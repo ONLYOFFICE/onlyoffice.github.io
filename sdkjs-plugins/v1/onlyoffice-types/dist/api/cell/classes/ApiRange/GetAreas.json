@@ -1,0 +1,12 @@
+{
+  "description": "Returns a collection of the ranges.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetAreas/",
+  "examples": [
+    "// How do I count the separate areas that make up a range in a spreadsheet?\n\n// Tally the distinct sub-ranges within a selection and write the total to a cell.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1:D1\");\nrange.SetValue(\"1\");\nrange.Select();\nlet areas = range.GetAreas();\nlet count = areas.GetCount();\nrange = worksheet.GetRange(\"A5\");\nrange.SetValue(\"The number of ranges in the areas: \");\nrange.AutoFit(false, true);\nworksheet.GetRange(\"B5\").SetValue(count);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiAreas"
+  },
+  "signature": "GetAreas(): ApiAreas"
+}

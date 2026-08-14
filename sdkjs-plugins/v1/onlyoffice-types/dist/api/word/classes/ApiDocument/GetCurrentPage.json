@@ -1,0 +1,13 @@
+{
+  "description": "Returns the index of the current page.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCurrentPage/",
+  "examples": [
+    "// How do I find which page the cursor is on in a document?\n\n// Useful when building navigation tools that need to report the user's current position in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The current page index is: \" + doc.GetCurrentPage());\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetCurrentPage(): number",
+  "since": "8.3.0"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Returns the smallest number in a set of values. Ignores logical values and text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MIN/",
+  "examples": [
+    "// What is the minimum number in a set in a spreadsheet?\n\n// Identify the lowest numeric value from a range in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet min = func.MIN(123, 197, 46, 345, 67, 456);\nworksheet.GetRange(\"C1\").SetValue(min);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the smallest number will be returned.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "number | number[] | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MIN(args: number | number[] | ApiRange | ApiName): number"
+}

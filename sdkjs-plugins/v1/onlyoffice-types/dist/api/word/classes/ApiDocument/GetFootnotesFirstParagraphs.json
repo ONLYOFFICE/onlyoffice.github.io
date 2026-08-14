@@ -1,0 +1,12 @@
+{
+  "description": "Returns the first paragraphs from all footnotes in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetFootnotesFirstParagraphs/",
+  "examples": [
+    "// How do I access the first paragraph of each footnote to add formatted text in a document?\n\n// Populate footnote content by writing directly to each footnote's opening paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"This is just a sample text.\");\ndoc.AddFootnote();\nlet footnotesFirstParagraphs = doc.GetFootnotesFirstParagraphs();\nfootnotesFirstParagraphs[0].AddText(\"Footnote 1\");\nfootnotesFirstParagraphs[0].SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph[]"
+  },
+  "signature": "GetFootnotesFirstParagraphs(): ApiParagraph[]"
+}

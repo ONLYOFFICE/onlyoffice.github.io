@@ -1,0 +1,626 @@
+{
+  "description": "Class representing a small text block called 'run'.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/",
+  "extends": [
+    "ApiTextPr"
+  ],
+  "methods": {
+    "AddLineBreak": {
+      "description": "Adds a line break to the current run position and starts the next element from a new line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddLineBreak/",
+      "examples": [
+        "// How do I insert a line break in text in a presentation?\n\n// Split text across multiple lines using line breaks in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is the text for the first line. Nothing special.\");\nrun.AddLineBreak();\nrun.AddText(\"This is the text which starts from the beginning of the second line. \");\nrun.AddText(\"It is written in two text runs, you need a space at the end of the first run sentence to separate them.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddLineBreak(): boolean"
+    },
+    "AddTabStop": {
+      "description": "Adds a tab stop to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddTabStop/",
+      "examples": [
+        "// How do I insert tabs in text in a presentation?\n\n// Space out text by adding multiple tab stops in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.SetFontSize(30);\nrun.AddText(\"This is just a sample text. After it three tab stops will be added.\");\nrun.AddTabStop();\nrun.AddTabStop();\nrun.AddTabStop();\nrun.AddText(\"This is the text which starts after the tab stops.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddTabStop(): boolean"
+    },
+    "AddText": {
+      "description": "Adds some text to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddText/",
+      "examples": [
+        "// How do I insert text into a text run in a presentation?\n\n// Include text content on a slide in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.SetFontSize(30);\nrun.AddText(\"This is just a sample text. Nothing special.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The text which will be added to the current run. It can be a string or an array of Unicode code points.",
+          "name": "text",
+          "type": "string | number[]"
+        },
+        {
+          "description": "An array of character widths (in millimeters). It should be the same length as the array of code points passed in the \"text\" parameter. When the widths are specified, the characters are added preserving these exact widths.",
+          "name": "widths",
+          "optional": true,
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddText(text: string | number[], widths?: number[]): boolean"
+    },
+    "ClearContent": {
+      "description": "Clears the content from the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/ClearContent/",
+      "examples": [
+        "// How do I remove text content from a text run in a presentation?\n\n// Clear text from a slide in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(30);\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"But you will not see it in the resulting document, as it will be cleared.\");\nparagraph.AddElement(run);\nrun.ClearContent();\n\nparagraph = Api.CreateParagraph();\nrun = Api.CreateRun();\nrun.AddText(\"The text in the previous paragraph cannot be seen, as it has been cleared.\");\nparagraph.AddElement(run);\ndocContent.Push(paragraph);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ClearContent(): boolean"
+    },
+    "Copy": {
+      "description": "Creates a copy of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/Copy/",
+      "examples": [
+        "// How do I copy a text run and add it to a paragraph in a presentation?\n\n// Reuse text formatting and content by copying a text run in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text that was copied. \");\nparagraph.AddElement(run);\n\nconst copyRun = run.Copy();\nparagraph.AddElement(copyRun);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "Copy(): ApiRun"
+    },
+    "Delete": {
+      "description": "Deletes the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/Delete/",
+      "examples": [
+        "// How do I delete a text run in a presentation?\n\n// Remove content from a slide by deleting a text run in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun.Delete();\n\nrun = Api.CreateRun();\nrun.AddText(\"This is the second run. The first run was removed from the paragraph.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetBold": {
+      "description": "Gets the bold property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetBold/",
+      "examples": [
+        "// Create a shape with a text run and set bold formatting.\n\n// Get and display whether the text is bold.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetBold(true);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst bold = textPr.GetBold();\nparagraph.AddText(\"Bold property: \" + bold);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetBold(): boolean",
+      "since": "8.1.0"
+    },
+    "GetCaps": {
+      "description": "Returns whether the text with the current text properties are capitalized.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetCaps/",
+      "examples": [
+        "// Create a shape with a text run and apply capitalization formatting.\n\n// Get and display whether the text is capitalized.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetCaps(true);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst caps = textPr.GetCaps();\nparagraph.AddText(\"Property of the capitalized letters: \" + caps);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetCaps(): boolean",
+      "since": "8.1.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRun class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine the type of a text run in a presentation?\n\n// Display the text run type name on the slide in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nconst classType = run.GetClassType();\nrun.SetFontSize(30);\nrun.AddText(\"Class Type = \" + classType);\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"run\""
+      },
+      "signature": "GetClassType(): \"run\""
+    },
+    "GetDoubleStrikeout": {
+      "description": "Gets the double strikeout property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetDoubleStrikeout/",
+      "examples": [
+        "// Create a shape with a text run and apply double strikeout formatting.\n\n// Get and display whether the text has double strikethrough.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetDoubleStrikeout(true);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst doubleStrikeout = textPr.GetDoubleStrikeout();\nparagraph.AddText(\"Double strikeout property: \" + doubleStrikeout);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetDoubleStrikeout(): boolean",
+      "since": "8.1.0"
+    },
+    "GetFill": {
+      "description": "Gets the text color from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFill/",
+      "examples": [
+        "// Create a shape with a text run and apply fill color.\n\n// Get and display the text fill type.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\n\nconst textPr = run.GetTextPr();\nfill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ntextPr.SetFill(fill);\nslide.AddObject(shape);\nparagraph = Api.CreateParagraph();\n\nfill = textPr.GetFill();\nconst type = fill.GetClassType();\nparagraph.AddText(\"Text color type: \" + type);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "GetFill(): ApiFill",
+      "since": "8.1.0"
+    },
+    "GetFontFamily": {
+      "description": "Returns the font family from the current text properties.\nThe method automatically calculates the font from the theme if the font was set via the theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFontFamily/",
+      "examples": [
+        "// Create a shape with a text run and set a specific font family.\n\n// Get and display the font name used in the text.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\n\nconst textPr = run.GetTextPr();\ntextPr.SetFontFamily(\"Arial\");\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst fontFamily = textPr.GetFontFamily();\nparagraph.AddText(\"Font family: \" + fontFamily);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFontFamily(): string",
+      "since": "8.1.0"
+    },
+    "GetFontNames": {
+      "description": "Returns all font names from all elements inside the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetFontNames/",
+      "examples": [
+        "// What font families are applied to text in a presentation?\n\n// Retrieve and list the font names of text runs in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetFontFamily(\"Comic Sans MS\");\nrun.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\nparagraph.AddElement(run);\nparagraph.AddLineBreak();\n\nconst fontNames = run.GetFontNames();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Run font names: \");\nparagraph.AddLineBreak();\nfor (let i = 0; i < fontNames.length; i++) {\n\tparagraph.AddText(fontNames[i]);\n\tparagraph.AddLineBreak();\n}\ndocContent.Push(paragraph);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The font names used for the current run.",
+        "type": "string[]"
+      },
+      "signature": "GetFontNames(): string[]"
+    },
+    "GetFontSize": {
+      "description": "Gets the font size from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFontSize/",
+      "examples": [
+        "// Create a shape with a text run and set a specific font size.\n\n// Get and display the font size used in the text.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetFontSize(60);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst fontSize = textPr.GetFontSize();\nparagraph.AddText(\"Font size: \" + fontSize);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "hps"
+      },
+      "signature": "GetFontSize(): hps",
+      "since": "8.1.0"
+    },
+    "GetHighlight": {
+      "description": "Gets the highlight property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetHighlight/",
+      "examples": [
+        "// How do I find out if text is highlighted in a presentation?\n\n// Read the highlight property of text to determine its highlighting status in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetHighlight(\"lightGray\");\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst highlight = textPr.GetHighlight();\nparagraph.AddText(\"Highlight property: \" + highlight);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetHighlight(): string",
+      "since": "8.1.0"
+    },
+    "GetItalic": {
+      "description": "Gets the italic property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetItalic/",
+      "examples": [
+        "// How do I determine if text uses italic formatting in a presentation?\n\n// Read the italic property of text to see if the formatting is applied in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetItalic(true);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst italic = textPr.GetItalic();\nparagraph.AddText(\"Italic property: \" + italic);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetItalic(): boolean",
+      "since": "8.1.0"
+    },
+    "GetOutLine": {
+      "description": "Gets the text outline from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetOutLine/",
+      "examples": [
+        "// How do I find out if text has an outline in a presentation?\n\n// Read the outline property of text to see if a stroke style is applied in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\nstroke = Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\ntextPr.SetOutLine(stroke);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nstroke = textPr.GetOutLine();\nconst type = stroke.GetClassType();\nparagraph.AddText(\"Text outline type: \" + type);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiStroke"
+      },
+      "signature": "GetOutLine(): ApiStroke",
+      "since": "8.1.0"
+    },
+    "GetSmallCaps": {
+      "description": "Returns whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSmallCaps/",
+      "examples": [
+        "// How do I determine if text is displayed as small capitals in a presentation?\n\n// Read the small capitals property to see if the style is enabled for text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetSmallCaps(true);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst smallCaps = textPr.GetSmallCaps();\nparagraph.AddText(\"Property of the small capitalized letters: \" + smallCaps);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetSmallCaps(): boolean",
+      "since": "8.1.0"
+    },
+    "GetSpacing": {
+      "description": "Gets the text spacing from the current text properties measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSpacing/",
+      "examples": [
+        "// How do I check the spacing between characters in text in a presentation?\n\n// Get the spacing property of text to see the current character spacing in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetSpacing(80);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst spacing = textPr.GetSpacing();\nparagraph.AddText(\"Text spacing: \" + spacing);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "twips"
+      },
+      "signature": "GetSpacing(): twips",
+      "since": "8.1.0"
+    },
+    "GetStrikeout": {
+      "description": "Gets the strikeout property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetStrikeout/",
+      "examples": [
+        "// How do I find out if text is crossed out with one line in a presentation?\n\n// Read the strikeout property to determine if the single line strike formatting exists in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetStrikeout(true);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst strikeout = textPr.GetStrikeout();\nparagraph.AddText(\"Strikeout property: \" + strikeout);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetStrikeout(): boolean",
+      "since": "8.1.0"
+    },
+    "GetTextFill": {
+      "description": "Gets the text fill from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetTextFill/",
+      "examples": [
+        "// How do I check what color is applied to text in a presentation?\n\n// Get the fill property of text to retrieve the color or fill style in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\nfill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ntextPr.SetTextFill(fill);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nfill = textPr.GetTextFill();\nconst type = fill.GetClassType();\nparagraph.AddText(\"Text fill type: \" + type);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "GetTextFill(): ApiFill",
+      "since": "8.1.0"
+    },
+    "GetTextPr": {
+      "description": "Returns the text properties of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetTextPr/",
+      "examples": [
+        "// What text formatting properties can be read from a run?\n\n// Retrieve text properties and modify font size in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nconst textPr = run.GetTextPr();\ntextPr.SetFontSize(30);\nparagraph.SetJc(\"left\");\nrun.AddText(\"This is a sample text inside the shape with the font size set to 15 points using the text properties.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "GetTextPr(): ApiTextPr"
+    },
+    "GetUnderline": {
+      "description": "Gets the underline property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetUnderline/",
+      "examples": [
+        "// How do I determine if text has underline formatting in a presentation?\n\n// Read the underline property of text to see if the underline style is active in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nrun.AddLineBreak();\nparagraph.AddElement(run);\nconst textPr = run.GetTextPr();\ntextPr.SetUnderline(true);\nslide.AddObject(shape);\n\nparagraph = Api.CreateParagraph();\nconst underline = textPr.GetUnderline();\nparagraph.AddText(\"Underline property: \" + underline);\ndocContent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetUnderline(): boolean",
+      "since": "8.1.0"
+    },
+    "RemoveAllElements": {
+      "description": "Removes all the elements from the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/RemoveAllElements/",
+      "examples": [
+        "// Delete content stored in a text run in a presentation?\n\n// Clear a text run before adding new text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is just a sample text.\");\nrun.RemoveAllElements();\nrun.AddText(\"All elements from this run were removed before adding this text.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveAllElements(): boolean"
+    },
+    "SetBold": {
+      "description": "Sets the bold property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetBold/",
+      "examples": [
+        "// What is bold text formatting in a presentation?\n\n// Add bold formatting to a text run in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetBold(true);\nrun.AddText(\"This is a text run with the font set to bold.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the run are displayed bold.",
+          "name": "isBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetBold(isBold: boolean): ApiTextPr"
+    },
+    "SetCaps": {
+      "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetCaps/",
+      "examples": [
+        "// What is the caps formatting option in a presentation?\n\n// Apply capital letter formatting to text runs in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetCaps(true);\nrun.AddText(\"This is a text run with the font set to capitalized letters.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed capitalized.",
+          "name": "isCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetCaps(isCaps: boolean): ApiTextPr"
+    },
+    "SetDoubleStrikeout": {
+      "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetDoubleStrikeout/",
+      "examples": [
+        "// What is double strikeout formatting in a presentation?\n\n// Apply double strikeout formatting to text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetDoubleStrikeout(true);\nrun.AddText(\"This is a text run with the text struck out with two lines.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed double struck through.",
+          "name": "isDoubleStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiTextPr"
+    },
+    "SetFill": {
+      "description": "Sets the text color to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFill/",
+      "examples": [
+        "// What fill colors can be set for text in a presentation?\n\n// Change the fill color of text runs in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nconst runFill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nrun.SetFill(runFill);\nrun.AddText(\"This is a text run with the font color set to black.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The color or pattern used to fill the text color.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFill(oApiFill: ApiFill): ApiTextPr"
+    },
+    "SetFontFamily": {
+      "description": "Sets all 4 font slots with the specified font family.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFontFamily/",
+      "examples": [
+        "// What font families can be applied to text in a presentation?\n\n// Set a custom font family for text runs in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetFontFamily(\"Comic Sans MS\");\nrun.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The font family or families used for the current text run.",
+          "name": "sFontFamily",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFontFamily(sFontFamily: string): ApiTextPr"
+    },
+    "SetFontSize": {
+      "description": "Sets the font size to the characters of the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFontSize/",
+      "examples": [
+        "// What font sizes can be set for text in a presentation?\n\n// Resize text by adjusting the font size in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetFontSize(50);\nrun.AddText(\"This is a text run with the font size set to 25 points (50 half-points).\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The text size value measured in half-points (1/144 of an inch).",
+          "name": "nSize",
+          "type": "hps"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFontSize(nSize: hps): ApiTextPr"
+    },
+    "SetHighlight": {
+      "description": "Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetHighlight/",
+      "examples": [
+        "// What highlight colors are available for text in a presentation?\n\n// Apply highlighting to text runs in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is a text run with the text highlighted with light gray color.\");\nparagraph.AddElement(run);\nrun.SetHighlight(\"lightGray\");\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Available highlight color.",
+          "name": "sColor",
+          "type": "highlightColor"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "SetHighlight(sColor: highlightColor): ApiTextPr"
+    },
+    "SetItalic": {
+      "description": "Sets the italic property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetItalic/",
+      "examples": [
+        "// Apply italic formatting to emphasize text within a presentation.\n\n// Create a text run with italic formatting applied.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetItalic(true);\nrun.AddText(\"This is a text run with the font set to italicized letters.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed italicized.",
+          "name": "isItalic",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetItalic(isItalic: boolean): ApiTextPr"
+    },
+    "SetOutLine": {
+      "description": "Sets the text outline to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetOutLine/",
+      "examples": [
+        "// Can I add a stroke or border to text in a presentation?\n\n// Apply a stroke outline effect to the text characters in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nconst textPr = run.GetTextPr();\ntextPr.SetFontSize(50);\nstroke = Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\ntextPr.SetOutLine(stroke);\nparagraph.SetJc(\"left\");\nrun.AddText(\"This is a text run with the black text outline set using the text properties.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the text outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetOutLine(oStroke: ApiStroke): ApiTextPr"
+    },
+    "SetSmallCaps": {
+      "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSmallCaps/",
+      "examples": [
+        "// Convert lowercase letters to smaller capital letter equivalents for typographic effect.\n\n// Create a text run and apply small caps formatting.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetSmallCaps(true);\nrun.AddText(\"This is a text run with the font set to small capitalized letters.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current run are displayed capitalized two points smaller or not.",
+          "name": "isSmallCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetSmallCaps(isSmallCaps: boolean): ApiTextPr"
+    },
+    "SetSpacing": {
+      "description": "Sets the text spacing measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSpacing/",
+      "examples": [
+        "// Increase or decrease spacing between characters for readability or design effect.\n\n// Create a text run and set spacing measured in twentieths of a point.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetSpacing(80);\nrun.AddText(\"This is a text run with the text spacing set to 4 points (20 twentieths of a point).\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nSpacing",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetSpacing(nSpacing: twips): ApiTextPr"
+    },
+    "SetStrikeout": {
+      "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetStrikeout/",
+      "examples": [
+        "// Apply strikeout formatting to indicate deleted or revised content.\n\n// Create a text run and apply strikeout formatting.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetStrikeout(true);\nrun.AddText(\"This is a text run with the text struck out with a single line.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed struck through.",
+          "name": "isStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetStrikeout(isStrikeout: boolean): ApiTextPr"
+    },
+    "SetTextFill": {
+      "description": "Sets the text fill to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetTextFill/",
+      "examples": [
+        "// What fill colors can be applied to text in a presentation?\n\n// Set the solid color that fills the text characters in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nconst textPr = run.GetTextPr();\ntextPr.SetFontSize(50);\nfill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ntextPr.SetTextFill(fill);\nparagraph.SetJc(\"left\");\nrun.AddText(\"This is a sample text inside the shape with the black text fill set using the text properties.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The color or pattern used to fill the text color.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetTextFill(oApiFill: ApiFill): ApiTextPr"
+    },
+    "SetTextPr": {
+      "description": "Sets the text properties to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetTextPr/",
+      "examples": [
+        "// Configure font size, weight, color, and other formatting options together.\n\n// Create a text run and set comprehensive text properties including font size and weight.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText(\"This is a sample text with the font size set to 15 points and the font weight set to bold.\");\n\nconst textPr = run.GetTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\nrun.SetTextPr(textPr);\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The text properties that will be set to the current run.",
+          "name": "oTextPr",
+          "type": "ApiTextPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "SetTextPr(oTextPr: ApiTextPr): ApiTextPr"
+    },
+    "SetUnderline": {
+      "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetUnderline/",
+      "examples": [
+        "// Add underline formatting to emphasize or highlight text content.\n\n// Create a text run and apply underline formatting.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetUnderline(true);\nrun.AddText(\"This is a text run with the text underlined with a single line.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed underlined.",
+          "name": "isUnderline",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetUnderline(isUnderline: boolean): ApiTextPr"
+    },
+    "SetVertAlign": {
+      "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetVertAlign/",
+      "examples": [
+        "// How do I align text vertically in a presentation?\n\n// Create text runs and apply subscript, baseline, and superscript alignment in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\n\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetVertAlign(\"subscript\");\nrun.AddText(\"This is a text run with the text aligned below the baseline vertically. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetVertAlign(\"baseline\");\nrun.AddText(\"This is a text run with the text aligned by the baseline vertically. \");\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetVertAlign(\"superscript\");\nrun.AddText(\"This is a text run with the text aligned above the baseline vertically.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The vertical alignment type applied to the text contents.",
+          "name": "sType",
+          "type": "\"baseline\" | \"subscript\" | \"superscript\""
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetVertAlign(sType: \"baseline\" | \"subscript\" | \"superscript\"): ApiTextPr"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Sets the fill formatting properties to the current graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Fill/",
+  "examples": [
+    "// How do I set a gradient fill on a drawing object in a document?\n\n// Differentiate two identical shapes by filling the duplicate with a radial gradient while leaving the original solid.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nfill = Api.CreateRadialGradientFill([gs1, gs2]);\ncopyDrawing.Fill(fill);\nparagraph.AddDrawing(copyDrawing);"
+  ],
+  "params": [
+    {
+      "description": "The fill type used to fill the graphic object.",
+      "name": "oFill",
+      "type": "ApiFill"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "Fill(oFill: ApiFill): boolean"
+}

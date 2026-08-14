@@ -1,0 +1,19 @@
+{
+  "description": "Sets the bold property to the text character.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetBold/",
+  "examples": [
+    "// How do I apply bold formatting to an entire paragraph in a document?\n\n// Emphasize a paragraph's content by enabling bold weight on all its characters in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the font set to bold.\");\nparagraph.SetBold(true);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of this paragraph are displayed bold.",
+      "name": "isBold",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetBold(isBold: boolean): ApiParagraph"
+}

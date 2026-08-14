@@ -1,0 +1,19 @@
+{
+  "description": "Creates a solid fill to apply to the object using a selected solid color as the object background.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateSolidFill/",
+  "examples": [
+    "// How do I apply a solid color background to a shape in a document?\n\n// Set a flat single-color fill on a rounded rectangle shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"roundRect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+  ],
+  "params": [
+    {
+      "description": "The color used for the element fill.",
+      "name": "color",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateSolidFill(color: ApiColor): ApiFill",
+  "since": "9.1.0"
+}

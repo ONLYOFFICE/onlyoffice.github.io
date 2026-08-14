@@ -1,0 +1,19 @@
+{
+  "description": "Scales the width of the figure using the specified coefficient.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/ScaleWidth/",
+  "examples": [
+    "// How do I resize the width of a shape proportionally in a document?\n\n// Create several shapes at increasing width scales to compare sizes side by side in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nfor (let i = 1; i < 4; i++ ){\n\tlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\n\tlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\n\tlet drawing = Api.CreateShape(\"cube\", 963295, 963295, fill, stroke);\n\tparagraph.AddDrawing(drawing);\n\tdrawing.ScaleWidth( i );\n}"
+  ],
+  "params": [
+    {
+      "description": "The coefficient by which the figure width will be scaled.",
+      "name": "coefficient",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "description": "return false if param is invali.",
+    "type": "boolean"
+  },
+  "signature": "ScaleWidth(coefficient: number): boolean"
+}

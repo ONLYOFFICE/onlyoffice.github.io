@@ -1,0 +1,18 @@
+{
+  "description": "Returns the inverse hyperbolic sine of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ASINH/",
+  "examples": [
+    "// Apply the ASINH function for hyperbolic calculations in a spreadsheet.\n\n// Obtain the inverse hyperbolic sine result for mathematical operations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ASINH(4));"
+  ],
+  "params": [
+    {
+      "description": "Any real number equal to or greater than 1.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ASINH(arg1: ApiRange | ApiName | number): number"
+}

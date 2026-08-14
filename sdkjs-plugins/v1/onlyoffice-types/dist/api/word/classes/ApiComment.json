@@ -1,0 +1,340 @@
+{
+  "description": "Class representing a comment.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/",
+  "methods": {
+    "AddReply": {
+      "description": "Adds a reply to a comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/AddReply/",
+      "examples": [
+        "// How do I add a reply to a comment in a document?\n\n// Respond to an existing comment on a paragraph to continue a review thread in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);"
+      ],
+      "params": [
+        {
+          "description": "The comment reply text.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The name of the comment reply author.",
+          "name": "sAuthorName",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment reply author.",
+          "name": "sUserId",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The comment reply position. If nPos=-1 add to the end.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "AddReply(sText: string, sAuthorName?: string, sUserId?: string, nPos?: number): ApiComment"
+    },
+    "Delete": {
+      "description": "Deletes the current comment from the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/Delete/",
+      "examples": [
+        "// How do I delete a comment from a document?\n\n// Remove an unwanted annotation after a review is complete in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].Delete();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The comment to the first paragraph was deleted\");\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAuthorName": {
+      "description": "Returns the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetAuthorName/",
+      "examples": [
+        "// How do I find out who wrote a comment in a document?\n\n// Identify the person behind a comment by retrieving the name stored with it.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\nlet authorName = comments[0].GetAuthorName();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Author name: \" + authorName);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiComment class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetClassType/",
+      "examples": [
+        "// How do I check what type of object a comment is in a document?\n\n// Confirm the object category of a comment to distinguish it from other element types.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\nlet classType = comments[0].GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"comment\""
+      },
+      "signature": "GetClassType(): \"comment\""
+    },
+    "GetId": {
+      "description": "Returns the current comment ID. If the comment doesn't have an ID, null is returned.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetId/",
+      "examples": [
+        "// How do I get the ID assigned to a comment in a document?\n\n// Use a comment's ID to look it up again and access its properties.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\nlet comment = doc.GetCommentById(comments[0].GetId());\nlet authorName = comment.GetAutorName();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment author name: \" + authorName);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetId(): string"
+    },
+    "GetQuoteText": {
+      "description": "Returns the quote text of the current comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetQuoteText/",
+      "examples": [
+        "// How do I get the text passage that a comment refers to in a document?\n\n// Extract the exact excerpt a reviewer highlighted when leaving a comment.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\nlet quoteText = comments[0].GetQuoteText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment quote text: \" + quoteText);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetQuoteText(): number"
+    },
+    "GetRepliesCount": {
+      "description": "Returns a number of the comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetRepliesCount/",
+      "examples": [
+        "// How do I find out how many replies a comment has in a document?\n\n// Check the reply count before iterating over a comment thread to avoid out-of-range errors.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet repliesCount = comments[0].GetRepliesCount();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of comment replies: \" + repliesCount);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRepliesCount(): number"
+    },
+    "GetReply": {
+      "description": "Returns the specified comment reply.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetReply/",
+      "examples": [
+        "// How do I retrieve a particular reply from a comment thread in a document?\n\n// Read a reply's text to display or process individual responses in a comment thread.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"First comment reply: \" + commentReply.GetText());\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The comment reply index.",
+          "name": "nIndex",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiCommentReply"
+      },
+      "signature": "GetReply(nIndex?: number): ApiCommentReply"
+    },
+    "GetText": {
+      "description": "Returns the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetText/",
+      "examples": [
+        "// How do I get the message written inside a comment in a document?\n\n// Extract a comment's text to display or process reviewer notes programmatically.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\nlet text = comments[0].GetText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment text: \" + text);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(): string"
+    },
+    "GetTime": {
+      "description": "Returns the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetTime/",
+      "examples": [
+        "// How do I find out when a comment was created in a document?\n\n// Display a comment's creation time in the user's local time zone for human-readable audit trails.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetTime(\"1672247153658\");\nlet time = comments[0].GetTime();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment creation timestamp: \" + time);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTime(): number"
+    },
+    "GetTimeUTC": {
+      "description": "Returns the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetTimeUTC/",
+      "examples": [
+        "// How do I get the UTC creation time of a comment in a document?\n\n// Store or compare comment timestamps across time zones using a UTC-normalized value.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetTimeUTC(\"1672247153658\");\nlet timeUTC = comments[0].GetTimeUTC();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The timestamp of comment creation in UTC format: \" + timeUTC);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTimeUTC(): number"
+    },
+    "GetUserId": {
+      "description": "Returns the user ID of the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/GetUserId/",
+      "examples": [
+        "// How do I get the identifier of the user who posted a comment in a document?\n\n// Match a comment to a user account by reading the author's unique user ID.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetUserId(\"uid-1\");\nlet userId = comments[0].GetUserId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment user ID: \" + userId);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUserId(): string"
+    },
+    "IsSolved": {
+      "description": "Checks if a comment is solved or not.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/IsSolved/",
+      "examples": [
+        "// How do I check if a comment has been resolved in a document?\n\n// Filter out already-resolved comments before processing open review threads.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetSolved(true);\nlet solved = comments[0].IsSolved();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The comment is solved: \" + solved);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsSolved(): boolean"
+    },
+    "RemoveReplies": {
+      "description": "Removes the specified comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/RemoveReplies/",
+      "examples": [
+        "// How do I delete all replies attached to a comment in a document?\n\n// Clear every reply from a comment to reset the discussion thread to a clean state.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\ncomments[0].RemoveReplies();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The comment replies were removed\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The position of the first comment reply to remove.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "A number of comment replies to remove.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to remove all comment replies or not.",
+          "name": "bRemoveAll",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "RemoveReplies(nPos?: number, nCount?: number, bRemoveAll?: boolean): ApiComment"
+    },
+    "SetAuthorName": {
+      "description": "Sets the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/SetAuthorName/",
+      "examples": [
+        "// How do I update the author name displayed on a comment in a document?\n\n// Reassign a comment to a different author by overwriting the stored name.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetAuthorName(\"Mark Potato\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The comment author's name was changed\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The comment author's name.",
+          "name": "sAuthorName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetAuthorName(sAuthorName: string): ApiComment"
+    },
+    "SetSolved": {
+      "description": "Marks a comment as solved.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/SetSolved/",
+      "examples": [
+        "// How do I set a comment's status to solved in a document?\n\n// Close out a review thread by flagging the comment as no longer needing attention.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetSolved(true);\nlet solved = comments[0].IsSolved();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The comment is solved: \" + solved);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if a comment is solved or not.",
+          "name": "bSolved",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetSolved(bSolved: boolean): ApiComment"
+    },
+    "SetText": {
+      "description": "Sets the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/SetText/",
+      "examples": [
+        "// How do I change the message written inside a comment in a document?\n\n// Update a comment's content to correct or revise the original feedback.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetText(\"new comment's text\");"
+      ],
+      "params": [
+        {
+          "description": "The comment text.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetText(sText: string): ApiComment"
+    },
+    "SetTime": {
+      "description": "Sets the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/SetTime/",
+      "examples": [
+        "// How do I assign a specific creation time to a comment in a document?\n\n// Correct or backdate a comment's recorded time when importing or migrating annotations.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetTime(\"1672247153658\");\nlet time = comments[0].GetTime();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment creation timestamp: \" + time);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in the current time zone format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetTime(nTimeStamp: number | string): ApiComment"
+    },
+    "SetTimeUTC": {
+      "description": "Sets the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/SetTimeUTC/",
+      "examples": [
+        "// How do I store a comment's creation time as a UTC value in a document?\n\n// Synchronize comment timestamps across time zones by recording the time in UTC.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetTimeUTC(\"1672247153658\");\nlet timeUTC = comments[0].GetTimeUTC();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The timestamp of comment creation in UTC format: \" + timeUTC);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in UTC format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetTimeUTC(nTimeStamp: number | string): ApiComment"
+    },
+    "SetUserId": {
+      "description": "Sets the user ID to the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComment/Methods/SetUserId/",
+      "examples": [
+        "// How do I set the user ID for the author of a comment in a document?\n\n// Link a comment to a specific user account by updating the stored author identifier.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].SetUserId(\"uid-1\");\nlet userId = comments[0].GetUserId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment user ID: \" + userId);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The user ID of the comment author.",
+          "name": "sUserId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetUserId(sUserId: string): ApiComment"
+    }
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "description": "Class representing a collection of format conditions.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/",
+  "methods": {
+    "Add": {
+      "description": "Adds a new format condition to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/Add/",
+      "examples": [
+        "// How do I create a rule that colors cells based on whether they are above or below a threshold in a spreadsheet?\n\n// Set up automatic cell formatting that reacts to the data entered in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\nif (condition1) {\n    condition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n}"
+      ],
+      "params": [
+        {
+          "description": "The format condition type.",
+          "name": "Type",
+          "type": "XlFormatConditionType"
+        },
+        {
+          "description": "The format condition operator.",
+          "name": "Operator",
+          "optional": true,
+          "type": "XlFormatConditionOperator"
+        },
+        {
+          "description": "The first formula.",
+          "name": "Formula1",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        },
+        {
+          "description": "The second formula.",
+          "name": "Formula2",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "The created format condition, or null if the operation failed.",
+        "type": "ApiFormatCondition | null"
+      },
+      "signature": "Add(Type: XlFormatConditionType, Operator?: XlFormatConditionOperator, Formula1?: string | number | ApiRange, Formula2?: string | number | ApiRange): ApiFormatCondition | null",
+      "since": "9.1.0"
+    },
+    "AddAboveAverage": {
+      "description": "Adds a new above average conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddAboveAverage/",
+      "examples": [
+        "// How do I automatically mark cells that are above the group average in a spreadsheet?\n\n// Draw attention to standout high values by coloring them relative to the mean in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Test Scores\");\nworksheet.GetRange(\"A2\").SetValue(85);\nworksheet.GetRange(\"A3\").SetValue(92);\nworksheet.GetRange(\"A4\").SetValue(78);\nworksheet.GetRange(\"A5\").SetValue(88);\nworksheet.GetRange(\"A6\").SetValue(95);\nworksheet.GetRange(\"A7\").SetValue(72);\nworksheet.GetRange(\"A8\").SetValue(90);\n\nlet dataRange = worksheet.GetRange(\"A2:A8\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet aboveAverageCondition = formatConditions.AddAboveAverage();\nif (aboveAverageCondition) {\n    aboveAverageCondition.SetFillColor(Api.CreateColorFromRGB(144, 238, 144));\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The created above average rule, or null if the operation fails.",
+        "type": "ApiAboveAverage | null"
+      },
+      "signature": "AddAboveAverage(): ApiAboveAverage | null",
+      "since": "9.1.0"
+    },
+    "AddColorScale": {
+      "description": "Adds a new color scale conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddColorScale/",
+      "examples": [
+        "// How do I shade a column of numbers from one color to another based on their relative size in a spreadsheet?\n\n// Give a range a heat-map appearance by mapping cell values to a color spectrum in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Performance Data\");\nworksheet.GetRange(\"A2\").SetValue(15);\nworksheet.GetRange(\"A3\").SetValue(67);\nworksheet.GetRange(\"A4\").SetValue(23);\nworksheet.GetRange(\"A5\").SetValue(89);\nworksheet.GetRange(\"A6\").SetValue(45);\nworksheet.GetRange(\"A7\").SetValue(91);\nworksheet.GetRange(\"A8\").SetValue(12);\nworksheet.GetRange(\"A9\").SetValue(78);\n\nlet dataRange = worksheet.GetRange(\"A2:A9\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nformatConditions.AddColorScale(3);"
+      ],
+      "params": [
+        {
+          "description": "The type of color scale (2 for two-color scale, 3 for three-color scale).",
+          "name": "ColorScaleType",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "The created color scale rule, or null if the operation fails.",
+        "type": "ApiColorScale | null"
+      },
+      "signature": "AddColorScale(ColorScaleType?: number): ApiColorScale | null",
+      "since": "9.1.0"
+    },
+    "AddDatabar": {
+      "description": "Adds a new data bar conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddDatabar/",
+      "examples": [
+        "// How do I add visual bars inside cells to compare numbers without creating a separate chart in a spreadsheet?\n\n// Turn a column of numbers into an instant bar-chart view using built-in cell formatting in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Budget Progress\");\nworksheet.GetRange(\"A2\").SetValue(25);\nworksheet.GetRange(\"A3\").SetValue(85);\nworksheet.GetRange(\"A4\").SetValue(60);\nworksheet.GetRange(\"A5\").SetValue(95);\nworksheet.GetRange(\"A6\").SetValue(40);\nworksheet.GetRange(\"A7\").SetValue(75);\nworksheet.GetRange(\"A8\").SetValue(30);\nworksheet.GetRange(\"A9\").SetValue(90);\n\nlet dataRange = worksheet.GetRange(\"A2:A9\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nformatConditions.AddDatabar();"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The created data bar rule, or null if the operation fails.",
+        "type": "ApiDatabar | null"
+      },
+      "signature": "AddDatabar(): ApiDatabar | null",
+      "since": "9.1.0"
+    },
+    "AddIconSetCondition": {
+      "description": "Adds a new icon set conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddIconSetCondition/",
+      "examples": [
+        "// How do I place visual symbols next to numbers to show their relative standing at a glance in a spreadsheet?\n\n// Represent data tiers with icons so readers can judge cell values without reading exact numbers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Progress Status\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(45);\nworksheet.GetRange(\"A4\").SetValue(75);\nworksheet.GetRange(\"A5\").SetValue(25);\nworksheet.GetRange(\"A6\").SetValue(90);\nworksheet.GetRange(\"A7\").SetValue(60);\nworksheet.GetRange(\"A8\").SetValue(35);\nworksheet.GetRange(\"A9\").SetValue(80);\n\nlet dataRange = worksheet.GetRange(\"A2:A9\");\nlet formatConditions = dataRange.GetFormatConditions();\nformatConditions.AddIconSetCondition();"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The created icon set rule, or null if the operation fails.",
+        "type": "ApiIconSetCondition | null"
+      },
+      "signature": "AddIconSetCondition(): ApiIconSetCondition | null",
+      "since": "9.1.0"
+    },
+    "AddTop10": {
+      "description": "Adds a new top 10 conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddTop10/",
+      "examples": [
+        "// How do I automatically mark the highest entries in a list of numbers in a spreadsheet?\n\n// Apply color-based ranking to stand out the best-performing cells in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Figures\");\nworksheet.GetRange(\"A2\").SetValue(120);\nworksheet.GetRange(\"A3\").SetValue(380);\nworksheet.GetRange(\"A4\").SetValue(250);\nworksheet.GetRange(\"A5\").SetValue(450);\nworksheet.GetRange(\"A6\").SetValue(180);\nworksheet.GetRange(\"A7\").SetValue(320);\nworksheet.GetRange(\"A8\").SetValue(90);\nworksheet.GetRange(\"A9\").SetValue(410);\nworksheet.GetRange(\"A10\").SetValue(200);\nworksheet.GetRange(\"A11\").SetValue(480);\nworksheet.GetRange(\"A12\").SetValue(560);\n\nlet dataRange = worksheet.GetRange(\"A2:A12\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet top10Condition = formatConditions.AddTop10();\nif (top10Condition) {\n    top10Condition.SetFillColor(Api.CreateColorFromRGB(255, 215, 0));\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The created top 10 rule, or null if the operation fails.",
+        "type": "ApiTop10 | null"
+      },
+      "signature": "AddTop10(): ApiTop10 | null",
+      "since": "9.1.0"
+    },
+    "AddUniqueValues": {
+      "description": "Adds a new unique values conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddUniqueValues/",
+      "examples": [
+        "// How do I visually separate unique items from duplicates across a data range in a spreadsheet?\n\n// Color-code cells so repeated and distinct values are easy to tell apart in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Product Names\");\nworksheet.GetRange(\"A2\").SetValue(\"Apple\");\nworksheet.GetRange(\"A3\").SetValue(\"Banana\");\nworksheet.GetRange(\"A4\").SetValue(\"Apple\");\nworksheet.GetRange(\"A5\").SetValue(\"Orange\");\nworksheet.GetRange(\"A6\").SetValue(\"Banana\");\nworksheet.GetRange(\"A7\").SetValue(\"Grape\");\nworksheet.GetRange(\"A8\").SetValue(\"Orange\");\nworksheet.GetRange(\"A9\").SetValue(\"Kiwi\");\n\nlet dataRange = worksheet.GetRange(\"A2:A9\");\nlet formatConditions = dataRange.GetFormatConditions();\nlet uniqueValuesCondition = formatConditions.AddUniqueValues();\n\nuniqueValuesCondition.GetFont().SetColor(Api.CreateColorFromRGB(255, 0, 0));"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The created unique values rule, or null if the operation fails.",
+        "type": "ApiUniqueValues | null"
+      },
+      "signature": "AddUniqueValues(): ApiUniqueValues | null",
+      "since": "9.1.0"
+    },
+    "Delete": {
+      "description": "Deletes all format conditions from the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/Delete/",
+      "examples": [
+        "// How do I clear every highlight and color rule from a selected range in a spreadsheet?\n\n// Strip away previously set visual conditions to return cells to their default look in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sample Data\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(45);\nworksheet.GetRange(\"A4\").SetValue(75);\nworksheet.GetRange(\"A5\").SetValue(25);\nworksheet.GetRange(\"A6\").SetValue(90);\nworksheet.GetRange(\"A7\").SetValue(60);\nworksheet.GetRange(\"A8\").SetValue(35);\nworksheet.GetRange(\"A9\").SetValue(80);\n\nlet dataRange = worksheet.GetRange(\"A2:A9\");\nlet formatConditions = dataRange.GetFormatConditions();\nformatConditions.AddIconSetCondition();\n\nworksheet.GetRange(\"B1\").SetValue(\"Rules before delete: \" + formatConditions.GetCount());\nformatConditions.Delete();\nworksheet.GetRange(\"B2\").SetValue(\"Rules after delete: \" + formatConditions.GetCount());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Delete(): void",
+      "since": "9.1.0"
+    },
+    "GetCount": {
+      "description": "Returns the number of conditional formatting rules in the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/GetCount/",
+      "examples": [
+        "// How do I find out the total number of highlighting rules set on a data range in a spreadsheet?\n\n// Check the quantity of color conditions assigned to cells to audit formatting in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sample Data\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(45);\nworksheet.GetRange(\"A4\").SetValue(75);\nworksheet.GetRange(\"A5\").SetValue(25);\nworksheet.GetRange(\"A6\").SetValue(90);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nformatConditions.AddDatabar();\n\nworksheet.GetRange(\"B1\").SetValue(\"Count: \" + formatConditions.GetCount());"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The number of conditional formatting rules in the collection.",
+        "type": "number"
+      },
+      "signature": "GetCount(): number",
+      "since": "9.1.0"
+    },
+    "GetItem": {
+      "description": "Returns a format condition by its index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/GetItem/",
+      "examples": [
+        "// How do I access one particular highlight rule out of several applied to a range in a spreadsheet?\n\n// Pick out an individual color condition by its order to inspect or modify it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sample Data\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(45);\nworksheet.GetRange(\"A4\").SetValue(75);\nworksheet.GetRange(\"A5\").SetValue(25);\nworksheet.GetRange(\"A6\").SetValue(90);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nformatConditions.AddDatabar();\n\nlet firstRule = formatConditions.GetItem(1);\n\nworksheet.GetRange(\"B1\").SetValue(\"Rule found: \" + (firstRule !== null));"
+      ],
+      "params": [
+        {
+          "description": "The index of the format condition (1-based).",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "The format condition.",
+        "type": "ApiFormatCondition | null"
+      },
+      "signature": "GetItem(index: number): ApiFormatCondition | null",
+      "since": "9.1.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent range object associated with the current conditional formatting collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/GetParent/",
+      "examples": [
+        "// How do I identify which cells a group of highlight conditions belongs to in a spreadsheet?\n\n// Trace formatting rules back to the range they were applied to in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sample Data\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(45);\nworksheet.GetRange(\"A4\").SetValue(75);\nworksheet.GetRange(\"A5\").SetValue(25);\nworksheet.GetRange(\"A6\").SetValue(90);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nformatConditions.AddDatabar();\n\nlet parentRange = formatConditions.GetParent();\n\nworksheet.GetRange(\"B1\").SetValue(\"Parent: \" + parentRange.GetAddress());"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The parent range object.",
+        "type": "ApiRange"
+      },
+      "signature": "GetParent(): ApiRange",
+      "since": "9.1.0"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Sets the italic property to the text character.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetItalic/",
+  "examples": [
+    "// How do I make the text in a paragraph appear in italics in a document?\n\n// Slant paragraph text into italic form to add emphasis or distinguish it from surrounding content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a text run with the font set to italicized letters.\");\nparagraph.SetItalic(true);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed italicized.",
+      "name": "isItalic",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetItalic(isItalic: boolean): ApiParagraph"
+}

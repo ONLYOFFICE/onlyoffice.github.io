@@ -1,0 +1,12 @@
+{
+  "description": "Adds a footnote for the selected text (or the current position if the selection doesn't exist).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddFootnote/",
+  "examples": [
+    "// How do I attach a footnote to text in a document?\n\n// Collect all footnote paragraphs and style the first one as bold in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"This is just a sample text.\");\ndoc.AddFootnote();\nlet footnotesFirstParagraphs = doc.GetFootnotesFirstParagraphs();\nfootnotesFirstParagraphs[0].AddText(\"Footnote 1\");\nfootnotesFirstParagraphs[0].SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiDocumentContent"
+  },
+  "signature": "AddFootnote(): ApiDocumentContent"
+}

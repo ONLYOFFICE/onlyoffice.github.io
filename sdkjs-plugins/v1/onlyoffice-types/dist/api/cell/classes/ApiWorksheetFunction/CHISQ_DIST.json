@@ -1,0 +1,28 @@
+{
+  "description": "Returns the left-tailed probability of the chi-squared distribution.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHISQ_DIST/",
+  "examples": [
+    "// Determine what portion of the distribution falls at or below a given value in a spreadsheet.\n\n// Evaluate how likely it is to see results less than or equal to an observed chi-squared value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CHISQ_DIST(2, 3, false));"
+  ],
+  "params": [
+    {
+      "description": "The value at which the distribution will be evaluated, a nonnegative number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of degrees of freedom, a number between 1 and 10^10, excluding 10^10.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value that determines the form of the function. If this argument is equal to **true**,\rthe cumulative distribution function is returned; if  it is equal to **false**, the probability density function is returned.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CHISQ_DIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | boolean): number"
+}

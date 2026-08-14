@@ -1,0 +1,18 @@
+{
+  "description": "Creates a radiobutton field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRadiobuttonField/",
+  "examples": [
+    "// How do I create a group of selectable radio buttons in a PDF?\n\n// Create a radio button field and configure options in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\n\nlet radioField = Api.CreateRadiobuttonField([10, 10, 25, 25]);\npage.AddObject(radioField);\nradioField.AddOption(0, [10, 30, 25, 45], 'Choice 2');\nradioField.SetValue('Choice 2');"
+  ],
+  "params": [
+    {
+      "description": "widget rect",
+      "name": "rect",
+      "type": "Rect"
+    }
+  ],
+  "returns": {
+    "type": "ApiRadiobuttonField"
+  },
+  "signature": "CreateRadiobuttonField(rect: Rect): ApiRadiobuttonField"
+}

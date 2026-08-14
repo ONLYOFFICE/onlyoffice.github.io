@@ -1,0 +1,12 @@
+{
+  "description": "Returns the type of the ApiDrawing class.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetClassType/",
+  "examples": [
+    "// How do I identify the category of a drawing object in a PDF?\n\n// Determine the kind of object you're working with in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\ndrawing.SetSize(150 * 36000, 65 * 36000);\npage.AddObject(drawing);\n\nconst aDrawings = page.GetAllDrawings();\nconst sType = aDrawings[0].GetClassType();\nconst docContent = drawing.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class Type = \" + sType);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiPage"
+  },
+  "signature": "GetParentPage(): ApiPage"
+}

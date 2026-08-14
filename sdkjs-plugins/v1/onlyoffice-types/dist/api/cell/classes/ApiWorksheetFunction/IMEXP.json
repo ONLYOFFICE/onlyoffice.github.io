@@ -1,0 +1,18 @@
+{
+  "description": "Returns the exponential of a complex number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMEXP/",
+  "examples": [
+    "// How do I calculate the exponential function for a complex number in a spreadsheet?\n\n// Apply the exponential function to a complex number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMEXP(\"-2+2.5i\"));"
+  ],
+  "params": [
+    {
+      "description": "A complex number expressed in the *x + yi* or *x + yj* form.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMEXP(arg1: ApiRange | ApiName | number): number"
+}

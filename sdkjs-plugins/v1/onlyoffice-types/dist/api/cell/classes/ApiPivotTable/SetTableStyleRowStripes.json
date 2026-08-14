@@ -1,0 +1,19 @@
+{
+  "description": "Sets the setting which specifies whether the background color alternation for odd and even rows will be enabled for the pivot table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotTable/Methods/SetTableStyleRowStripes/",
+  "examples": [
+    "// How do I apply striped row formatting to a pivot table in a spreadsheet?\n\n// Make a pivot table easier to read by enabling banded row colors in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n    rows: ['Region', 'Style'],\n});\n\npivotTable.AddDataField('Price');\npivotTable.SetTableStyleRowStripes(true);\n\nlet pivotWorksheet = Api.GetActiveSheet();\n\npivotWorksheet.GetRange('A12').SetValue('Table Style Row Stripes');\npivotWorksheet.GetRange('B12').SetValue(pivotTable.GetTableStyleRowStripes());"
+  ],
+  "params": [
+    {
+      "description": "Specifies whether the background color alternation for odd and even rows will be enabled for the pivot table.",
+      "name": "show",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetTableStyleRowStripes(show: boolean): void",
+  "since": "8.2.0"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Returns the sum of squares of deviations of data points from their sample mean.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DEVSQ/",
+  "examples": [
+    "// Calculate deviations by comparing each data point to the sample mean.\n\n// Use the DEVSQ function to find the sum of squared deviations across the dataset.\n\nlet worksheet = Api.GetActiveSheet();\nlet argumentsArrA = [34, 244];\nlet argumentsArrB = [769, 445];\nlet argumentsArrC = [76, 677];\nlet argumentsArrD = [89, 56];\nlet argumentsArrE = [98, 13];\n\n// Place the numbers in cells\nfor (let a = 0; a < argumentsArrA.length; a++) {\n    worksheet.GetRange(\"A\" + (a + 1)).SetValue(argumentsArrA[a]);\n}\nfor (let b = 0; b < argumentsArrB.length; b++) {\n    worksheet.GetRange(\"B\" + (b + 1)).SetValue(argumentsArrB[b]);\n}\nfor (let c = 0; c < argumentsArrC.length; c++) {\n    worksheet.GetRange(\"C\" + (c + 1)).SetValue(argumentsArrC[c]);\n}\nfor (let d = 0; d < argumentsArrD.length; d++) {\n    worksheet.GetRange(\"D\" + (d + 1)).SetValue(argumentsArrD[d]);\n}\nfor (let e = 0; e < argumentsArrE.length; e++) {\n    worksheet.GetRange(\"E\" + (e + 1)).SetValue(argumentsArrE[e]);\n}\n\n// Analyze the range of data \nlet func = Api.WorksheetFunction;\nlet ans = func.DEVSQ(worksheet.GetRange(\"A1:E2\"));\nworksheet.GetRange(\"E3\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numerical values for which to find the sum of squares of deviations.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, names, or arrays of numbers.",
+      "name": "args",
+      "type": "ApiRange | ApiName | number | number[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DEVSQ(args: ApiRange | ApiName | number | number[]): number"
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Gets the outline properties from the current shape.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/GetLine/",
+  "examples": [
+    "// How do I inspect the thickness, color, and style of a shape's outline in a document?\n\n// Extract stroke details from a shape to display its border settings in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 100));\nlet stroke = Api.CreateStroke(2.5 * 12700, Api.CreateSolidFill(Api.CreateRGBColor(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nparagraph.AddLineBreak();\nlet retrievedStroke = shape.GetLine();\nif (retrievedStroke) {\n    paragraph.AddText(\"Stroke type: \" + retrievedStroke.GetClassType());\n    paragraph.AddLineBreak();\n    let width = retrievedStroke.GetWidth();\n    paragraph.AddText(\"Width: \" + width + \" EMU (\" + (width / 12700).toFixed(2) + \" pt)\");\n    paragraph.AddLineBreak();\n    let strokeFill = retrievedStroke.GetFill();\n    if (strokeFill) {\n        paragraph.AddText(\"Fill type: \" + strokeFill.GetType());\n    }\n    paragraph.AddLineBreak();\n    let dashType = retrievedStroke.GetDashType();\n    paragraph.AddText(\"Dash type: \" + (dashType ? '\"' + dashType + '\"' : \"not set\"));\n}"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiStroke | null"
+  },
+  "signature": "GetLine(): ApiStroke | null"
+}

@@ -1,0 +1,43 @@
+{
+  "description": "Returns the paragraph text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/GetText/",
+  "examples": [
+    "// How do I retrieve the plain text from a paragraph inside a shape in a spreadsheet?\n\n// Extract the paragraph text and write it to a cell to verify the content in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText(\"Sample paragraph text.\");\nconst text = paragraph.GetText();\nworksheet.GetRange(\"A1\").SetValue(\"Paragraph text: \" + text);"
+  ],
+  "params": [
+    {
+      "description": "Options for formatting the returned text.",
+      "name": "options",
+      "optional": true,
+      "type": "object"
+    },
+    {
+      "description": "Defines if the resulting string will include numbering or not.",
+      "name": "options_Numbering",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines if the resulting string will include mathematical expressions or not.",
+      "name": "options_Math",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines how the line separator will be specified in the resulting string. Any string can be used. The default separator is \"\\r\".",
+      "name": "options_NewLineSeparator",
+      "optional": true,
+      "type": "string"
+    },
+    {
+      "description": "Defines how the tab will be specified in the resulting string (does not apply to numbering). Any string can be used. The default symbol is \"\\t\".",
+      "name": "options_TabSymbol",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string"
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Returns a list of all forms in the document with the specified role name.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetFormsByRole/",
+  "examples": [
+    "// How do I filter forms by their assigned role in a document?\n\n// Separate employee and manager fields by querying each role independently in a document.\n\nlet doc = Api.GetDocument();\nlet roles = doc.GetFormRoles();\nroles.Add(\"Employee\");\nroles.Add(\"Chief\");\nlet textForm = Api.CreateTextForm({\"role\" : \"Employee\", \"key\": \"Employee FirstName\", \"tip\": \"Enter your first name\", \"tag\": \"form_1\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet comboBoxForm = Api.CreateComboBoxForm({\"role\" : \"Employee\", \"key\": \"Country\", \"tip\": \"Choose your country\", \"tag\": \"form_1\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nparagraph.AddLineBreak();\nparagraph.AddElement(comboBoxForm);\n\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\ntextForm = Api.CreateTextForm({\"role\" : \"Chief\", \"key\": \"Chief FirstName\", \"tip\": \"Enter your first name\", \"tag\": \"form_1\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nparagraph.AddElement(textForm);\n\nlet forms = doc.GetFormsByRole(\"Employee\");\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddText(\"Number of forms with role 'Employee': \" + forms.length);\n\nforms = doc.GetFormsByRole(\"Chief\");\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddText(\"Number of forms with role 'Chief': \" + forms.length);"
+  ],
+  "params": [
+    {
+      "description": "The form role.",
+      "name": "role",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiForm[]"
+  },
+  "signature": "GetFormsByRole(role: string): ApiForm[]",
+  "since": "9.0.0"
+}

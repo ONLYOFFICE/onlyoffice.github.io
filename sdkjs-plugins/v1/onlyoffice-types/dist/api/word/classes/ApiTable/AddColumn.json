@@ -1,0 +1,25 @@
+{
+  "description": "Adds a new column to the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddColumn/",
+  "examples": [
+    "// How do I add a column next to an existing one to widen a table in a document?\n\n// Grow a table horizontally by placing a new column at a chosen position in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 2x2 table and add a new column, so that it becomes 3x2:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ntable.AddColumn(table.GetRow(0).GetCell(1), true);\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "The cell after which a new column will be added. If not specified, a new column will be added at the end of the table.",
+      "name": "oCell",
+      "optional": true,
+      "type": "ApiTableCell"
+    },
+    {
+      "description": "Adds a new column before (false) or after (true) the specified cell. If no cell is specified,\rthen this parameter will be ignored.",
+      "name": "isBefore",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "AddColumn(oCell?: ApiTableCell, isBefore?: boolean): boolean"
+}

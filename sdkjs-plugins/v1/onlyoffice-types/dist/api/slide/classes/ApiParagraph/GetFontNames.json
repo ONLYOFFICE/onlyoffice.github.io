@@ -1,0 +1,13 @@
+{
+  "description": "Returns all font names from all elements inside the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetFontNames/",
+  "examples": [
+    "// How do I get the list of fonts used in a paragraph in a presentation?\n\n// Collect and display all font families from text elements within a paragraph in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#FF6F3D'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.RemoveAllElements();\n\nlet run = Api.CreateRun();\nrun.AddText('This is just a sample text. ');\nparagraph.AddElement(run);\n\nrun = Api.CreateRun();\nrun.SetFontFamily('Calibri Light');\nrun.AddText(\"This is a text run with the font family set to 'Calibri Light'.\");\nparagraph.AddElement(run);\n\nconst fonts = paragraph.GetFontNames();\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('Fonts: ' + fonts.join(', '));\ndocContent.Push(paragraph2);\nslide.AddObject(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The font names used for the current paragraph.",
+    "type": "string[]"
+  },
+  "signature": "GetFontNames(): string[]"
+}

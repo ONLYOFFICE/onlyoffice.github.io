@@ -1,0 +1,18 @@
+{
+  "description": "Multiplies all the numbers given as arguments.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PRODUCT/",
+  "examples": [
+    "// What is the product of multiple numbers in a spreadsheet?\n\n// Calculate the result of multiplying a series of values together in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PRODUCT(65, 34, 165, 6, 9, 54));"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values that will be multiplied. The first argument is required, subsequent arguments are optional.\rArguments can be numbers, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "number | ApiRange | number[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PRODUCT(args: number | ApiRange | number[]): number"
+}

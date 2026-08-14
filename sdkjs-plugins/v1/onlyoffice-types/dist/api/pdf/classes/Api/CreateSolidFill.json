@@ -1,0 +1,19 @@
+{
+  "description": "Creates a solid fill to apply to the object using a selected solid color as the object background.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateSolidFill/",
+  "examples": [
+    "// How do I set the background color of a shape in a PDF?\n\n// Use an RGB color to fill a shape's background in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst rgbColor = Api.RGB(255, 111, 61);\nconst fill = Api.CreateSolidFill(rgbColor);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\npage.AddObject(drawing);"
+  ],
+  "params": [
+    {
+      "description": "The color used for the element fill.",
+      "name": "color",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateSolidFill(color: ApiColor): ApiFill",
+  "since": "9.1.0"
+}

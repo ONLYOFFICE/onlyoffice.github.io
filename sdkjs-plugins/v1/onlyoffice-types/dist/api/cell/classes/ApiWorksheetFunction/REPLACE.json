@@ -1,0 +1,33 @@
+{
+  "description": "Replaces part of a text string with a different text string.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/REPLACE/",
+  "examples": [
+    "// How do I change a portion of text within a larger string in a spreadsheet?\n\n// Remove a section of text and insert new content in its place in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.REPLACE(\"Online Office\", 8, 6, \"portal\"));"
+  ],
+  "params": [
+    {
+      "description": "The text where some characters will be replaced.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "The position of the character in the original text that will be replaced with the new text.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of characters in the original text that will be replaced.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The text that will replace characters in the original text.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "REPLACE(arg1: ApiRange | ApiName | string, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | string): string"
+}

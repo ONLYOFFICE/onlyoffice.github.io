@@ -1,0 +1,20 @@
+{
+  "description": "Selects the current graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Select/",
+  "examples": [
+    "// How do I select a shape or group of shapes in a document?\n\n// Control which shapes are highlighted by combining replace and additive selection modes in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke1 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = Api.CreateShape(\"rect\", 3212465, 963295*4, fill1, stroke1);\nparagraph.AddDrawing(drawing1);\ndrawing1.SetWrappingStyle(\"inFront\");\ndrawing1.SetHorPosition(\"page\", 0);\ndrawing1.SetVerPosition(\"page\", 0);\nlet fill2 = Api.CreateSolidFill(Api.RGB(51, 133, 255));\nlet stroke2 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing2 = Api.CreateShape(\"rect\", 3212465, 963295*2, fill2, stroke2);\nparagraph.AddDrawing(drawing2);\ndrawing2.SetWrappingStyle(\"inFront\");\ndrawing2.SetHorPosition(\"page\", 4000000);\ndrawing2.SetVerPosition(\"page\", 0);\nlet fill3 = Api.CreateSolidFill(Api.RGB(61, 255, 111));\nlet stroke3 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing3 = Api.CreateShape(\"rect\", 3212465, 963295, fill3, stroke3);\nparagraph.AddDrawing(drawing3);\ndrawing3.SetWrappingStyle(\"inFront\");\ndrawing3.SetHorPosition(\"page\", 0);\ndrawing3.SetVerPosition(\"page\", 4500000);\ndrawing1.Select(true);\ndrawing2.Select(true);\ndrawing3.Select();"
+  ],
+  "params": [
+    {
+      "description": "Specifies whether the selection should replace the current selection (true) or be added to it (false).",
+      "name": "isReplace",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "Select(isReplace?: boolean): boolean",
+  "since": "9.3.0"
+}

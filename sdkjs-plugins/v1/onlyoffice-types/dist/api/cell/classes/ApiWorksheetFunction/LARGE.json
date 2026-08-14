@@ -1,0 +1,23 @@
+{
+  "description": "Returns the k-th largest value in a data set. For example, the fifth largest number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LARGE/",
+  "examples": [
+    "// How do I find the fourth largest number or any ranked value in a spreadsheet?\n\n// Retrieve a specific ranked number by position in a sorted list in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet numbersArr = [4, 13, 27, 56, 46, 79, 22, 12];\n\n// Place the numbers in cells\n\nfor (let i = 0; i < numbersArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(numbersArr[i]);\n}\n\nlet func = Api.WorksheetFunction;\nlet range = worksheet.GetRange(\"A1:A8\");\nlet largePostion = 4;\nlet kLargest = func.LARGE(range, largePostion);\nworksheet.GetRange(\"C1\").SetValue(kLargest);"
+  ],
+  "params": [
+    {
+      "description": "The array or range of data for which the k-th largest value will be determined.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "The position (from the largest) in the array or cell range of data to return.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LARGE(arg1: ApiRange | ApiName | number[], arg2: ApiRange | ApiName | number): number"
+}

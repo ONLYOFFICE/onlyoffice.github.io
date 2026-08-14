@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that all the small letter characters in this paragraph are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetSmallCaps/",
+  "examples": [
+    "// How do I use small caps styling on paragraph text in a presentation?\n\n// Format letters as small capitals for text effects in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is a paragraph with the font set to small capitalized letters.');\nparagraph.SetSmallCaps(true);\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the contents of the current paragraph are displayed capitalized two points smaller or not.",
+      "name": "isSmallCaps",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetSmallCaps(isSmallCaps: boolean): ApiParagraph"
+}

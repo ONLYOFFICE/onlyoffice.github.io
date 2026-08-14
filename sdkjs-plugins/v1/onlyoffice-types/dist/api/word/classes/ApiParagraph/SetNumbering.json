@@ -1,0 +1,15 @@
+{
+  "description": "Specifies that the current paragraph references the numbering definition instance in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetNumbering/",
+  "params": [
+    {
+      "description": "The numbering level which will be used for assigning the numbers to the paragraph.",
+      "name": "oNumberingLevel",
+      "type": "ApiNumberingLevel"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetNumbering(oNumberingLevel: ApiNumberingLevel): boolean"
+}

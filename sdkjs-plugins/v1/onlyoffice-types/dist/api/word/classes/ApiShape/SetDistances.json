@@ -1,0 +1,33 @@
+{
+  "description": "Specifies the minimum distance which will be maintained between the edges of the current drawing object and any\nsubsequent text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetDistances/",
+  "examples": [
+    "// How do I control the gap between a shape and nearby text in a document?\n\n// Keep text away from a floating shape by defining margins on each side of the drawing in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is 1 inch (914400 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(914400, 0, 914400, 0);\ndrawing.SetWrappingStyle(\"square\");\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The distance from the left side of the current object and the subsequent text run measured in English measure units.",
+      "name": "nLeft",
+      "type": "EMU"
+    },
+    {
+      "description": "The distance from the top side of the current object and the preceding text run measured in English measure units.",
+      "name": "nTop",
+      "type": "EMU"
+    },
+    {
+      "description": "The distance from the right side of the current object and the subsequent text run measured in English measure units.",
+      "name": "nRight",
+      "type": "EMU"
+    },
+    {
+      "description": "The distance from the bottom side of the current object and the subsequent text run measured in English measure units.",
+      "name": "nBottom",
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean"
+}

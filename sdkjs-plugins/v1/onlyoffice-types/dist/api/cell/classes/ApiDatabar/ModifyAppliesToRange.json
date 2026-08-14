@@ -1,0 +1,19 @@
+{
+  "description": "Sets the cell range to which the current conditional formatting rule applies.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/ModifyAppliesToRange/",
+  "examples": [
+    "// How do I reassign a formatting rule to a different group of cells in a spreadsheet?\n\n// Expand or narrow the area where an existing formatting rule takes effect in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\nworksheet.GetRange(\"A7\").SetValue(180);\nworksheet.GetRange(\"A8\").SetValue(220);\n\nlet dataRange = worksheet.GetRange(\"A2:A8\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original range:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetAppliesTo().GetAddress());\n\nlet newRange = worksheet.GetRange(\"A2:A5\");\ncondition1.ModifyAppliesToRange(newRange);\n\nworksheet.GetRange(\"D1\").SetValue(\"Modified range:\");\nworksheet.GetRange(\"D2\").SetValue(condition1.GetAppliesTo().GetAddress());"
+  ],
+  "params": [
+    {
+      "description": "The range to which the current conditional formatting rule will be applied.",
+      "name": "Range",
+      "type": "ApiRange"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "ModifyAppliesToRange(Range: ApiRange): void",
+  "since": "9.1.0"
+}

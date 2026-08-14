@@ -1,0 +1,18 @@
+{
+  "description": "Returns an element by its position in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetElement/",
+  "examples": [
+    "// How do I get a single element at a known position inside a document content in a document?\n\n// Add text to a header paragraph by fetching it directly through its position index.\n\nlet doc = Api.GetDocument();\nlet section = doc.GetFinalSection();\nlet docContent = section.GetHeader(\"default\", true);\nlet paragraph = docContent.GetElement(0);\nparagraph.AddText(\"This is the text in the default header\");"
+  ],
+  "params": [
+    {
+      "description": "The element position that will be taken from the document.",
+      "name": "nPos",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "DocumentElement"
+  },
+  "signature": "GetElement(nPos: number): DocumentElement"
+}

@@ -1,0 +1,133 @@
+{
+  "description": "Represents a color that can be applied to text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/",
+  "methods": {
+    "FromJSON": {
+      "description": "Converts the JSON object into the ApiColor object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/FromJSON/",
+      "examples": [
+        "// How do I deserialize saved color data back into usable color objects in a document?\n\n// Round-trip colors through JSON to verify that each restored value matches the original in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst colors = [\n\tApi.RGB(93, 192, 232),\n\tApi.RGBA(149, 192, 56, 128),\n\tApi.HexColor('#FF6F3D'),\n\tApi.ThemeColor('accent2'),\n\tApi.AutoColor()\n];\n\nfor (let i = 0; i < colors.length; i++) {\n\tconst original = colors[i];\n\tconst json = JSON.parse(original.ToJSON());\n\tconst restored = original.FromJSON(json);\n\n\tif (i > 0) paragraph.AddLineBreak();\n\tlet run = Api.CreateRun();\n\trun.SetColor(original);\n\trun.AddText('Original: ' + original.GetHex());\n\tparagraph.Push(run);\n\n\trun = Api.CreateRun();\n\trun.AddText(' - ');\n\tparagraph.Push(run);\n\n\trun = Api.CreateRun();\n\trun.SetColor(restored);\n\trun.AddText('Restored: ' + restored.GetHex());\n\tparagraph.Push(run);\n}"
+      ],
+      "params": [
+        {
+          "description": "JSON representation of the color.",
+          "name": "jsonObject",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "new ApiColor object if the conversion was successful, null otherwise.",
+        "type": "ApiColor | null"
+      },
+      "signature": "FromJSON(jsonObject: string): ApiColor | null",
+      "since": "9.3.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify what kind of color object is used in a document?\n\n// Useful when you need to confirm the object type before processing color properties.\n\nconst doc = Api.GetDocument();\nconst color = Api.ThemeColor('accent1');\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('Class type of ApiColor instance: ' + color.GetClassType());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"color\""
+      },
+      "signature": "GetClassType(): \"color\"",
+      "since": "9.1.0"
+    },
+    "GetHex": {
+      "description": "Gets the HEX string representation of the color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/GetHex/",
+      "examples": [
+        "// How do I get the hexadecimal representation of a color in a document?\n\n// Verify that theme and auto colors always return black hex while hex-defined colors return their actual value.\n\nconst doc = Api.GetDocument();\n\nconst themeColor = Api.ThemeColor('accent1');\nconst autoColor = Api.AutoColor();\nconst rgbaColor = Api.HexColor('#FF0000');\n\nconst themeColorHex = themeColor.GetHex();\nconst autoColorHex = autoColor.GetHex();\nconst rgbaColorHex = rgbaColor.GetHex();\n\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('Hex of themeColor: ' + themeColorHex);\nparagraph.AddLineBreak();\nparagraph.AddText('Hex of autoColor: ' + autoColorHex);\nparagraph.AddLineBreak();\nparagraph.AddText('Hex of rgbaColor: ' + rgbaColorHex);\nparagraph.AddLineBreak();\nparagraph.AddText('Hex for theme colors and auto color are always opaque black; actual color depends on the document theme.');"
+      ],
+      "params": [],
+      "returns": {
+        "description": "A six-digit uppercase hex string, e.g. \"FF00AA\".",
+        "type": "string"
+      },
+      "signature": "GetHex(): string",
+      "since": "9.1.0"
+    },
+    "GetRGB": {
+      "description": "Gets the RGB components of the color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/GetRGB/",
+      "examples": [
+        "// How do I read the individual RGB components of a color in a document?\n\n// Compare channel values across theme, auto, and hex colors to understand how each type resolves in a document.\n\nconst doc = Api.GetDocument();\n\nconst themeColor = Api.ThemeColor('accent1');\nconst autoColor = Api.AutoColor();\nconst hexColor = Api.HexColor('#FF0000');\n\nconst themeColorRGB = themeColor.GetRGB();\nconst autoColorRGB = autoColor.GetRGB();\nconst hexColorRGB = hexColor.GetRGB();\n\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('RGB of themeColor: ' + themeColorRGB.r + ', ' + themeColorRGB.g + ', ' + themeColorRGB.b);\nparagraph.AddLineBreak();\nparagraph.AddText('RGB of autoColor: ' + autoColorRGB.r + ', ' + autoColorRGB.g + ', ' + autoColorRGB.b);\nparagraph.AddLineBreak();\nparagraph.AddText('RGB of hexColor: ' + hexColorRGB.r + ', ' + hexColorRGB.g + ', ' + hexColorRGB.b);\nparagraph.AddLineBreak();\nparagraph.AddText('RGB for theme colors and auto color are always opaque black; actual color depends on the document theme.');"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "GetRGB(): object",
+      "since": "9.1.0"
+    },
+    "GetRGBA": {
+      "description": "Gets the RGBA components of the color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/GetRGBA/",
+      "examples": [
+        "// How do I read the RGBA components of a color in a document?\n\n// Inspect opacity alongside color channels for theme, auto, and hex color types in a document.\n\nconst doc = Api.GetDocument();\n\nconst themeColor = Api.ThemeColor('accent1');\nconst autoColor = Api.AutoColor();\nconst hexColor = Api.HexColor('#FF0000');\n\nconst themeColorRGB = themeColor.GetRGBA();\nconst autoColorRGB = autoColor.GetRGBA();\nconst hexColorRGB = hexColor.GetRGBA();\n\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('RGBA of themeColor: ' + themeColorRGB.r + ', ' + themeColorRGB.g + ', ' + themeColorRGB.b + ', ' + themeColorRGB.a);\nparagraph.AddLineBreak();\nparagraph.AddText('RGBA of autoColor: ' + autoColorRGB.r + ', ' + autoColorRGB.g + ', ' + autoColorRGB.b + ', ' + autoColorRGB.a);\nparagraph.AddLineBreak();\nparagraph.AddText('RGBA of hexColor: ' + hexColorRGB.r + ', ' + hexColorRGB.g + ', ' + hexColorRGB.b + ', ' + hexColorRGB.a);\nparagraph.AddLineBreak();\nparagraph.AddText('RGBA for theme colors and auto color are always opaque black; actual color depends on the document theme.');"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "GetRGBA(): object",
+      "since": "9.1.0"
+    },
+    "GetThemeName": {
+      "description": "Gets the theme color name if the color is a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/GetThemeName/",
+      "examples": [
+        "// How do I find out which theme slot a color belongs to in a document?\n\n// Distinguish between a color defined by a hex value and one tied to a named theme slot in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst hexColor = Api.HexColor('#4080DE');\nconst themeColor = Api.ThemeColor('accent1');\n\nparagraph.AddText('Theme name of hexColor: ' + hexColor.GetThemeName());\nparagraph.AddLineBreak();\nparagraph.AddText('Theme name of themeColor: ' + themeColor.GetThemeName());"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The theme color name or null if not a theme color.",
+        "type": "SchemeColorId | null"
+      },
+      "signature": "GetThemeName(): SchemeColorId | null",
+      "since": "9.3.0"
+    },
+    "IsAutoColor": {
+      "description": "Returns true if the color is set to auto.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/IsAutoColor/",
+      "examples": [
+        "// How do I tell if a color uses the automatic setting in a document?\n\n// Confirm which color objects resolve to the automatic color and which do not in a document.\n\nconst doc = Api.GetDocument();\nconst themeColor = Api.ThemeColor('accent1');\nconst autoColor = Api.AutoColor();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('Is themeColor an auto color? ' + themeColor.IsAutoColor());\nparagraph.AddLineBreak();\nparagraph.AddText('Is autoColor an auto color? ' + autoColor.IsAutoColor());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsAutoColor(): boolean",
+      "since": "9.1.0"
+    },
+    "IsThemeColor": {
+      "description": "Returns true if the color is a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/IsThemeColor/",
+      "examples": [
+        "// How do I check if a color comes from the document theme in a document?\n\n// Distinguish a fixed hex color from a theme-bound color that changes with the theme in a document.\n\nconst doc = Api.GetDocument();\nconst hexColor = Api.HexColor('#FF0000');\nconst themeColor = Api.ThemeColor('accent1');\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('Is hexColor a theme color? ' + hexColor.IsThemeColor());\nparagraph.AddLineBreak();\nparagraph.AddText('Is themeColor a theme color? ' + themeColor.IsThemeColor());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsThemeColor(): boolean",
+      "since": "9.1.0"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiColor object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiColor/Methods/ToJSON/",
+      "examples": [
+        "// How do I export a color's full definition as a JSON string in a document?\n\n// Save or transfer color data by converting RGB, RGBA, hex, theme, and auto colors to JSON in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst rgbColor = Api.RGB(64, 128, 192);\nparagraph.AddText('RGB JSON:\\n' + rgbColor.ToJSON());\nparagraph.AddLineBreak();\n\nparagraph.AddLineBreak();\nconst rgbaColor = Api.RGBA(100, 150, 200, 128);\nparagraph.AddText('RGBA JSON:\\n' + rgbaColor.ToJSON());\nparagraph.AddLineBreak();\n\nparagraph.AddLineBreak();\nconst hexColor = Api.HexColor('#2E86C1');\nparagraph.AddText('HEX JSON:\\n' + hexColor.ToJSON());\nparagraph.AddLineBreak();\n\nparagraph.AddLineBreak();\nconst themeColor = Api.ThemeColor('accent5');\nparagraph.AddText('Theme JSON:\\n' + themeColor.ToJSON());\nparagraph.AddLineBreak();\n\nparagraph.AddLineBreak();\nconst autoColor = Api.AutoColor();\nparagraph.AddText('Auto JSON:\\n' + autoColor.ToJSON());"
+      ],
+      "params": [],
+      "returns": {
+        "description": "JSON string representation of the color.",
+        "type": "string"
+      },
+      "signature": "ToJSON(): string",
+      "since": "9.3.0"
+    }
+  }
+}

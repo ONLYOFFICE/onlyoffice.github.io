@@ -1,0 +1,34 @@
+{
+  "description": "Returns the probability of a trial result using a binomial distribution.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BINOM_DIST_RANGE/",
+  "examples": [
+    "// What is the chance of getting between X and Y successes in N attempts in a spreadsheet?\n\n// Estimate outcomes when trials have consistent success rates in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BINOM_DIST_RANGE(60, 0.75, 45, 50));"
+  ],
+  "params": [
+    {
+      "description": "The number of independent trials.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The probability of success on each trial.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The minimum number of successes in the trials to calculate probability for, a numeric value greater than or equal to 0.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The maximum number of successes in the trials to calculate probability for,\ra numeric value greater than the minimum number of successes and less than or equal to trials.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BINOM_DIST_RANGE(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4?: ApiRange | ApiName | number): number"
+}

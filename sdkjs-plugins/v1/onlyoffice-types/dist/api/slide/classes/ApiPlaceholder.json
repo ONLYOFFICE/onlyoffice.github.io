@@ -1,0 +1,85 @@
+{
+  "description": "Class representing a placeholder.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns the type of the ApiPlaceholder class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine what class a placeholder belongs to in a presentation?\n\n// Create a placeholder and retrieve its class type in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst placeholder = Api.CreatePlaceholder(\"chart\");\nshape.SetPlaceholder(placeholder);\n\nconst classType = placeholder.GetClassType();\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type = \" + classType);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"placeholder\""
+      },
+      "signature": "GetClassType(): \"placeholder\""
+    },
+    "GetIndex": {
+      "description": "Returns the placeholder index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/GetIndex/",
+      "examples": [
+        "// How do I find the index number assigned to a placeholder in a presentation?\n\n// Set a placeholder's index and then retrieve it in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nlet rgb = Api.CreateRGBColor(50, 100, 150);\nlet fill = Api.CreateSolidFill(rgb);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape('rect', 300 * 36000, 100 * 36000, fill, stroke);\n\nconst placeholder = Api.CreatePlaceholder();\nshape.SetPlaceholder(placeholder);\n\nplaceholder.SetIndex(42);\nslide.AddObject(shape);\n\nrgb = Api.CreateRGBColor(50, 100, 150);\nfill = Api.CreateSolidFill(rgb);\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\nshape = Api.CreateShape('rect', 300 * 36000, 10 * 36000, fill, stroke);\nshape.SetPosition(0, 110 * 36000);\nslide.AddObject(shape);\n\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText('Placeholder index set to ' + placeholder.GetIndex());"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns the placeholder index.",
+        "type": "number | undefined"
+      },
+      "signature": "GetIndex(): number | undefined",
+      "since": "8.2.0"
+    },
+    "GetType": {
+      "description": "Returns the placeholder type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/GetType/",
+      "examples": [
+        "// How do I find what type of placeholder is assigned to a shape in a presentation?\n\n// Create a shape with a placeholder and retrieve its category in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst placeholder = Api.CreatePlaceholder(\"chart\");\nshape.SetPlaceholder(placeholder);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Placeholder type in this shape is: \"' + placeholder.GetType() + '\"');\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns the placeholder type.",
+        "type": "PlaceholderType"
+      },
+      "signature": "GetType(): PlaceholderType",
+      "since": "8.2.0"
+    },
+    "SetIndex": {
+      "description": "Sets the placeholder index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/SetIndex/",
+      "examples": [
+        "// How do I change the index number of a placeholder in a presentation?\n\n// Set a placeholder's index and verify it was applied in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nlet rgb = Api.CreateRGBColor(50, 100, 150);\nlet fill = Api.CreateSolidFill(rgb);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape('rect', 300 * 36000, 100 * 36000, fill, stroke);\n\nconst placeholder = Api.CreatePlaceholder();\nshape.SetPlaceholder(placeholder);\n\nplaceholder.SetIndex(42);\nslide.AddObject(shape);\n\nrgb = Api.CreateRGBColor(50, 100, 150);\nfill = Api.CreateSolidFill(rgb);\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\nshape = Api.CreateShape('rect', 300 * 36000, 10 * 36000, fill, stroke);\nshape.SetPosition(0, 110 * 36000);\nslide.AddObject(shape);\n\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText('Placeholder index set to ' + placeholder.GetIndex());"
+      ],
+      "params": [
+        {
+          "description": "The placeholder index.",
+          "name": "nIdx",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "Returns false if the placeholder index wasn't set.",
+        "type": "boolean"
+      },
+      "signature": "SetIndex(nIdx: number): boolean",
+      "since": "8.2.0"
+    },
+    "SetType": {
+      "description": "Sets the placeholder type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/SetType/",
+      "examples": [
+        "// How do I change the placeholder category in a shape in a presentation?\n\n// Create a placeholder and change its type in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst placeholder = Api.CreatePlaceholder(\"chart\");\nshape.SetPlaceholder(placeholder);\n\nplaceholder.SetType(\"picture\");\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Placeholder type",
+          "name": "sType",
+          "type": "PlaceholderType"
+        }
+      ],
+      "returns": {
+        "description": "returns false if placeholder type doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetType(sType: PlaceholderType): boolean"
+    }
+  }
+}

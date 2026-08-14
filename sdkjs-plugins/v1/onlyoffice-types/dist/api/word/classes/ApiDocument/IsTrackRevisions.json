@@ -1,0 +1,12 @@
+{
+  "description": "Checks if change tracking mode is enabled or not.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/IsTrackRevisions/",
+  "examples": [
+    "// How do I find out if change tracking is turned on in a document?\n\n// Verify the tracking state before deciding whether to record or ignore edits in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\ndoc.SetTrackRevisions(true);\nlet trackRevisions = doc.IsTrackRevisions();\nparagraph.AddText(\"Change tracking is enabled: \" + trackRevisions);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "IsTrackRevisions(): boolean"
+}

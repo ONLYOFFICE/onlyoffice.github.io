@@ -1,0 +1,28 @@
+{
+  "description": "Creates a new hyperlink text block to be inserted to the current paragraph or table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateHyperlink/",
+  "examples": [
+    "// How do I add a hyperlink with a tooltip to a paragraph in a document?\n\n// Embed a named web link that shows a tooltip when hovered, then read back its type in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet hyperlink = Api.CreateHyperlink(\"https://api.onlyoffice.com/\", \"ONLYOFFICE Document Builder\", \"ONLYOFFICE for developers\");\nparagraph.AddElement(hyperlink, 0);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Class type of the created object: \" + hyperlink.GetClassType());"
+  ],
+  "params": [
+    {
+      "description": "The hyperlink address.",
+      "name": "link",
+      "type": "string"
+    },
+    {
+      "description": "The text to display the hyperlink.",
+      "name": "display",
+      "type": "string"
+    },
+    {
+      "description": "The screen tip text.",
+      "name": "screenTipText",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiHyperlink"
+  },
+  "signature": "CreateHyperlink(link: string, display: string, screenTipText: string): ApiHyperlink"
+}

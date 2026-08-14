@@ -1,0 +1,12 @@
+{
+  "description": "Adds a line break to the current position and starts the next element from a new line.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/AddLineBreak/",
+  "examples": [
+    "// How do I start text on the next line in a PDF?\n\n// Insert a line break to separate content and move following text down in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\n\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is a text inside the shape aligned left.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"This is a text after the line break.\");\npage.AddObject(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "AddLineBreak(): ApiRun"
+}

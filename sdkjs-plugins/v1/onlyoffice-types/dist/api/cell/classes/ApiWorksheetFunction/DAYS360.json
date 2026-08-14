@@ -1,0 +1,29 @@
+{
+  "description": "Returns the number of days between two dates based on a 360-day year (twelve 30-day months).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DAYS360/",
+  "examples": [
+    "// What is the total days between two specific dates using 360-day year in a spreadsheet?\n\n// Count the number of days from one date to another with 360-day months in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.DAYS360(\"3/31/2018\", \"4/30/2019\", false); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "Start date from which days will be counted.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "End date until which days will be counted.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value that specifies whether to use the U.S. (NASD) (false or omitted) or European (true) method in the calculation.\rAccording to the European method, the start and end dates that occur on the 31st of a month become equal to the 30th of the same month.\rAccording to the U.S. method, the start date is the last day of a month, it becomes equal to the 30th of the same month.\rIf the end date is the last day of a month and the start date is earlier than the 30th of a month, the end date becomes equal to the 1st of the next month.\rOtherwise the end date becomes equal to the 30th of the same month.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DAYS360(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | boolean): number"
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Returns the spacing after value of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingAfter/",
+  "examples": [
+    "// How do I get the amount of spacing after a paragraph in a document?\n\n// Verify the gap between paragraphs by retrieving and printing the spacing-after measurement in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\nlet paraPr = paragraph1.GetParaPr();\nparaPr.SetSpacingAfter(1440);\nparagraph1.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph1.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph1.AddText(\"This is due to the fact that the first paragraph has this offset enabled.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\nparagraph2.AddLineBreak();\nlet spacingAfter = paraPr.GetSpacingAfter();\nparagraph2.AddText(\"Spacing after: \" + spacingAfter);\ndoc.Push(paragraph2);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+    "type": "twips"
+  },
+  "signature": "GetSpacingAfter(): twips"
+}

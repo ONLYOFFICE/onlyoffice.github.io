@@ -1,0 +1,12 @@
+{
+  "description": "Returns all comments related to the whole workbook.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/GetComments/",
+  "examples": [
+    "// How do I get a list of comments from the workbook level in a spreadsheet?\n\n// Read the text and author of comments stored at the document level in a spreadsheet.\n\nApi.AddComment(\"Comment 1\", \"Bob\");\nApi.AddComment(\"Comment 2\", \"Bob\");\nlet arrComments = Api.GetComments();\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"Comment Text: \" + arrComments[0].GetText());\nworksheet.GetRange(\"B1\").SetValue(\"Comment Author: \" + arrComments[0].GetAuthorName());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiComment[]"
+  },
+  "signature": "GetComments(): ApiComment[]"
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Returns the paragraph contents justification.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetJc/",
+  "examples": [
+    "// How do I find out whether a paragraph's text is centered, left-aligned, or right-aligned in a spreadsheet?\n\n// Confirm the justification applied to a paragraph after changing its alignment in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"center\");\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet justification = paraPr.GetJc();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Justification: \" + justification);\ncontent.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "\"left\" | \"right\" | \"both\" | \"center\" | undefined"
+  },
+  "signature": "GetJc(): \"left\" | \"right\" | \"both\" | \"center\" | undefined"
+}

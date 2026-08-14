@@ -1,0 +1,348 @@
+{
+  "description": "Class representing a comment.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/",
+  "methods": {
+    "AddReply": {
+      "description": "Adds a reply to a comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/AddReply/",
+      "examples": [
+        "// How do I attach a follow-up response to a comment already placed on a cell in a spreadsheet?\n\n// Extend a conversation on a cell by adding a reply with an author name to the original comment in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply text: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetText());"
+      ],
+      "params": [
+        {
+          "description": "The comment reply text (required).",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The name of the comment reply author (optional).",
+          "name": "sAuthorName",
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment reply author (optional).",
+          "name": "sUserId",
+          "type": "string"
+        },
+        {
+          "description": "The comment reply position.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "AddReply(sText: string, sAuthorName: string, sUserId: string, nPos?: number): void",
+      "since": "7.5.0"
+    },
+    "Delete": {
+      "description": "Deletes the ApiComment object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/Delete/",
+      "examples": [
+        "// How do I delete a comment that was added to a cell range in a spreadsheet?\n\n// Clean up a cell by adding a comment and then erasing it to leave no annotation behind in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nlet comment = range.GetComment();\ncomment.Delete();\nworksheet.GetRange(\"A3\").SetValue(\"The comment was just deleted from A1.\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns true if the comment was deleted successfully.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAuthorName": {
+      "description": "Returns the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetAuthorName/",
+      "examples": [
+        "// How do I find out who authored a comment attached to a cell in a spreadsheet?\n\n// Identify the contributor behind a cell annotation by retrieving the author name stored with the comment in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's author: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetAuthorName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string",
+      "since": "7.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiComment class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetClassType/",
+      "examples": [
+        "// How do I confirm what kind of object a cell comment is classified as in a spreadsheet?\n\n// Display the category label that identifies a comment object to distinguish it from other element types in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nlet comment = range.GetComment();\nlet type = comment.GetClassType();\nworksheet.GetRange(\"A3\").SetValue(\"Type: \" + type);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"comment\""
+      },
+      "signature": "GetClassType(): \"comment\""
+    },
+    "GetId": {
+      "description": "Returns the current comment ID.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetId/",
+      "examples": [
+        "// How do I get the ID that uniquely identifies a comment on a cell in a spreadsheet?\n\n// Look up a comment's own identifier so it can be referenced or tracked programmatically in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment: \");\nworksheet.GetRange(\"B3\").SetValue(range.GetComment().GetId());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetId(): string",
+      "since": "7.5.0"
+    },
+    "GetQuoteText": {
+      "description": "Returns the quote text of the current comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetQuoteText/",
+      "examples": [
+        "// How do I retrieve the text that a comment quotes from its target cell in a spreadsheet?\n\n// Capture the source text that a comment references to understand what content it annotates in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's quote text: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetQuoteText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetQuoteText(): string | null",
+      "since": "7.5.0"
+    },
+    "GetRepliesCount": {
+      "description": "Returns a number of the comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetRepliesCount/",
+      "examples": [
+        "// How do I find out the total number of replies attached to a comment in a spreadsheet?\n\n// Retrieve the reply count for a comment to track discussion activity in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment replies count: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetRepliesCount());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRepliesCount(): number",
+      "since": "7.5.0"
+    },
+    "GetReply": {
+      "description": "Returns the specified comment reply.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetReply/",
+      "examples": [
+        "// How do I access a particular reply within a comment thread in a spreadsheet?\n\n// Retrieve the text of a chosen reply to inspect its contents in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply text: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetText());"
+      ],
+      "params": [
+        {
+          "description": "The comment reply index.",
+          "name": "nIndex",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiCommentReply"
+      },
+      "signature": "GetReply(nIndex?: number): ApiCommentReply",
+      "since": "7.5.0"
+    },
+    "GetText": {
+      "description": "Returns the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetText/",
+      "examples": [
+        "// How do I retrieve the written message stored inside a comment in a spreadsheet?\n\n// Extract what a comment says so it can be displayed or compared in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment: \");\nworksheet.GetRange(\"B3\").SetValue(range.GetComment().GetText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(): string"
+    },
+    "GetTime": {
+      "description": "Returns the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetTime/",
+      "examples": [
+        "// How do I find out the exact date and time a comment was posted, in my local time, in a spreadsheet?\n\n// Capture the creation timestamp of a comment to record the local time it was added in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Timestamp: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetTime());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTime(): number",
+      "since": "7.5.0"
+    },
+    "GetTimeUTC": {
+      "description": "Returns the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetTimeUTC/",
+      "examples": [
+        "// How do I find out the exact date and time a comment was posted in UTC in a spreadsheet?\n\n// Capture the creation timestamp of a comment in a timezone-neutral format in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Timestamp UTC: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetTimeUTC());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTimeUTC(): number",
+      "since": "7.5.0"
+    },
+    "GetUserId": {
+      "description": "Returns the user ID of the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetUserId/",
+      "examples": [
+        "// How do I look up the user ID belonging to the author of a comment in a spreadsheet?\n\n// Identify who created a comment by reading their account identifier in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's user Id: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetUserId());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUserId(): string",
+      "since": "7.5.0"
+    },
+    "IsSolved": {
+      "description": "Checks if a comment is solved or not.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/IsSolved/",
+      "examples": [
+        "// How do I tell if a comment has already been resolved or is still open in a spreadsheet?\n\n// Verify the resolved state of a comment to decide if further action is needed in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment is solved: \");\nworksheet.GetRange(\"B3\").SetValue(comment.IsSolved());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsSolved(): boolean",
+      "since": "7.5.0"
+    },
+    "RemoveReplies": {
+      "description": "Removes the specified comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/RemoveReplies/",
+      "examples": [
+        "// How do I remove one or more specific replies from a comment in a spreadsheet?\n\n// Clean up a comment thread by erasing unwanted replies and confirming the remaining count in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\ncomment.AddReply(\"Reply 2\", \"John Smith\", \"uid-1\");\ncomment.RemoveReplies(0, 1, false);\nworksheet.GetRange(\"A3\").SetValue(\"Comment replies count: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetRepliesCount());"
+      ],
+      "params": [
+        {
+          "description": "The position of the first comment reply to remove.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "A number of comment replies to remove.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to remove all comment replies or not.",
+          "name": "bRemoveAll",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "RemoveReplies(nPos?: number, nCount?: number, bRemoveAll?: boolean): void",
+      "since": "7.5.0"
+    },
+    "SetAuthorName": {
+      "description": "Sets the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetAuthorName/",
+      "examples": [
+        "// How do I change or set the name shown as the author of a comment in a spreadsheet?\n\n// Update who a comment appears to be written by so the correct name is displayed in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's author: \");\ncomment.SetAuthorName(\"Mark Potato\");\nworksheet.GetRange(\"B3\").SetValue(comment.GetAuthorName());"
+      ],
+      "params": [
+        {
+          "description": "The comment author's name.",
+          "name": "sAuthorName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAuthorName(sAuthorName: string): void",
+      "since": "7.5.0"
+    },
+    "SetSolved": {
+      "description": "Marks a comment as solved.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetSolved/",
+      "examples": [
+        "// How do I set a comment's status to resolved so others know it has been addressed in a spreadsheet?\n\n// Flag a comment as finished to signal that the raised issue no longer needs attention in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment is solved: \");\ncomment.SetSolved(true);\nworksheet.GetRange(\"B3\").SetValue(comment.IsSolved());"
+      ],
+      "params": [
+        {
+          "description": "Specifies if a comment is solved or not.",
+          "name": "bSolved",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSolved(bSolved: boolean): void",
+      "since": "7.5.0"
+    },
+    "SetText": {
+      "description": "Sets the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetText/",
+      "examples": [
+        "// How do I replace the text inside a comment with new content in a spreadsheet?\n\n// Overwrite an outdated comment message with a revised note in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.SetText(\"New comment text\");"
+      ],
+      "params": [
+        {
+          "description": "New text for comment.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetText(text: string): void",
+      "since": "7.5.0"
+    },
+    "SetTime": {
+      "description": "Sets the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetTime/",
+      "examples": [
+        "// How do I change when a comment appears to have been created in a spreadsheet?\n\n// Overwrite the original timestamp on a comment with a new time in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Timestamp: \");\ncomment.SetTime(Date.now());\nworksheet.GetRange(\"B3\").SetValue(comment.GetTime());"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in the current time zone format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTime(nTimeStamp: number | string): void",
+      "since": "7.5.0"
+    },
+    "SetTimeUTC": {
+      "description": "Sets the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetTimeUTC/",
+      "examples": [
+        "// How do I record when a comment was created using a universal time value in a spreadsheet?\n\n// Assign a UTC-based creation time to a comment so all users see the same timestamp in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Timestamp UTC: \");\ncomment.SetTimeUTC(Date.now());\nworksheet.GetRange(\"B3\").SetValue(comment.GetTimeUTC());"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in UTC format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTimeUTC(nTimeStamp: number | string): void",
+      "since": "7.5.0"
+    },
+    "SetUserId": {
+      "description": "Sets the user ID to the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetUserId/",
+      "examples": [
+        "// How do I update which user account is linked to a comment in a spreadsheet?\n\n// Transfer ownership of a comment to a different user account in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's user Id: \");\ncomment.SetUserId(\"uid-2\");\nworksheet.GetRange(\"B3\").SetValue(comment.GetUserId());"
+      ],
+      "params": [
+        {
+          "description": "The user ID of the comment author.",
+          "name": "sUserId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetUserId(sUserId: string): void",
+      "since": "7.5.0"
+    }
+  }
+}

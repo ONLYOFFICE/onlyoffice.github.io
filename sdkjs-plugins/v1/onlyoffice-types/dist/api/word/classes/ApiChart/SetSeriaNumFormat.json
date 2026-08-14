@@ -1,0 +1,23 @@
+{
+  "description": "Sets the specified numeric format to the chart series.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetSeriaNumFormat/",
+  "examples": [
+    "// How do I control how numbers are displayed in a chart series in a document?\n\n// Format data values with decimal places so the chart communicates precision consistently in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetSeriaNumFormat(\"0.00\", 0);\nparagraph.AddDrawing(chart);"
+  ],
+  "params": [
+    {
+      "description": "Numeric format (can be custom format).",
+      "name": "sFormat",
+      "type": "NumFormat | string"
+    },
+    {
+      "description": "Series index.",
+      "name": "nSeria",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetSeriaNumFormat(sFormat: NumFormat | string, nSeria: number): boolean"
+}

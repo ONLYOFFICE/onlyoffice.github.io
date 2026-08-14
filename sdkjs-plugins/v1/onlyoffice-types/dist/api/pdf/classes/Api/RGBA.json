@@ -1,0 +1,33 @@
+{
+  "description": "Creates an RGBA color from red, green, blue and alpha components.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/RGBA/",
+  "examples": [
+    "// How can I set a color that includes transparency in a PDF?\n\n// Apply a semi-transparent color to a shape fill in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst color = Api.RGBA(110, 160, 180, 127);\nconst fill = Api.CreateSolidFill(color);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "Red component (0-255).",
+      "name": "r",
+      "type": "number"
+    },
+    {
+      "description": "Green component (0-255).",
+      "name": "g",
+      "type": "number"
+    },
+    {
+      "description": "Blue component (0-255).",
+      "name": "b",
+      "type": "number"
+    },
+    {
+      "description": "Alpha component (0-255).",
+      "name": "a",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiColor"
+  },
+  "signature": "RGBA(r: number, g: number, b: number, a: number): ApiColor"
+}

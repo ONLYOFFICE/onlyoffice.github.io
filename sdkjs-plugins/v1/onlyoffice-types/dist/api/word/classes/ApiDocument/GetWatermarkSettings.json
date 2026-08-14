@@ -1,0 +1,13 @@
+{
+  "description": "Returns the watermark settings in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetWatermarkSettings/",
+  "examples": [
+    "// How do I change watermark text, font, and color in a document?\n\n// Customize the appearance of a text watermark including style, size, and highlight before saving it.\n\nlet doc = Api.GetDocument();\nlet watermarkSettings = doc.GetWatermarkSettings();\nwatermarkSettings.SetType(\"text\");\nwatermarkSettings.SetText(\"Example\");\nlet textPr = watermarkSettings.GetTextPr();\ntextPr.SetFontFamily(\"Calibri\");\ntextPr.SetFontSize(-1);\ntextPr.SetDoubleStrikeout(true);\ntextPr.SetItalic(true);\ntextPr.SetBold(true);\ntextPr.SetUnderline(true);\ntextPr.SetColor(Api.RGB(0, 255, 0));\ntextPr.SetHighlight(\"blue\");\nwatermarkSettings.SetTextPr(textPr);\ndoc.SetWatermarkSettings(watermarkSettings);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The object which represents the watermark settings.",
+    "type": "ApiWatermarkSettings"
+  },
+  "signature": "GetWatermarkSettings(): ApiWatermarkSettings"
+}

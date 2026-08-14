@@ -1,0 +1,21 @@
+{
+  "description": "Class representing a Preset Color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresetColor/",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiPresetColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresetColor/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine what type a preset color is in a presentation?\n\n// Display the color type name on the slide in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst presetColor = Api.CreatePresetColor(\"peachPuff\");\nconst gs1 = Api.CreateGradientStop(presetColor, 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst classType = presetColor.GetClassType();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class Type = \" + classType);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"presetColor\""
+      },
+      "signature": "GetClassType(): \"presetColor\""
+    }
+  }
+}

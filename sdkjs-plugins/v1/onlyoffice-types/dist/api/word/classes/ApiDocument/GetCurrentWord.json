@@ -1,0 +1,20 @@
+{
+  "description": "Returns the current word or part of the current word.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCurrentWord/",
+  "examples": [
+    "// How do I get the word the cursor is currently placed on in a document?\n\n// Split the word at the cursor to inspect its left and right portions separately in a document.\n\nlet doc = Api.GetDocument();\nlet para1 = doc.GetElement(0);\npara1.AddText(\"The quick brown \");\nlet run = para1.AddText(\"fox\");\npara1.AddText(\" jumps over the lazy dog\");\n\nrun.MoveCursorToPos(1);\n\nlet para2 = Api.CreateParagraph();\npara2.AddText(\"The current word is \" + doc.GetCurrentWord());\ndoc.Push(para2);\n\npara2 = Api.CreateParagraph();\npara2.AddText(\"The part of the word after cursor is \" + doc.GetCurrentWord(\"after\"));\ndoc.Push(para2);\n\npara2 = Api.CreateParagraph();\npara2.AddText(\"The part of the word before cursor is \" + doc.GetCurrentWord(\"before\"));\ndoc.Push(para2);"
+  ],
+  "params": [
+    {
+      "description": "The desired part of the current word to be returned.",
+      "name": "sWordPart",
+      "optional": true,
+      "type": "\"before\" | \"after\""
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetCurrentWord(sWordPart?: \"before\" | \"after\"): string",
+  "since": "8.2.0"
+}

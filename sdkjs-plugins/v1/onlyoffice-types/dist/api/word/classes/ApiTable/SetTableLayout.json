@@ -1,0 +1,18 @@
+{
+  "description": "Specifies the algorithm which will be used to lay out the contents of the current table within the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableLayout/",
+  "examples": [
+    "// How do I prevent table columns from changing size when content is added in a document?\n\n// Lock column widths so the table structure stays consistent regardless of content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We set the table cells to preserve their size:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntablePr.SetTableLayout(\"fixed\");\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\nlet cell = table.GetRow(0).GetCell(0);\ncell.GetContent().GetElement(0).AddText(\"Fixed layout\");\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "The type of the table layout in the document.",
+      "name": "sType",
+      "type": "\"autofit\" | \"fixed\""
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetTableLayout(sType: \"autofit\" | \"fixed\"): boolean"
+}

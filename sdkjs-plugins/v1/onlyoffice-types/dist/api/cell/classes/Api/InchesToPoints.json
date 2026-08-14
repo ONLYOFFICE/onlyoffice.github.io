@@ -1,0 +1,18 @@
+{
+  "description": "Converts inches to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/InchesToPoints/",
+  "examples": [
+    "// How do I convert a size given in inches to points in a spreadsheet?\n\n// Show the equivalent point value for a given number of inches in a spreadsheet.\n\nconst inches = 100;\nconst points = Api.InchesToPoints(inches);\nconst text = inches + ' inches are equal to ' + points + ' points.';\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue(text);"
+  ],
+  "params": [
+    {
+      "description": "The number of inches to convert to points.",
+      "name": "inches",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "InchesToPoints(inches: number): number"
+}

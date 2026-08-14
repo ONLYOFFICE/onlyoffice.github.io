@@ -1,0 +1,23 @@
+{
+  "description": "Returns a Range object that represents the part of the document contained in the specified table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetRange/",
+  "examples": [
+    "// How do I target a portion of a table's content by cell coordinates in a document?\n\n// Apply formatting to a defined span of table cells in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\ntable.GetCell(0, 0).GetContent().GetElement(0).AddText(\"This is just a sample text.\");\nlet range = table.GetRange(0, 3);\nrange.SetBold(true);"
+  ],
+  "params": [
+    {
+      "description": "Start position index in the current element.",
+      "name": "Start",
+      "type": "number"
+    },
+    {
+      "description": "End position index in the current element.",
+      "name": "End",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange"
+  },
+  "signature": "GetRange(Start: number, End: number): ApiRange"
+}

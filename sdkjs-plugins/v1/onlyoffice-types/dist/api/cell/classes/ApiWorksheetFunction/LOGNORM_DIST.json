@@ -1,0 +1,33 @@
+{
+  "description": "Returns the lognormal distribution of x, where ln(x) is normally distributed with the specified parameters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOGNORM_DIST/",
+  "examples": [
+    "// How do I find the cumulative or probability density for a lognormal distributed variable in a spreadsheet?\n\n// Determine the probability distribution of a lognormally distributed dataset in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\n//configure function parameters\nlet numbersArr = [4, 3.5, 1.2];\n\n//set values in cells\nfor (let i = 0; i < numbersArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(numbersArr[i]);\n}\n\n//get parameters\nlet xValue = worksheet.GetRange(\"A1\");\nlet mean = worksheet.GetRange(\"A2\");\nlet standardDeviation = worksheet.GetRange(\"A3\");\nlet cummulative = true;\n\n//invoke LOGNORM.DIST method\nlet func = Api.WorksheetFunction;\nlet ans = func.LOGNORM_DIST(xValue, mean, standardDeviation, cummulative);\n\n//print answer\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value at which to evaluate the function, a positive number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The mean of ln(x).",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The standard deviation of ln(x), a positive number.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value (**true** or **false**) that determines the function form.\rIf it is **true**, the function returns the cumulative distribution function.\rIf it is **false**, the function returns the probability density function.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LOGNORM_DIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | boolean): number"
+}

@@ -1,0 +1,321 @@
+{
+  "description": "Class representing a custom XML node.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/",
+  "methods": {
+    "Add": {
+      "description": "Creates a child node for the current XML node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/Add/",
+      "examples": [
+        "// How do I append a nested element to a custom XML node in a spreadsheet?\n\n// Expand an embedded XML structure by adding a sub-node to an existing parent in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example'><text>Hello World!</text></content>\");\nlet rootNode = xml.GetNodes(\"/content\")[0];\nlet textNode = rootNode.Add(\"text\");\nlet classType = textNode.GetClassType();\nworksheet.GetRange(\"A1\").SetValue(\"Class type: \" + classType);"
+      ],
+      "params": [
+        {
+          "description": "The name of the new child node.",
+          "name": "nodeName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The newly created child node.",
+        "type": "ApiCustomXmlNode"
+      },
+      "signature": "Add(nodeName: string): ApiCustomXmlNode",
+      "since": "9.0.0"
+    },
+    "Delete": {
+      "description": "Deletes the current XML node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/Delete/",
+      "examples": [
+        "// How do I delete an unwanted element from custom XML data in a spreadsheet?\n\n// Trim embedded XML content by eliminating a node and verifying what remains in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<root><item>Value 1</item><item>Value 2</item></root>\");\nlet rootNode = xml.GetNodes(\"/root\")[0];\nlet itemNodes = rootNode.GetNodes(\"/item\");\nitemNodes[0].Delete();\nlet remainingNodes = rootNode.GetNodes(\"/item\");\nworksheet.GetRange(\"A1\").SetValue(\"Remaining items: \" + remainingNodes.length);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the node was successfully deleted.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean",
+      "since": "9.0.0"
+    },
+    "DeleteAttribute": {
+      "description": "Deletes an attribute from the custom XML node.\nIf the attribute exists, it will be removed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/DeleteAttribute/",
+      "examples": [
+        "// How do I strip a specific attribute from a custom XML element in a spreadsheet?\n\n// Clean up XML metadata by dropping an attribute and confirming the change in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = `\n<bookstore>\n\t<book category='fiction' status='available'>\n\t\t<title>The Odyssey</title>\n\t</book>\n</bookstore>`;\nconst xml = xmlManager.Add(xmlString);\nconst bookNode = xml.GetNodes('/bookstore/book')[0];\n\nbookNode.DeleteAttribute('category');\n\nconst attributes = bookNode.GetAttributes();\nworksheet.GetRange('A1').SetValue('Remaining attributes count: ' + attributes.length);\nworksheet.GetRange('A2').SetValue('XML after deletion: ' + xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The name of the attribute to delete.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the attribute was successfully deleted, `false` if the attribute didn't exist.",
+        "type": "boolean"
+      },
+      "signature": "DeleteAttribute(name: string): boolean",
+      "since": "9.0.0"
+    },
+    "GetAttribute": {
+      "description": "Retrieves the attribute value from the custom XML node.\nIf the attribute doesn't exist, it returns `false`.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetAttribute/",
+      "examples": [
+        "// How do I extract the value of a specific attribute from a custom XML element in a spreadsheet?\n\n// Pull individual attribute values out of stored XML data and display them in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<product id='123' name='Laptop' price='999'></product>\");\nlet productNode = xml.GetNodes('/product')[0];\nlet id = productNode.GetAttribute(\"id\");\nlet name = productNode.GetAttribute(\"name\");\nlet price = productNode.GetAttribute(\"price\");\nworksheet.GetRange(\"A1\").SetValue(\"Product ID: \" + id);\nworksheet.GetRange(\"A2\").SetValue(\"Product Name: \" + name);\nworksheet.GetRange(\"A3\").SetValue(\"Product Price: \" + price);"
+      ],
+      "params": [
+        {
+          "description": "The name of the attribute to retrieve.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The value of the attribute if it exists, or `null` if the attribute is not found.",
+        "type": "string | null"
+      },
+      "signature": "GetAttribute(name: string): string | null",
+      "since": "9.0.0"
+    },
+    "GetAttributes": {
+      "description": "Returns a list of attributes of the current XML node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetAttributes/",
+      "examples": [
+        "// How do I list all attributes of a custom XML element in a spreadsheet?\n\n// Loop through the complete set of attributes on an embedded XML node and display them in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = `\n<zoo>\n\t<animal species='Lion' id='101'>\n\t\t<name>Leo</name>\n\t</animal>\n</zoo>`;\nconst xml = xmlManager.Add(xmlString);\nconst animalNode = xml.GetNodes('/zoo/animal')[0];\n\nconst attributes = animalNode.GetAttributes();\n\nworksheet.GetRange('A1').SetValue('Attribute');\nworksheet.GetRange('B1').SetValue('Value');\nfor (let i = 0; i < attributes.length; i++) {\n\tworksheet.GetRange('A' + (i + 2)).SetValue(attributes[i].name);\n\tworksheet.GetRange('B' + (i + 2)).SetValue(attributes[i].value);\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "An array of attribute objects.",
+        "type": "CustomXmlNodeAttribute[]"
+      },
+      "signature": "GetAttributes(): CustomXmlNodeAttribute[]",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCustomXmlNode class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetClassType/",
+      "examples": [
+        "// How do I confirm the category of an XML node object before processing it in a spreadsheet?\n\n// Verify the identity of an XML node to ensure it is the expected kind before using it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xmlText = `\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<zoo>\n    <animal species=\"Lion\" id=\"101\">\n        <name>Leo</name>\n        <age>5</age>\n        <habitat>Savanna</habitat>\n        <diet>Carnivore</diet>\n    </animal>\n</zoo>`;\nlet xml = xmlManager.Add(xmlText);\nlet node = xml.GetNodes('/zoo/animal')[0];\nlet classType = node.GetClassType();\nworksheet.GetRange(\"A1\").SetValue(\"Class type of the node: \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"customXmlNode\""
+      },
+      "signature": "GetClassType(): \"customXmlNode\""
+    },
+    "GetNodeName": {
+      "description": "Returns the name of the current XML node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetNodeName/",
+      "examples": [
+        "// How do I find out the element name of a custom XML node in a spreadsheet?\n\n// Identify which XML tag a node represents by reading its name in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<inventory><item>Book</item><item>Pen</item></inventory>\");\nlet inventoryNode = xml.GetNodes('/inventory')[0];\nlet itemNodes = inventoryNode.GetNodes('/item');\nlet nodeName = itemNodes[0].GetNodeName();\nworksheet.GetRange(\"A1\").SetValue(\"Node name: \" + nodeName);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The name of the current node.",
+        "type": "string"
+      },
+      "signature": "GetNodeName(): string",
+      "since": "9.0.0"
+    },
+    "GetNodeValue": {
+      "description": "Returns the XML string representation of the current node content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetNodeValue/",
+      "examples": [
+        "// How do I retrieve what value is saved inside an XML node in a spreadsheet?\n\n// Extract a node's raw value to inspect embedded data in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = `\n<zoo>\n\t<animal species='Lion'>\n\t\t<name>Leo</name>\n\t\t<age>5</age>\n\t</animal>\n</zoo>`;\nconst xml = xmlManager.Add(xmlString);\n\nconst animalNode = xml.GetNodes('/zoo/animal')[0];\nconst nodeValue = animalNode.GetNodeValue();\nworksheet.GetRange('A1').SetValue('Node value: ' + nodeValue);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The XML string representation of the current node content.",
+        "type": "string"
+      },
+      "signature": "GetNodeValue(): string",
+      "since": "9.0.0"
+    },
+    "GetNodes": {
+      "description": "Returns nodes from the custom XML node based on the given XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetNodes/",
+      "examples": [
+        "// How do I search for specific nodes inside an XML tree in a spreadsheet?\n\n// Gather a set of related XML nodes by their shared path in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<library><book>Book 1</book><book>Book 2</book><book>Book 3</book></library>\");\nlet libraryNode = xml.GetNodes('/library')[0];\nlet bookNodes = libraryNode.GetNodes('/book');\nworksheet.GetRange(\"A1\").SetValue(\"Number of books: \" + bookNodes.length);\nfor (let i = 0; i < bookNodes.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 2)).SetValue(\"Book\" + \": \" + bookNodes[i].GetText());\n}"
+      ],
+      "params": [
+        {
+          "description": "The XPath expression to match nodes.",
+          "name": "xPath",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "An array of nodes that match the given XPath.",
+        "type": "ApiCustomXmlNode[]"
+      },
+      "signature": "GetNodes(xPath: string): ApiCustomXmlNode[]",
+      "since": "9.0.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent of the current XML node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetParent/",
+      "examples": [
+        "// How do I find the parent node of an XML element in a spreadsheet?\n\n// Traverse the XML hierarchy to identify where a node belongs in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = `\n<zoo>\n\t<animal species='Lion'>\n\t\t<name>Leo</name>\n\t</animal>\n</zoo>`;\nconst xml = xmlManager.Add(xmlString);\n\nconst animalNode = xml.GetNodes('/zoo/animal')[0];\nconst parentNode = animalNode.GetParent();\nconst grandParent = parentNode.GetParent();\n\nworksheet.GetRange('A1').SetValue('Parent node name: ' + parentNode.GetNodeName());\nworksheet.GetRange('A2').SetValue('Grand parent: ' + grandParent);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The parent node, or `null` if the current node has no parent.",
+        "type": "ApiCustomXmlNode | null"
+      },
+      "signature": "GetParent(): ApiCustomXmlNode | null",
+      "since": "9.0.0"
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current node and its child nodes.\nFor example: `<text>123<one>4</one></text>` returns `\"1234\"`.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetText/",
+      "examples": [
+        "// How do I extract readable text from an XML node in a spreadsheet?\n\n// Pull out the human-readable content of an XML entry in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<message>Hello from custom XML!</message>\");\nlet messageNode = xml.GetNodes('/message')[0];\nlet text = messageNode.GetText();\nworksheet.GetRange(\"A1\").SetValue(\"Message: \" + text);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The combined text content of the node and its descendants.",
+        "type": "string"
+      },
+      "signature": "GetText(): string",
+      "since": "9.0.0"
+    },
+    "GetXPath": {
+      "description": "Returns the absolute XPath of the current XML node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetXPath/",
+      "examples": [
+        "// How do I find out where an XML node sits in the overall structure in a spreadsheet?\n\n// Identify the exact location of a node by reading its path expression in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<company><department><employee>John</employee></department></company>\");\nlet employeeNode = xml.GetNodes('/company/department/employee')[0];\nlet xpath = employeeNode.GetXPath();\nworksheet.GetRange(\"A1\").SetValue(\"XPath of employee node: \" + xpath);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The absolute XPath of the current node.",
+        "type": "string"
+      },
+      "signature": "GetXPath(): string",
+      "since": "9.0.0"
+    },
+    "GetXml": {
+      "description": "Returns the XML string of the current node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/GetXml/",
+      "examples": [
+        "// How do I get the full XML markup for a specific node in a spreadsheet?\n\n// Capture a node's complete structure as text to inspect or reuse it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<book><title>JavaScript Guide</title><author>John Smith</author></book>\");\nlet bookNode = xml.GetNodes('/book')[0];\nlet xmlString = bookNode.GetXml();\nworksheet.GetRange(\"A1\").SetValue(\"XML content:\");\nworksheet.GetRange(\"A2\").SetValue(xmlString);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The XML string representation of the current node.",
+        "type": "string"
+      },
+      "signature": "GetXml(): string",
+      "since": "9.0.0"
+    },
+    "SetAttribute": {
+      "description": "Sets an attribute for the custom XML node.\nIf the attribute already exists, it will not be modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/SetAttribute/",
+      "examples": [
+        "// How do I add an attribute to an XML node in a spreadsheet?\n\n// Annotate an XML element with descriptive metadata fields in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<product></product>\");\nlet productNode = xml.GetNodes('/product')[0];\nproductNode.SetAttribute(\"id\", \"456\");\nproductNode.SetAttribute(\"name\", \"Desktop Computer\");\nproductNode.SetAttribute(\"price\", \"1299\");\nlet updatedXml = xml.GetXml();\nworksheet.GetRange(\"A1\").SetValue(\"Updated XML:\");\nworksheet.GetRange(\"A2\").SetValue(updatedXml);"
+      ],
+      "params": [
+        {
+          "description": "The name of the attribute to set.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The value to assign to the attribute.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the attribute was successfully set, `false` if the attribute already exists.",
+        "type": "boolean"
+      },
+      "signature": "SetAttribute(name: string, value: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetNodeValue": {
+      "description": "Sets the XML content for the current node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/SetNodeValue/",
+      "examples": [
+        "// How do I change the value held by an XML node in a spreadsheet?\n\n// Replace an existing node's content with fresh data in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = `\n<bookstore>\n\t<book>\n\t\t<title>The Odyssey</title>\n\t\t<author>Homer</author>\n\t</book>\n</bookstore>`;\nconst xml = xmlManager.Add(xmlString);\n\nconst bookNode = xml.GetNodes('/bookstore/book')[0];\nbookNode.SetNodeValue('<book>Updated content</book>');\nworksheet.GetRange('A1').SetValue('XML after update:');\nworksheet.GetRange('B1').SetValue(xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The XML string to set as the content of the current node.",
+          "name": "xml",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the XML was successfully set.",
+        "type": "boolean"
+      },
+      "signature": "SetNodeValue(xml: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetText": {
+      "description": "Sets the text content of the current XML node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/SetText/",
+      "examples": [
+        "// How do I change the text inside an XML node in a spreadsheet?\n\n// Store a new text value inside an existing XML entry in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<message></message>\");\nlet messageNode = xml.GetNodes('/message')[0];\nmessageNode.SetText(\"Updated message from CustomXml!\");\nlet updatedText = messageNode.GetText();\nworksheet.GetRange(\"A1\").SetValue(\"Updated message: \" + updatedText);"
+      ],
+      "params": [
+        {
+          "description": "The text content to set for the node.",
+          "name": "str",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the text was successfully set.",
+        "type": "boolean"
+      },
+      "signature": "SetText(str: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetXml": {
+      "description": "Sets the XML content of the current XML node.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/SetXml/",
+      "examples": [
+        "// How do I replace the contents of an XML node with different XML in a spreadsheet?\n\n// Swap out a node's structure by supplying a fresh XML fragment in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = `\n<bookstore>\n\t<book>\n\t\t<title>The Odyssey</title>\n\t\t<author>Homer</author>\n\t</book>\n</bookstore>`;\nconst xml = xmlManager.Add(xmlString);\n\nconst bookNode = xml.GetNodes('/bookstore/book')[0];\nbookNode.SetXml('<book><title>New Book</title></book>');\nworksheet.GetRange('A1').SetValue('XML after replacement:');\nworksheet.GetRange('A2').SetValue(xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The XML string to set as the node content.",
+          "name": "strXml",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the XML was successfully set.",
+        "type": "boolean"
+      },
+      "signature": "SetXml(strXml: string): boolean",
+      "since": "9.0.0"
+    },
+    "UpdateAttribute": {
+      "description": "Updates the value of an existing attribute in the custom XML node.\nIf the attribute doesn't exist, the update will not occur.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlNode/Methods/UpdateAttribute/",
+      "examples": [
+        "// How do I modify the value of an attribute already set on an XML node in a spreadsheet?\n\n// Revise a previously assigned attribute to reflect updated information in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = `\n<bookstore>\n\t<book category='fiction'>\n\t\t<title>The Odyssey</title>\n\t</book>\n</bookstore>`;\nconst xml = xmlManager.Add(xmlString);\nconst bookNode = xml.GetNodes('/bookstore/book')[0];\n\nbookNode.UpdateAttribute('category', 'ancient');\n\nconst attributes = bookNode.GetAttributes();\nworksheet.GetRange('A1').SetValue('Updated attribute: ' + attributes[0].name + '=' + attributes[0].value);"
+      ],
+      "params": [
+        {
+          "description": "The name of the attribute to update.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The new value to assign to the attribute.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the attribute was successfully updated, `false` if the attribute doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "UpdateAttribute(name: string, value: string): boolean",
+      "since": "9.0.0"
+    }
+  },
+  "since": "9.0.0"
+}

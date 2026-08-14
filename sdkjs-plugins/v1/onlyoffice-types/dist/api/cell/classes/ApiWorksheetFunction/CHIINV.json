@@ -1,0 +1,23 @@
+{
+  "description": "Returns the inverse of the right-tailed probability of the chi-squared distribution.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHIINV/",
+  "examples": [
+    "// Identify the threshold where the upper tail of the chi-squared distribution starts in a spreadsheet.\n\n// Establish the boundary point for statistical significance at a given probability level in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.CHIDIST(0.4, 10);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A probability associated with the chi-squared distribution, a value between 0 and 1 inclusive.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of degrees of freedom, a number between 1 and 10^10, excluding 10^10.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CHIINV(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

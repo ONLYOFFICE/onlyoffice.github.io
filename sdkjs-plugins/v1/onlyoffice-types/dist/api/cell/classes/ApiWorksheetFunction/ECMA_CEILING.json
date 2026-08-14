@@ -1,0 +1,23 @@
+{
+  "description": "Rounds the number up to the nearest multiple of significance. Negative numbers are rounded towards zero.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ECMA_CEILING/",
+  "examples": [
+    "// How do I round numbers to the nearest increment in a spreadsheet?\n\n// Increase values to align with a specific rounding factor in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ECMA_CEILING(1.567, 0.1));"
+  ],
+  "params": [
+    {
+      "description": "The value to round up.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The multiple of significance to round up to.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ECMA_CEILING(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

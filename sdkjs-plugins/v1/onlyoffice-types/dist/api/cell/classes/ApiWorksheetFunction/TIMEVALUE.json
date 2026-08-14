@@ -1,0 +1,18 @@
+{
+  "description": "Converts a text time to a serial number for a time, a number from 0 (12:00:00 AM) to 0.999988426 (11:59:59 PM). Format the number with a time format after entering the formula.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TIMEVALUE/",
+  "examples": [
+    "// Parse a text string representing a time and convert it to a serial number.\n\n// Apply the TIMEVALUE function with a time string in date and time format.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.TIMEVALUE(\"11/5/18 11:17:00 am\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A text string that represents a time in one of the time formats (date information in the string is ignored).",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TIMEVALUE(arg1: ApiRange | ApiName | string): number"
+}

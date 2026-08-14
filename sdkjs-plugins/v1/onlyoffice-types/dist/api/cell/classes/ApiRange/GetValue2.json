@@ -1,0 +1,12 @@
+{
+  "description": "Returns the Value2 property (value without format) of the specified range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetValue2/",
+  "examples": [
+    "// How do I get the number stored in a cell without any formatting in a spreadsheet?\n\n// Extract the underlying value from a formatted cell to use it elsewhere in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet format = Api.Format(\"123456\", \"$#,##0\");\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(format);\nlet value2 = range.GetValue2();\nworksheet.GetRange(\"A3\").SetValue(\"Value of the cell A1 without format: \" + value2);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "string | string[][]"
+  },
+  "signature": "GetValue2(): string | string[][]"
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Inserts the specified pivot table into a new worksheet.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/InsertPivotNewWorksheet/",
+  "examples": [
+    "// How do I create a pivot table on a newly added sheet in a spreadsheet?\n\n// Summarize data with a pivot table placed on a fresh sheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Price');\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('C2').SetValue(42.5);\nworksheet.GetRange('C3').SetValue(35.2);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$C$3\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);"
+  ],
+  "params": [
+    {
+      "description": "The source data range.",
+      "name": "dataRef",
+      "type": "ApiRange"
+    },
+    {
+      "description": "A new worksheet name.",
+      "name": "newSheetName",
+      "optional": true,
+      "type": "ApiRange"
+    }
+  ],
+  "returns": {
+    "type": "ApiPivotTable"
+  },
+  "signature": "InsertPivotNewWorksheet(dataRef: ApiRange, newSheetName?: ApiRange): ApiPivotTable",
+  "since": "8.2.0"
+}

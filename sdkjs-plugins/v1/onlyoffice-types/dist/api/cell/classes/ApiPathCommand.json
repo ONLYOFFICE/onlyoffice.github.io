@@ -1,0 +1,175 @@
+{
+  "description": "Class representing a path command.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/",
+  "methods": {
+    "GetHR": {
+      "description": "Returns the height radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetHR/",
+      "examples": [
+        "// How do I find out the height radius of an arc drawn on a shape in a spreadsheet?\n\n// Extract the arc's vertical radius value and write it to a cell for review in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nworksheet.GetRange(\"A13\").SetValue(\"WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nworksheet.GetRange(\"A14\").SetValue(\"Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 6, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetHR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetStartAngle": {
+      "description": "Returns the start angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetStartAngle/",
+      "examples": [
+        "// How do I find the starting angle of an arc path command in a spreadsheet?\n\n// Inspect an arc segment to confirm the exact degree at which the curve opens in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nworksheet.GetRange(\"A13\").SetValue(\"WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nworksheet.GetRange(\"A14\").SetValue(\"Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 6, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetStartAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetSweepAngle": {
+      "description": "Returns the sweep angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetSweepAngle/",
+      "examples": [
+        "// How do I find the total rotation span of an arc path command in a spreadsheet?\n\n// Verify the angular extent of a curved segment on a shape in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nworksheet.GetRange(\"A13\").SetValue(\"WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nworksheet.GetRange(\"A14\").SetValue(\"Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 6, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetSweepAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the type of the current path command.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetType/",
+      "examples": [
+        "// How do I find out the type of a path command on a shape in a spreadsheet?\n\n// Distinguish between move, line, curve, and arc steps in a shape's drawing path in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"star5\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nworksheet.GetRange(\"A8\").SetValue(\"Commands: \" + path.GetCommandCount());\nlet cmd = path.GetCommand(0);\nworksheet.GetRange(\"A9\").SetValue(\"Type: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "PathCommandType"
+      },
+      "signature": "GetType(): PathCommandType",
+      "since": "9.1.0"
+    },
+    "GetWR": {
+      "description": "Returns the width radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetWR/",
+      "examples": [
+        "// How do I find the width radius of an arc segment on a shape in a spreadsheet?\n\n// Confirm the horizontal extent of a curved arc drawn inside a shape in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nworksheet.GetRange(\"A13\").SetValue(\"WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nworksheet.GetRange(\"A14\").SetValue(\"Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 6, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetWR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX": {
+      "description": "Returns the X coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetX/",
+      "examples": [
+        "// How do I find the X coordinate of a drawing command on a shape in a spreadsheet?\n\n// Confirm where a path step lands horizontally within a shape's drawing area in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"star5\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nworksheet.GetRange(\"A8\").SetValue(\"Commands: \" + path.GetCommandCount());\nlet cmd = path.GetCommand(0);\nworksheet.GetRange(\"A9\").SetValue(\"Type: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX0": {
+      "description": "Returns the X coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetX0/",
+      "examples": [
+        "// How do I find the X coordinate of the first bezier handle on a curve path command in a spreadsheet?\n\n// Inspect the initial horizontal anchor that shapes a cubic curve segment in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nworksheet.GetRange(\"A10\").SetValue(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \")\");\nworksheet.GetRange(\"A11\").SetValue(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \")\");\nworksheet.GetRange(\"A12\").SetValue(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX1": {
+      "description": "Returns the X coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetX1/",
+      "examples": [
+        "// How do I find the X coordinate of the second bezier handle on a curve path command in a spreadsheet?\n\n// Verify the mid-section horizontal anchor that guides the shape of a cubic curve in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nworksheet.GetRange(\"A10\").SetValue(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \")\");\nworksheet.GetRange(\"A11\").SetValue(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \")\");\nworksheet.GetRange(\"A12\").SetValue(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX2": {
+      "description": "Returns the X coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetX2/",
+      "examples": [
+        "// How do I find the X coordinate of the final destination point on a curve path command in a spreadsheet?\n\n// Confirm where a cubic curve segment ends horizontally within a shape's path in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nworksheet.GetRange(\"A10\").SetValue(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \")\");\nworksheet.GetRange(\"A11\").SetValue(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \")\");\nworksheet.GetRange(\"A12\").SetValue(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX2(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY": {
+      "description": "Returns the Y coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetY/",
+      "examples": [
+        "// How do I find the Y coordinate of a drawing command on a shape in a spreadsheet?\n\n// Confirm where a path step lands vertically within a shape's drawing area in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"star5\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nworksheet.GetRange(\"A8\").SetValue(\"Commands: \" + path.GetCommandCount());\nlet cmd = path.GetCommand(0);\nworksheet.GetRange(\"A9\").SetValue(\"Type: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY0": {
+      "description": "Returns the Y coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetY0/",
+      "examples": [
+        "// How do I find the Y coordinate of the first bezier handle on a curve path command in a spreadsheet?\n\n// Inspect the initial vertical anchor that shapes a cubic curve segment in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nworksheet.GetRange(\"A10\").SetValue(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \")\");\nworksheet.GetRange(\"A11\").SetValue(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \")\");\nworksheet.GetRange(\"A12\").SetValue(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY1": {
+      "description": "Returns the Y coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetY1/",
+      "examples": [
+        "// How do I find the Y coordinate of the second bezier handle on a curve path command in a spreadsheet?\n\n// Verify the mid-section vertical anchor that guides the shape of a cubic curve in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nworksheet.GetRange(\"A10\").SetValue(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \")\");\nworksheet.GetRange(\"A11\").SetValue(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \")\");\nworksheet.GetRange(\"A12\").SetValue(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY2": {
+      "description": "Returns the Y coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPathCommand/Methods/GetY2/",
+      "examples": [
+        "// How do I find the final Y point of a curve path command in a spreadsheet?\n\n// Confirm the destination height of a drawn curve by checking its last vertical point in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nworksheet.GetRange(\"A10\").SetValue(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \")\");\nworksheet.GetRange(\"A11\").SetValue(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \")\");\nworksheet.GetRange(\"A12\").SetValue(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 0);\nshape.SetGeometry(customGeometry);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY2(): string | null",
+      "since": "9.1.0"
+    }
+  }
+}

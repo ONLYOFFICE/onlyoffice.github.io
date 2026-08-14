@@ -1,0 +1,35 @@
+{
+  "description": "Returns the number of whole workdays between two dates with custom weekend parameters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NETWORKDAYS_INTL/",
+  "examples": [
+    "// Calculate business days using a specific weekend pattern in a spreadsheet.\n\n// Exclude custom holidays and weekends from workday calculations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NETWORKDAYS_INTL(\"8/1/2017\", \"9/1/2017\", \"0000011\", \"8/16/2017\"));"
+  ],
+  "params": [
+    {
+      "description": "A serial date number that represents the start date.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A serial date number that represents the end date.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A number or string specifying when weekends occur.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number | string"
+    },
+    {
+      "description": "An optional range or array of one or more serial date numbers to exclude from the working calendar, such as state and federal holidays and floating holidays.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | number[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "NETWORKDAYS_INTL(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | number | string, arg4?: ApiRange | number[]): number"
+}

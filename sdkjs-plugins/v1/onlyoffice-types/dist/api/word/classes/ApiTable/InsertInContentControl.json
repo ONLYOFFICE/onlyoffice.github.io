@@ -1,0 +1,18 @@
+{
+  "description": "Wraps the current table object with a content control.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/InsertInContentControl/",
+  "examples": [
+    "// How do I place a table inside a content control in a document?\n\n// Protect table content by enclosing it in a reusable control in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\nlet blockLvlSdt = table.InsertInContentControl(1);\ndoc.AddElement(0, blockLvlSdt);"
+  ],
+  "params": [
+    {
+      "description": "Defines if this method returns the ApiBlockLvlSdt (nType === 1) or ApiTable (any value except 1) object.",
+      "name": "nType",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiTable | ApiBlockLvlSdt"
+  },
+  "signature": "InsertInContentControl(nType: number): ApiTable | ApiBlockLvlSdt"
+}

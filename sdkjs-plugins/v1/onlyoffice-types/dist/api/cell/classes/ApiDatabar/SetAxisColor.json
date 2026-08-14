@@ -1,0 +1,19 @@
+{
+  "description": "Sets the axis color for the data bar conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetAxisColor/",
+  "examples": [
+    "// How do I change the color of the axis that divides positive and negative data bars in a spreadsheet?\n\n// Give the data bar axis a distinct color to make the zero line stand out in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nworksheet.GetRange(\"C1\").SetValue(\"Before Color:\");\nworksheet.GetRange(\"C2\").SetValue(dataBar.GetAxisColor() ? \"Set\" : \"None\");\n\nlet axisColor = Api.CreateColorFromRGB(255, 0, 0);\ndataBar.SetAxisColor(axisColor);\n\nworksheet.GetRange(\"C3\").SetValue(\"After Color:\");\nworksheet.GetRange(\"C4\").SetValue(dataBar.GetAxisColor() ? \"Set\" : \"None\");"
+  ],
+  "params": [
+    {
+      "description": "The axis color as an ApiColor object.",
+      "name": "oColor",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetAxisColor(oColor: ApiColor): void",
+  "since": "9.1.0"
+}

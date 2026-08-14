@@ -1,0 +1,265 @@
+{
+  "description": "Class representing a custom XML part.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/",
+  "methods": {
+    "Delete": {
+      "description": "Deletes the XML from the custom XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/Delete/",
+      "examples": [
+        "// Remove a custom XML part and show remaining parts in a presentation.\n\n// Discard an XML part from the document in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet xml1 = xmlManager.Add(\"<user xmlns='http://example'>John</user>\");\nlet xml2 = xmlManager.Add(\"<customer xmlns='http://example'>Alex</customer>\");\nxml1.Delete();\nlet count = xmlManager.GetCount();\nlet xmlParts = xmlManager.GetAll();\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nlet displayText = \"Remaining XML parts: \" + count;\nxmlParts.forEach(function(part, index) {\n    displayText += \"\\nXML part: \" + part.GetXml();\n});\nrun.AddText(displayText);\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "True if the XML was successfully deleted.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean",
+      "since": "9.0.0"
+    },
+    "DeleteAttribute": {
+      "description": "Deletes an attribute from the XML node at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/DeleteAttribute/",
+      "examples": [
+        "// Remove a named property from an XML element in a presentation.\n\n// Strip an attribute from custom XML in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst xmlManager = presentation.GetCustomXmlParts();\nconst xml = xmlManager.Add('<content xmlns=\"http://example\" version=\"1.0\"></content>');\nxml.DeleteAttribute('/content', 'version');\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#7E57C2'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('XML after deletion: ' + xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The XPath of the node from which to delete the attribute.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The name of the attribute to delete.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the attribute was successfully deleted.",
+        "type": "boolean"
+      },
+      "signature": "DeleteAttribute(xPath: string, name: string): boolean",
+      "since": "9.0.0"
+    },
+    "DeleteElement": {
+      "description": "Deletes an XML element at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/DeleteElement/",
+      "examples": [
+        "// Remove a child element from custom XML in a presentation.\n\n// Discard an XML node from a custom XML part in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst xmlManager = presentation.GetCustomXmlParts();\nconst xml = xmlManager.Add('<content xmlns=\"http://example\"><text>example_text</text><imaginaryNode>text inside imaginary node</imaginaryNode></content>');\nxml.DeleteElement('/content/imaginaryNode');\n\nconst fill = Api.CreateSolidFill(Api.RGB(156, 90, 161));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('XML after deletion: ' + xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The XPath of the node to delete.",
+          "name": "xPath",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the element was successfully deleted.",
+        "type": "boolean"
+      },
+      "signature": "DeleteElement(xPath: string): boolean",
+      "since": "9.0.0"
+    },
+    "GetAttribute": {
+      "description": "Returns an attribute from the XML node at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/GetAttribute/",
+      "examples": [
+        "// Read a named property from a custom XML node in a presentation.\n\n// Retrieve the value of an attribute in an XML element in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<config version='1.0' xmlns='http://example'><setting>value</setting></config>\");\nlet rootNodes = xml.GetNodes('/config');\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nif (rootNodes.length > 0) {\n    let version = rootNodes[0].GetAttribute('version');\n    run.AddText(\"Config version: \" + version);\n} else {\n    run.AddText(\"No root node found\");\n}\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The XPath of the node from which to get the attribute.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The name of the attribute to find.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The attribute value or null if no matching attributes are found.",
+        "type": "string | null"
+      },
+      "signature": "GetAttribute(xPath: string, name: string): string | null",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCustomXmlPart class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/GetClassType/",
+      "examples": [
+        "// Identify the type of a custom XML part in a presentation.\n\n// Retrieve the class type name of a custom XML part in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<data><value>Sample</value></data>\");\nlet classType = xml.GetClassType();\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nrun.AddText(\"Class type: \" + classType);\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"customXmlPart\""
+      },
+      "signature": "GetClassType(): \"customXmlPart\""
+    },
+    "GetId": {
+      "description": "Returns the ID of the custom XML part.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/GetId/",
+      "examples": [
+        "// Retrieve the unique identifier for a custom XML part in a presentation.\n\n// Access the ID value of a custom XML part in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<settings><theme>dark</theme></settings>\");\nlet id = xml.GetId();\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nrun.AddText(\"XML part ID: \" + id);\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetId(): string"
+    },
+    "GetNodes": {
+      "description": "Retrieves nodes from custom XML based on the provided XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/GetNodes/",
+      "examples": [
+        "// How do I retrieve nodes matching an XPath expression in a presentation?\n\n// Display matching XML nodes in a shape in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<products><item>Laptop</item><item>Mouse</item><item>Keyboard</item></products>\");\nlet itemNodes = xml.GetNodes('/products/item');\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nlet displayText = \"Found \" + itemNodes.length + \" products:\";\nfor (let i = 0; i < itemNodes.length; i++) {\n    displayText += \"\\n\" + (i + 1) + \". \" + itemNodes[i].GetText();\n}\nrun.AddText(displayText);\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The XPath expression to search for nodes.",
+          "name": "xPath",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "An array of ApiCustomXmlNode objects corresponding to the found nodes.",
+        "type": "ApiCustomXmlNode[]"
+      },
+      "signature": "GetNodes(xPath: string): ApiCustomXmlNode[]",
+      "since": "9.0.0"
+    },
+    "GetXml": {
+      "description": "Retrieves the XML string from the custom XML part.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/GetXml/",
+      "examples": [
+        "// How do I extract the raw XML from a custom XML part in a presentation?\n\n// Display the XML content in a shape in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<report><title>Monthly Report</title><date>2024-01-01</date></report>\");\nlet xmlContent = xml.GetXml();\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nrun.AddText(\"XML content: \" + xmlContent);\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The XML string.",
+        "type": "string"
+      },
+      "signature": "GetXml(): string",
+      "since": "9.0.0"
+    },
+    "InsertAttribute": {
+      "description": "Inserts an attribute into the XML node at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/InsertAttribute/",
+      "examples": [
+        "// How do I add a new attribute to an XML element in a presentation?\n\n// Show the updated XML with the new attribute in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst xmlManager = presentation.GetCustomXmlParts();\nconst xml = xmlManager.Add('<content xmlns=\"http://example\"></content>');\nxml.InsertAttribute('/content', 'version', '1.0');\n\nconst fill = Api.CreateSolidFill(Api.RGB(191, 127, 63));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('XML after insertion: ' + xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The XPath of the node to insert the attribute into.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The name of the attribute to insert.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The value of the attribute to insert.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the attribute was successfully inserted.",
+        "type": "boolean"
+      },
+      "signature": "InsertAttribute(xPath: string, name: string, value: string): boolean",
+      "since": "9.0.0"
+    },
+    "InsertElement": {
+      "description": "Inserts an XML element at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/InsertElement/",
+      "examples": [
+        "// How do I add a new element to an existing XML structure in a presentation?\n\n// Display the updated XML with the inserted element in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst xmlManager = presentation.GetCustomXmlParts();\nconst xml = xmlManager.Add('<content xmlns=\"http://example\"></content>');\nxml.InsertElement('/content', '<description>Main content</description>');\nxml.InsertElement('/content', '<title>Introduction</title>', 0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#689F38'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('XML after insertion: ' + xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The XPath of the parent node where the new element will be inserted.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The XML string to insert.",
+          "name": "xmlStr",
+          "type": "string"
+        },
+        {
+          "description": "The position at which to insert the new XML element. If omitted, the element will be appended as the last child.",
+          "name": "index",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "True if the insertion was successful.",
+        "type": "boolean"
+      },
+      "signature": "InsertElement(xPath: string, xmlStr: string, index?: number): boolean",
+      "since": "9.0.0"
+    },
+    "UpdateAttribute": {
+      "description": "Updates an attribute of the XML node at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/UpdateAttribute/",
+      "examples": [
+        "// How do I modify an existing attribute in an XML element in a presentation?\n\n// Display the updated XML with the new attribute value in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst xmlManager = presentation.GetCustomXmlParts();\nconst xml = xmlManager.Add('<content xmlns=\"http://example\" version=\"1.0\"></content>');\nxml.UpdateAttribute('/content', 'version', '2.0');\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#00897B'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('XML after update: ' + xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The XPath of the node whose attribute should be updated.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The name of the attribute to update.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The new value for the attribute.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the attribute was successfully updated.",
+        "type": "boolean"
+      },
+      "signature": "UpdateAttribute(xPath: string, name: string, value: string): boolean",
+      "since": "9.0.0"
+    },
+    "UpdateElement": {
+      "description": "Updates an XML element at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlPart/Methods/UpdateElement/",
+      "examples": [
+        "// How do I modify the content of an existing XML element in a presentation?\n\n// Display the updated XML with the replaced element in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst xmlManager = presentation.GetCustomXmlParts();\nconst xml = xmlManager.Add('<content xmlns=\"http://example\"><text>Example</text></content>');\nxml.UpdateElement('/content', '<user>John</user>');\n\nconst fill = Api.CreateSolidFill(Api.RGB(66, 133, 191));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('XML after update: ' + xml.GetXml());"
+      ],
+      "params": [
+        {
+          "description": "The XPath of the node to update.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The XML string to replace the node content with.",
+          "name": "xmlStr",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the update was successful.",
+        "type": "boolean"
+      },
+      "signature": "UpdateElement(xPath: string, xmlStr: string): boolean",
+      "since": "9.0.0"
+    }
+  },
+  "since": "9.0.0"
+}

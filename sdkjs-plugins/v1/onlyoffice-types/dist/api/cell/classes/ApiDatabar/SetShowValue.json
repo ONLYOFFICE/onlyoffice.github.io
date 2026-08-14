@@ -1,0 +1,19 @@
+{
+  "description": "Specifies whether the data bar displays the cell value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetShowValue/",
+  "examples": [
+    "// How do I hide or reveal the numbers inside data bars when applying conditional formatting in a spreadsheet?\n\n// Keep cells uncluttered by toggling off the text overlay on top of data bars in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nworksheet.GetRange(\"C1\").SetValue(\"Before:\");\nworksheet.GetRange(\"C2\").SetValue(dataBar.GetShowValue() ? \"Yes\" : \"No\");\n\ndataBar.SetShowValue(false);\n\nworksheet.GetRange(\"C3\").SetValue(\"After:\");\nworksheet.GetRange(\"C4\").SetValue(dataBar.GetShowValue() ? \"Yes\" : \"No\");"
+  ],
+  "params": [
+    {
+      "description": "True to show the value, false to hide it.",
+      "name": "showValue",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetShowValue(showValue: boolean): void",
+  "since": "9.1.0"
+}

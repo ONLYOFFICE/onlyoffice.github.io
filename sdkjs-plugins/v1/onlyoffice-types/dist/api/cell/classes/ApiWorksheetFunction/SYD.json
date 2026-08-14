@@ -1,0 +1,33 @@
+{
+  "description": "Returns the sum-of-years' digits depreciation of an asset for a specified period.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SYD/",
+  "examples": [
+    "// Calculate sum-of-years' digits depreciation using the SYD function.\n\n// Returns the depreciation amount for the specified period.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SYD(3500, 500, 5, 3));"
+  ],
+  "params": [
+    {
+      "description": "The initial cost of the asset.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The salvage value of the asset at the end of its lifetime.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of periods over which the asset is being depreciated (sometimes called the useful life of the asset).",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The period for which the depreciation will be calculated. It must use the same units as the useful life of the asset.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SYD(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | number): number"
+}

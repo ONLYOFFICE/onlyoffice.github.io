@@ -1,0 +1,168 @@
+{
+  "onAddComment": {
+    "description": "The function called when a comment is added to the document with the {@link https://api.onlyoffice.com/docs/plugins/interacting-with-editors/document-api/Methods/AddComment AddComment} method.",
+    "params": [
+      {
+        "name": "comment",
+        "type": "comment"
+      }
+    ]
+  },
+  "onBlurAnnotation": {
+    "description": "The function called when an annotation loses focus.",
+    "params": [
+      {
+        "name": "annotation",
+        "type": "TextAnnotation"
+      }
+    ]
+  },
+  "onBlurContentControl": {
+    "description": "The function called to show which content control has been blurred.",
+    "params": [
+      {
+        "name": "control",
+        "type": "ContentControl"
+      }
+    ]
+  },
+  "onChangeCommentData": {
+    "description": "The function called when the specified comment is changed with the {@link https://api.onlyoffice.com/docs/plugins/interacting-with-editors/document-api/Methods/ChangeComment ChangeComment} method.",
+    "params": [
+      {
+        "name": "comment",
+        "type": "comment"
+      }
+    ]
+  },
+  "onChangeContentControl": {
+    "description": "The function called to show which content control has been changed.",
+    "params": [
+      {
+        "name": "control",
+        "type": "ContentControl"
+      }
+    ]
+  },
+  "onChangeCurrentPage": {
+    "description": "The function called when the current page has changed.",
+    "params": [
+      {
+        "name": "index",
+        "type": "number"
+      }
+    ]
+  },
+  "onClickAnnotation": {
+    "description": "The function called when the user clicks an annotation.",
+    "params": [
+      {
+        "name": "annotation",
+        "type": "TextAnnotation"
+      }
+    ]
+  },
+  "onContentControlAdd": {
+    "description": "Fired when a content control is added to the document.",
+    "params": [
+      {
+        "name": "control",
+        "type": "ContentControl"
+      }
+    ]
+  },
+  "onContentControlRemove": {
+    "description": "Fired when a content control is removed from the document.",
+    "params": [
+      {
+        "name": "control",
+        "type": "ContentControl"
+      }
+    ]
+  },
+  "onFocusAnnotation": {
+    "description": "The function called when an annotation receives focus.",
+    "params": [
+      {
+        "name": "annotation",
+        "type": "TextAnnotation"
+      }
+    ]
+  },
+  "onFocusContentControl": {
+    "description": "The function called to show which content control has been focused.",
+    "params": [
+      {
+        "name": "control",
+        "type": "ContentControl"
+      }
+    ]
+  },
+  "onHideContentControlTrack": {
+    "description": "The function called when the content control loses focus in the document.",
+    "params": [
+      {
+        "name": "ids",
+        "type": "string[]"
+      }
+    ]
+  },
+  "onInsertOleObjects": {
+    "description": "The function called when one or more OLE objects are inserted into the document.",
+    "params": [
+      {
+        "name": "data",
+        "type": "object[]"
+      }
+    ]
+  },
+  "onParagraphAdd": {
+    "description": "Fired when a paragraph is added to the document.",
+    "params": [
+      {
+        "name": "data",
+        "type": "{ InternalId: string }"
+      }
+    ]
+  },
+  "onParagraphRemove": {
+    "description": "Fired when a paragraph is removed from the document.",
+    "params": [
+      {
+        "name": "data",
+        "type": "{ InternalId: string }"
+      }
+    ]
+  },
+  "onParagraphText": {
+    "description": "The function called when the paragraph text is updated in the document.",
+    "params": [
+      {
+        "name": "data",
+        "type": "{ paragraphId: string; recalcId: string; text: string; annotations: TextAnnotationRange[] }"
+      }
+    ]
+  },
+  "onRemoveComment": {
+    "description": "The function called when the specified comment is removed with the {@link https://api.onlyoffice.com/docs/plugins/interacting-with-editors/document-api/Methods/RemoveComments RemoveComments} method.",
+    "params": [
+      {
+        "name": "comment",
+        "type": "comment"
+      }
+    ]
+  },
+  "onShowContentControlTrack": {
+    "description": "The function called when the content control receives focus and its track appears.",
+    "params": [
+      {
+        "name": "ids",
+        "type": "string[]"
+      }
+    ]
+  },
+  "onSubmitForm": {
+    "description": "The function called when the user clicks the \"Complete & Submit\" button.",
+    "params": []
+  }
+}

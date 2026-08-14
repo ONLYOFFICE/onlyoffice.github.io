@@ -1,0 +1,36 @@
+{
+  "description": "Adds a comment to the specifed document element or array of Runs.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/AddComment/",
+  "examples": [
+    "// How do I attach a comment to a paragraph in a document?\n\n// Annotate a paragraph with reviewer feedback and an author name in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nApi.AddComment(paragraph, \"ONLYOFFICE for developers\", \"Jane\");"
+  ],
+  "params": [
+    {
+      "description": "The element where the comment will be added. It may be applied to any element which has the *AddComment* method.",
+      "name": "element",
+      "type": "ApiRun[] | DocumentElement"
+    },
+    {
+      "description": "The comment text.",
+      "name": "text",
+      "type": "string"
+    },
+    {
+      "description": "The author's name.",
+      "name": "author",
+      "optional": true,
+      "type": "string"
+    },
+    {
+      "description": "The user ID of the comment author.",
+      "name": "userId",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "Returns null if the comment was not added.",
+    "type": "ApiComment"
+  },
+  "signature": "AddComment(element: ApiRun[] | DocumentElement, text: string, author?: string, userId?: string): ApiComment"
+}

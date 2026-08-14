@@ -1,0 +1,18 @@
+{
+  "description": "Returns the series with a specific index.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/GetSeries/",
+  "examples": [
+    "// How do I find out what chart type a particular series uses in a document?\n\n// Verify the series type when a chart mixes different visualization styles in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"comboBarLine\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph.AddDrawing(chart);\nlet series = chart.GetSeries(0);\nlet seriesType = series.GetChartType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Series Type = \" + seriesType);\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "Series index.",
+      "name": "nIdx",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiChartSeries"
+  },
+  "signature": "GetSeries(nIdx: number): ApiChartSeries"
+}

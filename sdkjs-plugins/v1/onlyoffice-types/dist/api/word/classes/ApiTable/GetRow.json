@@ -1,0 +1,18 @@
+{
+  "description": "Returns a table row by its position in the table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetRow/",
+  "examples": [
+    "// How do I access a particular row of a table by its index in a document?\n\n// Use an existing row as a reference point to insert a new row in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 2x2 table and add a new row, so that it becomes 2x3:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ntable.AddRow(table.GetRow(1).GetCell(0), true);\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "The row index within the table.",
+      "name": "rowIndex",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiTableRow"
+  },
+  "signature": "GetRow(rowIndex: number): ApiTableRow"
+}

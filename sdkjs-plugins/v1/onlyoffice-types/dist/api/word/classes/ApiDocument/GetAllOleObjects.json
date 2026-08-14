@@ -1,0 +1,12 @@
+{
+  "description": "Returns a collection of OLE objects from the document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllOleObjects/",
+  "examples": [
+    "// How do I access every OLE object inside a content container in a document?\n\n// Read the application ID of the first OLE object and print it as a paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet oleObject = Api.CreateOleObject(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t150 * 36000, 150 * 36000,\n\t'https://youtu.be/SKGz4pmnpgY',\n\t'asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}'\n);\nparagraph = Api.CreateParagraph();\nparagraph.AddDrawing(oleObject);\nlet docContent = shape.GetDocContent();\ndocContent.AddElement(0, paragraph);\nlet oleObjects = docContent.GetAllOleObjects();\nlet appId = oleObjects[0].GetApplicationId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText('The application ID for the current OLE object: ' + appId);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiOleObject[]"
+  },
+  "signature": "GetAllOleObjects(): ApiOleObject[]"
+}

@@ -1,0 +1,30 @@
+{
+  "description": "Creates a stroke adding shadows to the element.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateStroke/",
+  "examples": [
+    "// How do I set the border color and thickness of a shape in a document?\n\n// Give a shape a visible outline with a custom width and color in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nlet stroke = Api.CreateStroke(5 * 36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\nlet shape = Api.CreateShape(\"roundRect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+  ],
+  "params": [
+    {
+      "description": "The width of the shadow measured in English measure units.",
+      "name": "width",
+      "type": "EMU"
+    },
+    {
+      "description": "The fill type used to create the shadow.",
+      "name": "fill",
+      "type": "ApiFill"
+    },
+    {
+      "description": "The type of line dash.",
+      "name": "sDash",
+      "optional": true,
+      "type": "DashType"
+    }
+  ],
+  "returns": {
+    "type": "ApiStroke"
+  },
+  "signature": "CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke",
+  "since": "9.3.0"
+}

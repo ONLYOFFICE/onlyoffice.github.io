@@ -1,0 +1,19 @@
+{
+  "description": "Sets the outline properties to the specified graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetOutLine/",
+  "examples": [
+    "// How do I apply a stroke to the edge of a shape in a document?\n\n// Copy a shape and give the duplicate a dark solid outline to contrast with the original in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing); \nlet copyDrawing = drawing.Copy();\nstroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\ncopyDrawing.SetOutLine(stroke);\nparagraph.AddDrawing(copyDrawing);"
+  ],
+  "params": [
+    {
+      "description": "The stroke used to create the graphic object outline.",
+      "name": "stroke",
+      "type": "ApiStroke"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetOutLine(stroke: ApiStroke): boolean"
+}

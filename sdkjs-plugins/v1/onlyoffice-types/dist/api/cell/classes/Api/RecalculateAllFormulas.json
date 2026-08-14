@@ -1,0 +1,19 @@
+{
+  "description": "Recalculates all formulas in the active workbook.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/RecalculateAllFormulas/",
+  "examples": [
+    "// How do I force all formulas to update their results after editing data in a spreadsheet?\n\n// Refresh every computed value to reflect the latest input changes in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(1);\nworksheet.GetRange(\"C1\").SetValue(2);\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"=SUM(B1:C1)\");\nrange = worksheet.GetRange(\"E1\");\nrange.SetValue(\"=A1+1\");\nworksheet.GetRange(\"B1\").SetValue(3);\nApi.RecalculateAllFormulas();\nworksheet.GetRange(\"A3\").SetValue(\"Formulas from cells A1 and E1 were recalculated with a new value from cell C1.\");"
+  ],
+  "params": [
+    {
+      "description": "A function which specifies the logger object for checking recalculation of formulas.",
+      "name": "fLogger",
+      "optional": true,
+      "type": "(...args: unknown[]) => unknown"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "RecalculateAllFormulas(fLogger?: (...args: unknown[]) => unknown): boolean"
+}

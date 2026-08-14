@@ -1,0 +1,18 @@
+{
+  "description": "Sets the outline to the chart title.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitleOutLine/",
+  "examples": [
+    "// Apply a stroke or outline to the title text in a presentation.\n\n// Define the border style and thickness for a chart title in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nchart.SetTitle(\"Financial Overview\", 13);\n\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nlet stroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\nchart.SetTitleOutLine(stroke);\nslide.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The stroke used to create the title outline.",
+      "name": "oStroke",
+      "type": "ApiStroke"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetTitleOutLine(oStroke: ApiStroke): boolean"
+}

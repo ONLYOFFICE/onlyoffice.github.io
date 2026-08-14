@@ -1,0 +1,26 @@
+{
+  "description": "Adds a table of figures to the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddTableOfFigures/",
+  "examples": [
+    "// How do I build a table of figures based on chart captions in a document?\n\n// Configure page numbers, leader dots, and label numbers when inserting a table of figures in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\ndrawing.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\ndrawing.SetHorAxisTitle(\"Year\", 11);\ndrawing.SetLegendPos(\"bottom\");\ndrawing.SetShowDataLabels(false, false, true, false);\ndrawing.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ndrawing.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\ndrawing.SetSeriesFill(fill, 1, false);\nparagraph.AddDrawing(drawing);\nparagraph.AddCaption(\" - Financial Overview\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");\nlet tofPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": \"Figure\", \"LabelNumber\": true, \"TofStyle\": \"distinctive\"};\ndoc.AddTableOfFigures(tofPr);"
+  ],
+  "params": [
+    {
+      "description": "Table of figures properties.\r<note>Please note that the table of figures properties will be filled with the default properties if they are undefined.</note>",
+      "name": "oTofPr",
+      "optional": true,
+      "type": "TofPr"
+    },
+    {
+      "description": "The range that the table of figures replaces. If omitted, the table of figures is inserted at the current position.",
+      "name": "oRange",
+      "optional": true,
+      "type": "ApiRange"
+    }
+  ],
+  "returns": {
+    "type": "ApiTableOfFigures"
+  },
+  "signature": "AddTableOfFigures(oTofPr?: TofPr, oRange?: ApiRange): ApiTableOfFigures",
+  "since": "9.5.0"
+}

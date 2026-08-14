@@ -1,0 +1,12 @@
+{
+  "description": "Creates no fill and removes the fill from the element.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateNoFill/",
+  "examples": [
+    "// Remove background fill from the object in a PDF document.\n\n// Create no fill and apply it to the element in a PDF document.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"The stroke of this shape is transparent.\");\npage.AddObject(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateNoFill(): ApiFill"
+}

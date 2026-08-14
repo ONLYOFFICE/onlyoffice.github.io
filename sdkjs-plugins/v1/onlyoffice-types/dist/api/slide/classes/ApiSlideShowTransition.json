@@ -1,0 +1,223 @@
+{
+  "description": "Class representing a slide show transition.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/",
+  "methods": {
+    "GetAdvanceOnClick": {
+      "description": "Returns whether the slide advances on mouse click.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetAdvanceOnClick/",
+      "examples": [
+        "// Create a slide show transition with specific properties.\n\n// Get the advance on click value and display it on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectFade');\ntransition.SetSpeed('medium');\ntransition.SetAdvanceOnClick(true);\nslide.SetSlideShowTransition(transition);\n\nconst retrievedTransition = slide.GetSlideShowTransition();\nconst advanceOnClick = retrievedTransition.GetAdvanceOnClick();\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#61cbd1')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Advance On Click: ' + advanceOnClick);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "True if the slide advances on mouse click; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "GetAdvanceOnClick(): boolean",
+      "since": "9.3.0"
+    },
+    "GetAdvanceOnTime": {
+      "description": "Returns whether the slide advances after a specified time.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetAdvanceOnTime/",
+      "examples": [
+        "// Retrieve the advance on time property from a slide show transition object.\n\n// Apply the retrieved value to a shape and display in the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectWipeRight');\ntransition.SetSpeed('medium');\ntransition.SetAdvanceOnTime(true);\ntransition.SetAdvanceTime(3000);\nslide.SetSlideShowTransition(transition);\n\nconst retrievedTransition = slide.GetSlideShowTransition();\nconst advanceOnTime = retrievedTransition.GetAdvanceOnTime();\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#61cbd1')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Advance On Time: ' + advanceOnTime);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "True if the slide advances after a specified time; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "GetAdvanceOnTime(): boolean",
+      "since": "9.3.0"
+    },
+    "GetAdvanceTime": {
+      "description": "Returns the slide advance time in milliseconds.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetAdvanceTime/",
+      "examples": [
+        "// Retrieve the advance time value from a slide show transition object.\n\n// Display the retrieved advance time as milliseconds in a shape on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectPushLeft');\ntransition.SetSpeed('fast');\ntransition.SetAdvanceOnTime(true);\ntransition.SetAdvanceTime(2500);\nslide.SetSlideShowTransition(transition);\n\nconst retrievedTransition = slide.GetSlideShowTransition();\nconst advanceTime = retrievedTransition.GetAdvanceTime();\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#61cbd1')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Advance Time: ' + advanceTime + ' ms');\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The slide advance time in milliseconds if set; otherwise undefined.",
+        "type": "number | undefined"
+      },
+      "signature": "GetAdvanceTime(): number | undefined",
+      "since": "9.3.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiSlideShowTransition class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetClassType/",
+      "examples": [
+        "// Retrieve the class type identifier from a slide show transition object.\n\n// Display the class type in a shape on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectFade');\ntransition.SetSpeed('medium');\nslide.SetSlideShowTransition(transition);\n\nconst retrievedTransition = slide.GetSlideShowTransition();\nconst classType = retrievedTransition.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 130 * 36000, fill, stroke);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText(\"Class Type = \" + classType);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"slideShowTransition\""
+      },
+      "signature": "GetClassType(): \"slideShowTransition\"",
+      "since": "9.3.0"
+    },
+    "GetDuration": {
+      "description": "Returns the transition duration in milliseconds for the slide show transition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetDuration/",
+      "examples": [
+        "// Retrieve the duration value from a slide show transition object.\n\n// Display the retrieved duration as milliseconds in a shape on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectPushRight');\ntransition.SetDuration(3300);\nslide.SetSlideShowTransition(transition);\n\nconst retrievedTransition = slide.GetSlideShowTransition();\nconst duration = retrievedTransition.GetDuration();\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#61cbd1')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Transition Duration: ' + duration + ' ms');\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The transition duration in milliseconds.",
+        "type": "number"
+      },
+      "signature": "GetDuration(): number",
+      "since": "9.3.0"
+    },
+    "GetEntryEffect": {
+      "description": "Returns the entry effect for the slide show transition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetEntryEffect/",
+      "examples": [
+        "// Retrieve the entry effect identifier from a slide show transition object.\n\n// Display the entry effect value in a shape on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectUncoverRight');\ntransition.SetSpeed('medium');\nslide.SetSlideShowTransition(transition);\n\nconst retrievedTransition = slide.GetSlideShowTransition();\nconst entryEffect = retrievedTransition.GetEntryEffect();\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t300 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#ff9447')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Entry Effect: ' + entryEffect);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The name of the entry effect in string format.",
+        "type": "EntryEffect"
+      },
+      "signature": "GetEntryEffect(): EntryEffect",
+      "since": "9.3.0"
+    },
+    "GetSpeed": {
+      "description": "Returns the transition speed (similar to PowerPoint VBA Speed property).\nMaps duration to speed based on OOXML spd attribute logic:\n- fast: duration <= 500ms\n- medium: 500ms < duration <= 750ms\n- slow: duration > 750ms",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetSpeed/",
+      "examples": [
+        "// Retrieve the speed value from a slide show transition object.\n\n// Display the retrieved speed in a shape on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectWheelReverse1Spoke');\ntransition.SetDuration(5000);\nslide.SetSlideShowTransition(transition);\n\nconst retrievedTransition = slide.GetSlideShowTransition();\nconst transitionSpeed = retrievedTransition.GetSpeed();\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t200 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#61cbd1')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Transition Speed is ' + transitionSpeed);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The transition speed in string format.",
+        "type": "TransitionSpeed"
+      },
+      "signature": "GetSpeed(): TransitionSpeed",
+      "since": "9.3.0"
+    },
+    "SetAdvanceOnClick": {
+      "description": "Sets whether the slide advances on mouse click.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetAdvanceOnClick/",
+      "examples": [
+        "// Configure the advance on click property of a slide show transition object.\n\n// Display a message indicating the transition will advance on time rather than click.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectCoverLeft');\ntransition.SetSpeed('medium');\ntransition.SetAdvanceOnClick(false);\ntransition.SetAdvanceOnTime(true);\ntransition.SetAdvanceTime(5000);\n\nslide.SetSlideShowTransition(transition);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#aba4e8')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Advance On Click set to false. Slide will advance automatically after 5 seconds.');\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "True to advance the slide on mouse click; otherwise false.",
+          "name": "advanceOnClick",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "True if the value was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetAdvanceOnClick(advanceOnClick: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetAdvanceOnTime": {
+      "description": "Sets whether the slide advances after a specified time.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetAdvanceOnTime/",
+      "examples": [
+        "// Configure the advance on time property of a slide show transition object.\n\n// Apply the transition and display a confirmation message on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectFadeSmoothly');\ntransition.SetSpeed('medium');\ntransition.SetAdvanceOnTime(true);\ntransition.SetAdvanceTime(5000);\n\nslide.SetSlideShowTransition(transition);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#aba4e8')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Slide will advance on click or automatically after 5 seconds.');\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "True to advance the slide after a specified time; otherwise false.",
+          "name": "advanceOnTime",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "True if the setting was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetAdvanceOnTime(advanceOnTime: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetAdvanceTime": {
+      "description": "Sets the slide advance time in milliseconds.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetAdvanceTime/",
+      "examples": [
+        "// Configure the advance time property of a slide show transition object.\n\n// Apply the transition and display a confirmation message on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectFade');\ntransition.SetSpeed('medium');\ntransition.SetAdvanceOnClick(false);\ntransition.SetAdvanceOnTime(true);\ntransition.SetAdvanceTime(4300);\n\nslide.SetSlideShowTransition(transition);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#aba4e8')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Slide will advance automatically after 4.3 seconds.');\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The slide advance time in milliseconds.",
+          "name": "advanceTime",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "True if the time was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetAdvanceTime(advanceTime: number): boolean",
+      "since": "9.3.0"
+    },
+    "SetDuration": {
+      "description": "Sets the transition duration in milliseconds for the slide show transition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetDuration/",
+      "examples": [
+        "// Configure the duration property of a slide show transition object.\n\n// Apply the transition and display the set duration on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectFadeSmoothly');\ntransition.SetDuration(2000);\n\nslide.SetSlideShowTransition(transition);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#aba4e8')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Transition Duration: 2000 ms');\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The transition duration in milliseconds.",
+          "name": "duration",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "True if the duration was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetDuration(duration: number): boolean",
+      "since": "9.3.0"
+    },
+    "SetEntryEffect": {
+      "description": "Sets the entry effect for the slide show transition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetEntryEffect/",
+      "examples": [
+        "// Configure the entry effect property of a slide show transition object.\n\n// Apply the transition and display the entry effect value on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectCoverLeftDown');\ntransition.SetSpeed('medium');\n\nslide.SetSlideShowTransition(transition);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#aba4e8')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Entry Effect: effectCoverLeftDown');\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The name of the entry effect in string format.",
+          "name": "entryEffectName",
+          "type": "EntryEffect"
+        }
+      ],
+      "returns": {
+        "description": "True if the entry effect name is supported and was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetEntryEffect(entryEffectName: EntryEffect): boolean",
+      "since": "9.3.0"
+    },
+    "SetSpeed": {
+      "description": "Sets the transition speed (similar to PowerPoint VBA Speed property).\nConverts speed to duration based on standard values:\n- fast = 500ms\n- medium = 750ms\n- slow = 1000ms",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetSpeed/",
+      "examples": [
+        "// How do I change how fast a transition plays in a presentation?\n\n// Apply a specific transition speed to control animation timing in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectWipeLeft');\ntransition.SetSpeed('slow');\n\nslide.SetSlideShowTransition(transition);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t250 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#aba4e8')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Transition Speed is \"slow\" which is 1 second by default.');\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The transition speed in string format.",
+          "name": "speed",
+          "type": "TransitionSpeed"
+        }
+      ],
+      "returns": {
+        "description": "True if the given parameter is valid and was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetSpeed(speed: TransitionSpeed): boolean",
+      "since": "9.3.0"
+    }
+  }
+}

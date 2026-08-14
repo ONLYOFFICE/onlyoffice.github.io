@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that the contents of this paragraph are displayed with two horizontal lines through each character displayed on the line.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetDoubleStrikeout/",
+  "examples": [
+    "// How do I cross out text with two lines in a paragraph in a PDF?\n\n// Strike through text with a double line in a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#FF6F3D'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is a paragraph with the text struck out with two lines.');\nparagraph.SetDoubleStrikeout(true);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed double struck through.",
+      "name": "isDoubleStrikeout",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiParagraph"
+}

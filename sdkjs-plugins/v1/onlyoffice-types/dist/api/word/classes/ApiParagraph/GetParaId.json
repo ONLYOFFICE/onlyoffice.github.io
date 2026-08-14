@@ -1,0 +1,14 @@
+{
+  "description": "Returns a unique ID for the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetParaId/",
+  "examples": [
+    "// How do I read the ID of a paragraph in a document?\n\n// Identify each paragraph by its numeric ID to distinguish them in a document.\n\nconst doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText('This is the first paragraph.');\n\nparagraph = Api.CreateParagraph();\nparagraph.SetParaId(920);\nparagraph.AddText('This is the second paragraph (with custom ID).');\ndoc.Push(paragraph);\n\nconst para1 = doc.GetElement(0);\nconst para2 = doc.GetElement(1);\n\nconst id1 = para1.GetParaId();\nconst id2 = para2.GetParaId();\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText('Paragraph IDs:\\n');\nparagraph.AddText('First paragraph ID: ' + id1 + '\\n');\nparagraph.AddText('Second paragraph ID: ' + id2 + '\\n');\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "0 if no identifier is specified for the current paragraph.",
+    "type": "number"
+  },
+  "signature": "GetParaId(): number",
+  "since": "9.2.0"
+}

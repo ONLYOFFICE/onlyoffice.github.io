@@ -1,0 +1,20 @@
+{
+  "description": "Sets the horizontal flip of the current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetFlipH/",
+  "examples": [
+    "// How do I mirror a shape along its vertical axis in a document?\n\n// Produce a mirrored copy of an arrow to compare original and flipped orientations in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 130, 170));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape('rightArrow', Api.MillimetersToEmus(40), Api.MillimetersToEmus(20), fill, stroke);\nparagraph.AddDrawing(drawing);\n\nconst flippedDrawing = drawing.Copy();\nflippedDrawing.SetFlipH(true);\nparagraph.AddDrawing(flippedDrawing);\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('The right arrow shape above is flipped horizontally.');\ndoc.Push(paragraph2);"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the figure will be flipped horizontally or not.",
+      "name": "bFlip",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "Returns true if the operation is successful, false otherwise.",
+    "type": "boolean"
+  },
+  "signature": "SetFlipH(bFlip: boolean): boolean",
+  "since": "9.3.0"
+}

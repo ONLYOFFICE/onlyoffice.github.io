@@ -1,0 +1,19 @@
+{
+  "description": "Sets the vertical alignment to the table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetVAlign/",
+  "examples": [
+    "// How do I push text to the bottom of a table cell instead of the top in a document?\n\n// Position content at the bottom edge of every cell to create a cleaner layout in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"The table was added to the bottom of the page. Scroll down to see it.\"); \nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\ntable.SetWrappingStyle(false);\ntable.SetTableBorderTop(\"single\", 4, 0, 51, 51, 51);\ntable.SetTableBorderBottom(\"single\", 4, 0, 51, 51, 51);\ntable.SetTableBorderLeft(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableBorderRight(\"single\", 4, 0, 51, 51, 51);\ntable.SetTableBorderInsideV(\"single\", 4, 0, 255, 111, 61);\ntable.SetTableBorderInsideH(\"single\", 4, 0, 255, 111, 61);\ntable.GetCell(0, 0).GetContent().GetElement(0).AddText(\"This is just a sample text.\");\ntable.SetVAlign(\"bottom\");"
+  ],
+  "params": [
+    {
+      "description": "Vertical alignment type: may be \"top\" or \"center\" or \"bottom\".",
+      "name": "sType",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetVAlign(sType: string): boolean"
+}

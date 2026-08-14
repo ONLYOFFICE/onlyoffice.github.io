@@ -1,0 +1,46 @@
+{
+  "description": "Calculates or predicts a future value based on existing (historical) values by using the AAA version of the Exponential Smoothing (ETS) algorithm.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FORECAST_ETS/",
+  "examples": [
+    "// How do I forecast the next data point using past values in a spreadsheet?\n\n// Use trend analysis to estimate an upcoming value from existing data in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet dates = [\"10/1/2017\", \"11/1/2017\", \"12/1/2017\", \"1/1/2018\", \"2/1/2018\", \"3/1/2018\"];\nlet numbers = [12558, 14356, 16345, 18678, 14227];\n\nfor (let i = 0; i < dates.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(dates[i]);\n}\nfor (let j = 0; j < numbers.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(numbers[j]);\n}\n\nworksheet.GetRange(\"A1\").SetColumnWidth(15);\nlet range1 = worksheet.GetRange(\"B1:B5\");\nlet range2 = worksheet.GetRange(\"A1:A5\");\nworksheet.GetRange(\"B6\").SetValue(func.FORECAST_ETS(\"3/1/2018\", range1, range2, 0, 1, 1));"
+  ],
+  "params": [
+    {
+      "description": "A date for which a new value will be predicted. Must be after the last date in the timeline.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A range or an array of numeric data that determines the historical values for which a new point will be predicted.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "A range of date/time values that correspond to the historical values.\rThe timeline range must be of the same size as the second argument. Date/time values must have a constant step between them and can't be zero.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "An optional numeric value that specifies the length of the seasonal pattern. The default value of 1 indicates seasonality is detected automatically.\rThe 0 value means no seasonality.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional numeric value to handle missing values. The default value of 1 replaces missing values by interpolation, and 0 replaces them with zeros.",
+      "name": "arg5",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional numeric value to aggregate multiple values with the same time stamp.",
+      "name": "arg6",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "FORECAST_ETS(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number[], arg3: ApiRange | ApiName, arg4?: ApiRange | ApiName | number, arg5?: ApiRange | ApiName | number, arg6?: ApiRange | ApiName | number): number"
+}

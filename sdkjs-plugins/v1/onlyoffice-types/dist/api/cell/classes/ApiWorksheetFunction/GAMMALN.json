@@ -1,0 +1,18 @@
+{
+  "description": "Returns the natural logarithm of the gamma function.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GAMMALN/",
+  "examples": [
+    "// How do I find the natural logarithm of a gamma function in a spreadsheet?\n\n// Get the logarithmic equivalent of a gamma function result in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.GAMMALN(0.5);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value for which the natural logarithm of the gamma function will be calculated, a positive number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GAMMALN(arg1: ApiRange | ApiName | number): number"
+}

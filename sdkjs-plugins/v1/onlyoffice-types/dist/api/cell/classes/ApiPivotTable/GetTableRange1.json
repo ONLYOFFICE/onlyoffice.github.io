@@ -1,0 +1,13 @@
+{
+  "description": "Returns a Range object that represents the entire pivot table report, but doesn't include page fields.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotTable/Methods/GetTableRange1/",
+  "examples": [
+    "// How do I find the cells that cover a pivot table but leave out the filter row in a spreadsheet?\n\n// Highlight the body of a pivot table without including any page-level filters in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n    rows: 'Region',\n    pages: 'Style',\n});\n\npivotTable.AddDataField('Price');\n\npivotTable.GetTableRange1().Select();"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiRange | null"
+  },
+  "signature": "GetTableRange1(): ApiRange | null",
+  "since": "8.2.0"
+}

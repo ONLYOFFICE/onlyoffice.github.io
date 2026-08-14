@@ -1,0 +1,7 @@
+{
+  "description": "Class representing a document combo box / drop-down list.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboBoxForm/",
+  "extends": [
+    "ApiFormBase"
+  ]
+}

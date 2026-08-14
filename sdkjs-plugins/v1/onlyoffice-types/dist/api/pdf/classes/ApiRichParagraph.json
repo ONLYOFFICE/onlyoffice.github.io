@@ -1,0 +1,199 @@
+{
+  "description": "Class representing a rich paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/",
+  "extends": [
+    "ApiRichParaPr"
+  ],
+  "methods": {
+    "AddElement": {
+      "description": "Adds an element to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/AddElement/",
+      "examples": [
+        "// How do I add items to a paragraph in a PDF?\n\n// Place a new element at a specific position in a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\nlet newRun = Api.CreateRichRun();\nnewRun.AddText(\"New run element\");\npara.AddElement(newRun, 0);\n\nconsole.log(\"We added new rich run element to rich paragraph\");"
+      ],
+      "params": [
+        {
+          "description": "The element which will be added at the current position.",
+          "name": "richRun",
+          "type": "ApiRichRun"
+        },
+        {
+          "description": "The position where the current element will be added. If this value is not\rspecified, then the element will be added at the end of the current paragraph.",
+          "name": "pos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddElement(richRun: ApiRichRun, pos?: number): boolean"
+    },
+    "AddText": {
+      "description": "Adds some text to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/AddText/",
+      "examples": [
+        "// How can I insert text into a paragraph in a PDF?\n\n// Include written content within a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\npara.AddText(\"Example text\");\n\nconsole.log(`We added some text to rich paragraph`);"
+      ],
+      "params": [
+        {
+          "description": "The text that we want to insert into the current paragraph.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRichRun"
+      },
+      "signature": "AddText(text: string): ApiRichRun"
+    },
+    "Copy": {
+      "description": "Creates a paragraph copy.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/Copy/",
+      "examples": [
+        "// How do I create a copy of a paragraph in a PDF?\n\n// Clone an existing paragraph and add it to content in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\npara.AddText(\"Some text\");\nlet copyPara = para.Copy();\nrichContent.AddElement(1, copyPara);\n\nconsole.log(`We copied paragraph from rich content`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRichParagraph"
+      },
+      "signature": "Copy(): ApiRichParagraph"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRichParagraph class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine what type a paragraph is in a PDF?\n\n// Check the object classification of a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\n\nconsole.log(`Object class type is: ${para.GetClassType()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"richParagraph\""
+      },
+      "signature": "GetClassType(): \"richParagraph\""
+    },
+    "GetElement": {
+      "description": "Returns a paragraph element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetElement/",
+      "examples": [
+        "// How can I retrieve items from a paragraph in a PDF?\n\n// Extract a specific element from a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\nlet run = para.GetElement(0);\nrun.AddText(\"Some example text\");\n\nconsole.log(\"We gets rich run element from rich paragraph and added some text to it\");"
+      ],
+      "params": [
+        {
+          "description": "The position where the element which content we want to get must be located.",
+          "name": "pos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRichRun"
+      },
+      "signature": "GetElement(pos: number): ApiRichRun"
+    },
+    "GetNext": {
+      "description": "Returns the next paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetNext/",
+      "examples": [
+        "// How do I navigate to the next paragraph in a PDF?\n\n// Jump to the subsequent paragraph and work with it in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = Api.CreateRichParagraph();\npara.AddText(\"Example text\");\nrichContent.AddElement(0, para);\nlet nextPara = para.GetNext();\nnextPara.AddText(\"This is next paragraph\");\n\nconsole.log(`We got next paragraph and added some text to it`);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if paragraph is last.",
+        "type": "ApiRichParagraph"
+      },
+      "signature": "GetNext(): ApiRichParagraph"
+    },
+    "GetParaPr": {
+      "description": "Returns the paragraph properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetParaPr/",
+      "examples": [
+        "// How can I access paragraph settings in a PDF?\n\n// Extract formatting properties from a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\npara.AddText(\"Example text\");\n\nlet paraPr = para.GetParaPr();\nparaPr.SetJc(\"right\");\n\nconsole.log(`We got rich paragraph properties from rich paragraph and set justification to it`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRichParaPr"
+      },
+      "signature": "GetParaPr(): ApiRichParaPr"
+    },
+    "GetPrevious": {
+      "description": "Returns the previous paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetPrevious/",
+      "examples": [
+        "// How do I get the previous paragraph in a PDF?\n\n// Navigate backward to the previous paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = Api.CreateRichParagraph();\npara.AddText(\"Example text\");\nrichContent.AddElement(1, para);\nlet previousPara = para.GetPrevious();\npreviousPara.AddText(\"This is previous paragraph\");\n\nconsole.log(`We got previous paragraph and added some text to it`);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if paragraph is first.",
+        "type": "ApiRichParagraph"
+      },
+      "signature": "GetPrevious(): ApiRichParagraph"
+    },
+    "Last": {
+      "description": "Returns the last element of the paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/Last/",
+      "examples": [
+        "// How do I access the last element in a paragraph in a PDF?\n\n// Obtain the bottom-most item from a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\nlet run = para.GetElement(0);\nrun.AddText(\"Last rich run element\");\n\nconsole.log(\"We gets last rich run element from rich paragraph and added some text to it\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRichRun"
+      },
+      "signature": "Last(): ApiRichRun"
+    },
+    "Push": {
+      "description": "Adds an element to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/Push/",
+      "examples": [
+        "// How do I insert a new element into a paragraph in a PDF?\n\n// Append an additional element to a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\nlet newRun = Api.CreateRichRun();\nnewRun.AddText(\"New run element\");\npara.Push(newRun);\n\nconsole.log(\"We pushed new rich run element to rich paragraph\");"
+      ],
+      "params": [
+        {
+          "description": "The element to add at the end of the paragraph.",
+          "name": "richRun",
+          "type": "ParagraphContent"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Push(richRun: ParagraphContent): boolean"
+    },
+    "SetParaPr": {
+      "description": "Sets the paragraph properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/SetParaPr/",
+      "examples": [
+        "// How do I configure paragraph appearance in a PDF?\n\n// Assign custom formatting rules to a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\npara.AddText(\"Example text\");\n\nlet paraPr = Api.CreateRichParaPr();\nparaPr.SetJc(\"right\");\npara.SetParaPr(paraPr);\n\nconsole.log(`We set new rich paragraph properties to rich paragraph`);"
+      ],
+      "params": [
+        {
+          "description": "The paragraph properties to apply.",
+          "name": "paraPr",
+          "type": "ApiRichParaPr"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetParaPr(paraPr: ApiRichParaPr): boolean"
+    },
+    "SetReadingOrder": {
+      "description": "Specifies the reading order for the current paragraph.\nPossible values are:\n**null** - use the standart direction parameter;\n**\"ltr\"** - left-to-right text direction;\n**\"rtl\"** - right-to-left text direction.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/SetReadingOrder/",
+      "examples": [
+        "// How do I set the reading direction for a paragraph in a PDF?\n\n// Configure how text flows through a paragraph in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\nlet run = para.GetElement(0);\nrun.AddText(\"Some paragraph text\");\npara.SetReadingOrder(\"rtl\");\n\nconsole.log(\"We sets rtl to rich paragraph\");"
+      ],
+      "params": [
+        {
+          "description": "The reading order.",
+          "name": "readingOrder",
+          "optional": true,
+          "type": "ReadingOrder"
+        }
+      ],
+      "returns": {
+        "description": "Returns the current paragraph itself (ApiRichParagraph).",
+        "type": "ApiRichParagraph"
+      },
+      "signature": "SetReadingOrder(readingOrder?: ReadingOrder): ApiRichParagraph"
+    }
+  }
+}

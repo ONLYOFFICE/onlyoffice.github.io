@@ -1,0 +1,33 @@
+{
+  "description": "Sets the specified numeric format to the chart data point.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetDataPointNumFormat/",
+  "examples": [
+    "// How do I control the number format displayed on individual data points in a PDF?\n\n// Apply a specific number format to a data point in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24, [\"0\", \"0.00\"]);\nchart.SetSize(150 * 36000, 65 * 36000);\nchart.SetPosition(608400, 1267200);\nchart.SetShowPointDataLabel(1, 0, false, false, true, false);\nchart.SetDataPointNumFormat(\"0.00\", 0, 0, true);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\npage.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "Numeric format (can be custom format).",
+      "name": "sFormat",
+      "type": "NumFormat | string"
+    },
+    {
+      "description": "Series index.",
+      "name": "nSeria",
+      "type": "number"
+    },
+    {
+      "description": "The index of the data point in the specified chart series.",
+      "name": "nDataPoint",
+      "type": "number"
+    },
+    {
+      "description": "Specifies if the numeric format will be applied to the specified data point in all series.",
+      "name": "bAllSeries",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetDataPointNumFormat(sFormat: NumFormat | string, nSeria: number, nDataPoint: number, bAllSeries: boolean): boolean"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Returns the second, a number from 0 to 59.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SECOND/",
+  "examples": [
+    "// Extract the seconds component from a time value using the SECOND function.\n\n// Apply the function to retrieve and display the seconds in a cell.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.SECOND(\"16:39:35\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A number in the date-time code, or text in the time format, such as \"16:48:00\" or \"4:48:00 PM\", or a result of other formulas or functions.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SECOND(arg1: ApiRange | ApiName | number | string): number"
+}

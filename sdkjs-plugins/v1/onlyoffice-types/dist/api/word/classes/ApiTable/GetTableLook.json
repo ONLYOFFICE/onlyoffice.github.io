@@ -1,0 +1,9 @@
+{
+  "description": "Gets table look properties",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetTableLook/",
+  "params": [],
+  "returns": {
+    "type": "TableLook"
+  },
+  "signature": "GetTableLook(): TableLook"
+}

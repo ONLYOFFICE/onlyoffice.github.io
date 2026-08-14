@@ -1,0 +1,28 @@
+{
+  "description": "Creates line annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateLineAnnot/",
+  "examples": [
+    "// Create the line annot in a PDF document.\n\n// Create the line annot and display the result in a PDF document.\n\nlet doc = Api.GetDocument();\nlet lineAnnot = Api.CreateLineAnnot([10, 10, 160, 32], {x: 11, y: 11}, {x: 155, y: 25});\nlineAnnot.SetEndStyle(\"openArrow\");\nlet page = doc.GetPage(0);\npage.AddObject(lineAnnot);"
+  ],
+  "params": [
+    {
+      "description": "annotation rect.",
+      "name": "rect",
+      "type": "Rect"
+    },
+    {
+      "description": "start line point",
+      "name": "startPoint",
+      "type": "Point"
+    },
+    {
+      "description": "end line point",
+      "name": "endPoint",
+      "type": "Point"
+    }
+  ],
+  "returns": {
+    "type": "ApiLineAnnotation"
+  },
+  "signature": "CreateLineAnnot(rect: Rect, startPoint: Point, endPoint: Point): ApiLineAnnotation"
+}

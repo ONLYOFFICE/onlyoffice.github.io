@@ -1,0 +1,23 @@
+{
+  "description": "Sets the size of the object (image, shape, chart) bounding box.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetSize/",
+  "examples": [
+    "// How do I change the size of a drawing in a document?\n\n// Adjust a shape's bounding box after it has already been placed on the page in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetSize(2 * 914400, 2 * 914400);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape was created with a size of 53x39 millimeters, then resized to the size of 2x2 inches.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The object width measured in English measure units.",
+      "name": "nWidth",
+      "type": "EMU"
+    },
+    {
+      "description": "The object height measured in English measure units.",
+      "name": "nHeight",
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetSize(nWidth: EMU, nHeight: EMU): boolean"
+}

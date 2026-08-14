@@ -1,0 +1,18 @@
+{
+  "description": "Returns the arccosine of a number, in radians in the range from 0 to Pi. The arccosine is the angle whose cosine is a number specified in the parameters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ACOS/",
+  "examples": [
+    "// How do I convert a cosine result back to its angle measurement in a spreadsheet?\n\n// Determine the radian angle from a known cosine value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ACOS(0));"
+  ],
+  "params": [
+    {
+      "description": "The angle cosine. It must be from -1 to 1.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ACOS(arg1: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,39 @@
+{
+  "description": "Returns the depreciation of an asset for a specified period using the fixed-declining balance method.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DB/",
+  "examples": [
+    "// What is the depreciation amount for a particular period in a spreadsheet?\n\n// Find the fixed-declining balance depreciation for your assets in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DB(3500, 500, 5, 1, 10));"
+  ],
+  "params": [
+    {
+      "description": "The initial cost of the asset.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The salvage value of the asset at the end of its lifetime.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of periods over which the asset is being depreciated (sometimes called the useful life of the asset).",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The period for which the depreciation will be calculated. Period must use the same units as the useful life of the asset.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of months in the first year. If this parameter is omitted, it is assumed to be 12.",
+      "name": "arg5",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DB(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | number, arg5?: ApiRange | ApiName | number): number"
+}

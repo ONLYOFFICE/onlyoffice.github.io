@@ -1,0 +1,24 @@
+{
+  "description": "Adds a comment to the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/AddComment/",
+  "examples": [
+    "// How do I add a comment to a range of cells in a spreadsheet?\n\n// Leave a written remark on a cell so other users see context when they open it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"1\");\nrange.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"The comment was added to the cell A1.\");\nworksheet.GetRange(\"A4\").SetValue(\"Comment: \" + range.GetComment().GetText());"
+  ],
+  "params": [
+    {
+      "description": "The comment text.",
+      "name": "sText",
+      "type": "string"
+    },
+    {
+      "description": "The author's name (optional).",
+      "name": "sAuthor",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "returns false if comment can't be added.",
+    "type": "ApiComment | null"
+  },
+  "signature": "AddComment(sText: string, sAuthor: string): ApiComment | null"
+}

@@ -1,0 +1,954 @@
+{
+  "ApiForm": {
+    "description": "Types of all supported forms.",
+    "type": "ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm | ApiSignatureForm"
+  },
+  "AxisPos": {
+    "description": "Axis position in the chart.",
+    "type": "\"top\" | \"bottom\" | \"right\" | \"left\""
+  },
+  "Base64Img": {
+    "description": "The Base64 image string.",
+    "type": "string"
+  },
+  "BlipFillType": {
+    "description": "The type of a fill which uses an image as a background.\n**\"tile\"** - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.\n**\"stretch\"** - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.",
+    "type": "\"tile\" | \"stretch\""
+  },
+  "Border": {
+    "description": "The border properties object.",
+    "properties": {
+      "Color": {
+        "description": "The border color.",
+        "type": "ApiColor"
+      },
+      "Size": {
+        "description": "The border width measured in eighths of a point.",
+        "type": "pt_8"
+      },
+      "Space": {
+        "description": "The spacing offset from the text to the border measured in points.",
+        "type": "pt"
+      },
+      "Type": {
+        "description": "The border style.",
+        "type": "BorderType"
+      }
+    }
+  },
+  "BorderType": {
+    "description": "A border type which will be added to the document element.\n**\"none\"** - no border will be added to the created element or the selected element side.\n**\"single\"** - a single border will be added to the created element or the selected element side.",
+    "type": "\"none\" | \"single\""
+  },
+  "CaptionLabel": {
+    "description": "Possible values for the caption label.",
+    "type": "\"Table\" | \"Equation\" | \"Figure\""
+  },
+  "CaptionNumberingFormat": {
+    "description": "Possible values for the caption numbering format.\n**\"ALPHABETIC\"** - upper letter.\n**\"alphabetic\"** - lower letter.\n**\"Roman\"** - upper Roman.\n**\"roman\"** - lower Roman.\n**\"Arabic\"** - arabic.",
+    "type": "\"ALPHABETIC\" | \"alphabetic\" | \"Roman\" | \"roman\" | \"Arabic\""
+  },
+  "CaptionSep": {
+    "description": "Possible values for the caption separator.\n**\"hyphen\"** - the \"-\" punctuation mark.\n**\"period\"** - the \".\" punctuation mark.\n**\"colon\"** - the \":\" punctuation mark.\n**\"longDash\"** - the \"—\" punctuation mark.\n**\"dash\"** - the \"-\" punctuation mark.",
+    "type": "\"hyphen\" | \"period\" | \"colon\" | \"longDash\" | \"dash\""
+  },
+  "ChartType": {
+    "description": "This type specifies the available chart types which can be used to create a new chart.",
+    "type": "\"ColumnClustered\" | \"ColumnStacked\" | \"ColumnStacked100\" | \"3DColumnClustered\" | \"3DColumnStacked\" | \"3DColumnStacked100\" | \"3DColumn\" | \"BarClustered\" | \"BarStacked\" | \"BarStacked100\" | \"3DBarClustered\" | \"3DBarStacked\" | \"3DBarStacked100\" | \"Line\" | \"LineStacked\" | \"LineStacked100\" | \"LineMarkers\" | \"LineMarkersStacked\" | \"LineMarkersStacked100\" | \"3DLine\" | \"Pie\" | \"3DPie\" | \"Doughnut\" | \"XYScatter\" | \"XYScatterLines\" | \"XYScatterLinesNoMarkers\" | \"XYScatterSmooth\" | \"XYScatterSmoothNoMarkers\" | \"StockHLC\" | \"StockOHLC\" | \"StockVHLC\" | \"StockVOHLC\" | \"Area\" | \"AreaStacked\" | \"AreaStacked100\" | \"Combo\" | \"ComboColumnClusteredLine\" | \"ComboColumnClusteredLineSecondaryAxis\" | \"Radar\" | \"RadarMarkers\" | \"RadarFilled\" | \"unknown\""
+  },
+  "ChartTypeLegacy": {
+    "description": "This type specifies the legacy chart type names which are kept for backward compatibility.",
+    "type": "\"bar\" | \"barStacked\" | \"barStackedPercent\" | \"bar3D\" | \"barStacked3D\" | \"barStackedPercent3D\" | \"barStackedPercent3DPerspective\" | \"horizontalBar\" | \"horizontalBarStacked\" | \"horizontalBarStackedPercent\" | \"horizontalBar3D\" | \"horizontalBarStacked3D\" | \"horizontalBarStackedPercent3D\" | \"lineNormal\" | \"lineStacked\" | \"lineStackedPercent\" | \"lineNormalMarker\" | \"lineStackedMarker\" | \"lineStackedPerMarker\" | \"line3D\" | \"pie\" | \"pie3D\" | \"doughnut\" | \"scatter\" | \"scatterLine\" | \"scatterLineMarker\" | \"scatterSmooth\" | \"scatterSmoothMarker\" | \"stock\" | \"area\" | \"areaStacked\" | \"areaStackedPercent\" | \"comboCustom\" | \"comboBarLine\" | \"comboBarLineSecondary\" | \"radar\" | \"radarMarker\" | \"radarFilled\" | \"unknown\""
+  },
+  "CheckBoxFormPr": {
+    "description": "Checkbox / radio button properties.",
+    "type": "FormPrBase | CheckBoxFormPrBase"
+  },
+  "CheckBoxFormPrBase": {
+    "description": "Specific checkbox / radio button properties.",
+    "properties": {
+      "radio": {
+        "description": "Specifies if the current checkbox is a radio button. In this case, the key parameter is considered as an identifier for the group of radio buttons.",
+        "type": "boolean"
+      }
+    }
+  },
+  "CheckboxOption": {
+    "description": "Option for checkbox",
+    "type": "boolean"
+  },
+  "ChoiceOption": {
+    "description": "Option for radio groups, dropdowns and combo boxes.",
+    "properties": {
+      "label": {
+        "description": "Display text.",
+        "type": "string"
+      },
+      "value": {
+        "description": "Stored value.",
+        "type": "string"
+      }
+    }
+  },
+  "ComboBoxFormPr": {
+    "description": "Combo box / dropdown list properties.",
+    "type": "FormPrBase | ComboBoxFormPrBase"
+  },
+  "ComboBoxFormPrBase": {
+    "description": "Specific combo box / dropdown list properties.",
+    "properties": {
+      "autoFit": {
+        "description": "Specifies if the combo box form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.",
+        "type": "boolean"
+      },
+      "editable": {
+        "description": "Specifies if the combo box text can be edited.",
+        "type": "boolean"
+      },
+      "items": {
+        "description": "The combo box items.\rThis array consists of strings or arrays of two strings where the first string is the displayed value and the second one is its meaning.\rIf the array consists of single strings, then the displayed value and its meaning are the same.\rExample: [\"First\", [\"Second\", \"2\"], [\"Third\", \"3\"], \"Fourth\"].",
+        "type": "(string | string[])[]"
+      }
+    }
+  },
+  "CommentReport": {
+    "description": "A dictionary of users and their comments.",
+    "properties": {
+      "username": {
+        "description": "The comments grouped by username.",
+        "optional": true,
+        "type": "UserComments"
+      }
+    }
+  },
+  "CommentReportRecord": {
+    "description": "Represents a single comment record.",
+    "properties": {
+      "CommentMessage": {
+        "description": "The comment text.",
+        "type": "string"
+      },
+      "Date": {
+        "description": "The comment local timestamp.",
+        "type": "number"
+      },
+      "DateUTC": {
+        "description": "The  comment UTC timestamp.",
+        "type": "number"
+      },
+      "IsAnswer": {
+        "description": "Specifies whether the comment is a response.",
+        "type": "boolean"
+      },
+      "QuoteText": {
+        "description": "The quoted text (if available).",
+        "optional": true,
+        "type": "string"
+      }
+    }
+  },
+  "ContentControlCheckBoxPr": {
+    "description": "The checkbox content control properties",
+    "properties": {
+      "checked": {
+        "description": "Indicates whether the checkbox is checked by default.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "checkedSymbol": {
+        "description": "A custom symbol to display when the checkbox is checked (e.g., \"☒\").",
+        "optional": true,
+        "type": "string"
+      },
+      "uncheckedSymbol": {
+        "description": "A custom symbol to display when the checkbox is unchecked (e.g., \"☐\").",
+        "optional": true,
+        "type": "string"
+      }
+    }
+  },
+  "ContentControlDatePr": {
+    "description": "The date picker content control properties.",
+    "properties": {
+      "format": {
+        "description": "The date format. Example: \"mm.dd.yyyy\".",
+        "type": "string"
+      },
+      "lang": {
+        "description": "The date language. Possible value for this parameter is a language identifier as defined by\rRFC 4646/BCP 47. Example: \"en-CA\".",
+        "type": "string"
+      }
+    }
+  },
+  "ContentControlListItem": {
+    "description": "The object representing the items in the combo box or drop-down list.",
+    "properties": {
+      "display": {
+        "description": "The text to be displayed in the combo box or drop-down list.",
+        "type": "string"
+      },
+      "value": {
+        "description": "The value associated with the item.",
+        "type": "string"
+      }
+    }
+  },
+  "CustomXmlNodeAttribute": {
+    "description": "Represents an attribute of an XML node.",
+    "properties": {
+      "name": {
+        "description": "The attribute name.",
+        "type": "string"
+      },
+      "value": {
+        "description": "The attribute value.",
+        "type": "string"
+      }
+    }
+  },
+  "DashType": {
+    "description": "Available dash type for line.",
+    "type": "\"dash\" | \"dashDot\" | \"dot\" | \"lgDash\" | \"lgDashDot\" | \"lgDashDotDot\" | \"solid\" | \"sysDash\" | \"sysDashDot\" | \"sysDashDotDot\" | \"sysDot\""
+  },
+  "DateFormPr": {
+    "description": "The date form properties.",
+    "type": "FormPrBase | DateFormPrBase"
+  },
+  "DateFormPrBase": {
+    "description": "Specific date form properties.",
+    "properties": {
+      "format": {
+        "description": "The date format, ex: mm.dd.yyyy",
+        "type": "string"
+      },
+      "lang": {
+        "description": "The date language. Possible value for this parameter is a language identifier as defined by\rRFC 4646/BCP 47. Example: \"en-CA\".",
+        "type": "string"
+      }
+    }
+  },
+  "DocumentElement": {
+    "description": "Any valid element which can be added to the document structure.",
+    "type": "ApiParagraph | ApiTable | ApiBlockLvlSdt"
+  },
+  "Drawing": {
+    "description": "Any valid drawing element.",
+    "type": "ApiShape | ApiImage | ApiGroup | ApiOleObject | ApiChart | ApiSmartArt"
+  },
+  "DrawingForGroup": {
+    "description": "Available drawing element for grouping.",
+    "type": "ApiShape | ApiGroup | ApiImage | ApiChart"
+  },
+  "DrawingLockType": {
+    "description": "This type specifies the type of drawing lock.",
+    "type": "\"noGrp\" | \"noUngrp\" | \"noSelect\" | \"noRot\" | \"noChangeAspect\" | \"noMove\" | \"noResize\" | \"noEditPoints\" | \"noAdjustHandles\" | \"noChangeArrowheads\" | \"noChangeShapeType\" | \"noDrilldown\" | \"noTextEdit\" | \"noCrop\" | \"txBox\""
+  },
+  "EMU": {
+    "description": "English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs.",
+    "type": "number"
+  },
+  "FillType": {
+    "description": "The available fill types.",
+    "type": "\"solid\" | \"gradient\" | \"pattern\" | \"blip\" | \"nofill\""
+  },
+  "FormData": {
+    "description": "Form data.",
+    "properties": {
+      "format": {
+        "description": "The date format string (e.g. **MM/DD/YYYY**). Present only for date picker fields.",
+        "optional": true,
+        "type": "string"
+      },
+      "key": {
+        "description": "The form key. If the current form is a radio button, then this field contains the group key.",
+        "type": "string"
+      },
+      "label": {
+        "description": "The checkbox label. Present only for checkbox fields.",
+        "optional": true,
+        "type": "string"
+      },
+      "lang": {
+        "description": "The date language/locale name (e.g. **en-US**). Present only for date picker fields.",
+        "optional": true,
+        "type": "string"
+      },
+      "options": {
+        "description": "The list of available options for the field.\rPresent for checkboxes, radio button groups, dropdown lists, and combo boxes.",
+        "optional": true,
+        "type": "ChoiceOption[] | CheckboxOption[]"
+      },
+      "role": {
+        "description": "The form role.",
+        "optional": true,
+        "type": "string"
+      },
+      "roleColor": {
+        "description": "The form role color in hex format.",
+        "optional": true,
+        "type": "string"
+      },
+      "tag": {
+        "description": "The form tag.",
+        "type": "string"
+      },
+      "type": {
+        "description": "The form type.",
+        "type": "FormSpecificType"
+      },
+      "value": {
+        "description": "The current field value.",
+        "type": "string | boolean"
+      }
+    }
+  },
+  "FormInsertPr": {
+    "description": "Form insertion specific properties.",
+    "properties": {
+      "keepSelectedTextInForm": {
+        "description": "Specifies if the currently selected text should be saved as the content of the inserted form.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "placeholderFromSelection": {
+        "description": "Specifies if the currently selected text should be saved as a placeholder of the inserted form.",
+        "optional": true,
+        "type": "boolean"
+      }
+    }
+  },
+  "FormPrBase": {
+    "description": "Common form properties.",
+    "properties": {
+      "key": {
+        "description": "The form key.",
+        "type": "string"
+      },
+      "placeholder": {
+        "description": "The form placeholder text.",
+        "type": "string"
+      },
+      "required": {
+        "description": "Specifies if the form is required or not.",
+        "type": "boolean"
+      },
+      "role": {
+        "description": "The role to fill out form.",
+        "type": "string"
+      },
+      "tag": {
+        "description": "The form tag.",
+        "type": "string"
+      },
+      "tip": {
+        "description": "The form tip text.",
+        "type": "string"
+      }
+    }
+  },
+  "FormSpecificType": {
+    "description": "The specific form type.",
+    "type": "\"text\" | \"checkBox\" | \"picture\" | \"comboBox\" | \"dropDownList\" | \"dateTime\" | \"radio\" | \"complex\" | \"signature\""
+  },
+  "FormType": {
+    "description": "Form type.\nThe available form types.",
+    "type": "\"textForm\" | \"comboBoxForm\" | \"dropDownForm\" | \"checkBoxForm\" | \"radioButtonForm\" | \"pictureForm\" | \"complexForm\" | \"dateForm\" | \"signatureForm\""
+  },
+  "GeometryCoordinate": {
+    "description": "The coordinate value for the geometry paths.\nCan be a guide name from \"gdLst\", a numeric value, or a string representation of a number.",
+    "type": "string | number"
+  },
+  "GeometryFormulaType": {
+    "description": "This type specifies the formula type that will be used for a geometry guide.",
+    "type": "\"*/\" | \"+-\" | \"+/\" | \"?:\" | \"abs\" | \"at2\" | \"cat2\" | \"cos\" | \"max\" | \"min\" | \"mod\" | \"pin\" | \"sat2\" | \"sin\" | \"sqrt\" | \"tan\" | \"val\""
+  },
+  "HdrFtrType": {
+    "description": "Header and footer types which can be applied to the document sections.\n**\"default\"** - a header or footer which can be applied to any default page.\n**\"title\"** - a header or footer which is applied to the title page.\n**\"even\"** - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).",
+    "type": "\"default\" | \"title\" | \"even\""
+  },
+  "LineEndSize": {
+    "description": "The line end size.",
+    "type": "\"large\" | \"medium\" | \"small\""
+  },
+  "LineEndType": {
+    "description": "The line end type.",
+    "type": "\"none\" | \"arrow\" | \"diamond\" | \"oval\" | \"stealth\" | \"triangle\""
+  },
+  "NumFormat": {
+    "description": "Standard numeric format.",
+    "type": "\"General\" | \"0\" | \"0.00\" | \"#,##0\" | \"#,##0.00\" | \"0%\" | \"0.00%\" | \"0.00E+00\" | \"# ?/?\" | \"# ??/??\" | \"m/d/yyyy\" | \"d-mmm-yy\" | \"d-mmm\" | \"mmm-yy\" | \"h:mm AM/PM\" | \"h:mm:ss AM/PM\" | \"h:mm\" | \"h:mm:ss\" | \"m/d/yyyy h:mm\" | \"#,##0_);(#,##0)\" | \"#,##0_);[Red](#,##0)\" | \"#,##0.00_);(#,##0.00)\" | \"#,##0.00_);[Red](#,##0.00)\" | \"mm:ss\" | \"[h]:mm:ss\" | \"mm:ss.0\" | \"##0.0E+0\" | \"@\""
+  },
+  "ParagraphContent": {
+    "description": "The types of elements that can be added to the paragraph structure.",
+    "type": "ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath"
+  },
+  "ParagraphLikeContainer": {
+    "description": "A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt, etc.).",
+    "type": "ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase"
+  },
+  "PathCommandType": {
+    "description": "The path command types.",
+    "type": "\"moveTo\" | \"lineTo\" | \"bezier3\" | \"bezier4\" | \"arcTo\" | \"close\""
+  },
+  "PathFillType": {
+    "description": "The path fill type.",
+    "type": "\"none\" | \"norm\" | \"lighten\" | \"lightenLess\" | \"darken\" | \"darkenLess\""
+  },
+  "PatternType": {
+    "description": "The available preset patterns which can be used for the fill.",
+    "type": "\"cross\" | \"dashDnDiag\" | \"dashHorz\" | \"dashUpDiag\" | \"dashVert\" | \"diagBrick\" | \"diagCross\" | \"divot\" | \"dkDnDiag\" | \"dkHorz\" | \"dkUpDiag\" | \"dkVert\" | \"dnDiag\" | \"dotDmnd\" | \"dotGrid\" | \"horz\" | \"horzBrick\" | \"lgCheck\" | \"lgConfetti\" | \"lgGrid\" | \"ltDnDiag\" | \"ltHorz\" | \"ltUpDiag\" | \"ltVert\" | \"narHorz\" | \"narVert\" | \"openDmnd\" | \"pct10\" | \"pct20\" | \"pct25\" | \"pct30\" | \"pct40\" | \"pct5\" | \"pct50\" | \"pct60\" | \"pct70\" | \"pct75\" | \"pct80\" | \"pct90\" | \"plaid\" | \"shingle\" | \"smCheck\" | \"smConfetti\" | \"smGrid\" | \"solidDmnd\" | \"sphere\" | \"trellis\" | \"upDiag\" | \"vert\" | \"wave\" | \"wdDnDiag\" | \"wdUpDiag\" | \"weave\" | \"zigZag\""
+  },
+  "PictureFormPr": {
+    "description": "Picture form properties.",
+    "type": "FormPrBase | PictureFormPrBase"
+  },
+  "PictureFormPrBase": {
+    "description": "Specific picture form properties.",
+    "properties": {
+      "lockAspectRatio": {
+        "description": "Specifies if the aspect ratio of the picture form is locked or not.",
+        "type": "boolean"
+      },
+      "respectBorders": {
+        "description": "Specifies if the form border width is respected or not when scaling the image.",
+        "type": "boolean"
+      },
+      "scaleFlag": {
+        "description": "The condition to scale an image in the picture form: \"always\", \"never\", \"tooBig\" or \"tooSmall\".",
+        "type": "ScaleFlag"
+      },
+      "shiftX": {
+        "description": "Horizontal picture position inside the picture form measured in percent:\r**0** - the picture is placed on the left;\r**50** - the picture is placed in the center;\r**100** - the picture is placed on the right.",
+        "type": "percentage"
+      },
+      "shiftY": {
+        "description": "Vertical picture position inside the picture form measured in percent:\r**0** - the picture is placed on top;\r**50** - the picture is placed in the center;\r**100** - the picture is placed on the bottom.",
+        "type": "percentage"
+      }
+    }
+  },
+  "PositiveFixedAngle": {
+    "description": "60000th of a degree (5400000 = 90 degrees).",
+    "type": "number"
+  },
+  "PositivePercentage": {
+    "description": "The 1000th of a percent (100000 = 100%).",
+    "type": "number"
+  },
+  "PresetColor": {
+    "description": "The available preset color names.",
+    "type": "\"aliceBlue\" | \"antiqueWhite\" | \"aqua\" | \"aquamarine\" | \"azure\" | \"beige\" | \"bisque\" | \"black\" | \"blanchedAlmond\" | \"blue\" | \"blueViolet\" | \"brown\" | \"burlyWood\" | \"cadetBlue\" | \"chartreuse\" | \"chocolate\" | \"coral\" | \"cornflowerBlue\" | \"cornsilk\" | \"crimson\" | \"cyan\" | \"darkBlue\" | \"darkCyan\" | \"darkGoldenrod\" | \"darkGray\" | \"darkGreen\" | \"darkGrey\" | \"darkKhaki\" | \"darkMagenta\" | \"darkOliveGreen\" | \"darkOrange\" | \"darkOrchid\" | \"darkRed\" | \"darkSalmon\" | \"darkSeaGreen\" | \"darkSlateBlue\" | \"darkSlateGray\" | \"darkSlateGrey\" | \"darkTurquoise\" | \"darkViolet\" | \"deepPink\" | \"deepSkyBlue\" | \"dimGray\" | \"dimGrey\" | \"dkBlue\" | \"dkCyan\" | \"dkGoldenrod\" | \"dkGray\" | \"dkGreen\" | \"dkGrey\" | \"dkKhaki\" | \"dkMagenta\" | \"dkOliveGreen\" | \"dkOrange\" | \"dkOrchid\" | \"dkRed\" | \"dkSalmon\" | \"dkSeaGreen\" | \"dkSlateBlue\" | \"dkSlateGray\" | \"dkSlateGrey\" | \"dkTurquoise\" | \"dkViolet\" | \"dodgerBlue\" | \"firebrick\" | \"floralWhite\" | \"forestGreen\" | \"fuchsia\" | \"gainsboro\" | \"ghostWhite\" | \"gold\" | \"goldenrod\" | \"gray\" | \"green\" | \"greenYellow\" | \"grey\" | \"honeydew\" | \"hotPink\" | \"indianRed\" | \"indigo\" | \"ivory\" | \"khaki\" | \"lavender\" | \"lavenderBlush\" | \"lawnGreen\" | \"lemonChiffon\" | \"lightBlue\" | \"lightCoral\" | \"lightCyan\" | \"lightGoldenrodYellow\" | \"lightGray\" | \"lightGreen\" | \"lightGrey\" | \"lightPink\" | \"lightSalmon\" | \"lightSeaGreen\" | \"lightSkyBlue\" | \"lightSlateGray\" | \"lightSlateGrey\" | \"lightSteelBlue\" | \"lightYellow\" | \"lime\" | \"limeGreen\" | \"linen\" | \"ltBlue\" | \"ltCoral\" | \"ltCyan\" | \"ltGoldenrodYellow\" | \"ltGray\" | \"ltGreen\" | \"ltGrey\" | \"ltPink\" | \"ltSalmon\" | \"ltSeaGreen\" | \"ltSkyBlue\" | \"ltSlateGray\" | \"ltSlateGrey\" | \"ltSteelBlue\" | \"ltYellow\" | \"magenta\" | \"maroon\" | \"medAquamarine\" | \"medBlue\" | \"mediumAquamarine\" | \"mediumBlue\" | \"mediumOrchid\" | \"mediumPurple\" | \"mediumSeaGreen\" | \"mediumSlateBlue\" | \"mediumSpringGreen\" | \"mediumTurquoise\" | \"mediumVioletRed\" | \"medOrchid\" | \"medPurple\" | \"medSeaGreen\" | \"medSlateBlue\" | \"medSpringGreen\" | \"medTurquoise\" | \"medVioletRed\" | \"midnightBlue\" | \"mintCream\" | \"mistyRose\" | \"moccasin\" | \"navajoWhite\" | \"navy\" | \"oldLace\" | \"olive\" | \"oliveDrab\" | \"orange\" | \"orangeRed\" | \"orchid\" | \"paleGoldenrod\" | \"paleGreen\" | \"paleTurquoise\" | \"paleVioletRed\" | \"papayaWhip\" | \"peachPuff\" | \"peru\" | \"pink\" | \"plum\" | \"powderBlue\" | \"purple\" | \"red\" | \"rosyBrown\" | \"royalBlue\" | \"saddleBrown\" | \"salmon\" | \"sandyBrown\" | \"seaGreen\" | \"seaShell\" | \"sienna\" | \"silver\" | \"skyBlue\" | \"slateBlue\" | \"slateGray\" | \"slateGrey\" | \"snow\" | \"springGreen\" | \"steelBlue\" | \"tan\" | \"teal\" | \"thistle\" | \"tomato\" | \"turquoise\" | \"violet\" | \"wheat\" | \"white\" | \"whiteSmoke\" | \"yellow\" | \"yellowGreen\""
+  },
+  "ReadingOrder": {
+    "description": "The reading order (left-to-right or right-to-left).",
+    "type": "\"ltr\" | \"rtl\""
+  },
+  "RelFromH": {
+    "description": "The possible values for the base which the relative horizontal positioning of an object will be calculated from.",
+    "type": "\"character\" | \"column\" | \"insideMargin\" | \"leftMargin\" | \"rightMargin\" | \"margin\" | \"outsideMargin\" | \"page\""
+  },
+  "RelFromV": {
+    "description": "The possible values for the base which the relative vertical positioning of an object will be calculated from.",
+    "type": "\"bottomMargin\" | \"insideMargin\" | \"topMargin\" | \"margin\" | \"outsideMargin\" | \"page\" | \"line\" | \"paragraph\""
+  },
+  "ReviewReport": {
+    "description": "A dictionary of users and their review changes.",
+    "properties": {
+      "username": {
+        "description": "The review changes grouped by username.",
+        "optional": true,
+        "type": "UserReviewChanges"
+      }
+    }
+  },
+  "ReviewReportRecord": {
+    "description": "Represents a single review change record.",
+    "properties": {
+      "Date": {
+        "description": "The timestamp of the change.",
+        "type": "number"
+      },
+      "ReviewedElement": {
+        "description": "The element that was reviewed.",
+        "type": "ApiParagraph | ApiTable"
+      },
+      "Type": {
+        "description": "The review record type.",
+        "type": "ReviewReportRecordType"
+      },
+      "Value": {
+        "description": "The review change value (only for \"TextAdd\" and \"TextRem\" types).",
+        "optional": true,
+        "type": "string"
+      }
+    }
+  },
+  "ReviewReportRecordType": {
+    "description": "Review record type.",
+    "type": "\"TextAdd\" | \"TextRem\" | \"ParaAdd\" | \"ParaRem\" | \"TextPr\" | \"ParaPr\" | \"Unknown\""
+  },
+  "RoleProperties": {
+    "description": "The role properties.",
+    "properties": {
+      "color": {
+        "description": "The role color.",
+        "type": "string"
+      }
+    }
+  },
+  "ScaleFlag": {
+    "description": "The condition to scale an image in the picture form.",
+    "type": "\"always\" | \"never\" | \"tooBig\" | \"tooSmall\""
+  },
+  "SchemeColorId": {
+    "description": "The available color scheme identifiers.",
+    "type": "\"accent1\" | \"accent2\" | \"accent3\" | \"accent4\" | \"accent5\" | \"accent6\" | \"bg1\" | \"bg2\" | \"dk1\" | \"dk2\" | \"lt1\" | \"lt2\" | \"tx1\" | \"tx2\""
+  },
+  "SdtLock": {
+    "description": "The lock type of the content control.",
+    "type": "\"unlocked\" | \"contentLocked\" | \"sdtContentLocked\" | \"sdtLocked\""
+  },
+  "SectionBreakType": {
+    "description": "The section break type which defines how the contents of the current section are placed relative to the previous section.\nWordprocessingML supports five distinct types of section breaks:\n**Next page** (\"nextPage\") - starts a new section on the next page (the default value).\n**Odd** (\"oddPage\") - starts a new section on the next odd-numbered page.\n**Even** (\"evenPage\") - starts a new section on the next even-numbered page.\n**Continuous** (\"continuous\") - starts a new section in the next paragraph.\nThis means that continuous section breaks might not specify certain page-level section properties,\nsince they shall be inherited from the following section.\nHowever, these breaks can specify other section properties, such as line numbering and footnote/endnote settings.\n**Column** (\"nextColumn\") - starts a new section in the next column on the page.",
+    "type": "\"nextPage\" | \"oddPage\" | \"evenPage\" | \"continuous\" | \"nextColumn\""
+  },
+  "ShadowSettings": {
+    "description": "Properties used to create a shadow.",
+    "properties": {
+      "color": {
+        "description": "The shadow color (black by default).",
+        "optional": true,
+        "type": "ApiUniColor"
+      },
+      "offsetX": {
+        "description": "The horizontal offset of the shadow measured in points (a positive value offsets to the right).",
+        "optional": true,
+        "type": "number"
+      },
+      "offsetY": {
+        "description": "The vertical offset of the shadow measured in points (a positive value offsets downwards).",
+        "optional": true,
+        "type": "number"
+      },
+      "rotateWithShape": {
+        "description": "Specifies whether the shadow rotates together with the shape.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "size": {
+        "description": "The shadow size as a percentage of the shape size.",
+        "optional": true,
+        "type": "number"
+      },
+      "transparency": {
+        "description": "The shadow transparency from 0.0 (opaque) to 1.0 (clear).",
+        "optional": true,
+        "type": "number"
+      }
+    }
+  },
+  "ShapeType": {
+    "description": "This type specifies the preset shape geometry that will be used for a shape.",
+    "type": "\"accentBorderCallout1\" | \"accentBorderCallout2\" | \"accentBorderCallout3\" | \"accentCallout1\" | \"accentCallout2\" | \"accentCallout3\" | \"actionButtonBackPrevious\" | \"actionButtonBeginning\" | \"actionButtonBlank\" | \"actionButtonDocument\" | \"actionButtonEnd\" | \"actionButtonForwardNext\" | \"actionButtonHelp\" | \"actionButtonHome\" | \"actionButtonInformation\" | \"actionButtonMovie\" | \"actionButtonReturn\" | \"actionButtonSound\" | \"arc\" | \"bentArrow\" | \"bentConnector2\" | \"bentConnector3\" | \"bentConnector4\" | \"bentConnector5\" | \"bentUpArrow\" | \"bevel\" | \"blockArc\" | \"borderCallout1\" | \"borderCallout2\" | \"borderCallout3\" | \"bracePair\" | \"bracketPair\" | \"callout1\" | \"callout2\" | \"callout3\" | \"can\" | \"chartPlus\" | \"chartStar\" | \"chartX\" | \"chevron\" | \"chord\" | \"circularArrow\" | \"cloud\" | \"cloudCallout\" | \"corner\" | \"cornerTabs\" | \"cube\" | \"curvedConnector2\" | \"curvedConnector3\" | \"curvedConnector4\" | \"curvedConnector5\" | \"curvedDownArrow\" | \"curvedLeftArrow\" | \"curvedRightArrow\" | \"curvedUpArrow\" | \"decagon\" | \"diagStripe\" | \"diamond\" | \"dodecagon\" | \"donut\" | \"doubleWave\" | \"downArrow\" | \"downArrowCallout\" | \"ellipse\" | \"ellipseRibbon\" | \"ellipseRibbon2\" | \"flowChartAlternateProcess\" | \"flowChartCollate\" | \"flowChartConnector\" | \"flowChartDecision\" | \"flowChartDelay\" | \"flowChartDisplay\" | \"flowChartDocument\" | \"flowChartExtract\" | \"flowChartInputOutput\" | \"flowChartInternalStorage\" | \"flowChartMagneticDisk\" | \"flowChartMagneticDrum\" | \"flowChartMagneticTape\" | \"flowChartManualInput\" | \"flowChartManualOperation\" | \"flowChartMerge\" | \"flowChartMultidocument\" | \"flowChartOfflineStorage\" | \"flowChartOffpageConnector\" | \"flowChartOnlineStorage\" | \"flowChartOr\" | \"flowChartPredefinedProcess\" | \"flowChartPreparation\" | \"flowChartProcess\" | \"flowChartPunchedCard\" | \"flowChartPunchedTape\" | \"flowChartSort\" | \"flowChartSummingJunction\" | \"flowChartTerminator\" | \"foldedCorner\" | \"frame\" | \"funnel\" | \"gear6\" | \"gear9\" | \"halfFrame\" | \"heart\" | \"heptagon\" | \"hexagon\" | \"homePlate\" | \"horizontalScroll\" | \"irregularSeal1\" | \"irregularSeal2\" | \"leftArrow\" | \"leftArrowCallout\" | \"leftBrace\" | \"leftBracket\" | \"leftCircularArrow\" | \"leftRightArrow\" | \"leftRightArrowCallout\" | \"leftRightCircularArrow\" | \"leftRightRibbon\" | \"leftRightUpArrow\" | \"leftUpArrow\" | \"lightningBolt\" | \"line\" | \"lineInv\" | \"mathDivide\" | \"mathEqual\" | \"mathMinus\" | \"mathMultiply\" | \"mathNotEqual\" | \"mathPlus\" | \"moon\" | \"nonIsoscelesTrapezoid\" | \"noSmoking\" | \"notchedRightArrow\" | \"octagon\" | \"parallelogram\" | \"pentagon\" | \"pie\" | \"pieWedge\" | \"plaque\" | \"plaqueTabs\" | \"plus\" | \"quadArrow\" | \"quadArrowCallout\" | \"rect\" | \"ribbon\" | \"ribbon2\" | \"rightArrow\" | \"rightArrowCallout\" | \"rightBrace\" | \"rightBracket\" | \"round1Rect\" | \"round2DiagRect\" | \"round2SameRect\" | \"roundRect\" | \"rtTriangle\" | \"smileyFace\" | \"snip1Rect\" | \"snip2DiagRect\" | \"snip2SameRect\" | \"snipRoundRect\" | \"squareTabs\" | \"star10\" | \"star12\" | \"star16\" | \"star24\" | \"star32\" | \"star4\" | \"star5\" | \"star6\" | \"star7\" | \"star8\" | \"straightConnector1\" | \"stripedRightArrow\" | \"sun\" | \"swooshArrow\" | \"teardrop\" | \"trapezoid\" | \"triangle\" | \"upArrowCallout\" | \"upDownArrow\" | \"upDownArrow\" | \"upDownArrowCallout\" | \"uturnArrow\" | \"verticalScroll\" | \"wave\" | \"wedgeEllipseCallout\" | \"wedgeRectCallout\" | \"wedgeRoundRectCallout\""
+  },
+  "Shd": {
+    "description": "The shading information object.",
+    "properties": {
+      "Color": {
+        "description": "The shading color.",
+        "type": "ApiColor"
+      },
+      "Type": {
+        "description": "The shading type: **\"nil\"** - no shading, **\"clear\"** - solid fill.",
+        "type": "ShdType"
+      }
+    }
+  },
+  "ShdType": {
+    "description": "A shade type which can be added to the document element.",
+    "type": "\"nil\" | \"clear\""
+  },
+  "SizeRelFromH": {
+    "description": "The possible values for the base which the relative horizontal size of an object will be calculated from.",
+    "type": "\"insideMargin\" | \"leftMargin\" | \"rightMargin\" | \"margin\" | \"outsideMargin\" | \"page\""
+  },
+  "SizeRelFromV": {
+    "description": "The possible values for the base which the relative vertical size of an object will be calculated from.",
+    "type": "\"bottomMargin\" | \"insideMargin\" | \"topMargin\" | \"margin\" | \"outsideMargin\" | \"page\""
+  },
+  "StyleType": {
+    "description": "The style type used for the document element.",
+    "type": "\"paragraph\" | \"table\" | \"run\" | \"numbering\""
+  },
+  "TabJc": {
+    "description": "Custom tab types.",
+    "type": "\"clear\" | \"left\" | \"right\" | \"center\""
+  },
+  "TabStop": {
+    "description": "A paragraph tab stop.",
+    "properties": {
+      "Leader": {
+        "description": "The tab leader character.",
+        "type": "\"none\" | \"dot\" | \"heavy\" | \"hyphen\" | \"middleDot\" | \"underscore\""
+      },
+      "Pos": {
+        "description": "The tab stop position measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips"
+      },
+      "Val": {
+        "description": "The tab stop alignment style.",
+        "type": "TabJc"
+      }
+    }
+  },
+  "TableLook": {
+    "properties": {
+      "bandHor": {
+        "description": "Specifies that the horizontal banding conditional formatting shall not be applied to the table.",
+        "type": "boolean"
+      },
+      "bandVer": {
+        "description": "Specifies that the vertical banding conditional formatting shall not be applied to the table.",
+        "type": "boolean"
+      },
+      "firstCol": {
+        "description": "Specifies that the first column conditional formatting shall be applied to the table.",
+        "type": "boolean"
+      },
+      "firstRow": {
+        "description": "Specifies that the first row conditional formatting shall be applied to the table.",
+        "type": "boolean"
+      },
+      "lastCol": {
+        "description": "Specifies that the last column conditional formatting shall be applied to the table.",
+        "type": "boolean"
+      },
+      "lastRow": {
+        "description": "Specifies that the last row conditional formatting shall be applied to the table.",
+        "type": "boolean"
+      }
+    }
+  },
+  "TableStyleOverrideType": {
+    "description": "This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used.\n**\"topLeftCell\"** - specifies that the table formatting is applied to the top left cell.\n**\"topRightCell\"** - specifies that the table formatting is applied to the top right cell.\n**\"bottomLeftCell\"** - specifies that the table formatting is applied to the bottom left cell.\n**\"bottomRightCell\"** - specifies that the table formatting is applied to the bottom right cell.\n**\"firstRow\"** - specifies that the table formatting is applied to the first row.\n**\"lastRow\"** - specifies that the table formatting is applied to the last row.\n**\"firstColumn\"** - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format.\n**\"lastColumn\"** - specifies that the table formatting is applied to the last column.\n**\"bandedColumn\"** - specifies that the table formatting is applied to odd numbered groupings of rows.\n**\"bandedColumnEven\"** - specifies that the table formatting is applied to even numbered groupings of rows.\n**\"bandedRow\"** - specifies that the table formatting is applied to odd numbered groupings of columns.\n**\"bandedRowEven\"** - specifies that the table formatting is applied to even numbered groupings of columns.\n**\"wholeTable\"** - specifies that the conditional formatting is applied to the whole table.",
+    "type": "\"topLeftCell\" | \"topRightCell\" | \"bottomLeftCell\" | \"bottomRightCell\" | \"firstRow\" | \"lastRow\" | \"firstColumn\" | \"lastColumn\" | \"bandedColumn\" | \"bandedColumnEven\" | \"bandedRow\" | \"bandedRowEven\" | \"wholeTable\""
+  },
+  "TableWidth": {
+    "description": "The possible values for the units of the width property are defined by a specific table or table cell width property.\n**\"auto\"** - sets the table or table cell width to auto width.\n**\"twips\"** - sets the table or table cell width to be measured in twentieths of a point.\n**\"nul\"** - sets the table or table cell width to be of a zero value.\n**\"percent\"** - sets the table or table cell width to be measured in percent to the parent container.",
+    "type": "\"auto\" | \"twips\" | \"nul\" | \"percent\""
+  },
+  "TextFlowDirection": {
+    "description": "The available text flow direction inside a drawing content.",
+    "type": "\"lrtb\" | \"tbrl\" | \"btlr\""
+  },
+  "TextFormFormat": {
+    "description": "The text field format data.",
+    "properties": {
+      "type": {
+        "description": "The format type.",
+        "type": "\"none\" | \"digit\" | \"letter\" | \"mask\" | \"regExp\""
+      },
+      "value": {
+        "description": "The format value. Required for **\"mask\"** and **\"regExp\"** types.",
+        "optional": true,
+        "type": "string"
+      }
+    }
+  },
+  "TextFormInsertPr": {
+    "description": "Properties for inserting a text field.",
+    "type": "FormPrBase | TextFormPrBase | FormInsertPr"
+  },
+  "TextFormPr": {
+    "description": "Text field properties.",
+    "type": "FormPrBase | TextFormPrBase"
+  },
+  "TextFormPrBase": {
+    "description": "Specific text field properties.",
+    "properties": {
+      "autoFit": {
+        "description": "Specifies if the text field content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.",
+        "type": "boolean"
+      },
+      "cellWidth": {
+        "description": "The cell width for each character measured in millimeters. If this parameter is not specified or equal to 0 or less, then the width will be set automatically.",
+        "type": "number"
+      },
+      "comb": {
+        "description": "Specifies if the text field should be a comb of characters with the same cell width. The maximum number of characters must be set to a positive value.",
+        "type": "boolean"
+      },
+      "maxCharacters": {
+        "description": "The maximum number of characters in the text field.",
+        "type": "number"
+      },
+      "multiLine": {
+        "description": "Specifies if the current fixed size text field is multiline or not.",
+        "type": "boolean"
+      }
+    }
+  },
+  "TextTransform": {
+    "description": "Text transform type.",
+    "type": "\"textArchDown\" | \"textArchDownPour\" | \"textArchUp\" | \"textArchUpPour\" | \"textButton\" | \"textButtonPour\" | \"textCanDown\" | \"textCanUp\" | \"textCascadeDown\" | \"textCascadeUp\" | \"textChevron\" | \"textChevronInverted\" | \"textCircle\" | \"textCirclePour\" | \"textCurveDown\" | \"textCurveUp\" | \"textDeflate\" | \"textDeflateBottom\" | \"textDeflateInflate\" | \"textDeflateInflateDeflate\" | \"textDeflateTop\" | \"textDoubleWave1\" | \"textFadeDown\" | \"textFadeLeft\" | \"textFadeRight\" | \"textFadeUp\" | \"textInflate\" | \"textInflateBottom\" | \"textInflateTop\" | \"textPlain\" | \"textRingInside\" | \"textRingOutside\" | \"textSlantDown\" | \"textSlantUp\" | \"textStop\" | \"textTriangle\" | \"textTriangleInverted\" | \"textWave1\" | \"textWave2\" | \"textWave4\" | \"textNoShape\""
+  },
+  "TickLabelPosition": {
+    "description": "Possible values for the position of chart tick labels (either horizontal or vertical).\n**\"none\"** - not display the selected tick labels.\n**\"nextTo\"** - sets the position of the selected tick labels next to the main label.\n**\"low\"** - sets the position of the selected tick labels in the part of the chart with lower values.\n**\"high\"** - sets the position of the selected tick labels in the part of the chart with higher values.",
+    "type": "\"none\" | \"nextTo\" | \"low\" | \"high\""
+  },
+  "TickMark": {
+    "description": "The type of tick mark appearance.",
+    "type": "\"cross\" | \"in\" | \"none\" | \"out\""
+  },
+  "ToHtmlOptions": {
+    "description": "Options for converting document content to an HTML string.",
+    "properties": {
+      "Base64img": {
+        "description": "Defines if the images will be created in the base64 format.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "DemoteHeadings": {
+        "description": "Defines if all heading levels will be demoted to conform with the following standard: single H1 as title, H2 as top-level heading in the text body.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "HtmlHeadings": {
+        "description": "Defines if the HTML headings and IDs will be generated when the Markdown renderer of your target platform does not handle Markdown-style IDs.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "RenderHTMLTags": {
+        "description": "Defines if HTML tags will be preserved. By default, the opening angle brackets will be replaced with the special characters.",
+        "optional": true,
+        "type": "boolean"
+      }
+    }
+  },
+  "TocBuildFromPr": {
+    "description": "Table of contents properties which specify whether to generate the table of contents from the outline levels or the specified styles.",
+    "properties": {
+      "OutlineLvlStart": {
+        "description": "The highest heading level included in the table of contents (the start of the outline range).",
+        "optional": true,
+        "type": "number"
+      },
+      "OutlineLvls": {
+        "description": "The lowest heading level included in the table of contents (the end of the outline range).",
+        "optional": true,
+        "type": "number"
+      },
+      "StylesLvls": {
+        "description": "Style levels (for example, [{Name: \"Heading 1\", Lvl: 2}, {Name: \"Heading 2\", Lvl: 3}]).\r<note>If StylesLvls.length > 0, then the OutlineLvls property will be ignored.</note>",
+        "type": "TocStyleLvl[]"
+      }
+    }
+  },
+  "TocLeader": {
+    "description": "Possible values for the table of contents leader:\n**\"dot\"** - \".......\"\n**\"dash\"** - \"-------\"\n**\"underline\"** - \"_______\"",
+    "type": "\"dot\" | \"dash\" | \"underline\" | \"none\""
+  },
+  "TocPr": {
+    "description": "Table of contents properties.",
+    "properties": {
+      "BuildFrom": {
+        "description": "Specifies whether to generate the table of contents from the outline levels or the specified styles.",
+        "optional": true,
+        "type": "TocBuildFromPr"
+      },
+      "FormatAsLinks": {
+        "description": "Specifies whether to format the table of contents as links.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "LeaderType": {
+        "description": "The leader type in the table of contents.",
+        "optional": true,
+        "type": "TocLeader"
+      },
+      "RightAlgn": {
+        "description": "Specifies whether to right-align page numbers in the table of contents.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "ShowPageNums": {
+        "description": "Specifies whether to show page numbers in the table of contents.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "TocStyle": {
+        "description": "The table of contents style type.",
+        "optional": true,
+        "type": "TocStyle"
+      }
+    }
+  },
+  "TocStyle": {
+    "description": "Possible values for the table of contents style.",
+    "type": "\"simple\" | \"online\" | \"standard\" | \"modern\" | \"classic\""
+  },
+  "TocStyleLvl": {
+    "description": "Table of contents style levels.",
+    "properties": {
+      "Lvl": {
+        "description": "Level which will be applied to the specified style in the table of contents.",
+        "type": "number"
+      },
+      "Name": {
+        "description": "Style name (for example, \"Heading 1\").",
+        "type": "string"
+      }
+    }
+  },
+  "TofPr": {
+    "description": "Table of figures properties.",
+    "properties": {
+      "BuildFrom": {
+        "description": "Specifies whether to generate the table of figures based on the specified caption label or the paragraph style name used (for example, \"Heading 1\").",
+        "optional": true,
+        "type": "CaptionLabel | string"
+      },
+      "FormatAsLinks": {
+        "description": "Specifies whether to format the table of figures as links.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "LabelNumber": {
+        "description": "Specifies whether to include the label and number in the table of figures.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "LeaderType": {
+        "description": "The leader type in the table of figures.",
+        "optional": true,
+        "type": "TocLeader"
+      },
+      "RightAlgn": {
+        "description": "Specifies whether to right-align page numbers in the table of figures.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "ShowPageNums": {
+        "description": "Specifies whether to show page numbers in the table of figures.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "TofStyle": {
+        "description": "The table of figures style type.",
+        "optional": true,
+        "type": "TofStyle"
+      }
+    }
+  },
+  "TofStyle": {
+    "description": "Possible values for the table of figures style.",
+    "type": "\"simple\" | \"online\" | \"classic\" | \"distinctive\" | \"centered\" | \"formal\""
+  },
+  "UserComments": {
+    "description": "Represents a user's comment history.",
+    "properties": {
+      "comments": {
+        "description": "A list of comments.",
+        "type": "CommentReportRecord[]"
+      }
+    }
+  },
+  "UserReviewChanges": {
+    "description": "Represents a user's review history.",
+    "properties": {
+      "reviews": {
+        "description": "A list of review records.",
+        "type": "ReviewReportRecord[]"
+      }
+    }
+  },
+  "VerticalTextAlign": {
+    "description": "The available text vertical alignment (used to align text in a shape with a placement for text inside it).",
+    "type": "\"top\" | \"center\" | \"bottom\""
+  },
+  "WatermarkDirection": {
+    "description": "The watermark direction.",
+    "type": "\"horizontal\" | \"clockwise45\" | \"counterclockwise45\" | \"clockwise90\" | \"counterclockwise90\""
+  },
+  "WatermarkType": {
+    "description": "The watermark type.",
+    "type": "\"none\" | \"text\" | \"image\""
+  },
+  "XmlMapping": {
+    "description": "This element specifies the information which shall be used to establish a mapping to an XML element stored within a Custom XML.",
+    "properties": {
+      "prefixMapping": {
+        "description": "The set of prefix mappings which shall be used to interpret the XPath expression specified in xpath.",
+        "type": "string"
+      },
+      "storeItemID": {
+        "description": "The custom XML data identifier.",
+        "type": "string"
+      },
+      "xpath": {
+        "description": "The XPath expression.",
+        "type": "string"
+      }
+    }
+  },
+  "bookmarkRefTo": {
+    "description": "Available values of the \"bookmark\" reference type:\n**\"text\"** - the entire bookmark text;\n**\"pageNum\"** - the bookmark page number;\n**\"paraNum\"** - the bookmark paragraph number;\n**\"noCtxParaNum\"** - the abbreviated paragraph number (the specific item only, e.g. instead of \"4.1.1\" you refer to \"1\" only);\n**\"fullCtxParaNum** - the full paragraph number, e.g. \"4.1.1\";\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
+    "type": "\"text\" | \"pageNum\" | \"paraNum\" | \"noCtxParaNum\" | \"fullCtxParaNum\" | \"aboveBelow\""
+  },
+  "byte": {
+    "description": "A numeric value from 0 to 255.",
+    "type": "number"
+  },
+  "captionRefTo": {
+    "description": "Available values of the \"equation\"/\"figure\"/\"table\" reference type:\n**\"entireCaption\"**- the entire caption text;\n**\"labelNumber\"** - the label and object number only, e.g. \"Table 1.1\";\n**\"captionText\"** - the caption text only;\n**\"pageNum\"** - the page number containing the referenced object;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
+    "type": "\"entireCaption\" | \"labelNumber\" | \"captionText\" | \"pageNum\" | \"aboveBelow\""
+  },
+  "endnoteRefTo": {
+    "description": "Available values of the \"endnote\" reference type:\n**\"endnoteNum\"** - the endnote number;\n**\"pageNum\"** - the endnote page number;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position;\n**\"formEndnoteNum\"** - the form number formatted as an endnote. The numbering of the actual endnotes is not affected.",
+    "type": "\"endnoteNum\" | \"pageNum\" | \"aboveBelow\" | \"formEndnoteNum\""
+  },
+  "footnoteRefTo": {
+    "description": "Available values of the \"footnote\" reference type:\n**\"footnoteNum\"** - the footnote number;\n**\"pageNum\"** - the page number of the footnote;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the position of the item;\n**\"formFootnoteNum\"** - the form number formatted as a footnote. The numbering of the actual footnotes is not affected.",
+    "type": "\"footnoteNum\" | \"pageNum\" | \"aboveBelow\" | \"formFootnoteNum\""
+  },
+  "headingRefTo": {
+    "description": "Available values of the \"heading\" reference type:\n**\"text\"** - the entire heading text;\n**\"pageNum\"** - the heading page number;\n**\"headingNum\"** - the heading sequence number;\n**\"noCtxHeadingNum\"** - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of \"4.B\" you receive \"B\" only;\n**\"fullCtxHeadingNum\"** - the full heading number even if the cursor pointer is in the same section;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
+    "type": "\"text\" | \"pageNum\" | \"headingNum\" | \"noCtxHeadingNum\" | \"fullCtxHeadingNum\" | \"aboveBelow\""
+  },
+  "highlightColor": {
+    "description": "Available highlight colors.",
+    "type": "\"black\" | \"blue\" | \"cyan\" | \"green\" | \"magenta\" | \"red\" | \"yellow\" | \"white\" | \"darkBlue\" | \"darkCyan\" | \"darkGreen\" | \"darkMagenta\" | \"darkRed\" | \"darkYellow\" | \"darkGray\" | \"lightGray\" | \"none\""
+  },
+  "hps": {
+    "description": "Half-points (2 half-points = 1 point).",
+    "type": "number"
+  },
+  "line240": {
+    "description": "240ths of a line.",
+    "type": "number"
+  },
+  "mm": {
+    "description": "1 millimetre equals 1/10th of a centimetre.",
+    "type": "number"
+  },
+  "numberedRefTo": {
+    "description": "Available values of the \"numbered\" reference type:\n**\"pageNum\"** - the numbered item page number;\n**\"paraNum\"** - the numbered item paragraph number;\n**\"noCtxParaNum\"** - the abbreviated paragraph number (the specific item only, e.g. instead of \"4.1.1\" you refer to \"1\" only);\n**\"fullCtxParaNum\"** - the full paragraph number, e.g. \"4.1.1\";\n**\"text\"** - the paragraph text value, e.g. if you have \"4.1.1. Terms and Conditions\", you refer to \"Terms and Conditions\" only;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
+    "type": "\"pageNum\" | \"paraNum\" | \"noCtxParaNum\" | \"fullCtxParaNum\" | \"text\" | \"aboveBelow\""
+  },
+  "percentage": {
+    "description": "Value from 0 to 100.",
+    "type": "number"
+  },
+  "pt": {
+    "description": "A point.",
+    "type": "number"
+  },
+  "pt_8": {
+    "description": "Eighths of a point (24 eighths of a point = 3 points).",
+    "type": "number"
+  },
+  "twips": {
+    "description": "Twentieths of a point (equivalent to 1/1440th of an inch).",
+    "type": "number"
+  }
+}

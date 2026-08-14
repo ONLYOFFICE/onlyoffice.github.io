@@ -1,0 +1,18 @@
+{
+  "description": "Returns the complex conjugate of a complex number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMCONJUGATE/",
+  "examples": [
+    "// How do I find the conjugate of a complex number in a spreadsheet?\n\n// Reflect a complex number across the real axis in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMCONJUGATE(\"-2+2.5i\"));"
+  ],
+  "params": [
+    {
+      "description": "A complex number expressed in the *x + yi* or *x + yj* form.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMCONJUGATE(arg1: ApiRange | ApiName | number): number"
+}

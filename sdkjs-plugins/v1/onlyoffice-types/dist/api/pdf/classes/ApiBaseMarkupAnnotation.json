@@ -1,0 +1,591 @@
+{
+  "description": "Class representing a base markup annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/",
+  "extends": [
+    "ApiBaseAnnotation"
+  ],
+  "methods": {
+    "AddReply": {
+      "description": "Adds reply on this annot.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/AddReply/",
+      "examples": [
+        "// How can I reply to an annotation comment in a PDF?\n\n// Attach a text response to an existing annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nsquareAnnot.SetContents(\"Annot contents\");\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\n\nlet textAnnot = Api.CreateTextAnnot([10, 10, 20, 20]);\ntextAnnot.SetContents(\"Annot reply\");\nsquareAnnot.AddReply(textAnnot);"
+      ],
+      "params": [
+        {
+          "description": "The text annotation to use as a reply.",
+          "name": "textAnnot",
+          "type": "ApiTextAnnotation"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddReply(textAnnot: ApiTextAnnotation): boolean"
+    },
+    "Delete": {
+      "description": "Removes annotation from document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/Delete/",
+      "examples": [
+        "// How do I delete an annotation in a PDF?\n\n// Erase an annotation that no longer needs to be in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetBorderStyle(\"dashed\");\nsquareAnnot.SetDashPattern([8, 4, 4, 4]);\nsquareAnnot.Delete();"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAuthorName": {
+      "description": "Gets annotation author name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetAuthorName/",
+      "examples": [
+        "// How can I find out who created an annotation in a PDF?\n\n// Retrieve the name of the person who added an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation author name is: ${squareAnnot.GetAuthorName()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string"
+    },
+    "GetBorderColor": {
+      "description": "Gets annotation border color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderColor/",
+      "examples": [
+        "// How can I find the color of an annotation's outline in a PDF?\n\n// Read the border color value from an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation border color is: ${squareAnnot.GetBorderColor()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetBorderColor(): ApiColor"
+    },
+    "GetBorderEffectIntensity": {
+      "description": "Gets annotation border effect intensity.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderEffectIntensity/",
+      "examples": [
+        "// What is the border effect intensity value for an annotation in a PDF?\n\n// Check the strength of a cloud or other border effect applied to an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nsquareAnnot.SetBorderEffectStyle(\"cloud\");\nsquareAnnot.SetBorderEffectIntensity(1);\n\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation border effect intensity is: ${squareAnnot.GetBorderEffectIntensity()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetBorderEffectIntensity(): number"
+    },
+    "GetBorderEffectStyle": {
+      "description": "Gets annotation border effect style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderEffectStyle/",
+      "examples": [
+        "// What type of border effect is applied to an annotation in a PDF?\n\n// Find out whether an annotation has a cloud, solid, or other border effect style in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nsquareAnnot.SetBorderEffectStyle(\"cloud\");\nsquareAnnot.SetBorderEffectIntensity(1);\n\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation border effect style is: ${squareAnnot.GetBorderEffectStyle()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "AnnotBorderEffectStyle"
+      },
+      "signature": "GetBorderEffectStyle(): AnnotBorderEffectStyle"
+    },
+    "GetBorderStyle": {
+      "description": "Gets annotation border style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderStyle/",
+      "examples": [
+        "// What style does the border use on an annotation in a PDF?\n\n// Determine whether an annotation's border is solid, dashed, or another style in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation border style is: ${squareAnnot.GetBorderStyle()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "AnnotBorderStyle"
+      },
+      "signature": "GetBorderStyle(): AnnotBorderStyle"
+    },
+    "GetBorderWidth": {
+      "description": "Gets annotation border width.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderWidth/",
+      "examples": [
+        "// How thick is the border around an annotation in a PDF?\n\n// Check the line thickness of an annotation's border in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation border width is: ${squareAnnot.GetBorderWidth()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "pt"
+      },
+      "signature": "GetBorderWidth(): pt"
+    },
+    "GetContents": {
+      "description": "Gets annotation contents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetContents/",
+      "examples": [
+        "// What text is stored in an annotation in a PDF?\n\n// Read the content or description that was added to an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nsquareAnnot.SetContents(\"Annot contents\");\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation contents is: ${squareAnnot.GetContents()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetContents(): string"
+    },
+    "GetCreationDate": {
+      "description": "Gets annotation creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetCreationDate/",
+      "examples": [
+        "// When was an annotation added to the PDF?\n\n// Check the creation timestamp of an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation creation date is: ${squareAnnot.GetCreationDate()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCreationDate(): number"
+    },
+    "GetDashPattern": {
+      "description": "Gets annotation dash pattern.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetDashPattern/",
+      "examples": [
+        "// What dash pattern is used for an annotation's border in a PDF?\n\n// Check the spacing and length of dashes on an annotation's border in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nsquareAnnot.SetBorderStyle(\"dashed\");\nsquareAnnot.SetDashPattern([8, 4, 4, 4]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation dash pattern is: ${squareAnnot.GetDashPattern()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number[]"
+      },
+      "signature": "GetDashPattern(): number[]"
+    },
+    "GetDisplay": {
+      "description": "Gets annotation display type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetDisplay/",
+      "examples": [
+        "// How is the visibility of an annotation configured in a PDF?\n\n// Check whether an annotation is displayed or hidden in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation display is: ${squareAnnot.GetDisplay()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "DisplayType"
+      },
+      "signature": "GetDisplay(): DisplayType"
+    },
+    "GetFillColor": {
+      "description": "Gets annotation fill color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetFillColor/",
+      "examples": [
+        "// What color is used to fill an annotation in a PDF?\n\n// Check the background or fill color applied to an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nsquareAnnot.SetFillColor(Api.RGB(255, 0, 0));\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation fill color is: ${squareAnnot.GetFillColor()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetFillColor(): ApiColor"
+    },
+    "GetModDate": {
+      "description": "Gets annotation last modification date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetModDate/",
+      "examples": [
+        "// When was an annotation last modified in a PDF?\n\n// Check the last update timestamp of an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation mod date is: ${squareAnnot.GetModDate()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetModDate(): number"
+    },
+    "GetOpacity": {
+      "description": "Gets annotation opacity.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetOpacity/",
+      "examples": [
+        "// How transparent is an annotation in a PDF?\n\n// Check the opacity value that controls how see-through an annotation appears in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation opacity is: ${squareAnnot.GetOpacity()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetOpacity(): string"
+    },
+    "GetPosition": {
+      "description": "Gets annotation position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetPosition/",
+      "examples": [
+        "// What are the horizontal and vertical coordinates of an annotation in a PDF?\n\n// Retrieve the X and Y position values from an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nlet pos = squareAnnot.GetPosition();\nconsole.log(`Annot position x: ${pos.x}, y: ${pos.y}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Point"
+      },
+      "signature": "GetPosition(): Point"
+    },
+    "GetQuads": {
+      "description": "Gets quads from current markup annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/Methods/GetQuads/",
+      "examples": [
+        "// How do I read the highlight coordinates in a PDF?\n\n// Extract the quad coordinates that define the marked region in a PDF.\n\nlet doc = Api.GetDocument();\nlet markupAnnot = Api.CreateHighlightAnnot([84, 55, 231, 72]);\nlet page = doc.GetPage(0);\npage.AddObject(markupAnnot);\nconsole.log(`The markup quads is: ${markupAnnot.GetQuads()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Quad[]"
+      },
+      "signature": "GetQuads(): Quad[]"
+    },
+    "GetRect": {
+      "description": "Gets annotation rect.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetRect/",
+      "examples": [
+        "// What is the area occupied by an annotation in a PDF?\n\n// Read the bounding rectangle coordinates of an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation rect is: ${squareAnnot.GetRect()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Rect"
+      },
+      "signature": "GetRect(): Rect"
+    },
+    "GetReplies": {
+      "description": "Gets replies on this annot.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetReplies/",
+      "examples": [
+        "// What reply annotations are associated with a parent annotation in a PDF?\n\n// Access the list of reply comments linked to an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nsquareAnnot.SetContents(\"Annot contents\");\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\n\nlet textAnnot = Api.CreateTextAnnot([10, 10, 20, 20]);\ntextAnnot.SetContents(\"Annot reply\");\nsquareAnnot.AddReply(textAnnot);\n\nlet replies = squareAnnot.GetReplies();\nreplies.forEach((reply, idx) => {\n\tconsole.log(`Reply with idx ${idx}: \"${reply.GetContents()}\"`);\n});"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextAnnotation[]"
+      },
+      "signature": "GetReplies(): ApiTextAnnotation[]"
+    },
+    "GetSubject": {
+      "description": "Gets annotation subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetSubject/",
+      "examples": [
+        "// What is the subject text assigned to an annotation in a PDF?\n\n// Extract the subject property from an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nsquareAnnot.SetSubject(\"Annot subject\");\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation subject is: ${squareAnnot.GetSubject()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetSubject(): string"
+    },
+    "GetUniqueName": {
+      "description": "Gets annotation unique name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetUniqueName/",
+      "examples": [
+        "// What is the unique name assigned to an annotation in a PDF?\n\n// Obtain the identifier string that uniquely identifies an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nconsole.log(`Annotation unique name is: ${squareAnnot.GetUniqueName()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUniqueName(): string"
+    },
+    "SetAuthorName": {
+      "description": "Sets annotation author name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetAuthorName/",
+      "examples": [
+        "// Who created or should be credited for an annotation in a PDF?\n\n// Set the author name property of an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetAuthorName(\"John Smith\");"
+      ],
+      "params": [
+        {
+          "description": "The author name.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetAuthorName(name: string): boolean"
+    },
+    "SetBorderColor": {
+      "description": "Sets annotation border color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderColor/",
+      "examples": [
+        "// What color should the border of an annotation be in a PDF?\n\n// Apply a color to the border outline of an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetBorderColor(Api.RGB(255, 0, 0));"
+      ],
+      "params": [
+        {
+          "description": "The border color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderColor(color: ApiColor): boolean"
+    },
+    "SetBorderEffectIntensity": {
+      "description": "Sets annotation border effect intensity.\n<note> Can be applied to circle, square, freeText and polygon annotations </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderEffectIntensity/",
+      "examples": [
+        "// How strong should a border effect appear on an annotation in a PDF?\n\n// Adjust the intensity level of a visual effect applied to an annotation's border in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetBorderEffectStyle(\"cloud\");\nsquareAnnot.SetBorderEffectIntensity(1);"
+      ],
+      "params": [
+        {
+          "description": "The border effect intensity. Must be greater than or equal to 0.",
+          "name": "value",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderEffectIntensity(value: number): boolean"
+    },
+    "SetBorderEffectStyle": {
+      "description": "Sets annotation border effect style.\n<note> Can be applied to circle, square, freeText and polygon annotations </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderEffectStyle/",
+      "examples": [
+        "// What visual effect should appear on an annotation's border in a PDF?\n\n// Configure a border effect style on an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetBorderEffectStyle(\"cloud\");\nsquareAnnot.SetBorderEffectIntensity(1);"
+      ],
+      "params": [
+        {
+          "description": "The border effect style: **\"none\"** or **\"cloud\"**.",
+          "name": "style",
+          "type": "AnnotBorderEffectStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderEffectStyle(style: AnnotBorderEffectStyle): boolean"
+    },
+    "SetBorderStyle": {
+      "description": "Sets annotation border style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderStyle/",
+      "examples": [
+        "// Should an annotation border be solid, dashed, or have another pattern in a PDF?\n\n// Apply a border style pattern to an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetBorderStyle(\"dashed\");\nsquareAnnot.SetDashPattern([8, 4, 4, 4]);"
+      ],
+      "params": [
+        {
+          "description": "The border style: **\"solid\"** or **\"dashed\"**.",
+          "name": "borderStyle",
+          "type": "AnnotBorderStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderStyle(borderStyle: AnnotBorderStyle): boolean"
+    },
+    "SetBorderWidth": {
+      "description": "Sets annotation border width.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderWidth/",
+      "examples": [
+        "// How thick should an annotation border be in a PDF?\n\n// Set the width of the border outline on an annotation object in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetBorderWidth(2);"
+      ],
+      "params": [
+        {
+          "description": "The border width in points.",
+          "name": "width",
+          "type": "pt"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderWidth(width: pt): boolean"
+    },
+    "SetContents": {
+      "description": "Sets annotation contents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetContents/",
+      "examples": [
+        "// Store a message or note within an annotation in a PDF.\n\n// Assign descriptive text to mark or label an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetContents(\"John Smith\");"
+      ],
+      "params": [
+        {
+          "description": "The annotation text contents.",
+          "name": "contents",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetContents(contents: string): boolean"
+    },
+    "SetCreationDate": {
+      "description": "Sets annotation creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetCreationDate/",
+      "examples": [
+        "// Timestamp an annotation with its creation date in a PDF.\n\n// Set the creation date metadata for an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetCreationDate(new Date().getTime());"
+      ],
+      "params": [
+        {
+          "description": "The annotation creation date as a numeric timestamp.",
+          "name": "timeStamp",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCreationDate(timeStamp: number): boolean"
+    },
+    "SetDashPattern": {
+      "description": "Sets annotation dash pattern.\n<note> The border style property must be set to \"dashed\". </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetDashPattern/",
+      "examples": [
+        "// Create a dotted line effect on an annotation's border in a PDF.\n\n// Define the dash pattern for an annotation's outline in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetBorderStyle(\"dashed\");\nsquareAnnot.SetDashPattern([8, 4, 4, 4]);"
+      ],
+      "params": [
+        {
+          "description": "A dash array defining a pattern of dashes and gaps to be used in drawing a dashed border. For example, a value of [3, 2] specifies a border drawn with 3-point dashes alternating with 2-point gaps.",
+          "name": "pattern",
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDashPattern(pattern: number[]): boolean"
+    },
+    "SetDisplay": {
+      "description": "Sets annotation display type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetDisplay/",
+      "examples": [
+        "// Toggle whether an annotation appears or stays hidden in a PDF.\n\n// Set the display mode to show or conceal an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetDisplay(\"hidden\");"
+      ],
+      "params": [
+        {
+          "description": "The display type for the annotation.",
+          "name": "display",
+          "type": "DisplayType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDisplay(display: DisplayType): boolean"
+    },
+    "SetFillColor": {
+      "description": "Sets annotation fill color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetFillColor/",
+      "examples": [
+        "// Apply a fill color to make an annotation stand out in a PDF.\n\n// Change the interior color of an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetFillColor(Api.RGB(255, 0, 0));"
+      ],
+      "params": [
+        {
+          "description": "color to set fill (omit the argument to set no fill)",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFillColor(color: ApiColor): boolean"
+    },
+    "SetModDate": {
+      "description": "Sets annotation last modification date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetModDate/",
+      "examples": [
+        "// Update the modification timestamp of an annotation in a PDF.\n\n// Set the last-changed date for an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetModDate(new Date().getTime());"
+      ],
+      "params": [
+        {
+          "description": "The annotation last modification date as a numeric timestamp.",
+          "name": "timeStamp",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetModDate(timeStamp: number): boolean"
+    },
+    "SetOpacity": {
+      "description": "Sets annotation opacity.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetOpacity/",
+      "examples": [
+        "// Adjust the transparency level of an annotation in a PDF.\n\n// Control how solid or see-through an annotation appears in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetFillColor(Api.RGB(255, 0, 0));\nsquareAnnot.SetOpacity(50);"
+      ],
+      "params": [
+        {
+          "description": "The opacity value from 0 (transparent) to 100 (opaque).",
+          "name": "value",
+          "type": "percentage"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetOpacity(value: percentage): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets annotation position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetPosition/",
+      "examples": [
+        "// Reposition an annotation by changing its coordinates in a PDF.\n\n// Update where an annotation appears in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetPosition({x: 30, y: 30});"
+      ],
+      "params": [
+        {
+          "description": "The new position of the annotation.",
+          "name": "position",
+          "type": "Point"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosition(position: Point): boolean"
+    },
+    "SetQuads": {
+      "description": "Sets quads to current markup annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/Methods/SetQuads/",
+      "examples": [
+        "// How do I define the highlighted region in a PDF?\n\n// Assign new coordinates to the marked area of an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet markupAnnot = Api.CreateHighlightAnnot([84, 55, 231, 72]);\nmarkupAnnot.SetQuads([[85, 73, 226, 73, 85, 87, 226, 87]]);\nlet page = doc.GetPage(0);\npage.AddObject(markupAnnot);\nconsole.log(`We set new quads to markup annotation`);"
+      ],
+      "params": [
+        {
+          "description": "An array of quadrilaterals defining the highlighted regions.",
+          "name": "quads",
+          "type": "Quad[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetQuads(quads: Quad[]): boolean"
+    },
+    "SetRect": {
+      "description": "Sets annotation rect.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetRect/",
+      "examples": [
+        "// Expand or shrink an annotation's size in a PDF.\n\n// Adjust the rectangular area covered by an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetRect([10, 10, 320, 64]);"
+      ],
+      "params": [
+        {
+          "description": "The new bounding rectangle for the annotation.",
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRect(rect: Rect): boolean"
+    },
+    "SetSubject": {
+      "description": "Sets annotation subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetSubject/",
+      "examples": [
+        "// Categorize an annotation with a subject line in a PDF.\n\n// Assign a subject title to an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetSubject(\"Annot subject\");"
+      ],
+      "params": [
+        {
+          "description": "The annotation subject text.",
+          "name": "subject",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSubject(subject: string): boolean"
+    },
+    "SetUniqueName": {
+      "description": "Sets annotation unique name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetUniqueName/",
+      "examples": [
+        "// Give an annotation a distinct name for reference in a PDF.\n\n// Set a unique name to distinguish an annotation from others in a PDF.\n\nlet doc = Api.GetDocument();\nlet squareAnnot = Api.CreateSquareAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(squareAnnot);\nsquareAnnot.SetUniqueName(\"Square annot\");"
+      ],
+      "params": [
+        {
+          "description": "The unique name for the annotation.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetUniqueName(name: string): boolean"
+    }
+  }
+}

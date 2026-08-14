@@ -1,0 +1,13 @@
+{
+  "description": "Returns the outline level of the specified properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetOutlineLvl/",
+  "examples": [
+    "// How do I read the outline level of a paragraph in a presentation?\n\n// Retrieve the hierarchical level assigned to a paragraph for outline or table of contents purposes in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst rgb = Api.CreateRGBColor(50, 100, 150);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 200 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(10 * 36000, 10 * 36000);\nslide.AddObject(shape);\n\nconst content = shape.GetDocContent();\nconst paragraph = content.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\n\nconst levelBefore = paraPr.GetOutlineLvl();\nparaPr.SetOutlineLvl(8);\nconst levelAfter = paraPr.GetOutlineLvl();\n\nlet text =  'Outline level (index) for this paragraph is currently set to ' + levelAfter;\ntext += ',\\n';\ntext += 'but originally was set to ' + levelBefore;\nparagraph.AddText(text);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number | undefined"
+  },
+  "signature": "GetOutlineLvl(): number | undefined",
+  "since": "8.2.0"
+}

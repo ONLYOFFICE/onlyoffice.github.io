@@ -1,0 +1,18 @@
+{
+  "description": "Creates the empty table style properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTableStylePr/",
+  "examples": [
+    "// How do I style only the first row or first column of a table differently in a document?\n\n// Use conditional table formatting to highlight header rows and banded columns in a document.\n\nlet doc = Api.GetDocument();\nlet table = Api.CreateTable(2, 2);\n\ntable.SetWidth(\"percent\", 100);\n\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntable.SetStyle(tableStyle);\ntable.SetTableLook(true, true, true, true, true, true);\n\nlet tableStylePr = Api.CreateTableStylePr('wholeTable');\nlet tablePr = tableStyle.GetTablePr();\ntablePr.SetTableBorderTop(\"single\", 4, 0, 51, 51, 51);\ntablePr.SetTableBorderBottom(\"single\", 4, 0, 51, 51, 51);\ntablePr.SetTableBorderLeft(\"single\", 4, 0, 51, 51, 51);\ntablePr.SetTableBorderRight(\"single\", 4, 0, 51, 51, 51);\ntablePr.SetTableBorderInsideV(\"single\", 4, 0, 255, 111, 61);\ntablePr.SetTableBorderInsideH(\"single\", 4, 0, 255, 111, 61);\ntableStylePr.GetTextPr().SetItalic(true);\n\ntableStyle.SetConditionalTableStyle(tableStylePr);\n\nlet cellContent = table.GetRow(0).GetCell(0).GetContent();\nlet paragraph = cellContent.GetElement(0);\nparagraph.AddText(\"This cell font is set to italic\");\n\ncellContent = table.GetRow(1).GetCell(0).GetContent();\nparagraph = cellContent.GetElement(0);\nparagraph.AddText(\"This cell font is also set to italic\");\n\ncellContent = table.GetRow(0).GetCell(1).GetContent();\nparagraph = cellContent.GetElement(0);\nparagraph.AddText(\"This cell font is also set to italic\");\n\ncellContent = table.GetRow(1).GetCell(1).GetContent();\nparagraph = cellContent.GetElement(0);\nparagraph.AddText(\"This cell font is also set to italic\");\n\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "The table part which the formatting properties must be applied to.",
+      "name": "sType",
+      "type": "TableStyleOverrideType"
+    }
+  ],
+  "returns": {
+    "type": "ApiTableStylePr"
+  },
+  "signature": "CreateTableStylePr(sType: TableStyleOverrideType): ApiTableStylePr"
+}

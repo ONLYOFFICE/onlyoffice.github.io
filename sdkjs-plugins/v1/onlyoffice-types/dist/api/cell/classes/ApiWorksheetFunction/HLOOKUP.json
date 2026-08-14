@@ -1,0 +1,34 @@
+{
+  "description": "Looks for a value in the top row of a table or array of values and returns the value in the same column from the specified row.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/HLOOKUP/",
+  "examples": [
+    "// How do I find values in a horizontal table using a lookup formula in a spreadsheet?\n\n// Retrieve a specific cell value from a table by searching horizontally in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ids = [\"ID\", 1, 2, 3, 4, 5];\nlet clients = [\"Client\", \"John Smith\", \"Ella Tompson\", \"Mary Shinoda\", \"Lily-Ann Bates\", \"Clara Ray\"];\nlet phones = [\"Phone number\", \"12054097166\", \"13343943678\", \"12568542099\", \"12057032298\", \"12052914781\"];\n\nfor (let i = 0; i < ids.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(ids[i]);\n}\nfor (let j = 0; j < clients.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(clients[j]);\n}\nfor (let n = 0; n < phones.length; n++) {\n    worksheet.GetRange(\"C\" + (n + 1)).SetValue(phones[n]);\n}\n\nworksheet.GetRange(\"E1\").SetValue(\"ID\");\nworksheet.GetRange(\"E2\").SetValue(3);\nworksheet.GetRange(\"F1\").SetValue(\"Phone number\");\nlet range = worksheet.GetRange(\"A1:C5\");\nworksheet.GetRange(\"F2\").SetValue(func.HLOOKUP(\"Phone number\", range, 3+1));"
+  ],
+  "params": [
+    {
+      "description": "The value to be found in the first row of the table and can be a value, a reference, or a text string.",
+      "name": "arg1",
+      "type": "number | string | ApiRange | ApiName"
+    },
+    {
+      "description": "A table of text, numbers, or logical values in which data is looked up. The data is sorted in ascending order.\rThis argument can be a range of cells or a range name.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "The row number in data table from which the matching value should be returned. The first row of values in the table is row 1.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value which specifies whether to find the closest match in the top row (sorted in ascending order) (**true** or omitted)\ror find an exact match (**false**).",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number | string"
+  },
+  "signature": "HLOOKUP(arg1: number | string | ApiRange | ApiName, arg2: ApiRange | ApiName, arg3: ApiRange | ApiName | number, arg4?: ApiRange | ApiName | boolean): number | string"
+}

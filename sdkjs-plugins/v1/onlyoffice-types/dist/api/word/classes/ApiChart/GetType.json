@@ -1,0 +1,9 @@
+{
+  "description": "Returns a type of the chart object using the chart type names from the {@link ChartType} enumeration.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/GetType/",
+  "params": [],
+  "returns": {
+    "type": "ChartType"
+  },
+  "signature": "GetType(): ChartType"
+}

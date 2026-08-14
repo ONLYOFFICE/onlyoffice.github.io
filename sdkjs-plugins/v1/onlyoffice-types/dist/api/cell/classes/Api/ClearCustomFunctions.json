@@ -1,0 +1,13 @@
+{
+  "description": "Clears all custom functions.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/ClearCustomFunctions/",
+  "examples": [
+    "// How do I unregister every custom function that was added in a spreadsheet?\n\n// Clean up previously defined calculation functions to reset the formula environment in a spreadsheet.\n\nApi.AddCustomFunctionLibrary(\"LibraryName\", function(){\n    /**\n     * Function that returns the argument\n     * @customfunction\n     * @param {any} first First argument.\n     * @returns {any} second Second argument.\n     */\n    Api.AddCustomFunction(function ADD(first, second) {\n        return first + second;\n    });\n});\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"=ADD(1, 2)\");\nApi.ClearCustomFunctions();\nworksheet.GetRange(\"A3\").SetValue(\"All the custom functions were removed.\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns false if such functions do not exist.",
+    "type": "boolean"
+  },
+  "signature": "ClearCustomFunctions(): boolean"
+}

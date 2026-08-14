@@ -1,0 +1,514 @@
+{
+  "description": "Class representing document properties (similar to BuiltInDocumentProperties in VBA).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/",
+  "methods": {
+    "GetCategory": {
+      "description": "Returns the document category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetCategory/",
+      "examples": [
+        "// How do I find out what category a workbook belongs to in a spreadsheet?\n\n// Display the workbook category stored in the document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetCategory(\"Examples\");\nconst category = core.GetCategory();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Category: \" + category);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document category.",
+        "type": "string"
+      },
+      "signature": "GetCategory(): string",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCore class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out what kind of object holds the document properties in a spreadsheet?\n\n// Identify the internal type of the core document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\nconst classType = core.GetClassType();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Class type: \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"core\""
+      },
+      "signature": "GetClassType(): \"core\"",
+      "since": "9.0.0"
+    },
+    "GetContentStatus": {
+      "description": "Returns the document content status.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetContentStatus/",
+      "examples": [
+        "// How do I check the current content status of a workbook in a spreadsheet?\n\n// Retrieve and display the publication or review status of a workbook in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\ncore.SetContentStatus(\"Final\");\nconst contentStatus = core.GetContentStatus();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Content Status: \" + contentStatus);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document content status.",
+        "type": "string"
+      },
+      "signature": "GetContentStatus(): string",
+      "since": "9.0.0"
+    },
+    "GetCreated": {
+      "description": "Returns the document creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetCreated/",
+      "examples": [
+        "// How do I find out when a workbook was originally created in a spreadsheet?\n\n// Retrieve and display the date the workbook was first made in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetCreated(new Date('20 January 2000'));\nconst createdDate = core.GetCreated().toDateString();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Created: \" + createdDate);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document creation date.",
+        "type": "Date"
+      },
+      "signature": "GetCreated(): Date",
+      "since": "9.0.0"
+    },
+    "GetCreator": {
+      "description": "Returns the document author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetCreator/",
+      "examples": [
+        "// How do I find out who created a workbook in a spreadsheet?\n\n// Retrieve and display the name of the person who originally authored the workbook in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetCreator(\"John Smith\");\nconst creator = core.GetCreator();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Creator: \" + creator);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document author.",
+        "type": "string"
+      },
+      "signature": "GetCreator(): string",
+      "since": "9.0.0"
+    },
+    "GetDescription": {
+      "description": "Returns the document description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetDescription/",
+      "examples": [
+        "// How do I retrieve the text description of a workbook in a spreadsheet?\n\n// Extract and display the summary text saved with the workbook in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetDescription(\"This is a sample workbook made to help fellow users understand how to use the ApiCore methods.\");\nconst description = core.GetDescription();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Description: \" + description);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document description.",
+        "type": "string"
+      },
+      "signature": "GetDescription(): string",
+      "since": "9.0.0"
+    },
+    "GetIdentifier": {
+      "description": "Returns the document identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetIdentifier/",
+      "examples": [
+        "// How do I look up the identifier assigned to a workbook in a spreadsheet?\n\n// Extract and display the workbook's unique ID from the document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetIdentifier(\"#ID42\");\nconst identifier = core.GetIdentifier();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Identifier: \" + identifier);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document identifier.",
+        "type": "string"
+      },
+      "signature": "GetIdentifier(): string",
+      "since": "9.0.0"
+    },
+    "GetKeywords": {
+      "description": "Returns the document keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetKeywords/",
+      "examples": [
+        "// How do I find the search keywords associated with a workbook in a spreadsheet?\n\n// Extract and display the tag words saved with the workbook in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetKeywords(\"Example; ApiCore; Workbook\");\nconst keywords = core.GetKeywords();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Keywords: \" + keywords);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document keywords in the string format.",
+        "type": "string"
+      },
+      "signature": "GetKeywords(): string",
+      "since": "9.0.0"
+    },
+    "GetLanguage": {
+      "description": "Returns the document language.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetLanguage/",
+      "examples": [
+        "// How do I find out what language is assigned to a workbook in a spreadsheet?\n\n// Check the language property to confirm the locale recorded for the file in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetLanguage(\"en-US\");\nconst language = core.GetLanguage();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Language: \" + language);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document language.",
+        "type": "string"
+      },
+      "signature": "GetLanguage(): string",
+      "since": "9.0.0"
+    },
+    "GetLastModifiedBy": {
+      "description": "Returns the name of the user who last modified the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetLastModifiedBy/",
+      "examples": [
+        "// How do I find out who made the most recent change to a workbook in a spreadsheet?\n\n// Look up the last editor's name recorded in the document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetLastModifiedBy(\"Mark Pottato\");\nconst lastModifiedBy = core.GetLastModifiedBy();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Last modified by: \" + lastModifiedBy);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The name of the user who last modified the document.",
+        "type": "string"
+      },
+      "signature": "GetLastModifiedBy(): string",
+      "since": "9.0.0"
+    },
+    "GetLastPrinted": {
+      "description": "Returns the date when the document was last printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetLastPrinted/",
+      "examples": [
+        "// How do I check when a workbook was last printed in a spreadsheet?\n\n// Confirm the last print date stored in the document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetLastPrinted(new Date());\nconst lastPrintedDate = core.GetLastPrinted().toDateString();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Last printed: \" + lastPrintedDate);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The date when the document was last printed.",
+        "type": "Date"
+      },
+      "signature": "GetLastPrinted(): Date",
+      "since": "9.0.0"
+    },
+    "GetModified": {
+      "description": "Returns the date when the document was last modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetModified/",
+      "examples": [
+        "// How do I find out when a workbook was most recently modified in a spreadsheet?\n\n// Inspect the last-modified timestamp recorded in the document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetModified(new Date(\"10 March 1990\"));\nconst lastModifiedDate = core.GetModified().toDateString();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Last modified: \" + lastModifiedDate);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The date when the document was last modified.",
+        "type": "Date"
+      },
+      "signature": "GetModified(): Date",
+      "since": "9.0.0"
+    },
+    "GetRevision": {
+      "description": "Returns the document revision.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetRevision/",
+      "examples": [
+        "// How do I read the revision identifier stored for a workbook in a spreadsheet?\n\n// Display the current revision marker recorded in the document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetRevision(\"Rev. A\");\nconst revision = core.GetRevision();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Revision: \" + revision);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document revision.",
+        "type": "string"
+      },
+      "signature": "GetRevision(): string",
+      "since": "9.0.0"
+    },
+    "GetSubject": {
+      "description": "Returns the document subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetSubject/",
+      "examples": [
+        "// How do I find out what subject is recorded for a workbook in a spreadsheet?\n\n// Fetch the subject text stored in the metadata of the file in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetSubject(\"ApiCore Method Showcase\");\nconst subject = core.GetSubject();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Subject: \" + subject);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document subject.",
+        "type": "string"
+      },
+      "signature": "GetSubject(): string",
+      "since": "9.0.0"
+    },
+    "GetTitle": {
+      "description": "Returns the document title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetTitle/",
+      "examples": [
+        "// How do I retrieve the title that has been saved for a workbook in a spreadsheet?\n\n// Fetch the document title from the metadata fields of the file in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetTitle(\"My Workbook Title\");\nconst title = core.GetTitle();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Title: \" + title);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document title.",
+        "type": "string"
+      },
+      "signature": "GetTitle(): string",
+      "since": "9.0.0"
+    },
+    "GetVersion": {
+      "description": "Returns the document version.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/GetVersion/",
+      "examples": [
+        "// How do I find out which version is recorded for a workbook in a spreadsheet?\n\n// Display the version string stored in the metadata of the file in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetVersion(\"v9.0\");\nconst version = core.GetVersion();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Version: \" + version);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document version.",
+        "type": "string"
+      },
+      "signature": "GetVersion(): string",
+      "since": "9.0.0"
+    },
+    "SetCategory": {
+      "description": "Sets the document category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetCategory/",
+      "examples": [
+        "// How do I set a category for a workbook in a spreadsheet?\n\n// Store a descriptive category in the metadata fields of the file in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetCategory(\"Examples\");\nconst category = core.GetCategory();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Category: \" + category);"
+      ],
+      "params": [
+        {
+          "description": "The document category.",
+          "name": "sCategory",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCategory(sCategory: string): void",
+      "since": "9.0.0"
+    },
+    "SetContentStatus": {
+      "description": "Sets the document content status.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetContentStatus/",
+      "examples": [
+        "// How do I mark the content status of a workbook in a spreadsheet?\n\n// Save a status label such as \"Final\" or \"Draft\" in the file metadata in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\ncore.SetContentStatus(\"Final\");\nconst contentStatus = core.GetContentStatus();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Content Status: \" + contentStatus);"
+      ],
+      "params": [
+        {
+          "description": "The document content status.",
+          "name": "sStatus",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetContentStatus(sStatus: string): void",
+      "since": "9.0.0"
+    },
+    "SetCreated": {
+      "description": "Sets the document creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetCreated/",
+      "examples": [
+        "// How do I set the creation date recorded for a workbook in a spreadsheet?\n\n// Store a specific date as the origin timestamp for the file in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetCreated(new Date('20 January 2000'));\nconst createdDate = core.GetCreated().toDateString();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Created: \" + createdDate);"
+      ],
+      "params": [
+        {
+          "description": "The document creation date.",
+          "name": "oCreated",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCreated(oCreated: Date): void",
+      "since": "9.0.0"
+    },
+    "SetCreator": {
+      "description": "Sets the document author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetCreator/",
+      "examples": [
+        "// How do I record who created a workbook in a spreadsheet?\n\n// Store the author's identity in the workbook metadata in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetCreator(\"John Smith\");\nconst creator = core.GetCreator();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Creator: \" + creator);"
+      ],
+      "params": [
+        {
+          "description": "The document author.",
+          "name": "sCreator",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCreator(sCreator: string): void",
+      "since": "9.0.0"
+    },
+    "SetDescription": {
+      "description": "Sets the document description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetDescription/",
+      "examples": [
+        "// How do I add a description to a workbook's metadata in a spreadsheet?\n\n// Attach a plain-text explanation to the workbook so others know what it contains in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetDescription(\"This is a sample workbook made to help fellow users understand how to use the ApiCore methods.\");\nconst description = core.GetDescription();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Description: \" + description);"
+      ],
+      "params": [
+        {
+          "description": "The document description.",
+          "name": "sDescription",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetDescription(sDescription: string): void",
+      "since": "9.0.0"
+    },
+    "SetIdentifier": {
+      "description": "Sets the document identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetIdentifier/",
+      "examples": [
+        "// How do I tag a workbook with a unique ID in a spreadsheet?\n\n// Label the workbook with a custom reference code stored in its metadata in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetIdentifier(\"#ID42\");\nconst identifier = core.GetIdentifier();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Identifier: \" + identifier);"
+      ],
+      "params": [
+        {
+          "description": "The document identifier.",
+          "name": "sIdentifier",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetIdentifier(sIdentifier: string): void",
+      "since": "9.0.0"
+    },
+    "SetKeywords": {
+      "description": "Sets the document keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetKeywords/",
+      "examples": [
+        "// How do I attach search tags to a workbook's metadata in a spreadsheet?\n\n// Tag the workbook with descriptive terms that make it easier to find in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetKeywords(\"Example; ApiCore; Workbook\");\nconst keywords = core.GetKeywords();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Keywords: \" + keywords);"
+      ],
+      "params": [
+        {
+          "description": "The document keywords in the string format.",
+          "name": "sKeywords",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetKeywords(sKeywords: string): void",
+      "since": "9.0.0"
+    },
+    "SetLanguage": {
+      "description": "Sets the document language.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetLanguage/",
+      "examples": [
+        "// How do I specify the language used in a workbook's metadata in a spreadsheet?\n\n// Mark the workbook with a locale code so readers know which language it targets in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetLanguage(\"en-US\");\nconst language = core.GetLanguage();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Language: \" + language);"
+      ],
+      "params": [
+        {
+          "description": "The document language.",
+          "name": "sLanguage",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLanguage(sLanguage: string): void",
+      "since": "9.0.0"
+    },
+    "SetLastModifiedBy": {
+      "description": "Sets the name of the user who last modified the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetLastModifiedBy/",
+      "examples": [
+        "// How do I store the last editor's name in a workbook's metadata in a spreadsheet?\n\n// Track who made the most recent changes by writing their name to the document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetLastModifiedBy(\"Mark Pottato\");\nconst lastModifiedBy = core.GetLastModifiedBy();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Last modified by: \" + lastModifiedBy);"
+      ],
+      "params": [
+        {
+          "description": "The name of the user who last modified the document.",
+          "name": "sLastModifiedBy",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLastModifiedBy(sLastModifiedBy: string): void",
+      "since": "9.0.0"
+    },
+    "SetLastPrinted": {
+      "description": "Sets the date when the document was last printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetLastPrinted/",
+      "examples": [
+        "// How do I log the last time a workbook was printed in a spreadsheet?\n\n// Capture the date a workbook was last sent to the printer and store it in the metadata in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetLastPrinted(new Date());\nconst lastPrintedDate = core.GetLastPrinted().toDateString();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Last printed: \" + lastPrintedDate);"
+      ],
+      "params": [
+        {
+          "description": "The date when the document was last printed.",
+          "name": "oLastPrinted",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLastPrinted(oLastPrinted: Date): void",
+      "since": "9.0.0"
+    },
+    "SetModified": {
+      "description": "Sets the date when the document was last modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetModified/",
+      "examples": [
+        "// How do I write a custom last-modified date into a workbook's metadata in a spreadsheet?\n\n// Update the modification timestamp stored in the workbook so the history reflects a specific date in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetModified(new Date(\"10 March 1990\"));\nconst lastModifiedDate = core.GetModified().toDateString();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Last modified: \" + lastModifiedDate);"
+      ],
+      "params": [
+        {
+          "description": "The date when the document was last modified.",
+          "name": "oModified",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetModified(oModified: Date): void",
+      "since": "9.0.0"
+    },
+    "SetRevision": {
+      "description": "Sets the document revision.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetRevision/",
+      "examples": [
+        "// How do I track the revision number of a workbook in a spreadsheet?\n\n// Mark the workbook with a version string so collaborators know which revision they are viewing in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetRevision(\"Rev. A\");\nconst revision = core.GetRevision();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Revision: \" + revision);"
+      ],
+      "params": [
+        {
+          "description": "The document revision.",
+          "name": "sRevision",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetRevision(sRevision: string): void",
+      "since": "9.0.0"
+    },
+    "SetSubject": {
+      "description": "Sets the document subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetSubject/",
+      "examples": [
+        "// How do I set a subject line for a workbook's metadata in a spreadsheet?\n\n// Categorize the workbook's content by assigning it a subject in the document properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetSubject(\"ApiCore Method Showcase\");\nconst subject = core.GetSubject();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Subject: \" + subject);"
+      ],
+      "params": [
+        {
+          "description": "The document subject.",
+          "name": "sSubject",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSubject(sSubject: string): void",
+      "since": "9.0.0"
+    },
+    "SetTitle": {
+      "description": "Sets the document title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetTitle/",
+      "examples": [
+        "// How do I assign a title to a workbook's metadata in a spreadsheet?\n\n// Name the workbook by writing a title into its document properties so it is easy to identify in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetTitle(\"My Workbook Title\");\nconst title = core.GetTitle();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Title: \" + title);"
+      ],
+      "params": [
+        {
+          "description": "The document title.",
+          "name": "sTitle",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTitle(sTitle: string): void",
+      "since": "9.0.0"
+    },
+    "SetVersion": {
+      "description": "Sets the document version.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCore/Methods/SetVersion/",
+      "examples": [
+        "// How do I record a version number in the document metadata in a spreadsheet?\n\n// Store a custom version label alongside the file's built-in properties in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst core = Api.GetCore();\n\ncore.SetVersion(\"v9.0\");\nconst version = core.GetVersion();\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 50, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 3, 0\n);\n\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Version: \" + version);"
+      ],
+      "params": [
+        {
+          "description": "The document version.",
+          "name": "sVersion",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetVersion(sVersion: string): void",
+      "since": "9.0.0"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Returns a collection of chart objects from the document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllCharts/",
+  "examples": [
+    "// How do I access every chart inside a content container in a document?\n\n// Apply custom gridline styling to the first chart found inside a shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 95 * 36000, 70 * 36000, 24);\nfill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph = Api.CreateParagraph();\nparagraph.AddDrawing(chart);\nlet docContent = shape.GetDocContent();\ndocContent.AddElement(0, paragraph);\nlet charts = docContent.GetAllCharts();\nstroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\ncharts[0].SetMinorHorizontalGridlines(stroke);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiChart[]"
+  },
+  "signature": "GetAllCharts(): ApiChart[]"
+}

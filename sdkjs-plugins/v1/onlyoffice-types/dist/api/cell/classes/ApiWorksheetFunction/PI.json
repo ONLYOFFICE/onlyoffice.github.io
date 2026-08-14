@@ -1,0 +1,12 @@
+{
+  "description": "Returns the mathematical constant **pi**, equal to **3.14159265358979**, accurate to 15 digits.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PI/",
+  "examples": [
+    "// How do I get the value of pi for mathematical calculations in a spreadsheet?\n\n// Use pi to calculate circles, circumference, and other geometric formulas in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PI());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PI(): number"
+}

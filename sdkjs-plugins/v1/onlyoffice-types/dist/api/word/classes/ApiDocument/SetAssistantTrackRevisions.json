@@ -1,0 +1,23 @@
+{
+  "description": "Enables or disables AI-assisted change tracking in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SetAssistantTrackRevisions/",
+  "examples": [
+    "// How do I track changes made by an AI assistant in a document?\n\n// Assign a named author to AI-generated edits so reviewers can identify them separately.\n\nconst doc = Api.GetDocument();\n\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('Original document text.');\n\ndoc.SetAssistantTrackRevisions(true, 'AI Assistant');\n\nconst assistantParagraph = Api.CreateParagraph();\nassistantParagraph.AddText('Text added by AI assistant.');\ndoc.Push(assistantParagraph);\n\ndoc.SetAssistantTrackRevisions(false);\n\nconst resultParagraph = Api.CreateParagraph();\nresultParagraph.AddText('AI-assisted tracking has been enabled and then disabled.');\ndoc.Push(resultParagraph);"
+  ],
+  "params": [
+    {
+      "description": "Specifies whether the change tracking mode is set or not.",
+      "name": "isTrack",
+      "type": "boolean"
+    },
+    {
+      "description": "The AI assistant name.",
+      "name": "assistantName",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetAssistantTrackRevisions(isTrack: boolean, assistantName: string): boolean"
+}

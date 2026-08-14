@@ -1,0 +1,18 @@
+{
+  "description": "Returns **true** if a number is even.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ISEVEN/",
+  "examples": [
+    "// How do I determine if a number is even in a spreadsheet?\n\n// Test whether a value is an even number in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet result = func.ISEVEN(\"66\");\nworksheet.GetRange(\"C3\").SetValue(result)"
+  ],
+  "params": [
+    {
+      "description": "The value to test.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ISEVEN(arg1: ApiRange | ApiName | number): boolean"
+}

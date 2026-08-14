@@ -1,0 +1,19 @@
+{
+  "description": "Sets all 4 font slots with the specified font family.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetFontFamily/",
+  "examples": [
+    "// How do I set the font family for a paragraph in a presentation?\n\n// Apply a specific font typeface to all text in a paragraph in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the font family set to 'Consolas'.\");\nparagraph.SetFontFamily('Consolas');\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The font family or families used for the current paragraph.",
+      "name": "sFontFamily",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetFontFamily(sFontFamily: string): ApiParagraph"
+}

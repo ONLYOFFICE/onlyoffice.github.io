@@ -1,0 +1,28 @@
+{
+  "description": "Returns the (right-tailed) F probability distribution (degree of diversity) for two data sets.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/F_DIST_RT/",
+  "examples": [
+    "// Calculate the right-tailed probability of F-distributed values.\n\n// Determine F distribution using F_DIST_RT with specified degrees of freedom.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.F_DIST_RT(10, 6, 4);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value at which to evaluate the function, a nonnegative number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The numerator degrees of freedom, a number between 1 and 10^10, excluding 10^10.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The denominator degrees of freedom, a number between 1 and 10^10, excluding 10^10.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "F_DIST_RT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

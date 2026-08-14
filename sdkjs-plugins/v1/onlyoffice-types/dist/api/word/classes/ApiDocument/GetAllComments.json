@@ -1,0 +1,12 @@
+{
+  "description": "Returns all comments from the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetAllComments/",
+  "examples": [
+    "// How do I get every comment in a document so I can inspect or process them in a document?\n\n// Confirm the type of a comment object after collecting the full set of reviewer annotations in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\nlet type = comments[0].GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + type);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiComment[]"
+  },
+  "signature": "GetAllComments(): ApiComment[]"
+}

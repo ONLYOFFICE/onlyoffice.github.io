@@ -1,0 +1,11 @@
+{
+  "description": "Returns the selected cells of the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetSelectedCells/",
+  "params": [],
+  "returns": {
+    "description": "An array of the currently selected cells (empty if there is no cell selection).",
+    "type": "ApiTableCell[]"
+  },
+  "signature": "GetSelectedCells(): ApiTableCell[]",
+  "since": "9.5.0"
+}

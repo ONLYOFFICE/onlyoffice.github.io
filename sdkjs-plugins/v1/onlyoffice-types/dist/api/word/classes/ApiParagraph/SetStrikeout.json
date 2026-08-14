@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that the contents of this paragraph are displayed with a single horizontal line through the center of the line.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetStrikeout/",
+  "examples": [
+    "// How do I display paragraph text with a line crossed through it in a document?\n\n// Mark paragraph content as struck through with a single line in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text struck out with a single line.\");\nparagraph.SetStrikeout(true);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed struck through.",
+      "name": "isStrikeout",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetStrikeout(isStrikeout: boolean): ApiParagraph"
+}

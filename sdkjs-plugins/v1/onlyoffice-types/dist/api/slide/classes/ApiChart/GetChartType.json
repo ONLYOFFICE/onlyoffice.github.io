@@ -1,0 +1,12 @@
+{
+  "description": "Returns a type of the chart object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetChartType/",
+  "examples": [
+    "// How do I find out what type of chart I have in a presentation?\n\n// Determine the chart type and display it as the title in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst chart = Api.CreateChart('bar3D', [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], ['Projected Revenue', 'Estimated Costs'], [2014, 2015, 2016], 4051300, 2347595, 24);\n\nconst solidGrey = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nconst solidOrange = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(solidGrey, 0, false);\nchart.SetSeriesFill(solidOrange, 1, false);\nconst chartType = chart.GetChartType();\nchart.SetTitle('This chart is of the ' + chartType + ' type', 14);\n\nslide.RemoveAllObjects();\nslide.AddObject(chart);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ChartTypeLegacy"
+  },
+  "signature": "GetChartType(): ChartTypeLegacy"
+}

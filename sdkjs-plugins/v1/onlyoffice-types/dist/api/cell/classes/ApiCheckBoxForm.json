@@ -1,0 +1,7 @@
+{
+  "description": "Class representing a document checkbox / radio button.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCheckBoxForm/",
+  "extends": [
+    "ApiFormBase"
+  ]
+}

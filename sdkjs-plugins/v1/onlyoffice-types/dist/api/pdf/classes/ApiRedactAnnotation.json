@@ -1,0 +1,51 @@
+{
+  "description": "Class representing a redact annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRedactAnnotation/",
+  "extends": [
+    "ApiBaseMarkupAnnotation"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiRedactAnnotation class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRedactAnnotation/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine what kind of annotation a redaction is in a PDF?\n\n// Check the object type of a redaction element in a PDF.\n\nlet doc = Api.GetDocument();\nlet redactAnnot = Api.CreateRedactAnnot([84, 60, 231, 70]);\nlet page = doc.GetPage(0);\npage.AddObject(redactAnnot);\nconsole.log(`Annot class type is: ${redactAnnot.GetClassType()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"redactAnnot\""
+      },
+      "signature": "GetClassType(): \"redactAnnot\""
+    },
+    "GetQuads": {
+      "description": "Gets quads from current markup annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/Methods/GetQuads/",
+      "examples": [
+        "// How do I read the highlight coordinates in a PDF?\n\n// Extract the quad coordinates that define the marked region in a PDF.\n\nlet doc = Api.GetDocument();\nlet markupAnnot = Api.CreateHighlightAnnot([84, 55, 231, 72]);\nlet page = doc.GetPage(0);\npage.AddObject(markupAnnot);\nconsole.log(`The markup quads is: ${markupAnnot.GetQuads()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Quad[]"
+      },
+      "signature": "GetQuads(): Quad[]"
+    },
+    "SetQuads": {
+      "description": "Sets quads to current markup annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/Methods/SetQuads/",
+      "examples": [
+        "// How do I define the highlighted region in a PDF?\n\n// Assign new coordinates to the marked area of an annotation in a PDF.\n\nlet doc = Api.GetDocument();\nlet markupAnnot = Api.CreateHighlightAnnot([84, 55, 231, 72]);\nmarkupAnnot.SetQuads([[85, 73, 226, 73, 85, 87, 226, 87]]);\nlet page = doc.GetPage(0);\npage.AddObject(markupAnnot);\nconsole.log(`We set new quads to markup annotation`);"
+      ],
+      "params": [
+        {
+          "description": "An array of quadrilaterals defining the highlighted regions.",
+          "name": "quads",
+          "type": "Quad[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetQuads(quads: Quad[]): boolean"
+    }
+  }
+}

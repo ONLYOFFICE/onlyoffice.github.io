@@ -1,0 +1,10 @@
+{
+  "description": "Returns a collection of all cells in the table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetAllCells/",
+  "params": [],
+  "returns": {
+    "type": "ApiTableCell[]"
+  },
+  "signature": "GetAllCells(): ApiTableCell[]",
+  "since": "9.4.0"
+}

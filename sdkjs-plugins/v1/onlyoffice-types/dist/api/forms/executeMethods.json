@@ -1,0 +1,747 @@
+{
+  "AddOleObject": {
+    "description": "Adds an OLE object to the current document position.",
+    "params": [
+      {
+        "description": "The OLE object properties.",
+        "name": "data",
+        "type": "OLEProperties"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"AddOleObject\", [data: OLEProperties], callback?): any"
+  },
+  "CoAuthoringChatSendMessage": {
+    "description": "Sends a message to the co-authoring chat.",
+    "params": [
+      {
+        "description": "Message text.",
+        "name": "sText",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"CoAuthoringChatSendMessage\", [sText: string], callback?): any"
+  },
+  "ConvertDocument": {
+    "description": "Converts a document to Markdown or HTML text.",
+    "params": [
+      {
+        "description": "Conversion type (\"markdown\" or \"html\").",
+        "name": "sConvertType",
+        "optional": true,
+        "type": "\"markdown\" | \"html\""
+      },
+      {
+        "description": "Defines if the HTML headings and IDs will be generated when the Markdown renderer of your target platform does not handle Markdown-style IDs.",
+        "name": "bHtmlHeadings",
+        "optional": true,
+        "type": "boolean"
+      },
+      {
+        "description": "Defines if the images will be created in the base64 format.",
+        "name": "bBase64img",
+        "optional": true,
+        "type": "boolean"
+      },
+      {
+        "description": "Defines if all heading levels in your document will be demoted to conform with the following standard: single H1 as title, H2 as top-level heading in the text body.",
+        "name": "bDemoteHeadings",
+        "optional": true,
+        "type": "boolean"
+      },
+      {
+        "description": "Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional HTML tag, you can avoid using the opening angle bracket in the following way: \\<tag>text\\</tag>. By default, the opening angle brackets will be replaced with the special characters.",
+        "name": "bRenderHTMLTags",
+        "optional": true,
+        "type": "boolean"
+      }
+    ],
+    "returns": {
+      "description": "The Markdown/HTML text.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"ConvertDocument\", [sConvertType?: \"markdown\" | \"html\", bHtmlHeadings?: boolean, bBase64img?: boolean, bDemoteHeadings?: boolean, bRenderHTMLTags?: boolean], callback?): string"
+  },
+  "EditOleObject": {
+    "description": "Edits an OLE object in the document.",
+    "params": [
+      {
+        "description": "The OLE object properties.",
+        "name": "data",
+        "type": "OLEProperties"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"EditOleObject\", [data: OLEProperties], callback?): any"
+  },
+  "EndAction": {
+    "description": "Specifies the end action for long operations.",
+    "params": [
+      {
+        "description": "The action type:\r**\"Information\"** - ends a non-blocking informational action,\r**\"Block\"** - ends a blocking interaction action.",
+        "name": "type",
+        "type": "\"Information\" | \"Block\""
+      },
+      {
+        "description": "A string description displayed during the action.",
+        "name": "description",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "description": "The error status code. If no error occurs, then an empty string is passed.",
+        "name": "status",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"EndAction\", [type: \"Information\" | \"Block\", description?: string, status?: string], callback?): any"
+  },
+  "FocusEditor": {
+    "description": "Returns focus to the editor.",
+    "params": [],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"FocusEditor\", [], callback?): any"
+  },
+  "GetAllForms": {
+    "description": "Returns information about all the forms that have been added to the document.",
+    "params": [],
+    "returns": {
+      "description": "An array with all the forms from the document.",
+      "type": "ContentControl[]"
+    },
+    "signature": "executeMethod(\"GetAllForms\", [], callback?): ContentControl[]"
+  },
+  "GetDocumentLang": {
+    "description": "Returns the document language.",
+    "params": [],
+    "returns": {
+      "description": "Document language.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetDocumentLang\", [], callback?): string",
+    "since": "7.4.0"
+  },
+  "GetFileToDownload": {
+    "description": "Returns the current file to download in the specified format.",
+    "params": [
+      {
+        "description": "A format in which you need to download a file.",
+        "name": "format",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "URL to download the file in the specified format or error.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetFileToDownload\", [format?: string], callback?): string",
+    "since": "7.2.0"
+  },
+  "GetFontList": {
+    "description": "Returns the fonts list.",
+    "params": [],
+    "returns": {
+      "description": "An array of the FontInfo objects containing the data about the used fonts.",
+      "type": "FontInfo[]"
+    },
+    "signature": "executeMethod(\"GetFontList\", [], callback?): FontInfo[]"
+  },
+  "GetFormValue": {
+    "description": "Returns a value of the specified form.",
+    "params": [
+      {
+        "description": "A unique internal identifier of the form.",
+        "name": "internalId",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "The form value in the string or boolean format depending on the form type. The null value means that the form is filled with a placeholder.",
+      "type": "null | string | boolean"
+    },
+    "signature": "executeMethod(\"GetFormValue\", [internalId: string], callback?): null | string | boolean"
+  },
+  "GetFormsByTag": {
+    "description": "Returns information about all the forms that have been added to the document with specified tag.",
+    "params": [
+      {
+        "description": "The form tag.",
+        "name": "tag",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "An array with all the forms from the document with the specified tag.",
+      "type": "ContentControl[]"
+    },
+    "signature": "executeMethod(\"GetFormsByTag\", [tag: string], callback?): ContentControl[]"
+  },
+  "GetImageDataFromSelection": {
+    "description": "Returns the image data from the first of the selected drawings. If there are no drawings selected, the method returns a white rectangle.",
+    "params": [],
+    "returns": {
+      "description": "The ImageData object containig the information about the base64 encoded png image.",
+      "type": "ImageData"
+    },
+    "signature": "executeMethod(\"GetImageDataFromSelection\", [], callback?): ImageData",
+    "since": "7.2.0"
+  },
+  "GetInstalledPlugins": {
+    "description": "Returns all the installed plugins.",
+    "params": [],
+    "returns": {
+      "description": "An array of all the installed plugins.",
+      "type": "PluginData[]"
+    },
+    "signature": "executeMethod(\"GetInstalledPlugins\", [], callback?): PluginData[]",
+    "since": "7.2.0"
+  },
+  "GetMacros": {
+    "description": "Returns the document macros.",
+    "params": [
+      {
+        "name": "oContent",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "The Macros object containing the data about all the macros from the document",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetMacros\", [oContent?: string], callback?): string"
+  },
+  "GetOFormRole": {
+    "description": "Returns the current role name for the OForm document.",
+    "params": [],
+    "returns": {
+      "description": "The current role name, or an empty string if no role is set.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetOFormRole\", [], callback?): string",
+    "since": "9.5.0"
+  },
+  "GetSelectedContent": {
+    "description": "Returns the selected content in the specified format.",
+    "params": [
+      {
+        "description": "The returned content properties.",
+        "name": "prop",
+        "type": "{ type?: \"text\" | \"html\" }"
+      }
+    ],
+    "returns": {
+      "description": "The selected content.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetSelectedContent\", [prop: { type?: \"text\" | \"html\" }], callback?): string",
+    "since": "8.3.1"
+  },
+  "GetSelectedOleObjects": {
+    "description": "Returns an array of the selected OLE objects.",
+    "params": [],
+    "returns": {
+      "description": "An array of the *OLEProperties* objects containing the data about the OLE object parameters.",
+      "type": "OLEProperties[]"
+    },
+    "signature": "executeMethod(\"GetSelectedOleObjects\", [], callback?): OLEProperties[]"
+  },
+  "GetSelectedText": {
+    "description": "Returns the selected text from the document.",
+    "params": [
+      {
+        "description": "The resulting string display properties.",
+        "name": "prop",
+        "optional": true,
+        "type": "{ Numbering?: boolean; Math?: boolean; TableCellSeparator?: string; TableRowSeparator?: string; ParaSeparator?: string; TabSymbol?: string; NewLineSeparator?: string }"
+      }
+    ],
+    "returns": {
+      "description": "Selected text.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetSelectedText\", [prop?: { Numbering?: boolean; Math?: boolean; TableCellSeparator?: string; TableRowSeparator?: string; ParaSeparator?: string; TabSymbol?: string; NewLineSeparator?: string }], callback?): string",
+    "since": "7.1.0"
+  },
+  "GetSelectionType": {
+    "description": "Returns the type of the current selection.",
+    "params": [],
+    "returns": {
+      "description": "The selection type.",
+      "type": "SelectionType"
+    },
+    "signature": "executeMethod(\"GetSelectionType\", [], callback?): SelectionType"
+  },
+  "GetVBAMacros": {
+    "description": "Returns all VBA macros from the document.",
+    "params": [],
+    "returns": {
+      "description": "VBA xml macros.",
+      "type": "string | null"
+    },
+    "signature": "executeMethod(\"GetVBAMacros\", [], callback?): string | null",
+    "since": "7.3.0"
+  },
+  "GetVersion": {
+    "description": "Returns the editor version.",
+    "params": [],
+    "returns": {
+      "description": "The editor version.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetVersion\", [], callback?): string"
+  },
+  "InputText": {
+    "description": "Inserts text into the document.",
+    "params": [
+      {
+        "description": "A string value that specifies the text to be inserted into the document.",
+        "name": "text",
+        "type": "string"
+      },
+      {
+        "description": "A string value that specifies the text to be replaced with a new text.",
+        "name": "textReplace",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"InputText\", [text: string, textReplace: string], callback?): any"
+  },
+  "InstallPlugin": {
+    "description": "Installs a plugin using the specified plugin config.",
+    "params": [
+      {
+        "description": "The plugin {@link https://api.onlyoffice.com/docs/plugins/configuration/configuration config}.",
+        "name": "config",
+        "optional": true,
+        "type": "object"
+      }
+    ],
+    "returns": {
+      "description": "An object with the result information.",
+      "type": "object"
+    },
+    "signature": "executeMethod(\"InstallPlugin\", [config?: object], callback?): object",
+    "since": "7.2.0"
+  },
+  "IsEditingPdfForm": {
+    "description": "Checks if the document is in the editing PDF form mode.",
+    "params": [],
+    "returns": {
+      "description": "Returns **true** if the document is in the editing PDF form mode.",
+      "type": "boolean"
+    },
+    "signature": "executeMethod(\"IsEditingPdfForm\", [], callback?): boolean",
+    "since": "9.3.0"
+  },
+  "IsFillingForm": {
+    "description": "Checks if the document is in the filling form mode.",
+    "params": [],
+    "returns": {
+      "description": "Returns **true** if the document is in the filling form mode.",
+      "type": "boolean"
+    },
+    "signature": "executeMethod(\"IsFillingForm\", [], callback?): boolean",
+    "since": "9.3.0"
+  },
+  "IsFillingPdfForm": {
+    "description": "Checks if the document is in the filling PDF form mode.",
+    "params": [],
+    "returns": {
+      "description": "Returns **true** if the document is in the filling PDF form mode.",
+      "type": "boolean"
+    },
+    "signature": "executeMethod(\"IsFillingPdfForm\", [], callback?): boolean",
+    "since": "9.3.0"
+  },
+  "IsFormSigned": {
+    "description": "Checks whether the specified form has been digitally signed.",
+    "params": [],
+    "returns": {
+      "description": "Returns true if the form is signed, false otherwise.",
+      "type": "boolean"
+    },
+    "signature": "executeMethod(\"IsFormSigned\", [], callback?): boolean",
+    "since": "9.3.0"
+  },
+  "MouseMoveWindow": {
+    "description": "Sends an event to the plugin when the mouse button is moved inside the plugin iframe.",
+    "params": [
+      {
+        "description": "The frame ID.",
+        "name": "frameId",
+        "type": "string"
+      },
+      {
+        "description": "The X coordinate.",
+        "name": "x",
+        "type": "number"
+      },
+      {
+        "description": "The Y coordinate.",
+        "name": "y",
+        "type": "number"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"MouseMoveWindow\", [frameId: string, x: number, y: number], callback?): any",
+    "since": "7.4.0"
+  },
+  "MouseUpWindow": {
+    "description": "Sends an event to the plugin when the mouse button is released inside the plugin iframe.",
+    "params": [
+      {
+        "description": "The frame ID.",
+        "name": "frameId",
+        "type": "string"
+      },
+      {
+        "description": "The X coordinate.",
+        "name": "x",
+        "type": "number"
+      },
+      {
+        "description": "The Y coordinate.",
+        "name": "y",
+        "type": "number"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"MouseUpWindow\", [frameId: string, x: number, y: number], callback?): any",
+    "since": "7.4.0"
+  },
+  "OnDropEvent": {
+    "description": "Implements the external drag&drop emulation.",
+    "params": [
+      {
+        "description": "The drag&drop emulation properties.",
+        "name": "obj",
+        "type": "{ type?: string; x?: number; y?: number; html?: string; text?: string }"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"OnDropEvent\", [obj: { type?: string; x?: number; y?: number; html?: string; text?: string }], callback?): any",
+    "since": "7.3.0"
+  },
+  "OnEncryption": {
+    "description": "Encrypts the document.",
+    "params": [
+      {
+        "description": "The encryption properties.",
+        "name": "obj",
+        "type": "{ type?: string; password?: string; data?: string; check?: boolean; docinfo?: string; hash?: string; error?: string }"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"OnEncryption\", [obj: { type?: string; password?: string; data?: string; check?: boolean; docinfo?: string; hash?: string; error?: string }], callback?): any"
+  },
+  "PasteHtml": {
+    "description": "Pastes text in the HTML format into the document.",
+    "params": [
+      {
+        "description": "A string value that specifies the text in the *HTML* format to be pasted into the document.",
+        "name": "htmlText",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"PasteHtml\", [htmlText: string], callback?): any"
+  },
+  "PasteText": {
+    "description": "Pastes text into the document.",
+    "params": [
+      {
+        "description": "A string value that specifies the text to be pasted into the document.",
+        "name": "text",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"PasteText\", [text: string], callback?): any"
+  },
+  "PutImageDataToSelection": {
+    "description": "Replaces the first selected drawing with the image specified in the parameters.\nIf there are no drawings selected, the method inserts the image at the current position.",
+    "params": [
+      {
+        "description": "The information about the base64 encoded *png* image.",
+        "name": "oImageData",
+        "type": "ImageData"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"PutImageDataToSelection\", [oImageData: ImageData], callback?): any",
+    "since": "7.2.0"
+  },
+  "RemovePlugin": {
+    "description": "Removes a plugin with the specified GUID.",
+    "params": [
+      {
+        "description": "The plugin identifier. It must be of the *asc.{UUID}* type.",
+        "name": "guid",
+        "type": "string"
+      },
+      {
+        "description": "The plugin backup. This parameter is used when working with the desktop editors.",
+        "name": "backup",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "An object with the result information.",
+      "type": "object"
+    },
+    "signature": "executeMethod(\"RemovePlugin\", [guid: string, backup: string], callback?): object",
+    "since": "7.2.0"
+  },
+  "ReplaceTextSmart": {
+    "description": "Replaces each paragraph (or text in cell) in the select with the corresponding text from an array of strings.",
+    "params": [
+      {
+        "description": "An array of replacement strings.",
+        "name": "arrString",
+        "type": "string[]"
+      },
+      {
+        "description": "A character which is used to specify the tab in the source text. Any symbol can be used. The default separator is \"\\t\".",
+        "name": "sParaTab",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "description": "A character which is used to specify the line break character in the source text. Any symbol can be used. The default separator is \"\\r\\n\".",
+        "name": "sParaNewLine",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "Always returns true.",
+      "type": "boolean"
+    },
+    "signature": "executeMethod(\"ReplaceTextSmart\", [arrString: string[], sParaTab?: string, sParaNewLine?: string], callback?): boolean",
+    "since": "7.1.0"
+  },
+  "SetFormValue": {
+    "description": "Sets a value to the specified form.",
+    "params": [
+      {
+        "description": "A unique internal identifier of the form.",
+        "name": "internalId",
+        "type": "string"
+      },
+      {
+        "description": "Form value to be set. Its type depends on the form type.",
+        "name": "value",
+        "type": "string | boolean"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"SetFormValue\", [internalId: string, value: string | boolean], callback?): any"
+  },
+  "SetMacros": {
+    "description": "Sets macros to the document.",
+    "params": [
+      {
+        "description": "The *Macros* object containing the data about all the macros from the document.",
+        "name": "data",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"SetMacros\", [data: string], callback?): any"
+  },
+  "SetPluginsOptions": {
+    "description": "Configures plugins from an external source. The settings can be set for all plugins or for a specific plugin.\nFor example, this method can be used to pass an authorization token to the plugin. This method can be used only with the connector class.",
+    "params": [
+      {
+        "description": "Plugin options.",
+        "name": "options",
+        "type": "PluginOptions"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"SetPluginsOptions\", [options: PluginOptions], callback?): any",
+    "since": "8.1.1"
+  },
+  "SetProperties": {
+    "description": "Sets the properties to the document.",
+    "params": [
+      {
+        "description": "The document properties.",
+        "name": "obj",
+        "type": "{ copyoutenabled?: boolean; hideContentControlTrack?: boolean; watermark_on_draw?: string; disableAutostartMacros?: boolean; fillForms?: string }"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"SetProperties\", [obj: { copyoutenabled?: boolean; hideContentControlTrack?: boolean; watermark_on_draw?: string; disableAutostartMacros?: boolean; fillForms?: string }], callback?): any"
+  },
+  "ShowButton": {
+    "description": "Shows or hides buttons in the header.",
+    "params": [
+      {
+        "description": "The button ID.",
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "description": "The flag specifies whether the button is shown (**true**) or hidden (**false**).",
+        "name": "bShow",
+        "type": "boolean"
+      },
+      {
+        "description": "The parameter indicates whether the button will be displayed on the right side of the window or on the left. The default value is \"left\".",
+        "name": "align",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"ShowButton\", [id: string, bShow: boolean, align: string], callback?): any",
+    "since": "7.2.0"
+  },
+  "ShowError": {
+    "description": "Shows an error/warning message.",
+    "params": [
+      {
+        "description": "The error text.",
+        "name": "error",
+        "type": "string"
+      },
+      {
+        "description": "-1 or 0 for error or warning.",
+        "name": "level",
+        "type": "number"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"ShowError\", [error: string, level: number], callback?): any",
+    "since": "8.3.0"
+  },
+  "ShowInputHelper": {
+    "description": "Shows the input helper.",
+    "params": [
+      {
+        "description": "A string value which specifies a plugin identifier which must be of the *asc.{UUID}* type.",
+        "name": "guid",
+        "type": "string"
+      },
+      {
+        "description": "A number which specifies the window width measured in millimeters.",
+        "name": "w",
+        "type": "number"
+      },
+      {
+        "description": "A number which specifies the window height measured in millimeters.",
+        "name": "h",
+        "type": "number"
+      },
+      {
+        "description": "Defines if the keyboard is caught (**true**) or not (**false**).",
+        "name": "isKeyboardTake",
+        "type": "boolean"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"ShowInputHelper\", [guid: string, w: number, h: number, isKeyboardTake: boolean], callback?): any"
+  },
+  "StartAction": {
+    "description": "Specifies the start action for long operations.",
+    "params": [
+      {
+        "description": "The action type:\r**\"Information\"** - a non-blocking informational action,\r**\"Block\"** - a blocking interaction action.",
+        "name": "type",
+        "type": "\"Information\" | \"Block\""
+      },
+      {
+        "description": "A string description displayed during the action.",
+        "name": "description",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"StartAction\", [type: \"Information\" | \"Block\", description?: string], callback?): any"
+  },
+  "UnShowInputHelper": {
+    "description": "Unshows the input helper.",
+    "params": [
+      {
+        "description": "A string value which specifies a plugin identifier which must be of the *asc.{UUID}* type.",
+        "name": "guid",
+        "type": "string"
+      },
+      {
+        "description": "Defines if the input context will be cleared (**true**) or not (**false**).",
+        "name": "isclear",
+        "type": "boolean"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"UnShowInputHelper\", [guid: string, isclear: boolean], callback?): any"
+  },
+  "UpdatePlugin": {
+    "description": "Updates a plugin using the specified plugin config.",
+    "params": [
+      {
+        "description": "The plugin {@link https://api.onlyoffice.com/docs/plugins/configuration/configuration config}.",
+        "name": "config",
+        "optional": true,
+        "type": "object"
+      }
+    ],
+    "returns": {
+      "description": "An object with the result information.",
+      "type": "object"
+    },
+    "signature": "executeMethod(\"UpdatePlugin\", [config?: object], callback?): object",
+    "since": "7.3.0"
+  }
+}

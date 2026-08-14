@@ -1,0 +1,18 @@
+{
+  "description": "Class representing the rich paragraph properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParaPr/",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiRichParaPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParaPr/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine what type an object is in a PDF?\n\n// Find the classification of a paragraph formatting object in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\npara.AddText(\"Example text\");\nlet paraPr = para.GetParaPr();\n\nconsole.log(`Object class type is: ${paraPr.GetClassType()}`);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"richParaPr\""
+      },
+      "signature": "GetClassType(): \"richParaPr\""
+    }
+  }
+}

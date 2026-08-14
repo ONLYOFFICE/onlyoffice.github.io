@@ -1,0 +1,20 @@
+{
+  "description": "Specifies the reading order for the current paragraph.\nPossible values are:\n**null** - use the standart direction parameter;\n**\"ltr\"** - left-to-right text direction;\n**\"rtl\"** - right-to-left text direction.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetReadingOrder/",
+  "examples": [
+    "// How do I make a paragraph display text in a right-to-left reading order in a document?\n\n// Switch a paragraph's text flow to match a language that reads from right to left in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText('Hello! مرحبا! 你好!');\ndoc.Push(paragraph);\nparagraph.SetReadingOrder('rtl');"
+  ],
+  "params": [
+    {
+      "description": "The reading order.",
+      "name": "readingOrder",
+      "optional": true,
+      "type": "ReadingOrder"
+    }
+  ],
+  "returns": {
+    "description": "Returns the current paragraph itself (ApiParagraph).",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetReadingOrder(readingOrder?: ReadingOrder): ApiParagraph"
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Returns the paragraph line spacing rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingLineRule/",
+  "examples": [
+    "// How do I get the line spacing rule of a paragraph in a document?\n\n// Confirm the spacing mode in use by printing the line spacing rule after setting triple-line spacing in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddLineBreak();\nlet spacingLineRule = paraPr.GetSpacingLineRule();\nparagraph.AddText(\"Spacing line rule: \" + spacingLineRule);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "\"auto\" | \"atLeast\" | \"exact\" | undefined"
+  },
+  "signature": "GetSpacingLineRule(): \"auto\" | \"atLeast\" | \"exact\" | undefined"
+}

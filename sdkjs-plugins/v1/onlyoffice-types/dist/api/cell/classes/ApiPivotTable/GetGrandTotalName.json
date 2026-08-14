@@ -1,0 +1,13 @@
+{
+  "description": "Returns the text string label that is displayed in the grand total column or row heading in the specified pivot table report.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotTable/Methods/GetGrandTotalName/",
+  "examples": [
+    "// How do I find out what text appears on the grand total line of a pivot table in a spreadsheet?\n\n// Retrieve the custom title assigned to the grand total section of a pivot table in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n    rows: 'Region',\n    columns: 'Style',\n});\n\npivotTable.AddDataField('Price');\n\nlet pivotWorksheet = Api.GetActiveSheet();\npivotWorksheet.GetRange('A9').SetValue('Grand Total name');\npivotWorksheet.GetRange('B9').SetValue(pivotTable.GetGrandTotalName());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetGrandTotalName(): string",
+  "since": "8.2.0"
+}

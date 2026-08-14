@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that the contents of the cell / cell range are displayed with a single horizontal line through the center of the contents.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetStrikeout/",
+  "examples": [
+    "// How do I cross out the text in a cell in a spreadsheet?\n\n// Mark content as deleted or outdated by striking through it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"Struckout text\");\nworksheet.GetRange(\"A2\").SetStrikeout(true);\nworksheet.GetRange(\"A3\").SetValue(\"Normal text\");"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the contents of the current cell / cell range are displayed struck through.",
+      "name": "isStrikeout",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the strikeout property was set successfully.",
+    "type": "boolean"
+  },
+  "signature": "SetStrikeout(isStrikeout: boolean): boolean"
+}

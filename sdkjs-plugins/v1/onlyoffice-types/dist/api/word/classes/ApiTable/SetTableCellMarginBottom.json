@@ -1,0 +1,18 @@
+{
+  "description": "Specifies an amount of space which will be left between the bottom extent of the cell contents and the border\nof all table cells within the parent table (or table row).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginBottom/",
+  "examples": [
+    "// How do I control how much space appears below the text inside table cells in a document?\n\n// Push cell content away from the bottom border of each table cell in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableCellMarginBottom(720);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\nlet cell = table.GetCell(0, 0).GetContent().GetElement(0).AddText(\"This is just a sample text to show that the bottom cell margin is 36 points.\");\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "The value for the amount of space below the bottom extent of the cell measured in\rtwentieths of a point (1/1440 of an inch).",
+      "name": "nValue",
+      "type": "twips"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetTableCellMarginBottom(nValue: twips): boolean"
+}

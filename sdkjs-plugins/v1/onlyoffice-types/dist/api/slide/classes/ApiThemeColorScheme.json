@@ -1,0 +1,83 @@
+{
+  "description": "Class representing a theme color scheme.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/",
+  "methods": {
+    "ChangeColor": {
+      "description": "Changes a color in the theme color scheme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/ChangeColor/",
+      "examples": [
+        "// How do I modify the color palette used by a presentation's theme?\n\n// Access the theme's color scheme and update specific colors in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst theme = master.GetTheme();\nconst colorScheme = theme.GetColorScheme();\ncolorScheme.ChangeColor(0, Api.CreateRGBColor(255, 111, 61));\ncolorScheme.ChangeColor(1, Api.CreateRGBColor(51, 51, 51));\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide.AddObject(chart);"
+      ],
+      "params": [
+        {
+          "description": "Color position in the color scheme which will be changed.",
+          "name": "nPos",
+          "type": "number"
+        },
+        {
+          "description": "New color of the theme color scheme.",
+          "name": "oColor",
+          "type": "ApiUniColor | ApiRGBColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ChangeColor(nPos: number, oColor: ApiUniColor | ApiRGBColor): boolean"
+    },
+    "Copy": {
+      "description": "Creates a copy of the current theme color scheme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/Copy/",
+      "examples": [
+        "// How do I make a copy of a color scheme to reuse it elsewhere?\n\n// Access a color scheme and create a duplicate copy in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide1 = presentation.GetSlideByIndex(0);\nslide1.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst theme1 = master.GetTheme();\nconst colorScheme = Api.CreateThemeColorScheme([\n\tApi.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235),\n\tApi.CreateRGBColor(163, 21, 21), Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128),\n\tApi.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)\n], \"New color scheme\");\ntheme1.SetColorScheme(colorScheme);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide1.AddObject(chart);\n\nconst copyColorScheme = colorScheme.Copy();\nslide1.ApplyTheme(theme1);\n\nconst slide2 = Api.CreateSlide();\nslide2.RemoveAllObjects();\npresentation.AddSlide(slide2);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill1 = Api.CreateRadialGradientFill([gs1, gs2]);\nconst bgFill1 = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke1 = Api.CreateStroke(1 * 36000, fill1);\nconst fill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.RGB(255, 111, 61), Api.RGB(51, 51, 51));\nconst bgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.RGB(255, 111, 61), Api.RGB(51, 51, 51));\nconst stroke2 = Api.CreateStroke(1 * 36000, fill2);\nconst fill3 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst bgFill3 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke3 = Api.CreateStroke(1 * 36000, fill3);\n\nconst formatScheme = Api.CreateThemeFormatScheme([fill1, fill2, fill3], [bgFill1, bgFill2, bgFill3], [stroke1, stroke2, stroke3], \"New format scheme\");\nconst fontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nconst theme2 = Api.CreateTheme(\"New theme\", master, copyColorScheme, formatScheme, fontScheme);\nslide2.ApplyTheme(theme2);\nslide2.AddObject(chart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiThemeColorScheme"
+      },
+      "signature": "Copy(): ApiThemeColorScheme"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiThemeColorScheme class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/GetClassType/",
+      "examples": [
+        "// How can I identify the type of a color scheme object in a presentation?\n\n// Retrieve the class type identifier and display it for a color scheme in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst theme = master.GetTheme();\nconst colorScheme = Api.CreateThemeColorScheme([\n\tApi.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235),\n\tApi.CreateRGBColor(163, 21, 21), Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128),\n\tApi.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)\n], \"New color scheme\");\ntheme.SetColorScheme(colorScheme);\n\nconst type = colorScheme.GetClassType();\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type = \" + type);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"themeColorScheme\""
+      },
+      "signature": "GetClassType(): \"themeColorScheme\""
+    },
+    "SetSchemeName": {
+      "description": "Sets a name to the current theme color scheme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/SetSchemeName/",
+      "examples": [
+        "// How do I assign a custom name to a color scheme in a presentation?\n\n// Create a color scheme and give it a new name in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst theme = master.GetTheme();\nconst colorScheme = Api.CreateThemeColorScheme([\n\tApi.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235),\n\tApi.CreateRGBColor(163, 21, 21), Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128),\n\tApi.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)\n], \"New color scheme\");\ntheme.SetColorScheme(colorScheme);\n\ncolorScheme.SetSchemeName(\"New color scheme name\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"New name was set to the theme color scheme.\");\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Theme color scheme name.",
+          "name": "sName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSchemeName(sName: string): boolean"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiThemeColorScheme object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/ToJSON/",
+      "examples": [
+        "// How can I export a color scheme as JSON data in a presentation?\n\n// Create a color scheme, export it to JSON, and recreate it from the JSON in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst colorScheme = Api.CreateThemeColorScheme([\n\tApi.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235),\n\tApi.CreateRGBColor(163, 21, 21), Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128),\n\tApi.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)\n], \"New color scheme\");\n\nconst json = colorScheme.ToJSON();\nconst colorSchemeFromJSON = Api.FromJSON(json);\n\nconst theme = slide.GetTheme();\ntheme.SetColorScheme(colorSchemeFromJSON);\nconst sType = colorSchemeFromJSON.GetClassType();\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Class type = \" + sType, 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide.AddObject(chart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

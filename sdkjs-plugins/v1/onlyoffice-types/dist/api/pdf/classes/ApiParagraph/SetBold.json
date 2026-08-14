@@ -1,0 +1,19 @@
+{
+  "description": "Sets the bold property to the text character.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetBold/",
+  "examples": [
+    "// How do I apply bold formatting to a paragraph in a PDF?\n\n// Strengthen text weight in a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#FF6F3D'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is a paragraph with the font set to bold.');\nparagraph.SetBold(true);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of this paragraph are displayed bold.",
+      "name": "isBold",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetBold(isBold: boolean): ApiParagraph"
+}

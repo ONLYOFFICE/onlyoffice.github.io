@@ -1,0 +1,18 @@
+{
+  "description": "Sets the bullet or numbering to the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetBullet/",
+  "examples": [
+    "// How do I apply a bullet style to a paragraph in a presentation?\n\n// Format a paragraph to display with a custom bullet character in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nconst bullet = Api.CreateBullet(\"-\");\nparaPr.SetBullet(bullet);\nparagraph.AddText(\" This is an example of the bulleted paragraph.\");\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The bullet object created with the {@link Api#CreateBullet} or {@link Api#CreateNumbering} method.",
+      "name": "oBullet",
+      "type": "ApiBullet"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetBullet(oBullet: ApiBullet): void"
+}

@@ -1,0 +1,49 @@
+{
+  "description": "Returns the prorated linear depreciation of an asset for each accounting period.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/AMORLINC/",
+  "examples": [
+    "// Use the AMORLINC function to compute straight-line asset value decline in a spreadsheet.\n\n// Insert the depreciation figure into a cell for accounting records in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.AMORLINC(3500, \"1/1/2018\", \"3/1/2018\", 500, 1, 0.25, 1));"
+  ],
+  "params": [
+    {
+      "description": "The cost of the asset.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The date when asset is purchased.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The date when the first period ends.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The salvage value of the asset at the end of its lifetime.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The period for which the depreciation will be calculated.",
+      "name": "arg5",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The rate of depreciation.",
+      "name": "arg6",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The day count basis to use: **0** or omitted - US (NASD) 30/360; **1** - Actual/actual; **2** - Actual/360; **3** - Actual/365; **4** - European 30/360.",
+      "name": "arg7",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "AMORLINC(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | number, arg5: ApiRange | ApiName | number, arg6: ApiRange | ApiName | number, arg7?: ApiRange | ApiName | number): number"
+}

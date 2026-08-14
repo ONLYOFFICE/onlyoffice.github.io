@@ -1,0 +1,12 @@
+{
+  "description": "Gets the fill properties from the current shape.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/GetFill/",
+  "examples": [
+    "// How do I inspect the color or gradient covering the inside of a shape in a document?\n\n// Extract fill details from a shape to display its visual properties in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nparagraph.AddLineBreak();\nlet retrievedFill = shape.GetFill();\nif (retrievedFill) {\n    paragraph.AddText(\"Fill type: \" + retrievedFill.GetType());\n}"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiFill | null"
+  },
+  "signature": "GetFill(): ApiFill | null"
+}

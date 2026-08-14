@@ -1,0 +1,23 @@
+{
+  "description": "Converts the ApiParagraph object into the JSON object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/ToJSON/",
+  "examples": [
+    "// How do I export a paragraph's structure and content as a JSON object in a document?\n\n// Save a paragraph's formatting and text as structured data so it can be reconstructed later in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph\");\nlet json = paragraph.ToJSON(false, true);\nlet paragraphFromJSON = Api.FromJSON(json);\nparagraphFromJSON.SetBold(true);\ndoc.AddElement(0, paragraphFromJSON);"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the used numberings will be written to the JSON object or not.",
+      "name": "bWriteNumberings",
+      "type": "boolean"
+    },
+    {
+      "description": "Specifies if the used styles will be written to the JSON object or not.",
+      "name": "bWriteStyles",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "object"
+  },
+  "signature": "ToJSON(bWriteNumberings: boolean, bWriteStyles: boolean): object"
+}

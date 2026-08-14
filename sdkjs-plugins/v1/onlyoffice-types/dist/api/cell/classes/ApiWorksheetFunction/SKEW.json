@@ -1,0 +1,18 @@
+{
+  "description": "Returns the skewness of a distribution: a characterization of the degree of asymmetry of a distribution around its mean.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SKEW/",
+  "examples": [
+    "// Calculate the skewness of a distribution using the SKEW function.\n\n// Place values in cells and apply the function to display the asymmetry result.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet valueArr = [1, 0, 0, 0, 0, 1, 0, 0, 2, 3, 4, 5, 6, 8, 10, 12];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\nlet func = Api.WorksheetFunction;\nlet ans = func.SKEW(1, 0, 0, 0, 0, 1, 0, 0, 2, 3, 4, 5, 6, 8, 10, 12);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the skewness of a distribution will be returned.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "number | ApiName | number[] | ApiRange"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SKEW(args: number | ApiName | number[] | ApiRange): number"
+}

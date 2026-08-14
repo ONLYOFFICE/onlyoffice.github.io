@@ -1,0 +1,18 @@
+{
+  "description": "Sets the fill to the chart legend.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetLegendFill/",
+  "examples": [
+    "// How do I set a solid background color for the legend of a chart in a document?\n\n// Highlight the legend with a distinct fill so it stands out from the chart area in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nparagraph.AddDrawing(chart);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nfill = Api.CreateSolidFill(Api.RGB(128, 128, 128));\nchart.SetLegendFill(fill);"
+  ],
+  "params": [
+    {
+      "description": "The fill type used to fill the legend.",
+      "name": "oFill",
+      "type": "ApiFill"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetLegendFill(oFill: ApiFill): boolean"
+}

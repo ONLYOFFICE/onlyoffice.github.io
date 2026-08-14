@@ -1,0 +1,20 @@
+{
+  "description": "Sets the text color to the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetColor/",
+  "examples": [
+    "// How do I apply a specific color to the text of a paragraph in a document?\n\n// Give paragraph text a custom color to make it visually distinct in a document.\n\nconst doc = Api.GetDocument();\nconst firstParagraph = doc.GetElement(0);\nfirstParagraph.AddText('This is a paragraph with the font color set to orange.');\nfirstParagraph.SetColor(Api.HexColor('#FF6F3D'));\n\nconst color = Api.HexColor('ff6f3d');\nconst secondParagraph = Api.CreateParagraph();\nsecondParagraph.AddText('This text is in same orange color, but created using HexColor method.');\nsecondParagraph.SetColor(color);\ndoc.Push(secondParagraph);"
+  ],
+  "params": [
+    {
+      "description": "The text color.",
+      "name": "color",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetColor(color: ApiColor): ApiParagraph",
+  "since": "9.1.0"
+}

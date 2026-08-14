@@ -1,0 +1,18 @@
+{
+  "description": "Converts EMUs (English Metric Units) to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/EmusToPoints/",
+  "examples": [
+    "// How do I convert emus to points for sizing in a PDF?\n\n// Translate emu values to point measurements and show the result in a PDF.\n\nconst emus = 100;\nconst points = Api.EmusToPoints(emus);\n\nconst rgb = Api.RGB(50, 150, 250);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(emus + ' emus are equal to ' + points + ' points.');\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The number of EMUs to convert to points.",
+      "name": "emu",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "EmusToPoints(emu: number): number"
+}

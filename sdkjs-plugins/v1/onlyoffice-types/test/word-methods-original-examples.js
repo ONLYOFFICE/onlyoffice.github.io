@@ -23,6 +23,7 @@ var id = "5_556";
 var removeGuid = null;
 /** @type {any} */
 var Content;
+/** @param {string} _algorithm @param {string} _password */
 function setPasswordByFile(_algorithm, _password) {}
 
 // ============================================================================

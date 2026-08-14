@@ -1,0 +1,28 @@
+{
+  "description": "Returns the confidence interval for a population mean, using a normal distribution.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CONFIDENCE_NORM/",
+  "examples": [
+    "// What uncertainty level should you expect around your average in a spreadsheet?\n\n// Measure how confident you can be in your average calculation in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.CONFIDENCE_NORM(0.5, 57, 8);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The significance level used to compute the confidence level, a number greater than 0 and less than 1.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The population standard deviation for the data range and is assumed to be known. This value must be greater than 0.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The sample size.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CONFIDENCE_NORM(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

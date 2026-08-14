@@ -1,0 +1,18 @@
+{
+  "description": "Returns the hyperbolic cosine of a complex number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMCOSH/",
+  "examples": [
+    "// How do I find the hyperbolic cosine in a spreadsheet?\n\n// Calculate the hyperbolic cosine function for a complex number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMCOSH(\"-2+2.5i\"));"
+  ],
+  "params": [
+    {
+      "description": "A complex number expressed in the *x + yi* or *x + yj* form.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMCOSH(arg1: ApiRange | ApiName | number): number"
+}

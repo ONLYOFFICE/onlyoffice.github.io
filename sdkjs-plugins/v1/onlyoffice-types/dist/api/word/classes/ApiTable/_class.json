@@ -1,0 +1,9 @@
+{
+  "description": "Class representing a table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/",
+  "extends": [
+    "ApiTablePr"
+  ],
+  "methodCount": 71,
+  "sharded": true
+}

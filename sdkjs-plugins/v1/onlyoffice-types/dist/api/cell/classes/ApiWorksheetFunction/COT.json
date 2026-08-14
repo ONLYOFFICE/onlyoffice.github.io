@@ -1,0 +1,18 @@
+{
+  "description": "Returns the cotangent of an angle.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COT/",
+  "examples": [
+    "// What is the reciprocal tangent value in a spreadsheet?\n\n// Find the inverted tangent ratio for a given angle in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COT(0.785398));"
+  ],
+  "params": [
+    {
+      "description": "The angle in radians for which the cotangent will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "COT(arg1: ApiRange | ApiName | number): number"
+}

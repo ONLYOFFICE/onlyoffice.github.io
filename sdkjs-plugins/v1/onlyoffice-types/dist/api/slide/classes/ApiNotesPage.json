@@ -1,0 +1,77 @@
+{
+  "description": "Class representing a notes page.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/",
+  "methods": {
+    "AddBodyShapeText": {
+      "description": "Adds a text to the body shape of the current notes page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/AddBodyShapeText/",
+      "examples": [
+        "// How do I add text to the slide notes in a presentation?\n\n// Insert content into the notes page using the notes page object in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nconst notesPage = slide.GetNotesPage();\nslide.RemoveAllObjects();\n\nlet isAdded = false;\nif (notesPage) {\n\tisAdded = notesPage.AddBodyShapeText('This text was added using AddBodyShapeText method');\n}\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 150 * 36000, fill, stroke);\nshape.SetPosition(0, 3 * 36000);\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\n\nif (isAdded) {\n\tparagraph.AddText('Text was successfully added to the body shape.');\n} else {\n\tparagraph.AddText('Failed to add text to the body shape.');\n}\n\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The text to be added to the body shape.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if text was added successfully, otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "AddBodyShapeText(sText: string): boolean",
+      "since": "9.0.0"
+    },
+    "GetBodyShape": {
+      "description": "Returns a shape with the type=\"body\" attribute from the current notes page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/GetBodyShape/",
+      "examples": [
+        "// How do I get the main content area from the slide notes in a presentation?\n\n// Retrieve the notes page text container and check if it exists in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nconst notesPage = slide.GetNotesPage();\n\nlet message = 'No notes page available.';\n\nif (notesPage) {\n\tconst bodyShape = notesPage.GetBodyShape();\n\tif (bodyShape) {\n\t\tmessage = 'Body shape exists.';\n\t} else {\n\t\tmessage = 'No body shape available.';\n\t}\n}\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 150 * 36000, fill, stroke);\nshape.SetPosition(0, 3 * 36000);\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(message);\n\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiShape | null"
+      },
+      "signature": "GetBodyShape(): ApiShape | null",
+      "since": "9.0.0"
+    },
+    "GetBodyShapeText": {
+      "description": "Returns the text from the body shape of the current notes page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/GetBodyShapeText/",
+      "examples": [
+        "// How do I get the content of the slide notes in a presentation?\n\n// Retrieve text that was added to the notes page and display it in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst notesPage = slide.GetNotesPage();\nnotesPage.AddBodyShapeText('This text was added using AddBodyShapeText method to notes page of the first slide');\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 150 * 36000, fill, stroke);\nslide.AddObject(shape);\n\nconst text = notesPage.GetBodyShapeText();\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(text);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The text from the body shape.",
+        "type": "string"
+      },
+      "signature": "GetBodyShapeText(): string",
+      "since": "9.1.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiNotesPage class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine the class type of the notes page in a presentation?\n\n// Retrieve and display the class type of the slide notes in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst notesPage = slide.GetNotesPage();\nconst classType = notesPage.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 100 * 36000, fill, stroke);\nshape.SetPosition(0, 30 * 36000);\nslide.AddObject(shape);\n\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText('Class type of ApiNotesPage: ' + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"notesPage\""
+      },
+      "signature": "GetClassType(): \"notesPage\"",
+      "since": "9.0.0"
+    },
+    "GetTheme": {
+      "description": "Returns a theme of the current notes page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/GetTheme/",
+      "params": [],
+      "returns": {
+        "description": "Returns null if the notes page master or theme doesn't exist.",
+        "type": "ApiTheme | null"
+      },
+      "signature": "GetTheme(): ApiTheme | null",
+      "since": "9.3.0"
+    }
+  }
+}

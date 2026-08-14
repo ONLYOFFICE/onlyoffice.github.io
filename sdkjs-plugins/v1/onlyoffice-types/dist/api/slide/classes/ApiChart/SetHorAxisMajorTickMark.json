@@ -1,0 +1,18 @@
+{
+  "description": "Specifies major tick mark for the horizontal axis.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisMajorTickMark/",
+  "examples": [
+    "// How do I choose the appearance of tick marks on a chart's horizontal axis in a presentation?\n\n// Create a chart and apply a specific tick mark style to the horizontal axis in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst chart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetTitle(\"Financial Overview\", 13);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetHorAxisMajorTickMark(\"cross\");\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nlet stroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\nchart.SetMarkerFill(fill, 0, 0, true);\nchart.SetMarkerOutLine(stroke, 0, 0, true);\n\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nstroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\nchart.SetMarkerFill(fill, 1, 0, true);\nchart.SetMarkerOutLine(stroke, 1, 0, true);\n\nslide.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The type of tick mark appearance.",
+      "name": "sTickMark",
+      "type": "TickMark"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetHorAxisMajorTickMark(sTickMark: TickMark): boolean"
+}

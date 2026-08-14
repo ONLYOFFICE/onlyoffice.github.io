@@ -1,0 +1,19 @@
+{
+  "description": "Sets the background color to the format condition with the previously created color object.\nSets 'No Fill' when previously created color object is null.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetFillColor/",
+  "examples": [
+    "// How do I fill matching cells with a specific color when a formatting condition is met in a spreadsheet?\n\n// Color-code qualifying cells automatically through a conditional formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\n\nworksheet.GetRange(\"C1\").SetValue(\"Original color:\");\nworksheet.GetRange(\"C2\").SetValue(\"No Fill\");\n\nlet fillColor = Api.CreateColorFromRGB(255, 255, 0);\ncondition1.SetFillColor(fillColor);\n\nworksheet.GetRange(\"C4\").SetValue(\"New color:\");\nworksheet.GetRange(\"C5\").SetValue(\"Yellow background\");"
+  ],
+  "params": [
+    {
+      "description": "The color object that specifies the background color for the format condition.",
+      "name": "oColor",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetFillColor(oColor: ApiColor): void",
+  "since": "9.1.0"
+}

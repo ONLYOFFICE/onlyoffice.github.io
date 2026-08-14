@@ -1,0 +1,17 @@
+{
+  "description": "Sets the shadow to the current graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetShadow/",
+  "params": [
+    {
+      "description": "The shadow to apply, or null to remove the current shadow.",
+      "name": "shadow",
+      "type": "ApiShadow"
+    }
+  ],
+  "returns": {
+    "description": "returns false if the graphic object does not support shadow.",
+    "type": "boolean"
+  },
+  "signature": "SetShadow(shadow: ApiShadow): boolean",
+  "since": "9.5.0"
+}

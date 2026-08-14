@@ -1,0 +1,19 @@
+{
+  "description": "Sets the table wrapping style.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetWrappingStyle/",
+  "examples": [
+    "// How do I make text wrap around a table or keep a table on its own line in a document?\n\n// Place one table inline with text and another on a separate line to compare wrapping behavior in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text.\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table1 = Api.CreateTable(3, 3);\ntable1.SetWidth(\"percent\", 100);\ntable1.SetStyle(tableStyle);\ndoc.Push(table1);\ntable1.GetCell(0, 0).GetContent().GetElement(0).AddText(\"Table 1\");\nlet table2 = Api.CreateTable(3, 3);\ntable2.SetWidth(\"percent\", 100);\ntable2.SetStyle(tableStyle);\ndoc.Push(table2);\ntable2.GetCell(0, 0).GetContent().GetElement(0).AddText(\"Table 2\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"The tables were added to the paragraph. Table 1 is inline and Table 2 is not.\");\ntable1.SetWrappingStyle(true);\ntable2.SetWrappingStyle(false);"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the table is inline or not.",
+      "name": "isFlow",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetWrappingStyle(isFlow: boolean): boolean"
+}

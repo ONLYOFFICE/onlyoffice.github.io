@@ -1,0 +1,18 @@
+{
+  "description": "Sets the wrapping type of the current object (image, shape, chart). One of the following wrapping style types can be set:\n**\"inline\"** - the object is considered to be a part of the text, like a character, so when the text moves, the object moves as well. In this case the positioning options are inaccessible.\nIf one of the following styles is selected, the object can be moved independently of the text and positioned on the page exactly:\n**\"square\"** - the text wraps the rectangular box that bounds the object.\n**\"tight\"** - the text wraps the actual object edges.\n**\"through\"** - the text wraps around the object edges and fills in the open white space within the object.\n**\"topAndBottom\"** - the text is only above and below the object.\n**\"behind\"** - the text overlaps the object.\n**\"inFront\"** - the object overlaps the text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetWrappingStyle/",
+  "examples": [
+    "// How do I control how text flows around a drawing in a document?\n\n// Keep a fixed gap between surrounding text and all sides of a floating shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text (horizontally) is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\nparagraph.AddDrawing(drawing);"
+  ],
+  "params": [
+    {
+      "description": "The wrapping style type available for the object.",
+      "name": "sType",
+      "type": "\"inline\" | \"square\" | \"tight\" | \"through\" | \"topAndBottom\" | \"behind\" | \"inFront\""
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetWrappingStyle(sType: \"inline\" | \"square\" | \"tight\" | \"through\" | \"topAndBottom\" | \"behind\" | \"inFront\"): boolean"
+}

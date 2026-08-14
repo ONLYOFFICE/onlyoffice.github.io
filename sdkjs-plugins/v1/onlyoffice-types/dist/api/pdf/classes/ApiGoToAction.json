@@ -1,0 +1,93 @@
+{
+  "description": "Class representing a GoTo action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiGoToAction class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetClassType/",
+      "params": [],
+      "returns": {
+        "type": "\"goToAction\""
+      },
+      "signature": "GetClassType(): \"goToAction\""
+    },
+    "GetPage": {
+      "description": "Gets desctination page index",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetPage/",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetPage(): number"
+    },
+    "GetRect": {
+      "description": "Gets goto destination rect",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetRect/",
+      "params": [],
+      "returns": {
+        "type": "Rect"
+      },
+      "signature": "GetRect(): Rect"
+    },
+    "GetType": {
+      "description": "Gets goto type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetType/",
+      "params": [],
+      "returns": {
+        "type": "GoToType"
+      },
+      "signature": "GetType(): GoToType"
+    },
+    "GetZoom": {
+      "description": "Gets goto destination rect",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetRect/",
+      "params": [],
+      "returns": {
+        "type": "Rect"
+      },
+      "signature": "GetZoom(): Rect"
+    },
+    "SetPage": {
+      "description": "Sets desctination page index",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/SetPage/",
+      "params": [
+        {
+          "name": "page",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPage(page: number): boolean"
+    },
+    "SetRect": {
+      "description": "Sets goto destination rect",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/SetRect/",
+      "params": [
+        {
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRect(rect: Rect): boolean"
+    },
+    "SetType": {
+      "description": "Sets goto type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/SetType/",
+      "params": [
+        {
+          "name": "type",
+          "type": "GoToType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetType(type: GoToType): boolean"
+    }
+  }
+}

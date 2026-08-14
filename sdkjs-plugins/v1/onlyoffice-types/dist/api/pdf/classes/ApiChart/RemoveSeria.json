@@ -1,0 +1,18 @@
+{
+  "description": "Removes the specified series from the current chart.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/RemoveSeria/",
+  "examples": [
+    "// How do I remove one series from a chart in a PDF?\n\n// Take away a series by its index to simplify a chart in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetSize(150 * 36000, 65 * 36000);\nchart.SetPosition(608400, 1267200);\nchart.RemoveSeria(1);\nchart.SetTitle(\"The Estimated Costs series was removed from the current chart.\");\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 0, false);\npage.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The index of the chart series.",
+      "name": "nSeria",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "RemoveSeria(nSeria: number): boolean"
+}

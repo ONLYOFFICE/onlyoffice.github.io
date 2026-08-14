@@ -1,0 +1,23 @@
+{
+  "description": "Searches for a scope of a paragraph object. The search results are a collection of ApiRange objects.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/Search/",
+  "examples": [
+    "// How do I find a specific word within a paragraph in a document?\n\n// Highlight a search result by applying bold formatting to the found text in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. This text was added to the paragraph.\");\nlet searchResults = paragraph.Search(\"text\");\nsearchResults[0].SetBold(true);"
+  ],
+  "params": [
+    {
+      "description": "Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase parameter is ignored (control case sensitivity with the \"i\" flag instead).",
+      "name": "sText",
+      "type": "string | RegExp"
+    },
+    {
+      "description": "Case sensitive or not.",
+      "name": "isMatchCase",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange[]"
+  },
+  "signature": "Search(sText: string | RegExp, isMatchCase: boolean): ApiRange[]"
+}

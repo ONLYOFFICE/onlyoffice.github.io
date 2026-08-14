@@ -1,0 +1,18 @@
+{
+  "description": "Sets the x-axis values to all chart series. It is used with the scatter charts only.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetXValues/",
+  "examples": [
+    "// How do I set custom labels for the horizontal axis in a scatter chart in a PDF?\n\n// Replace the default horizontal axis values with custom text labels in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst chart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetSize(150 * 36000, 65 * 36000);\nchart.SetPosition(608400, 1267200);\nchart.SetXValues([\"2020\", \"2021\", \"2022\"]);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nlet stroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\nchart.SetMarkerFill(fill, 0, 0, true);\nchart.SetMarkerOutLine(stroke, 0, 0, true);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nstroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\nchart.SetMarkerFill(fill, 1, 0, true);\nchart.SetMarkerOutLine(stroke, 1, 0, true);\npage.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The array of the data which will be set to the x-axis data points.",
+      "name": "aValues",
+      "type": "string[]"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetXValues(aValues: string[]): boolean"
+}

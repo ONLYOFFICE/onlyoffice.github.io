@@ -1,0 +1,23 @@
+{
+  "description": "Returns a Range object that represents all the cells in the specified range or a specified cell.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCells/",
+  "examples": [
+    "// How do I pick out one cell from a larger range in a spreadsheet?\n\n// Target a single cell inside a multi-cell range and fill it with a highlight color.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:C3\");\nrange.GetCells(2, 1).SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+  ],
+  "params": [
+    {
+      "description": "The row number or the cell number (if only row is defined).",
+      "name": "row",
+      "type": "number"
+    },
+    {
+      "description": "The column number.",
+      "name": "col",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange"
+  },
+  "signature": "GetCells(row: number, col: number): ApiRange"
+}

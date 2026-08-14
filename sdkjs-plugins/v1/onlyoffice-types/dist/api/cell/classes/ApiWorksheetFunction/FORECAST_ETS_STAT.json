@@ -1,0 +1,46 @@
+{
+  "description": "Returns the requested statistic for the forecast.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FORECAST_ETS_STAT/",
+  "examples": [
+    "// Retrieve forecast statistics from time series data using dates and values arrays.\n\n// Calculate the forecast statistic using FORECAST_ETS_STAT.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet dates = [\"10/1/2017\", \"11/1/2017\", \"12/1/2017\", \"1/1/2018\", \"2/1/2018\"];\nlet numbers = [12558, 14356, 16345, 18678, 14227];\n\nfor (let i = 0; i < dates.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(dates[i]);\n}\nfor (let j = 0; j < numbers.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(numbers[j]);\n}\n\nlet range1 = worksheet.GetRange(\"B1:B5\");\nlet range2 = worksheet.GetRange(\"A1:A5\");\nworksheet.GetRange(\"B6\").SetValue(func.FORECAST_ETS_STAT(range1, range2, 4));"
+  ],
+  "params": [
+    {
+      "description": "A range or an array of numeric data that determines the historical values for which a new point will be predicted.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "A range of date/time values that correspond to the historical values.\rThe timeline range must be of the same size as the second argument. Date/time values must have a constant step between them and can't be zero.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "A number between 1 and 8, indicating which statistic will be returned for the calculated forecast.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional numeric value that specifies the length of the seasonal pattern. The default value of 1 indicates seasonality is detected automatically.\rThe 0 value means no seasonality.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional numeric value to handle missing values. The default value of 1 replaces missing values by interpolation, and 0 replaces them with zeros.",
+      "name": "arg5",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional numeric value to aggregate multiple values with the same time stamp.",
+      "name": "arg6",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "FORECAST_ETS_STAT(arg1: ApiRange | ApiName | number[], arg2: ApiRange | ApiName, arg3: ApiRange | ApiName | number, arg4?: ApiRange | ApiName | number, arg5?: ApiRange | ApiName | number, arg6?: ApiRange | ApiName | number): number"
+}

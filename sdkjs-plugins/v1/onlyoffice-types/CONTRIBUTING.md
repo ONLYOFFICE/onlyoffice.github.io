@@ -31,8 +31,11 @@ side of this is the [Versioning](README.md#versioning) table). To cut a release:
    prints e.g. `v9.5.0.150`. The **first three segments** are the package version - `9.5.0`. The
    fourth is a build number and is not part of it. A trailing `-<n>-g<sha>` (e.g.
    `v9.5.0.150-2-g586ec09e`) means the checkout is *n* commits past that tag: fine while developing,
-   but move to the exact tag before publishing, or the manifest will record a version the released
-   types were not actually generated from.
+   but not for a release, or the manifest records a version the types were not generated from.
+   `npm run check-release-sources` enforces this - it regenerates with `--require-clean-sources
+   --require-release-tag` and fails if any source checkout is dirty or sits off a tag. Run it
+   instead of `check-generated` when cutting a release; do not rely on remembering the rule, which
+   is how `9.5.0` came to record `v9.5.0.150-2-g586ec09e2d`.
 2. Regenerate (`npm run generate`) and run the checks below. `src/generated/generation-manifest.json`
    records the commit *and* that `describe` string, so the mapping from a published version back to
    its source is auditable later - do not hand-edit it.
@@ -69,8 +72,8 @@ npm run generate
 
 `sdkjs-forms` is expected next to `sdkjs` by default (`SDKJS_PATH/../sdkjs-forms`); override with
 `SDKJS_FORMS_PATH` or `--sdkjs-forms <path>` if it lives elsewhere. `--sdkjs <path>` works instead of
-the env var too. The generator records source commits and file hashes in
-`src/generated/generation-manifest.json`.
+the env var too. `DOCS_PATH` is required as well - see below. The generator records every source's
+commit, tag and file hashes in `src/generated/generation-manifest.json`.
 
 `npm run generate` only regenerates the Api object model (`src/generated/{word,cell,slide,pdf,forms}.ts`).
 The `Asc.plugin.executeMethod` surface (`src/generated/*-methods.ts` - `<Editor>MethodArgs`/
@@ -100,15 +103,40 @@ pattern DefinitelyTyped uses for undocumented corners of a real-world API; the g
 override in wherever it would otherwise emit a blind `export type X = unknown;` stub, and warns if an
 override is no longer needed (a later sdkjs checkout resolved the same name from a real source too).
 
-The legacy documentation snapshots are stored in `scripts/legacy-api/` and pinned to the commit
-recorded in `src/generated/generation-manifest.json`. Generation is fully offline and fails if a
-snapshot is missing or invalid. To update the snapshots, download the four JSON files from the new
-pinned commit, review the diff, regenerate the types, and commit the snapshots together with the
-updated manifest.
+Runnable examples come from a checkout of the documentation site, `DOCS_PATH` (or `--docs`),
+pointing at either an `api.onlyoffice.com` clone or an unpacked archive of it:
 
-sdkjs is the structural source of truth (classes, methods, params - it can't drift from the actual
-runtime), while the local `office-js-api-declarations` snapshots provide richer descriptions and
-runnable examples wherever a class/method name matches.
+```bash
+SDKJS_PATH=/path/to/sdkjs DOCS_PATH=/path/to/api.onlyoffice.com npm run generate
+```
+
+The page for a member is addressed by exactly the segments its `docsUrl` already carries -
+`site/docs/office-api/usage-api/<section>/<Class>/Methods/<Method>.md` - so the lookup is derived,
+not guessed (99.9% of existing `docsUrl`s resolve to a file). The generator takes the `## Example`
+section's fenced blocks and drops the site-only fence directive (```javascript editor-docx), the
+same way it used to drop `document-builder={...}`.
+
+This replaced 9 MB of vendored `scripts/legacy-api/*.json` snapshots, which were a pinned dump of
+the same site. They aged in place, covered four editors of five - PDF had no snapshot and therefore
+no examples at all - and reached 3003 members where the site covers 5839. Verified before deletion:
+with prose and `docsUrl` already coming from sdkjs, generating with and without the snapshots
+produced byte-identical output, so examples were the only thing left in them.
+
+The docs site trails sdkjs by several minor versions (its own CHANGELOG version is recorded in
+`generation-manifest.json`), which is why some members still have no example and ~10% of `@see`
+links 404 today. Both improve on their own as it catches up; neither is a defect to work around.
+
+sdkjs is the source of truth for structure (classes, methods, params - it can't drift from the
+actual runtime), for prose, and for the `@see` links. The documentation checkout contributes exactly
+one thing: the runnable examples, which genuinely cannot be regenerated from sdkjs - its JSDoc
+carries only a `@see office-js-api/Examples/{Editor}/<Class>/Methods/<Method>.js` *path*, and the
+code itself lives in the docs repository.
+
+That prose precedence was measured, not assumed. Across Word, 789 of the 845 methods documented in
+both sources have byte-identical prose once the example is removed - and of the 56 that differ,
+sdkjs is the longer, fresher text in 42, including three carrying `Breaking Change` / version notes
+the docs predate. Preferring the docs, as this once did, lost real information (`Api.CreateTable`'s
+9.4.0 parameter-order warning) to gain nothing measurable.
 
 ### Documentation carried by the types
 
@@ -119,8 +147,8 @@ in the editor shows what the reference site shows:
 /**
  * Adds a comment to the current document selection, or to the current word if no text is selected.
  *
- * @param sText - The comment text (required).
- * @param sAuthor - The author's name (optional).
+ * @param sText - The comment text.
+ * @param sAuthor - The author's name.
  * @returns Returns null if the comment was not added.
  *
  * @example
@@ -139,12 +167,27 @@ Everything in that block comes from the sources above, not from hand-written pro
 - the description, with the docs' inline HTML (`<b>"tile"</b>`) translated to markdown;
 - `@param`/`@returns` from the documented arguments and return value - param prose is merged by
   parameter *name*, since the snapshot occasionally documents a different arity than current sdkjs;
+- `@default`, from a parameter's `[name=value]` form;
 - `@since`, where sdkjs records the editor version a member first appeared in;
 - `@example`, from the docs' "## Try it" snippet (its `document-builder={...}` fence directive, which
   means nothing outside the docs site, is dropped);
-- `@see`, derived from the `@see office-js-api/Examples/<Editor>/<Class>/Methods/<Method>.js` path
-  already present in the JSDoc - the same three segments address the public reference page, so the
-  link is data-driven rather than guessed and can't point at a page that doesn't exist.
+- `@see`, built from the `@see office-js-api/Examples/{Editor}/<Class>/Methods/<Method>.js` path in
+  the source doclet. `{Editor}` is a literal placeholder that the docs pipeline fills in per editor,
+  and so does this generator - substituting it is what makes the link derive from sdkjs rather than
+  from the snapshot, which is why PDF has documentation links at all.
+
+Examples are emitted in full, uncapped, and `dist/api/` carries its own copy for JSON consumers.
+Dropping them from the declarations was tried and reverted: the case for it was that they are ~47%
+of the generated `.d.ts`, which is the wrong benchmark - TypeScript ships `lib.dom.d.ts` at 1.8 MB
+in every install, so declarations this size are unremarkable - and the "unreadable in a tooltip"
+problem is 5 members out of 2712 (18 exceed 2 KB; the median is 492 B). A size threshold would have
+split members into documented and undocumented by an arbitrary rule, which costs more than five
+awkward tooltips.
+
+Roughly 10% of `@see` links point at pages the documentation site has not published yet, because it
+trails sdkjs by several minor versions. They start resolving as it catches up. Do not filter them
+against a local docs checkout: that would drop correct links to pages about to exist, and make this
+package's output depend on the site's release cadence instead of the API's.
 
 ## Type-checking
 
@@ -263,12 +306,26 @@ A file with no top-level `import`/`export` is a TypeScript "script": every `inte
 to look like if it weren't wrapped in a module - unlike the modular npm package, it doesn't need
 installing, only loading as text.
 
+That global scope is shared with the DOM lib, so a name we happen to share with it stops being a
+separate type and becomes a declaration *merge* - harmless when the shapes agree, fatal when they
+don't. sdkjs's `ImageData` typedef (a base64 image: `src`, `width`, `height`) merged with the
+canvas `ImageData`, whose `width`/`height` are `readonly`, and every consumer compiling with
+`"lib": ["DOM"]` got `TS2687`. The bundle therefore renames such names on flatten -
+`AMBIENT_RENAMES` in the generator, currently just `ImageData` → `AscImageData` - and
+`assertNoDomCollisions` fails the build if a new shared name appears, so the next one has to be
+classified rather than silently shipped. `Window` is in `INTENTIONAL_DOM_MERGES`: merging with it
+is exactly how `declare global` adds `Asc` to the real `Window`.
+
+The rename lives in the ambient generator, not in the type generator: in the modular package each
+file is a module, so `ImageData` is local to it and collides with nothing. Renaming it there would
+be a breaking change for consumers importing the type, to fix a problem they don't have.
+
 ## Machine-readable index (AI agents, search, RAG)
 
-`dist/api-index.json` is the same API surface as the `.d.ts` files - every class, method, typedef,
-editor event and `executeMethod` - but as plain JSON for tools that don't parse TypeScript. Each
-entry carries its signature, markdown description, parameter list, return type, runnable `examples`,
-`since` version and the verified `docsUrl` (derived from the sources, never guessed):
+`dist/api/` is the same API surface as the `.d.ts` files - every class, method, typedef, editor event
+and `executeMethod` - but as JSON for tools that don't parse TypeScript. Each entry carries its
+signature, markdown description, parameter list, return type, runnable `examples`, `since` version
+and the verified `docsUrl` (derived from the sources, never guessed):
 
 ```json
 "AddComment": {
@@ -281,10 +338,10 @@ entry carries its signature, markdown description, parameter list, return type, 
 }
 ```
 
-Alongside `editors` there is a `runtime` section covering the other half of the API - how you write
-a plugin at all, rather than what you do inside a `callCommand` body. It is grouped as
-`runtime.plugin` (`AscPlugin`, `Asc`, events, buttons), `runtime.config` (the `config.json` types)
-and `runtime.services`, and carries each member's real declared signature plus its JSDoc:
+Alongside the per-editor directories there is `runtime.json`, covering the other half of the API -
+how you write a plugin at all, rather than what you do inside a `callCommand` body. It is grouped as
+`plugin` (`AscPlugin`, `Asc`, events, buttons), `config` (the `config.json` types) and `services`,
+and carries each member's real declared signature plus its JSDoc:
 
 ```json
 "callCommand": {
@@ -293,20 +350,40 @@ and `runtime.services`, and carries each member's real declared signature plus i
 }
 ```
 
-Three ways to get the file: read it from an installed copy of the package
-(`require.resolve("@onlyoffice/plugins-types/api-index.json")` - it's in the published `files`),
-fetch the git-tracked file from raw.githubusercontent.com, or regenerate it locally with
-`npm run generate`. Written by `generate-types.js` (object model + events),
-`generate-plugin-methods.js` (executeMethod surface) and `generate-runtime-index.js` (the `runtime`
-section); each replaces its own section wholesale, so removed members disappear instead of going
-stale.
+### Why it is a tree and not one file
+
+It used to be a single `dist/api-index.json`. That file reached **6.3 MB / ~1.6M tokens** - about
+eight times a typical model context - so the one consumer it was built for could not read it at all,
+only grep fragments out of pretty-printed JSON. The layout is now sized for how an agent actually
+works: load a small index, then read exactly one detail file.
+
+```text
+dist/api/index.json                     manifest: editors, counts, navigation (~1 KB)
+dist/api/<editor>/index.json            every member name -> signature (7k-41k tokens)
+dist/api/<editor>/classes/<Class>.json  full detail for one class
+dist/api/<editor>/classes/<Class>/      ...sharded per method when a class exceeds 80 KB,
+                                        with the class's own prose in _class.json
+dist/api/<editor>/{typedefs,events,executeMethods}.json
+dist/api/runtime.json                   AscPlugin/config/services
+```
+
+Sharding is a threshold rule rather than a special case: most classes are tiny (median 1.6 KB), but a
+few - `ApiWorksheetFunction` is the Excel formula library with 416 members - would otherwise be a
+single 100k-token read and reintroduce exactly the problem the split exists to solve.
+
+Three ways to get it: read it from an installed copy of the package
+(`@onlyoffice/plugins-types/api/<path>` - `dist/api` is in the published `files`), fetch the
+git-tracked files from raw.githubusercontent.com, or regenerate locally with `npm run generate`.
+Written by `generate-types.js` (object model + events), `generate-plugin-methods.js` (executeMethod
+surface) and `generate-runtime-index.js` (`runtime.json`); each replaces its own section wholesale,
+so removed members disappear instead of going stale.
 
 `generate-runtime-index.js` is the one generator that reads *this package's* declarations rather
 than sdkjs - via the TypeScript compiler API, so the published signature is the one we actually
 authored (`callCommand`'s serializability constraint, `executeMethod`'s overload chain) rather than
 a re-transcription of sdkjs's looser `@param {Function}` JSDoc. Because its inputs are hand-written
 files that change without a regeneration, it needs no `SDKJS_PATH` and has its own drift guard:
-`npm run check-runtime-index` regenerates and fails if the checked-in `dist/api-index.json` differs.
+`npm run check-runtime-index` regenerates and fails if the checked-in `dist/api/` differs.
 Run it after editing anything under `src/plugin/`, `src/config/` or `src/services/`. `AGENTS.md` in this directory condenses the
 plugin-authoring contract (`callCommand` serialization, `Asc.scope`, the three channels) plus these
 lookup pointers for coding agents.
@@ -356,12 +433,12 @@ onlyoffice-types/
 ├── schemas/
 │   └── config.schema.json
 ├── dist/                  # tracked in git: directly linkable build artifacts
-│   ├── api-index.json      # machine-readable API index (signatures, docs, examples) for agents/RAG
+│   ├── api/                # machine-readable API tree (compact indexes + per-class detail) for agents/RAG
 │   └── ambient/            # flattened no-import .d.ts bundle + per-editor Api addons (Monaco etc.)
 ├── scripts/
 │   ├── generate-types.js          # Api object model generator (src/generated/{word,cell,slide,pdf,forms}.ts)
 │   ├── generate-plugin-methods.js # executeMethod surface generator (src/generated/*-methods.ts)
-│   ├── api-index.js               # shared section-merging writer for dist/api-index.json
+│   ├── api-index.js               # writer for the dist/api tree (splitting + sharding)
 │   ├── generate-ambient-bundle.js
 │   ├── generate-config-schema.js
 │   ├── check-runtime-contract.js

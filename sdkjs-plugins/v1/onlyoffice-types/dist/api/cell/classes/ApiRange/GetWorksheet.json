@@ -1,0 +1,12 @@
+{
+  "description": "Returns the Worksheet object that represents the worksheet containing the specified range. It will be available in the read-only mode.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetWorksheet/",
+  "examples": [
+    "// How do I identify the sheet that contains a particular range in a spreadsheet?\n\n// Confirm the parent sheet of a range by checking its name in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:C1\");\nrange.SetValue(\"1\");\nlet oSheet = range.GetWorksheet();\nworksheet.GetRange(\"A3\").SetValue(\"Worksheet name: \" + oSheet.GetName());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiWorksheet"
+  },
+  "signature": "GetWorksheet(): ApiWorksheet"
+}

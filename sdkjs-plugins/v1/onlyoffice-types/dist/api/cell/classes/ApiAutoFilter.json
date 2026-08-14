@@ -1,0 +1,81 @@
+{
+  "description": "Class representing worksheet autofilters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/",
+  "methods": {
+    "ApplyFilter": {
+      "description": "Reapplies the AutoFilter to the worksheet using the existing filter criteria.\n\nThis method corresponds to the Excel AutoFilter.ApplyFilter behavior:\nit does not change the currently defined filter conditions; it only\nreevaluates which rows should be visible based on the active filters.\nIf no AutoFilter is defined for the worksheet, the method does nothing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/ApplyFilter/",
+      "examples": [
+        "// How do I update the filtered view after data has changed in a spreadsheet?\n\n// Refresh the visible rows without changing or removing the filter conditions in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare sample data\nworksheet.GetRange(\"A1\").SetValue(\"Score\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(20);\nworksheet.GetRange(\"A4\").SetValue(30);\nworksheet.GetRange(\"A5\").SetValue(40);\nworksheet.GetRange(\"A6\").SetValue(50);\n\n// Apply an AutoFilter that shows values greater than 25\nlet dataRange = worksheet.GetRange(\"A1:A6\");\ndataRange.SetAutoFilter(null);\ndataRange.SetAutoFilter(1, \">25\", \"xlOr\");\n\n// Change one value so that the filter result would be different\nworksheet.GetRange(\"A7\").SetValue(22);\n\n// Reapply the existing filter criteria on the worksheet\nlet autoFilter = worksheet.AutoFilter;\nautoFilter.ApplyFilter();\n\n// Explain in the sheet what we did\nworksheet.GetRange(\"C1\").SetValue(\"AutoFilter reapplied with ApplyFilter().\");\nworksheet.GetRange(\"C2\").SetValue(\"Filter: Score > 25\");\nworksheet.GetRange(\"C7\").SetValue(\"Updated value in A3 is now included by the filter.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "ApplyFilter(): void"
+    },
+    "GetFilterMode": {
+      "description": "Returns a value that indicates whether the worksheet has an AutoFilter applied.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/GetFilterMode/",
+      "examples": [
+        "// How do I tell if a filter is hiding rows on a sheet in a spreadsheet?\n\n// Confirm that at least one filtering rule is in effect and some data is being suppressed in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Initially: no AutoFilter\nlet autoFilter = worksheet.AutoFilter;\n\nworksheet.GetRange(\"C1\").SetValue(\"FilterMode before SetAutoFilter:\");\nworksheet.GetRange(\"C2\").SetValue(autoFilter.FilterMode);\n\n// Add data and apply an AutoFilter\nworksheet.GetRange(\"A1\").SetValue(\"Data\");\nworksheet.GetRange(\"A2\").SetValue(1);\nworksheet.GetRange(\"A3\").SetValue(2);\nworksheet.GetRange(\"A4\").SetValue(3);\nworksheet.GetRange(\"A5\").SetValue(4);\n\nlet dataRange = worksheet.GetRange(\"A1:A5\");\ndataRange.SetAutoFilter(1, \">2\", \"xlOr\");\n\n// Reacquire the AutoFilter and check FilterMode again\nautoFilter = worksheet.AutoFilter;\n\nworksheet.GetRange(\"C4\").SetValue(\"FilterMode after SetAutoFilter:\");\nworksheet.GetRange(\"C5\").SetValue(autoFilter.GetFilterMode());"
+      ],
+      "params": [],
+      "returns": {
+        "description": "true if the worksheet has an AutoFilter; otherwise, false.",
+        "type": "boolean"
+      },
+      "signature": "GetFilterMode(): boolean"
+    },
+    "GetFilters": {
+      "description": "Returns the array of ApiFilter objects that represents the filters applied to the AutoFilter range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/GetFilters/",
+      "examples": [
+        "// How do I read the criteria that each column filter is using in a spreadsheet?\n\n// Inspect what values or rules each column is being filtered by in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare sample data\nworksheet.GetRange(\"A1\").SetValue(\"Value\");\nworksheet.GetRange(\"A2\").SetValue(2);\nworksheet.GetRange(\"A3\").SetValue(5);\nworksheet.GetRange(\"A4\").SetValue(7);\nworksheet.GetRange(\"A5\").SetValue(9);\nworksheet.GetRange(\"A6\").SetValue(11);\n\n// Apply a values filter on column A\nlet dataRange = worksheet.GetRange(\"A1:A6\");\ndataRange.SetAutoFilter(1, [\"2\", \"5\", \"7\"], \"xlFilterValues\");\n\n// Get the AutoFilter and its filters collection\nlet autoFilter = worksheet.AutoFilter;\nlet filters = autoFilter.GetFilters();      // or autoFilter.Filters\n\nworksheet.GetRange(\"C1\").SetValue(\"Number of filters:\");\nworksheet.GetRange(\"C2\").SetValue(filters.length);\n\n// Show information about the first filter\nif (filters.length > 0) {\n    let f = filters[0];\n\n    worksheet.GetRange(\"C4\").SetValue(\"Operator:\");\n    worksheet.GetRange(\"C5\").SetValue(f.Operator);\n\n    worksheet.GetRange(\"C7\").SetValue(\"Criteria1:\");\n    worksheet.GetRange(\"C8\").SetValue(f.Criteria1.toString());\n\n    worksheet.GetRange(\"C10\").SetValue(\"Filter On:\");\n    worksheet.GetRange(\"C11\").SetValue(f.On);\n}"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFilter[]"
+      },
+      "signature": "GetFilters(): ApiFilter[]"
+    },
+    "GetParent": {
+      "description": "Returns the parent object for the AutoFilter — either the ApiWorksheet the filter is applied to,\nor the ApiListObject if the filter belongs to a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/GetParent/",
+      "examples": [
+        "// How do I get back to the sheet itself when I only have a filter reference in a spreadsheet?\n\n// Navigate from the filter back to the worksheet so you can work with other cells on the same sheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Create a simple AutoFilter\nworksheet.GetRange(\"A1\").SetValue(\"Name\");\nworksheet.GetRange(\"A2\").SetValue(\"Alice\");\nworksheet.GetRange(\"A3\").SetValue(\"Bob\");\nworksheet.GetRange(\"A4\").SetValue(\"Charlie\");\n\nlet range = worksheet.GetRange(\"A1:A4\");\nrange.SetAutoFilter();\n\n// Get the AutoFilter and its parent worksheet\nlet autoFilter = worksheet.AutoFilter;\nlet parentSheet = autoFilter.GetParent();   // or autoFilter.Parent\n\nworksheet.GetRange(\"C1\").SetValue(\"Parent worksheet name:\");\nworksheet.GetRange(\"C2\").SetValue(parentSheet.GetName());\n\nworksheet.GetRange(\"C4\").SetValue(\"AutoFilter is attached to this worksheet.\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The parent worksheet or table object.",
+        "type": "ApiWorksheet | ApiListObject"
+      },
+      "signature": "GetParent(): ApiWorksheet | ApiListObject"
+    },
+    "GetRange": {
+      "description": "Returns the ApiRange object that represents the AutoFilter range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/GetRange/",
+      "examples": [
+        "// How do I get the cell range that the current filter is applied to in a spreadsheet?\n\n// Identify the full span of rows and columns under filter control so you can format or read them in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare a header and some data\nworksheet.GetRange(\"A1\").SetValue(\"Product\");\nworksheet.GetRange(\"B1\").SetValue(\"Quantity\");\n\nworksheet.GetRange(\"A2\").SetValue(\"Apples\");\nworksheet.GetRange(\"B2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(\"Oranges\");\nworksheet.GetRange(\"B3\").SetValue(20);\nworksheet.GetRange(\"A4\").SetValue(\"Bananas\");\nworksheet.GetRange(\"B4\").SetValue(5);\n\n// Apply an AutoFilter to A1:B4\nlet dataRange = worksheet.GetRange(\"A1:B4\");\ndataRange.SetAutoFilter(2, \">8\", \"xlAnd\");\n\n// Get the AutoFilter range\nlet autoFilter = worksheet.AutoFilter;\nlet filterRange = autoFilter.GetRange();    // or autoFilter.Range\n\nworksheet.GetRange(\"D1\").SetValue(\"AutoFilter range address:\");\nif (filterRange !== null) {\n    worksheet.GetRange(\"D2\").SetValue(filterRange.GetAddress());\n    // Highlight the AutoFilter range\n    filterRange.SetFillColor(Api.CreateColorFromRGB(255, 255, 204));\n} else {\n    worksheet.GetRange(\"D2\").SetValue(\"No AutoFilter defined.\");\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The range to which the AutoFilter is applied; null if no AutoFilter is defined.",
+        "type": "ApiRange | null"
+      },
+      "signature": "GetRange(): ApiRange | null"
+    },
+    "ShowAllData": {
+      "description": "Clears all filters and displays all rows in the AutoFilter range.\n\nThis method corresponds to the Excel AutoFilter.ShowAllData behavior:\nit removes any active filtering from the worksheet while preserving the\nAutoFilter drop-downs on the header row. If no AutoFilter is defined\nfor the worksheet, the method does nothing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/ShowAllData/",
+      "examples": [
+        "// How do I unhide all filtered-out rows without removing the filter drop-downs in a spreadsheet?\n\n// Reveal all hidden rows while leaving the filter controls on the header intact in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare sample data\nworksheet.GetRange(\"A1\").SetValue(\"Amount\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(200);\nworksheet.GetRange(\"A4\").SetValue(50);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(40);\n\n// Apply an AutoFilter that hides small values\nlet dataRange = worksheet.GetRange(\"A1:A6\");\ndataRange.SetAutoFilter(1, \">100\", \"xlOr\");\n\nlet autoFilter = worksheet.AutoFilter;\nworksheet.GetRange(\"C1\").SetValue(\"FilterMode before ShowAllData:\");\nworksheet.GetRange(\"C2\").SetValue(autoFilter.FilterMode);\n\n// Now show all data (rows become visible, filter drop-down stays)\nautoFilter.ShowAllData();\n\nworksheet.GetRange(\"C4\").SetValue(\"ShowAllData() called.\");\nworksheet.GetRange(\"C5\").SetValue(\"Filter drop-down remains on header.\");\nworksheet.GetRange(\"C6\").SetValue(\"All rows in the AutoFilter range are visible.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "ShowAllData(): void"
+    }
+  }
+}

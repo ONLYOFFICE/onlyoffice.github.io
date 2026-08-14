@@ -1,0 +1,14 @@
+{
+  "description": "Returns the keep next value of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetKeepNext/",
+  "examples": [
+    "// How do I check if a paragraph is configured to stay with the next paragraph in a document?\n\n// Verify the keep-with-next setting before adjusting page break behavior around headings or captions.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetKeepNext(true);\nparagraph.AddText(\"This is a paragraph kept on the same page as the following paragraph.\");\nlet keepNext = paraPr.GetKeepNext();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Keep next: \" + keepNext);\ndoc.Push(paragraph2);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Returns _true_ if the paragraph is kept on the same page as the following paragraph,\r_false_ if it is not, or _undefined_ if the value is not set.",
+    "type": "boolean | undefined"
+  },
+  "signature": "GetKeepNext(): boolean | undefined",
+  "since": "9.4.0"
+}

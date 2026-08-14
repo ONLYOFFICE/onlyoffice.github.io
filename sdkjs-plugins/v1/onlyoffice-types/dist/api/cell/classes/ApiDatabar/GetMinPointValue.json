@@ -1,0 +1,14 @@
+{
+  "description": "Returns the value of the minimum value condition for the data bar.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetMinPointValue/",
+  "examples": [
+    "// How do I find out the number or threshold at the bottom end of a data bar in a spreadsheet?\n\n// Check what value marks the shortest bar to understand the data bar scale in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nlet minPointValue = dataBar.GetMinPointValue();\n\nworksheet.GetRange(\"C1\").SetValue(\"Min Point Value:\");\nworksheet.GetRange(\"C2\").SetValue(minPointValue || \"Auto\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The value of the minimum value condition.",
+    "type": "string | number | null"
+  },
+  "signature": "GetMinPointValue(): string | number | null",
+  "since": "9.1.0"
+}

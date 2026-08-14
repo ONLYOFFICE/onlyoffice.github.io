@@ -1,0 +1,23 @@
+{
+  "description": "Converts the ApiDrawing object into the JSON object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/ToJSON/",
+  "examples": [
+    "// How do I convert a drawing object to JSON in a document?\n\n// Duplicate a shape by exporting it to JSON and rebuilding it from that data in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 224, 204), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 164, 101), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nlet json = drawing.ToJSON(false, true);\nlet drawingFromJSON = Api.FromJSON(json);\nparagraph.AddDrawing(drawingFromJSON);"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the used numberings will be written to the JSON object or not.",
+      "name": "bWriteNumberings",
+      "type": "boolean"
+    },
+    {
+      "description": "Specifies if the used styles will be written to the JSON object or not.",
+      "name": "bWriteStyles",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "object"
+  },
+  "signature": "ToJSON(bWriteNumberings: boolean, bWriteStyles: boolean): object"
+}

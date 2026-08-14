@@ -1,0 +1,124 @@
+{
+  "description": "Class representing a presentation theme.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns the type of the ApiTheme class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify the type of a theme object in a presentation?\n\n// Retrieve the theme class type and display it as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst theme = master.GetTheme();\nconst type = theme.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type = \" + type);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"theme\""
+      },
+      "signature": "GetClassType(): \"theme\""
+    },
+    "GetColorScheme": {
+      "description": "Returns the color scheme of the current theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetColorScheme/",
+      "examples": [
+        "// How do I access the colors defined in a presentation's theme?\n\n// Retrieve the theme's color scheme and modify its colors in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst theme = master.GetTheme();\n\nconst clrScheme = theme.GetColorScheme();\nclrScheme.ChangeColor(0, Api.CreateRGBColor(255, 111, 61));\nclrScheme.ChangeColor(1, Api.CreateRGBColor(51, 51, 51));\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide.AddObject(chart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiThemeColorScheme"
+      },
+      "signature": "GetColorScheme(): ApiThemeColorScheme"
+    },
+    "GetFontScheme": {
+      "description": "Returns the font scheme of the current theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetFontScheme/",
+      "examples": [
+        "// How do I access the fonts defined in a presentation's theme?\n\n// Retrieve the font scheme and display its type information in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst theme = master.GetTheme();\nconst fontScheme = theme.GetFontScheme();\nconst type = fontScheme.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type = \" + type);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiThemeFontScheme"
+      },
+      "signature": "GetFontScheme(): ApiThemeFontScheme"
+    },
+    "GetFormatScheme": {
+      "description": "Returns the format scheme of the current theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetFormatScheme/",
+      "examples": [
+        "// How do I access the formatting styles defined in a presentation's theme?\n\n// Retrieve the format scheme and display its type information in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\nconst theme = master.GetTheme();\nconst formatScheme = theme.GetFormatScheme();\nconst type = formatScheme.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type = \" + type);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiThemeFormatScheme"
+      },
+      "signature": "GetFormatScheme(): ApiThemeFormatScheme"
+    },
+    "GetMaster": {
+      "description": "Returns the slide master of the current theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetMaster/",
+      "examples": [
+        "// How do I access the master slide template from a theme?\n\n// Retrieve the theme master and display its type information in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst theme = slide.GetTheme();\nconst master = theme.GetMaster();\nconst type = master.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type = \" + type);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if slide master doesn't exist.",
+        "type": "ApiMaster | null"
+      },
+      "signature": "GetMaster(): ApiMaster | null"
+    },
+    "SetColorScheme": {
+      "description": "Sets the color scheme to the current presentation theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetColorScheme/",
+      "examples": [
+        "// How do I change the colors used throughout a presentation?\n\n// Create a custom color scheme and assign it to the theme in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst colorScheme = Api.CreateThemeColorScheme([\n\tApi.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117),\n\tApi.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), Api.CreateRGBColor(128, 43, 43),\n\tApi.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222),\n\tApi.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)\n], \"New color scheme\");\n\nconst theme = slide.GetTheme();\ntheme.SetColorScheme(colorScheme);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide.AddObject(chart);"
+      ],
+      "params": [
+        {
+          "description": "Theme color scheme.",
+          "name": "oApiColorScheme",
+          "type": "ApiThemeColorScheme"
+        }
+      ],
+      "returns": {
+        "description": "return false if color scheme doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetColorScheme(oApiColorScheme: ApiThemeColorScheme): boolean"
+    },
+    "SetFontScheme": {
+      "description": "Sets the font scheme to the current presentation theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetFontScheme/",
+      "examples": [
+        "// How do I change the fonts used throughout a presentation?\n\n// Create a custom font scheme and assign it to the theme in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nconst theme = slide.GetTheme();\ntheme.SetFontScheme(fontScheme);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph with a new font scheme set.\");\ndocContent.Push(paragraph);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Theme font scheme.",
+          "name": "oApiFontScheme",
+          "type": "ApiThemeFontScheme"
+        }
+      ],
+      "returns": {
+        "description": "return false if font scheme doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetFontScheme(oApiFontScheme: ApiThemeFontScheme): boolean"
+    },
+    "SetFormatScheme": {
+      "description": "Sets the format scheme to the current presentation theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetFormatScheme/",
+      "examples": [
+        "// How do I change the formatting styles used throughout a presentation?\n\n// Create a custom format scheme and assign it to the theme in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\n\nconst oFill1 = Api.CreateRadialGradientFill([gs1, gs2]);\nconst oFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.RGB(255, 111, 61), Api.RGB(51, 51, 51));\nconst oFill3 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst oBgFill1 = Api.CreateRadialGradientFill([gs1, gs2]);\nconst oBgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.RGB(255, 111, 61), Api.RGB(51, 51, 51));\nconst oBgFill3 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst oStroke1 = Api.CreateStroke(1 * 36000, oFill1);\nconst oStroke2 = Api.CreateStroke(1 * 36000, oFill2);\nconst oStroke3 = Api.CreateStroke(1 * 36000, oFill3);\n\nconst formatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], \"New format scheme\");\nconst theme = slide.GetTheme();\ntheme.SetFormatScheme(formatScheme);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide.AddObject(chart);"
+      ],
+      "params": [
+        {
+          "description": "Theme format scheme.",
+          "name": "oApiFormatScheme",
+          "type": "ApiThemeFormatScheme"
+        }
+      ],
+      "returns": {
+        "description": "return false if format scheme doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetFormatScheme(oApiFormatScheme: ApiThemeFormatScheme): boolean"
+    }
+  }
+}

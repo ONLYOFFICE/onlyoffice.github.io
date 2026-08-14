@@ -1,0 +1,13 @@
+{
+  "description": "Returns the current paragraph where the cursor is located.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetCurrentParagraph/",
+  "examples": [
+    "// How do I get the active paragraph inside a document content container in a document?\n\n// Append text to whichever paragraph is focused without referencing it by index.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst rgb = Api.CreateRGBColor(100, 150, 200);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\n\nconst docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nconst newParagraph = Api.CreateParagraph();\nnewParagraph.AddText(\"This is a new paragraph inside the shape.\");\ndocContent.Push(newParagraph);\n\nconst currentParagraph = docContent.GetCurrentParagraph();\ncurrentParagraph.AddText(\"(Current paragraph detected!)\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph"
+  },
+  "signature": "GetCurrentParagraph(): ApiParagraph",
+  "since": "9.0.0"
+}

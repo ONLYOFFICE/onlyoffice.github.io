@@ -1,0 +1,43 @@
+{
+  "description": "Spicifies the show options for data labels.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetShowPointDataLabel/",
+  "examples": [
+    "// How do I control which label details appear on one specific data point in a document?\n\n// Target an individual point to show only the label information relevant to that value in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetShowPointDataLabel(1, 0, false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph.AddDrawing(chart);"
+  ],
+  "params": [
+    {
+      "description": "The series index from the array of the data used to build the chart from.",
+      "name": "nSeriesIndex",
+      "type": "number"
+    },
+    {
+      "description": "The point index from this series.",
+      "name": "nPointIndex",
+      "type": "number"
+    },
+    {
+      "description": "Whether to show or hide the source table column names used for the data which the chart will be build from.",
+      "name": "bShowSerName",
+      "type": "boolean"
+    },
+    {
+      "description": "Whether to show or hide the source table row names used for the data which the chart will be build from.",
+      "name": "bShowCatName",
+      "type": "boolean"
+    },
+    {
+      "description": "Whether to show or hide the chart data values.",
+      "name": "bShowVal",
+      "type": "boolean"
+    },
+    {
+      "description": "Whether to show or hide the percent for the data values (works with stacked chart types).",
+      "name": "bShowPercent",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetShowPointDataLabel(nSeriesIndex: number, nPointIndex: number, bShowSerName: boolean, bShowCatName: boolean, bShowVal: boolean, bShowPercent: boolean): boolean"
+}

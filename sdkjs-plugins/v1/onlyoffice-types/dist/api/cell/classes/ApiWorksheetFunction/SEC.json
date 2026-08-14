@@ -1,0 +1,18 @@
+{
+  "description": "Returns the secant of an angle.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SEC/",
+  "examples": [
+    "// Get the secant value of an angle using the SEC function.\n\n// Apply the function to calculate and display the result in a cell.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SEC(0.785398));"
+  ],
+  "params": [
+    {
+      "description": "The angle in radians for which the secant will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SEC(arg1: ApiRange | ApiName | number): number"
+}

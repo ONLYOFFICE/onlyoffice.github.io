@@ -1,0 +1,19 @@
+{
+  "description": "Sets the bar color for the data bar.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetBarColor/",
+  "examples": [
+    "// How do I change the color of data bars shown inside cells in a spreadsheet?\n\n// Make data bars stand out by assigning them a specific color that fits your design in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nworksheet.GetRange(\"C1\").SetValue(\"Before Color:\");\nworksheet.GetRange(\"C2\").SetValue(dataBar.GetBarColor() ? \"Set\" : \"None\");\n\nlet barColor = Api.CreateColorFromRGB(0, 128, 255);\ndataBar.SetBarColor(barColor);\n\nworksheet.GetRange(\"C3\").SetValue(\"After Color:\");\nworksheet.GetRange(\"C4\").SetValue(dataBar.GetBarColor() ? \"Set\" : \"None\");"
+  ],
+  "params": [
+    {
+      "description": "The ApiColor object representing the bar color.",
+      "name": "oColor",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetBarColor(oColor: ApiColor): void",
+  "since": "9.1.0"
+}

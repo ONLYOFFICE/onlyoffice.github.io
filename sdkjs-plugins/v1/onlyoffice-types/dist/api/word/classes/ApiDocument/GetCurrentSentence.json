@@ -1,0 +1,20 @@
+{
+  "description": "Returns the current sentence or part of the current sentence.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCurrentSentence/",
+  "examples": [
+    "// How do I read the full sentence the cursor is placed within in a document?\n\n// Display the sentence at a given cursor offset to verify text parsing behavior in a document.\n\nlet doc = Api.GetDocument();\nlet para1 = doc.GetElement(0);\nlet run = para1.AddText(\"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\");\nrun.MoveCursorToPos(80);\n\nlet para2 = Api.CreateParagraph();\npara2.AddText(\"The current sentence is \\\"\" + doc.GetCurrentSentence() + \"\\\"\");\ndoc.Push(para2);"
+  ],
+  "params": [
+    {
+      "description": "The desired part of the current sentence to be returned.",
+      "name": "sPart",
+      "optional": true,
+      "type": "\"before\" | \"after\""
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetCurrentSentence(sPart?: \"before\" | \"after\"): string",
+  "since": "8.2.0"
+}

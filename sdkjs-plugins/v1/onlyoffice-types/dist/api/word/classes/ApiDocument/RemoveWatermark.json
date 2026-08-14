@@ -1,0 +1,12 @@
+{
+  "description": "Removes a watermark from the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/RemoveWatermark/",
+  "examples": [
+    "// How do I add and then delete a watermark in a document?\n\n// Verify that a watermark can be cleared by checking the type before and after removal in a document.\n\nlet doc = Api.GetDocument();\nlet watermarkSettings = doc.GetWatermarkSettings();\nwatermarkSettings.SetType(\"text\");\nwatermarkSettings.SetText(\"Example\");\nlet textPr = watermarkSettings.GetTextPr();\ntextPr.SetFontFamily(\"Calibri\");\ntextPr.SetFontSize(-1);\ntextPr.SetDoubleStrikeout(true);\ntextPr.SetItalic(true);\ntextPr.SetBold(true);\ntextPr.SetUnderline(true);\ntextPr.SetColor(Api.RGB(0, 255, 0));\ntextPr.SetHighlight(\"blue\");\nwatermarkSettings.SetTextPr(textPr);\ndoc.SetWatermarkSettings(watermarkSettings);\nlet watermarkSettings2 = doc.GetWatermarkSettings();\nlet paragraph1 = Api.CreateParagraph();\nparagraph1.AddText(\"Watermark Type = \" + watermarkSettings2.GetType());\ndoc.Push(paragraph1);\ndoc.RemoveWatermark();\nlet watermarkSettings3 = doc.GetWatermarkSettings();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Watermark Type = \" + watermarkSettings3.GetType());\ndoc.Push(paragraph2);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "RemoveWatermark(): boolean"
+}

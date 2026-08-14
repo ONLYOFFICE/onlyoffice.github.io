@@ -1,0 +1,175 @@
+{
+  "description": "Class representing a path command.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/",
+  "methods": {
+    "GetHR": {
+      "description": "Returns the height radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetHR/",
+      "examples": [
+        "// How do I find out how tall the arc curve is in a custom shape in a document?\n\n// Retrieve the height radius value from an arc segment of a drawn shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nparagraph.AddText(\"Arc: WR=\" + cmd.GetWR() + \", HR=\" + cmd.GetHR());\nparagraph.AddText(\", Start=\" + cmd.GetStartAngle() + \", Sweep=\" + cmd.GetSweepAngle());\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetHR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetStartAngle": {
+      "description": "Returns the start angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetStartAngle/",
+      "examples": [
+        "// How do I find out where an arc starts rotating from in a custom shape in a document?\n\n// Retrieve the angle at which an arc segment begins within a drawn shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nparagraph.AddText(\"Arc: WR=\" + cmd.GetWR() + \", HR=\" + cmd.GetHR());\nparagraph.AddText(\", Start=\" + cmd.GetStartAngle() + \", Sweep=\" + cmd.GetSweepAngle());\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetStartAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetSweepAngle": {
+      "description": "Returns the sweep angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetSweepAngle/",
+      "examples": [
+        "// How do I find out how far around an arc extends in a custom shape in a document?\n\n// Retrieve the total angular span of an arc segment within a drawn shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nparagraph.AddText(\"Arc: WR=\" + cmd.GetWR() + \", HR=\" + cmd.GetHR());\nparagraph.AddText(\", Start=\" + cmd.GetStartAngle() + \", Sweep=\" + cmd.GetSweepAngle());\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetSweepAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the type of the current path command.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetType/",
+      "examples": [
+        "// How do I find out what type of move a specific step in a shape's outline represents in a document?\n\n// Identify the category of a drawing step within a shape's outline path in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"star5\", 80 * 36000, 80 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nparagraph.AddText(\"Command count: \" + path.GetCommandCount());\nlet cmd = path.GetCommand(0);\nparagraph.AddText(\", First command: \" + cmd.GetType() + \" (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "PathCommandType"
+      },
+      "signature": "GetType(): PathCommandType",
+      "since": "9.1.0"
+    },
+    "GetWR": {
+      "description": "Returns the width radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetWR/",
+      "examples": [
+        "// How do I find out how wide the arc curve is in a custom shape in a document?\n\n// Retrieve the width radius value from an arc segment of a drawn shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nparagraph.AddText(\"Arc: WR=\" + cmd.GetWR() + \", HR=\" + cmd.GetHR());\nparagraph.AddText(\", Start=\" + cmd.GetStartAngle() + \", Sweep=\" + cmd.GetSweepAngle());\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetWR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX": {
+      "description": "Returns the X coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetX/",
+      "examples": [
+        "// How do I find the left-right coordinate of a specific point along a shape's outline in a document?\n\n// Retrieve the horizontal coordinate from a drawing step within a shape's path in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"star5\", 80 * 36000, 80 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nparagraph.AddText(\"Command count: \" + path.GetCommandCount());\nlet cmd = path.GetCommand(0);\nparagraph.AddText(\", First command: \" + cmd.GetType() + \" (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX0": {
+      "description": "Returns the X coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetX0/",
+      "examples": [
+        "// How do I find the left-right coordinate of the first handle that shapes a curve in a document?\n\n// Retrieve the horizontal coordinate of the first guiding point of a curved path segment in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1); // cubic bezier command\nparagraph.AddText(\"Control points: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX1": {
+      "description": "Returns the X coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetX1/",
+      "examples": [
+        "// How do I find the left-right coordinate of the second handle that shapes a curve in a document?\n\n// Retrieve the horizontal coordinate of the second guiding point of a curved path segment in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1); // cubic bezier command\nparagraph.AddText(\"Control points: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX2": {
+      "description": "Returns the X coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetX2/",
+      "examples": [
+        "// How do I find the horizontal coordinate of the second control point of a curve segment in a document?\n\n// Inspect the curve geometry to confirm the horizontal offset of its second control handle in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1); // cubic bezier command\nparagraph.AddText(\"Control points: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX2(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY": {
+      "description": "Returns the Y coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetY/",
+      "examples": [
+        "// How do I find the vertical coordinate of the first drawing command on a shape in a document?\n\n// Inspect a shape's path to confirm the vertical position of its starting point in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"star5\", 80 * 36000, 80 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nparagraph.AddText(\"Command count: \" + path.GetCommandCount());\nlet cmd = path.GetCommand(0);\nparagraph.AddText(\", First command: \" + cmd.GetType() + \" (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY0": {
+      "description": "Returns the Y coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetY0/",
+      "examples": [
+        "// How do I find the vertical coordinate of the first control handle of a curve segment in a document?\n\n// Inspect the curve geometry to confirm the vertical offset of its first control handle in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1); // cubic bezier command\nparagraph.AddText(\"Control points: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY1": {
+      "description": "Returns the Y coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetY1/",
+      "examples": [
+        "// How do I find the vertical coordinate of the second control handle of a curve segment in a document?\n\n// Inspect the curve geometry to confirm the vertical offset of its second control handle in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1); // cubic bezier command\nparagraph.AddText(\"Control points: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY2": {
+      "description": "Returns the Y coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetY2/",
+      "examples": [
+        "// How do I find the vertical coordinate of the endpoint of a curve segment in a document?\n\n// Inspect the curve geometry to confirm the vertical position where the curve lands in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1); // cubic bezier command\nparagraph.AddText(\"Control points: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"(\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 80 * 36000, 80 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY2(): string | null",
+      "since": "9.1.0"
+    }
+  }
+}

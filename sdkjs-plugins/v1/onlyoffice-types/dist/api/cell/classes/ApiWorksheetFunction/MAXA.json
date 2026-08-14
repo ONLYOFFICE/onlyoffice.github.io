@@ -1,0 +1,18 @@
+{
+  "description": "Returns the largest value in a set of values. Does not ignore logical values and text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MAXA/",
+  "examples": [
+    "// How do I find the maximum value when my list contains mixed data types in a spreadsheet?\n\n// Get the highest value from a collection of mixed data in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:A5\").GetValue();\nlet func = Api.WorksheetFunction;\nlet maxA = func.MAX(23, 45, true, \"text\", 0.89);\nworksheet.GetRange(\"C1\").SetValue(maxA);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 values (number, text, logical value) for which the largest value will be returned.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, logical values and text representations of numbers, names, ranges, or arrays.",
+      "name": "args",
+      "type": "number | string | boolean | (number | string | boolean)[] | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MAXA(args: number | string | boolean | (number | string | boolean)[] | ApiRange | ApiName): number"
+}

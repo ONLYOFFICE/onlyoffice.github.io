@@ -2,24 +2,10 @@
 // Editor type: form
 
 export namespace Forms {
-  /**
-   * Types of all supported forms.
-   *
-   * @example
-   * ```js
-   * let copyTextForm = textForm.Copy();
-   * ```
-   */
+  /** Types of all supported forms. */
   export type ApiForm = ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm | ApiSignatureForm;
 
-  /**
-   * Axis position in the chart.
-   *
-   * @example
-   * ```js
-   * chart.SetAxieNumFormat("top", "0.00");
-   * ```
-   */
+  /** Axis position in the chart. */
   export type AxisPos = "top" | "bottom" | "right" | "left";
 
   /** The Base64 image string. */
@@ -31,11 +17,6 @@ export namespace Forms {
    * over the created shape surface.
    * **"stretch"** - if the image is smaller than the shape which is filled, the image will be stretched
    * to fit the created shape surface.
-   *
-   * @example
-   * ```js
-   * let blipFill = Api.CreateBlipFill("https://example.com/myimage.png", "tile");
-   * ```
    */
   export type BlipFillType = "tile" | "stretch";
 
@@ -58,22 +39,10 @@ export namespace Forms {
    * A border type which will be added to the document element.
    * **"none"** - no border will be added to the created element or the selected element side.
    * **"single"** - a single border will be added to the created element or the selected element side.
-   *
-   * @example
-   * ```js
-   * paraPr.SetBottomBorder("single", 24, 0, 0, 255, 0);
-   * ```
    */
   export type BorderType = "none" | "single";
 
-  /**
-   * Possible values for the caption label.
-   *
-   * @example
-   * ```js
-   * paragraph.AddCaptionCrossRef("Table", "pageNum", caption);
-   * ```
-   */
+  /** Possible values for the caption label. */
   export type CaptionLabel = "Table" | "Equation" | "Figure";
 
   /**
@@ -83,11 +52,6 @@ export namespace Forms {
    * **"Roman"** - upper Roman.
    * **"roman"** - lower Roman.
    * **"Arabic"** - arabic.
-   *
-   * @example
-   * ```js
-   * paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen");
-   * ```
    */
   export type CaptionNumberingFormat = "ALPHABETIC" | "alphabetic" | "Roman" | "roman" | "Arabic";
 
@@ -98,53 +62,19 @@ export namespace Forms {
    * **"colon"** - the ":" punctuation mark.
    * **"longDash"** - the "—" punctuation mark.
    * **"dash"** - the "-" punctuation mark.
-   *
-   * @example
-   * ```js
-   * paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen");
-   * ```
    */
   export type CaptionSep = "hyphen" | "period" | "colon" | "longDash" | "dash";
 
-  /**
-   * This type specifies the available chart types which can be used to create a new chart.
-   *
-   * @example
-   * ```js
-   * // ChartType used in text documents
-   * // The resulting chart will have a 'bar3D' type:
-   * var chart = Api.CreateChart("bar3D", [[200, 240, 280],[250, 260, 280]], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
-   *
-   * // ChartType used in spreadsheets
-   * // The resulting chart will have a 'bar3D' type:
-   * var chart = worksheet.AddChart("'Sheet1'!$A$1:$D$3", true, "bar3D", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);
-   * ```
-   */
+  /** This type specifies the available chart types which can be used to create a new chart. */
   export type ChartType = "ColumnClustered" | "ColumnStacked" | "ColumnStacked100" | "3DColumnClustered" | "3DColumnStacked" | "3DColumnStacked100" | "3DColumn" | "BarClustered" | "BarStacked" | "BarStacked100" | "3DBarClustered" | "3DBarStacked" | "3DBarStacked100" | "Line" | "LineStacked" | "LineStacked100" | "LineMarkers" | "LineMarkersStacked" | "LineMarkersStacked100" | "3DLine" | "Pie" | "3DPie" | "Doughnut" | "XYScatter" | "XYScatterLines" | "XYScatterLinesNoMarkers" | "XYScatterSmooth" | "XYScatterSmoothNoMarkers" | "StockHLC" | "StockOHLC" | "StockVHLC" | "StockVOHLC" | "Area" | "AreaStacked" | "AreaStacked100" | "Combo" | "ComboColumnClusteredLine" | "ComboColumnClusteredLineSecondaryAxis" | "Radar" | "RadarMarkers" | "RadarFilled" | "unknown";
 
   /** This type specifies the legacy chart type names which are kept for backward compatibility. */
   export type ChartTypeLegacy = "bar" | "barStacked" | "barStackedPercent" | "bar3D" | "barStacked3D" | "barStackedPercent3D" | "barStackedPercent3DPerspective" | "horizontalBar" | "horizontalBarStacked" | "horizontalBarStackedPercent" | "horizontalBar3D" | "horizontalBarStacked3D" | "horizontalBarStackedPercent3D" | "lineNormal" | "lineStacked" | "lineStackedPercent" | "lineNormalMarker" | "lineStackedMarker" | "lineStackedPerMarker" | "line3D" | "pie" | "pie3D" | "doughnut" | "scatter" | "scatterLine" | "scatterLineMarker" | "scatterSmooth" | "scatterSmoothMarker" | "stock" | "area" | "areaStacked" | "areaStackedPercent" | "comboCustom" | "comboBarLine" | "comboBarLineSecondary" | "radar" | "radarMarker" | "radarFilled" | "unknown";
 
-  /**
-   * Checkbox / radio button properties.
-   *
-   * @example
-   * ```js
-   * let checkBoxFormPr = {"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true};
-   * let checkBoxForm = Api.CreateCheckBoxForm(checkBoxFormPr);
-   * ```
-   */
+  /** Checkbox / radio button properties. */
   export type CheckBoxFormPr = FormPrBase | CheckBoxFormPrBase;
 
-  /**
-   * Specific checkbox / radio button properties.
-   *
-   * @example
-   * ```js
-   * let checkBoxFormPrBase = {"radio": true};
-   * let checkBoxForm = Api.CreateCheckBoxForm(checkBoxFormPrBase)
-   * ```
-   */
+  /** Specific checkbox / radio button properties. */
   export interface CheckBoxFormPrBase {
     /**
      * Specifies if the current checkbox is a radio button. In this case, the key parameter is considered
@@ -165,26 +95,10 @@ export namespace Forms {
     label: string;
   }
 
-  /**
-   * Combo box / dropdown list properties.
-   *
-   * @example
-   * ```js
-   * let comboBoxFormPr = {"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]};
-   * let comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPr);
-   * ```
-   */
+  /** Combo box / dropdown list properties. */
   export type ComboBoxFormPr = FormPrBase | ComboBoxFormPrBase;
 
-  /**
-   * Specific combo box / dropdown list properties.
-   *
-   * @example
-   * ```js
-   * let comboBoxFormPrBase = {"editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]};
-   * let comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPrBase);
-   * ```
-   */
+  /** Specific combo box / dropdown list properties. */
   export interface ComboBoxFormPrBase {
     /** Specifies if the combo box text can be edited. */
     editable: boolean;
@@ -205,42 +119,27 @@ export namespace Forms {
     items: (string | string[])[];
   }
 
-  /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
-   *
-   * @example
-   * ```js
-   * let commentsReport = oDocument.GetCommentsReport();
-   * ```
-   */
+  /** A dictionary of users and their comments. */
   export interface CommentReport {
     /** The comments grouped by username. */
     username?: UserComments;
   }
 
-  /**
-   * Record of one comment.
-   *
-   * @example
-   * ```js
-   * let commentsReport = oDocument.GetCommentsReport();
-   * ```
-   */
+  /** Represents a single comment record. */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -289,26 +188,10 @@ export namespace Forms {
   /** Available dash type for line. */
   export type DashType = "dash" | "dashDot" | "dot" | "lgDash" | "lgDashDot" | "lgDashDotDot" | "solid" | "sysDash" | "sysDashDot" | "sysDashDotDot" | "sysDot";
 
-  /**
-   * Date form properties.
-   *
-   * @example
-   * ```js
-   * let dateFormPr = {"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"};
-   * let dateForm = Api.CreateDateForm(dateFormPr);
-   * ```
-   */
+  /** The date form properties. */
   export type DateFormPr = FormPrBase | DateFormPrBase;
 
-  /**
-   * Specific date form properties.
-   *
-   * @example
-   * ```js
-   * let dateFormPrBase = {"format": "mm.dd.yyyy", "lang": "en-US"};
-   * let dateForm = Api.CreateDateForm(dateFormPrBase);
-   * ```
-   */
+  /** Specific date form properties. */
   export interface DateFormPrBase {
     /** The date format, ex: mm.dd.yyyy */
     format: string;
@@ -320,14 +203,7 @@ export namespace Forms {
     lang: string;
   }
 
-  /**
-   * Any valid element which can be added to the document structure.
-   *
-   * @example
-   * ```js
-   * doc.AddElement(paragraph);
-   * ```
-   */
+  /** Any valid element which can be added to the document structure. */
   export type DocumentElement = ApiParagraph | ApiTable | ApiBlockLvlSdt;
 
   /** Any valid drawing element. */
@@ -336,14 +212,7 @@ export namespace Forms {
   /** Available drawing element for grouping. */
   export type DrawingForGroup = ApiShape | ApiGroup | ApiImage | ApiChart;
 
-  /**
-   * This type specifies the type of drawing lock.
-   *
-   * @example
-   * ```js
-   * let lockValue = drawing.GetLockValue("noSelect");
-   * ```
-   */
+  /** This type specifies the type of drawing lock. */
   export type DrawingLockType = "noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles" | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox";
 
   /** English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs. */
@@ -352,14 +221,7 @@ export namespace Forms {
   /** The available fill types. */
   export type FillType = "solid" | "gradient" | "pattern" | "blip" | "nofill";
 
-  /**
-   * Form data.
-   *
-   * @example
-   * ```js
-   * let formData = {key: "CompanyName", value: "OnlyOffice", type: "text"};
-   * ```
-   */
+  /** Form data. */
   export interface FormData {
     /** The form key. If the current form is a radio button, then this field contains the group key. */
     key: string;
@@ -395,15 +257,7 @@ export namespace Forms {
     lang?: string;
   }
 
-  /**
-   * Form insertion specific properties.
-   *
-   * @example
-   * ```js
-   * let textFormInsertPr = {"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "Name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false, "placeholderFromSelection": true, "keepSelectedTextInForm": false};
-   * doc.InsertTextForm(textFormInsertPr);
-   * ```
-   */
+  /** Form insertion specific properties. */
   export interface FormInsertPr {
     /** Specifies if the currently selected text should be saved as a placeholder of the inserted form. */
     placeholderFromSelection?: boolean;
@@ -412,23 +266,15 @@ export namespace Forms {
     keepSelectedTextInForm?: boolean;
   }
 
-  /**
-   * Common form properties.
-   *
-   * @example
-   * ```js
-   * let formPrBase = {"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name"};
-   * let textForm = Api.CreateTextForm(formPrBase);
-   * ```
-   */
+  /** Common form properties. */
   export interface FormPrBase {
-    /** Form key. */
+    /** The form key. */
     key: string;
 
-    /** Form tip text. */
+    /** The form tip text. */
     tip: string;
 
-    /** Form tag. */
+    /** The form tag. */
     tag: string;
 
     /** The role to fill out form. */
@@ -437,28 +283,16 @@ export namespace Forms {
     /** Specifies if the form is required or not. */
     required: boolean;
 
-    /** Form placeholder text. */
+    /** The form placeholder text. */
     placeholder: string;
   }
 
-  /**
-   * The specific form type.
-   *
-   * @example
-   * ```js
-   * let formsData = doc.GetFormsData();
-   * ```
-   */
+  /** The specific form type. */
   export type FormSpecificType = "text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio" | "complex" | "signature";
 
   /**
    * Form type.
    * The available form types.
-   *
-   * @example
-   * ```js
-   * let formType = textForm.GetFormType();
-   * ```
    */
   export type FormType = "textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm" | "complexForm" | "dateForm" | "signatureForm";
 
@@ -477,11 +311,6 @@ export namespace Forms {
    * **"title"** - a header or footer which is applied to the title page.
    * **"even"** - a header or footer which can be applied to even pages to distinguish them from the odd
    * ones (which will be considered default).
-   *
-   * @example
-   * ```js
-   * let docContent = finalSection.RemoveHeader("title");
-   * ```
    */
   export type HdrFtrType = "default" | "title" | "even";
 
@@ -491,24 +320,10 @@ export namespace Forms {
   /** The line end type. */
   export type LineEndType = "none" | "arrow" | "diamond" | "oval" | "stealth" | "triangle";
 
-  /**
-   * Standard numeric format.
-   *
-   * @example
-   * ```js
-   * worksheet.GetRange("A1").SetOrientation("xlUpward");
-   * ```
-   */
+  /** Standard numeric format. */
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
 
-  /**
-   * The types of elements that can be added to the paragraph structure.
-   *
-   * @example
-   * ```js
-   * paragraph.AddElement(run, 0);
-   * ```
-   */
+  /** The types of elements that can be added to the paragraph structure. */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
 
   /**
@@ -523,36 +338,13 @@ export namespace Forms {
   /** The path fill type. */
   export type PathFillType = "none" | "norm" | "lighten" | "lightenLess" | "darken" | "darkenLess";
 
-  /**
-   * The available preset patterns which can be used for the fill.
-   *
-   * @example
-   * ```js
-   * let fill = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(0, 225, 0), Api.CreateRGBColor(255, 0, 0));
-   * ```
-   */
+  /** The available preset patterns which can be used for the fill. */
   export type PatternType = "cross" | "dashDnDiag" | "dashHorz" | "dashUpDiag" | "dashVert" | "diagBrick" | "diagCross" | "divot" | "dkDnDiag" | "dkHorz" | "dkUpDiag" | "dkVert" | "dnDiag" | "dotDmnd" | "dotGrid" | "horz" | "horzBrick" | "lgCheck" | "lgConfetti" | "lgGrid" | "ltDnDiag" | "ltHorz" | "ltUpDiag" | "ltVert" | "narHorz" | "narVert" | "openDmnd" | "pct10" | "pct20" | "pct25" | "pct30" | "pct40" | "pct5" | "pct50" | "pct60" | "pct70" | "pct75" | "pct80" | "pct90" | "plaid" | "shingle" | "smCheck" | "smConfetti" | "smGrid" | "solidDmnd" | "sphere" | "trellis" | "upDiag" | "vert" | "wave" | "wdDnDiag" | "wdUpDiag" | "weave" | "zigZag";
 
-  /**
-   * Picture form properties.
-   *
-   * @example
-   * ```js
-   * let pictureFormPr = {"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50};
-   * let pictureForm = Api.CreatePictureForm(pictureFormPr);
-   * ```
-   */
+  /** Picture form properties. */
   export type PictureFormPr = FormPrBase | PictureFormPrBase;
 
-  /**
-   * Specific picture form properties.
-   *
-   * @example
-   * ```js
-   * let comboBoxFormPr = {"editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]};
-   * let comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPr);
-   * ```
-   */
+  /** Specific picture form properties. */
   export interface PictureFormPrBase {
     /** The condition to scale an image in the picture form: "always", "never", "tooBig" or "tooSmall". */
     scaleFlag: ScaleFlag;
@@ -580,34 +372,13 @@ export namespace Forms {
     shiftY: percentage;
   }
 
-  /**
-   * 60000th of a degree (5400000 = 90 degrees).
-   *
-   * @example
-   * ```js
-   * let fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);
-   * ```
-   */
+  /** 60000th of a degree (5400000 = 90 degrees). */
   export type PositiveFixedAngle = number;
 
-  /**
-   * The 1000th of a percent (100000 = 100%).
-   *
-   * @example
-   * ```js
-   * let gs = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);
-   * ```
-   */
+  /** The 1000th of a percent (100000 = 100%). */
   export type PositivePercentage = number;
 
-  /**
-   * The available preset color names.
-   *
-   * @example
-   * ```js
-   * let schemeColor = Api.CreatePresetColor("lightYellow");
-   * ```
-   */
+  /** The available preset color names. */
   export type PresetColor = "aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate" | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" | "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" | "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" | "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" | "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" | "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" | "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" | "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" | "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen";
 
   /** The reading order (left-to-right or right-to-left). */
@@ -616,88 +387,37 @@ export namespace Forms {
   /**
    * The possible values for the base which the relative horizontal positioning of an object will be
    * calculated from.
-   *
-   * @example
-   * ```js
-   * drawing.SetHorAlign("page", "center");
-   * ```
    */
   export type RelFromH = "character" | "column" | "insideMargin" | "leftMargin" | "rightMargin" | "margin" | "outsideMargin" | "page";
 
   /**
    * The possible values for the base which the relative vertical positioning of an object will be
    * calculated from.
-   *
-   * @example
-   * ```js
-   * drawing.SetVerAlign("page", "center");
-   * ```
    */
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
-  /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
-   *
-   * @example
-   * ```js
-   * let reviewRecord = {
-   * 	"John Smith" : [{Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161},
-   * 					{Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}],
-   * 	"Mark Pottato" : [{Type: "ParaRem", Date: 1679941755942},
-   * 					{Type: "TextPr", Date: 1679941757832}]
-   * }
-   * ```
-   */
+  /** A dictionary of users and their review changes. */
   export interface ReviewReport {
     /** The review changes grouped by username. */
     username?: UserReviewChanges;
   }
 
-  /**
-   * Record of one review change.
-   *
-   * @example
-   * ```js
-   * let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161};
-   * let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189};
-   * let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942};
-   * let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832};
-   * let reviewRecord = {
-   * 	"John Smith" : [reviewReportRecord1, reviewReportRecord2],
-   * 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4]
-   * };
-   * ```
-   */
+  /** Represents a single review change record. */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
-  /**
-   * Review record type.
-   *
-   * @example
-   * ```js
-   * let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161};
-   * let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189};
-   * let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942};
-   * let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832};
-   * let reviewRecord = {
-   * 	"John Smith" : [reviewReportRecord1, reviewReportRecord2],
-   * 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4]
-   * };
-   * ```
-   */
+  /** Review record type. */
   export type ReviewReportRecordType = "TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown";
 
   /** The role properties. */
@@ -706,34 +426,13 @@ export namespace Forms {
     color: string;
   }
 
-  /**
-   * The condition to scale an image in the picture form.
-   *
-   * @example
-   * ```js
-   * pictureForm.SetScaleFlag("tooBig");
-   * ```
-   */
+  /** The condition to scale an image in the picture form. */
   export type ScaleFlag = "always" | "never" | "tooBig" | "tooSmall";
 
-  /**
-   * The available color scheme identifiers.
-   *
-   * @example
-   * ```js
-   * let schemeColor = Api.CreateSchemeColor("accent2");
-   * ```
-   */
+  /** The available color scheme identifiers. */
   export type SchemeColorId = "accent1" | "accent2" | "accent3" | "accent4" | "accent5" | "accent6" | "bg1" | "bg2" | "dk1" | "dk2" | "lt1" | "lt2" | "tx1" | "tx2";
 
-  /**
-   * The lock type of the content control.
-   *
-   * @example
-   * ```js
-   * inlineLvlSdt.SetLock("sdtContentLocked");
-   * ```
-   */
+  /** The lock type of the content control. */
   export type SdtLock = "unlocked" | "contentLocked" | "sdtContentLocked" | "sdtLocked";
 
   /**
@@ -773,14 +472,7 @@ export namespace Forms {
     rotateWithShape?: boolean;
   }
 
-  /**
-   * This type specifies the preset shape geometry that will be used for a shape.
-   *
-   * @example
-   * ```js
-   * let drawing = Api.CreateShape("diamond", 100 * 36000, 100 * 36000, fill, stroke);
-   * ```
-   */
+  /** This type specifies the preset shape geometry that will be used for a shape. */
   export type ShapeType = "accentBorderCallout1" | "accentBorderCallout2" | "accentBorderCallout3" | "accentCallout1" | "accentCallout2" | "accentCallout3" | "actionButtonBackPrevious" | "actionButtonBeginning" | "actionButtonBlank" | "actionButtonDocument" | "actionButtonEnd" | "actionButtonForwardNext" | "actionButtonHelp" | "actionButtonHome" | "actionButtonInformation" | "actionButtonMovie" | "actionButtonReturn" | "actionButtonSound" | "arc" | "bentArrow" | "bentConnector2" | "bentConnector3" | "bentConnector4" | "bentConnector5" | "bentUpArrow" | "bevel" | "blockArc" | "borderCallout1" | "borderCallout2" | "borderCallout3" | "bracePair" | "bracketPair" | "callout1" | "callout2" | "callout3" | "can" | "chartPlus" | "chartStar" | "chartX" | "chevron" | "chord" | "circularArrow" | "cloud" | "cloudCallout" | "corner" | "cornerTabs" | "cube" | "curvedConnector2" | "curvedConnector3" | "curvedConnector4" | "curvedConnector5" | "curvedDownArrow" | "curvedLeftArrow" | "curvedRightArrow" | "curvedUpArrow" | "decagon" | "diagStripe" | "diamond" | "dodecagon" | "donut" | "doubleWave" | "downArrow" | "downArrowCallout" | "ellipse" | "ellipseRibbon" | "ellipseRibbon2" | "flowChartAlternateProcess" | "flowChartCollate" | "flowChartConnector" | "flowChartDecision" | "flowChartDelay" | "flowChartDisplay" | "flowChartDocument" | "flowChartExtract" | "flowChartInputOutput" | "flowChartInternalStorage" | "flowChartMagneticDisk" | "flowChartMagneticDrum" | "flowChartMagneticTape" | "flowChartManualInput" | "flowChartManualOperation" | "flowChartMerge" | "flowChartMultidocument" | "flowChartOfflineStorage" | "flowChartOffpageConnector" | "flowChartOnlineStorage" | "flowChartOr" | "flowChartPredefinedProcess" | "flowChartPreparation" | "flowChartProcess" | "flowChartPunchedCard" | "flowChartPunchedTape" | "flowChartSort" | "flowChartSummingJunction" | "flowChartTerminator" | "foldedCorner" | "frame" | "funnel" | "gear6" | "gear9" | "halfFrame" | "heart" | "heptagon" | "hexagon" | "homePlate" | "horizontalScroll" | "irregularSeal1" | "irregularSeal2" | "leftArrow" | "leftArrowCallout" | "leftBrace" | "leftBracket" | "leftCircularArrow" | "leftRightArrow" | "leftRightArrowCallout" | "leftRightCircularArrow" | "leftRightRibbon" | "leftRightUpArrow" | "leftUpArrow" | "lightningBolt" | "line" | "lineInv" | "mathDivide" | "mathEqual" | "mathMinus" | "mathMultiply" | "mathNotEqual" | "mathPlus" | "moon" | "nonIsoscelesTrapezoid" | "noSmoking" | "notchedRightArrow" | "octagon" | "parallelogram" | "pentagon" | "pie" | "pieWedge" | "plaque" | "plaqueTabs" | "plus" | "quadArrow" | "quadArrowCallout" | "rect" | "ribbon" | "ribbon2" | "rightArrow" | "rightArrowCallout" | "rightBrace" | "rightBracket" | "round1Rect" | "round2DiagRect" | "round2SameRect" | "roundRect" | "rtTriangle" | "smileyFace" | "snip1Rect" | "snip2DiagRect" | "snip2SameRect" | "snipRoundRect" | "squareTabs" | "star10" | "star12" | "star16" | "star24" | "star32" | "star4" | "star5" | "star6" | "star7" | "star8" | "straightConnector1" | "stripedRightArrow" | "sun" | "swooshArrow" | "teardrop" | "trapezoid" | "triangle" | "upArrowCallout" | "upDownArrow" | "upDownArrow" | "upDownArrowCallout" | "uturnArrow" | "verticalScroll" | "wave" | "wedgeEllipseCallout" | "wedgeRectCallout" | "wedgeRoundRectCallout";
 
   /** The shading information object. */
@@ -792,14 +484,7 @@ export namespace Forms {
     Color: ApiColor;
   }
 
-  /**
-   * A shade type which can be added to the document element.
-   *
-   * @example
-   * ```js
-   * tablePr.SetShd("clear", 0, 255, 0, false);
-   * ```
-   */
+  /** A shade type which can be added to the document element. */
   export type ShdType = "nil" | "clear";
 
   /**
@@ -814,24 +499,10 @@ export namespace Forms {
    */
   export type SizeRelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page";
 
-  /**
-   * The style type used for the document element.
-   *
-   * @example
-   * ```js
-   * let normalStyle = doc.GetDefaultStyle("paragraph");
-   * ```
-   */
+  /** The style type used for the document element. */
   export type StyleType = "paragraph" | "table" | "run" | "numbering";
 
-  /**
-   * Custom tab types.
-   *
-   * @example
-   * ```js
-   * paraPr.SetTabs([1000, 1500, 3000], ["center", "left", "right"]);
-   * ```
-   */
+  /** Custom tab types. */
   export type TabJc = "clear" | "left" | "right" | "center";
 
   /** A paragraph tab stop. */
@@ -888,11 +559,6 @@ export namespace Forms {
    * **"bandedRowEven"** - specifies that the table formatting is applied to even numbered groupings of
    * columns.
    * **"wholeTable"** - specifies that the conditional formatting is applied to the whole table.
-   *
-   * @example
-   * ```js
-   * tableStyle.GetConditionalTableStyle("topLeftCell").GetTableCellPr().SetShd("clear", 255, 0, 0);
-   * ```
    */
   export type TableStyleOverrideType = "topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" | "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" | "wholeTable";
 
@@ -904,11 +570,6 @@ export namespace Forms {
    * **"nul"** - sets the table or table cell width to be of a zero value.
    * **"percent"** - sets the table or table cell width to be measured in percent to the parent
    * container.
-   *
-   * @example
-   * ```js
-   * tableCell.SetWidth("twips", 2000);
-   * ```
    */
   export type TableWidth = "auto" | "twips" | "nul" | "percent";
 
@@ -924,37 +585,13 @@ export namespace Forms {
     value?: string;
   }
 
-  /**
-   * Properties for inserting a text field.
-   *
-   * @example
-   * ```js
-   * let textFormInsertPr = {"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "Name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false, "placeholderFromSelection": true, "keepSelectedTextInForm": false};
-   * doc.InsertTextForm(textFormInsertPr);
-   * ```
-   */
+  /** Properties for inserting a text field. */
   export type TextFormInsertPr = FormPrBase | TextFormPrBase | FormInsertPr;
 
-  /**
-   * Text field properties.
-   *
-   * @example
-   * ```js
-   * let textFormPr = {"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false};
-   * let textForm = Api.CreateTextForm(textFormPr);
-   * ```
-   */
+  /** Text field properties. */
   export type TextFormPr = FormPrBase | TextFormPrBase;
 
-  /**
-   * Specific text field properties.
-   *
-   * @example
-   * ```js
-   * let textFormPrBase = {"comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false};
-   * let textForm = Api.CreateTextForm(textFormPrBase);
-   * ```
-   */
+  /** Specific text field properties. */
   export interface TextFormPrBase {
     /**
      * Specifies if the text field should be a comb of characters with the same cell width. The maximum
@@ -981,14 +618,7 @@ export namespace Forms {
     autoFit: boolean;
   }
 
-  /**
-   * Text transform type.
-   *
-   * @example
-   * ```js
-   * let textArt = Api.CreateWordArt(oTextPr, "onlyoffice", "textArchUp", fill, stroke, 0, 150 * 36000, 50 * 36000);
-   * ```
-   */
+  /** Text transform type. */
   export type TextTransform = "textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown" | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour" | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop" | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop" | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted" | "textWave1" | "textWave2" | "textWave4" | "textNoShape";
 
   /**
@@ -999,22 +629,10 @@ export namespace Forms {
    * values.
    * **"high"** - sets the position of the selected tick labels in the part of the chart with higher
    * values.
-   *
-   * @example
-   * ```js
-   * chart.SetVertAxisTickLabelPosition("nextTo");
-   * ```
    */
   export type TickLabelPosition = "none" | "nextTo" | "low" | "high";
 
-  /**
-   * The type of tick mark appearance.
-   *
-   * @example
-   * ```js
-   * chart.SetVertAxisMajorTickMark("cross");
-   * ```
-   */
+  /** The type of tick mark appearance. */
   export type TickMark = "cross" | "in" | "none" | "out";
 
   /** Options for converting document content to an HTML string. */
@@ -1044,19 +662,12 @@ export namespace Forms {
   /**
    * Table of contents properties which specify whether to generate the table of contents from the
    * outline levels or the specified styles.
-   *
-   * @example
-   * ```js
-   * let tocBuildFromPr = {"OutlineLvls": 9};
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": tocBuildFromPr, "TocStyle": "standard"};
-   * doc.AddTableOfContents(tocPr);
-   * ```
    */
   export interface TocBuildFromPr {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -1071,25 +682,10 @@ export namespace Forms {
    * **"dot"** - "......."
    * **"dash"** - "-------"
    * **"underline"** - "_______"
-   *
-   * @example
-   * ```js
-   * let tocLeader = "dot";
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": tocLeader, "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"};
-   * doc.AddTableOfContents(tocPr);
-   * ```
    */
   export type TocLeader = "dot" | "dash" | "underline" | "none";
 
-  /**
-   * Table of contents properties.
-   *
-   * @example
-   * ```js
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"};
-   * doc.AddTableOfContents(tocPr);
-   * ```
-   */
+  /** Table of contents properties. */
   export interface TocPr {
     /** Specifies whether to show page numbers in the table of contents. */
     ShowPageNums?: boolean;
@@ -1110,28 +706,10 @@ export namespace Forms {
     TocStyle?: TocStyle;
   }
 
-  /**
-   * Possible values for the table of contents style.
-   *
-   * @example
-   * ```js
-   * let tocStyle = "standard";
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": tocStyle};
-   * doc.AddTableOfContents(tocPr);
-   * ```
-   */
+  /** Possible values for the table of contents style. */
   export type TocStyle = "simple" | "online" | "standard" | "modern" | "classic";
 
-  /**
-   * Table of contents style levels.
-   *
-   * @example
-   * ```js
-   * let tocStyleLvl = [{Name: "Heading 1", Lvl: 2}, {Name: "Heading 2", Lvl: 3}];
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"StylesLvls": tocStyleLvl}, "TocStyle": "standard"};
-   * doc.AddTableOfContents(tocPr);
-   * ```
-   */
+  /** Table of contents style levels. */
   export interface TocStyleLvl {
     /** Style name (for example, "Heading 1"). */
     Name: string;
@@ -1140,15 +718,7 @@ export namespace Forms {
     Lvl: number;
   }
 
-  /**
-   * Table of figures properties.
-   *
-   * @example
-   * ```js
-   * let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": "distinctive"};
-   * doc.AddTableOfFigures(tofPr);
-   * ```
-   */
+  /** Table of figures properties. */
   export interface TofPr {
     /** Specifies whether to show page numbers in the table of figures. */
     ShowPageNums?: boolean;
@@ -1175,16 +745,7 @@ export namespace Forms {
     TofStyle?: TofStyle;
   }
 
-  /**
-   * Possible values for the table of figures style.
-   *
-   * @example
-   * ```js
-   * let tofStyle = "distinctive";
-   * let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": tofStyle};
-   * doc.AddTableOfFigures(tofPr);
-   * ```
-   */
+  /** Possible values for the table of figures style. */
   export type TofStyle = "simple" | "online" | "classic" | "distinctive" | "centered" | "formal";
 
   /** Represents a user's comment history. */
@@ -1202,32 +763,13 @@ export namespace Forms {
   /**
    * The available text vertical alignment (used to align text in a shape with a placement for text
    * inside it).
-   *
-   * @example
-   * ```js
-   * drawing.SetVerticalTextAlign("top");
-   * ```
    */
   export type VerticalTextAlign = "top" | "center" | "bottom";
 
-  /**
-   * The watermark direction.
-   *
-   * @example
-   * ```js
-   * watermarkSettings.SetDirection("clockwise45");
-   * ```
-   */
+  /** The watermark direction. */
   export type WatermarkDirection = "horizontal" | "clockwise45" | "counterclockwise45" | "clockwise90" | "counterclockwise90";
 
-  /**
-   * The watermark type.
-   *
-   * @example
-   * ```js
-   * watermarkSettings.SetType("text");
-   * ```
-   */
+  /** The watermark type. */
   export type WatermarkType = "none" | "text" | "image";
 
   /**
@@ -1254,25 +796,10 @@ export namespace Forms {
    * "4.1.1" you refer to "1" only);
    * **"fullCtxParaNum** - the full paragraph number, e.g. "4.1.1";
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
-   *
-   * @example
-   * ```js
-   * paragraph.AddBookmarkCrossRef("pageNum", bookmark);
-   * ```
    */
   export type bookmarkRefTo = "text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow";
 
-  /**
-   * A numeric value from 0 to 255.
-   *
-   * @example
-   * ```js
-   * // The resulting color is green, the bytes are measured in decimal numbers:
-   * let rgbColorGreen = Api.CreateRGBColor(0, 255, 0);
-   * // The resulting color is red, the bytes are measured in hexadecimal numbers:
-   * let rgbColorRed = Api.CreateRGBColor(0xff, 0, 0);
-   * ```
-   */
+  /** A numeric value from 0 to 255. */
   export type byte = number;
 
   /**
@@ -1282,11 +809,6 @@ export namespace Forms {
    * **"captionText"** - the caption text only;
    * **"pageNum"** - the page number containing the referenced object;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
-   *
-   * @example
-   * ```js
-   * paragraph.AddCaptionCrossRef("table", "pageNum", caption);
-   * ```
    */
   export type captionRefTo = "entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow";
 
@@ -1297,11 +819,6 @@ export namespace Forms {
    * **"aboveBelow"** - the words "above" or "below" depending on the item position;
    * **"formEndnoteNum"** - the form number formatted as an endnote. The numbering of the actual endnotes
    * is not affected.
-   *
-   * @example
-   * ```js
-   * paragraph.AddEndnoteCrossRef("pageNum", endnoteParagraph);
-   * ```
    */
   export type endnoteRefTo = "endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum";
 
@@ -1312,11 +829,6 @@ export namespace Forms {
    * **"aboveBelow"** - the words "above" or "below" depending on the position of the item;
    * **"formFootnoteNum"** - the form number formatted as a footnote. The numbering of the actual
    * footnotes is not affected.
-   *
-   * @example
-   * ```js
-   * paragraph.AddFootnoteCrossRef("pageNum", footnoteParagraph);
-   * ```
    */
   export type footnoteRefTo = "footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum";
 
@@ -1330,52 +842,19 @@ export namespace Forms {
    * instead of "4.B" you receive "B" only;
    * **"fullCtxHeadingNum"** - the full heading number even if the cursor pointer is in the same section;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
-   *
-   * @example
-   * ```js
-   * paragraph.AddHeadingCrossRef("pageNum", headingParagraph);
-   * ```
    */
   export type headingRefTo = "text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow";
 
-  /**
-   * Available highlight colors.
-   *
-   * @example
-   * ```js
-   * paragraph.SetHighlight("green");
-   * ```
-   */
+  /** Available highlight colors. */
   export type highlightColor = "black" | "blue" | "cyan" | "green" | "magenta" | "red" | "yellow" | "white" | "darkBlue" | "darkCyan" | "darkGreen" | "darkMagenta" | "darkRed" | "darkYellow" | "darkGray" | "lightGray" | "none";
 
-  /**
-   * Half-points (2 half-points = 1 point).
-   *
-   * @example
-   * ```js
-   * textPr.SetFontSize(22);
-   * ```
-   */
+  /** Half-points (2 half-points = 1 point). */
   export type hps = number;
 
-  /**
-   * 240ths of a line.
-   *
-   * @example
-   * ```js
-   * paraPr.SetSpacingLine(240, "auto");
-   * ```
-   */
+  /** 240ths of a line. */
   export type line240 = number;
 
-  /**
-   * 1 millimetre equals 1/10th of a centimetre.
-   *
-   * @example
-   * ```js
-   * textForm.SetCellWidth(7);
-   * ```
-   */
+  /** 1 millimetre equals 1/10th of a centimetre. */
   export type mm = number;
 
   /**
@@ -1388,52 +867,19 @@ export namespace Forms {
    * **"text"** - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to
    * "Terms and Conditions" only;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
-   *
-   * @example
-   * ```js
-   * paragraph.AddNumberedCrossRef("pageNum", numberedParagraph, true, true);
-   * ```
    */
   export type numberedRefTo = "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow";
 
-  /**
-   * Value from 0 to 100.
-   *
-   * @example
-   * ```js
-   * pictureForm.SetPicturePosition(70, 70);
-   * ```
-   */
+  /** Value from 0 to 100. */
   export type percentage = number;
 
-  /**
-   * A point.
-   *
-   * @example
-   * ```js
-   * paraPr.SetBottomBorder("single", 24, 1, 0, 255, 0);
-   * ```
-   */
+  /** A point. */
   export type pt = number;
 
-  /**
-   * Eighths of a point (24 eighths of a point = 3 points).
-   *
-   * @example
-   * ```js
-   * paraPr.SetBottomBorder("single", 48, 0, 0, 255, 0);
-   * ```
-   */
+  /** Eighths of a point (24 eighths of a point = 3 points). */
   export type pt_8 = number;
 
-  /**
-   * Twentieths of a point (equivalent to 1/1440th of an inch).
-   *
-   * @example
-   * ```js
-   * paragraph.SetEqualColumns(2, 720);
-   * ```
-   */
+  /** Twentieths of a point (equivalent to 1/1440th of an inch). */
   export type twips = number;
 
   /**
@@ -1459,6 +905,42 @@ export namespace Forms {
      * @default base64img = false
      * @default demoteHeadings = false
      * @default renderHTMLTags = false
+     *
+     * @example
+     * ```js
+     * // How do I export the text of a document as Markdown in a document?
+     *
+     * // Write headings and paragraphs, then append the Markdown version of that content in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddText("Heading 1");
+     * paragraph.SetStyle(doc.GetStyle("Heading 1"));
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("This document will be converted to Markdown.");
+     * doc.Push(paragraph);
+     * paragraph.Search("Markdown")[0].SetBold(true);
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Heading 2");
+     * doc.Push(paragraph);
+     * paragraph.SetStyle(doc.GetStyle("Heading 2"));
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("There is an example of two heading levels.");
+     * doc.Push(paragraph);
+     *
+     * let md = Api.ConvertDocument("markdown", false, false, true, false);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddLineBreak();
+     * paragraph.AddText("Markdown").SetBold(true);
+     * paragraph.AddLineBreak();
+     * paragraph.AddText(md);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/ConvertDocument/
      */
     ConvertDocument(convertType?: "markdown" | "html", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string;
 
@@ -1469,13 +951,42 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I insert checkboxes or radio buttons in a document?
+     *
+     * // Create selectable options that let users pick from predefined choices in a document.
+     *
      * let doc = Api.GetDocument();
-     * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
      * let paragraph = doc.GetElement(0);
+     *
+     * let checkBoxForm = Api.CreateCheckBoxForm({
+     * 	"key": "Marital status",
+     * 	"tip": "Specify your marital status",
+     * 	"required": true,
+     * 	"placeholder": "Marital status",
+     * 	"radio": true
+     * });
      * paragraph.AddElement(checkBoxForm);
      * paragraph.AddText(" Married");
      * paragraph.AddLineBreak();
-     * checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
+     *
+     * checkBoxForm = Api.CreateCheckBoxForm({
+     * 	"key": "Marital status",
+     * 	"tip": "Specify your marital status",
+     * 	"required": true,
+     * 	"placeholder": "Marital status",
+     * 	"radio": true
+     * });
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Single");
+     * paragraph.AddLineBreak();
+     *
+     * checkBoxForm = Api.CreateCheckBoxForm({
+     * 	"key": "Children",
+     * 	"tip": "Indicate if you have children",
+     * 	"required": false,
+     * 	"placeholder": "Children",
+     * 	"radio": false
+     * });
      * paragraph.AddElement(checkBoxForm);
      * paragraph.AddText(" Single");
      * ```
@@ -1491,8 +1002,20 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a dropdown field to a document?
+     *
+     * // Set up a selection menu with multiple choices that users can pick from in a document.
+     *
      * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * let comboBoxForm = Api.CreateComboBoxForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Choose your country",
+     * 	"required": true,
+     * 	"placeholder": "Country",
+     * 	"editable": false,
+     * 	"autoFit": false,
+     * 	"items": ["Latvia", "USA", "UK"]
+     * });
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(comboBoxForm);
      * ```
@@ -1506,6 +1029,24 @@ export namespace Forms {
      *
      * @param formPr - Complex form properties.
      *
+     * @example
+     * ```js
+     * // How do I create a form field that contains multiple parts in a document?
+     *
+     * // Build a composite field that allows users to enter different types of data together in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let complexForm = Api.CreateComplexForm({
+     * 	"key": "Email",
+     * 	"tip": "Email",
+     * 	"placeholder": "Start to fill complex form"
+     * });
+     * complexForm.Add(Api.CreateTextForm());
+     * complexForm.Add("@onlyoffice.com");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(complexForm);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateComplexForm/
      */
     CreateComplexForm(formPr: FormPrBase): ApiComplexForm;
@@ -1517,8 +1058,19 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a date picker field to a document?
+     *
+     * // Set up a form field that accepts date values with specific formatting in a document.
+     *
      * let doc = Api.GetDocument();
-     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
+     * let dateForm = Api.CreateDateForm({
+     * 	"key": "Nowadays",
+     * 	"tip": "Enter current date",
+     * 	"required": true,
+     * 	"placeholder": "Your date here",
+     * 	"format": "mm.dd.yyyy",
+     * 	"lang": "en-US"
+     * });
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(dateForm);
      * ```
@@ -1534,11 +1086,25 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I create an image field for users to upload pictures in a document?
+     *
+     * // Enable users to fill in a form by selecting or uploading image files in a document.
+     *
      * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
+     * let pictureForm = Api.CreatePictureForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Upload your photo",
+     * 	"required": true,
+     * 	"placeholder": "Photo",
+     * 	"scaleFlag": "tooBig",
+     * 	"lockAspectRatio": true,
+     * 	"respectBorders": false,
+     * 	"shiftX": 50,
+     * 	"shiftY": 50
+     * });
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreatePictureForm/
@@ -1562,8 +1128,22 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I create a text box field in a document?
+     *
+     * // Insert a fillable text area where users can type their responses in a document.
+     *
      * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
      * ```
@@ -1581,6 +1161,24 @@ export namespace Forms {
      * @param newLine - A character which is used to specify the line break character in the source text.
      * @default tab = "\t"
      * @default newLine = "\r\n"
+     *
+     * @example
+     * ```js
+     * // How do I replace text without losing its bold or italic styling in a document?
+     *
+     * // Swap out paragraph text for new content and retain the existing character formatting in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddText("This is the normal text. ");
+     * paragraph.AddText("The is bold text. ").SetBold(true);
+     * paragraph.AddText("This is italic text.").SetItalic(true);
+     *
+     * paragraph.GetRange().Select();
+     * Api.ReplaceTextSmart(["This is the normal text. This bold text was smart replaced. This is italic text."]);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/ReplaceTextSmart/
      */
     ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean;
   }
@@ -1605,13 +1203,21 @@ export namespace Forms {
   export interface ApiChartSeries {
   }
 
-  /** Class representing a document checkbox / radio button. */
+  /**
+   * Class representing a document checkbox / radio button.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/
+   */
   export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
      * @example
      * ```js
+     * // How do I clear the content of a form in a document?
+     *
+     * // Reset a filled-in form field to blank so it is ready for new input in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -1623,7 +1229,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
@@ -1632,6 +1238,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I copy a form field in a document?
+     *
+     * // Reuse an existing form by placing an identical copy elsewhere on the same paragraph.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -1641,7 +1251,7 @@ export namespace Forms {
      * paragraph.AddElement(copyTextForm);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -1651,6 +1261,31 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I delete a form field in a document?
+     *
+     * // Clean up a document by removing one of several inserted checkbox forms.
+     *
+     * const doc = Api.GetDocument();
+     * const checkBoxForm = Api.CreateCheckBoxForm({
+     * 	'key': 'Marital status',
+     * 	'tip': 'Specify your marital status',
+     * 	'placeholder': 'Marital status',
+     * 	'radio': true
+     * });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(' Married');
+     * let copyCheckBoxForm = checkBoxForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyCheckBoxForm);
+     * paragraph.AddText(' Single');
+     * checkBoxForm.Delete();
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -1658,6 +1293,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -1665,6 +1302,25 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the border color of a form field in a document?
+     *
+     * // Verify a custom border color by reading its RGB values back after applying it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.RGB(255, 111, 61));
+     * let borderColor = textForm.GetBorderColor();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Border color (RGB): (" + borderColor.r + ", " + borderColor.g + ", " + borderColor.b + ")");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -1672,27 +1328,98 @@ export namespace Forms {
      * Returns the choice name of the current radio button.
      *
      * @since 8.3.2
+     *
+     * @example
+     * ```js
+     * // How do I find out which radio button a user has chosen by reading its name in a document?
+     *
+     * // Identify the active selection in a grouped set of choices so it can be displayed or processed in a document.
+     *
+     * let doc = Api.GetDocument();
+     *
+     * // Create first radio button
+     * let checkBoxForm = Api.CreateCheckBoxForm({
+     *     "tip": "Select your preferred contact method",
+     *     "required": true,
+     *     "placeholder": "Contact preference",
+     *     "radio": true
+     * });
+     * checkBoxForm.SetRadioGroup("ContactPreference");
+     * checkBoxForm.SetChoiceName("Email");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Email");
+     * paragraph.AddLineBreak();
+     *
+     * // Create second radio button
+     * checkBoxForm = Api.CreateCheckBoxForm({
+     *     "tip": "Select your preferred contact method",
+     *     "required": true,
+     *     "placeholder": "Contact preference",
+     *     "radio": true
+     * });
+     * checkBoxForm.SetRadioGroup("ContactPreference");
+     * checkBoxForm.SetChoiceName("Phone");
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Phone");
+     * paragraph.AddLineBreak();
+     * checkBoxForm.SetChecked(true);
+     *
+     * // Create third radio button
+     * checkBoxForm = Api.CreateCheckBoxForm({
+     *     "tip": "Select your preferred contact method",
+     *     "required": true,
+     *     "placeholder": "Contact preference",
+     *     "radio": true
+     * });
+     * checkBoxForm.SetRadioGroup("ContactPreference");
+     * checkBoxForm.SetChoiceName("Mail");
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Mail");
+     *
+     * // Find the selected radio button and display the choice name
+     * let radioGroup = checkBoxForm.GetRadioGroup();
+     * paragraph = Api.CreateParagraph();
+     * doc.GetAllForms().forEach(form => {
+     *     if ("ContactPreference" === form.GetRadioGroup() && form.IsChecked()) {
+     *         let choiceName = form.GetChoiceName();
+     *         paragraph.AddText("Selected option: " + choiceName);
+     *     }
+     * });
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetChoiceName/
      */
     GetChoiceName(): string;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiCheckBoxForm class.
      *
      * @since 9.0.4
      *
      * @example
      * ```js
+     * // How do I confirm the object type of a checkbox form at runtime in a document?
+     *
+     * // Verify that a form element is a checkbox before applying checkbox-specific operations in a document.
+     *
      * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
      * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Married");
+     * paragraph.AddLineBreak();
+     * checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Single");
+     * let classType = checkBoxForm.GetClassType();
      * paragraph = Api.CreateParagraph();
      * paragraph.AddText("Class type: " + classType);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetClassType/
      */
     GetClassType(): "checkBoxForm";
 
@@ -1701,6 +1428,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the key of a form field in a document?
+     *
+     * // Confirm the grouping key of a combo box by reading it back and displaying it.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -1711,7 +1442,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
@@ -1720,6 +1451,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the type of a form field in a document?
+     *
+     * // Distinguish one form from another by printing its type identifier next to it.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -1730,7 +1465,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -1739,6 +1474,34 @@ export namespace Forms {
      * Returns an empty string if the current form is not a radio button or nothing is selected.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetGroupValue method returns the selected choice name, or an empty string if nothing is selected.
+     *
+     * // Create two radio buttons, select one, then read the group value and display it.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     * let radio1 = Api.CreateCheckBoxForm({"tip": "Select your marital status", "required": true, "placeholder": "Status", "radio": true});
+     * radio1.SetRadioGroup("MaritalStatus");
+     * radio1.SetChoiceName("Married");
+     * paragraph.AddElement(radio1);
+     * paragraph.AddText(" Married");
+     * paragraph.AddLineBreak();
+     * let radio2 = Api.CreateCheckBoxForm({"tip": "Select your marital status", "required": true, "placeholder": "Status", "radio": true});
+     * radio2.SetRadioGroup("MaritalStatus");
+     * radio2.SetChoiceName("Single");
+     * paragraph.AddElement(radio2);
+     * paragraph.AddText(" Single");
+     * radio1.SetGroupValue("Married");
+     * let groupValue = radio1.GetGroupValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Selected radio button: " + groupValue);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetGroupValue/
      */
     GetGroupValue(): string;
 
@@ -1746,6 +1509,24 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I get the internal ID of a form field in a document?
+     *
+     * // Uniquely track a form by reading its auto-assigned internal identifier.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let internalId = textForm.GetInternalId();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Internal id: " + internalId);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -1753,6 +1534,29 @@ export namespace Forms {
      * Returns the label of the current check box.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I retrieve the label displayed next to a checkbox form in a document?
+     *
+     * // Confirm the descriptive label of a checkbox before presenting it to users in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let checkBoxForm = Api.CreateCheckBoxForm({"tip": "Select if you agree to terms", "required": true, "key" : "Terms agreement"});
+     * checkBoxForm.SetLabel(" I agree to the terms and conditions");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     *
+     * // Get the label from the checkbox form
+     * let label = checkBoxForm.GetLabel();
+     *
+     * // Add the retrieved label text to the document
+     * paragraph.AddLineBreak();
+     * paragraph.AddLineBreak();
+     * paragraph.AddText("Retrieved label: " + label);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetLabel/
      */
     GetLabel(): string;
 
@@ -1760,6 +1564,25 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I find out whether a form field is locked in a document?
+     *
+     * // Protect a form, then confirm the lock is active by reading the lock state.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -1769,6 +1592,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -1776,6 +1601,25 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the placeholder text of a form field in a document?
+     *
+     * // Confirm a hint label by retrieving the placeholder text after setting it on a form.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * let placeholderText = textForm.GetPlaceholderText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Placeholder text: " + placeholderText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -1784,6 +1628,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -1792,6 +1638,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out which radio group a checkbox button belongs to in a document?
+     *
+     * // Confirm that multiple radio buttons share the same group so only one can be selected at a time in a document.
+     *
      * let doc = Api.GetDocument();
      * let checkBoxForm = Api.CreateCheckBoxForm({"tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
      * checkBoxForm.SetRadioGroup("Marital status");
@@ -1809,7 +1659,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/GetRadioGroup/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetRadioGroup/
      */
     GetRadioGroup(): string;
 
@@ -1817,6 +1667,41 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the role of a form field in a document?
+     *
+     * // Assign a custom role to a form, then read it back to verify the assignment.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -1824,15 +1709,49 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the tag of a form field in a document?
+     *
+     * // Label a form with a custom tag, then retrieve it to confirm it was stored correctly.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
+     * // How do I read the current value typed into a form in a document?
+     *
+     * // Extract the raw content of a filled-in text field to use or display elsewhere in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -1843,16 +1762,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
+     * // How do I access the font and style settings of a form field in a document?
+     *
+     * // Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -1866,7 +1789,7 @@ export namespace Forms {
      * textForm.SetTextPr(formTextPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
@@ -1875,6 +1798,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read the instructional hint shown when a user hovers over a form field in a document?
+     *
+     * // Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -1885,7 +1812,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -1893,6 +1820,26 @@ export namespace Forms {
      * Returns the current state of the checkbox form as a boolean value.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetValue method returns true if the checkbox is checked and false otherwise.
+     *
+     * // Check the checkbox form and then read its value to display the state.
+     *
+     * let doc = Api.GetDocument();
+     * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Agreement", "tip": "I agree to the terms", "required": true, "placeholder": "Agreement"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" I agree to the terms");
+     * checkBoxForm.SetValue(true);
+     * let value = checkBoxForm.GetValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Checkbox value: " + value);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetValue/
      */
     GetValue(): boolean;
 
@@ -1905,17 +1852,21 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the surrounding shape of a form field so I can adjust its border or position in a document?
+     *
+     * // Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
      * textForm.ToFixed(10 * 240, 2 * 240);
      * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));
      * shape.SetOutLine(stroke);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -1924,6 +1875,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a checkbox form is checked in a document?
+     *
+     * // Confirm the checked state of a specific radio button after programmatically selecting it in a document.
+     *
      * let doc = Api.GetDocument();
      * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
      * let paragraph = doc.GetElement(0);
@@ -1940,7 +1895,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/IsChecked/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/IsChecked/
      */
     IsChecked(): boolean;
 
@@ -1948,6 +1903,31 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I tell if a form field has been filled out in a document?
+     *
+     * // Verify the fill status of multiple form fields to determine which ones still need input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm1 = Api.CreateTextForm({"key": "Name1", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": false, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm1);
+     * let textForm2 = Api.CreateTextForm({"key": "Name2", "tip": "Enter your last name", "required": true, "placeholder": "Last name", "comb": false, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm2);
+     * textForm2.SetText("Smith");
+     * let filled1 = textForm1.IsFilled();
+     * let filled2 = textForm2.IsFilled();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first text form is filled: " + filled1);
+     * doc.Push(paragraph);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The second text form is filled: " + filled2);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
@@ -1956,6 +1936,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a form field is locked to a specific size in a document?
+     *
+     * // Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -1967,7 +1951,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
@@ -1976,6 +1960,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a checkbox form is a radio button in a document?
+     *
+     * // Distinguish a radio-style form from a standard checkbox by reading its type in a document.
+     *
      * let doc = Api.GetDocument();
      * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
      * let paragraph = doc.GetElement(0);
@@ -1991,7 +1979,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/IsRadioButton/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/IsRadioButton/
      */
     IsRadioButton(): boolean;
 
@@ -2000,6 +1988,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check if a form field must be filled out before the document is submitted in a document?
+     *
+     * // Confirm whether a form field is required so the result can be shown to the reader in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2010,7 +2002,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -2023,6 +2015,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I place the cursor right after a form field to continue typing in a document?
+     *
+     * // Shift focus out of a completed form field so the next input lands in the surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2031,7 +2027,7 @@ export namespace Forms {
      * textForm.MoveCursorOutside(true);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -2043,14 +2039,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I fill a form field with a specific background color in a document?
+     *
+     * // Color the background of a form field to make it visually distinct from surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
+     * textForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -2062,14 +2062,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the border color of a form field in a document?
+     *
+     * // Style the outline of a form field with a specific color to draw attention to it in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
+     * textForm.SetBorderColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -2080,6 +2084,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I programmatically check a checkbox form in a document?
+     *
+     * // Pre-select a specific radio button option without requiring manual user interaction in a document.
+     *
      * let doc = Api.GetDocument();
      * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
      * let paragraph = doc.GetElement(0);
@@ -2092,7 +2100,7 @@ export namespace Forms {
      * checkBoxForm.SetChecked(true);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/SetChecked/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetChecked/
      */
     SetChecked(isChecked: boolean): boolean;
 
@@ -2101,6 +2109,68 @@ export namespace Forms {
      *
      * @param choiceName - The radio button choice name.
      * @since 8.3.2
+     *
+     * @example
+     * ```js
+     * // How do I label individual radio button choices in a grouped form in a document?
+     *
+     * // Build a grouped set of radio buttons with distinct choice labels and retrieve the selected label in a document.
+     *
+     * let doc = Api.GetDocument();
+     *
+     * // Create first radio button
+     * let checkBoxForm = Api.CreateCheckBoxForm({
+     *     "tip": "Select your preferred contact method",
+     *     "required": true,
+     *     "placeholder": "Contact preference",
+     *     "radio": true
+     * });
+     * checkBoxForm.SetRadioGroup("ContactPreference");
+     * checkBoxForm.SetChoiceName("Email");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Email");
+     * paragraph.AddLineBreak();
+     *
+     * // Create second radio button
+     * checkBoxForm = Api.CreateCheckBoxForm({
+     *     "tip": "Select your preferred contact method",
+     *     "required": true,
+     *     "placeholder": "Contact preference",
+     *     "radio": true
+     * });
+     * checkBoxForm.SetRadioGroup("ContactPreference");
+     * checkBoxForm.SetChoiceName("Phone");
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Phone");
+     * paragraph.AddLineBreak();
+     * checkBoxForm.SetChecked(true);
+     *
+     * // Create third radio button
+     * checkBoxForm = Api.CreateCheckBoxForm({
+     *     "tip": "Select your preferred contact method",
+     *     "required": true,
+     *     "placeholder": "Contact preference",
+     *     "radio": true
+     * });
+     * checkBoxForm.SetRadioGroup("ContactPreference");
+     * checkBoxForm.SetChoiceName("Mail");
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" Mail");
+     *
+     * // Find the selected radio button and display the choice name
+     * let radioGroup = checkBoxForm.GetRadioGroup();
+     * paragraph = Api.CreateParagraph();
+     * doc.GetAllForms().forEach(form => {
+     *     if ("ContactPreference" === form.GetRadioGroup() && form.IsChecked()) {
+     *         let choiceName = form.GetChoiceName();
+     *         paragraph.AddText("Selected option: " + choiceName);
+     *     }
+     * });
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetChoiceName/
      */
     SetChoiceName(choiceName: string): boolean;
 
@@ -2111,6 +2181,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set the key that identifies a form field in a document?
+     *
+     * // Label a form field with a custom key so it can be referenced or grouped with related fields in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2122,7 +2196,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -2131,6 +2205,30 @@ export namespace Forms {
      *
      * @param value - The choice name of the radio button to select.
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The SetGroupValue method changes which radio button is selected across all buttons in the same group.
+     *
+     * // Create two radio buttons in the same group, then select one using SetGroupValue.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     * let radio1 = Api.CreateCheckBoxForm({"tip": "Select your gender", "required": true, "placeholder": "Gender", "radio": true});
+     * radio1.SetRadioGroup("Gender");
+     * radio1.SetChoiceName("Male");
+     * paragraph.AddElement(radio1);
+     * paragraph.AddText(" Male");
+     * paragraph.AddLineBreak();
+     * let radio2 = Api.CreateCheckBoxForm({"tip": "Select your gender", "required": true, "placeholder": "Gender", "radio": true});
+     * radio2.SetRadioGroup("Gender");
+     * radio2.SetChoiceName("Female");
+     * paragraph.AddElement(radio2);
+     * paragraph.AddText(" Female");
+     * radio1.SetGroupValue("Female");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetGroupValue/
      */
     SetGroupValue(value: string): boolean;
 
@@ -2139,6 +2237,25 @@ export namespace Forms {
      *
      * @param label - The label.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I add descriptive text next to a checkbox in a document?
+     *
+     * // Label each checkbox option so readers know what they are selecting in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let checkBoxForm = Api.CreateCheckBoxForm({"tip": "Specify your marital status", "required": true, "radio": true, "key" : "Marital status"});
+     * checkBoxForm.SetLabel(" Married");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddLineBreak();
+     * checkBoxForm = Api.CreateCheckBoxForm({"tip": "Specify your marital status", "required": true, "radio" : true, "key" : "Marital status"});
+     * checkBoxForm.SetLabel(" Single");
+     * paragraph.AddElement(checkBoxForm);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetLabel/
      */
     SetLabel(label: string): boolean;
 
@@ -2148,17 +2265,40 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I lock a form field so it cannot be changed in a document?
+     *
+     * // Protect specific fields from modification while keeping others editable.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I add hint text inside an empty form field in a document?
+     *
+     * // Display a prompt inside a field before the user fills it in.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2166,7 +2306,7 @@ export namespace Forms {
      * textForm.SetPlaceholderText("First name");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -2177,6 +2317,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I link multiple radio buttons into a single exclusive group in a document?
+     *
+     * // Ensure mutually exclusive choices by assigning all related buttons to the same group in a document.
+     *
      * let doc = Api.GetDocument();
      * let checkBoxForm = Api.CreateCheckBoxForm({"tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
      * checkBoxForm.SetRadioGroup("Marital status");
@@ -2194,7 +2338,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/SetRadioGroup/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetRadioGroup/
      */
     SetRadioGroup(sKey: string): boolean;
 
@@ -2205,6 +2349,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I make a form field mandatory in a document?
+     *
+     * // Ensure a field must be filled before the document form is submitted.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2216,7 +2364,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -2225,6 +2373,41 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I associate a form field with a specific role in a document?
+     *
+     * // Restrict which signers or participants are responsible for a given field.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -2233,17 +2416,52 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I attach a label or identifier to a form field in a document?
+     *
+     * // Organize or reference form fields programmatically using custom tags.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I change the font size and style of text inside a form field in a document?
+     *
+     * // Make form field text bold and larger to improve readability.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2254,7 +2472,7 @@ export namespace Forms {
      * textForm.SetTextPr(textPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -2265,6 +2483,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a tooltip that appears when hovering over a form field in a document?
+     *
+     * // Give users helpful instructions that appear when they hover over a field.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2276,7 +2498,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -2285,6 +2507,22 @@ export namespace Forms {
      *
      * @param value - Specifies if the checkbox will be checked (true) or not (false).
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The SetValue method accepts a boolean: true to check the box, false to uncheck it.
+     *
+     * // Create a checkbox form and mark it as checked using SetValue.
+     *
+     * let doc = Api.GetDocument();
+     * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Agreement", "tip": "I agree to the terms", "required": true, "placeholder": "Agreement"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(" I agree to the terms");
+     * checkBoxForm.SetValue(true);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetValue/
      */
     SetValue(value: boolean): boolean;
 
@@ -2298,6 +2536,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set a specific width and height for a form field in a document?
+     *
+     * // Lock a form's dimensions so layout does not shift when content changes.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2309,16 +2551,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
+     * // How do I switch a form field from fixed size to inline positioning in a document?
+     *
+     * // Allow a form field to flow with surrounding text instead of occupying a fixed block.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2338,7 +2584,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -2347,13 +2593,21 @@ export namespace Forms {
   export interface ApiColor {
   }
 
-  /** Class representing a document combo box / dropdown list. */
+  /**
+   * Class representing a document combo box / drop-down list.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/
+   */
   export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
      * @example
      * ```js
+     * // How do I clear the content of a form in a document?
+     *
+     * // Reset a filled-in form field to blank so it is ready for new input in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2365,7 +2619,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
@@ -2374,6 +2628,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I copy a form field in a document?
+     *
+     * // Reuse an existing form by placing an identical copy elsewhere on the same paragraph.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2383,7 +2641,7 @@ export namespace Forms {
      * paragraph.AddElement(copyTextForm);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -2393,6 +2651,31 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I delete a form field in a document?
+     *
+     * // Clean up a document by removing one of several inserted checkbox forms.
+     *
+     * const doc = Api.GetDocument();
+     * const checkBoxForm = Api.CreateCheckBoxForm({
+     * 	'key': 'Marital status',
+     * 	'tip': 'Specify your marital status',
+     * 	'placeholder': 'Marital status',
+     * 	'radio': true
+     * });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(' Married');
+     * let copyCheckBoxForm = checkBoxForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyCheckBoxForm);
+     * paragraph.AddText(' Single');
+     * checkBoxForm.Delete();
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -2400,6 +2683,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -2407,27 +2692,50 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the border color of a form field in a document?
+     *
+     * // Verify a custom border color by reading its RGB values back after applying it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.RGB(255, 111, 61));
+     * let borderColor = textForm.GetBorderColor();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Border color (RGB): (" + borderColor.r + ", " + borderColor.g + ", " + borderColor.b + ")");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComboBoxForm class.
      *
      * @since 9.0.4
      *
      * @example
      * ```js
+     * // How do I check what class type a combo box form belongs to in a document?
+     *
+     * // Distinguish a combo box form from other form objects by reading its type label.
+     *
      * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
+     * paragraph.AddElement(comboBoxForm);
+     * let classType = comboBoxForm.GetClassType();
      * paragraph = Api.CreateParagraph();
      * paragraph.AddText("Class type: " + classType);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/GetClassType/
      */
     GetClassType(): "comboBoxForm";
 
@@ -2436,6 +2744,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the key of a form field in a document?
+     *
+     * // Confirm the grouping key of a combo box by reading it back and displaying it.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -2446,7 +2758,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
@@ -2455,6 +2767,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the type of a form field in a document?
+     *
+     * // Distinguish one form from another by printing its type identifier next to it.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2465,7 +2781,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -2473,6 +2789,24 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I get the internal ID of a form field in a document?
+     *
+     * // Uniquely track a form by reading its auto-assigned internal identifier.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let internalId = textForm.GetInternalId();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Internal id: " + internalId);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -2481,6 +2815,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read the list of selectable items from a combo box form in a document?
+     *
+     * // Print every available option to confirm the dropdown choices are set correctly.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2497,7 +2835,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/GetListValues/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/GetListValues/
      */
     GetListValues(): string[];
 
@@ -2505,6 +2843,25 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I find out whether a form field is locked in a document?
+     *
+     * // Protect a form, then confirm the lock is active by reading the lock state.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -2514,6 +2871,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -2521,6 +2880,25 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the placeholder text of a form field in a document?
+     *
+     * // Confirm a hint label by retrieving the placeholder text after setting it on a form.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * let placeholderText = textForm.GetPlaceholderText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Placeholder text: " + placeholderText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -2529,6 +2907,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -2536,6 +2916,41 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the role of a form field in a document?
+     *
+     * // Assign a custom role to a form, then read it back to verify the assignment.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -2543,15 +2958,49 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the tag of a form field in a document?
+     *
+     * // Label a form with a custom tag, then retrieve it to confirm it was stored correctly.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
+     * // How do I read the current value typed into a form in a document?
+     *
+     * // Extract the raw content of a filled-in text field to use or display elsewhere in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2562,16 +3011,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
+     * // How do I access the font and style settings of a form field in a document?
+     *
+     * // Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2585,7 +3038,7 @@ export namespace Forms {
      * textForm.SetTextPr(formTextPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
@@ -2594,6 +3047,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read the instructional hint shown when a user hovers over a form field in a document?
+     *
+     * // Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -2604,7 +3061,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -2612,6 +3069,26 @@ export namespace Forms {
      * Returns the current text value of the combo box form.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetValue method returns the currently selected or entered text in the combo box.
+     *
+     * // Set list values and select one, then read it back and display it in the document.
+     *
+     * let doc = Api.GetDocument();
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Department", "tip": "Select your department", "required": true, "placeholder": "Department", "editable": false, "list": ["HR", "Engineering", "Marketing"]});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(comboBoxForm);
+     * comboBoxForm.SetListValues(["HR", "Engineering", "Marketing"]);
+     * comboBoxForm.SetValue("Engineering");
+     * let value = comboBoxForm.GetValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Selected department: " + value);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -2624,26 +3101,34 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the surrounding shape of a form field so I can adjust its border or position in a document?
+     *
+     * // Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
      * textForm.ToFixed(10 * 240, 2 * 240);
      * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));
      * shape.SetOutLine(stroke);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
     /**
-     * Checks if the combo box text can be edited. If it is not editable, then this form is a dropdown
+     * Checks if the combo box text can be edited. If it is not editable, then this form is a drop-down
      * list.
      *
      * @example
      * ```js
+     * // How do I check if a combo box form allows free-text input in a document?
+     *
+     * // Show whether a combo box restricts selection to preset options or permits manual entry in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -2654,7 +3139,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/IsEditable/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/IsEditable/
      */
     IsEditable(): boolean;
 
@@ -2662,6 +3147,31 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I tell if a form field has been filled out in a document?
+     *
+     * // Verify the fill status of multiple form fields to determine which ones still need input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm1 = Api.CreateTextForm({"key": "Name1", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": false, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm1);
+     * let textForm2 = Api.CreateTextForm({"key": "Name2", "tip": "Enter your last name", "required": true, "placeholder": "Last name", "comb": false, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm2);
+     * textForm2.SetText("Smith");
+     * let filled1 = textForm1.IsFilled();
+     * let filled2 = textForm2.IsFilled();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first text form is filled: " + filled1);
+     * doc.Push(paragraph);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The second text form is filled: " + filled2);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
@@ -2670,6 +3180,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a form field is locked to a specific size in a document?
+     *
+     * // Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2681,7 +3195,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
@@ -2690,6 +3204,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check if a form field must be filled out before the document is submitted in a document?
+     *
+     * // Confirm whether a form field is required so the result can be shown to the reader in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2700,7 +3218,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -2713,6 +3231,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I place the cursor right after a form field to continue typing in a document?
+     *
+     * // Shift focus out of a completed form field so the next input lands in the surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2721,7 +3243,7 @@ export namespace Forms {
      * textForm.MoveCursorOutside(true);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -2732,6 +3254,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I programmatically pick an option from a combo box list in a document?
+     *
+     * // Pre-fill a combo box with a known answer to set the default selection in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -2739,7 +3265,7 @@ export namespace Forms {
      * comboBoxForm.SelectListValue("USA");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/SelectListValue/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/SelectListValue/
      */
     SelectListValue(sValue: string): boolean;
 
@@ -2751,14 +3277,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I fill a form field with a specific background color in a document?
+     *
+     * // Color the background of a form field to make it visually distinct from surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
+     * textForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -2770,14 +3300,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the border color of a form field in a document?
+     *
+     * // Style the outline of a form field with a specific color to draw attention to it in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
+     * textForm.SetBorderColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -2788,6 +3322,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set the key that identifies a form field in a document?
+     *
+     * // Label a form field with a custom key so it can be referenced or grouped with related fields in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2799,7 +3337,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -2810,6 +3348,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I define the drop-down choices available in a combo box form in a document?
+     *
+     * // Supply a set of predefined values to a combo box so users can pick from a list in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2817,7 +3359,7 @@ export namespace Forms {
      * comboBoxForm.SetListValues(["Latvia", "USA", "UK"]);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/SetListValues/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/SetListValues/
      */
     SetListValues(aListString: string[]): boolean;
 
@@ -2827,17 +3369,40 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I lock a form field so it cannot be changed in a document?
+     *
+     * // Protect specific fields from modification while keeping others editable.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I add hint text inside an empty form field in a document?
+     *
+     * // Display a prompt inside a field before the user fills it in.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2845,7 +3410,7 @@ export namespace Forms {
      * textForm.SetPlaceholderText("First name");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -2856,6 +3421,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I make a form field mandatory in a document?
+     *
+     * // Ensure a field must be filled before the document form is submitted.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2867,7 +3436,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -2876,6 +3445,41 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I associate a form field with a specific role in a document?
+     *
+     * // Restrict which signers or participants are responsible for a given field.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -2884,17 +3488,52 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I attach a label or identifier to a form field in a document?
+     *
+     * // Organize or reference form fields programmatically using custom tags.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
     /**
      * Sets the text to the current combo box.
-     * Available only for editable combo box forms.*
+     * *Available only for editable combo box forms.*
      *
      * @param sText - The combo box text.
      *
      * @example
      * ```js
+     * // How do I set the text value of a combo box form in a document?
+     *
+     * // Pre-fill a combo box with a custom entry that is not in the predefined list in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": true, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -2902,18 +3541,22 @@ export namespace Forms {
      * comboBoxForm.SetText("France");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/SetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/SetText/
      */
     SetText(sText: string): boolean;
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I change the font size and style of text inside a form field in a document?
+     *
+     * // Make form field text bold and larger to improve readability.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2924,7 +3567,7 @@ export namespace Forms {
      * textForm.SetTextPr(textPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -2935,6 +3578,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a tooltip that appears when hovering over a form field in a document?
+     *
+     * // Give users helpful instructions that appear when they hover over a field.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2946,7 +3593,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -2956,6 +3603,22 @@ export namespace Forms {
      *
      * @param value - The value to set.
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // SetValue selects a list item when the value matches; for editable combo boxes it also accepts free text.
+     *
+     * // Create a combo box form with a list, then set its value to one of the list items.
+     *
+     * let doc = Api.GetDocument();
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Department", "tip": "Select your department", "required": true, "placeholder": "Department", "editable": false, "list": ["HR", "Engineering", "Marketing"]});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(comboBoxForm);
+     * comboBoxForm.SetListValues(["HR", "Engineering", "Marketing"]);
+     * comboBoxForm.SetValue("Engineering");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/SetValue/
      */
     SetValue(value: string): boolean;
 
@@ -2969,6 +3632,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set a specific width and height for a form field in a document?
+     *
+     * // Lock a form's dimensions so layout does not shift when content changes.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -2980,16 +3647,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
+     * // How do I switch a form field from fixed size to inline positioning in a document?
+     *
+     * // Allow a form field to flow with surrounding text instead of occupying a fixed block.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3009,7 +3680,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -3022,13 +3693,33 @@ export namespace Forms {
   export interface ApiCommentReply {
   }
 
-  /** Class representing a complex field. */
+  /**
+   * Class representing a complex field.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/
+   */
   export interface ApiComplexForm extends Omit<ApiFormBase, "GetValue"> {
     /**
      * Appends the text content of the given form to the end of the current complex form.
      *
      * @param value - The text or the form to add.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I add form fields and static text to a complex form in a document?
+     *
+     * // Build a multi-part entry field by combining a text input and a suffix label inside one form.
+     *
+     * let doc = Api.GetDocument();
+     * let complexForm = Api.CreateComplexForm({"key": "Email", "tip": "Email", "placeholder": "Start to fill complex form"});
+     * complexForm.Add(Api.CreateTextForm());
+     * complexForm.Add("@onlyoffice.com");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(complexForm);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/Add/
      */
     Add(value: string | ApiDateForm | ApiPictureForm | ApiCheckBoxForm | ApiComboBoxForm | ApiTextForm): boolean;
 
@@ -3037,6 +3728,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I clear the content of a form in a document?
+     *
+     * // Reset a filled-in form field to blank so it is ready for new input in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3048,7 +3743,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
@@ -3056,6 +3751,24 @@ export namespace Forms {
      * Clears all content from the current complex form, resetting it to its placeholder state.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I clear the content inside a complex form in a document?
+     *
+     * // Wipe user-entered values from a complex form without removing the form structure itself.
+     *
+     * let doc = Api.GetDocument()
+     * let complexForm = Api.CreateComplexForm({"key": "Complex1"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(complexForm);
+     * complexForm.Add(Api.CreateCheckBoxForm());
+     * complexForm.Add("Text");
+     * complexForm.ClearContent();
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/ClearContent/
      */
     ClearContent(): boolean;
 
@@ -3064,6 +3777,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I copy a form field in a document?
+     *
+     * // Reuse an existing form by placing an identical copy elsewhere on the same paragraph.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3073,7 +3790,7 @@ export namespace Forms {
      * paragraph.AddElement(copyTextForm);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -3083,6 +3800,31 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I delete a form field in a document?
+     *
+     * // Clean up a document by removing one of several inserted checkbox forms.
+     *
+     * const doc = Api.GetDocument();
+     * const checkBoxForm = Api.CreateCheckBoxForm({
+     * 	'key': 'Marital status',
+     * 	'tip': 'Specify your marital status',
+     * 	'placeholder': 'Marital status',
+     * 	'radio': true
+     * });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(' Married');
+     * let copyCheckBoxForm = checkBoxForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyCheckBoxForm);
+     * paragraph.AddText(' Single');
+     * checkBoxForm.Delete();
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -3090,6 +3832,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -3097,27 +3841,50 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the border color of a form field in a document?
+     *
+     * // Verify a custom border color by reading its RGB values back after applying it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.RGB(255, 111, 61));
+     * let borderColor = textForm.GetBorderColor();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Border color (RGB): (" + borderColor.r + ", " + borderColor.g + ", " + borderColor.b + ")");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComplexForm class.
      *
      * @since 9.0.4
      *
      * @example
      * ```js
+     * // How do I get the class type of a complex form in a document?
+     *
+     * // Identify what kind of object a complex form is by reading its type label at runtime.
+     *
      * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let complexForm = Api.CreateComplexForm();
      * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
+     * paragraph.AddElement(complexForm);
+     * let classType = complexForm.GetClassType();
      * paragraph = Api.CreateParagraph();
      * paragraph.AddText("Class type: " + classType);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetClassType/
      */
     GetClassType(): "form";
 
@@ -3126,6 +3893,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the key of a form field in a document?
+     *
+     * // Confirm the grouping key of a combo box by reading it back and displaying it.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -3136,7 +3907,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
@@ -3145,6 +3916,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the type of a form field in a document?
+     *
+     * // Distinguish one form from another by printing its type identifier next to it.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3155,7 +3930,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -3163,6 +3938,24 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I get the internal ID of a form field in a document?
+     *
+     * // Uniquely track a form by reading its auto-assigned internal identifier.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let internalId = textForm.GetInternalId();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Internal id: " + internalId);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -3170,6 +3963,25 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I find out whether a form field is locked in a document?
+     *
+     * // Protect a form, then confirm the lock is active by reading the lock state.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -3179,6 +3991,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -3186,6 +4000,25 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the placeholder text of a form field in a document?
+     *
+     * // Confirm a hint label by retrieving the placeholder text after setting it on a form.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * let placeholderText = textForm.GetPlaceholderText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Placeholder text: " + placeholderText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -3194,6 +4027,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -3201,6 +4036,41 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the role of a form field in a document?
+     *
+     * // Assign a custom role to a form, then read it back to verify the assignment.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -3208,6 +4078,28 @@ export namespace Forms {
      * Returns an ordered list of subforms.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I access each individual sub-form inside a complex form in a document?
+     *
+     * // Count or iterate over the sub-forms of a complex form to process them separately in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let complexForm = Api.CreateComplexForm({"key": "Email", "tip": "Email", "placeholder": "Start to fill complex form"});
+     * complexForm.Add(Api.CreateTextForm({"placeholder" : "username"}));
+     * complexForm.Add("@");
+     * let comboBox = Api.CreateComboBoxForm({"editable" : false, "placeholder" : "mail.com"});
+     * comboBox.SetListValues(["onlyoffice.com", "gmail.com", "hotmail.com"]);
+     * complexForm.Add(comboBox);
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(complexForm);
+     * paragraph.AddLineBreak();
+     * let subForms = complexForm.GetSubForms();
+     * paragraph.AddText("Number of subforms: " + subForms.length);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetSubForms/
      */
     GetSubForms(): ApiForm[];
 
@@ -3215,15 +4107,49 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the tag of a form field in a document?
+     *
+     * // Label a form with a custom tag, then retrieve it to confirm it was stored correctly.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
+     * // How do I read the current value typed into a form in a document?
+     *
+     * // Extract the raw content of a filled-in text field to use or display elsewhere in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3234,16 +4160,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
+     * // How do I access the font and style settings of a form field in a document?
+     *
+     * // Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3257,7 +4187,7 @@ export namespace Forms {
      * textForm.SetTextPr(formTextPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
@@ -3266,6 +4196,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read the instructional hint shown when a user hovers over a form field in a document?
+     *
+     * // Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -3276,7 +4210,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -3284,6 +4218,28 @@ export namespace Forms {
      * Returns the current text value of the complex form.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetValue method concatenates the text of all sub-forms and text nodes inside the complex form.
+     *
+     * // Build a complex form with a text sub-form and a string suffix, then read the combined value.
+     *
+     * let doc = Api.GetDocument();
+     * let complexForm = Api.CreateComplexForm({"key": "Email", "tip": "Email", "placeholder": "Enter your email"});
+     * let textForm = Api.CreateTextForm({"key": "Username"});
+     * complexForm.Add(textForm);
+     * complexForm.Add("@example.com");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(complexForm);
+     * textForm.SetText("john.doe");
+     * let value = complexForm.GetValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Complex form value: " + value);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -3296,17 +4252,21 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the surrounding shape of a form field so I can adjust its border or position in a document?
+     *
+     * // Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
      * textForm.ToFixed(10 * 240, 2 * 240);
      * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));
      * shape.SetOutLine(stroke);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -3314,6 +4274,31 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I tell if a form field has been filled out in a document?
+     *
+     * // Verify the fill status of multiple form fields to determine which ones still need input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm1 = Api.CreateTextForm({"key": "Name1", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": false, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm1);
+     * let textForm2 = Api.CreateTextForm({"key": "Name2", "tip": "Enter your last name", "required": true, "placeholder": "Last name", "comb": false, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm2);
+     * textForm2.SetText("Smith");
+     * let filled1 = textForm1.IsFilled();
+     * let filled2 = textForm2.IsFilled();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first text form is filled: " + filled1);
+     * doc.Push(paragraph);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The second text form is filled: " + filled2);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
@@ -3322,6 +4307,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a form field is locked to a specific size in a document?
+     *
+     * // Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3333,7 +4322,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
@@ -3342,6 +4331,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check if a form field must be filled out before the document is submitted in a document?
+     *
+     * // Confirm whether a form field is required so the result can be shown to the reader in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3352,7 +4345,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -3365,6 +4358,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I place the cursor right after a form field to continue typing in a document?
+     *
+     * // Shift focus out of a completed form field so the next input lands in the surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3373,7 +4370,7 @@ export namespace Forms {
      * textForm.MoveCursorOutside(true);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -3385,14 +4382,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I fill a form field with a specific background color in a document?
+     *
+     * // Color the background of a form field to make it visually distinct from surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
+     * textForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -3404,14 +4405,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the border color of a form field in a document?
+     *
+     * // Style the outline of a form field with a specific color to draw attention to it in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
+     * textForm.SetBorderColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -3422,6 +4427,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set the key that identifies a form field in a document?
+     *
+     * // Label a form field with a custom key so it can be referenced or grouped with related fields in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3433,7 +4442,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -3443,17 +4452,40 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I lock a form field so it cannot be changed in a document?
+     *
+     * // Protect specific fields from modification while keeping others editable.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I add hint text inside an empty form field in a document?
+     *
+     * // Display a prompt inside a field before the user fills it in.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3461,7 +4493,7 @@ export namespace Forms {
      * textForm.SetPlaceholderText("First name");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -3472,6 +4504,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I make a form field mandatory in a document?
+     *
+     * // Ensure a field must be filled before the document form is submitted.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3483,7 +4519,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -3492,6 +4528,41 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I associate a form field with a specific role in a document?
+     *
+     * // Restrict which signers or participants are responsible for a given field.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -3500,17 +4571,52 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I attach a label or identifier to a form field in a document?
+     *
+     * // Organize or reference form fields programmatically using custom tags.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I change the font size and style of text inside a form field in a document?
+     *
+     * // Make form field text bold and larger to improve readability.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3521,7 +4627,7 @@ export namespace Forms {
      * textForm.SetTextPr(textPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -3532,6 +4638,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a tooltip that appears when hovering over a form field in a document?
+     *
+     * // Give users helpful instructions that appear when they hover over a field.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3543,7 +4653,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -3552,6 +4662,21 @@ export namespace Forms {
      *
      * @param value - The value to set.
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The SetValue method provides a type-agnostic way to set form values across all form types.
+     *
+     * // Set the form value and add the form to a document paragraph.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Name", "tip": "Enter your name", "required": true, "placeholder": "Your name"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetValue("Jane Doe");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetValue/
      */
     SetValue(value: string | boolean): boolean;
 
@@ -3565,6 +4690,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set a specific width and height for a form field in a document?
+     *
+     * // Lock a form's dimensions so layout does not shift when content changes.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3576,16 +4705,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
+     * // How do I switch a form field from fixed size to inline positioning in a document?
+     *
+     * // Allow a form field to flow with surrounding text instead of occupying a fixed block.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3605,7 +4738,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -3649,13 +4782,21 @@ export namespace Forms {
   export interface ApiCustomXmlParts {
   }
 
-  /** Class representing a document date field. */
+  /**
+   * Class representing a document date field.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/
+   */
   export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
      * @example
      * ```js
+     * // How do I clear the content of a form in a document?
+     *
+     * // Reset a filled-in form field to blank so it is ready for new input in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3667,7 +4808,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
@@ -3676,6 +4817,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I copy a form field in a document?
+     *
+     * // Reuse an existing form by placing an identical copy elsewhere on the same paragraph.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3685,7 +4830,7 @@ export namespace Forms {
      * paragraph.AddElement(copyTextForm);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -3695,6 +4840,31 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I delete a form field in a document?
+     *
+     * // Clean up a document by removing one of several inserted checkbox forms.
+     *
+     * const doc = Api.GetDocument();
+     * const checkBoxForm = Api.CreateCheckBoxForm({
+     * 	'key': 'Marital status',
+     * 	'tip': 'Specify your marital status',
+     * 	'placeholder': 'Marital status',
+     * 	'radio': true
+     * });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(' Married');
+     * let copyCheckBoxForm = checkBoxForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyCheckBoxForm);
+     * paragraph.AddText(' Single');
+     * checkBoxForm.Delete();
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -3702,6 +4872,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -3709,27 +4881,50 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the border color of a form field in a document?
+     *
+     * // Verify a custom border color by reading its RGB values back after applying it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.RGB(255, 111, 61));
+     * let borderColor = textForm.GetBorderColor();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Border color (RGB): (" + borderColor.r + ", " + borderColor.g + ", " + borderColor.b + ")");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiDateForm class.
      *
      * @since 9.0.4
      *
      * @example
      * ```js
+     * // How do I get the class type of a date form object in a document?
+     *
+     * // Confirm the object kind before applying type-specific logic to a date form in a document.
+     *
      * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
      * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
+     * paragraph.AddElement(dateForm);
+     * let classType = dateForm.GetClassType();
      * paragraph = Api.CreateParagraph();
      * paragraph.AddText("Class type: " + classType);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetClassType/
      */
     GetClassType(): "dateForm";
 
@@ -3738,6 +4933,25 @@ export namespace Forms {
      *
      * @returns The date object, or undefined if the form is a placeholder.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I read the current date from a date form in a document?
+     *
+     * // Display the date a user entered into a date form by fetching its stored value in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(dateForm);
+     * dateForm.SetDate(new Date());
+     * let formDate = dateForm.GetDate();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first date form from this document has setted time: " + formDate.toString());
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetDate/
      */
     GetDate(): undefined | Date;
 
@@ -3746,6 +4960,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the key of a form field in a document?
+     *
+     * // Confirm the grouping key of a combo box by reading it back and displaying it.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -3756,7 +4974,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
@@ -3765,6 +4983,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the type of a form field in a document?
+     *
+     * // Distinguish one form from another by printing its type identifier next to it.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3775,7 +4997,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -3786,6 +5008,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check which date format is applied to a date form in a document?
+     *
+     * // Confirm the format after changing it to make sure the update took effect.
+     *
      * let doc = Api.GetDocument();
      * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
      * let paragraph = doc.GetElement(0);
@@ -3797,7 +5023,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetFormat/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetFormat/
      */
     GetFormat(): string;
 
@@ -3805,6 +5031,24 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I get the internal ID of a form field in a document?
+     *
+     * // Uniquely track a form by reading its auto-assigned internal identifier.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let internalId = textForm.GetInternalId();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Internal id: " + internalId);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -3815,6 +5059,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out which language is set on a date form in a document?
+     *
+     * // Verify the locale after updating it to confirm the change was applied.
+     *
      * let doc = Api.GetDocument();
      * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
      * let paragraph = doc.GetElement(0);
@@ -3826,7 +5074,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetLanguage/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetLanguage/
      */
     GetLanguage(): string;
 
@@ -3834,6 +5082,25 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I find out whether a form field is locked in a document?
+     *
+     * // Protect a form, then confirm the lock is active by reading the lock state.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -3843,6 +5110,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -3850,6 +5119,25 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the placeholder text of a form field in a document?
+     *
+     * // Confirm a hint label by retrieving the placeholder text after setting it on a form.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * let placeholderText = textForm.GetPlaceholderText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Placeholder text: " + placeholderText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -3858,6 +5146,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -3865,6 +5155,41 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the role of a form field in a document?
+     *
+     * // Assign a custom role to a form, then read it back to verify the assignment.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -3872,15 +5197,49 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the tag of a form field in a document?
+     *
+     * // Label a form with a custom tag, then retrieve it to confirm it was stored correctly.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
+     * // How do I read the current value typed into a form in a document?
+     *
+     * // Extract the raw content of a filled-in text field to use or display elsewhere in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3891,16 +5250,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
+     * // How do I access the font and style settings of a form field in a document?
+     *
+     * // Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -3914,7 +5277,7 @@ export namespace Forms {
      * textForm.SetTextPr(formTextPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
@@ -3926,6 +5289,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the date and time value entered into a date form in a document?
+     *
+     * // Convert the returned timestamp to a readable date to display it as a formatted string.
+     *
      * let doc = Api.GetDocument();
      * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
      * let paragraph = doc.GetElement(0);
@@ -3937,7 +5304,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetTime/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetTime/
      */
     GetTime(): undefined | number;
 
@@ -3946,6 +5313,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read the instructional hint shown when a user hovers over a form field in a document?
+     *
+     * // Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -3956,7 +5327,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -3964,6 +5335,25 @@ export namespace Forms {
      * Returns the date of the current form.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetValue method returns a Date object, or undefined if the form still shows its placeholder.
+     *
+     * // Set a date on the form and then retrieve it to display the date string.
+     *
+     * let doc = Api.GetDocument();
+     * let dateForm = Api.CreateDateForm({"key": "EventDate", "tip": "Enter the event date", "required": true, "placeholder": "Event date", "format": "mm.dd.yyyy", "lang": "en-US"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(dateForm);
+     * dateForm.SetDate(new Date(2024, 0, 15));
+     * let value = dateForm.GetValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Date form value: " + value.toString());
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetValue/
      */
     GetValue(): Date | undefined;
 
@@ -3976,17 +5366,21 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the surrounding shape of a form field so I can adjust its border or position in a document?
+     *
+     * // Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
      * textForm.ToFixed(10 * 240, 2 * 240);
      * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));
      * shape.SetOutLine(stroke);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -3994,6 +5388,31 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I tell if a form field has been filled out in a document?
+     *
+     * // Verify the fill status of multiple form fields to determine which ones still need input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm1 = Api.CreateTextForm({"key": "Name1", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": false, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm1);
+     * let textForm2 = Api.CreateTextForm({"key": "Name2", "tip": "Enter your last name", "required": true, "placeholder": "Last name", "comb": false, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm2);
+     * textForm2.SetText("Smith");
+     * let filled1 = textForm1.IsFilled();
+     * let filled2 = textForm2.IsFilled();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first text form is filled: " + filled1);
+     * doc.Push(paragraph);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The second text form is filled: " + filled2);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
@@ -4002,6 +5421,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a form field is locked to a specific size in a document?
+     *
+     * // Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4013,7 +5436,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
@@ -4022,6 +5445,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check if a form field must be filled out before the document is submitted in a document?
+     *
+     * // Confirm whether a form field is required so the result can be shown to the reader in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4032,7 +5459,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -4045,6 +5472,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I place the cursor right after a form field to continue typing in a document?
+     *
+     * // Shift focus out of a completed form field so the next input lands in the surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4053,7 +5484,7 @@ export namespace Forms {
      * textForm.MoveCursorOutside(true);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -4065,14 +5496,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I fill a form field with a specific background color in a document?
+     *
+     * // Color the background of a form field to make it visually distinct from surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
+     * textForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -4084,14 +5519,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the border color of a form field in a document?
+     *
+     * // Style the outline of a form field with a specific color to draw attention to it in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
+     * textForm.SetBorderColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -4100,6 +5539,25 @@ export namespace Forms {
      *
      * @param date - The date object or the date in the string format.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I populate a date form with a chosen date in a document?
+     *
+     * // Pre-fill a date form with today's date and read back the stored value in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(dateForm);
+     * dateForm.SetDate(new Date());
+     * let formDate = dateForm.GetDate();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first date form from this document has setted time: " + formDate.toString());
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetDate/
      */
     SetDate(date: Date | string): boolean;
 
@@ -4110,6 +5568,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set the key that identifies a form field in a document?
+     *
+     * // Label a form field with a custom key so it can be referenced or grouped with related fields in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4121,7 +5583,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -4133,6 +5595,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the way dates are formatted in a date form in a document?
+     *
+     * // Switch a date form to a long-form date pattern and verify the updated format in a document.
+     *
      * let doc = Api.GetDocument();
      * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
      * let paragraph = doc.GetElement(0);
@@ -4144,7 +5610,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/SetFormat/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetFormat/
      */
     SetFormat(sFormat: string): boolean;
 
@@ -4157,6 +5623,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the locale of a date form in a document?
+     *
+     * // Update a date form to use a different language and confirm the new locale is applied in a document.
+     *
      * let doc = Api.GetDocument();
      * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
      * let paragraph = doc.GetElement(0);
@@ -4168,7 +5638,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/SetLanguage/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetLanguage/
      */
     SetLanguage(sLangId: string): boolean;
 
@@ -4178,17 +5648,40 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I lock a form field so it cannot be changed in a document?
+     *
+     * // Protect specific fields from modification while keeping others editable.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I add hint text inside an empty form field in a document?
+     *
+     * // Display a prompt inside a field before the user fills it in.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4196,7 +5689,7 @@ export namespace Forms {
      * textForm.SetPlaceholderText("First name");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -4207,6 +5700,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I make a form field mandatory in a document?
+     *
+     * // Ensure a field must be filled before the document form is submitted.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4218,7 +5715,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -4227,6 +5724,41 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I associate a form field with a specific role in a document?
+     *
+     * // Restrict which signers or participants are responsible for a given field.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -4235,17 +5767,52 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I attach a label or identifier to a form field in a document?
+     *
+     * // Organize or reference form fields programmatically using custom tags.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I change the font size and style of text inside a form field in a document?
+     *
+     * // Make form field text bold and larger to improve readability.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4256,7 +5823,7 @@ export namespace Forms {
      * textForm.SetTextPr(textPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -4268,6 +5835,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set the current date and time on a date form in a document?
+     *
+     * // Pre-fill a date form with a specific point in time to reflect today's date in a document.
+     *
      * let doc = Api.GetDocument();
      * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
      * let paragraph = doc.GetElement(0);
@@ -4279,7 +5850,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/SetTime/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetTime/
      */
     SetTime(nTimeStamp: number): boolean;
 
@@ -4290,6 +5861,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a tooltip that appears when hovering over a form field in a document?
+     *
+     * // Give users helpful instructions that appear when they hover over a field.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4301,7 +5876,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -4310,6 +5885,21 @@ export namespace Forms {
      *
      * @param value - The date object or the date in the string format.
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The SetValue method accepts either a Date instance or a date string and applies it to the form.
+     *
+     * // Create a date form and assign a specific date using SetValue.
+     *
+     * let doc = Api.GetDocument();
+     * let dateForm = Api.CreateDateForm({"key": "EventDate", "tip": "Enter the event date", "required": true, "placeholder": "Event date", "format": "mm.dd.yyyy", "lang": "en-US"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(dateForm);
+     * dateForm.SetValue(new Date(2024, 0, 15));
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetValue/
      */
     SetValue(value: Date | string): boolean;
 
@@ -4323,6 +5913,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set a specific width and height for a form field in a document?
+     *
+     * // Lock a form's dimensions so layout does not shift when content changes.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4334,16 +5928,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
+     * // How do I switch a form field from fixed size to inline positioning in a document?
+     *
+     * // Allow a form field to flow with surrounding text instead of occupying a fixed block.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4363,7 +5961,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -4374,10 +5972,58 @@ export namespace Forms {
    * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/
    */
   export interface ApiDocument extends ApiDocumentContent {
-    /** Clears all forms in the document. */
+    /**
+     * Clears all forms in the document.
+     *
+     * @example
+     * ```js
+     * // How do I reset every form field to its empty state in a document?
+     *
+     * // Wipe entered data from text forms and content controls to start fresh in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     * let inlineLvlSdt = Api.CreateInlineLvlSdt();
+     * paragraph.AddInlineLvlSdt(inlineLvlSdt);
+     * let run = Api.CreateRun();
+     * run.AddText("This is an inline text content control.");
+     * inlineLvlSdt.AddElement(run, 0);
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(textForm);
+     * doc.ClearAllFields();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("All fields from this document were just cleared.");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/ClearAllFields/
+     */
     ClearAllFields(): boolean;
 
-    /** Returns all existing forms in the document. */
+    /**
+     * Returns all existing forms in the document.
+     *
+     * @example
+     * ```js
+     * // How do I access every form field present in a document?
+     *
+     * // Pre-fill a text field and select a combo box value when automating document completion.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Name", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Country", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(comboBoxForm);
+     * let forms = doc.GetAllForms();
+     * forms[0].SetText("John Smith");
+     * forms[1].SelectListValue("USA");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetAllForms/
+     */
     GetAllForms(): ApiForm[];
 
     /**
@@ -4386,6 +6032,41 @@ export namespace Forms {
      * @param role - The form role.
      * @returns A list of all form keys attached to the specified role.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I find which form fields belong to a particular role in a document?
+     *
+     * // Separate form responsibilities by role so each participant sees only their required fields in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Employee");
+     * roles.Add("Chief");
+     * let textForm = Api.CreateTextForm({"role" : "Employee", "key": "Employee FirstName", "tip": "Enter your first name", "tag": "form_1", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let comboBoxForm = Api.CreateComboBoxForm({"role" : "Employee", "key": "Country", "tip": "Choose your country", "tag": "form_1", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(comboBoxForm);
+     *
+     * paragraph = Api.CreateParagraph();
+     * doc.Push(paragraph);
+     * textForm = Api.CreateTextForm({"role" : "Chief", "key": "Chief FirstName", "tip": "Enter your first name", "tag": "form_1", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm);
+     *
+     * let keys = doc.GetFormKeysByRole("Employee");
+     * paragraph = Api.CreateParagraph();
+     * doc.Push(paragraph);
+     * paragraph.AddText("Form keys that need to be filled by 'Employee':");
+     *
+     * keys.forEach(key => {
+     *     paragraph.AddLineBreak();
+     *     paragraph.AddText(key);
+     * });
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormKeysByRole/
      */
     GetFormKeysByRole(role: string): string[];
 
@@ -4393,6 +6074,23 @@ export namespace Forms {
      * Returns a collection of form roles.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I see what roles have access to form fields in a document?
+     *
+     * // Access the role management system to view form permissions in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.Add("Seller");
+     * let paragraph = doc.GetElement(0);
+     * roles.GetAllRoles().forEach(role => {
+     *     paragraph.AddText(role);
+     *     paragraph.AddLineBreak();
+     * });
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormRoles/
      */
@@ -4406,6 +6104,32 @@ export namespace Forms {
      * @returns Returns true/false for checkboxes and string for other form types. Returns null if there is no
      *   form with the specified key.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I retrieve what a user entered in a named form field in a document?
+     *
+     * // Verify filled-in form data by looking up field values by key in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph1 = doc.GetElement(0);
+     * let checkBox = Api.CreateCheckBoxForm({key: "BestCompany"});
+     * checkBox.SetChecked(true);
+     * paragraph1.Push(checkBox);
+     * let textForm = Api.CreateTextForm({key: "CompanyName"});
+     * textForm.SetText("OnlyOffice");
+     * paragraph1.Push(textForm);
+     *
+     * let paragraph = Api.CreateParagraph();
+     * doc.Push(paragraph);
+     * let formValue = doc.GetFormValueByKey("CompanyName");
+     * paragraph.AddText("CompanyName: " + formValue);
+     * paragraph.AddLineBreak();
+     * formValue = doc.GetFormValueByKey("BestCompany");
+     * paragraph.AddText("BestCompany: " + formValue);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormValueByKey/
      */
     GetFormValueByKey(key: string): null | boolean | string;
 
@@ -4414,6 +6138,33 @@ export namespace Forms {
      *
      * @param key - The form key.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I find every form field that uses a given key in a document?
+     *
+     * // Locate duplicate-keyed form fields across multiple paragraphs in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "FirstName", "tip": "Enter your first name", "tag": "form_1", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Country", "tip": "Choose your country", "tag": "form_1", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(comboBoxForm);
+     *
+     * paragraph = Api.CreateParagraph();
+     * doc.Push(paragraph);
+     * textForm = Api.CreateTextForm({"key": "FirstName", "tip": "Enter your first name", "tag": "form_1", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm);
+     *
+     * let forms = doc.GetFormsByKey("FirstName");
+     * paragraph = Api.CreateParagraph();
+     * doc.Push(paragraph);
+     * paragraph.AddText("Number of forms with key 'FirstName': " + forms.length);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByKey/
      */
     GetFormsByKey(key: string): ApiForm[];
 
@@ -4422,6 +6173,41 @@ export namespace Forms {
      *
      * @param role - The form role.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I filter forms by their assigned role in a document?
+     *
+     * // Separate employee and manager fields by querying each role independently in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Employee");
+     * roles.Add("Chief");
+     * let textForm = Api.CreateTextForm({"role" : "Employee", "key": "Employee FirstName", "tip": "Enter your first name", "tag": "form_1", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let comboBoxForm = Api.CreateComboBoxForm({"role" : "Employee", "key": "Country", "tip": "Choose your country", "tag": "form_1", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(comboBoxForm);
+     *
+     * paragraph = Api.CreateParagraph();
+     * doc.Push(paragraph);
+     * textForm = Api.CreateTextForm({"role" : "Chief", "key": "Chief FirstName", "tip": "Enter your first name", "tag": "form_1", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm);
+     *
+     * let forms = doc.GetFormsByRole("Employee");
+     * paragraph = Api.CreateParagraph();
+     * doc.Push(paragraph);
+     * paragraph.AddText("Number of forms with role 'Employee': " + forms.length);
+     *
+     * forms = doc.GetFormsByRole("Chief");
+     * paragraph = Api.CreateParagraph();
+     * doc.Push(paragraph);
+     * paragraph.AddText("Number of forms with role 'Chief': " + forms.length);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByRole/
      */
     GetFormsByRole(role: string): ApiForm[];
 
@@ -4429,6 +6215,26 @@ export namespace Forms {
      * Returns a list of all forms in the document with the specified tag name.
      *
      * @param sTag - Form tag.
+     *
+     * @example
+     * ```js
+     * // How do I look up forms by their tag in a document?
+     *
+     * // Populate related form fields at once by targeting them through a shared tag in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "FirstName", "tip": "Enter your first name", "tag": "form_1", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Country", "tip": "Choose your country", "tag": "form_1", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(comboBoxForm);
+     * let forms = doc.GetFormsByTag("form_1");
+     * forms[0].SetText("John Smith");
+     * forms[1].SelectListValue("USA");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByTag/
      */
     GetFormsByTag(sTag: string): ApiForm[];
 
@@ -4437,6 +6243,29 @@ export namespace Forms {
      * If a form was created and not assigned to any part of the document, it won't appear in this list.
      *
      * @since 8.0.0
+     *
+     * @example
+     * ```js
+     * // How do I export form field data as a JSON string in a document?
+     *
+     * // Verify filled-in form values by printing them as text at the end of a document.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph1 = doc.GetElement(0);
+     * let checkBox = Api.CreateCheckBoxForm({key: "BestCompany"});
+     * checkBox.SetChecked(true);
+     * paragraph1.Push(checkBox);
+     * let textForm = Api.CreateTextForm({key: "CompanyName"});
+     * textForm.SetText("OnlyOffice");
+     * paragraph1.Push(textForm);
+     *
+     * let text = JSON.stringify(doc.GetFormsData());
+     * let paragraph2 = Api.CreateParagraph();
+     * paragraph2.AddText(text);
+     * doc.Push(paragraph2);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsData/
      */
     GetFormsData(): FormData[];
 
@@ -4445,16 +6274,91 @@ export namespace Forms {
      *
      * @returns Returns the highlight color, or _null_ if the highlight is disabled.
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I retrieve the current form highlight color in a document?
+     *
+     * // Confirm a highlight was applied correctly by displaying its hex value in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * doc.SetFormsHighlight(191, 219, 254);
+     * let highlight = doc.GetFormsHighlight();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The forms highlight color is: " + highlight.GetHex());
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsHighlight/
      */
     GetFormsHighlight(): ApiColor | null;
 
-    /** Returns a list of all tags that are used for all forms in the document. */
+    /**
+     * Returns a list of all tags that are used for all forms in the document.
+     *
+     * @example
+     * ```js
+     * // How do I retrieve every form tag from a document?
+     *
+     * // Verify which tags are attached to text and combo-box form fields after filling them with values.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "tag": "form_1", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "tag": "form_2", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(comboBoxForm);
+     * let forms = doc.GetAllForms();
+     * forms[0].SetText("John Smith");
+     * forms[1].SelectListValue("USA");
+     * let tags = doc.GetTagsOfAllForms();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Forms tags: ");
+     * paragraph.AddLineBreak();
+     * for (let i = 0; i < tags.length; i++ ){
+     * 	paragraph.AddText(tags[i]);
+     * 	paragraph.AddLineBreak();
+     * }
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetTagsOfAllForms/
+     */
     GetTagsOfAllForms(): string[];
 
     /**
      * Inserts a text box with the specified text box properties over the selected text.
      *
      * @param formPr - Properties for inserting a text field.
+     *
+     * @example
+     * ```js
+     * // How do I convert text into a fillable field in a document?
+     *
+     * // Turn highlighted content into an interactive text input area in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddText("First name");
+     * paragraph.Select();
+     * doc.InsertTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "Name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false,
+     * 	"placeholderFromSelection": true,
+     * 	"keepSelectedTextInForm": false
+     * });
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/InsertTextForm/
      */
@@ -4465,6 +6369,27 @@ export namespace Forms {
      *
      * @param arrData - An array of form data to set to the specified forms.
      * @since 8.0.0
+     *
+     * @example
+     * ```js
+     * // How do I fill in form fields programmatically in a document?
+     *
+     * // Pre-fill checkboxes and text fields by matching each field's key to a corresponding value.
+     *
+     * let doc = Api.GetDocument();
+     * let paragraph1 = doc.GetElement(0);
+     * let checkBox = Api.CreateCheckBoxForm({key: "BestCompany"});
+     * paragraph1.Push(checkBox);
+     * let textForm = Api.CreateTextForm({key: "CompanyName"});
+     * paragraph1.Push(textForm);
+     *
+     * doc.SetFormsData([
+     *     {key: "BestCompany", value: true},
+     *     {key: "CompanyName", value: "OnlyOffice"}
+     * ]);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/SetFormsData/
      */
     SetFormsData(arrData: FormData[]): boolean;
 
@@ -4473,6 +6398,21 @@ export namespace Forms {
      *
      * @param color - The highlight color for the forms.
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I highlight form fields with a custom color in a document?
+     *
+     * // Draw attention to fillable areas by painting them with a distinct background color.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * doc.SetFormsHighlight(Api.HexColor('#FF6F3D'));
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/SetFormsHighlight/
      */
     SetFormsHighlight(color: ApiColor): boolean;
   }
@@ -4497,13 +6437,21 @@ export namespace Forms {
   export interface ApiFill {
   }
 
-  /** Class representing a document form base. */
+  /**
+   * Class representing a document form base.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/
+   */
   export interface ApiFormBase {
     /**
      * Clears the current form.
      *
      * @example
      * ```js
+     * // How do I clear the content of a form in a document?
+     *
+     * // Reset a filled-in form field to blank so it is ready for new input in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4515,7 +6463,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
@@ -4524,6 +6472,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I copy a form field in a document?
+     *
+     * // Reuse an existing form by placing an identical copy elsewhere on the same paragraph.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4533,7 +6485,7 @@ export namespace Forms {
      * paragraph.AddElement(copyTextForm);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -4543,6 +6495,31 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I delete a form field in a document?
+     *
+     * // Clean up a document by removing one of several inserted checkbox forms.
+     *
+     * const doc = Api.GetDocument();
+     * const checkBoxForm = Api.CreateCheckBoxForm({
+     * 	'key': 'Marital status',
+     * 	'tip': 'Specify your marital status',
+     * 	'placeholder': 'Marital status',
+     * 	'radio': true
+     * });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(' Married');
+     * let copyCheckBoxForm = checkBoxForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyCheckBoxForm);
+     * paragraph.AddText(' Single');
+     * checkBoxForm.Delete();
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -4550,6 +6527,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -4557,6 +6536,25 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the border color of a form field in a document?
+     *
+     * // Verify a custom border color by reading its RGB values back after applying it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.RGB(255, 111, 61));
+     * let borderColor = textForm.GetBorderColor();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Border color (RGB): (" + borderColor.r + ", " + borderColor.g + ", " + borderColor.b + ")");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -4565,6 +6563,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the class type of a form object in a document?
+     *
+     * // Confirm what kind of object a form belongs to by printing its class type label.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4575,7 +6577,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetClassType/
      */
     GetClassType(): "form";
 
@@ -4584,6 +6586,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the key of a form field in a document?
+     *
+     * // Confirm the grouping key of a combo box by reading it back and displaying it.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -4594,7 +6600,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
@@ -4603,6 +6609,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the type of a form field in a document?
+     *
+     * // Distinguish one form from another by printing its type identifier next to it.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4613,7 +6623,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -4621,6 +6631,24 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I get the internal ID of a form field in a document?
+     *
+     * // Uniquely track a form by reading its auto-assigned internal identifier.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let internalId = textForm.GetInternalId();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Internal id: " + internalId);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -4628,6 +6656,25 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I find out whether a form field is locked in a document?
+     *
+     * // Protect a form, then confirm the lock is active by reading the lock state.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -4637,6 +6684,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -4644,6 +6693,25 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the placeholder text of a form field in a document?
+     *
+     * // Confirm a hint label by retrieving the placeholder text after setting it on a form.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * let placeholderText = textForm.GetPlaceholderText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Placeholder text: " + placeholderText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -4652,6 +6720,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -4659,6 +6729,41 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the role of a form field in a document?
+     *
+     * // Assign a custom role to a form, then read it back to verify the assignment.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -4666,15 +6771,49 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the tag of a form field in a document?
+     *
+     * // Label a form with a custom tag, then retrieve it to confirm it was stored correctly.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
+     * // How do I read the current value typed into a form in a document?
+     *
+     * // Extract the raw content of a filled-in text field to use or display elsewhere in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4685,16 +6824,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
+     * // How do I access the font and style settings of a form field in a document?
+     *
+     * // Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4708,7 +6851,7 @@ export namespace Forms {
      * textForm.SetTextPr(formTextPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
@@ -4717,6 +6860,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read the instructional hint shown when a user hovers over a form field in a document?
+     *
+     * // Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -4727,7 +6874,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -4735,6 +6882,25 @@ export namespace Forms {
      * Returns the current value of the form field.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetValue method returns the form's current value regardless of its specific type.
+     *
+     * // Read the form value after setting it and display the result in a new paragraph.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Name", "tip": "Enter your name", "required": true, "placeholder": "Your name"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetValue("Jane Doe");
+     * let value = textForm.GetValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form value: " + value);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetValue/
      */
     GetValue(): string | boolean;
 
@@ -4747,17 +6913,21 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the surrounding shape of a form field so I can adjust its border or position in a document?
+     *
+     * // Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
      * textForm.ToFixed(10 * 240, 2 * 240);
      * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));
      * shape.SetOutLine(stroke);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -4765,6 +6935,31 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I tell if a form field has been filled out in a document?
+     *
+     * // Verify the fill status of multiple form fields to determine which ones still need input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm1 = Api.CreateTextForm({"key": "Name1", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": false, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm1);
+     * let textForm2 = Api.CreateTextForm({"key": "Name2", "tip": "Enter your last name", "required": true, "placeholder": "Last name", "comb": false, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm2);
+     * textForm2.SetText("Smith");
+     * let filled1 = textForm1.IsFilled();
+     * let filled2 = textForm2.IsFilled();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first text form is filled: " + filled1);
+     * doc.Push(paragraph);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The second text form is filled: " + filled2);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
@@ -4773,6 +6968,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a form field is locked to a specific size in a document?
+     *
+     * // Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4784,7 +6983,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
@@ -4793,6 +6992,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check if a form field must be filled out before the document is submitted in a document?
+     *
+     * // Confirm whether a form field is required so the result can be shown to the reader in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4803,7 +7006,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -4816,6 +7019,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I place the cursor right after a form field to continue typing in a document?
+     *
+     * // Shift focus out of a completed form field so the next input lands in the surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4824,7 +7031,7 @@ export namespace Forms {
      * textForm.MoveCursorOutside(true);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -4836,14 +7043,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I fill a form field with a specific background color in a document?
+     *
+     * // Color the background of a form field to make it visually distinct from surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
+     * textForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -4855,14 +7066,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the border color of a form field in a document?
+     *
+     * // Style the outline of a form field with a specific color to draw attention to it in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
+     * textForm.SetBorderColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -4873,6 +7088,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set the key that identifies a form field in a document?
+     *
+     * // Label a form field with a custom key so it can be referenced or grouped with related fields in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4884,7 +7103,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -4894,17 +7113,40 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I lock a form field so it cannot be changed in a document?
+     *
+     * // Protect specific fields from modification while keeping others editable.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I add hint text inside an empty form field in a document?
+     *
+     * // Display a prompt inside a field before the user fills it in.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4912,7 +7154,7 @@ export namespace Forms {
      * textForm.SetPlaceholderText("First name");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -4923,6 +7165,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I make a form field mandatory in a document?
+     *
+     * // Ensure a field must be filled before the document form is submitted.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4934,7 +7180,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -4943,6 +7189,41 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I associate a form field with a specific role in a document?
+     *
+     * // Restrict which signers or participants are responsible for a given field.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -4951,17 +7232,52 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I attach a label or identifier to a form field in a document?
+     *
+     * // Organize or reference form fields programmatically using custom tags.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I change the font size and style of text inside a form field in a document?
+     *
+     * // Make form field text bold and larger to improve readability.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4972,7 +7288,7 @@ export namespace Forms {
      * textForm.SetTextPr(textPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -4983,6 +7299,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a tooltip that appears when hovering over a form field in a document?
+     *
+     * // Give users helpful instructions that appear when they hover over a field.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -4994,7 +7314,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -5003,6 +7323,21 @@ export namespace Forms {
      *
      * @param value - The value to set.
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The SetValue method provides a type-agnostic way to set form values across all form types.
+     *
+     * // Set the form value and add the form to a document paragraph.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Name", "tip": "Enter your name", "required": true, "placeholder": "Your name"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetValue("Jane Doe");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetValue/
      */
     SetValue(value: string | boolean): boolean;
 
@@ -5016,6 +7351,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set a specific width and height for a form field in a document?
+     *
+     * // Lock a form's dimensions so layout does not shift when content changes.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5027,16 +7366,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
+     * // How do I switch a form field from fixed size to inline positioning in a document?
+     *
+     * // Allow a form field to flow with surrounding text instead of occupying a fixed block.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5056,7 +7399,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -5076,6 +7419,23 @@ export namespace Forms {
      * @param props - The role properties.
      * @since 9.0.0
      *
+     * @example
+     * ```js
+     * // How do I add a new role that can fill forms in a document?
+     *
+     * // Define a role name that controls who can edit form fields in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.Add("Seller");
+     * let paragraph = doc.GetElement(0);
+     * roles.GetAllRoles().forEach(role => {
+     *     paragraph.AddText(role);
+     *     paragraph.AddLineBreak();
+     * });
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/Add/
      */
     Add(name: string, props: RoleProperties): boolean;
@@ -5085,6 +7445,26 @@ export namespace Forms {
      *
      * @since 9.0.0
      *
+     * @example
+     * ```js
+     * // How do I see every role that can access form fields in a document?
+     *
+     * // List all the role names available for controlling form permissions in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.Add("Seller");
+     * let paragraph = doc.GetElement(0);
+     * let orderIndex = 1;
+     * roles.GetAllRoles().forEach(role => {
+     *     paragraph.AddText(orderIndex + ": ");
+     *     paragraph.AddText(role);
+     *     paragraph.AddLineBreak();
+     *     orderIndex++;
+     * });
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/GetAllRoles/
      */
     GetAllRoles(): string[];
@@ -5093,6 +7473,25 @@ export namespace Forms {
      * Returns a number of form roles.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I find out how many roles exist in a document?
+     *
+     * // Check the total number of roles that have been created in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.Add("Seller");
+     * let paragraph = doc.GetElement(0);
+     * roles.GetAllRoles().forEach(role => {
+     *     paragraph.AddText(role);
+     *     paragraph.AddLineBreak();
+     * });
+     * let numRoles = roles.GetCount();
+     * paragraph.AddText("Number of roles: " + numRoles);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/GetCount/
      */
@@ -5104,6 +7503,20 @@ export namespace Forms {
      * @param name - The role name.
      * @since 9.0.0
      *
+     * @example
+     * ```js
+     * // How do I find out what color a role uses in a document?
+     *
+     * // Check the color value for a specific role in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * let color = roles.GetRoleColor("Customer");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddText("Role color: rgb(" + color.r + ", " + color.g + ", " + color.b + ")");
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/GetRoleColor/
      */
     GetRoleColor(name: string): null | object;
@@ -5113,6 +7526,27 @@ export namespace Forms {
      *
      * @param name - The role name.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I verify whether a specific role is available in a document?
+     *
+     * // Test for the presence of a role and display the result in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.Add("Seller");
+     * let paragraph = doc.GetElement(0);
+     * ["Customer", "CEO"].forEach(roleName => {
+     *     if (roles.HaveRole(roleName)) {
+     *         paragraph.AddText(roleName + " role is present in the form");
+     *     } else {
+     *         paragraph.AddText(roleName + " role is not present in the form");
+     *     }
+     *     paragraph.AddLineBreak();
+     * });
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/HaveRole/
      */
@@ -5124,6 +7558,30 @@ export namespace Forms {
      * @param name - The role name.
      * @since 9.0.0
      *
+     * @example
+     * ```js
+     * // How do I change the order of roles to place one later in the sequence in a document?
+     *
+     * // Reposition a role downward in the list and display the updated order in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.Add("Seller");
+     *
+     * // Make the selected role the last one to fill
+     * while (roles.MoveDown("Customer"));
+     *
+     * let paragraph = doc.GetElement(0);
+     * let orderIndex = 1;
+     * roles.GetAllRoles().forEach(role => {
+     *     paragraph.AddText(orderIndex + ": ");
+     *     paragraph.AddText(role);
+     *     paragraph.AddLineBreak();
+     *     orderIndex++;
+     * });
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/MoveDown/
      */
     MoveDown(name: string): boolean;
@@ -5133,6 +7591,30 @@ export namespace Forms {
      *
      * @param name - The role name.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I change the order of roles to place one earlier in the sequence in a document?
+     *
+     * // Reposition a role upward in the list and display the updated order in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.Add("Seller");
+     *
+     * // Make the selected role the first one to fill
+     * while (roles.MoveUp("Customer"));
+     *
+     * let paragraph = doc.GetElement(0);
+     * let orderIndex = 1;
+     * roles.GetAllRoles().forEach(role => {
+     *     paragraph.AddText(orderIndex + ": ");
+     *     paragraph.AddText(role);
+     *     paragraph.AddLineBreak();
+     *     orderIndex++;
+     * });
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/MoveUp/
      */
@@ -5145,6 +7627,24 @@ export namespace Forms {
      * @param delegateRole - The name of the role to which all forms bound to this role will be delegated.
      * @since 9.0.0
      *
+     * @example
+     * ```js
+     * // How do I remove a role that is no longer needed in a document?
+     *
+     * // Eliminate a specific role and show the remaining roles in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.Add("Seller");
+     * roles.Remove("Anyone");
+     * let paragraph = doc.GetElement(0);
+     * roles.GetAllRoles().forEach(role => {
+     *     paragraph.AddText(role);
+     *     paragraph.AddLineBreak();
+     * });
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/Remove/
      */
     Remove(name: string, delegateRole?: string): boolean;
@@ -5155,6 +7655,23 @@ export namespace Forms {
      * @param name - The role name.
      * @param color - The role color.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I apply a specific color to identify a role in a document?
+     *
+     * // Change the color value for a role to customize its appearance in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let roles = doc.GetFormRoles();
+     * roles.Add("Customer");
+     * roles.SetRoleColor("Customer", "#C6E0B3");
+     * doc.InsertTextForm({
+     * 	key: "Name",
+     * 	role: "Customer",
+     * 	placeholder: "Enter your name"
+     * });
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/SetRoleColor/
      */
@@ -5217,13 +7734,21 @@ export namespace Forms {
   export interface ApiPathCommand {
   }
 
-  /** Class representing a document picture form. */
+  /**
+   * Class representing a document picture form.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/
+   */
   export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
      * @example
      * ```js
+     * // How do I clear the content of a form in a document?
+     *
+     * // Reset a filled-in form field to blank so it is ready for new input in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5235,7 +7760,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
@@ -5244,6 +7769,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I copy a form field in a document?
+     *
+     * // Reuse an existing form by placing an identical copy elsewhere on the same paragraph.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5253,7 +7782,7 @@ export namespace Forms {
      * paragraph.AddElement(copyTextForm);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -5263,6 +7792,31 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I delete a form field in a document?
+     *
+     * // Clean up a document by removing one of several inserted checkbox forms.
+     *
+     * const doc = Api.GetDocument();
+     * const checkBoxForm = Api.CreateCheckBoxForm({
+     * 	'key': 'Marital status',
+     * 	'tip': 'Specify your marital status',
+     * 	'placeholder': 'Marital status',
+     * 	'radio': true
+     * });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(' Married');
+     * let copyCheckBoxForm = checkBoxForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyCheckBoxForm);
+     * paragraph.AddText(' Single');
+     * checkBoxForm.Delete();
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -5270,6 +7824,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -5277,27 +7833,51 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the border color of a form field in a document?
+     *
+     * // Verify a custom border color by reading its RGB values back after applying it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.RGB(255, 111, 61));
+     * let borderColor = textForm.GetBorderColor();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Border color (RGB): (" + borderColor.r + ", " + borderColor.g + ", " + borderColor.b + ")");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiPictureForm class.
      *
      * @since 9.0.4
      *
      * @example
      * ```js
+     * // How do I find out what category a picture form field belongs to in a document?
+     *
+     * // Confirm the kind of form element in use by reading its category label in a document.
+     *
      * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
      * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
+     * paragraph.AddElement(pictureForm);
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
+     * let classType = pictureForm.GetClassType();
      * paragraph = Api.CreateParagraph();
      * paragraph.AddText("Class type: " + classType);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetClassType/
      */
     GetClassType(): "pictureForm";
 
@@ -5306,6 +7886,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the key of a form field in a document?
+     *
+     * // Confirm the grouping key of a combo box by reading it back and displaying it.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -5316,7 +7900,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
@@ -5325,6 +7909,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the type of a form field in a document?
+     *
+     * // Distinguish one form from another by printing its type identifier next to it.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5335,7 +7923,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -5344,17 +7932,21 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read back the image data from a picture form in a document?
+     *
+     * // Access the visual content embedded within a picture form in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * let base64img = pictureForm.GetImage();
      * let drawing = Api.CreateImage(base64img, 60 * 36000, 35 * 36000);
      * paragraph.AddDrawing(drawing);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/GetImage/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetImage/
      */
     GetImage(): Base64Img;
 
@@ -5362,6 +7954,24 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I get the internal ID of a form field in a document?
+     *
+     * // Uniquely track a form by reading its auto-assigned internal identifier.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let internalId = textForm.GetInternalId();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Internal id: " + internalId);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -5369,6 +7979,25 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I find out whether a form field is locked in a document?
+     *
+     * // Protect a form, then confirm the lock is active by reading the lock state.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -5378,6 +8007,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -5388,11 +8019,15 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out where a picture is positioned inside a form in a document?
+     *
+     * // Inspect the horizontal and vertical shift of an image inside a picture form in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * pictureForm.SetPicturePosition(70, 70);
      * let position = pictureForm.GetPicturePosition();
      * paragraph = Api.CreateParagraph();
@@ -5406,7 +8041,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/GetPicturePosition/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetPicturePosition/
      */
     GetPicturePosition(): percentage[];
 
@@ -5414,6 +8049,25 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the placeholder text of a form field in a document?
+     *
+     * // Confirm a hint label by retrieving the placeholder text after setting it on a form.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * let placeholderText = textForm.GetPlaceholderText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Placeholder text: " + placeholderText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -5422,6 +8076,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -5429,6 +8085,41 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the role of a form field in a document?
+     *
+     * // Assign a custom role to a form, then read it back to verify the assignment.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -5437,18 +8128,22 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check how a picture is scaled inside a form in a document?
+     *
+     * // Determine whether a picture shrinks, grows, or stays fixed within a form in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * let scaleFlag = pictureForm.GetScaleFlag();
      * paragraph = Api.CreateParagraph();
      * paragraph.AddText("Picture scale flag: " + scaleFlag);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/GetScaleFlag/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetScaleFlag/
      */
     GetScaleFlag(): ScaleFlag;
 
@@ -5456,15 +8151,49 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the tag of a form field in a document?
+     *
+     * // Label a form with a custom tag, then retrieve it to confirm it was stored correctly.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
+     * // How do I read the current value typed into a form in a document?
+     *
+     * // Extract the raw content of a filled-in text field to use or display elsewhere in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5475,16 +8204,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
+     * // How do I access the font and style settings of a form field in a document?
+     *
+     * // Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5498,7 +8231,7 @@ export namespace Forms {
      * textForm.SetTextPr(formTextPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
@@ -5507,6 +8240,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read the instructional hint shown when a user hovers over a form field in a document?
+     *
+     * // Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -5517,7 +8254,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -5525,6 +8262,24 @@ export namespace Forms {
      * Returns the current image of the picture form as a base64 encoded string.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetValue method of ApiPictureForm returns the image data currently stored in the form.
+     *
+     * // Create a picture form, add it to the document, and read its current value.
+     *
+     * let doc = Api.GetDocument();
+     * let pictureForm = Api.CreatePictureForm({"key": "Photo", "tip": "Upload your photo", "required": true, "placeholder": "Photo"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(pictureForm);
+     * let value = pictureForm.GetValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Picture form value type: " + typeof value);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -5537,17 +8292,21 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the surrounding shape of a form field so I can adjust its border or position in a document?
+     *
+     * // Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
      * textForm.ToFixed(10 * 240, 2 * 240);
      * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));
      * shape.SetOutLine(stroke);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -5555,6 +8314,31 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I tell if a form field has been filled out in a document?
+     *
+     * // Verify the fill status of multiple form fields to determine which ones still need input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm1 = Api.CreateTextForm({"key": "Name1", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": false, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm1);
+     * let textForm2 = Api.CreateTextForm({"key": "Name2", "tip": "Enter your last name", "required": true, "placeholder": "Last name", "comb": false, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm2);
+     * textForm2.SetText("Smith");
+     * let filled1 = textForm1.IsFilled();
+     * let filled2 = textForm2.IsFilled();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first text form is filled: " + filled1);
+     * doc.Push(paragraph);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The second text form is filled: " + filled2);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
@@ -5563,6 +8347,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a form field is locked to a specific size in a document?
+     *
+     * // Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5574,7 +8362,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
@@ -5583,19 +8371,23 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a picture form preserves its original proportions in a document?
+     *
+     * // Confirm that resizing a picture form will not distort its image in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "respectBorders": false, "shiftX": 50, "shiftY": 50});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * pictureForm.SetLockAspectRatio(true);
      * let lock = pictureForm.IsLockAspectRatio();
      * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The aspect ratio of the first picture form in this document is locked: " + lock);
+     * paragraph.AddText("The aspect ratio of the picture form in this document is locked: " + lock);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/IsLockAspectRatio/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/IsLockAspectRatio/
      */
     IsLockAspectRatio(): boolean;
 
@@ -5604,6 +8396,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check if a form field must be filled out before the document is submitted in a document?
+     *
+     * // Confirm whether a form field is required so the result can be shown to the reader in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5614,7 +8410,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -5623,19 +8419,23 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a picture form prevents the image from overlapping its borders in a document?
+     *
+     * // Verify that the image inside a picture form stays within its frame when scaled in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "shiftX": 50, "shiftY": 50});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * pictureForm.SetRespectBorders(true);
      * let respectBorders = pictureForm.IsRespectBorders();
      * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The borders of the first picture form in this document are respected when scaling the image: " + respectBorders);
+     * paragraph.AddText("The borders of the picture form in this document are respected when scaling the image: " + respectBorders);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/IsRespectBorders/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/IsRespectBorders/
      */
     IsRespectBorders(): boolean;
 
@@ -5648,6 +8448,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I place the cursor right after a form field to continue typing in a document?
+     *
+     * // Shift focus out of a completed form field so the next input lands in the surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5656,7 +8460,7 @@ export namespace Forms {
      * textForm.MoveCursorOutside(true);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -5668,14 +8472,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I fill a form field with a specific background color in a document?
+     *
+     * // Color the background of a form field to make it visually distinct from surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
+     * textForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -5687,14 +8495,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the border color of a form field in a document?
+     *
+     * // Style the outline of a form field with a specific color to draw attention to it in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
+     * textForm.SetBorderColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -5705,6 +8517,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set the key that identifies a form field in a document?
+     *
+     * // Label a form field with a custom key so it can be referenced or grouped with related fields in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5716,7 +8532,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -5728,14 +8544,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I insert a specific image into a picture form in a document?
+     *
+     * // Populate a picture form with an image from a web address in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetImage/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetImage/
      */
     SetImage(imageSrc: string): boolean;
 
@@ -5745,6 +8565,25 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I lock a form field so it cannot be changed in a document?
+     *
+     * // Protect specific fields from modification while keeping others editable.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -5756,19 +8595,23 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I ensure a picture form keeps its original proportions when resized in a document?
+     *
+     * // Protect an image from distortion by locking the width-to-height ratio of its form in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "respectBorders": false, "shiftX": 50, "shiftY": 50});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * pictureForm.SetLockAspectRatio(true);
      * let lock = pictureForm.IsLockAspectRatio();
      * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The aspect ratio of the first picture form in this document is locked: " + lock);
+     * paragraph.AddText("The aspect ratio of the picture form in this document is locked: " + lock);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetLockAspectRatio/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetLockAspectRatio/
      */
     SetLockAspectRatio(isLock?: boolean): boolean;
 
@@ -5783,11 +8626,15 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I shift an image to a specific spot inside a picture field in a document?
+     *
+     * // Reposition the image horizontally and vertically inside a picture field in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * pictureForm.SetPicturePosition(70, 70);
      * let position = pictureForm.GetPicturePosition();
      * paragraph = Api.CreateParagraph();
@@ -5801,18 +8648,22 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetPicturePosition/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetPicturePosition/
      */
     SetPicturePosition(nShiftX: percentage, nShiftY: percentage): boolean;
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I add hint text inside an empty form field in a document?
+     *
+     * // Display a prompt inside a field before the user fills it in.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5820,7 +8671,7 @@ export namespace Forms {
      * textForm.SetPlaceholderText("First name");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -5831,6 +8682,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I make a form field mandatory in a document?
+     *
+     * // Ensure a field must be filled before the document form is submitted.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5842,7 +8697,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -5854,19 +8709,23 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I keep a scaled image from overflowing the edges of its picture field in a document?
+     *
+     * // Ensure the border of a picture field stays visible no matter how the image is resized in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "shiftX": 50, "shiftY": 50});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * pictureForm.SetRespectBorders(true);
      * let respectBorders = pictureForm.IsRespectBorders();
      * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The borders of the first picture form in this document are respected when scaling the image: " + respectBorders);
+     * paragraph.AddText("The borders of the picture form in this document are respected when scaling the image: " + respectBorders);
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetRespectBorders/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetRespectBorders/
      */
     SetRespectBorders(isRespect?: boolean): boolean;
 
@@ -5875,6 +8734,41 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I associate a form field with a specific role in a document?
+     *
+     * // Restrict which signers or participants are responsible for a given field.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -5885,11 +8779,15 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I control whether an image shrinks or grows to match the size of a picture field in a document?
+     *
+     * // Decide the conditions under which an image adjusts its size inside a picture field in a document.
+     *
      * let doc = Api.GetDocument();
      * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
+     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));
      * pictureForm.SetScaleFlag("tooBig");
      * let scaleFlag = pictureForm.GetScaleFlag();
      * paragraph = Api.CreateParagraph();
@@ -5897,7 +8795,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetScaleFlag/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetScaleFlag/
      */
     SetScaleFlag(sScaleFlag: ScaleFlag): boolean;
 
@@ -5906,17 +8804,52 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I attach a label or identifier to a form field in a document?
+     *
+     * // Organize or reference form fields programmatically using custom tags.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I change the font size and style of text inside a form field in a document?
+     *
+     * // Make form field text bold and larger to improve readability.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5927,7 +8860,7 @@ export namespace Forms {
      * textForm.SetTextPr(textPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -5938,6 +8871,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a tooltip that appears when hovering over a form field in a document?
+     *
+     * // Give users helpful instructions that appear when they hover over a field.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5949,7 +8886,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -5958,6 +8895,21 @@ export namespace Forms {
      *
      * @param value - The image source (URL or base64 encoded image).
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The SetValue method of ApiPictureForm is a shorthand for SetImage that fits the unified value interface.
+     *
+     * // Create a picture form and assign an image from a URL using SetValue.
+     *
+     * let doc = Api.GetDocument();
+     * let pictureForm = Api.CreatePictureForm({"key": "Photo", "tip": "Upload your photo", "required": true, "placeholder": "Photo"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(pictureForm);
+     * pictureForm.SetValue("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetValue/
      */
     SetValue(value: string): boolean;
 
@@ -5971,6 +8923,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set a specific width and height for a form field in a document?
+     *
+     * // Lock a form's dimensions so layout does not shift when content changes.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -5982,16 +8938,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
+     * // How do I switch a form field from fixed size to inline positioning in a document?
+     *
+     * // Allow a form field to flow with surrounding text instead of occupying a fixed block.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6011,7 +8971,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -6054,12 +9014,56 @@ export namespace Forms {
   export interface ApiShape extends ApiDrawing {
   }
 
-  /** Class representing a document picture form. */
+  /**
+   * Class representing a document picture form.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiSignatureForm/
+   */
   export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
-    /** Clears the current form. */
+    /**
+     * Clears the current form.
+     *
+     * @example
+     * ```js
+     * // How do I clear the content of a form in a document?
+     *
+     * // Reset a filled-in form field to blank so it is ready for new input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetText("John Smith");
+     * textForm.Clear();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document was cleared.");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
+     */
     Clear(): boolean;
 
-    /** Copies the current form (copies with the shape if it exists). */
+    /**
+     * Copies the current form (copies with the shape if it exists).
+     *
+     * @example
+     * ```js
+     * // How do I copy a form field in a document?
+     *
+     * // Reuse an existing form by placing an identical copy elsewhere on the same paragraph.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let copyTextForm = textForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyTextForm);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
+     */
     Copy(): ApiForm;
 
     /**
@@ -6068,6 +9072,31 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I delete a form field in a document?
+     *
+     * // Clean up a document by removing one of several inserted checkbox forms.
+     *
+     * const doc = Api.GetDocument();
+     * const checkBoxForm = Api.CreateCheckBoxForm({
+     * 	'key': 'Marital status',
+     * 	'tip': 'Specify your marital status',
+     * 	'placeholder': 'Marital status',
+     * 	'radio': true
+     * });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(' Married');
+     * let copyCheckBoxForm = checkBoxForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyCheckBoxForm);
+     * paragraph.AddText(' Single');
+     * checkBoxForm.Delete();
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -6075,6 +9104,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -6082,6 +9113,25 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the border color of a form field in a document?
+     *
+     * // Verify a custom border color by reading its RGB values back after applying it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.RGB(255, 111, 61));
+     * let borderColor = textForm.GetBorderColor();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Border color (RGB): (" + borderColor.r + ", " + borderColor.g + ", " + borderColor.b + ")");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -6089,19 +9139,95 @@ export namespace Forms {
      * Returns a type of the ApiSignatureForm class.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I find out what category a form object belongs to in a document?
+     *
+     * // Identify the kind of element a signature form represents in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let signatureForm = Api.CreateSignatureForm({"key": "Signature", "tip": "Please sign here", "placeholder": "Signature"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(signatureForm);
+     * let classType = signatureForm.GetClassType();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Class type: " + classType);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiSignatureForm/Methods/GetClassType/
      */
     GetClassType(): "signatureForm";
 
-    /** Returns the current form key. */
+    /**
+     * Returns the current form key.
+     *
+     * @example
+     * ```js
+     * // How do I get the key of a form field in a document?
+     *
+     * // Confirm the grouping key of a combo box by reading it back and displaying it.
+     *
+     * let doc = Api.GetDocument();
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(comboBoxForm);
+     * let key = comboBoxForm.GetFormKey();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form key: " + key);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
+     */
     GetFormKey(): string;
 
-    /** Returns a type of the current form. */
+    /**
+     * Returns a type of the current form.
+     *
+     * @example
+     * ```js
+     * // How do I get the type of a form field in a document?
+     *
+     * // Distinguish one form from another by printing its type identifier next to it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let formType = textForm.GetFormType();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form type: " + formType);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
+     */
     GetFormType(): FormType;
 
     /**
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I get the internal ID of a form field in a document?
+     *
+     * // Uniquely track a form by reading its auto-assigned internal identifier.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let internalId = textForm.GetInternalId();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Internal id: " + internalId);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -6109,6 +9235,25 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I find out whether a form field is locked in a document?
+     *
+     * // Protect a form, then confirm the lock is active by reading the lock state.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -6118,6 +9263,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -6125,6 +9272,25 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the placeholder text of a form field in a document?
+     *
+     * // Confirm a hint label by retrieving the placeholder text after setting it on a form.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * let placeholderText = textForm.GetPlaceholderText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Placeholder text: " + placeholderText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -6133,6 +9299,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -6140,6 +9308,41 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the role of a form field in a document?
+     *
+     * // Assign a custom role to a form, then read it back to verify the assignment.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -6147,25 +9350,136 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the tag of a form field in a document?
+     *
+     * // Label a form with a custom tag, then retrieve it to confirm it was stored correctly.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
-    /** Returns the text from the current form. */
+    /**
+     * Returns the text from the current form.
+     *
+     * @example
+     * ```js
+     * // How do I read the current value typed into a form in a document?
+     *
+     * // Extract the raw content of a filled-in text field to use or display elsewhere in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let text = textForm.GetText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form text: " + text);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
+     */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
+     *
+     * @example
+     * ```js
+     * // How do I access the font and style settings of a form field in a document?
+     *
+     * // Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let textPr = Api.CreateTextPr();
+     * textPr.SetFontSize(30);
+     * textPr.SetBold(true);
+     * textForm.SetTextPr(textPr);
+     * let formTextPr = textForm.GetTextPr();
+     * formTextPr.SetItalic(true);
+     * textForm.SetTextPr(formTextPr);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
-    /** Returns the tip text of the current form. */
+    /**
+     * Returns the tip text of the current form.
+     *
+     * @example
+     * ```js
+     * // How do I read the instructional hint shown when a user hovers over a form field in a document?
+     *
+     * // Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(comboBoxForm);
+     * let tipText = comboBoxForm.GetTipText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tip text: " + tipText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
+     */
     GetTipText(): string;
 
     /**
      * Returns the current image of the signature form as a base64 encoded string.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetValue method of ApiSignatureForm returns the signature image data stored in the form.
+     *
+     * // Create a signature form, add it to the document, and read its current value.
+     *
+     * let doc = Api.GetDocument();
+     * let signatureForm = Api.CreateSignatureForm({"key": "Signature", "tip": "Please sign here", "required": true, "placeholder": "Signature"});
+     * signatureForm.Value = "https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png";
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(signatureForm);
+     * let value = signatureForm.GetValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Signature form value: " + value);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiSignatureForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -6175,6 +9489,24 @@ export namespace Forms {
      * The null value will be returned for the inline forms.
      *
      * @returns returns the shape in which the form is placed.
+     *
+     * @example
+     * ```js
+     * // How do I get the surrounding shape of a form field so I can adjust its border or position in a document?
+     *
+     * // Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.ToFixed(10 * 240, 2 * 240);
+     * let shape = textForm.GetWrapperShape();
+     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));
+     * shape.SetOutLine(stroke);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -6182,13 +9514,79 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I tell if a form field has been filled out in a document?
+     *
+     * // Verify the fill status of multiple form fields to determine which ones still need input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm1 = Api.CreateTextForm({"key": "Name1", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": false, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm1);
+     * let textForm2 = Api.CreateTextForm({"key": "Name2", "tip": "Enter your last name", "required": true, "placeholder": "Last name", "comb": false, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm2);
+     * textForm2.SetText("Smith");
+     * let filled1 = textForm1.IsFilled();
+     * let filled2 = textForm2.IsFilled();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first text form is filled: " + filled1);
+     * doc.Push(paragraph);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The second text form is filled: " + filled2);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
-    /** Checks if the current form is fixed size. */
+    /**
+     * Checks if the current form is fixed size.
+     *
+     * @example
+     * ```js
+     * // How do I find out if a form field is locked to a specific size in a document?
+     *
+     * // Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.ToFixed(10 * 240, 2 * 240);
+     * let fixed = textForm.IsFixed();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is fixed: " + fixed);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
+     */
     IsFixed(): boolean;
 
-    /** Checks if the current form is required. */
+    /**
+     * Checks if the current form is required.
+     *
+     * @example
+     * ```js
+     * // How do I check if a form field must be filled out before the document is submitted in a document?
+     *
+     * // Confirm whether a form field is required so the result can be shown to the reader in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let required = textForm.IsRequired();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is required: " + required);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
+     */
     IsRequired(): boolean;
 
     /**
@@ -6197,6 +9595,22 @@ export namespace Forms {
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
      * @default isAfter = true
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * // How do I place the cursor right after a form field to continue typing in a document?
+     *
+     * // Shift focus out of a completed form field so the next input lands in the surrounding text in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetText("The cursor will be placed after the current form.");
+     * textForm.MoveCursorOutside(true);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -6205,6 +9619,21 @@ export namespace Forms {
      *
      * @param color - The background color.
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I fill a form field with a specific background color in a document?
+     *
+     * // Color the background of a form field to make it visually distinct from surrounding text in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -6213,6 +9642,21 @@ export namespace Forms {
      *
      * @param color - The border color.
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I change the border color of a form field in a document?
+     *
+     * // Style the outline of a form field with a specific color to draw attention to it in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.HexColor('#FF6F3D'));
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -6220,6 +9664,25 @@ export namespace Forms {
      * Sets a key to the current form.
      *
      * @param sKey - Form key.
+     *
+     * @example
+     * ```js
+     * // How do I set the key that identifies a form field in a document?
+     *
+     * // Label a form field with a custom key so it can be referenced or grouped with related fields in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetFormKey("Personal information");
+     * let key = textForm.GetFormKey();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form key: " + key);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -6229,6 +9692,25 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I lock a form field so it cannot be changed in a document?
+     *
+     * // Protect specific fields from modification while keeping others editable.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -6237,6 +9719,21 @@ export namespace Forms {
      * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
+     *
+     * @example
+     * ```js
+     * // How do I add hint text inside an empty form field in a document?
+     *
+     * // Display a prompt inside a field before the user fills it in.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -6244,6 +9741,25 @@ export namespace Forms {
      * Specifies if the current form should be required.
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
+     *
+     * @example
+     * ```js
+     * // How do I make a form field mandatory in a document?
+     *
+     * // Ensure a field must be filled before the document form is submitted.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetRequired(true);
+     * let required = textForm.IsRequired();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is required: " + required);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -6252,6 +9768,41 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I associate a form field with a specific role in a document?
+     *
+     * // Restrict which signers or participants are responsible for a given field.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -6260,6 +9811,37 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I attach a label or identifier to a form field in a document?
+     *
+     * // Organize or reference form fields programmatically using custom tags.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -6268,6 +9850,24 @@ export namespace Forms {
      * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
+     *
+     * @example
+     * ```js
+     * // How do I change the font size and style of text inside a form field in a document?
+     *
+     * // Make form field text bold and larger to improve readability.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let textPr = Api.CreateTextPr();
+     * textPr.SetFontSize(30);
+     * textPr.SetBold(true);
+     * textForm.SetTextPr(textPr);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -6275,6 +9875,25 @@ export namespace Forms {
      * Sets the tip text to the current form.
      *
      * @param sText - Tip text.
+     *
+     * @example
+     * ```js
+     * // How do I add a tooltip that appears when hovering over a form field in a document?
+     *
+     * // Give users helpful instructions that appear when they hover over a field.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetTipText("Enter your first name");
+     * let tipText = textForm.GetTipText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Tip text: " + tipText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -6283,6 +9902,21 @@ export namespace Forms {
      *
      * @param value - The image source (URL or base64 encoded image).
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The SetValue method of ApiSignatureForm is a shorthand for SetImage that fits the unified value interface.
+     *
+     * // Create a signature form and assign a signature image from a URL using SetValue.
+     *
+     * let doc = Api.GetDocument();
+     * let signatureForm = Api.CreateSignatureForm({"key": "Signature", "tip": "Please sign here", "required": true, "placeholder": "Signature"});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(signatureForm);
+     * signatureForm.SetValue("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiSignatureForm/Methods/SetValue/
      */
     SetValue(value: string): boolean;
 
@@ -6293,12 +9927,58 @@ export namespace Forms {
      * @param height - The wrapper shape height measured in twentieths of a point (1/1440 of an inch).
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
+     *
+     * @example
+     * ```js
+     * // How do I set a specific width and height for a form field in a document?
+     *
+     * // Lock a form's dimensions so layout does not shift when content changes.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.ToFixed(10 * 240, 2 * 240);
+     * let fixed = textForm.IsFixed();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
+     *
+     * @example
+     * ```js
+     * // How do I switch a form field from fixed size to inline positioning in a document?
+     *
+     * // Allow a form field to flow with surrounding text instead of occupying a fixed block.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.ToFixed(10 * 240, 2 * 240);
+     * let copyForm = textForm.Copy();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddElement(copyForm);
+     * doc.Push(paragraph);
+     * copyForm.ToInline();
+     * let fixed = textForm.IsFixed();
+     * let fixedCopy = copyForm.IsFixed();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
+     * paragraph.AddLineBreak();
+     * paragraph.AddText("The second form from this document has a fixed size: " + fixedCopy);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -6347,13 +10027,21 @@ export namespace Forms {
   export interface ApiTableStylePr {
   }
 
-  /** Class representing a document text field. */
+  /**
+   * Class representing a document text field.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/
+   */
   export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
      * @example
      * ```js
+     * // How do I clear the content of a form in a document?
+     *
+     * // Reset a filled-in form field to blank so it is ready for new input in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6365,7 +10053,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
@@ -6374,6 +10062,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I copy a form field in a document?
+     *
+     * // Reuse an existing form by placing an identical copy elsewhere on the same paragraph.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6383,7 +10075,7 @@ export namespace Forms {
      * paragraph.AddElement(copyTextForm);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -6393,16 +10085,62 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I delete a form field in a document?
+     *
+     * // Clean up a document by removing one of several inserted checkbox forms.
+     *
+     * const doc = Api.GetDocument();
+     * const checkBoxForm = Api.CreateCheckBoxForm({
+     * 	'key': 'Marital status',
+     * 	'tip': 'Specify your marital status',
+     * 	'placeholder': 'Marital status',
+     * 	'radio': true
+     * });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(checkBoxForm);
+     * paragraph.AddText(' Married');
+     * let copyCheckBoxForm = checkBoxForm.Copy();
+     * paragraph.AddLineBreak();
+     * paragraph.AddElement(copyCheckBoxForm);
+     * paragraph.AddText(' Single');
+     * checkBoxForm.Delete();
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
-    /** Returns the allowed symbols for the current text field. */
+    /**
+     * Returns the allowed symbols for the current text field.
+     *
+     * @example
+     * ```js
+     * // How do I find out which symbols are permitted in a text field in a document?
+     *
+     * // Confirm the character restriction applied to a text entry area in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({ key: "Letters", placeholder: "Letters only" });
+     * textForm.SetAllowedSymbols("abcdefghijklmnopqrstuvwxyz");
+     * let allowedSymbols = textForm.GetAllowedSymbols();
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddText("Allowed symbols: " + allowedSymbols);
+     * paragraph.Push(textForm);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetAllowedSymbols/
+     */
     GetAllowedSymbols(): string;
 
     /**
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -6410,6 +10148,25 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the border color of a form field in a document?
+     *
+     * // Verify a custom border color by reading its RGB values back after applying it.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetBorderColor(Api.RGB(255, 111, 61));
+     * let borderColor = textForm.GetBorderColor();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Border color (RGB): (" + borderColor.r + ", " + borderColor.g + ", " + borderColor.b + ")");
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -6420,6 +10177,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check how many characters a text entry area is limited to in a document?
+     *
+     * // Verify the character cap set on a text field to ensure input constraints are correct in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6432,17 +10193,21 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/GetCharactersLimit/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetCharactersLimit/
      */
     GetCharactersLimit(): number;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiTextForm class.
      *
      * @since 9.0.4
      *
      * @example
      * ```js
+     * // How do I find out what type of element a text entry area represents in a document?
+     *
+     * // Confirm the category of a text field to distinguish it from other elements in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6453,7 +10218,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetClassType/
      */
     GetClassType(): "textForm";
 
@@ -6462,6 +10227,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the key of a form field in a document?
+     *
+     * // Confirm the grouping key of a combo box by reading it back and displaying it.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -6472,7 +10241,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
@@ -6481,6 +10250,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the type of a form field in a document?
+     *
+     * // Distinguish one form from another by printing its type identifier next to it.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6491,17 +10264,54 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
-    /** Returns the format of the current text field. */
+    /**
+     * Returns the format of the current text field.
+     *
+     * @example
+     * ```js
+     * // How do I check what format rule is set on a text entry area in a document?
+     *
+     * // Confirm the mask or pattern controlling user input in a text field in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({ key: "Code", placeholder: "Enter code" });
+     * textForm.SetFormat({ type: "mask", value: "9-9-9" });
+     * let format = textForm.GetFormat();
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddText("Text form format type: " + format.type + ", value: " + format.value);
+     * paragraph.Push(textForm);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetFormat/
+     */
     GetFormat(): TextFormFormat;
 
     /**
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @example
+     * ```js
+     * // How do I get the internal ID of a form field in a document?
+     *
+     * // Uniquely track a form by reading its auto-assigned internal identifier.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * let internalId = textForm.GetInternalId();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Internal id: " + internalId);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -6509,6 +10319,25 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I find out whether a form field is locked in a document?
+     *
+     * // Protect a form, then confirm the lock is active by reading the lock state.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -6518,6 +10347,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -6525,6 +10356,25 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @example
+     * ```js
+     * // How do I get the placeholder text of a form field in a document?
+     *
+     * // Confirm a hint label by retrieving the placeholder text after setting it on a form.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetPlaceholderText("First name");
+     * let placeholderText = textForm.GetPlaceholderText();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Placeholder text: " + placeholderText);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -6533,6 +10383,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -6540,6 +10392,41 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the role of a form field in a document?
+     *
+     * // Assign a custom role to a form, then read it back to verify the assignment.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -6547,15 +10434,49 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I get the tag of a form field in a document?
+     *
+     * // Label a form with a custom tag, then retrieve it to confirm it was stored correctly.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
+     * // How do I read the current value typed into a form in a document?
+     *
+     * // Extract the raw content of a filled-in text field to use or display elsewhere in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6566,16 +10487,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
+     * // How do I access the font and style settings of a form field in a document?
+     *
+     * // Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6589,7 +10514,7 @@ export namespace Forms {
      * textForm.SetTextPr(formTextPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
@@ -6598,6 +10523,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I read the instructional hint shown when a user hovers over a form field in a document?
+     *
+     * // Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.
+     *
      * let doc = Api.GetDocument();
      * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
      * let paragraph = doc.GetElement(0);
@@ -6608,7 +10537,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -6616,6 +10545,25 @@ export namespace Forms {
      * Returns the current text value of the text form.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The GetValue method of ApiTextForm returns the current text content of the field.
+     *
+     * // Set a value to the text form and then read it back to display in the document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetValue("John Smith");
+     * let value = textForm.GetValue();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Text form value: " + value);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -6628,17 +10576,21 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I get the surrounding shape of a form field so I can adjust its border or position in a document?
+     *
+     * // Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
      * textForm.ToFixed(10 * 240, 2 * 240);
      * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));
      * shape.SetOutLine(stroke);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -6648,6 +10600,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a text field is set to shrink text to fit in a document?
+     *
+     * // Confirm the auto-fit setting on a form field before adjusting its layout in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6658,7 +10614,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/IsAutoFit/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/IsAutoFit/
      */
     IsAutoFit(): boolean;
 
@@ -6667,6 +10623,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I determine if a text field uses a comb layout for its characters in a document?
+     *
+     * // Verify that equal-width character cells are active on a text field in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "maxCharacters": 10, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6678,7 +10638,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/IsComb/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/IsComb/
      */
     IsComb(): boolean;
 
@@ -6686,6 +10646,31 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // How do I tell if a form field has been filled out in a document?
+     *
+     * // Verify the fill status of multiple form fields to determine which ones still need input in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm1 = Api.CreateTextForm({"key": "Name1", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": false, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm1);
+     * let textForm2 = Api.CreateTextForm({"key": "Name2", "tip": "Enter your last name", "required": true, "placeholder": "Last name", "comb": false, "multiLine": false, "autoFit": false});
+     * paragraph.AddElement(textForm2);
+     * textForm2.SetText("Smith");
+     * let filled1 = textForm1.IsFilled();
+     * let filled2 = textForm2.IsFilled();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first text form is filled: " + filled1);
+     * doc.Push(paragraph);
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The second text form is filled: " + filled2);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
@@ -6694,6 +10679,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a form field is locked to a specific size in a document?
+     *
+     * // Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6705,7 +10694,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
@@ -6714,6 +10703,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I find out if a form field allows line breaks and wrapping in a document?
+     *
+     * // Confirm that a text field supports more than one line of text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6724,7 +10717,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/IsMultiline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/IsMultiline/
      */
     IsMultiline(): boolean;
 
@@ -6733,6 +10726,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I check if a form field must be filled out before the document is submitted in a document?
+     *
+     * // Confirm whether a form field is required so the result can be shown to the reader in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6743,7 +10740,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -6756,6 +10753,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I place the cursor right after a form field to continue typing in a document?
+     *
+     * // Shift focus out of a completed form field so the next input lands in the surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6764,7 +10765,7 @@ export namespace Forms {
      * textForm.MoveCursorOutside(true);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -6773,6 +10774,22 @@ export namespace Forms {
      * as input.
      *
      * @param symbols - A string of allowed characters.
+     *
+     * @example
+     * ```js
+     * // How do I limit which characters a user can type into a text field in a document?
+     *
+     * // Prevent unwanted input by defining the exact characters allowed in a text field in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({ key: "Digits", placeholder: "Digits only" });
+     * textForm.SetAllowedSymbols("0123456789");
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddText("Text form accepting digits only: ");
+     * paragraph.Push(textForm);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetAllowedSymbols/
      */
     SetAllowedSymbols(symbols: string): boolean;
 
@@ -6784,6 +10801,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I make a text field automatically adjust its size to match the entered text in a document?
+     *
+     * // Keep a text field tidy by letting it expand or shrink to fit its content in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "multiLine": false});
      * let paragraph = doc.GetElement(0);
@@ -6796,7 +10817,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetAutoFit/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetAutoFit/
      */
     SetAutoFit(bAutoFit: boolean): boolean;
 
@@ -6808,14 +10829,18 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I fill a form field with a specific background color in a document?
+     *
+     * // Color the background of a form field to make it visually distinct from surrounding text in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
+     * textForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -6827,27 +10852,34 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I change the border color of a form field in a document?
+     *
+     * // Style the outline of a form field with a specific color to draw attention to it in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
      * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
+     * textForm.SetBorderColor(Api.HexColor('#FF6F3D'));
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
     /**
      * Sets the cell width to the applied comb of characters.
      *
-     * @param nCellWidth - The cell width measured in millimeters.
-     *   If this parameter is not specified or equal to 0 or less, then the width will be set
-     *   automatically. Must be >= 1 and <= 558.8.
+     * @param nCellWidth - The cell width measured in millimeters. If this parameter is not specified or equal to 0 or
+     *   less, then the width will be set automatically. Must be >= 1 and <= 558.8.
      * @default nCellWidth = 0
      *
      * @example
      * ```js
+     * // How do I control the width of individual character boxes in a text field in a document?
+     *
+     * // Adjust character cell width to ensure uniform spacing across a comb text field in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "maxCharacters": 10, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6856,7 +10888,7 @@ export namespace Forms {
      * textForm.SetCellWidth(7);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetCellWidth/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetCellWidth/
      */
     SetCellWidth(nCellWidth?: mm): boolean;
 
@@ -6864,12 +10896,15 @@ export namespace Forms {
      * Sets a limit to the text field characters.
      *
      * @param nChars - The maximum number of characters in the text field. If this parameter is equal to -1, no limit
-     *   will be set.
-     *   A limit is required to be set if a comb of characters is applied.
-     *   Maximum value for this parameter is 1000000.
+     *   will be set. A limit is required to be set if a comb of characters is applied. Maximum value for
+     *   this parameter is 1000000.
      *
      * @example
      * ```js
+     * // How do I cap the total number of characters allowed in a text field in a document?
+     *
+     * // Enforce a maximum input length to keep text field entries concise in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6882,7 +10917,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetCharactersLimit/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetCharactersLimit/
      */
     SetCharactersLimit(nChars: number): boolean;
 
@@ -6894,6 +10929,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I split a text field into evenly spaced individual character cells in a document?
+     *
+     * // Give a text field a structured grid appearance by enabling its comb layout in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "maxCharacters": 10, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6905,7 +10944,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetComb/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetComb/
      */
     SetComb(bComb: boolean): boolean;
 
@@ -6916,6 +10955,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set the key that identifies a form field in a document?
+     *
+     * // Label a form field with a custom key so it can be referenced or grouped with related fields in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6927,7 +10970,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -6935,6 +10978,22 @@ export namespace Forms {
      * Sets the format for the current text field.
      *
      * @param format - The format to set.
+     *
+     * @example
+     * ```js
+     * // How do I restrict a text field to accept only a certain type of input in a document?
+     *
+     * // Enforce a structured input pattern on a text field to guide user entries in a document.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({ key: "Phone", placeholder: "Enter digits" });
+     * textForm.SetFormat({ type: "digit" });
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddText("Text form with digit format: ");
+     * paragraph.Push(textForm);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetFormat/
      */
     SetFormat(format: TextFormFormat): boolean;
 
@@ -6944,6 +11003,25 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * // How do I lock a form field so it cannot be changed in a document?
+     *
+     * // Protect specific fields from modification while keeping others editable.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetLock(true);
+     * let locked = textForm.GetLock();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("The first form from this document is locked: " + locked);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -6955,6 +11033,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I enable a text field to accept line breaks and wrap across multiple rows in a document?
+     *
+     * // Expand a text field so users can enter longer responses across several lines in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6967,18 +11049,22 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetMultiline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetMultiline/
      */
     SetMultiline(bMultiline: boolean): boolean;
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I add hint text inside an empty form field in a document?
+     *
+     * // Display a prompt inside a field before the user fills it in.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -6986,7 +11072,7 @@ export namespace Forms {
      * textForm.SetPlaceholderText("First name");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -6997,6 +11083,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I make a form field mandatory in a document?
+     *
+     * // Ensure a field must be filled before the document form is submitted.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -7008,7 +11098,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -7017,6 +11107,41 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I associate a form field with a specific role in a document?
+     *
+     * // Restrict which signers or participants are responsible for a given field.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const roles = doc.GetFormRoles();
+     * const rolePr = { "color": "#ffefbf" };
+     * roles.Add("MY_ROLE", rolePr);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * paragraph.AddElement(textForm);
+     *
+     * textForm.SetRole("MY_ROLE");
+     * const role = textForm.GetRole();
+     *
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form role: " + role);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -7025,6 +11150,37 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @example
+     * ```js
+     * // How do I attach a label or identifier to a form field in a document?
+     *
+     * // Organize or reference form fields programmatically using custom tags.
+     *
+     * const doc = Api.GetDocument();
+     * let paragraph = doc.GetElement(0);
+     *
+     * const textForm = Api.CreateTextForm({
+     * 	"key": "Personal information",
+     * 	"tip": "Enter your first name",
+     * 	"required": true,
+     * 	"placeholder": "First name",
+     * 	"comb": true,
+     * 	"maxCharacters": 10,
+     * 	"cellWidth": 3,
+     * 	"multiLine": false,
+     * 	"autoFit": false
+     * });
+     * textForm.SetTag('MY_TAG');
+     * paragraph.AddElement(textForm);
+     *
+     * const formTag = textForm.GetTag();
+     * paragraph = Api.CreateParagraph();
+     * paragraph.AddText("Form tag: " + formTag);
+     * doc.Push(paragraph);
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -7035,6 +11191,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I pre-fill a text form with specific content in a document?
+     *
+     * // Populate a text form with a default value so the field is not empty in a document.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -7042,18 +11202,22 @@ export namespace Forms {
      * textForm.SetText("John Smith");
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetText/
      */
     SetText(text: string): boolean;
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
      * @example
      * ```js
+     * // How do I change the font size and style of text inside a form field in a document?
+     *
+     * // Make form field text bold and larger to improve readability.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -7064,7 +11228,7 @@ export namespace Forms {
      * textForm.SetTextPr(textPr);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -7075,6 +11239,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I add a tooltip that appears when hovering over a form field in a document?
+     *
+     * // Give users helpful instructions that appear when they hover over a field.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -7086,7 +11254,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -7095,6 +11263,21 @@ export namespace Forms {
      *
      * @param value - The text value to set.
      * @since 9.4.0
+     *
+     * @example
+     * ```js
+     * // The SetValue method fills the text form with the given string value.
+     *
+     * // Create a text form, set its value, and add it to the first paragraph.
+     *
+     * let doc = Api.GetDocument();
+     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "multiLine": false, "autoFit": false});
+     * let paragraph = doc.GetElement(0);
+     * paragraph.AddElement(textForm);
+     * textForm.SetValue("John Smith");
+     * ```
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetValue/
      */
     SetValue(value: string): boolean;
 
@@ -7108,6 +11291,10 @@ export namespace Forms {
      *
      * @example
      * ```js
+     * // How do I set a specific width and height for a form field in a document?
+     *
+     * // Lock a form's dimensions so layout does not shift when content changes.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -7119,16 +11306,20 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
+     * // How do I switch a form field from fixed size to inline positioning in a document?
+     *
+     * // Allow a form field to flow with surrounding text instead of occupying a fixed block.
+     *
      * let doc = Api.GetDocument();
      * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
      * let paragraph = doc.GetElement(0);
@@ -7148,7 +11339,7 @@ export namespace Forms {
      * doc.Push(paragraph);
      * ```
      *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }

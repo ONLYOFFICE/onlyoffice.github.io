@@ -1,0 +1,19 @@
+{
+  "description": "Flips the current drawing vertically.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetVertFlip/",
+  "examples": [
+    "// How do I mirror a drawing vertically in a document?\n\n// Invert a shape's orientation to create a reflected effect in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetVertFlip(true);"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the figure will be flipped vertically or not.",
+      "name": "bFlip",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetVertFlip(bFlip: boolean): boolean"
+}

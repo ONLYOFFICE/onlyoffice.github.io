@@ -1,0 +1,13 @@
+{
+  "description": "Returns the paragraph right side indentation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndRight/",
+  "examples": [
+    "// How do I find out how far a paragraph is indented from the right margin in a document?\n\n// Check the right indent size before synchronizing paragraph layout across multiple styles.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"right\");\nparaPr.SetIndRight(2880);\nparagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet indRight = paraPr.GetIndRight();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Right indent: \" + indRight);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
+    "type": "twips | undefined"
+  },
+  "signature": "GetIndRight(): twips | undefined"
+}

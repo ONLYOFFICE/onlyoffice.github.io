@@ -1,0 +1,13 @@
+{
+  "description": "Splits the selected merged cell range into the single cells.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/UnMerge/",
+  "examples": [
+    "// How do I separate merged cells into single cells in a spreadsheet?\n\n// Undo a cell merge so each address in the range becomes its own independent cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A3:E8\").Merge(true);\nworksheet.GetRange(\"A5:E5\").UnMerge();"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns true if the range was unmerged successfully.",
+    "type": "boolean"
+  },
+  "signature": "UnMerge(): boolean"
+}

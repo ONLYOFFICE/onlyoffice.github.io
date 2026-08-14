@@ -1,0 +1,13 @@
+{
+  "description": "Returns the next inline drawing object if exists.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetNextDrawing/",
+  "examples": [
+    "// How do I access the drawing that comes after a given shape in a document?\n\n// Traverse sibling drawings and modify the properties of the following shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nparagraph.AddDrawing(copyDrawing);\nlet nextDrawing = drawing.GetNextDrawing();\nnextDrawing.SetHorFlip(true);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if drawing object is last.",
+    "type": "ApiDrawing | null"
+  },
+  "signature": "GetNextDrawing(): ApiDrawing | null"
+}

@@ -103,6 +103,6 @@ var pluginConfig = {
 export { 
     basicPluginExample, 
     documentPluginExample, 
-    eventsExample, 
+    eventsExample,
     pluginConfig 
 };

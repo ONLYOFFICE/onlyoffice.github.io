@@ -1,0 +1,581 @@
+{
+  "description": "Class representing a text field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/",
+  "extends": [
+    "ApiBaseField"
+  ],
+  "methods": {
+    "AddWidget": {
+      "description": "Adds new widget - visual representation for field",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/AddWidget/",
+      "examples": [
+        "// How do I create a visual instance of a form field in a PDF?\n\n// Display a form field's widget at a specific location in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Example text');\ntextField.AddWidget(0, [10, 40, 160, 60]);"
+      ],
+      "params": [
+        {
+          "description": "page index to add widget",
+          "name": "pageIndex",
+          "type": "number"
+        },
+        {
+          "description": "field rect",
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "ApiWidget"
+      },
+      "signature": "AddWidget(pageIndex: number, rect: Rect): ApiWidget"
+    },
+    "ClearFormat": {
+      "description": "Clears format of field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/ClearFormat/",
+      "examples": [
+        "// How do I clear formatting that was applied to a text field in a PDF?\n\n// Reset a text field to its default appearance without any special formatting in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetNumberFormat(0, \"us\", \"black-minus\", \"$\", true);\ntextField.SetValue('-1000');\ntextField.ClearFormat();"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ClearFormat(): boolean"
+    },
+    "Delete": {
+      "description": "Removes field from document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/Delete/",
+      "examples": [
+        "// How do I delete a form field from a PDF?\n\n// Remove a field and all its associated widgets from a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Example text');\ntextField.AddWidget(0, [10, 40, 160, 60]);\ntextField.Delete();"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAllWidgets": {
+      "description": "Gets array with widgets of the current field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetAllWidgets/",
+      "examples": [
+        "// How can I retrieve every visual representation of a form field in a PDF?\n\n// Modify the appearance of all form field widgets in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Example text');\ntextField.AddWidget(0, [10, 40, 160, 60]);\nlet widgets = textField.GetAllWidgets();\nlet rgbColor = Api.RGB(255, 100, 0);\nwidgets.forEach(function(widget) {\n    widget.SetBorderColor(rgbColor);\n});"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns emptry array if the field is not added to the document.",
+        "type": "ApiWidget[]"
+      },
+      "signature": "GetAllWidgets(): ApiWidget[]"
+    },
+    "GetCharLimit": {
+      "description": "Gets the text field character limit.\n<note> Char limit 0 means field doesn't have char limit",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetCharLimit/",
+      "examples": [
+        "// How do I find out how many characters a text field accepts in a PDF?\n\n// Read the character limit restriction of a text input field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetCharLimit(20);\ntextField.SetValue('Char limit is: ' + textField.GetCharLimit());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCharLimit(): number"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiTextField class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out what class a text field belongs to in a PDF?\n\n// Identify the type category of a text input box in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue(textField.GetClassType());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"textField\""
+      },
+      "signature": "GetClassType(): \"textField\""
+    },
+    "GetFormattedValue": {
+      "description": "Gets formatted value of a field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetFormattedValue/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFormattedValue(): string"
+    },
+    "GetFullName": {
+      "description": "Gets field full name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetFullName/",
+      "examples": [
+        "// How do I retrieve the full name assigned to a form field in a PDF?\n\n// Display the unique full name property of a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Field full name is: ' + textField.GetFullName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFullName(): string"
+    },
+    "GetPartialName": {
+      "description": "Gets field partial name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetPartialName/",
+      "examples": [
+        "// How can I find the partial name of a form field in a PDF?\n\n// Access the short name identifier assigned to a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetPartialName('EXAMPLE');\ntextField.SetValue('Field partial name is: ' + textField.GetFullName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetPartialName(): string"
+    },
+    "GetPlaceholder": {
+      "description": "Gets text field placeholder.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetPlaceholder/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetPlaceholder(): string"
+    },
+    "GetRegularExp": {
+      "description": "Gets text widget regular validate expression.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetRegularExp/",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetRegularExp(): boolean"
+    },
+    "GetValue": {
+      "description": "Gets field value",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetValue/",
+      "examples": [
+        "// How do I read the value entered in a form field in a PDF?\n\n// Transfer text content between form fields in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\n\nlet textField1 = Api.CreateTextField([10, 10, 160, 30]);\nlet textField2 = Api.CreateTextField([10, 40, 160, 60]);\n\npage.AddObject(textField1);\npage.AddObject(textField2);\n\ntextField1.SetValue('Name Surname');\ntextField2.SetValue(textField1.GetValue());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | string[]"
+      },
+      "signature": "GetValue(): string | string[]"
+    },
+    "IsComb": {
+      "description": "Checks if the text field uses comb formatting.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/IsComb/",
+      "examples": [
+        "// How do I know if a text field is set to display characters in separate boxes in a PDF?\n\n// Verify if the comb format is enabled for a text input field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetCharLimit(12);\ntextField.SetComb(true);\ntextField.SetValue('Comb is:' + textField.IsComb());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsComb(): boolean"
+    },
+    "IsMultiline": {
+      "description": "Checks if text field is multiline.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/IsMultiline/",
+      "examples": [
+        "// How do I determine if a text field accepts multiple lines in a PDF?\n\n// Verify if text wrapping is enabled for a text input field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetMultiline(true);\ntextField.SetValue('Multiline is: ' + textField.IsMultiline());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsMultiline(): boolean"
+    },
+    "IsReadOnly": {
+      "description": "Checks if field is read only",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/IsReadOnly/",
+      "examples": [
+        "// How can I determine if a form field is read-only in a PDF?\n\n// Verify the read-only status of a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Read only is: ' + textField.IsReadOnly());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsReadOnly(): boolean"
+    },
+    "IsRequired": {
+      "description": "Checks if field is required",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/IsRequired/",
+      "examples": [
+        "// How can I determine if a form field is required in a PDF?\n\n// Verify whether a form field must have a value in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Required: ' + textField.IsRequired());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsRequired(): boolean"
+    },
+    "IsScrollLongText": {
+      "description": "Checks if text field can scroll long text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/IsScrollLongText/",
+      "examples": [
+        "// How do I know if long text will scroll instead of wrap in a text field in a PDF?\n\n// Determine whether a text input allows scrolling for content larger than the field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetScrollLongText(true);\ntextField.SetValue('Scroll long text property is: ' + textField.IsScrollLongText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsScrollLongText(): boolean"
+    },
+    "SetCharLimit": {
+      "description": "Sets the text field character limit.\n<note> Character limit 0 means the field doesn't have a character limit.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetCharLimit/",
+      "examples": [
+        "// How do I prevent users from typing beyond a certain character count in a PDF?\n\n// Control how many characters a text field will accept in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetCharLimit(20);\ntextField.SetValue('Char limit is: ' + textField.GetCharLimit());"
+      ],
+      "params": [
+        {
+          "description": "The maximum number of characters allowed in the field.",
+          "name": "charLimit",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCharLimit(charLimit: number): boolean"
+    },
+    "SetComb": {
+      "description": "Sets whether the text field uses comb formatting.\n<note>The character limit must be greater than 0.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetComb/",
+      "examples": [
+        "// How do I spread out characters into separate boxes in a PDF?\n\n// Enable spaced character input for a text field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetCharLimit(12);\ntextField.SetComb(true);\ntextField.SetValue('Comb is: ' + textField.IsComb());"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether comb formatting is enabled.",
+          "name": "comb",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetComb(comb: boolean): boolean"
+    },
+    "SetDateFormat": {
+      "description": "Sets date format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetDateFormat/",
+      "examples": [
+        "// How do I make sure dates display in a specific format in a PDF?\n\n// Apply a date format pattern to a text field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetDateFormat(\"dd.mm.yyyy\");\ntextField.SetValue(\"10 january 2015\");"
+      ],
+      "params": [
+        {
+          "description": "date format (e.g. \"dd.mm.yyyy\")",
+          "name": "format",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDateFormat(format: string): boolean"
+    },
+    "SetFullName": {
+      "description": "Sets new field name if possible.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetFullName/",
+      "examples": [
+        "// How do I name a form field in a PDF?\n\n// Set the unique full name property of a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetFullName('EXAMPLE');\ntextField.SetValue('Field full name is: ' + textField.GetFullName());"
+      ],
+      "params": [
+        {
+          "description": "The new full name for the field.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFullName(name: string): boolean"
+    },
+    "SetMask": {
+      "description": "Sets the input mask for entered text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetMask/",
+      "examples": [
+        "// How do I enforce a phone number or ID format when users type in a PDF?\n\n// Set an input pattern that users must follow in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetMask(\"(999)999-9999\");\ntextField.SetValue(\"(123)456-7890\");"
+      ],
+      "params": [
+        {
+          "description": "The input mask (e.g. \"(999)999-9999\").",
+          "name": "inputMask",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMask(inputMask: string): boolean"
+    },
+    "SetMultiline": {
+      "description": "Sets text field multiline prop.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetMultiline/",
+      "examples": [
+        "// How do I let users type multiple paragraphs in a single text field in a PDF?\n\n// Enable multiple lines of text input for a text field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetMultiline(true);\ntextField.SetValue('Multiline is: ' + textField.IsMultiline());"
+      ],
+      "params": [
+        {
+          "description": "will the field be multiline",
+          "name": "multiline",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMultiline(multiline: boolean): boolean"
+    },
+    "SetNumberFormat": {
+      "description": "Sets number format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetNumberFormat/",
+      "examples": [
+        "// How do I show dollar amounts and decimal places correctly in a PDF?\n\n// Configure number formatting with currency and decimal precision in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetNumberFormat(0, \"us\", \"black-minus\", \"$\", true);\ntextField.SetValue('-1000.50');"
+      ],
+      "params": [
+        {
+          "description": "The number of digits after the decimal point.",
+          "name": "decimalPlaces",
+          "type": "number"
+        },
+        {
+          "description": "The number separator style.",
+          "name": "separatorStyle",
+          "type": "NumberSepStyle"
+        },
+        {
+          "description": "The negative number display style.",
+          "name": "negativeStyle",
+          "type": "NumberNegStyle"
+        },
+        {
+          "description": "The currency symbol.",
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "description": "If true, places the currency symbol before the number (e.g., $1,234.56);\rif false, places it after (e.g., 1,234.56$).",
+          "name": "currencyPrepend",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetNumberFormat(decimalPlaces: number, separatorStyle: NumberSepStyle, negativeStyle: NumberNegStyle, currency: string, currencyPrepend: boolean): boolean"
+    },
+    "SetPartialName": {
+      "description": "Sets new field partial name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetPartialName/",
+      "examples": [
+        "// How do I set the local name for a form field in a PDF?\n\n// Define the partial name property of a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetPartialName('EXAMPLE');\ntextField.SetValue('Field partial name is: ' + textField.GetFullName());"
+      ],
+      "params": [
+        {
+          "description": "The new partial name for the field.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPartialName(name: string): boolean"
+    },
+    "SetPercentageFormat": {
+      "description": "Sets percentage format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetPercentageFormat/",
+      "examples": [
+        "// How do I show decimal values as percentages in a PDF?\n\n// Apply percentage formatting to text input in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetPercentageFormat(0, \"us\");\ntextField.SetValue(10);"
+      ],
+      "params": [
+        {
+          "description": "The number of digits after the decimal point.",
+          "name": "decimalPlaces",
+          "type": "number"
+        },
+        {
+          "description": "The number separator style.",
+          "name": "separatorStyle",
+          "type": "NumberSepStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPercentageFormat(decimalPlaces: number, separatorStyle: NumberSepStyle): boolean"
+    },
+    "SetPlaceholder": {
+      "description": "Sets text field placeholder.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetPlaceholder/",
+      "params": [
+        {
+          "description": "field placeholder",
+          "name": "sPlaceholder",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPlaceholder(sPlaceholder: string): boolean"
+    },
+    "SetReadOnly": {
+      "description": "Sets field read only",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetReadOnly/",
+      "examples": [
+        "// How do I make a form field read-only in a PDF?\n\n// Disable editing on a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetReadOnly(true);\ntextField.SetValue('Read only is: ' + textField.IsReadOnly());"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether the field is read-only.",
+          "name": "readOnly",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetReadOnly(readOnly: boolean): boolean"
+    },
+    "SetRegularExp": {
+      "description": "Sets regular expression validate string for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetRegularExp/",
+      "examples": [
+        "// How do I check that users enter valid email addresses or specific formats in a PDF?\n\n// Apply validation rules to ensure text matches a required pattern in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetRegularExp(\"\\\\S+@\\\\S+\\\\.\\\\S+\");\ntextField.SetValue(\"example@gmail.com\");"
+      ],
+      "params": [
+        {
+          "description": "The validation regular expression (e.g. \"\\\\S+@\\\\S+\\\\.\\\\S+\")",
+          "name": "regularExpression",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRegularExp(regularExpression: string): boolean"
+    },
+    "SetRequired": {
+      "description": "Sets field required",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetRequired/",
+      "examples": [
+        "// How do I make a form field required in a PDF?\n\n// Check whether a field is marked as required in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetRequired(true);\ntextField.SetValue('Required: ' + textField.IsRequired());"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether the field is required.",
+          "name": "required",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRequired(required: boolean): boolean"
+    },
+    "SetScrollLongText": {
+      "description": "Sets whether the text field can scroll long text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetScrollLongText/",
+      "examples": [
+        "// How do I make a narrow text field scrollable for longer content in a PDF?\n\n// Enable scrolling for text that overflows the field boundary in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetScrollLongText(true);\ntextField.SetValue('Scroll long text property is: ' + textField.IsScrollLongText());"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether long text can be scrolled.",
+          "name": "allowScroll",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScrollLongText(allowScroll: boolean): boolean"
+    },
+    "SetSpecialFormat": {
+      "description": "Sets special format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetSpecialFormat/",
+      "examples": [
+        "// How do I automatically format phone numbers and social security numbers in a PDF?\n\n// Use built-in formats to style user input in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetSpecialFormat(\"phone\");\ntextField.SetValue(\"1234567890\");"
+      ],
+      "params": [
+        {
+          "description": "the formatting style to apply to the value",
+          "name": "format",
+          "type": "PsfFormat"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpecialFormat(format: PsfFormat): boolean"
+    },
+    "SetTimeFormat": {
+      "description": "Sets time format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetTimeFormat/",
+      "examples": [
+        "// How do I show time input in a specific format in a PDF?\n\n// Configure time display patterns for a text field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetTimeFormat(\"h:MM:ss tt\");\ntextField.SetValue(\"8:45:30\");"
+      ],
+      "params": [
+        {
+          "description": "available time format",
+          "name": "format",
+          "type": "TimeFormat"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTimeFormat(format: TimeFormat): boolean"
+    },
+    "SetValidateRange": {
+      "description": "Sets validate range for field.\n<note> Can only be applied to fields with a percentage or number format. </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetValidateRange/",
+      "examples": [
+        "// How do I restrict what numbers can be entered in a text field in a PDF?\n\n// Define the minimum and maximum allowed values for a text field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetNumberFormat(0, \"us\", \"black-minus\", \"$\", true);\ntextField.SetValidateRange(true, 0, true, 5);\ntextField.SetValue('10');"
+      ],
+      "params": [
+        {
+          "description": "If true, enables minimum value validation using `greaterThanValue`.",
+          "name": "greaterThan",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "The minimum allowed value.",
+          "name": "greaterThanValue",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "If true, enables maximum value validation using `lessThanValue`.",
+          "name": "lessThan",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "The maximum allowed value.",
+          "name": "lessThanValue",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValidateRange(greaterThan?: boolean, greaterThanValue?: number, lessThan?: boolean, lessThanValue?: number): boolean"
+    },
+    "SetValue": {
+      "description": "Sets field value",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetValue/",
+      "examples": [
+        "// How do I fill in a form field in a PDF?\n\n// Set a text value for a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Name Surname');"
+      ],
+      "params": [
+        {
+          "description": "The new value for the field.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValue(value: string): boolean"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Returns the double factorial of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FACTDOUBLE/",
+  "examples": [
+    "// Calculate the double factorial of a number.\n\n// Apply FACTDOUBLE function to get the double factorial value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.FACTDOUBLE(123));"
+  ],
+  "params": [
+    {
+      "description": "The value for which to return the double factorial.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "FACTDOUBLE(arg1: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,29 @@
+{
+  "description": "Adds a new name to a range of cells.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/AddDefName/",
+  "examples": [
+    "// How do I give a cell range a descriptive name in a spreadsheet?\n\n// Label a range of cells so it can be referenced by name instead of address in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nworksheet.GetRange(\"A3\").SetValue(\"We defined a name 'numbers' for a range of cells A1:B1.\");"
+  ],
+  "params": [
+    {
+      "description": "The range name.",
+      "name": "sName",
+      "type": "string"
+    },
+    {
+      "description": "The reference to the specified range. It must contain the sheet name, followed by sign ! and a range of cells.\rExample: \"Sheet1!$A$1:$B$2\".",
+      "name": "sRef",
+      "type": "string"
+    },
+    {
+      "description": "Defines if the range name is hidden or not.",
+      "name": "isHidden",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns false if sName or sRef are invalid.",
+    "type": "boolean"
+  },
+  "signature": "AddDefName(sName: string, sRef: string, isHidden: boolean): boolean"
+}

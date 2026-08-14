@@ -1,0 +1,19 @@
+{
+  "description": "Merges the selected cell range into a single cell or a cell row.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Merge/",
+  "examples": [
+    "// How do I merge multiple cells together into one in a spreadsheet?\n\n// Join adjacent cells across rows or columns into a unified block in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A3:E8\").Merge(true);\nworksheet.GetRange(\"A9:E14\").Merge(false);"
+  ],
+  "params": [
+    {
+      "description": "When set to **true**, the cells within the selected range will be merged along the rows,\rbut remain split in the columns. When set to **false**, the whole selected range of cells will be merged into a single cell.",
+      "name": "isAcross",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the range was merged successfully.",
+    "type": "boolean"
+  },
+  "signature": "Merge(isAcross: boolean): boolean"
+}

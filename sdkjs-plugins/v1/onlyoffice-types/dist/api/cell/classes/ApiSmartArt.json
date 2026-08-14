@@ -1,0 +1,31 @@
+{
+  "description": "Class representing a smart art.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiSmartArt/",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiSmartArt class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiSmartArt/Methods/GetClassType/",
+      "params": [],
+      "returns": {
+        "type": "\"smartArt\""
+      },
+      "signature": "GetClassType(): \"smartArt\""
+    },
+    "GetParentSheet": {
+      "description": "Returns the parent sheet of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetParentSheet/",
+      "examples": [
+        "// How do I find out which worksheet a drawing belongs to in a spreadsheet?\n\n// Identify the parent sheet of a shape and use its name in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet parentSheet = shape.GetParentSheet();\nlet content = shape.GetDocContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"Parent sheet name is \" + parentSheet.GetName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiWorksheet"
+      },
+      "signature": "GetParentSheet(): ApiWorksheet",
+      "since": "8.3.0"
+    }
+  }
+}

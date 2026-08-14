@@ -1,0 +1,31 @@
+{
+  "description": "Class representing a mathematical equation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiMath/",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiMath class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiMath/Methods/GetClassType/",
+      "params": [],
+      "returns": {
+        "type": "\"math\""
+      },
+      "signature": "GetClassType(): \"math\""
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current math element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiMath/Methods/GetText/",
+      "params": [
+        {
+          "description": "The format the text should be returned in.",
+          "name": "format",
+          "optional": true,
+          "type": "\"unicode\" | \"latex\""
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(format?: \"unicode\" | \"latex\"): string"
+    }
+  }
+}

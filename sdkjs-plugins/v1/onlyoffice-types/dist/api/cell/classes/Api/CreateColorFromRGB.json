@@ -1,0 +1,28 @@
+{
+  "description": "Creates an RGB color setting the appropriate values for the red, green and blue color components.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateColorFromRGB/",
+  "examples": [
+    "// How do I build a specific color using red, green, and blue numbers in a spreadsheet?\n\n// Color text or shapes with a precise tone by mixing three numeric channel values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet color = Api.CreateColorFromRGB(255, 111, 61);\nworksheet.GetRange(\"A2\").SetValue(\"Text with color\");\nworksheet.GetRange(\"A2\").SetFontColor(color);"
+  ],
+  "params": [
+    {
+      "description": "Red color component value.",
+      "name": "r",
+      "type": "number"
+    },
+    {
+      "description": "Green color component value.",
+      "name": "g",
+      "type": "number"
+    },
+    {
+      "description": "Blue color component value.",
+      "name": "b",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiColor"
+  },
+  "signature": "CreateColorFromRGB(r: number, g: number, b: number): ApiColor"
+}

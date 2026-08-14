@@ -1,0 +1,12 @@
+{
+  "description": "Copies the current graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Copy/",
+  "examples": [
+    "// How do I make a copy of a chart in a document?\n\n// Clone a chart so that the duplicate appears alongside the original in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n    [200, 240, 280],\n    [250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595);\nparagraph.AddDrawing(chart);\n\nlet copyChart = chart.Copy();\nparagraph.AddDrawing(copyChart);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiDrawing | null"
+  },
+  "signature": "Copy(): ApiDrawing | null"
+}

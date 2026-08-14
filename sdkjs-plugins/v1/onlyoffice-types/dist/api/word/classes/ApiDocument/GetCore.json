@@ -1,0 +1,14 @@
+{
+  "description": "Retrieves the core properties interface for the current document.\nThis method is used to view or modify standard metadata such as title, author, and keywords.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCore/",
+  "examples": [
+    "// How do I read and write document metadata such as title, author, and keywords in a document?\n\n// Populate all built-in metadata fields and then display their values in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\n\ncore.SetCategory(\"Examples\");\ncore.SetContentStatus(\"Final\");\ncore.SetCreated(new Date('2000-01-20'));\ncore.SetCreator(\"John Smith\");\ncore.SetDescription(\"Sample document made to help fellow users understand ApiCore methods.\");\ncore.SetIdentifier(\"#ID42\");\ncore.SetKeywords(\"Example; ApiCore; Document\");\ncore.SetLanguage(\"en-US\");\ncore.SetLastModifiedBy(\"Mark Pottato\");\ncore.SetLastPrinted(new Date());\ncore.SetModified(new Date('1990-03-10'));\ncore.SetRevision(\"Rev. A\");\ncore.SetSubject(\"ApiCore Method Showcase\");\ncore.SetTitle(\"My Document Title\");\ncore.SetVersion(\"v9.0\");\n\nconst category = core.GetCategory();\nconst contentStatus = core.GetContentStatus();\nconst createdDate = core.GetCreated().toDateString();\nconst creator = core.GetCreator();\nconst description = core.GetDescription();\nconst identifier = core.GetIdentifier();\nconst keywords = core.GetKeywords();\nconst language = core.GetLanguage();\nconst lastModifiedBy = core.GetLastModifiedBy();\nconst lastPrintedDate = core.GetLastPrinted().toDateString();\nconst lastModifiedDate = core.GetModified().toDateString();\nconst revision = core.GetRevision();\nconst subject = core.GetSubject();\nconst title = core.GetTitle();\nconst version = core.GetVersion();\n\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Category: \" + category + \"\\n\");\nparagraph.AddText(\"Content Status: \" + contentStatus + \"\\n\");\nparagraph.AddText(\"Created: \" + createdDate + \"\\n\");\nparagraph.AddText(\"Creator: \" + creator + \"\\n\");\nparagraph.AddText(\"Description: \" + description + \"\\n\");\nparagraph.AddText(\"Identifier: \" + identifier + \"\\n\");\nparagraph.AddText(\"Keywords: \" + keywords + \"\\n\");\nparagraph.AddText(\"Language: \" + language + \"\\n\");\nparagraph.AddText(\"Last Modified By: \" + lastModifiedBy + \"\\n\");\nparagraph.AddText(\"Last Printed: \" + lastPrintedDate + \"\\n\");\nparagraph.AddText(\"Last Modified: \" + lastModifiedDate + \"\\n\");\nparagraph.AddText(\"Revision: \" + revision + \"\\n\");\nparagraph.AddText(\"Subject: \" + subject + \"\\n\");\nparagraph.AddText(\"Title: \" + title + \"\\n\");\nparagraph.AddText(\"Version: \" + version);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The core document properties object.",
+    "type": "ApiCore"
+  },
+  "signature": "GetCore(): ApiCore",
+  "since": "9.0.0"
+}

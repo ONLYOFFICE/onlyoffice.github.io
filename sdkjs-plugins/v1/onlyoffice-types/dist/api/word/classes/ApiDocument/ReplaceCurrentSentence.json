@@ -1,0 +1,25 @@
+{
+  "description": "Replaces the current sentence or part of the current sentence with the specified text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ReplaceCurrentSentence/",
+  "examples": [
+    "// How do I substitute a whole sentence based on cursor placement in a document?\n\n// Position the cursor mid-paragraph and overwrite that sentence with a replacement string in a document.\n\nlet doc = Api.GetDocument();\n\nlet text = \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\";\nlet para1 = doc.GetElement(0);\npara1.AddText(text);\n\nlet para2 = Api.CreateParagraph();\ndoc.Push(para2);\nlet run = para2.AddText(text);\nrun.MoveCursorToPos(80);\ndoc.ReplaceCurrentSentence(\"The quick brown fox jumps over the lazy dog.\");"
+  ],
+  "params": [
+    {
+      "description": "The string to replace the current sentence with.",
+      "name": "sReplace",
+      "type": "string"
+    },
+    {
+      "description": "The desired part of the current sentence to be replaced.",
+      "name": "sPart",
+      "optional": true,
+      "type": "\"before\" | \"after\""
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ReplaceCurrentSentence(sReplace: string, sPart?: \"before\" | \"after\"): boolean",
+  "since": "8.2.0"
+}

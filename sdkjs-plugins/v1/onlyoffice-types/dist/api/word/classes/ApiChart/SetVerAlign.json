@@ -1,0 +1,25 @@
+{
+  "description": "Specifies how the floating object will be vertically aligned.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetVerAlign/",
+  "examples": [
+    "// How do I control the vertical alignment of a drawing in a document?\n\n// Pin a shape to the top of the page without manually setting its coordinates in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text (horizontally) is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetVerAlign(\"page\", \"top\");\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned to the top of the page.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The document element which will be taken as a countdown point for the object vertical alignment.",
+      "name": "sRelativeFrom",
+      "optional": true,
+      "type": "RelFromV"
+    },
+    {
+      "description": "The alingment type which will be used for the object vertical alignment.",
+      "name": "sAlign",
+      "optional": true,
+      "type": "\"top\" | \"bottom\" | \"center\""
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: \"top\" | \"bottom\" | \"center\"): boolean"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Estimates standard deviation based on a sample, including logical values and text. Text and the **false** logical value have the value 0; the **true** logical value has the value 1.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/STDEVA/",
+  "examples": [
+    "// The STDEVA function treats text as 0 and logical values as 0 (false) or 1 (true) in calculations.\n\n// Get the standard deviation including logical and text values, and place it in cell C1.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet valueArr = [1, 0, 0, 0, \"text\", 1, 0, 0, 2, 3, true, false, 6, 8, 10, 12];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\nlet func = Api.WorksheetFunction;\nlet ans = func.STDEVA(\n  1,\n  0,\n  0,\n  0,\n  \"text\",\n  1,\n  0,\n  0,\n  2,\n  3,\n  true,\n  false,\n  6,\n  8,\n  10,\n  12\n); //includes logical values\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 values for which the standard deviation will be calculated.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, logical values, text strings, names, ranges, or arrays.",
+      "name": "args",
+      "type": "number[] | number | string | boolean | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "STDEVA(args: number[] | number | string | boolean | ApiRange | ApiName): number"
+}

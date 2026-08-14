@@ -1,0 +1,7 @@
+{
+  "description": "Class representing a document picture form.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiSignatureForm/",
+  "extends": [
+    "ApiFormBase"
+  ]
+}

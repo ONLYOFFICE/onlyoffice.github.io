@@ -1,0 +1,29 @@
+{
+  "description": "Converts a number into a text representation with the given radix (base).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BASE/",
+  "examples": [
+    "// Express a number in a different numeral base in a spreadsheet.\n\n// Rewrite a decimal value as a string in any radix with a minimum digit width in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BASE(5, 2, 5));"
+  ],
+  "params": [
+    {
+      "description": "The number to convert.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The base radix into which the number will be converted. An integer greater than or equal to 2 and less than or equal to 36.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The minimum length of the returned string. An integer greater than or equal to 0 and less than 256. If omitted, leading zeros are not added to the result.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BASE(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | number): number"
+}

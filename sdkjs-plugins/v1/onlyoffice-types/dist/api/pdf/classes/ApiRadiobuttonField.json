@@ -1,0 +1,110 @@
+{
+  "description": "Class representing a radiobutton field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRadiobuttonField/",
+  "extends": [
+    "ApiCheckboxField"
+  ],
+  "methods": {
+    "AddOption": {
+      "description": "Adds options to checkbox group.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiCheckboxField/Methods/AddOption/",
+      "examples": [
+        "// How do I create multiple choices for a checkbox field in a PDF?\n\n// Create an additional choice that users can select in a checkbox field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet checkboxField = Api.CreateCheckboxField([10, 10, 25, 25]);\npage.AddObject(checkboxField);\n\ncheckboxField.AddOption(0, [10, 30, 25, 45], 'Choice 2');\nconsole.log('Toggle to off is: ' + checkboxField.IsToggleToOff());"
+      ],
+      "params": [
+        {
+          "description": "The page where the option will be added.",
+          "name": "pageIndex",
+          "type": "number"
+        },
+        {
+          "description": "The option rectangle.",
+          "name": "rect",
+          "type": "Rect"
+        },
+        {
+          "description": "The option checked value.",
+          "name": "exportValue",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiCheckboxWidget"
+      },
+      "signature": "AddOption(pageIndex: number, rect: Rect, exportValue?: string): ApiCheckboxWidget"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRadiobuttonField class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRadiobuttonField/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine the object type of a radio button field in a PDF?\n\n// Find the classification name for a radio button field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet radiobuttonField = Api.CreateRadiobuttonField([10, 10, 25, 25]);\npage.AddObject(radiobuttonField);\n\nconsole.log('Field type is: ' + radiobuttonField.GetClassType());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"radiobuttonField\""
+      },
+      "signature": "GetClassType(): \"radiobuttonField\""
+    },
+    "IsCheckInUnison": {
+      "description": "Checks if field will check in unison.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRadiobuttonField/Methods/IsCheckInUnison/",
+      "examples": [
+        "// How do I check if radio button choices work together in a PDF?\n\n// Verify the unified selection setting for radio buttons in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet radiobuttonField = Api.CreateRadiobuttonField([10, 10, 25, 25]);\npage.AddObject(radiobuttonField);\n\nradiobuttonField.AddOption(0, [10, 30, 25, 45], 'Choice1');\nradiobuttonField.AddOption(0, [10, 50, 25, 65], 'Choice2');\nradiobuttonField.AddOption(0, [10, 70, 25, 85], 'Choice3');\nradiobuttonField.SetCheckInUnison(true);\nradiobuttonField.SetValue('Choice1');\nconsole.log('Check in unison is: ' + radiobuttonField.IsCheckInUnison());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsCheckInUnison(): boolean"
+    },
+    "IsToggleToOff": {
+      "description": "Checks if the field can be toggled off.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiCheckboxField/Methods/IsToggleToOff/",
+      "examples": [
+        "// How do I find out if a checkbox uses toggle-off behavior in a PDF?\n\n// Determine whether a checked checkbox unselects when clicked again in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet checkboxField = Api.CreateCheckboxField([10, 10, 25, 25]);\npage.AddObject(checkboxField);\n\ncheckboxField.SetToggleToOff(false);\nconsole.log('Toggle to off is: ' + checkboxField.IsToggleToOff());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsToggleToOff(): boolean"
+    },
+    "SetCheckInUnison": {
+      "description": "Sets field in unison prop.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRadiobuttonField/Methods/SetCheckInUnison/",
+      "examples": [
+        "// How do I make radio buttons work together in a PDF?\n\n// Enable synchronized selection across radio button choices in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet radiobuttonField = Api.CreateRadiobuttonField([10, 10, 25, 25]);\npage.AddObject(radiobuttonField);\n\nradiobuttonField.AddOption(0, [10, 30, 25, 45], 'Choice1');\nradiobuttonField.AddOption(0, [10, 50, 25, 65], 'Choice2');\nradiobuttonField.AddOption(0, [10, 70, 25, 85], 'Choice3');\nradiobuttonField.SetCheckInUnison(true);\nradiobuttonField.SetValue('Choice1');"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether fields with the same export value are checked together.",
+          "name": "checkInUnison",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCheckInUnison(checkInUnison: boolean): boolean"
+    },
+    "SetToggleToOff": {
+      "description": "Sets whether the checked state can be toggled off.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiCheckboxField/Methods/SetToggleToOff/",
+      "examples": [
+        "// How do I make a checkbox uncheck when clicked if already checked in a PDF?\n\n// Control whether a checked checkbox deselects on a second click in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet checkboxField = Api.CreateCheckboxField([10, 10, 25, 25]);\npage.AddObject(checkboxField);\n\ncheckboxField.SetToggleToOff(false);"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether the checked state can be toggled off.",
+          "name": "allowToggleOff",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetToggleToOff(allowToggleOff: boolean): boolean"
+    }
+  }
+}

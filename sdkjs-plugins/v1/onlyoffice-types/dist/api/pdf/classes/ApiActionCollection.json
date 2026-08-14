@@ -1,0 +1,255 @@
+{
+  "description": "Class representing a base an action collection.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/",
+  "methods": {
+    "GetCalculate": {
+      "description": "Gets Calculate action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetCalculate/",
+      "params": [],
+      "returns": {
+        "type": "ApiJsAction"
+      },
+      "signature": "GetCalculate(): ApiJsAction"
+    },
+    "GetClassType": {
+      "description": "Gets class type of this object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetClassType/",
+      "params": [],
+      "returns": {
+        "type": "\"actionCollection\""
+      },
+      "signature": "GetClassType(): \"actionCollection\""
+    },
+    "GetFormat": {
+      "description": "Gets Format action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetFormat/",
+      "params": [],
+      "returns": {
+        "type": "ApiJsAction"
+      },
+      "signature": "GetFormat(): ApiJsAction"
+    },
+    "GetKeystroke": {
+      "description": "Gets Keystroke action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetKeystroke/",
+      "params": [],
+      "returns": {
+        "type": "ApiJsAction"
+      },
+      "signature": "GetKeystroke(): ApiJsAction"
+    },
+    "GetMouseDown": {
+      "description": "Gets MouseDown action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetMouseDown/",
+      "params": [],
+      "returns": {
+        "type": "ApiBaseAction"
+      },
+      "signature": "GetMouseDown(): ApiBaseAction"
+    },
+    "GetMouseEnter": {
+      "description": "Gets MouseEnter action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetMouseEnter/",
+      "params": [],
+      "returns": {
+        "type": "ApiBaseAction"
+      },
+      "signature": "GetMouseEnter(): ApiBaseAction"
+    },
+    "GetMouseExit": {
+      "description": "Gets MouseExit action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetMouseExit/",
+      "params": [],
+      "returns": {
+        "type": "ApiBaseAction"
+      },
+      "signature": "GetMouseExit(): ApiBaseAction"
+    },
+    "GetMouseUp": {
+      "description": "Gets MouseUp action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetMouseUp/",
+      "params": [],
+      "returns": {
+        "type": "ApiBaseAction"
+      },
+      "signature": "GetMouseUp(): ApiBaseAction"
+    },
+    "GetOnBlur": {
+      "description": "Gets OnBlur action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetOnBlur/",
+      "params": [],
+      "returns": {
+        "type": "ApiBaseAction"
+      },
+      "signature": "GetOnBlur(): ApiBaseAction"
+    },
+    "GetOnFocus": {
+      "description": "Gets OnFocus action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetOnFocus/",
+      "params": [],
+      "returns": {
+        "type": "ApiBaseAction"
+      },
+      "signature": "GetOnFocus(): ApiBaseAction"
+    },
+    "GetValidate": {
+      "description": "Gets Validate action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetValidate/",
+      "params": [],
+      "returns": {
+        "type": "ApiJsAction"
+      },
+      "signature": "GetValidate(): ApiJsAction"
+    },
+    "SetCalculate": {
+      "description": "Sets the Calculate action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetCalculate/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiJsAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCalculate(action: ApiJsAction): boolean"
+    },
+    "SetFormat": {
+      "description": "Sets the Format action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetFormat/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiJsAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFormat(action: ApiJsAction): boolean"
+    },
+    "SetKeystroke": {
+      "description": "Sets the Keystroke action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetKeystroke/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiJsAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetKeystroke(action: ApiJsAction): boolean"
+    },
+    "SetMouseDown": {
+      "description": "Sets the MouseDown action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetMouseDown/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiBaseAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMouseDown(action: ApiBaseAction): boolean"
+    },
+    "SetMouseEnter": {
+      "description": "Sets the MouseEnter action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetMouseEnter/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiBaseAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMouseEnter(action: ApiBaseAction): boolean"
+    },
+    "SetMouseExit": {
+      "description": "Sets the MouseExit action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetMouseExit/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiBaseAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMouseExit(action: ApiBaseAction): boolean"
+    },
+    "SetMouseUp": {
+      "description": "Sets the MouseUp action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetMouseUp/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiBaseAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMouseUp(action: ApiBaseAction): boolean"
+    },
+    "SetOnBlur": {
+      "description": "Sets the OnBlur action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetOnBlur/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiBaseAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetOnBlur(action: ApiBaseAction): boolean"
+    },
+    "SetOnFocus": {
+      "description": "Sets the OnFocus action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetOnFocus/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiBaseAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetOnFocus(action: ApiBaseAction): boolean"
+    },
+    "SetValidate": {
+      "description": "Sets the Validate action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetValidate/",
+      "params": [
+        {
+          "description": "The action to set, or `null` to remove it.",
+          "name": "action",
+          "type": "ApiJsAction"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValidate(action: ApiJsAction): boolean"
+    }
+  }
+}

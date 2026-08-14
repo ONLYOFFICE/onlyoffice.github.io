@@ -5,11 +5,25 @@ const { spawnSync } = require('child_process');
 const { mergeApiIndex } = require('./api-index.js');
 
 const PACKAGE_ROOT = path.join(__dirname, '..');
-const LEGACY_DECLARATIONS_REPO = 'ONLYOFFICE/office-js-api-declarations';
-const LEGACY_DECLARATIONS_COMMIT = '7ab23357042d8cc2510a9b4c84f3f0e5e99626a3';
 
 const OUTPUT_DIR = path.join(PACKAGE_ROOT, 'src', 'generated');
-const LEGACY_SNAPSHOT_DIR = path.join(__dirname, 'legacy-api');
+
+// Runnable examples come from a checkout of the documentation site (api.onlyoffice.com), which is
+// where they actually live: sdkjs's JSDoc carries only a `@see office-js-api/Examples/...` *path*,
+// and the code sits in the docs repository. The page for a member is addressed by the same three
+// segments as its `docsUrl`, so nothing here is guessed.
+//
+// This replaces the vendored `scripts/legacy-api/*.json` snapshots (9 MB), which were a pinned dump
+// of the same site: they aged in place, covered four editors of five (PDF had none, and therefore no
+// examples at all), and reached only 3003 members against 5831 available here.
+const DOCS_SECTION_DIR = 'office-api/usage-api';
+const DOCS_EDITOR_SECTION = {
+  word: 'document-api',
+  cell: 'spreadsheet-api',
+  slide: 'presentation-api',
+  forms: 'form-api',
+  pdf: 'pdf-api',
+};
 const EDITORS = {
   word: { code: 'CDE', sources: ['word/apiBuilder.js', 'word/plugin-events.js'] },
   cell: { code: 'CSE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'cell/apiBuilder.js', 'cell/plugin-events.js'] },
@@ -56,6 +70,54 @@ function resolveSdkjsPaths() {
   if (!fs.existsSync(resolvedSdkjsForms)) throw new Error(`sdkjs-forms directory does not exist: ${resolvedSdkjsForms}`);
 
   return { sdkjs: resolvedSdkjs, sdkjsForms: resolvedSdkjsForms };
+}
+
+function resolveDocsPath() {
+  const docs = readOption('docs') || process.env.DOCS_PATH;
+  if (!docs) {
+    throw new Error('Set DOCS_PATH or pass --docs <path-to-api.onlyoffice.com> (the documentation checkout supplying runnable examples).');
+  }
+  // Accept either the repository root or the inner project directory, since the GitHub archive
+  // nests one inside the other (`api.onlyoffice.com-master/api.onlyoffice.com`).
+  for (const candidate of [path.join(path.resolve(docs), 'site', 'docs'), path.join(path.resolve(docs), 'api.onlyoffice.com', 'site', 'docs')]) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  throw new Error(`Documentation checkout has no site/docs directory: ${path.resolve(docs)}`);
+}
+
+// The `## Example` section of a member's page, as fenced blocks. The fence carries an editor
+// directive (```javascript editor-docx) that means nothing outside the docs site, so only the
+// language survives - the same treatment the old snapshots' `document-builder={...}` got.
+function docsExamples(file) {
+  if (!fs.existsSync(file)) return [];
+  const text = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
+  const section = text.split(/^## Example\s*$/m)[1];
+  if (!section) return [];
+  // Stop at the next `## ` heading so a later section's code block isn't swept in.
+  const body = section.split(/^## /m)[0];
+  return [...body.matchAll(/```[^\n]*\n([\s\S]*?)```/g)].map((m) => m[1].trim()).filter(Boolean);
+}
+
+function docsMethodFile(docsRoot, editor, className, methodName) {
+  return path.join(docsRoot, DOCS_SECTION_DIR, DOCS_EDITOR_SECTION[editor], className, 'Methods', `${methodName}.md`);
+}
+
+// Examples are appended to the description as fenced blocks rather than carried in their own field,
+// because that is what `splitDescription` already lifts into `@example` for the declarations and
+// into `examples` for dist/api - one representation, both consumers.
+function applyDocsExamples(classes, editor, docsRoot) {
+  let applied = 0;
+  for (const [className, classData] of Object.entries(classes)) {
+    for (const [methodName, method] of Object.entries(classData.methods)) {
+      const examples = docsExamples(docsMethodFile(docsRoot, editor, className, methodName));
+      if (examples.length === 0) continue;
+      method.description = [method.description, ...examples.map((code) => `\`\`\`js\n${code}\n\`\`\``)]
+        .filter(Boolean)
+        .join('\n\n');
+      applied += examples.length;
+    }
+  }
+  return applied;
 }
 
 function getSourcePaths(editor, paths) {
@@ -110,100 +172,17 @@ function fetchApiDefinitions() {
   return results;
 }
 
-function buildLegacyLookup(data) {
-  const classes = {};
-  const typedefs = {};
 
-  const describedParams = (item) => Object.fromEntries(
-    (item.params || []).filter((p) => p.name && p.description).map((p) => [p.name, p.description])
-  );
 
-  for (const item of data) {
-    if (item.kind === 'class' && item.name && item.description) {
-      classes[item.name] = classes[item.name] || { description: '', methods: {} };
-      classes[item.name].description = item.description;
-    }
-    if (item.kind === 'typedef' && item.name && item.description) {
-      typedefs[item.name] = {
-        description: item.description,
-        properties: Object.fromEntries(
-          (item.properties || []).filter((p) => p.name && p.description).map((p) => [p.name, p.description])
-        ),
-      };
-    }
-  }
-  for (const item of data) {
-    if ((item.kind === 'function' || item.kind === 'method') && item.name && item.memberof && item.description) {
-      const className = item.memberof.replace('#', '');
-      classes[className] = classes[className] || { description: '', methods: {} };
-      // office-js-api-declarations has the same duplicate-entry quirk sdkjs does (see the comment
-      // in extractClasses) - keep whichever description was recorded first for a given method.
-      if (!classes[className].methods[item.name]) {
-        classes[className].methods[item.name] = {
-          description: item.description,
-          params: describedParams(item),
-          returnDescription: (item.returns && item.returns[0] && item.returns[0].description) || '',
-          docsUrl: methodDocsUrl(item.see),
-        };
-      }
-    }
-  }
 
-  return { classes, typedefs };
+function withoutExamples(description) {
+  return String(description || '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/^[ \t]*#+[ \t]*Try it[ \t]*$/gim, '')
+    .trim();
 }
 
-// office-js-api-declarations (a periodically-regenerated snapshot of ONLYOFFICE's public API docs
-// site) has richer prose than sdkjs's own JSDoc comments - notably a "## Try it" runnable example
-// in almost every description. sdkjs is still the structural source of truth (it's the one place
-// that can't drift from the actual runtime), but its descriptions are enriched from the local pinned
-// snapshots keyed by the same class/method names, wherever a match exists.
-async function fetchLegacyDescriptions(editor) {
-  // PDF has no office-js-api-declarations snapshot. Its descriptions come directly from sdkjs.
-  if (editor === 'pdf') return null;
 
-  const snapshotPath = path.join(LEGACY_SNAPSHOT_DIR, `${editor}.json`);
-  if (!fs.existsSync(snapshotPath)) {
-    throw new Error(`Missing legacy API snapshot: ${snapshotPath}`);
-  }
-
-  try {
-    return buildLegacyLookup(JSON.parse(fs.readFileSync(snapshotPath, 'utf8')));
-  } catch (err) {
-    throw new Error(`Could not read legacy API snapshot ${snapshotPath}: ${err.message}`);
-  }
-}
-
-function applyLegacyDescriptions(classes, typedefs, legacy) {
-  if (!legacy) return;
-
-  for (const [className, classData] of Object.entries(classes)) {
-    const legacyClass = legacy.classes[className];
-    if (legacyClass && legacyClass.description) classData.description = legacyClass.description;
-    for (const [methodName, method] of Object.entries(classData.methods)) {
-      const legacyMethod = legacyClass && legacyClass.methods[methodName];
-      if (!legacyMethod) continue;
-      method.description = legacyMethod.description;
-      if (legacyMethod.returnDescription) method.returnDescription = legacyMethod.returnDescription;
-      if (!method.docsUrl) method.docsUrl = legacyMethod.docsUrl;
-      // Param descriptions are matched by name, not position: the snapshot occasionally documents a
-      // different arity than the current sdkjs signature does, and a positional merge would then
-      // attach one parameter's prose to another.
-      for (const param of method.params) {
-        const legacyParamDescription = legacyMethod.params[param.name];
-        if (legacyParamDescription) param.description = legacyParamDescription;
-      }
-    }
-  }
-  for (const [name, typedefData] of Object.entries(typedefs)) {
-    const legacyTypedef = legacy.typedefs[name];
-    if (!legacyTypedef) continue;
-    typedefData.description = legacyTypedef.description;
-    for (const prop of typedefData.properties) {
-      const legacyPropDescription = legacyTypedef.properties[prop.name];
-      if (legacyPropDescription) prop.description = legacyPropDescription;
-    }
-  }
-}
 
 function splitTopLevel(str, sep) {
   const parts = [];
@@ -293,10 +272,20 @@ const DOCS_SECTIONS = {
   Pdf: 'pdf-api',
 };
 
-function parseSeeEntry(see) {
-  for (const entry of (Array.isArray(see) ? see : [see])) {
-    const match = /Examples\/([A-Za-z]+)\/([A-Za-z0-9_]+)\/Methods\/([A-Za-z0-9_]+)\.js/
-      .exec(String(entry || ''));
+// sdkjs writes the editor segment as a literal `{Editor}` placeholder
+// (`office-js-api/Examples/{Editor}/Api/Methods/GetDocument.js`) which the docs pipeline fills in
+// per editor. Without substituting it here the path simply failed to parse, so `docsUrl` came from
+// the pinned snapshot instead of from sdkjs - which is why PDF, the one editor with no snapshot, had
+// no documentation links at all despite sdkjs carrying 536 such paths for it. `Editor` is the
+// generator's current editor; `Forms` maps to the form-api section, which is where the docs put
+// every Forms class that has methods of its own.
+const EDITOR_SEGMENT = { word: 'Word', cell: 'Cell', slide: 'Slide', forms: 'Forms', pdf: 'Pdf' };
+
+function parseSeeEntry(see, editor) {
+  const placeholder = EDITOR_SEGMENT[editor];
+  for (const raw of (Array.isArray(see) ? see : [see])) {
+    const entry = String(raw || '').replace(/\{Editor\}/g, placeholder || '');
+    const match = /Examples\/([A-Za-z]+)\/([A-Za-z0-9_]+)\/Methods\/([A-Za-z0-9_]+)\.js/.exec(entry);
     // "Enumerations" is a real segment here, but typedefs have no per-editor reference page.
     if (match && DOCS_SECTIONS[match[1]]) {
       return { section: DOCS_SECTIONS[match[1]], className: match[2], methodName: match[3] };
@@ -305,16 +294,16 @@ function parseSeeEntry(see) {
   return null;
 }
 
-function methodDocsUrl(see) {
-  const parsed = parseSeeEntry(see);
+function methodDocsUrl(see, editor) {
+  const parsed = parseSeeEntry(see, editor);
   // A `constructor.js` example documents the class itself, not a callable member - the reference
   // site has no /Methods/constructor/ page for it.
   if (!parsed || parsed.methodName === 'constructor') return '';
   return `${DOCS_BASE}/${parsed.section}/${parsed.className}/Methods/${parsed.methodName}/`;
 }
 
-function classDocsUrl(see) {
-  const parsed = parseSeeEntry(see);
+function classDocsUrl(see, editor) {
+  const parsed = parseSeeEntry(see, editor);
   return parsed ? `${DOCS_BASE}/${parsed.section}/${parsed.className}/` : '';
 }
 
@@ -350,7 +339,7 @@ function buildOverloadParams(params, ownOptional) {
   return [requiredOnly, anchored];
 }
 
-function extractClasses(data) {
+function extractClasses(data, editor) {
   const classes = {};
 
   for (const item of data) {
@@ -360,7 +349,7 @@ function extractClasses(data) {
         description: item.description || '',
         since: item.since || '',
         deprecated: item.deprecated || '',
-        docsUrl: classDocsUrl(item.see),
+        docsUrl: classDocsUrl(item.see, editor),
         // sdkjs classes commonly do `ApiOleObject.prototype = Object.create(ApiDrawing.prototype)`
         // and JSDoc-tag the relationship with `@extends {ApiDrawing}` (-> `augments` here) -
         // without modeling that as a real TS `extends`, every method tagged `@memberof ApiDrawing`
@@ -431,7 +420,7 @@ function extractClasses(data) {
           returnDescription: (item.returns && item.returns[0] && item.returns[0].description) || '',
           since: item.since || '',
           deprecated: item.deprecated || '',
-          docsUrl: methodDocsUrl(item.see),
+          docsUrl: methodDocsUrl(item.see, editor),
           see: item.see || [],
         };
       }
@@ -457,7 +446,7 @@ function extractClasses(data) {
   for (const classData of Object.values(classes)) {
     if (classData.docsUrl) continue;
     for (const method of Object.values(classData.methods)) {
-      const url = classDocsUrl(method.see);
+      const url = classDocsUrl(method.see, editor);
       if (url) {
         classData.docsUrl = url;
         break;
@@ -639,6 +628,12 @@ function renderJsDoc(doc, indent) {
   }
   if (tags.length > 0) blocks.push(tags);
 
+  // Every example, uncapped and without exception. This was briefly removed on the grounds that
+  // examples are ~47% of the generated .d.ts, which turned out to be the wrong benchmark: TypeScript
+  // itself ships `lib.dom.d.ts` at 1.8 MB in every install, so declarations of this size are
+  // unremarkable. And the "unreadable in a tooltip" case is 5 members out of 2712 (18 exceed 2 KB,
+  // median 492 B) - not worth a size threshold that would split members into documented and
+  // undocumented by an arbitrary rule. `dist/api/` keeps its own copy for consumers reading JSON.
   for (const example of examples) {
     blocks.push(['@example', '```js', ...example.split('\n').map((line) => line.trimEnd()), '```']);
   }
@@ -996,13 +991,13 @@ function loadOverrides(typeName) {
   return parseOverrideBlocks(fs.readFileSync(overridePath, 'utf8'));
 }
 
-function generateDtsFile(data, typeName, namespaceName, legacy) {
+function generateDtsFile(data, typeName, namespaceName, docsRoot) {
   const editorName = typeName === 'forms' ? 'form' : typeName;
   let body = '';
 
   const typedefs = extractTypedefs(data);
-  const classes = extractClasses(data);
-  applyLegacyDescriptions(classes, typedefs, legacy);
+  const classes = extractClasses(data, typeName);
+  const exampleCount = applyDocsExamples(classes, typeName, docsRoot);
 
   const typedefNames = Object.keys(typedefs).sort();
   for (const name of typedefNames) {
@@ -1134,15 +1129,59 @@ function packageVersion(packageName) {
   }
 }
 
-function buildGenerationManifest(paths) {
+// Shared by both generators, because each reads a different set of repositories and a guard that
+// only covers one of them is the bug it is meant to prevent: `--require-clean-sources` used to check
+// sdkjs/sdkjs-forms only, while generate-plugin-methods.js was quietly reading sdkjs-ext too.
+function assertSourcesReleasable(repositories) {
+  if (process.argv.includes('--require-clean-sources')) {
+    const dirty = Object.entries(repositories).filter(([, repo]) => repo.dirty).map(([name]) => name);
+    if (dirty.length > 0) {
+      throw new Error(`--require-clean-sources requires clean source checkouts; dirty: ${dirty.join(', ')}.`);
+    }
+  }
+
+  // A release's version is the editor version its sources carry, so generating from a checkout that
+  // sits *past* a tag produces types labelled with a release they were not built from. `git describe`
+  // appends `-<commits>-g<sha>` in exactly that case; a checkout on the tag itself has no suffix.
+  // This used to be prose in CONTRIBUTING ("move to the exact tag before publishing") and was
+  // promptly violated - the 9.5.0 manifest recorded `v9.5.0.150-2-g586ec09e2d` - so it is a check now.
+  if (process.argv.includes('--require-release-tag')) {
+    const offTag = Object.entries(repositories)
+      .filter(([, repo]) => repo.describe && /-\d+-g[0-9a-f]+$/.test(repo.describe))
+      .map(([name, repo]) => `${name} is at ${repo.describe}`);
+    if (offTag.length > 0) {
+      throw new Error(`--require-release-tag requires every source checkout to sit exactly on a tag: ${offTag.join('; ')}. Check out the release tag and regenerate.`);
+    }
+  }
+}
+
+// The docs site is routinely consumed as a downloaded archive rather than a clone, so git metadata
+// is often absent. Its own CHANGELOG's newest heading identifies the release just as well, and works
+// either way; the git commit is still recorded when there is one.
+function getDocsMetadata(docsRoot) {
+  const repoRoot = path.resolve(docsRoot, '..', '..');
+  const git = getGitMetadata(repoRoot);
+
+  let version = null;
+  const changelog = path.join(repoRoot, 'CHANGELOG.md');
+  if (fs.existsSync(changelog)) {
+    const match = fs.readFileSync(changelog, 'utf8').match(/^##\s*v?(\d+\.\d+(?:\.\d+)?)/m);
+    if (match) version = match[1];
+  }
+
+  return { ...git, ...(version ? { version } : {}) };
+}
+
+function buildGenerationManifest(paths, docsRoot) {
   const repositories = {
     sdkjs: getGitMetadata(paths.sdkjs),
     sdkjsForms: getGitMetadata(paths.sdkjsForms),
+    // The documentation checkout supplies every runnable example, so what produced this output
+    // includes its version - and its lag behind sdkjs is what explains both the members without
+    // examples and the ~10% of @see links that 404 today.
+    docs: getDocsMetadata(docsRoot),
   };
-  if (process.argv.includes('--require-clean-sources') &&
-      Object.values(repositories).some(repo => repo.dirty)) {
-    throw new Error('Source checkout is dirty; --require-clean-sources requires clean sdkjs and sdkjs-forms repositories.');
-  }
+  assertSourcesReleasable(repositories);
 
   const sourceFiles = [];
   const seen = new Set();
@@ -1156,28 +1195,58 @@ function buildGenerationManifest(paths) {
         : paths.sdkjs;
       sourceFiles.push({
         repository: sourceRepo === paths.sdkjsForms ? 'sdkjs-forms' : 'sdkjs',
-        path: path.relative(sourceRepo, sourcePath),
+        // Forward slashes always: `path.relative` yields the host separator, so a Windows run
+        // recorded `word\apiBuilder.js` and the same commit regenerated on Linux produced
+        // `word/apiBuilder.js` - a diff in a file `check-generated` compares, with nothing about the
+        // types actually changed. These are repository-relative identifiers, not host paths.
+        path: path.relative(sourceRepo, sourcePath).split(path.sep).join('/'),
         sha256: sha256File(sourcePath),
       });
     }
   }
 
+  // Cheap self-check rather than a separate script: the manifest is compared across machines by
+  // `check-generated`, so a host separator leaking back into a path is a portability bug that must
+  // fail at generation time, not show up as a mystery diff in someone else's CI.
+  const hostPaths = sourceFiles.filter((file) => file.path.includes('\\'));
+  if (hostPaths.length > 0) {
+    throw new Error(`Manifest paths must use forward slashes, got: ${hostPaths.map((f) => f.path).join(', ')}`);
+  }
+
+  // generate-plugin-methods.js owns `repositories.sdkjsExt` and `pluginMethodSourceFiles` - it reads
+  // sdkjs-ext, which this generator does not. Carry whatever it recorded through instead of writing
+  // the manifest wholesale, so running this script on its own doesn't erase the other half of the
+  // provenance record.
+  const existing = readExistingManifest();
+
   return {
+    // Only versions that are pinned by package-lock.json, and therefore identical for everyone
+    // running `npm ci` on this commit. The Node version used to be recorded here too, but it is
+    // ambient rather than pinned: any contributor or CI runner on a different Node rewrote the
+    // manifest and failed `check-generated` with nothing about the types changed. jsdoc genuinely
+    // affects the parsed doclets and typescript the runtime index, so those stay.
     generator: {
       packageVersion: JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')).version,
-      node: process.version,
       jsdoc: packageVersion('jsdoc'),
       typescript: packageVersion('typescript'),
     },
     repositories: {
+      ...(existing.repositories?.sdkjsExt ? { sdkjsExt: existing.repositories.sdkjsExt } : {}),
       ...repositories,
-      officeApiDescriptions: {
-        repository: `https://github.com/${LEGACY_DECLARATIONS_REPO}.git`,
-        commit: LEGACY_DECLARATIONS_COMMIT,
-      },
     },
     sourceFiles,
+    ...(existing.pluginMethodSourceFiles ? { pluginMethodSourceFiles: existing.pluginMethodSourceFiles } : {}),
   };
+}
+
+function readExistingManifest() {
+  const manifestPath = path.join(OUTPUT_DIR, 'generation-manifest.json');
+  if (!fs.existsSync(manifestPath)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  } catch {
+    return {};
+  }
 }
 
 async function main() {
@@ -1186,13 +1255,12 @@ async function main() {
   }
 
   const paths = resolveSdkjsPaths();
+  const docsRoot = resolveDocsPath();
   const apiData = await fetchApiDefinitions();
   const report = {};
 
   for (const [typeName, data] of Object.entries(apiData)) {
-    console.log(`Fetching legacy descriptions for ${typeName}...`);
-    const legacy = await fetchLegacyDescriptions(typeName);
-    const generated = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName], legacy);
+    const generated = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName], docsRoot);
     const filename = `${typeName}.ts`;
     fs.writeFileSync(path.join(OUTPUT_DIR, filename), generated.content);
     report[typeName] = generated.stats;
@@ -1201,7 +1269,7 @@ async function main() {
   }
 
   fs.writeFileSync(path.join(OUTPUT_DIR, 'api-report.json'), `${JSON.stringify(report, null, 2)}\n`);
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'generation-manifest.json'), `${JSON.stringify(buildGenerationManifest(paths), null, 2)}\n`);
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'generation-manifest.json'), `${JSON.stringify(buildGenerationManifest(paths, docsRoot), null, 2)}\n`);
   console.log(`Wrote ${path.join(OUTPUT_DIR, 'api-report.json')}`);
   console.log(`Wrote ${path.join(OUTPUT_DIR, 'generation-manifest.json')}`);
   console.log('Done!');
@@ -1220,6 +1288,9 @@ module.exports = {
   renderJsDoc,
   splitDescription,
   collectCustomTypeRefs,
+  getGitMetadata,
+  sha256File,
+  assertSourcesReleasable,
   TS_BUILTINS,
   DOC_WIDTH,
 };

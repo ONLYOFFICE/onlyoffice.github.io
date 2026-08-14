@@ -1,0 +1,19 @@
+{
+  "description": "Sets a custom geometry for the current shape.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/SetGeometry/",
+  "examples": [
+    "// How do I give a shape a custom geometric outline in a document?\n\n// Define a unique silhouette for a shape by providing hand-drawn path coordinates in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nparagraph.AddDrawing(shape);"
+  ],
+  "params": [
+    {
+      "description": "The custom geometry.",
+      "name": "oGeometry",
+      "type": "ApiGeometry"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetGeometry(oGeometry: ApiGeometry): boolean",
+  "since": "9.1.0"
+}

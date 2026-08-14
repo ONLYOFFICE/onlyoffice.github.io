@@ -1,0 +1,18 @@
+{
+  "description": "Spicifies tick labels position for the horizontal axis.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisTickLabelPosition/",
+  "examples": [
+    "// How do I position the numbers on a chart's horizontal axis in a presentation?\n\n// Create a chart and set where the horizontal axis labels appear relative to the axis in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetTitle(\"Financial Overview\", 13);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetHorAxisTickLabelPosition(\"high\");\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nslide.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The type for the position of chart horizontal tick labels.",
+      "name": "sTickLabelPosition",
+      "type": "TickLabelPosition"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetHorAxisTickLabelPosition(sTickLabelPosition: TickLabelPosition): boolean"
+}

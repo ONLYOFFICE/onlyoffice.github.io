@@ -1,0 +1,7 @@
+{
+  "description": "Class representing a complex field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComplexForm/",
+  "extends": [
+    "ApiFormBase"
+  ]
+}

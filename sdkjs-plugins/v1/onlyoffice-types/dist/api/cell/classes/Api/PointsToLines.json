@@ -1,0 +1,18 @@
+{
+  "description": "Converts points to lines (1 line = 12 points).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToLines/",
+  "examples": [
+    "// How do I express a point value as lines in a spreadsheet?\n\n// Get the line-unit equivalent of a given number of points in a spreadsheet.\n\nconst points = 100;\nconst lines = Api.PointsToLines(points);\nconst text = points + ' points are equal to ' + lines + ' lines.';\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue(text);"
+  ],
+  "params": [
+    {
+      "description": "The number of points to convert to lines.",
+      "name": "pt",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PointsToLines(pt: number): number"
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Shows a comment by its ID.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ShowComment/",
+  "examples": [
+    "// How do I display a comment attached to a text range in a document?\n\n// Reveal a reviewer's comment programmatically so it appears in the comment panel without manual interaction.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('This text has a comment attached to it.');\n\nconst range = paragraph.GetRange();\nconst comment = range.AddComment('Please review this section.', 'John');\n\nif (comment) {\n\tdoc.ShowComment(comment.GetId());\n\tconst resultParagraph = Api.CreateParagraph();\n\tconst author = comment.GetAuthorName();\n\tresultParagraph.AddText('Comment by ' + author + ' is now displayed.');\n\tdoc.Push(resultParagraph);\n}"
+  ],
+  "params": [
+    {
+      "description": "The comment ID.",
+      "name": "commentId",
+      "type": "string | string[]"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ShowComment(commentId: string | string[]): boolean",
+  "since": "9.0.4"
+}

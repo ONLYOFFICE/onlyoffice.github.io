@@ -50,18 +50,33 @@ three channels, and confusing them is the most common source of broken plugin co
 
 ### Looking up the API without guessing
 
-- `dist/api-index.json` (npm: `@onlyoffice/plugins-types/api-index.json`; raw:
-  `https://raw.githubusercontent.com/ONLYOFFICE/plugins-types/master/dist/api-index.json`)
-  — every class/method/typedef/event/executeMethod with signature, markdown description, parameter
-  list, return type, runnable `examples`, `since` version and a verified `docsUrl`. Search this
-  before inventing a method name; if a member isn't in the index, it isn't public API.
-  Two top-level sections, and which one to search depends on the question:
-  `editors.<editor>` for what you do *inside* a `callCommand` body (`Api.*` classes, typedefs,
-  editor events, `executeMethod` names); `runtime` for how you write the plugin around it -
-  `runtime.plugin` (`AscPlugin.callCommand`, the async variants, `Asc`, buttons, plugin events),
-  `runtime.config` (`config.json`), `runtime.services`.
-- Every generated member's JSDoc carries the same information (hover in the editor), including an
-  `@example` snippet and an `@see` link to api.onlyoffice.com.
+- `dist/api/` (npm: `@onlyoffice/plugins-types/api/<path>`; raw:
+  `https://raw.githubusercontent.com/ONLYOFFICE/plugins-types/master/dist/api/<path>`) — every
+  class/method/typedef/event/executeMethod with signature, markdown description, parameter list,
+  return type, runnable `examples`, `since` version and a verified `docsUrl`. Search this before
+  inventing a method name; if a member isn't there, it isn't public API.
+
+  **It is a tree, split so that no single read is large. Read it in two steps, and do not
+  concatenate it** — the whole point of the layout is that you never load more than you need:
+
+  1. `dist/api/<editor>/index.json` — every member name mapped to its signature, for one editor
+    (7k–41k tokens). This is the file to hold in context while you work.
+  2. Then exactly one detail file: `<editor>/classes/<Class>.json`, or
+    `<editor>/classes/<Class>/<Method>.json` when a class was large enough to be sharded per method
+    (`_class.json` in that directory holds the class's own prose).
+
+  Also: `<editor>/typedefs.json`, `<editor>/events.json`, `<editor>/executeMethods.json`, and
+  `runtime.json` for the plugin runtime itself (`AscPlugin.callCommand`, the async variants, `Asc`,
+  buttons, plugin events, `config.json` types). `dist/api/index.json` is a ~1 KB manifest listing the
+  editors and restating this navigation.
+
+  Rule of thumb for which half to search: `<editor>/…` answers what you do *inside* a `callCommand`
+  body; `runtime.json` answers how you write the plugin around it.
+- Every generated member's JSDoc carries the same information (hover in the editor): description,
+  `@param`/`@returns`, `@default`, `@since`, a runnable `@example` and an `@see` link to
+  api.onlyoffice.com. About 10% of those links point at pages the docs site has not published yet -
+  it trails sdkjs by a few minor versions - so a 404 there means "not documented yet", not "wrong
+  member".
 - `dist/ambient/` holds a flattened no-import `.d.ts` bundle for Monaco-style tooling
   (`addExtraLib()`): load `onlyoffice-plugins-types.ambient.d.ts` plus exactly one
   `onlyoffice-plugins-types.<editor>-api.ambient.d.ts` addon, in that order.
@@ -76,9 +91,13 @@ npm run typecheck        # package only
 npm run check-runtime    # Asc.plugin/Asc.Buttons vs plugins.dev.js + full API surface vs sdkjs (SDKJS_PATH)
 npm run check-plugin-events  # plugin-window event map vs sdkjs event sources (SDKJS_PATH)
 npm run validate-schema  # schemas/config.schema.json vs every real config.json in this monorepo
-npm run generate         # regenerate src/generated from sdkjs + merge dist/api-index.json
+npm run generate         # regenerate src/generated from sdkjs + rebuild dist/api
                          # (postgenerate also regenerates executeMethod types and dist/ambient)
 ```
+
+`generate` also needs `DOCS_PATH` - a checkout (clone or unpacked archive) of the api.onlyoffice.com
+documentation site, which supplies every runnable `@example`. sdkjs's JSDoc carries only a `@see`
+path to those files, not the code.
 
 `generate` needs a local sdkjs checkout (`SDKJS_PATH` env or `--sdkjs`), plus `sdkjs-forms` and
 `sdkjs-ext` next to it (override with `SDKJS_FORMS_PATH`/`SDKJS_EXT_PATH`). The exact expected source
@@ -95,7 +114,7 @@ produce a byte-identical tree (`npm run check-generated`).
   type that differs from the declared one) belong in the override tables in
   `scripts/generate-plugin-methods.js` with a comment citing the real usage — never as hand edits
   to `src/generated/*`, which the next regeneration would silently revert.
-- The same hand-edit rule applies to `dist/api-index.json` and `dist/ambient/*`: both are build
+- The same hand-edit rule applies to `dist/api/` and `dist/ambient/*`: both are build
   artifacts of the generators, tracked in git only so they are directly linkable/reviewable.
 - JSDoc prose goes through `htmlToMarkdown`/`cleanProse`/`splitDescription` in
   `scripts/generate-types.js`; docs-site links are derived from the `@see

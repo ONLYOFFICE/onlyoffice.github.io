@@ -1,0 +1,34 @@
+{
+  "description": "Finds and replaces the text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SearchAndReplace/",
+  "examples": [
+    "// How do I perform a find-and-replace operation in a document?\n\n// Update outdated wording in bulk by substituting one string with another in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the first sample text. The serial number of this sample text was replaced here.\");\ndoc.SearchAndReplace({\"searchString\": \"first\", \"replaceString\": \"second\"});"
+  ],
+  "params": [
+    {
+      "description": "The properties to find and replace.",
+      "name": "oProperties",
+      "type": "object"
+    },
+    {
+      "description": "Search string.",
+      "name": "oProperties_searchString",
+      "type": "string"
+    },
+    {
+      "description": "Replacement string.",
+      "name": "oProperties_replaceString",
+      "type": "string"
+    },
+    {
+      "description": "Case sensitive or not.",
+      "name": "oProperties_matchCase",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SearchAndReplace(oProperties: object, oProperties_searchString: string, oProperties_replaceString: string, oProperties_matchCase?: string): boolean"
+}

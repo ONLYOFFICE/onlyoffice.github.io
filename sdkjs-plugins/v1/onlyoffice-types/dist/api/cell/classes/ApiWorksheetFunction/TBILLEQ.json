@@ -1,0 +1,28 @@
+{
+  "description": "Returns the bond-equivalent yield for a treasury bill.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TBILLEQ/",
+  "examples": [
+    "// Calculate the bond-equivalent yield for a treasury bill using the TBILLEQ function.\n\n// Returns the bond-equivalent yield value for the specified dates and discount rate.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TBILLEQ(\"1/1/2018\", \"11/20/2018\", \"8.00%\"));"
+  ],
+  "params": [
+    {
+      "description": "The settlement date of the Treasury bill, expressed as a serial date number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The maturity date of the Treasury bill, expressed as a serial date number.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The discount rate of the Treasury bill.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TBILLEQ(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

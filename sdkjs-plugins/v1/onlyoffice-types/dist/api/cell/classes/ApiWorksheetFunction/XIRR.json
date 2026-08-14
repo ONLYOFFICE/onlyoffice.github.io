@@ -1,0 +1,29 @@
+{
+  "description": "Returns the internal rate of return for a schedule of cash flows.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/XIRR/",
+  "examples": [
+    "// How do I find the internal rate of return when cash flows occur on specific dates in a spreadsheet?\n\n// Determine the annual rate of return based on irregular payment timing in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet values = [\"Values\", \"-$40,000.00\", \"$10,000.00\", \"$15,000.00\", \"$20,000.00\"];\nlet dates = [\"Dates\", \"1/1/2018\", \"4/1/2018\", \"8/1/2018\", \"12/1/2018\"];\n\nfor (let i = 0; i < values.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(values[i]);\n}\nfor (let j = 0; j < dates.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(dates[j]);\n}\n\nworksheet.GetRange(\"B1\").SetColumnWidth(15);\nlet range1 = worksheet.GetRange(\"A2:A5\");\nlet range2 = worksheet.GetRange(\"B2:B5\");\nworksheet.GetRange(\"C5\").SetValue(func.XIRR(range1, range2));"
+  ],
+  "params": [
+    {
+      "description": "A range that contains the series of cash flows that corresponds to a schedule of payments in dates.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "A range that contains the schedule of payment dates that corresponds to the cash flow payments.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "An estimate at what the internal rate of return will be. If it is omitted, the function will assume guess to be 0.1 (10 percent).",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "XIRR(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName, arg3?: ApiRange | ApiName | number): number"
+}

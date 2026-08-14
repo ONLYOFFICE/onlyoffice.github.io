@@ -1,0 +1,18 @@
+{
+  "description": "Sets the outline to the chart plot area.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetPlotAreaOutLine/",
+  "examples": [
+    "// How do I add a colored outline to the chart plot area in a spreadsheet?\n\n// Highlight the boundary of the chart data region with a visible stroke in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nlet chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\nchart.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nlet stroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\nchart.SetPlotAreaOutLine(stroke);"
+  ],
+  "params": [
+    {
+      "description": "The stroke used to create the plot area outline.",
+      "name": "oStroke",
+      "type": "ApiStroke"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetPlotAreaOutLine(oStroke: ApiStroke): boolean"
+}

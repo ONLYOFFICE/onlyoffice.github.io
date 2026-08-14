@@ -18,6 +18,7 @@ const path = require('path');
 const {
   resolveSdkjsPaths, runJsdoc, parseType, collectCustomTypeRefs, renderJsDoc,
   splitDescription, htmlToMarkdown, cleanProse,
+  getGitMetadata, sha256File, assertSourcesReleasable,
 } = require('./generate-types.js');
 const { mergeApiIndex } = require('./api-index.js');
 
@@ -145,25 +146,41 @@ function applyMethodOverrides(name, method) {
   };
 }
 
+// sdkjs-ext contributes real methods to word and slide (AnnotateParagraph, SetParagraphHtml, ...),
+// so a missing checkout is a generation defect, not a degraded mode: it silently produced 104
+// instead of 109 Word methods and 51 instead of 57 Slide methods, exiting 0. Fail instead, and offer
+// an explicit opt-out for anyone who genuinely wants the commercial-extension-free surface.
 function resolveSdkjsExt(paths) {
   const sdkjsExt = process.argv.includes('--sdkjs-ext')
     ? process.argv[process.argv.indexOf('--sdkjs-ext') + 1]
     : process.env.SDKJS_EXT_PATH || path.resolve(paths.sdkjs, '..', 'sdkjs-ext');
-  return path.resolve(sdkjsExt);
+  const resolved = path.resolve(sdkjsExt);
+
+  if (!fs.existsSync(resolved)) {
+    if (process.argv.includes('--allow-missing-sdkjs-ext')) {
+      console.warn(`[warn] sdkjs-ext not found at ${resolved}; generating WITHOUT it - the word and slide method surfaces will be incomplete.`);
+      return null;
+    }
+    throw new Error(`sdkjs-ext directory does not exist: ${resolved}. Set SDKJS_EXT_PATH or pass --sdkjs-ext <path>; pass --allow-missing-sdkjs-ext to generate a deliberately incomplete surface anyway.`);
+  }
+  return resolved;
 }
 
+// `paths.sdkjsExt` is null only under --allow-missing-sdkjs-ext; every other entry is mandatory and
+// its absence is reported by readMethodSources rather than silently skipped.
 function methodSources(paths, editor) {
   const common = path.join(paths.sdkjs, 'common', 'apiBase_plugins.js');
+  const ext = (...segments) => (paths.sdkjsExt ? [path.join(paths.sdkjsExt, ...segments)] : []);
   switch (editor) {
     case 'word':
       // Matches tools/docs/plugins/config/methods/word.json in the ONLYOFFICE super-repo: Word
       // also picks up sdkjs-forms/apiPlugins.js's methods (GetAllForms, SetFormValue, ...), since a
       // Word document can itself contain form fields.
-      return [common, path.join(paths.sdkjs, 'word', 'api_plugins.js'), path.join(paths.sdkjsForms, 'apiPlugins.js'), path.join(paths.sdkjsExt, 'word', 'api_plugins.js')];
+      return [common, path.join(paths.sdkjs, 'word', 'api_plugins.js'), path.join(paths.sdkjsForms, 'apiPlugins.js'), ...ext('word', 'api_plugins.js')];
     case 'cell':
       return [common, path.join(paths.sdkjs, 'cell', 'api_plugins.js')];
     case 'slide':
-      return [common, path.join(paths.sdkjs, 'slide', 'api_plugins.js'), path.join(paths.sdkjsExt, 'slide', 'api_plugins.js')];
+      return [common, path.join(paths.sdkjs, 'slide', 'api_plugins.js'), ...ext('slide', 'api_plugins.js')];
     case 'pdf':
       return [common, path.join(paths.sdkjs, 'pdf', 'api_plugins.js')];
     case 'forms':
@@ -171,6 +188,18 @@ function methodSources(paths, editor) {
     default:
       throw new Error(`Unknown editor: ${editor}`);
   }
+}
+
+// Every path methodSources returns is a declared input. Dropping a missing one silently - which is
+// what `.filter(fs.existsSync)` did here - turns a broken checkout into a smaller, still-successful
+// type surface, so a missing declared source is an error.
+function readMethodSources(paths, editor) {
+  const sources = methodSources(paths, editor);
+  const missing = sources.filter((file) => !fs.existsSync(file));
+  if (missing.length > 0) {
+    throw new Error(`[${editor}] declared plugin-method source(s) not found:\n  ${missing.join('\n  ')}`);
+  }
+  return sources;
 }
 
 function hasEditorTag(doclet, editorCode) {
@@ -453,12 +482,53 @@ function buildExecuteMethodIndex(methods) {
   return index;
 }
 
+// generate-types.js records provenance for the repositories it reads; sdkjs-ext is read only here,
+// so this generator has to record it or the manifest would claim a determinism guarantee it does not
+// have. Written as its own keys, which generate-types.js carries through rather than overwrites.
+function writeExtProvenance(paths, usedSources) {
+  const manifestPath = path.join(OUTPUT_DIR, 'generation-manifest.json');
+  if (!fs.existsSync(manifestPath)) return; // generate-types.js has not run yet; it owns creation
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+
+  manifest.repositories = manifest.repositories || {};
+  if (paths.sdkjsExt) {
+    manifest.repositories.sdkjsExt = getGitMetadata(paths.sdkjsExt);
+  } else {
+    delete manifest.repositories.sdkjsExt;
+  }
+
+  const extFiles = [...usedSources]
+    .filter((file) => paths.sdkjsExt && file.startsWith(paths.sdkjsExt))
+    .sort()
+    .map((file) => ({
+      repository: 'sdkjs-ext',
+      // Forward slashes for the same reason generate-types.js normalizes `sourceFiles`: these are
+      // repository-relative identifiers compared across machines by `check-generated`.
+      path: path.relative(paths.sdkjsExt, file).split(path.sep).join('/'),
+      sha256: sha256File(file),
+    }));
+
+  if (extFiles.length > 0) manifest.pluginMethodSourceFiles = extFiles;
+  else delete manifest.pluginMethodSourceFiles;
+
+  fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+}
+
 function main() {
   const sdkjsPaths = resolveSdkjsPaths();
   const paths = { ...sdkjsPaths, sdkjsExt: resolveSdkjsExt(sdkjsPaths) };
 
+  assertSourcesReleasable({
+    sdkjs: getGitMetadata(paths.sdkjs),
+    sdkjsForms: getGitMetadata(paths.sdkjsForms),
+    ...(paths.sdkjsExt ? { sdkjsExt: getGitMetadata(paths.sdkjsExt) } : {}),
+  });
+
+  const usedSources = new Set();
+
   for (const editor of Object.keys(EDITOR_CODES)) {
-    const sources = methodSources(paths, editor).filter((f) => fs.existsSync(f));
+    const sources = readMethodSources(paths, editor);
+    sources.forEach((file) => usedSources.add(file));
     console.log(`Reading ${editor} plugin-method JSDoc from ${sources.join(', ')}...`);
     const doclets = runJsdoc(sources);
     const methods = extractMethods(doclets, EDITOR_CODES[editor]);
@@ -470,6 +540,8 @@ function main() {
     mergeApiIndex(editor, { executeMethods: buildExecuteMethodIndex(methods) });
     console.log(`Generated ${path.relative(PACKAGE_ROOT, outPath)} with ${Object.keys(methods).length} methods, ${Object.keys(typedefs).length} typedefs`);
   }
+
+  writeExtProvenance(paths, usedSources);
 }
 
 main();

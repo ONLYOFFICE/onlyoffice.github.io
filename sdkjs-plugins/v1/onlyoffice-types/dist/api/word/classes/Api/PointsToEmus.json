@@ -1,0 +1,18 @@
+{
+  "description": "Converts points to EMUs (English Metric Units).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToEmus/",
+  "examples": [
+    "// How do I translate a point measurement into English metric units in a document?\n\n// Show the English metric unit equivalent of a given number of points as text in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = Api.CreateParagraph();\n\nconst points = 1000;\nconst emus = Api.PointsToEmus(points);\nparagraph.AddText(points + ' points are equal to ' + emus + ' english metric units.');\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The number of points to convert to EMUs.",
+      "name": "pt",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PointsToEmus(pt: number): number"
+}

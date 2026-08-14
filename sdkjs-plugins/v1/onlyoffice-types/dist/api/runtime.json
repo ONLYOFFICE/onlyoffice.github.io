@@ -1,0 +1,1019 @@
+{
+  "config": {
+    "ButtonConfig": {
+      "kind": "interface",
+      "members": {
+        "isViewer": {
+          "optional": true,
+          "signature": "isViewer?: boolean;"
+        },
+        "primary": {
+          "optional": true,
+          "signature": "primary?: boolean;"
+        },
+        "text": {
+          "signature": "text: string;"
+        },
+        "textLocale": {
+          "optional": true,
+          "signature": "textLocale?: Record<string, string>;"
+        }
+      }
+    },
+    "EditorType": {
+      "kind": "type",
+      "type": "'word' | 'cell' | 'slide' | 'pdf'"
+    },
+    "IconConfig": {
+      "kind": "type",
+      "type": "{ [K in IconScale]?: IconScaleEntry; } & { /** Light/dark icon set variant - real-world config.json files pair this with `theme`. */ style?: 'light' | 'dark'; /** Icon theme name, e.g. `\"flat\"`/`\"flatDark\"` - not a fixed enum in practice. */ theme?: string; /** Fallback used for any scale not otherwise listed. */ default?: IconScaleEntry; }"
+    },
+    "IconScale": {
+      "kind": "type",
+      "type": "'100%' | '125%' | '150%' | '175%' | '200%'"
+    },
+    "IconScaleEntry": {
+      "kind": "type",
+      "type": "{ active?: string; hover?: string; normal: string; }"
+    },
+    "InitDataType": {
+      "kind": "type",
+      "type": "'text' | 'html' | 'ole' | 'desktop' | 'desktop-external' | 'none' | 'sign'"
+    },
+    "InstalledPluginInfo": {
+      "kind": "interface",
+      "members": {
+        "baseUrl": {
+          "signature": "baseUrl: string;"
+        },
+        "canRemoved": {
+          "signature": "canRemoved: boolean;"
+        },
+        "guid": {
+          "signature": "guid: string;"
+        },
+        "obj": {
+          "signature": "obj: PluginConfig;"
+        },
+        "removed": {
+          "optional": true,
+          "signature": "removed?: boolean;"
+        }
+      }
+    },
+    "MenuType": {
+      "kind": "type",
+      "type": "'left' | 'right'"
+    },
+    "PluginConfig": {
+      "kind": "interface",
+      "members": {
+        "baseUrl": {
+          "optional": true,
+          "signature": "baseUrl?: string;"
+        },
+        "description": {
+          "optional": true,
+          "signature": "description?: string;"
+        },
+        "discussion": {
+          "optional": true,
+          "signature": "discussion?: string;"
+        },
+        "guid": {
+          "signature": "guid: string;"
+        },
+        "help": {
+          "description": "A help/support link for the plugin.",
+          "optional": true,
+          "signature": "help?: string;"
+        },
+        "manifestVersion": {
+          "description": "Version of the config.json format itself, distinct from the plugin's own `version`.",
+          "optional": true,
+          "signature": "manifestVersion?: string;"
+        },
+        "minVersion": {
+          "optional": true,
+          "signature": "minVersion?: string;"
+        },
+        "name": {
+          "signature": "name: string;"
+        },
+        "nameLocale": {
+          "optional": true,
+          "signature": "nameLocale?: Record<string, string>;"
+        },
+        "offered": {
+          "description": "The plugin author who proposed the plugin for publication.",
+          "optional": true,
+          "signature": "offered?: string;"
+        },
+        "onlyofficeScheme": {
+          "description": "Marks the plugin as belonging to ONLYOFFICE's own scheme/catalog rather than a third party.",
+          "optional": true,
+          "signature": "onlyofficeScheme?: boolean;"
+        },
+        "url": {
+          "optional": true,
+          "signature": "url?: string;"
+        },
+        "variations": {
+          "signature": "variations: VariationConfig[];"
+        },
+        "version": {
+          "description": "The plugin's own version, e.g. `\"1.0\"`. Optional per the reference, and genuinely omitted by\nshipped plugins - `guid`, `name` and `variations` are the only required top-level fields.",
+          "optional": true,
+          "signature": "version?: string;"
+        }
+      }
+    },
+    "StoreConfig": {
+      "kind": "interface",
+      "members": {
+        "background": {
+          "optional": true,
+          "signature": "background?: { dark: string; light: string; };"
+        },
+        "categories": {
+          "optional": true,
+          "signature": "categories?: string[];"
+        },
+        "icons": {
+          "optional": true,
+          "signature": "icons?: { dark: string; light: string; };"
+        },
+        "screenshots": {
+          "optional": true,
+          "signature": "screenshots?: string[];"
+        }
+      }
+    },
+    "VariationConfig": {
+      "kind": "interface",
+      "members": {
+        "EditorsSupport": {
+          "signature": "EditorsSupport: EditorType[];"
+        },
+        "buttons": {
+          "description": "Defaults to no buttons (an empty toolbar) when omitted - routinely omitted in practice.",
+          "optional": true,
+          "signature": "buttons?: ButtonConfig[];"
+        },
+        "cryptoDisabledForExternalCloud": {
+          "optional": true,
+          "signature": "cryptoDisabledForExternalCloud?: string;"
+        },
+        "cryptoDisabledForInternalCloud": {
+          "optional": true,
+          "signature": "cryptoDisabledForInternalCloud?: string;"
+        },
+        "cryptoDisabledOnStart": {
+          "optional": true,
+          "signature": "cryptoDisabledOnStart?: string;"
+        },
+        "cryptoMode": {
+          "optional": true,
+          "signature": "cryptoMode?: string;"
+        },
+        "description": {
+          "signature": "description: string;"
+        },
+        "descriptionLocale": {
+          "optional": true,
+          "signature": "descriptionLocale?: Record<string, string>;"
+        },
+        "events": {
+          "optional": true,
+          "signature": "events?: string[];"
+        },
+        "fixedSize": {
+          "optional": true,
+          "signature": "fixedSize?: boolean;"
+        },
+        "icons": {
+          "description": "Some plugins use the same rich per-scale shape here as `icons2` instead of a plain path/map.",
+          "optional": true,
+          "signature": "icons?: Record<string, string> | string[] | string | IconConfig[];"
+        },
+        "icons2": {
+          "optional": true,
+          "signature": "icons2?: IconConfig[];"
+        },
+        "initData": {
+          "optional": true,
+          "signature": "initData?: string;"
+        },
+        "initDataType": {
+          "optional": true,
+          "signature": "initDataType?: InitDataType;"
+        },
+        "initOnSelectionChanged": {
+          "optional": true,
+          "signature": "initOnSelectionChanged?: boolean;"
+        },
+        "isCanDocked": {
+          "optional": true,
+          "signature": "isCanDocked?: boolean;"
+        },
+        "isCustomWindow": {
+          "optional": true,
+          "signature": "isCustomWindow?: boolean;"
+        },
+        "isDisplayedInViewer": {
+          "optional": true,
+          "signature": "isDisplayedInViewer?: boolean;"
+        },
+        "isInsideMode": {
+          "optional": true,
+          "signature": "isInsideMode?: boolean;"
+        },
+        "isModal": {
+          "optional": true,
+          "signature": "isModal?: boolean;"
+        },
+        "isNeedNumbering": {
+          "description": "Whether the variation's content needs sequential numbering (used by some panel plugins).",
+          "optional": true,
+          "signature": "isNeedNumbering?: boolean;"
+        },
+        "isSystem": {
+          "optional": true,
+          "signature": "isSystem?: boolean;"
+        },
+        "isTargeted": {
+          "optional": true,
+          "signature": "isTargeted?: boolean;"
+        },
+        "isUpdateOleOnResize": {
+          "optional": true,
+          "signature": "isUpdateOleOnResize?: boolean;"
+        },
+        "isViewer": {
+          "optional": true,
+          "signature": "isViewer?: boolean;"
+        },
+        "isVisual": {
+          "description": "Omitted in practice about as often as it's set explicitly.",
+          "optional": true,
+          "signature": "isVisual?: boolean;"
+        },
+        "menu": {
+          "optional": true,
+          "signature": "menu?: MenuType;"
+        },
+        "methods": {
+          "description": "executeMethod names this variation calls - purely descriptive/documentation, not enforced.",
+          "optional": true,
+          "signature": "methods?: string[];"
+        },
+        "name": {
+          "optional": true,
+          "signature": "name?: string;"
+        },
+        "nameLocale": {
+          "optional": true,
+          "signature": "nameLocale?: Record<string, string>;"
+        },
+        "screens": {
+          "description": "Store listing screenshots for this specific variation (see also StoreConfig.screenshots).",
+          "optional": true,
+          "signature": "screens?: string[];"
+        },
+        "size": {
+          "optional": true,
+          "signature": "size?: number[];"
+        },
+        "store": {
+          "optional": true,
+          "signature": "store?: StoreConfig;"
+        },
+        "type": {
+          "optional": true,
+          "signature": "type?: VariationType;"
+        },
+        "url": {
+          "signature": "url: string;"
+        }
+      }
+    },
+    "VariationType": {
+      "kind": "type",
+      "type": "'window' | 'panel' | 'panelRight' | 'background' | 'system'"
+    }
+  },
+  "plugin": {
+    "Asc": {
+      "kind": "interface",
+      "members": {
+        "ButtonContentControl": {
+          "signature": "ButtonContentControl: new (parent?: ButtonBase | null, id?: string) => ButtonContentControl;"
+        },
+        "ButtonContextMenu": {
+          "signature": "ButtonContextMenu: new (parent?: ButtonBase | null, id?: string) => ButtonContextMenu;"
+        },
+        "ButtonToolbar": {
+          "signature": "ButtonToolbar: new (parent?: ButtonBase | null, id?: string) => ButtonToolbar;"
+        },
+        "ButtonWindowHeader": {
+          "signature": "ButtonWindowHeader: new (parent?: ButtonBase | null, id?: string) => ButtonWindowHeader;"
+        },
+        "Buttons": {
+          "signature": "Buttons: Buttons;"
+        },
+        "PluginWindow": {
+          "signature": "PluginWindow: new () => PluginWindow;"
+        },
+        "plugin": {
+          "signature": "plugin: AscPlugin;"
+        },
+        "scope": {
+          "signature": "scope: PluginScope;"
+        }
+      }
+    },
+    "AscPlugin": {
+      "kind": "interface",
+      "members": {
+        "attachContextMenuClickEvent": {
+          "signature": "attachContextMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;"
+        },
+        "attachEditorEvent": {
+          "description": "Per-editor overloads (typed from each editor's own plugin-events.js) come first so a known\nevent name gets its real payload type; the final overload is a loose fallback for events\nnot modeled yet (e.g. the low-level common/UI ones - onContextMenuShow, onClick, onKeyDown, ...).",
+          "signature": "attachEditorEvent: (<T extends Word.EditorEventName>(eventName: T, callback: (...args: Word.EditorEventArgs[T]) => void) => void) & (<T extends Cell.EditorEventName>(eventName: T, callback: (...args: Cell.EditorEventArgs[T]) => void) => void) & (<T extends Slide.EditorEventName>(eventName: T, callback: (...args: Slide.EditorEventArgs[T]) => void) => void) & (<T extends Forms.EditorEventName>(eventName: T, callback: (...args: Forms.EditorEventArgs[T]) => void) => void) & (<T extends Pdf.EditorEventName>(eventName: T, callback: (...args: Pdf.EditorEventArgs[T]) => void) => void) & ((eventName: PluginEditorEventName, callback: PluginEditorEventCallback) => void);"
+        },
+        "attachEvent": {
+          "signature": "attachEvent: (<T extends keyof PluginEventMap>(eventName: T, callback: (...args: PluginEventMap[T]) => void) => void) & ((eventName: string, callback: (...args: unknown[]) => void) => void);"
+        },
+        "attachToolbarMenuClickEvent": {
+          "signature": "attachToolbarMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;"
+        },
+        "attachWindowHeaderMenuClickEvent": {
+          "signature": "attachWindowHeaderMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;"
+        },
+        "button": {
+          "signature": "button: (id: number, text: string) => void;"
+        },
+        "callCommand": {
+          "description": "Runs `command` inside the editor's process, where the global `Api` is the entry point.\n\nThe function is serialized with `Function.prototype.toString()`, so it is **not a closure**:\nnothing from the surrounding scope is visible inside it. Pass data in through\n`Asc.scope` (JSON-serialized into the command's context and readable there as `Asc.scope` or\nthe bare `scope`) rather than by capturing variables.\n\n`command`'s return value is delivered to `callback`. It must be plain data - see\n{@link CommandSerializable}; returning an `Api.*` object yields `undefined` at runtime and is\nrejected here at compile time.",
+          "signature": "callCommand: <T>( command: () => T & CommandSerializable<T>, isClose?: boolean, isCalc?: boolean, callback?: (value: T) => void, ) => void;"
+        },
+        "callCommandAsync": {
+          "description": "Promise-returning {@link AscPlugin.callCommand}, available when the host supports async\nfunctions. Always runs with `isClose: false` and `isCalc: true`; use `callCommand` directly\nwhen you need either of those to differ.",
+          "signature": "callCommandAsync: <T>(command: () => T & CommandSerializable<T>) => Promise<T>;"
+        },
+        "callMethodAsync": {
+          "description": "Promise-returning {@link AscPlugin.executeMethod}, typed per editor the same way.",
+          "signature": "callMethodAsync: (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T]) => Promise<WordMethodReturn<T>>) & (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T]) => Promise<CellMethodReturn<T>>) & (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T]) => Promise<SlideMethodReturn<T>>) & (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T]) => Promise<PdfMethodReturn<T>>) & (<T extends FormsMethodName>(methodName: T, args?: FormsMethodArgs[T]) => Promise<FormsMethodReturn<T>>);"
+        },
+        "callModule": {
+          "description": "Fetches a remotely located script and executes it as a command, the same way\n{@link AscPlugin.callCommand} executes an inline function. The callback receives the fetched\nsource text, not the command's return value.",
+          "signature": "callModule: (url: string, callback?: (response: string) => void, isClose?: boolean) => void;"
+        },
+        "createInputHelper": {
+          "description": "Creates the {@link InputHelper} - a window that tracks the cursor as the user types.",
+          "signature": "createInputHelper: () => void;"
+        },
+        "detachEditorEvent": {
+          "signature": "detachEditorEvent: (<T extends Word.EditorEventName>(eventName: T) => void) & (<T extends Cell.EditorEventName>(eventName: T) => void) & (<T extends Slide.EditorEventName>(eventName: T) => void) & (<T extends Forms.EditorEventName>(eventName: T) => void) & (<T extends Pdf.EditorEventName>(eventName: T) => void) & ((eventName: PluginEditorEventName) => void);"
+        },
+        "detachEvent": {
+          "signature": "detachEvent: (<T extends keyof PluginEventMap>(eventName: T) => void) & ((eventName: string) => void);"
+        },
+        "event_onChangeRestrictions": {
+          "optional": true,
+          "signature": "event_onChangeRestrictions?: PluginEventHandler<\"onChangeRestrictions\">;"
+        },
+        "event_onClick": {
+          "optional": true,
+          "signature": "event_onClick?: PluginEventHandler<\"onClick\">;"
+        },
+        "event_onClickBack": {
+          "optional": true,
+          "signature": "event_onClickBack?: PluginEventHandler<\"onClickBack\">;"
+        },
+        "event_onContextMenuClick": {
+          "description": "Handler for context-menu item clicks registered with attachContextMenuClickEvent.",
+          "optional": true,
+          "signature": "event_onContextMenuClick?: (id?: string) => void;"
+        },
+        "event_onContextMenuShow": {
+          "optional": true,
+          "signature": "event_onContextMenuShow?: PluginEventHandler<\"onContextMenuShow\">;"
+        },
+        "event_onDocumentContentReady": {
+          "optional": true,
+          "signature": "event_onDocumentContentReady?: PluginEventHandler<\"onDocumentContentReady\">;"
+        },
+        "event_onEnableMouseEvent": {
+          "optional": true,
+          "signature": "event_onEnableMouseEvent?: PluginEventHandler<\"onEnableMouseEvent\">;"
+        },
+        "event_onExternalMouseUp": {
+          "optional": true,
+          "signature": "event_onExternalMouseUp?: PluginEventHandler<\"onExternalMouseUp\">;"
+        },
+        "event_onInputHelperClear": {
+          "optional": true,
+          "signature": "event_onInputHelperClear?: PluginEventHandler<\"onInputHelperClear\">;"
+        },
+        "event_onInputHelperInput": {
+          "optional": true,
+          "signature": "event_onInputHelperInput?: PluginEventHandler<\"onInputHelperInput\">;"
+        },
+        "event_onKeyDown": {
+          "optional": true,
+          "signature": "event_onKeyDown?: PluginEventHandler<\"onKeyDown\">;"
+        },
+        "event_onTargetPositionChanged": {
+          "optional": true,
+          "signature": "event_onTargetPositionChanged?: PluginEventHandler<\"onTargetPositionChanged\">;"
+        },
+        "event_onToolbarMenuClick": {
+          "description": "Handler for toolbar-menu item clicks registered with attachToolbarMenuClickEvent.",
+          "optional": true,
+          "signature": "event_onToolbarMenuClick?: (id?: string) => void;"
+        },
+        "event_onWindowHeaderMenuClick": {
+          "description": "Handler for window-header item clicks registered with attachWindowHeaderMenuClickEvent.",
+          "optional": true,
+          "signature": "event_onWindowHeaderMenuClick?: (id?: string) => void;"
+        },
+        "event_onWindowResize": {
+          "optional": true,
+          "signature": "event_onWindowResize?: PluginEventHandler<\"onWindowResize\">;"
+        },
+        "executeCommand": {
+          "signature": "executeCommand: ExecuteCommandCallback;"
+        },
+        "executeMethod": {
+          "signature": "executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) & ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) & ((methodName: 'ResizeWindow', args?: [frameId: string, size: number, minSize: number, maxSize: number]) => void) & (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) & (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) & (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void) & (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T], callback?: (result: PdfMethodReturn<T>) => void) => void) & (<T extends FormsMethodName>(methodName: T, args?: FormsMethodArgs[T], callback?: (result: FormsMethodReturn<T>) => void) => void);"
+        },
+        "getInputHelper": {
+          "description": "Returns the {@link InputHelper} created by {@link AscPlugin.createInputHelper}.",
+          "signature": "getInputHelper: () => InputHelper;"
+        },
+        "guid": {
+          "description": "Plugin GUID from config.json.",
+          "optional": true,
+          "signature": "guid?: string;"
+        },
+        "info": {
+          "signature": "info: PluginInfo;"
+        },
+        "init": {
+          "signature": "init: () => void;"
+        },
+        "inputHelper_onSelectItem": {
+          "description": "Called when the user picks an item from the input helper.",
+          "optional": true,
+          "signature": "inputHelper_onSelectItem?: (item: InputHelperItem) => void;"
+        },
+        "loadModule": {
+          "description": "Fetches a remotely located text resource without executing it.",
+          "signature": "loadModule: (url: string, callback?: (response: string) => void) => void;"
+        },
+        "onCommandCallback": {
+          "description": "Fallback for a {@link AscPlugin.callCommand} result when that call was made without its own\n`callback` argument.",
+          "optional": true,
+          "signature": "onCommandCallback?: (returnValue: unknown) => void;"
+        },
+        "onDestroy": {
+          "optional": true,
+          "signature": "onDestroy?: () => void;"
+        },
+        "onEvent": {
+          "signature": "onEvent: (eventName: string, payload?: unknown) => void;"
+        },
+        "onExternalMouseUp": {
+          "signature": "onExternalMouseUp: () => void;"
+        },
+        "onExternalPluginMessage": {
+          "description": "Called when the editor integrator sends the plugin a message.",
+          "optional": true,
+          "signature": "onExternalPluginMessage?: (data: { type: string; [key: string]: unknown }) => void;"
+        },
+        "onMethodReturn": {
+          "description": "Fallback for an {@link AscPlugin.executeMethod} result when that call was made without its\nown `callback` argument.",
+          "optional": true,
+          "signature": "onMethodReturn?: (returnValue: unknown) => void;"
+        },
+        "onThemeChanged": {
+          "signature": "onThemeChanged: (theme: AscTheme) => void;"
+        },
+        "onThemeChangedBase": {
+          "signature": "onThemeChangedBase: (theme: AscTheme) => void;"
+        },
+        "onTranslate": {
+          "signature": "onTranslate(): void;"
+        },
+        "resizeWindow": {
+          "signature": "resizeWindow: (width: number, height: number, minWidth?: number, minHeight?: number, maxWidth?: number, maxHeight?: number) => void;"
+        },
+        "sendEvent": {
+          "signature": "sendEvent: (eventName: string, eventData?: unknown) => void;"
+        },
+        "sendToPlugin": {
+          "signature": "sendToPlugin(message: string, payload?: unknown): void;"
+        },
+        "theme": {
+          "signature": "theme: AscTheme;"
+        },
+        "tr": {
+          "signature": "tr: (key: string) => string;"
+        },
+        "tr_init": {
+          "description": "Set to `true` after `tr` is first initialized",
+          "optional": true,
+          "signature": "tr_init?: boolean;"
+        },
+        "translateManager": {
+          "description": "Translation map for the current language, populated by `pluginInitTranslateManager`",
+          "optional": true,
+          "signature": "translateManager?: Record<string, string>;"
+        },
+        "trigger": {
+          "signature": "trigger: (eventName: string, eventData?: unknown) => void;"
+        },
+        "version": {
+          "signature": "version: string;"
+        },
+        "windowID": {
+          "description": "Window identifier assigned when the plugin is opened in a separate window.",
+          "optional": true,
+          "signature": "windowID?: string;"
+        }
+      }
+    },
+    "ButtonBase": {
+      "kind": "interface",
+      "members": {
+        "attachOnClick": {
+          "signature": "attachOnClick: (callback: CustomMenuClickCallback) => void;"
+        },
+        "childs": {
+          "signature": "childs: ButtonBase[] | null;"
+        },
+        "copy": {
+          "optional": true,
+          "signature": "copy?: () => ButtonBase;"
+        },
+        "data": {
+          "signature": "data: string;"
+        },
+        "disabled": {
+          "signature": "disabled: boolean;"
+        },
+        "editors": {
+          "signature": "editors: EditorType[];"
+        },
+        "enableToggle": {
+          "signature": "enableToggle: boolean;"
+        },
+        "hint": {
+          "signature": "hint: string | null;"
+        },
+        "icons": {
+          "signature": "icons: IconConfig | string[] | string | null;"
+        },
+        "id": {
+          "signature": "id: string;"
+        },
+        "lockInViewMode": {
+          "signature": "lockInViewMode: boolean;"
+        },
+        "menu": {
+          "optional": true,
+          "signature": "menu?: ButtonMenuItem[];"
+        },
+        "parent": {
+          "signature": "parent: ButtonBase | null;"
+        },
+        "pressed": {
+          "optional": true,
+          "signature": "pressed?: boolean;"
+        },
+        "removed": {
+          "signature": "removed: boolean;"
+        },
+        "separator": {
+          "signature": "separator: boolean;"
+        },
+        "split": {
+          "optional": true,
+          "signature": "split?: boolean;"
+        },
+        "text": {
+          "signature": "text: string;"
+        }
+      }
+    },
+    "ButtonContentControl": {
+      "kind": "interface",
+      "members": {
+        "addChecker": {
+          "signature": "addChecker: (checker: (contentControlId: string) => boolean | Promise<boolean>) => void;"
+        },
+        "checker": {
+          "optional": true,
+          "signature": "checker?: (contentControlId: string) => boolean | Promise<boolean>;"
+        }
+      }
+    },
+    "ButtonContextMenu": {
+      "kind": "interface",
+      "members": {
+        "addCheckers": {
+          "signature": "addCheckers: (...keys: string[]) => void;"
+        },
+        "showOnOptionsType": {
+          "signature": "showOnOptionsType: string[];"
+        }
+      }
+    },
+    "ButtonMenuItem": {
+      "kind": "interface",
+      "members": {
+        "hint": {
+          "optional": true,
+          "signature": "hint?: string;"
+        },
+        "id": {
+          "signature": "id: string;"
+        },
+        "items": {
+          "optional": true,
+          "signature": "items?: ButtonMenuItem[];"
+        },
+        "onclick": {
+          "optional": true,
+          "signature": "onclick?: CustomMenuClickCallback;"
+        },
+        "text": {
+          "signature": "text: string;"
+        }
+      }
+    },
+    "ButtonToolbar": {
+      "kind": "interface",
+      "members": {
+        "tab": {
+          "signature": "tab: string;"
+        },
+        "type": {
+          "signature": "type: ToolbarButtonType;"
+        }
+      }
+    },
+    "ButtonWindowHeader": {
+      "kind": "interface",
+      "members": {
+        "align": {
+          "signature": "align: \"left\" | \"center\" | \"right\" | string;"
+        },
+        "isLabel": {
+          "signature": "isLabel: boolean;"
+        },
+        "isTitle": {
+          "signature": "isTitle: boolean;"
+        }
+      }
+    },
+    "Buttons": {
+      "kind": "interface",
+      "members": {
+        "registerContentControl": {
+          "signature": "registerContentControl: () => void;"
+        },
+        "registerContextMenu": {
+          "signature": "registerContextMenu: () => void;"
+        },
+        "registerToolbarMenu": {
+          "signature": "registerToolbarMenu: () => void;"
+        },
+        "registerWindowHeader": {
+          "signature": "registerWindowHeader: (id: string, buttons: ButtonWindowHeader[], frame?: WindowHeaderFrameOptions) => void;"
+        },
+        "updateToolbarMenu": {
+          "signature": "updateToolbarMenu: (id: string, text: string, buttons: ButtonToolbar[]) => void;"
+        },
+        "updateWindowHeader": {
+          "signature": "updateWindowHeader: (id: string, buttons: ButtonWindowHeader[], add?: boolean, frame?: WindowHeaderFrameOptions) => void;"
+        }
+      }
+    },
+    "CommandSerializable": {
+      "description": "Rejects anything a `callCommand` result can't survive.\n\nThe command body is serialized with `Function.prototype.toString()` and re-run inside the\neditor's own process, so its return value has to cross a process boundary. The editor filters it\nthrough `Asc.checkReturnCommand`, which walks the value up to 10 levels deep and replaces\nanything carrying methods - an `ApiParagraph`, an `ApiDocument`, any other `Api.*` object - with\n`undefined`. Mapping function-valued properties to `never` turns that silent data loss into a\ncompile error, while plain data (object literals, interfaces, arrays, unions, nested\ncombinations) passes through untouched.",
+      "kind": "type",
+      "type": "T extends Function ? never : T extends object ? { [K in keyof T]: CommandSerializable<T[K]> } : T"
+    },
+    "ContextMenuShowEvent": {
+      "kind": "interface",
+      "members": {
+        "type": {
+          "description": "The context type used by the editor, for example `All`.",
+          "signature": "type: string;"
+        }
+      }
+    },
+    "CustomMenuClickCallback": {
+      "kind": "type",
+      "type": "(data?: string) => void"
+    },
+    "ExecuteCommandCallback": {
+      "kind": "interface"
+    },
+    "InputHelper": {
+      "description": "A window that appears and disappears as the user types, positioned against the cursor. Obtained\nfrom `Asc.plugin.getInputHelper()` after `Asc.plugin.createInputHelper()`.",
+      "kind": "interface",
+      "members": {
+        "createWindow": {
+          "description": "Creates the input helper window.",
+          "signature": "createWindow(): void;"
+        },
+        "getItems": {
+          "description": "Returns all items currently in the input helper.",
+          "signature": "getItems(): InputHelperItem[];"
+        },
+        "getScrollSizes": {
+          "description": "Returns the scrollable size of the input helper window.\n\nKeyed `w`/`h`, not `width`/`height`: sdkjs's own JSDoc declares this `@returns {number}` and\ndescribes it as \"width and height\", but the implementation returns `{ w, h }` - the shape\nhere follows the implementation.",
+          "signature": "getScrollSizes(): { w: number; h: number };"
+        },
+        "setItems": {
+          "description": "Sets the items shown in the input helper.",
+          "signature": "setItems(items: InputHelperItem[]): void;"
+        },
+        "show": {
+          "description": "Shows the input helper at the given size, optionally capturing the keyboard.",
+          "signature": "show(width: number, height: number, isCaptureKeyboard?: boolean): void;"
+        },
+        "unShow": {
+          "description": "Hides the input helper.",
+          "signature": "unShow(): void;"
+        }
+      }
+    },
+    "InputHelperItem": {
+      "description": "An item of the input helper list.",
+      "kind": "interface",
+      "members": {
+        "id": {
+          "description": "The item index. Optional when setting items - the runtime assigns the array position as the\nid for any item that omits it - and always present on items read back via `getItems`.",
+          "optional": true,
+          "signature": "id?: string;"
+        },
+        "text": {
+          "description": "The item text.",
+          "signature": "text: string;"
+        }
+      }
+    },
+    "PluginEditorEventCallback": {
+      "kind": "type",
+      "type": "(...args: T[]) => void"
+    },
+    "PluginEditorEventName": {
+      "description": "Editor content events (paragraph/page changes) - a distinct registry from PluginEventName, which covers plugin-window-level events (theme, resize, ...)",
+      "kind": "type",
+      "type": "'onChangeCurrentPage' | 'onParagraphText' | 'onPargraphAdd' | 'onParagraphRemove' | string"
+    },
+    "PluginEventCallback": {
+      "kind": "type",
+      "type": "(...args: T[]) => void"
+    },
+    "PluginEventHandler": {
+      "kind": "type",
+      "type": "(...args: PluginEventMap[K]) => void"
+    },
+    "PluginEventMap": {
+      "description": "Event arguments are tuples so events with no payload can be represented as `[]`.",
+      "kind": "type",
+      "type": "{ onContextMenuShow: [event: ContextMenuShowEvent]; /** Payload is not documented consistently across editor versions. */ onWindowResize: [event: unknown]; /** Payload is not documented consistently across editor versions. */ onInputHelperInput: [event: unknown]; onInputHelperClear: []; onExternalMouseUp: []; onClickBack: []; onDocumentContentReady: []; onTargetPositionChanged: []; /** `isSelectionUse` - defines if the selection is used or not. */ onClick: [isSelectionUse: boolean]; /** Payload shape is not documented consistently across editor versions. */ onKeyDown: [event: unknown]; /** `isEnabled` - whether the mouse or touchpad is enabled (true) or not (false). */ onEnableMouseEvent: [isEnabled: boolean]; /** `value` - the restrictions value. */ onChangeRestrictions: [value: number]; // Word only (per sdkjs/word/plugin-events.js's own `@typeofeditors [\"CDE\"]`) - firing an // attachEvent for one of these outside Word is not documented and won't happen in practice. /** Word only. Fired when a comment is added via `AddComment`. */ onAddComment: [comment: comment]; /** Word only. Fired when a comment is changed via `ChangeComment`. */ onChangeCommentData: [comment: comment]; /** Word only. Fired when the current page changes. `index` is the newly activated page. */ onChangeCurrentPage: [index: number]; /** Word only. Fired when a comment is removed via `RemoveComments`. */ onRemoveComment: [comment: comment]; /** Word only. Fired when the user clicks the \"Complete & Submit\" button on a form. */ onSubmitForm: []; /** Word only. Fired when a content control receives focus. */ onFocusContentControl: [control: ContentControl]; /** Word only. Fired when a content control loses focus. */ onBlurContentControl: [control: ContentControl]; /** Word only. Fired when a content control changes. */ onChangeContentControl: [control: ContentControl]; /** Word only. Fired with the IDs of content control(s) that lost focus tracking in the document. */ onHideContentControlTrack: [ids: string[]]; /** Word only. Fired with the IDs of content control(s) that gained focus tracking in the document. */ onShowContentControlTrack: [ids: string[]]; /** Word only. Fired when one or more OLE objects are inserted into the document. */ onInsertOleObjects: [data: object[]]; /** Word only. Fired when a text annotation (e.g. a grammar/spellcheck range) loses focus. Since 9.2.0. */ onBlurAnnotation: [annotation: TextAnnotation]; /** Word only. Fired when a text annotation receives focus. Since 9.2.0. */ onFocusAnnotation: [annotation: TextAnnotation]; /** Word only. Fired when the user clicks a text annotation. Since 9.2.0. */ onClickAnnotation: [annotation: TextAnnotation]; /** Word only. Fired when a paragraph's text is updated in the document. Since 9.2.0. */ onParagraphText: [data: { paragraphId: string; recalcId: string; text: string; annotations: TextAnnotationRange[] }]; // Cell only. /** Cell only. Fired when the current worksheet changes. `index` is the newly activated sheet. */ onChangeCurrentSheet: [index: number]; // Slide only. /** Slide only. Fired when the current slide changes. `index` is the newly activated slide. */ onChangeCurrentSlide: [index: number]; /** Slide only. Fired when a slide show presentation starts. */ onSlideShowBegin: []; /** Slide only. Fired when a slide show presentation ends. */ onSlideShowEnd: []; /** Slide only. Fired after the slide changes during a slide show, before its content is displayed. */ onSlideShowNextSlide: []; /** Slide only. Fired when the slide changes during a slide show, with the current and previous indices (`previousSlideIndex` is `-1` for the first slide). */ onSlideShowSlideChanged: [data: { slideIndex: number; previousSlideIndex: number }]; // Pdf only. /** Pdf only. Fired when a text selection ends, at the page and point where it ended. */ onSelectionEnd: [page: number, x: number, y: number]; /** Pdf only. Fired when a text selection is canceled. */ onSelectionCancel: []; }"
+    },
+    "PluginEventName": {
+      "kind": "type",
+      "type": "keyof PluginEventMap | (string & {})"
+    },
+    "PluginInfo": {
+      "kind": "interface",
+      "members": {
+        "documentCallbackUrl": {
+          "signature": "documentCallbackUrl: string;"
+        },
+        "documentId": {
+          "signature": "documentId: string;"
+        },
+        "documentTitle": {
+          "signature": "documentTitle: string;"
+        },
+        "editorType": {
+          "signature": "editorType: EditorType;"
+        },
+        "guid": {
+          "signature": "guid: string;"
+        },
+        "isEmbedMode": {
+          "signature": "isEmbedMode: boolean;"
+        },
+        "isMobileMode": {
+          "signature": "isMobileMode: boolean;"
+        },
+        "isViewMode": {
+          "signature": "isViewMode: boolean;"
+        },
+        "jwt": {
+          "signature": "jwt: string;"
+        },
+        "lang": {
+          "signature": "lang: string;"
+        },
+        "mmToPx": {
+          "signature": "mmToPx: number;"
+        },
+        "theme": {
+          "signature": "theme: AscTheme;"
+        },
+        "userId": {
+          "signature": "userId: string;"
+        },
+        "userName": {
+          "signature": "userName: string;"
+        }
+      }
+    },
+    "PluginScope": {
+      "kind": "interface",
+      "members": {
+        "prototype": {
+          "description": "Only present on the initial `Asc.scope` the runtime bootstraps (`plugins.dev.js` sets it once\nat startup as a convenience for plugin authors - the runtime itself never calls it). Plugins\nroutinely replace `Asc.scope` wholesale with a plain data payload before `callCommand`\n(`window.Asc.scope = { foo: 1 }`) so that data is readable inside the sandboxed callback -\nthat payload has no reason to carry `prototype.clear`, so it must stay optional here.",
+          "optional": true,
+          "signature": "prototype?: { clear(): void; };"
+        }
+      }
+    },
+    "PluginWindow": {
+      "kind": "interface",
+      "members": {
+        "attachEvent": {
+          "signature": "attachEvent: (eventName: string, callback: PluginEventCallback) => void;"
+        },
+        "close": {
+          "signature": "close: () => void;"
+        },
+        "command": {
+          "signature": "command: (methodName: string, payload?: unknown) => void;"
+        },
+        "id": {
+          "signature": "id: string;"
+        },
+        "show": {
+          "signature": "show: (variation: VariationConfig) => void;"
+        }
+      }
+    },
+    "ToolbarButtonType": {
+      "kind": "type",
+      "type": "\"button\" | \"big-button\""
+    },
+    "WindowHeaderFrameOptions": {
+      "kind": "interface",
+      "members": {
+        "align": {
+          "optional": true,
+          "signature": "align?: \"left\" | \"center\" | \"right\" | string;"
+        },
+        "isLabel": {
+          "optional": true,
+          "signature": "isLabel?: boolean;"
+        },
+        "isTitle": {
+          "optional": true,
+          "signature": "isTitle?: boolean;"
+        }
+      }
+    }
+  },
+  "services": {
+    "AscDesktopEditor": {
+      "kind": "interface",
+      "members": {
+        "AddChanges": {
+          "signature": "AddChanges(type: number, base64: string): void;"
+        },
+        "CheckUserId": {
+          "signature": "CheckUserId(): string;"
+        },
+        "GetBackupPlugins": {
+          "signature": "GetBackupPlugins(): string;"
+        },
+        "GetInstallPlugins": {
+          "signature": "GetInstallPlugins(): string;"
+        },
+        "GetOpenedFile": {
+          "signature": "GetOpenedFile(path: string): ArrayBuffer | null;"
+        },
+        "IsLocalFileExist": {
+          "signature": "IsLocalFileExist(path: string): boolean;"
+        },
+        "LocalFileGetImageUrl": {
+          "signature": "LocalFileGetImageUrl(path: string): string;"
+        },
+        "LocalFileGetImageUrlCorrect": {
+          "signature": "LocalFileGetImageUrlCorrect(path: string): string;"
+        },
+        "LocalFileGetOpenChangesCount": {
+          "signature": "LocalFileGetOpenChangesCount(): number;"
+        },
+        "LocalFileGetRelativePath": {
+          "signature": "LocalFileGetRelativePath(path: string): string;"
+        },
+        "LocalFileGetSaved": {
+          "signature": "LocalFileGetSaved(): boolean;"
+        },
+        "LocalFileGetSourcePath": {
+          "signature": "LocalFileGetSourcePath(): string;"
+        },
+        "LocalFileSave": {
+          "signature": "LocalFileSave(params: string, password: string, docinfo?: unknown, fileType?: number, jsonOptions?: string, passwordOld?: string): void;"
+        },
+        "LocalFileSaveChanges": {
+          "signature": "LocalFileSaveChanges(changes: string, deleteIndex: number, count: number): void;"
+        },
+        "LocalStartOpen": {
+          "signature": "LocalStartOpen(): void;"
+        },
+        "NativeViewerOpen": {
+          "signature": "NativeViewerOpen(password: string): void;"
+        },
+        "OpenFilenameDialog": {
+          "signature": "OpenFilenameDialog(type: DesktopDialogType, multiple: boolean, callback: (file: string | string[]) => void): void;"
+        },
+        "PluginInstall": {
+          "signature": "PluginInstall(path: string): boolean;"
+        },
+        "SetAdvancedOptions": {
+          "signature": "SetAdvancedOptions(xml: string): void;"
+        },
+        "SetDocumentName": {
+          "signature": "SetDocumentName(name: string): void;"
+        },
+        "SetLocalRestrictions": {
+          "signature": "SetLocalRestrictions(value: number): void;"
+        },
+        "buildCryptedEnd": {
+          "signature": "buildCryptedEnd(success: boolean): void;"
+        },
+        "onDocumentModifiedChanged": {
+          "signature": "onDocumentModifiedChanged(isModified: boolean): void;"
+        },
+        "startExternalConvertation": {
+          "signature": "startExternalConvertation(type: string, params: string): void;"
+        }
+      }
+    },
+    "AscSimpleRequest": {
+      "kind": "interface",
+      "members": {
+        "createRequest": {
+          "signature": "createRequest(options: AscSimpleRequestOptions): void;"
+        }
+      }
+    },
+    "AscSimpleRequestOptions": {
+      "kind": "interface",
+      "members": {
+        "complete": {
+          "optional": true,
+          "signature": "complete?: (response: any, status: string) => void;"
+        },
+        "crossDomain": {
+          "optional": true,
+          "signature": "crossDomain?: boolean;"
+        },
+        "crossOrigin": {
+          "optional": true,
+          "signature": "crossOrigin?: boolean;"
+        },
+        "error": {
+          "optional": true,
+          "signature": "error?: (response: any, status: string, error: any) => void;"
+        },
+        "headers": {
+          "optional": true,
+          "signature": "headers?: string;"
+        },
+        "timeout": {
+          "optional": true,
+          "signature": "timeout?: number;"
+        },
+        "url": {
+          "signature": "url: string;"
+        }
+      }
+    },
+    "DesktopDialogType": {
+      "kind": "type",
+      "type": "'plugin' | 'images' | 'cell' | 'word' | 'slide'"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "description": "Sets the border to the cell / cell range with the parameters specified.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetBorders/",
+  "examples": [
+    "// How do I draw a border on a specific side of a cell in a spreadsheet?\n\n// Define which edge of a cell gets a border, its thickness, and its color in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetColumnWidth(0, 50);\nworksheet.GetRange(\"A2\").SetBorders(\"Bottom\", \"Thick\", Api.CreateColorFromRGB(255, 111, 61));\nworksheet.GetRange(\"A2\").SetValue(\"This is a cell with a bottom border\");"
+  ],
+  "params": [
+    {
+      "description": "Specifies the cell border position.",
+      "name": "bordersIndex",
+      "type": "BordersIndex"
+    },
+    {
+      "description": "Specifies the line style used to form the cell border.",
+      "name": "lineStyle",
+      "type": "LineStyle"
+    },
+    {
+      "description": "The color object which specifies the color to be set to the cell border.",
+      "name": "oColor",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the borders were set successfully.",
+    "type": "boolean"
+  },
+  "signature": "SetBorders(bordersIndex: BordersIndex, lineStyle: LineStyle, oColor: ApiColor): boolean"
+}

@@ -1,0 +1,29 @@
+{
+  "description": "Returns the number of whole workdays between two dates.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NETWORKDAYS/",
+  "examples": [
+    "// Calculate business days, excluding weekends in a spreadsheet.\n\n// Determine workdays for project scheduling in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.NETWORKDAYS(\"3/16/2018\", \"12/31/2018\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A serial date number that represents the start date.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A serial date number that represents the end date.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional range or array of one or more serial date numbers to exclude from the working calendar, such as state and federal holidays and floating holidays.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | number[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "NETWORKDAYS(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3?: ApiRange | number[]): number"
+}

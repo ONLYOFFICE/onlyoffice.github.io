@@ -1,0 +1,13 @@
+{
+  "description": "Returns a table that contains the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetParentTable/",
+  "examples": [
+    "// How do I navigate from a nested table up to its surrounding table in a document?\n\n// Locate the enclosing table so its rows can be modified in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table1 = Api.CreateTable(3, 3);\ntable1.SetWidth(\"percent\", 100);\ntable1.SetStyle(tableStyle);\ndoc.Push(table1);\nlet table2 = Api.CreateTable(2, 2);\ntable2.SetWidth(\"percent\", 100);\ntable2.SetStyle(tableStyle);\nlet cell = table1.GetCell(0, 0);\ntable1.AddElement(cell, 0, table2);\nlet parentTable = table2.GetParentTable();\ncell = parentTable.GetRow(2).GetCell(0);\nparentTable.RemoveRow(cell);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if parent table doesn't exist.",
+    "type": "ApiTable | null"
+  },
+  "signature": "GetParentTable(): ApiTable | null"
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Returns the full name of the currently opened file.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/GetFullName/",
+  "examples": [
+    "// How do I display the full name of the open file in a document?\n\n// Write the path and name of the currently open file into the first paragraph in a document.\n\nlet paragraph = Api.GetDocument().GetElement(0);\nparagraph.AddText(\"File name: \" + Api.GetFullName());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetFullName(): string"
+}

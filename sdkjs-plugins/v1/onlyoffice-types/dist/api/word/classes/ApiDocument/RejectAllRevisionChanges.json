@@ -1,0 +1,12 @@
+{
+  "description": "Rejects all changes made in review mode.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/RejectAllRevisionChanges/",
+  "examples": [
+    "// How do I discard every pending edit from review mode in a document?\n\n// Restore the original content after a review session by dismissing all proposed changes in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\ndoc.SetTrackRevisions(true);\nparagraph1.AddText(\"Reviewing documents\");\nparagraph1.SetJc(\"center\");\nparagraph1.SetFontSize(24);\nparagraph1.SetBold(true);\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"If you need to get review report, you can use Document Builder. The steps below will show how to do it.\");\ndoc.Push(paragraph2);\ndoc.RejectAllRevisionChanges();\ndoc.SetTrackRevisions(false);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"All revision changes in this document were rejected.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "RejectAllRevisionChanges(): boolean"
+}

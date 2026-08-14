@@ -1,0 +1,12 @@
+{
+  "description": "Removes all the elements from the current paragraph.\n<note>When all the elements are removed from the paragraph, a new empty run is automatically created. If you want to add\ncontent to this run, use the {@link ApiParagraph#GetElement} method.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/RemoveAllElements/",
+  "examples": [
+    "// How do I remove every element from a paragraph in a document?\n\n// Wipe a paragraph clean before inserting fresh content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is the first text run in the current paragraph.\");\nparagraph.AddElement(run);\nparagraph.RemoveAllElements();\nrun = Api.CreateRun();\nrun.AddText(\"We removed all the paragraph elements and added a new text run inside it.\");\nparagraph.AddElement(run);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "RemoveAllElements(): boolean"
+}

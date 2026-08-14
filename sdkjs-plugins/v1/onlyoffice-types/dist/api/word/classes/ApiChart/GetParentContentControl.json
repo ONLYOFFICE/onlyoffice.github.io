@@ -1,0 +1,13 @@
+{
+  "description": "Returns a parent content control that contains the graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetParentContentControl/",
+  "examples": [
+    "// How do I find the content control that wraps a drawing in a document?\n\n// Access the enclosing block-level content control to add text alongside a shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nblockLvlSdt.AddElement(paragraph, 0);\ndoc.AddElement(0, blockLvlSdt);\nlet parentContentControl = drawing.GetParentContentControl();\nparentContentControl.AddText(\"This is a parent content control.\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if parent content control doesn't exist.",
+    "type": "ApiBlockLvlSdt | null"
+  },
+  "signature": "GetParentContentControl(): ApiBlockLvlSdt | null"
+}

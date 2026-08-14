@@ -1,0 +1,18 @@
+{
+  "description": "Returns the character specified by the code number from your computer's character set.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHAR/",
+  "examples": [
+    "// What character does a number code represent in a spreadsheet?\n\n// Display the letter or symbol matching a code value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CHAR(234));"
+  ],
+  "params": [
+    {
+      "description": "A number between 1 and 255 specifying a character from the computer character set.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "CHAR(arg1: ApiRange | ApiName | number): string"
+}

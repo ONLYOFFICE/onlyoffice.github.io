@@ -1,0 +1,29 @@
+{
+  "description": "Adds a hyperlink to a paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddHyperlink/",
+  "examples": [
+    "// How do I attach an external URL to text inside a paragraph in a document?\n\n// Make a word or phrase navigate to a web page by embedding a link directly in paragraph content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nparagraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\", \"docbuilder\");"
+  ],
+  "params": [
+    {
+      "description": "The link address.",
+      "name": "sLink",
+      "type": "string"
+    },
+    {
+      "description": "The screen tip text.",
+      "name": "sScreenTipText",
+      "type": "string"
+    },
+    {
+      "description": "name of a bookmark",
+      "name": "sBookmarkName",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "returns null if params are invalid.",
+    "type": "ApiHyperlink"
+  },
+  "signature": "AddHyperlink(sLink: string, sScreenTipText: string, sBookmarkName: string): ApiHyperlink"
+}

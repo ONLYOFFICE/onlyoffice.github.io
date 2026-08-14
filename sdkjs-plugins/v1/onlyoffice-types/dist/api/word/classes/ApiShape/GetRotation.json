@@ -1,0 +1,13 @@
+{
+  "description": "Returns the rotation angle of the current drawing object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetRotation/",
+  "examples": [
+    "// How do I get the rotation angle of a shape in a document?\n\n// Display the current tilt of a drawing as text inside the shape itself in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 110 * 36000, 10 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetRotation(90);\nlet rotAngle = drawing.GetRotation();\nlet docContent = drawing.GetContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing rotation angle is: \" + rotAngle + \" degrees\");\ndocContent.AddElement(0, paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetRotation(): number",
+  "since": "9.0.0"
+}

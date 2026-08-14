@@ -1,0 +1,29 @@
+{
+  "description": "Sets the fill to the specified chart series.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetSeriesFill/",
+  "examples": [
+    "// How do I apply different colors to each data series in a PDF?\n\n// Apply a solid fill color to chart series in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetSize(150 * 36000, 65 * 36000);\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\npage.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The fill type used to fill the series.",
+      "name": "oFill",
+      "type": "ApiFill"
+    },
+    {
+      "description": "The index of the chart series.",
+      "name": "nSeries",
+      "type": "number"
+    },
+    {
+      "description": "Specifies if the fill will be applied to all series.",
+      "name": "bAll",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetSeriesFill(oFill: ApiFill, nSeries: number, bAll?: boolean): boolean"
+}

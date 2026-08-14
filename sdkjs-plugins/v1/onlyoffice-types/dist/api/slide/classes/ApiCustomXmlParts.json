@@ -1,0 +1,106 @@
+{
+  "description": "Class representing a custom XML manager, which provides methods to manage custom XML parts in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlParts/",
+  "methods": {
+    "Add": {
+      "description": "Adds a new custom XML part to the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlParts/Methods/Add/",
+      "examples": [
+        "// How do I create a new custom XML part in a presentation?\n\n// Display the XML content of the added part in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet newXml = xmlManager.Add(\"<content xmlns='http://example' version='1.0'></content>\");\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nrun.AddText(\"New XML part added: \" + newXml.GetXml());\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The XML string to be added.",
+          "name": "xml",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The newly created ApiCustomXmlPart object.",
+        "type": "ApiCustomXmlPart"
+      },
+      "signature": "Add(xml: string): ApiCustomXmlPart",
+      "since": "9.0.0"
+    },
+    "GetAll": {
+      "description": "Returns all custom XML parts from the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlParts/Methods/GetAll/",
+      "examples": [
+        "// How do I retrieve all custom XML parts from a presentation?\n\n// Display the count and content of each XML part in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nxmlManager.Add(\"<employees><employee>John</employee></employees>\");\nxmlManager.Add(\"<departments><department>IT</department></departments>\");\nxmlManager.Add(\"<projects><project>Website</project></projects>\");\nlet allParts = xmlManager.GetAll();\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nrun.AddText(\"Total XML parts: \" + allParts.length);\nparagraph.AddElement(run);\nfor (let i = 0; i < allParts.length; i++) {\n    let run2 = Api.CreateRun();\n    run2.AddText(\"\\nPart \" + (i + 1) + \": \" + allParts[i].GetXml());\n    paragraph.AddElement(run2);\n}\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "An array of all custom XML parts.",
+        "type": "ApiCustomXmlPart[]"
+      },
+      "signature": "GetAll(): ApiCustomXmlPart[]",
+      "since": "9.0.0"
+    },
+    "GetById": {
+      "description": "Returns a custom XML part by its ID from the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlParts/Methods/GetById/",
+      "examples": [
+        "// How do I find a custom XML part using its unique ID in a presentation?\n\n// Display the retrieved XML part's content in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<inventory><item>Book</item></inventory>\");\nlet id = xml.GetId();\nlet retrievedXml = xmlManager.GetById(id);\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nif (retrievedXml) {\n    run.AddText(\"Found XML part: \" + retrievedXml.GetXml());\n} else {\n    run.AddText(\"XML part not found\");\n}\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The XML part ID.",
+          "name": "xmlPartId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The corresponding ApiCustomXmlPart object if found, or null if no match is found.",
+        "type": "ApiCustomXmlPart | null"
+      },
+      "signature": "GetById(xmlPartId: string): ApiCustomXmlPart | null",
+      "since": "9.0.0"
+    },
+    "GetByNamespace": {
+      "description": "Returns custom XML parts by namespace from the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlParts/Methods/GetByNamespace/",
+      "examples": [
+        "// How do I find all XML parts that use a specific namespace in a presentation?\n\n// Display the matching XML parts in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nxmlManager.Add(\"<config xmlns='http://example.com/config'><setting>value1</setting></config>\");\nxmlManager.Add(\"<data xmlns='http://example.com/data'><entry>value2</entry></data>\");\nxmlManager.Add(\"<info xmlns='http://example.com/config'><detail>value3</detail></info>\");\nlet configParts = xmlManager.GetByNamespace(\"http://example.com/config\");\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nrun.AddText(\"Found \" + configParts.length + \" XML parts with config namespace:\");\nparagraph.AddElement(run);\nfor (let i = 0; i < configParts.length; i++) {\n    let run2 = Api.CreateRun();\n    run2.AddText(\"\\nConfig part \" + (i + 1) + \": \" + configParts[i].GetXml());\n    paragraph.AddElement(run2);\n}\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The namespace of the XML parts.",
+          "name": "namespace",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "An array of ApiCustomXmlPart objects or null if no matching XML parts are found.",
+        "type": "ApiCustomXmlPart[]"
+      },
+      "signature": "GetByNamespace(namespace: string): ApiCustomXmlPart[]",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCustomXmlParts class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlParts/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine the class type of a custom XML parts manager in a presentation?\n\n// Display the class type of the XML parts manager in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nlet classType = xmlManager.GetClassType();\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nrun.AddText(\"XML manager class type: \" + classType);\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"customXmlParts\""
+      },
+      "signature": "GetClassType(): \"customXmlParts\""
+    },
+    "GetCount": {
+      "description": "Returns a number of custom XML parts in the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCustomXmlParts/Methods/GetCount/",
+      "examples": [
+        "// How do I count XML parts stored in a presentation?\n\n// Retrieve the number of custom XML entries in the presentation's XML manager.\n\nlet presentation = Api.GetPresentation();\nlet xmlManager = presentation.GetCustomXmlParts();\nxmlManager.Add(\"<products><item><name>Laptop</name><price>999</price></item></products>\");\nxmlManager.Add(\"<user><name>John Doe</name><email>john@example.com</email></user>\");\nlet count = xmlManager.GetCount();\nlet slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nlet docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontSize(60);\nrun.AddText(\"There are \" + count + \" custom XML parts in the presentation.\");\nparagraph.AddElement(run);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The number of custom XML parts.",
+        "type": "number"
+      },
+      "signature": "GetCount(): number",
+      "since": "9.0.0"
+    }
+  }
+}

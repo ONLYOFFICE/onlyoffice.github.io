@@ -1,0 +1,29 @@
+{
+  "description": "Checks whether a condition is met, and returns one value if **true**, and another value if **false**.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IF/",
+  "examples": [
+    "// How do I test a condition and display different results in a spreadsheet?\n\n// Execute conditional logic to display specific values when criteria are met in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IF(\"12<100\", 0, 1));"
+  ],
+  "params": [
+    {
+      "description": "Any value or expression that can be evaluated to **true** or **false**.",
+      "name": "arg1",
+      "type": "number | string | ApiRange | ApiName | boolean"
+    },
+    {
+      "description": "The value that is returned if the condition is **true**. If omitted, **true** is returned. You can nest up to seven IF functions.",
+      "name": "arg2",
+      "type": "number | string | ApiRange | ApiName | boolean"
+    },
+    {
+      "description": "The value that is returned if the condition is **false**. If omitted, **false** is returned.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number | string | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number | string | boolean"
+  },
+  "signature": "IF(arg1: number | string | ApiRange | ApiName | boolean, arg2: number | string | ApiRange | ApiName | boolean, arg3?: ApiRange | ApiName | number | string | boolean): number | string | boolean"
+}

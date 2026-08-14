@@ -1,0 +1,19 @@
+{
+  "description": "Sets the specified font family as the font name for the current cell range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetFontName/",
+  "examples": [
+    "// How do I switch the typeface for a group of cells in a spreadsheet?\n\n// Apply a named font to all text within a range of cells in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:D5\");\nrange.SetFontName(\"Arial\");"
+  ],
+  "params": [
+    {
+      "description": "The font family name used for the current cell range.",
+      "name": "sName",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the font name was set successfully.",
+    "type": "boolean"
+  },
+  "signature": "SetFontName(sName: string): boolean"
+}

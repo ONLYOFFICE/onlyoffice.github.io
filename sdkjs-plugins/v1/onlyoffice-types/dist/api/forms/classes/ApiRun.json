@@ -1,0 +1,6 @@
+{
+  "description": "Class representing a small text block called 'run'.",
+  "extends": [
+    "ApiTextPr"
+  ]
+}

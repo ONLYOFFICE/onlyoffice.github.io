@@ -1,0 +1,19 @@
+{
+  "description": "Sets the theme colors to the current spreadsheet.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/SetThemeColors/",
+  "examples": [
+    "// How do I pick and activate one of the available color themes for the whole document in a spreadsheet?\n\n// Update the document's palette by selecting a theme from the list of built-in options in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet themes = Api.GetThemesColors();\nfor (let i = 0; i < themes.length; ++i) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(themes[i]);\n}\nApi.SetThemeColors(themes[3]);\nworksheet.GetRange(\"C3\").SetValue(\"The 'Apex' theme colors were set to the current spreadsheet.\");"
+  ],
+  "params": [
+    {
+      "description": "The color scheme that will be set to the current spreadsheet.",
+      "name": "sTheme",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "returns false if sTheme isn't a string.",
+    "type": "boolean"
+  },
+  "signature": "SetThemeColors(sTheme: string): boolean"
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Creates a copy of the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/Copy/",
+  "examples": [
+    "// How do I make an identical copy of a table in a document?\n\n// Reproduce a table with all its structure and style preserved in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet copyTable = table.Copy();\ndoc.Push(copyTable);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiTable"
+  },
+  "signature": "Copy(): ApiTable"
+}

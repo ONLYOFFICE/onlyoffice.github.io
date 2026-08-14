@@ -1,0 +1,28 @@
+{
+  "description": "Returns the characters from the middle of a text string, given a starting position and length.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MID/",
+  "examples": [
+    "// What characters can I pull from a text string in a spreadsheet?\n\n// Get a substring from a specific position and length in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.MID(\"Online Office\", 3, 4));"
+  ],
+  "params": [
+    {
+      "description": "The text string from which to extract the characters.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "The position of the first character to extract. The first text character is 1.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A number of the characters to extract.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "MID(arg1: ApiRange | ApiName | string, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): string"
+}

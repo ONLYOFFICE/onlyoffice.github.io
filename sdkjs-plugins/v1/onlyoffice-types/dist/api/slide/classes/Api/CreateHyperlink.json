@@ -1,0 +1,23 @@
+{
+  "description": "Creates a new hyperlink object to be used for setting hyperlinks on drawing objects (shapes or images).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateHyperlink/",
+  "examples": [
+    "// How do I make an image open a website when clicked in a presentation?\n\n// Attach a URL to an image so it navigates to a webpage in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst image = Api.CreateImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t150 * 36000, 150 * 36000\n);\nslide.AddObject(image);\n\nconst hyperlink = Api.CreateHyperlink('https://onlyoffice.com', 'Link to OnlyOffice website');\nimage.SetHyperlink(hyperlink);"
+  ],
+  "params": [
+    {
+      "description": "The hyperlink address. Accepts an external URL (http, https, mailto, ftp) or one of the internal slide actions: \"ppaction://hlinkshowjump?jump=firstslide\", \"ppaction://hlinkshowjump?jump=lastslide\", \"ppaction://hlinkshowjump?jump=nextslide\", \"ppaction://hlinkshowjump?jump=previousslide\", \"ppaction://hlinksldjumpslide{N}\" (N is the zero-based slide index), \"ppaction://hlinkfile?file={path}\" (opens an external file).",
+      "name": "link",
+      "type": "string"
+    },
+    {
+      "description": "The tooltip text.",
+      "name": "tooltip",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiHyperlink"
+  },
+  "signature": "CreateHyperlink(link: string, tooltip: string): ApiHyperlink"
+}

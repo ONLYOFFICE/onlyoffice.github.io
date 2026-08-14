@@ -1,0 +1,26 @@
+{
+  "description": "Sets the relative width of the object (image, shape, chart) bounding box.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRelativeWidth/",
+  "examples": [
+    "// How do I make a shape's width span a fixed fraction of the page in a document?\n\n// Stretch a rectangle to half the page width so its layout stays consistent across page sizes in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 250, 0));\nlet stroke = Api.CreateStroke(0.4 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(65, 113, 156)));\nlet drawing = Api.CreateShape(\"rect\", 1 * 36000, 1 * 36000, fill, stroke);\ndrawing.SetWrappingStyle(\"inFront\");\ndrawing.SetVerPosition(\"page\", 50 * 36000);\ndrawing.SetHorPosition(\"page\", 0 * 3600);\ndrawing.SetRelativeWidth(\"page\", 50);\ndrawing.SetRelativeHeight(\"page\", 25);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape was created with a width 50% of page width and 25% of height page\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The document element which will be taken as a countdown point for the object width.",
+      "name": "relativeFrom",
+      "optional": true,
+      "type": "SizeRelFromH"
+    },
+    {
+      "description": "The width of the object as a percentage of the specified element.",
+      "name": "percent",
+      "optional": true,
+      "type": "percentage"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean",
+  "since": "9.3.0"
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Returns the paragraph line spacing value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingLineValue/",
+  "examples": [
+    "// How do I get the line spacing value of a paragraph in a document?\n\n// Confirm the exact spacing amount by printing the numeric line spacing value after setting triple-line spacing in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddLineBreak();\nlet spacingLineValue = paraPr.GetSpacingLineValue();\nparagraph.AddText(\"Spacing line value: \" + spacingLineValue);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
+    "type": "twips | line240 | undefined"
+  },
+  "signature": "GetSpacingLineValue(): twips | line240 | undefined"
+}

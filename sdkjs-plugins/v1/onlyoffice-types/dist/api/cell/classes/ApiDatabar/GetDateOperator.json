@@ -1,0 +1,14 @@
+{
+  "description": "Returns the date operator for time period conditions.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetDateOperator/",
+  "examples": [
+    "// How do I check which date period a conditional formatting rule is set to highlight in a spreadsheet?\n\n// Inspect the date condition of a rule to confirm it targets the intended time window in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Dates\");\nworksheet.GetRange(\"A2\").SetValue(\"2023-01-15\");\nworksheet.GetRange(\"A3\").SetValue(\"2023-02-20\");\nworksheet.GetRange(\"A4\").SetValue(\"2023-03-10\");\nworksheet.GetRange(\"A5\").SetValue(\"2023-04-05\");\nworksheet.GetRange(\"A6\").SetValue(\"2023-05-25\");\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlTimePeriod\", \"xlThisMonth\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet dateOperator = condition1.GetDateOperator();\n\nworksheet.GetRange(\"C1\").SetValue(\"Date operator:\");\nworksheet.GetRange(\"C2\").SetValue(dateOperator ? dateOperator : \"None\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The time period operator that defines how the date condition is evaluated,\ror null if the rule is not date-based.",
+    "type": "XlTimePeriods | null"
+  },
+  "signature": "GetDateOperator(): XlTimePeriods | null",
+  "since": "9.1.0"
+}

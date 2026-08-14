@@ -1,0 +1,19 @@
+{
+  "description": "Returns a collection of drawing objects from the document filtered by their names.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetDrawingsByName/",
+  "examples": [
+    "// How do I find drawings by their names and apply a transformation in a document?\n\n// Select a subset of shapes from the page and change their orientation in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\nconst fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke1 = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing1 = Api.CreateShape(\"rect\", 60 * 36000, 35 * 36000, fill1, stroke1);\ndrawing1.SetName(\"MyShape1\");\nparagraph.AddDrawing(drawing1);\nconst fill2 = Api.CreateSolidFill(Api.RGB(51, 133, 255));\nconst stroke2 = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing2 = Api.CreateShape(\"rect\", 60 * 36000, 35 * 36000, fill2, stroke2);\ndrawing2.SetName(\"MyShape2\");\nparagraph.AddDrawing(drawing2);\nconst fill3 = Api.CreateSolidFill(Api.RGB(61, 255, 111));\nconst stroke3 = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing3 = Api.CreateShape(\"rect\", 60 * 36000, 35 * 36000, fill3, stroke3);\ndrawing3.SetName(\"DifferentShape\");\nparagraph.AddDrawing(drawing3);\nconst drawings = doc.GetDrawingsByName([\"MyShape1\", \"MyShape2\"]);\nfor (let i = 0; i < drawings.length; i++) {\n\tdrawings[i].SetRotation(45);\n}"
+  ],
+  "params": [
+    {
+      "description": "An array of drawing names to filter by.",
+      "name": "ids",
+      "type": "string[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiDrawing[]"
+  },
+  "signature": "GetDrawingsByName(ids: string[]): ApiDrawing[]",
+  "since": "9.3.0"
+}

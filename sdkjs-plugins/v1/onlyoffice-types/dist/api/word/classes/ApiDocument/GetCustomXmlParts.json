@@ -1,0 +1,14 @@
+{
+  "description": "Retrieves the custom XML manager associated with the document.\nThis manager allows manipulation and access to custom XML parts within the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCustomXmlParts/",
+  "examples": [
+    "// How do I add and look up custom XML data stored inside a document?\n\n// Store structured XML payloads within a document and confirm they can be fetched back by identifier in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText = \"<content><text>Example XML</text></content>\";\nlet xmlPart = xmlManager.Add(xmlText);\nlet xmlId = xmlPart.GetId();\nlet retrievedXml = xmlManager.GetById(xmlId);\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"Retrieved XML: \" + retrievedXml.GetXml());\ndoc.Push(infoParagraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Returns an instance of ApiCustomXmlParts if the custom XML manager exists, otherwise returns null.",
+    "type": "ApiCustomXmlParts | null"
+  },
+  "signature": "GetCustomXmlParts(): ApiCustomXmlParts | null",
+  "since": "9.0.0"
+}

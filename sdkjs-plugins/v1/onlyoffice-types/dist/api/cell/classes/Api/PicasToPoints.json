@@ -1,0 +1,18 @@
+{
+  "description": "Converts picas to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PicasToPoints/",
+  "examples": [
+    "// How do I turn a value in picas into its equivalent in points in a spreadsheet?\n\n// Display a typographic size converted from picas to points in a spreadsheet.\n\nconst picas = 100;\nconst points = Api.PicasToPoints(picas);\nconst text = picas + ' picas are equal to ' + points + ' points.';\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue(text);"
+  ],
+  "params": [
+    {
+      "description": "The number of picas to convert to points.",
+      "name": "pc",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PicasToPoints(pc: number): number"
+}

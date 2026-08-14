@@ -1,0 +1,13 @@
+{
+  "description": "Returns a content control that contains the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetParentContentControl/",
+  "examples": [
+    "// How do I find the structured container holding a table in a document?\n\n// Reach the enclosing content control so its properties can be updated in a document.\n\nlet doc = Api.GetDocument();\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\nblockLvlSdt.AddElement(table, 0);\ndoc.AddElement(0, blockLvlSdt);\nlet parentContentControl = table.GetParentContentControl();\nparentContentControl.SetAlias(\"№1\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "return null is parent content control doesn't exist.",
+    "type": "ApiBlockLvlSdt | null"
+  },
+  "signature": "GetParentContentControl(): ApiBlockLvlSdt | null"
+}

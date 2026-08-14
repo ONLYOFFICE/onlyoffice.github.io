@@ -1,0 +1,14 @@
+{
+  "description": "Returns the left border of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetLeftBorder/",
+  "examples": [
+    "// How do I read the left border from a paragraph's formatting in a document?\n\n// Useful when you need to inspect border details such as type and size drawn to the left of a paragraph.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetLeftBorder(\"single\", 24, 0, 255, 111, 61);\nparagraph.AddText(\"This is a paragraph with a left border.\");\nlet border = paraPr.GetLeftBorder();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Left border type: \" + border.Type + \", size: \" + border.Size);\ndoc.Push(paragraph2);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Returns the border properties object, or _undefined_ if the left border is not set.",
+    "type": "Border | undefined"
+  },
+  "signature": "GetLeftBorder(): Border | undefined",
+  "since": "9.4.0"
+}

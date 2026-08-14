@@ -1,0 +1,23 @@
+{
+  "description": "Returns a Range object that represents the part of the document contained in the specified document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetRange/",
+  "examples": [
+    "// How do I get a range of characters using start and end indexes in a document?\n\n// Apply bold formatting to a precise word by targeting it with index-based range selection in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text.\");\nlet range = doc.GetRange(8, 11);\nrange.SetBold(true);"
+  ],
+  "params": [
+    {
+      "description": "Start position index in the current element.",
+      "name": "Start",
+      "type": "number"
+    },
+    {
+      "description": "End position index in the current element.",
+      "name": "End",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange"
+  },
+  "signature": "GetRange(Start: number, End: number): ApiRange"
+}

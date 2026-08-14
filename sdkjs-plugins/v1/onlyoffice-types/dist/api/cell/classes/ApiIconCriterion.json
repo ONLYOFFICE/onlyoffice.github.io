@@ -1,0 +1,152 @@
+{
+  "description": "Class representing a single icon criterion.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/",
+  "methods": {
+    "GetIcon": {
+      "description": "Returns the icon associated with the current icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetIcon/",
+      "examples": [
+        "// How do I find out what icon a formatting rule uses in a spreadsheet?\n\n// Check the visual symbol tied to a specific condition in an icon set rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Quality\");\nworksheet.GetRange(\"A2\").SetValue(90);\nworksheet.GetRange(\"A3\").SetValue(70);\nworksheet.GetRange(\"A4\").SetValue(40);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nlet criteria = iconCondition.GetIconCriteria();\nlet firstIcon = criteria[0].GetIcon();\n\nworksheet.GetRange(\"B1\").SetValue(\"First criterion icon: \" + firstIcon);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The icon constant, or null if not available.",
+        "type": "XlIcon | null"
+      },
+      "signature": "GetIcon(): XlIcon | null",
+      "since": "9.1.0"
+    },
+    "GetIndex": {
+      "description": "Returns the index of the icon criterion in the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetIndex/",
+      "examples": [
+        "// How do I determine the order of a criterion inside an icon set rule in a spreadsheet?\n\n// Identify which slot a particular condition occupies in the icon set sequence in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('Data');\nworksheet.GetRange('A2').SetValue(90);\nworksheet.GetRange('A3').SetValue(70);\nworksheet.GetRange('A4').SetValue(50);\n\nconst range = worksheet.GetRange('A2:A4');\nconst formatConditions = range.GetFormatConditions();\nconst iconCondition = formatConditions.AddIconSetCondition();\nconst criteria = iconCondition.GetIconCriteria();\nconst lastCriterion = criteria[criteria.length - 1];\n\nworksheet.GetRange('B1').SetValue('Last criterion index: ' + lastCriterion.GetIndex());\nworksheet.GetRange('B2').SetValue('Total criteria: ' + criteria.length);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The 1-based index of the icon criterion.",
+        "type": "number"
+      },
+      "signature": "GetIndex(): number",
+      "since": "9.1.0"
+    },
+    "GetOperator": {
+      "description": "Returns the comparison operator of the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetOperator/",
+      "examples": [
+        "// How do I find out which comparison operator an icon criterion uses in a spreadsheet?\n\n// Check whether a criterion compares values with greater-than, less-than, or another rule in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('Scores');\nworksheet.GetRange('A2').SetValue(85);\nworksheet.GetRange('A3').SetValue(60);\nworksheet.GetRange('A4').SetValue(35);\n\nconst range = worksheet.GetRange('A2:A4');\nconst formatConditions = range.GetFormatConditions();\nconst iconCondition = formatConditions.AddIconSetCondition();\n\nconst criteria = iconCondition.GetIconCriteria();\ncriteria[1].SetOperator('xlGreater');\n\nfor (let i = 0; i < criteria.length; i++) {\n\tconst range = worksheet.GetRange('B' + (i + 2));\n\trange.SetValue('Criterion ' + (i + 1) + ' operator: ' + criteria[i].GetOperator());\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The operator (\"xlGreaterEqual\" or \"xlGreater\"), or null if not available.",
+        "type": "string | null"
+      },
+      "signature": "GetOperator(): string | null",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the condition value type for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetType/",
+      "examples": [
+        "// How do I find out whether an icon criterion uses a number, percent, or formula as its threshold in a spreadsheet?\n\n// Inspect what kind of threshold an icon criterion is set to compare against in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Scores\");\nworksheet.GetRange(\"A2\").SetValue(85);\nworksheet.GetRange(\"A3\").SetValue(70);\nworksheet.GetRange(\"A4\").SetValue(55);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nlet criteria = iconCondition.GetIconCriteria();\nlet firstCriterion = criteria[0];\nlet criterionType = firstCriterion.GetType();\n\nworksheet.GetRange(\"B1\").SetValue(\"First criterion type: \" + criterionType);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The condition value type, or null if not available.",
+        "type": "XlConditionValueTypes | null"
+      },
+      "signature": "GetType(): XlConditionValueTypes | null",
+      "since": "9.1.0"
+    },
+    "GetValue": {
+      "description": "Returns the threshold value for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetValue/",
+      "examples": [
+        "// How do I find out what number or formula an icon criterion uses as its cutoff in a spreadsheet?\n\n// Retrieve the exact boundary value that determines which icon a cell receives in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(75);\nworksheet.GetRange(\"A4\").SetValue(50);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nlet criteria = iconCondition.GetIconCriteria();\nlet secondCriterion = criteria[1];\nlet criterionValue = secondCriterion.GetValue();\n\nworksheet.GetRange(\"B1\").SetValue(\"Second criterion value: \" + criterionValue);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The threshold value, or null if not available.",
+        "type": "string | number | null"
+      },
+      "signature": "GetValue(): string | number | null",
+      "since": "9.1.0"
+    },
+    "SetIcon": {
+      "description": "Sets the icon for the current icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/SetIcon/",
+      "examples": [
+        "// How do I replace the default icon for one of the thresholds in an icon set rule in a spreadsheet?\n\n// Override the automatically chosen icon with a custom one for a selected criterion in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Status\");\nworksheet.GetRange(\"A2\").SetValue(85);\nworksheet.GetRange(\"A3\").SetValue(65);\nworksheet.GetRange(\"A4\").SetValue(45);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nlet criteria = iconCondition.GetIconCriteria();\nworksheet.GetRange(\"B1\").SetValue(\"Before: Default icons\");\n\ncriteria[0].SetIcon(\"xlIconRedFlag\");\nworksheet.GetRange(\"B2\").SetValue(\"After: First icon changed to red flag\");"
+      ],
+      "params": [
+        {
+          "description": "The icon constant to set.",
+          "name": "icon",
+          "type": "XlIcon"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetIcon(icon: XlIcon): void",
+      "since": "9.1.0"
+    },
+    "SetOperator": {
+      "description": "Sets the comparison operator for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/SetOperator/",
+      "examples": [
+        "// How do I control whether an icon criterion triggers on values greater than or equal to a threshold in a spreadsheet?\n\n// Choose between greater-than and other comparison rules to decide when an icon appears in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('Results');\nworksheet.GetRange('A2').SetValue(80);\nworksheet.GetRange('A3').SetValue(55);\nworksheet.GetRange('A4').SetValue(30);\n\nconst range = worksheet.GetRange('A2:A4');\nconst formatConditions = range.GetFormatConditions();\nconst iconCondition = formatConditions.AddIconSetCondition();\nconst criteria = iconCondition.GetIconCriteria();\nconst secondCriterion = criteria[1];\n\nworksheet.GetRange('B1').SetValue('Operator before: ' + secondCriterion.GetOperator());\nsecondCriterion.SetOperator('xlGreater');\nworksheet.GetRange('B2').SetValue('Operator after: ' + secondCriterion.GetOperator());"
+      ],
+      "params": [
+        {
+          "description": "The operator to set (\"xlGreaterEqual\" or \"xlGreater\").",
+          "name": "operator",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetOperator(operator: string): void",
+      "since": "9.1.0"
+    },
+    "SetType": {
+      "description": "Sets the condition value type for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/SetType/",
+      "examples": [
+        "// How do I change the kind of value an icon criterion compares against in a spreadsheet?\n\n// Switch an icon criterion to use a fixed number instead of a percentage or other threshold type in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('Metrics');\nworksheet.GetRange('A2').SetValue(90);\nworksheet.GetRange('A3').SetValue(65);\nworksheet.GetRange('A4').SetValue(40);\n\nconst range = worksheet.GetRange('A2:A4');\nconst formatConditions = range.GetFormatConditions();\nconst iconCondition = formatConditions.AddIconSetCondition();\nconst criteria = iconCondition.GetIconCriteria();\nconst secondCriterion = criteria[1];\n\nworksheet.GetRange('B1').SetValue('Type before: ' + secondCriterion.GetType());\nsecondCriterion.SetType('xlConditionValueNumber');\nworksheet.GetRange('B2').SetValue('Type after: ' + secondCriterion.GetType());"
+      ],
+      "params": [
+        {
+          "description": "The condition value type. Only \"xlConditionValueNumber\", \"xlConditionValuePercent\", \"xlConditionValuePercentile\", or \"xlConditionValueFormula\" are supported.",
+          "name": "type",
+          "type": "XlConditionValueTypes"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetType(type: XlConditionValueTypes): void",
+      "since": "9.1.0"
+    },
+    "SetValue": {
+      "description": "Sets the threshold value for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/SetValue/",
+      "examples": [
+        "// How do I change the cutoff number that determines which icon a cell displays in a spreadsheet?\n\n// Update the boundary value for one of the icon set thresholds so cells are colored differently in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Performance\");\nworksheet.GetRange(\"A2\").SetValue(95);\nworksheet.GetRange(\"A3\").SetValue(78);\nworksheet.GetRange(\"A4\").SetValue(62);\nworksheet.GetRange(\"A5\").SetValue(45);\n\nlet range = worksheet.GetRange(\"A2:A5\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nlet criteria = iconCondition.GetIconCriteria();\nworksheet.GetRange(\"B1\").SetValue(\"Before: Default threshold values\");\n\ncriteria[1].SetValue(\"80\");\nworksheet.GetRange(\"B2\").SetValue(\"After: Second threshold set to 80\");"
+      ],
+      "params": [
+        {
+          "description": "The threshold value to set.",
+          "name": "value",
+          "type": "string | number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetValue(value: string | number): void",
+      "since": "9.1.0"
+    }
+  }
+}

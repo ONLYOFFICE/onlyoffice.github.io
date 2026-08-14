@@ -1,0 +1,24 @@
+{
+  "description": "Returns an array of ApiComment objects.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/AddComment/",
+  "examples": [
+    "// How do I add a comment to a cell in a spreadsheet?\n\n// Annotate a cell with reviewer notes and display the comment text in a spreadsheet.\n\nApi.AddComment(\"Comment 1\", \"Bob\");\nApi.AddComment(\"Comment 2\");\nlet comments = Api.GetComments();\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"Comment Text: \" + comments[0].GetText());\nworksheet.GetRange(\"B1\").SetValue(\"Comment Author: \" + comments[0].GetAuthorName());"
+  ],
+  "params": [
+    {
+      "description": "The comment text.",
+      "name": "sText",
+      "type": "string"
+    },
+    {
+      "description": "The author's name (optional).",
+      "name": "sAuthor",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiComment | null"
+  },
+  "signature": "AddComment(sText: string, sAuthor: string): ApiComment | null",
+  "since": "7.5.0"
+}

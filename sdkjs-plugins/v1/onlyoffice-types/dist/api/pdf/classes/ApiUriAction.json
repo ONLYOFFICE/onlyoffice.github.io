@@ -1,0 +1,38 @@
+{
+  "description": "Class representing a uri action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUriAction/",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiUriAction class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUriAction/Methods/GetClassType/",
+      "params": [],
+      "returns": {
+        "type": "\"uriAction\""
+      },
+      "signature": "GetClassType(): \"uriAction\""
+    },
+    "GetUri": {
+      "description": "Gets uri string",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUriAction/Methods/GetRect/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUri(): string"
+    },
+    "SetUri": {
+      "description": "Sets uri to action",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUriAction/Methods/GetRect/",
+      "params": [
+        {
+          "name": "uri",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetUri(uri: string): boolean"
+    }
+  }
+}

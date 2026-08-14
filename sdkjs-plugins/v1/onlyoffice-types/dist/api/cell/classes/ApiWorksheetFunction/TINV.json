@@ -1,0 +1,23 @@
+{
+  "description": "Returns the two-tailed inverse of the Student's t-distribution.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TINV/",
+  "examples": [
+    "// Calculate the inverse t-value for a given probability and degrees of freedom.\n\n// Apply the TINV function with probability and degrees of freedom parameters.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet result = func.TINV(0.5, 10);\nworksheet.GetRange(\"B2\").SetValue(result);"
+  ],
+  "params": [
+    {
+      "description": "The probability associated with the two-tailed Student's t-distribution, a number between 0 and 1 inclusive.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A positive integer indicating the number of degrees of freedom to characterize the distribution.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TINV(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

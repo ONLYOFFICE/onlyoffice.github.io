@@ -1,0 +1,19 @@
+{
+  "description": "Sets the row height value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetRowHeight/",
+  "examples": [
+    "// How do I make a row taller or shorter in a spreadsheet?\n\n// Resize a row to fit content or improve the visual layout in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetRowHeight(32);"
+  ],
+  "params": [
+    {
+      "description": "The row height in the current range measured in points.",
+      "name": "nHeight",
+      "type": "pt"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the row height was set successfully.",
+    "type": "boolean"
+  },
+  "signature": "SetRowHeight(nHeight: pt): boolean"
+}

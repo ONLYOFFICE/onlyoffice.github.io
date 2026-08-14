@@ -1,0 +1,11 @@
+{
+  "description": "Returns the drop cap related to the current paragraph, if any.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetDropCap/",
+  "params": [],
+  "returns": {
+    "description": "The drop cap, or null if the paragraph has no drop cap.",
+    "type": "ApiDropCap"
+  },
+  "signature": "GetDropCap(): ApiDropCap",
+  "since": "9.5.0"
+}

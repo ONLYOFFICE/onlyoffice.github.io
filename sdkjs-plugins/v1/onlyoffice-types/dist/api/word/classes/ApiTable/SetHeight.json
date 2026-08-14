@@ -1,0 +1,17 @@
+{
+  "description": "Sets the total height of the current table, distributing it evenly among the table rows.\nThe value is applied as a minimum height for each row, so a row can be taller if its content requires more space.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetHeight/",
+  "params": [
+    {
+      "description": "The table height in English measure units.",
+      "name": "nValue",
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "description": "Returns the requested height (in EMU), or null if the table has no rows.",
+    "type": "EMU | null"
+  },
+  "signature": "SetHeight(nValue: EMU): EMU | null",
+  "since": "9.5.0"
+}

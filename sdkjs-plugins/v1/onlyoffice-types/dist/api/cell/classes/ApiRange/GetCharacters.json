@@ -1,0 +1,24 @@
+{
+  "description": "Returns the ApiCharacters object that represents a range of characters within the object text. Use the ApiCharacters object to format characters within a text string.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCharacters/",
+  "examples": [
+    "// How do I bold just a few characters within a cell's text in a spreadsheet?\n\n// Extract a slice of text by position and apply bold formatting to those characters only.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);"
+  ],
+  "params": [
+    {
+      "description": "The first character to be returned. If this argument is either 1 or omitted, this property returns a range of characters starting with the first character.",
+      "name": "Start",
+      "type": "number"
+    },
+    {
+      "description": "The number of characters to be returned. If this argument is omitted, this property returns the remainder of the string (everything after the Start character).",
+      "name": "Length",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiCharacters"
+  },
+  "signature": "GetCharacters(Start: number, Length: number): ApiCharacters",
+  "since": "7.4.0"
+}

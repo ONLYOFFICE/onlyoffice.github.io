@@ -1,0 +1,131 @@
+{
+  "description": "Class representing a stroke.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/",
+  "methods": {
+    "GetBeginArrow": {
+      "description": "Returns the beginning arrow properties of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/Methods/GetBeginArrow/",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetBeginArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiStroke class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/Methods/GetClassType/",
+      "examples": [
+        "// What class identifier does a border line report in a PDF?\n\n// Print the type classification of a border line in a PDF\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nconst fill1 = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nconst stroke = Api.CreateStroke(3 * 36000, fill1);\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\n\nconst classType = stroke.GetClassType();\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class Type = \" + classType);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"stroke\""
+      },
+      "signature": "GetClassType(): \"stroke\""
+    },
+    "GetDashType": {
+      "description": "Gets the dash type of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/Methods/GetDashType/",
+      "examples": [
+        "// What dash pattern is applied to a border line in a PDF?\n\n// Extract and show the line style for a border in a PDF\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(0, 0, 255)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet retrievedStroke = shape.GetLine();\nlet dashType = retrievedStroke.GetDashType();\nparagraph.AddText(\"Dash type: \" + (dashType ? dashType : \"not set\"));"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns dash type (\"solid\", \"dash\", etc.) or null.",
+        "type": "DashType | null"
+      },
+      "signature": "GetDashType(): DashType | null"
+    },
+    "GetEndArrow": {
+      "description": "Returns the ending arrow properties of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/Methods/GetEndArrow/",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetEndArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetFill": {
+      "description": "Gets the fill (color) of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/Methods/GetFill/",
+      "examples": [
+        "// What color is the border line filled with in a PDF?\n\n// Check and display the fill properties of a border in a PDF\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 100));\nlet stroke = Api.CreateStroke(2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(0, 0, 255)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet strokeObj = shape.GetLine();\nif (strokeObj) {\n    let strokeFill = strokeObj.GetFill();\n    if (strokeFill) {\n        paragraph.AddText(\"Stroke fill type: \" + strokeFill.GetType());\n    }\n}"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null"
+    },
+    "GetWidth": {
+      "description": "Gets the width of the stroke in English Metric Units.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/Methods/GetWidth/",
+      "examples": [
+        "// What is the border thickness measured in units in a PDF?\n\n// Read and display the line width of a border in a PDF\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 100));\n\n// Shape with 1pt border\nlet stroke1 = Api.CreateStroke(1 * 12700, Api.CreateSolidFill(Api.CreateRGBColor(0, 0, 255)));\nlet shape1 = Api.CreateShape(\"rect\", 50 * 36000, 30 * 36000, fill, stroke1);\nshape1.SetPosition(2000000, 1000000);\npage.AddObject(shape1);\nlet content1 = shape1.GetContent();\nlet para1 = content1.GetElement(0);\nlet width1 = shape1.GetLine().GetWidth();\npara1.AddText(\"1pt: \" + width1 + \" EMU\");\n\n// Shape with 2.5pt border\nlet stroke2 = Api.CreateStroke(2.5 * 12700, Api.CreateSolidFill(Api.CreateRGBColor(255, 0, 0)));\nlet shape2 = Api.CreateShape(\"rect\", 50 * 36000, 30 * 36000, fill, stroke2);\nshape2.SetPosition(2000000, 2000000);\npage.AddObject(shape2);\nlet content2 = shape2.GetContent();\nlet para2 = content2.GetElement(0);\nlet width2 = shape2.GetLine().GetWidth();\npara2.AddText(\"2.5pt: \" + width2 + \" EMU\");\n\n// Shape with 5pt border\nlet stroke3 = Api.CreateStroke(5 * 12700, Api.CreateSolidFill(Api.CreateRGBColor(0, 255, 0)));\nlet shape3 = Api.CreateShape(\"rect\", 50 * 36000, 30 * 36000, fill, stroke3);\nshape3.SetPosition(2000000, 3000000);\npage.AddObject(shape3);\nlet content3 = shape3.GetContent();\nlet para3 = content3.GetElement(0);\nlet width3 = shape3.GetLine().GetWidth();\npara3.AddText(\"5pt: \" + width3 + \" EMU\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "EMU | null"
+      },
+      "signature": "GetWidth(): EMU | null"
+    },
+    "SetBeginArrow": {
+      "description": "Sets the beginning arrow of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/Methods/SetBeginArrow/",
+      "params": [
+        {
+          "description": "The type of the beginning arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the beginning arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the beginning arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    },
+    "SetEndArrow": {
+      "description": "Sets the ending arrow of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStroke/Methods/SetEndArrow/",
+      "params": [
+        {
+          "description": "The type of the ending arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the ending arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the ending arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

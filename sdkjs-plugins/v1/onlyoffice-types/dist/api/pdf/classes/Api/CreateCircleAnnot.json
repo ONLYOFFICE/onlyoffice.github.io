@@ -1,0 +1,18 @@
+{
+  "description": "Creates circle annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateCircleAnnot/",
+  "examples": [
+    "// How do I draw a circle annotation in a PDF?\n\n// Mark a region with a circular outline in a PDF.\n\nlet doc = Api.GetDocument();\nlet circleAnnot = Api.CreateCircleAnnot([10, 10, 160, 32]);\nlet page = doc.GetPage(0);\npage.AddObject(circleAnnot);"
+  ],
+  "params": [
+    {
+      "description": "annotation rect.",
+      "name": "rect",
+      "type": "Rect"
+    }
+  ],
+  "returns": {
+    "type": "ApiCircleAnnotation"
+  },
+  "signature": "CreateCircleAnnot(rect: Rect): ApiCircleAnnotation"
+}

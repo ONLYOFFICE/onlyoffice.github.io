@@ -1,0 +1,30 @@
+{
+  "description": "Replaces each paragraph (or text in cell) in the select with the corresponding text from an array of strings.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/ReplaceTextSmart/",
+  "examples": [
+    "// How do I swap out the contents of multiple cells at once using a set of replacement values in a spreadsheet?\n\n// Overwrite selected cell values in bulk using a matching array of strings in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:A2\");\nrange.Select();\nApi.ReplaceTextSmart([\"Cell 1\", \"Cell 2\"]);"
+  ],
+  "params": [
+    {
+      "description": "An array of replacement strings.",
+      "name": "textStrings",
+      "type": "string[]"
+    },
+    {
+      "description": "A character which is used to specify the tab in the source text.",
+      "name": "tab",
+      "optional": true,
+      "type": "string"
+    },
+    {
+      "description": "A character which is used to specify the line break character in the source text.",
+      "name": "newLine",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean"
+}

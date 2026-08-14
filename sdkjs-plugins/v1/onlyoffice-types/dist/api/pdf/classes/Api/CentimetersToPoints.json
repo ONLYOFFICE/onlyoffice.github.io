@@ -1,0 +1,18 @@
+{
+  "description": "Converts centimeters to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CentimetersToPoints/",
+  "examples": [
+    "// How do I convert centimeters to points in a PDF?\n\n// Display a measurement conversion in a shape in a PDF.\n\nconst centimeters = 1000;\nconst points = Api.CentimetersToPoints(centimeters);\n\nconst rgb = Api.RGB(50, 150, 250);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(centimeters + ' centimeters are equal to ' + points + ' points.');\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The number of centimeters to convert to points.",
+      "name": "cm",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CentimetersToPoints(cm: number): number"
+}

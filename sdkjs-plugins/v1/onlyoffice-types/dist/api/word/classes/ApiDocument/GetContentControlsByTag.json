@@ -1,0 +1,18 @@
+{
+  "description": "Returns a list of all content controls in the document with the specified tag name.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetContentControlsByTag/",
+  "examples": [
+    "// How do I select content controls by their tag name in a document?\n\n// Target a specific group of controls using a shared tag to update their properties in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.AddText(\"Inline content control\");\ninlineLvlSdt.SetTag(\"Tag 1\");\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nblockLvlSdt.GetContent().GetElement(0).AddText(\"Block text content control\");\nblockLvlSdt.SetTag(\"Tag 2\");\ndoc.AddElement(0, blockLvlSdt);\nlet contentControls = doc.GetContentControlsByTag(\"Tag 1\");\ncontentControls[0].SetAlias(\"№1\");"
+  ],
+  "params": [
+    {
+      "description": "Content control tag.",
+      "name": "sTag",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiBlockLvlSdt[] | ApiInlineLvlSdt[]"
+  },
+  "signature": "GetContentControlsByTag(sTag: string): ApiBlockLvlSdt[] | ApiInlineLvlSdt[]"
+}

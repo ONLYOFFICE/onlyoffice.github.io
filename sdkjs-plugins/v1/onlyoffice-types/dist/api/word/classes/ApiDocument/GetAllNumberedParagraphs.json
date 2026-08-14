@@ -1,0 +1,12 @@
+{
+  "description": "Returns all numbered paragraphs from the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetAllNumberedParagraphs/",
+  "examples": [
+    "// How do I collect every paragraph that has numbering applied in a document?\n\n// Make the first numbered paragraph bold to draw attention to the opening list item.\n\nlet doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nfor (let lvl = 0; lvl < 8; ++lvl) {\n\tlet numLvl = numbering.GetLevel(lvl);\n\tlet formatString = \"\";\n\tfor (let tempLvl = 0; tempLvl <= lvl; ++tempLvl) formatString += \"%\" + tempLvl + \".\";\n\tnumLvl.SetCustomType(\"lowerRoman\", formatString, \"left\");\n\tnumLvl.SetStart(lvl + 1);\n\tnumLvl.SetSuff(\"space\");\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"Custom numbered lvl \" + (lvl + 1));\n\tparagraph.SetNumbering(numLvl);\n\tparagraph.SetContextualSpacing(true);\n\tdoc.Push(paragraph);\n}\nlet numberedParagraphs = doc.GetAllNumberedParagraphs();\nnumberedParagraphs[0].SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph[]"
+  },
+  "signature": "GetAllNumberedParagraphs(): ApiParagraph[]"
+}

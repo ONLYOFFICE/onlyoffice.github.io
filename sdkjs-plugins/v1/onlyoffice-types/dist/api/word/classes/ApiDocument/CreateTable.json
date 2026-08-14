@@ -1,0 +1,21 @@
+{
+  "description": "Creates a new table with a specified number of rows and columns.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/CreateTable/",
+  "params": [
+    {
+      "description": "Number of rows.",
+      "name": "rows",
+      "type": "number"
+    },
+    {
+      "description": "Number of columns.",
+      "name": "cols",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiTable"
+  },
+  "signature": "CreateTable(rows: number, cols: number): ApiTable",
+  "since": "9.4.0"
+}

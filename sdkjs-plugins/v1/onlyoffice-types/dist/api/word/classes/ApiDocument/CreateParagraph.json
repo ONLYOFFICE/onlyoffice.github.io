@@ -1,0 +1,10 @@
+{
+  "description": "Creates a new empty paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/CreateParagraph/",
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph"
+  },
+  "signature": "CreateParagraph(): ApiParagraph",
+  "since": "9.4.0"
+}

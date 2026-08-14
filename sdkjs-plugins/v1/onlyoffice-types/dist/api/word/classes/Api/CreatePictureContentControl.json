@@ -1,0 +1,27 @@
+{
+  "description": "Creates a new picture container.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreatePictureContentControl/",
+  "examples": [
+    "// How do I add an image placeholder that users can click to insert a picture in a document?\n\n// Place a fixed-size picture content control inside a new paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreatePictureContentControl(2000000, 2000000);\nlet paragraph = Api.CreateParagraph();\nparagraph.Push(cc);\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The optional image width.",
+      "name": "width",
+      "optional": true,
+      "type": "EMU"
+    },
+    {
+      "description": "The optional image height.",
+      "name": "height",
+      "optional": true,
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "description": "An inline-level content control that represents a picture container.",
+    "type": "ApiInlineLvlSdt"
+  },
+  "signature": "CreatePictureContentControl(width?: EMU, height?: EMU): ApiInlineLvlSdt",
+  "since": "9.0.0"
+}

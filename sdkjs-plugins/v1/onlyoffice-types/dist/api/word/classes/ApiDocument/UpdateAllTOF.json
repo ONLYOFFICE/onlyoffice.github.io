@@ -1,0 +1,19 @@
+{
+  "description": "Updates all tables of figures in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/UpdateAllTOF/",
+  "examples": [
+    "// How do I keep tables of figures current when new images or shapes are added in a document?\n\n// Synchronize figure captions and page numbers across every table of figures in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph.AddDrawing(chart);\nparagraph.AddCaption(\" - Financial Overview\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");\nlet tofPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": \"Figure\", \"LabelNumber\": true, \"TofStyle\": \"distinctive\"};\ndoc.AddTableOfFigures(tofPr);\nparagraph = Api.CreateParagraph();\nlet fill = Api.CreateSolidFill(Api.RGB(104, 155, 104));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndoc.AddElement(2, paragraph);\nparagraph.AddCaption(\" - Sample shape\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");\ndoc.UpdateAllTOF(false);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that only page numbers will be updated.",
+      "name": "bOnlyPageNumbers",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "UpdateAllTOF(bOnlyPageNumbers?: boolean): boolean"
+}

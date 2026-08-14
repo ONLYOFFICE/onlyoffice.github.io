@@ -1,0 +1,12 @@
+{
+  "description": "Returns a list of all tags that are used for all forms in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetTagsOfAllForms/",
+  "examples": [
+    "// How do I retrieve every form tag from a document?\n\n// Verify which tags are attached to text and combo-box form fields after filling them with values.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"tag\": \"form_1\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"tag\": \"form_2\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nparagraph.AddLineBreak();\nparagraph.AddElement(comboBoxForm);\nlet forms = doc.GetAllForms();\nforms[0].SetText(\"John Smith\");\nforms[1].SelectListValue(\"USA\");\nlet tags = doc.GetTagsOfAllForms();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Forms tags: \");\nparagraph.AddLineBreak();\nfor (let i = 0; i < tags.length; i++ ){\n\tparagraph.AddText(tags[i]);\n\tparagraph.AddLineBreak();\n}\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "string[]"
+  },
+  "signature": "GetTagsOfAllForms(): string[]"
+}

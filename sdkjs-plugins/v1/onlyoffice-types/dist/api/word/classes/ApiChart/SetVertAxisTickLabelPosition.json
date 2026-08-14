@@ -1,0 +1,18 @@
+{
+  "description": "Spicifies tick labels position for the vertical axis.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetVertAxisTickLabelPosition/",
+  "examples": [
+    "// How do I control where tick labels appear on the vertical axis in a document?\n\n// Place tick labels at the far end of the vertical axis to keep them away from the chart area in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetVertAxisTickLabelPosition(\"high\");\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph.AddDrawing(chart);"
+  ],
+  "params": [
+    {
+      "description": "The type for the position of chart vertical tick labels.",
+      "name": "sTickLabelPosition",
+      "type": "TickLabelPosition"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetVertAxisTickLabelPosition(sTickLabelPosition: TickLabelPosition): boolean"
+}

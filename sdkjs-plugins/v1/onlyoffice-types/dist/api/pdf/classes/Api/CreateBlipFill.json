@@ -1,0 +1,23 @@
+{
+  "description": "Creates a blip fill to apply to the object using the selected image as the object background.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateBlipFill/",
+  "examples": [
+    "// How do I use an image as a fill in a PDF?\n\n// Apply a repeating image pattern to a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateBlipFill(\"https://static.onlyoffice.com/assets/docs/samples/img/presentation_sky.png\", \"tile\");\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"star10\", 150 * 36000, 65 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\npage.AddObject(drawing);"
+  ],
+  "params": [
+    {
+      "description": "The path to the image used for the blip fill (currently only internet URL or Base64 encoded images are supported).",
+      "name": "imageUrl",
+      "type": "string"
+    },
+    {
+      "description": "The type of the fill used for the blip fill (tile or stretch).",
+      "name": "blipFillType",
+      "type": "BlipFillType"
+    }
+  ],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateBlipFill(imageUrl: string, blipFillType: BlipFillType): ApiFill"
+}

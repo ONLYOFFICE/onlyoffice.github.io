@@ -1,0 +1,18 @@
+{
+  "description": "Returns the median, or the number in the middle of the set of given numbers.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MEDIAN/",
+  "examples": [
+    "// What is the median number in a list in a spreadsheet?\n\n// Extract the median value from a range of values in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet median = func.MEDIAN(4,45,12,34,3,54,2,2);\nworksheet.GetRange(\"C1\").SetValue(median);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the median will be calculated.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "number | number[] | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MEDIAN(args: number | number[] | ApiRange | ApiName): number"
+}

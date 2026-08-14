@@ -1,0 +1,40 @@
+{
+  "description": "Returns the inverse of the cumulative beta probability density function (BETA_DIST).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BETA_INV/",
+  "examples": [
+    "// How do I convert a probability percentage back into the original data range in a spreadsheet?\n\n// Retrieve the input value that corresponds to a specific cumulative probability in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.BETA_INV(0.2, 4, 5);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A probability associated with the beta distribution.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The alpha parameter of the distribution which must be greater than 0.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The beta parameter of the distribution which must be greater than 0.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional lower bound to the interval of x (A). If omitted, it is equal to 0.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional upper bound to the interval of x (B). If omitted, it is equal to 1.",
+      "name": "arg5",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BETA_INV(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4?: ApiRange | ApiName | number, arg5?: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Adds a line break to the current position and starts the next element from a new line.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddLineBreak/",
+  "examples": [
+    "// How do I break a line mid-paragraph so the next text begins on a fresh line in a document?\n\n// Keep two lines inside the same paragraph block while visually separating them with a hard line break in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the text for the first line. Nothing special.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"This is the text which starts from the beginning of the second line. \");\nparagraph.AddText(\"It is written in two text runs, you need a space at the end of the first run sentence to separate them.\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "AddLineBreak(): ApiRun"
+}

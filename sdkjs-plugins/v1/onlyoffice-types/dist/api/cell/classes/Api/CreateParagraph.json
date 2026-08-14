@@ -1,0 +1,12 @@
+{
+  "description": "Creates a new paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateParagraph/",
+  "examples": [
+    "// How do I add a separate block of text as its own paragraph inside a shape in a spreadsheet?\n\n// Build and place a standalone text block within a shape's content area in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nlet paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph"
+  },
+  "signature": "CreateParagraph(): ApiParagraph"
+}

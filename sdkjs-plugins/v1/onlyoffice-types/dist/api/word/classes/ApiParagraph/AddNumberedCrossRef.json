@@ -1,0 +1,41 @@
+{
+  "description": "Adds a numbered cross-reference to the current paragraph.\n<note>Please note that this paragraph must be in the document.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddNumberedCrossRef/",
+  "examples": [
+    "// How do I cite a specific numbered paragraph from elsewhere in the text in a document?\n\n// Embed the list number of another paragraph so readers can identify the exact item being referenced in a document.\n\nlet doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nfor (let i = 0; i < 8; ++i) {\n\tlet numLvl = numbering.GetLevel(i);\n\tlet formatString = \"\";\n\tfor (let nTempLvl = 0; nTempLvl <= i; ++nTempLvl) \n\t\tformatString += \"%\" + nTempLvl + \".\";\n\tnumLvl.SetCustomType(\"lowerRoman\", formatString, \"left\");\n\tnumLvl.SetStart(i + 1);\n\tnumLvl.SetSuff(\"space\");\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"Custom numbered lvl \" + (i + 1));\n\tparagraph.SetNumbering(numLvl);\n\tparagraph.SetContextualSpacing(true);\n\tdoc.Push(paragraph);\n}\nlet numberedParagraphs = doc.GetAllNumberedParagraphs();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"An example of the customized numbering type can be found in the paragraph № \");\ndoc.Push(paragraph);\nparagraph.AddNumberedCrossRef(\"paraNum\", numberedParagraphs[1], true, true);"
+  ],
+  "params": [
+    {
+      "description": "The text or numeric value of a numbered reference you want to insert.",
+      "name": "sRefType",
+      "type": "numberedRefTo"
+    },
+    {
+      "description": "The numbered paragraph to be referred to (must be in the document).",
+      "name": "oParaTo",
+      "type": "ApiParagraph"
+    },
+    {
+      "description": "Specifies if the reference will be inserted as a hyperlink.",
+      "name": "bLink",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Specifies if the above/below words indicating the position of the reference should be included (don't used with the \"text\" and \"aboveBelow\" sRefType).",
+      "name": "bAboveBelow",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "A number separator (used only with the \"fullCtxParaNum\" sRefType).",
+      "name": "sSepWith",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "AddNumberedCrossRef(sRefType: numberedRefTo, oParaTo: ApiParagraph, bLink?: boolean, bAboveBelow?: boolean, sSepWith?: string): boolean"
+}

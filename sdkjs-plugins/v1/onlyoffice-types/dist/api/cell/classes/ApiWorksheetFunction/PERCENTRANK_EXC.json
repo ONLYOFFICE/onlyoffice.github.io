@@ -1,0 +1,29 @@
+{
+  "description": "Returns the rank of a value in a data set as a percentage (0..1, exclusive) of the data set.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PERCENTRANK_EXC/",
+  "examples": [
+    "// How do I find a value's percentile rank within a dataset in a spreadsheet?\n\n// Determine the relative position of a number between other values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet column1 = [1, 0, 7, 10];\nlet column2 = [3, 2, 5, 8];\nlet column3 = [5, 4, 3, 6];\nlet column4 = [7, 6, 5, 4];\n\nfor (let i = 0; i < column1.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(column1[i]);\n}\nfor (let j = 0; j < column2.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(column2[j]);\n}\nfor (let n = 0; n < column3.length; n++) {\n    worksheet.GetRange(\"C\" + (n + 1)).SetValue(column3[n]);\n}\nfor (let m = 0; m < column4.length; m++) {\n    worksheet.GetRange(\"D\" + (m + 1)).SetValue(column4[m]);\n}\n\nlet range = worksheet.GetRange(\"A1:D4\");\nworksheet.GetRange(\"D5\").SetValue(func.PERCENTRANK_EXC(range, 2, 4));"
+  ],
+  "params": [
+    {
+      "description": "The array or range of data with numeric values that defines relative standing.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "The value for which the rank will be returned.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional value that identifies the number of significant digits for the returned percentage, three digits if omitted (0.xxx%).",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PERCENTRANK_EXC(arg1: ApiRange | ApiName | number[], arg2: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | number): number"
+}

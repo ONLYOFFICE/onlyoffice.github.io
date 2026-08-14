@@ -1,0 +1,29 @@
+{
+  "description": "Returns the serial number of the date before or after a specified number of workdays.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/WORKDAY/",
+  "examples": [
+    "// How do I calculate a new date by adding or subtracting workdays in a spreadsheet?\n\n// Determine a future or past workday date based on a number of working days in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.WORKDAY(\"12/7/1981\", 56); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A serial date number that represents the start date.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of nonweekend and non-holiday days before or after the start date. A positive value for days yields a future date; a negative value yields a past date.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional range or array of one or more serial date numbers to exclude from the working calendar, such as state and federal holidays and floating holidays.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "WORKDAY(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | number[]): number"
+}

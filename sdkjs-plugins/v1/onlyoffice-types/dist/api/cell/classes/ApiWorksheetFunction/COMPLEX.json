@@ -1,0 +1,29 @@
+{
+  "description": "Converts real and imaginary coefficients into a complex number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COMPLEX/",
+  "examples": [
+    "// What is a complex number made from two values in a spreadsheet?\n\n// Combine regular and imaginary parts to build a complex number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COMPLEX(-2, 2.5, \"i\"));"
+  ],
+  "params": [
+    {
+      "description": "The real coefficient of the complex number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The imaginary coefficient of the complex number.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The suffix for the imaginary component of the complex number. It can be either \"i\" or \"j\" in lowercase.\rIf it is omitted, the function will assume suffix to be \"i\".",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "COMPLEX(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | string): number"
+}

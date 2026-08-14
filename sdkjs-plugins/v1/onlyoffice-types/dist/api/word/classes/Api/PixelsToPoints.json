@@ -1,0 +1,18 @@
+{
+  "description": "Converts pixels to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PixelsToPoints/",
+  "examples": [
+    "// How do I translate a pixel value into points in a document?\n\n// Write out the point equivalent of a given pixel count as readable text in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = Api.CreateParagraph();\n\nconst pixels = 100;\nconst points = Api.PixelsToPoints(pixels);\nparagraph.AddText(pixels + ' pixels are equal to ' + points + ' points.');\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The number of pixels to convert to points.",
+      "name": "px",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PixelsToPoints(px: number): number"
+}

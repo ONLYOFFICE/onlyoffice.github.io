@@ -1,0 +1,18 @@
+{
+  "description": "Sets the paragraph first line indentation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndFirstLine/",
+  "examples": [
+    "// How do I set a first-line indent for paragraphs using a paragraph style in a document?\n\n// Give paragraphs a classic indented opening line to improve readability and visual structure.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetIndFirstLine(1440);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the second paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
+      "name": "nValue",
+      "type": "twips"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetIndFirstLine(nValue: twips): boolean"
+}

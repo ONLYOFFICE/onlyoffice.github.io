@@ -1,0 +1,29 @@
+{
+  "description": "Inserts a paragraph at the specified position.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/InsertParagraph/",
+  "examples": [
+    "// How do I add text inside a shape in a document?\n\n// Place a labeled paragraph inside a rectangle to annotate the shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This graphic object with paragraph.\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph.\");\ndrawing.InsertParagraph(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "Text or paragraph.",
+      "name": "paragraph",
+      "type": "string | ApiParagraph"
+    },
+    {
+      "description": "The position where the text or paragraph will be inserted (\"before\" or \"after\" the drawing specified).",
+      "name": "sPosition",
+      "type": "string"
+    },
+    {
+      "description": "Defines if this method returns a new paragraph (true) or the current ApiDrawing (false).",
+      "name": "beRNewPara",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns null if parent paragraph doesn't exist.",
+    "type": "ApiParagraph | ApiDrawing"
+  },
+  "signature": "InsertParagraph(paragraph: string | ApiParagraph, sPosition: string, beRNewPara: boolean): ApiParagraph | ApiDrawing"
+}

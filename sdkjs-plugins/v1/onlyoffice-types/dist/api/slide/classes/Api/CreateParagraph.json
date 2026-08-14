@@ -1,0 +1,12 @@
+{
+  "description": "Creates a new paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateParagraph/",
+  "examples": [
+    "// How do I create multiple text lines inside a shape in a presentation?\n\n// Create paragraphs with text alignment inside a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetDocContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\nslide.AddObject(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph"
+  },
+  "signature": "CreateParagraph(): ApiParagraph"
+}

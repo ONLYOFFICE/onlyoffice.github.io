@@ -1,0 +1,514 @@
+{
+  "description": "Class representing document properties (similar to BuiltInDocumentProperties in VBA).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/",
+  "methods": {
+    "GetCategory": {
+      "description": "Returns the document category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetCategory/",
+      "examples": [
+        "// How do I retrieve the category metadata stored in a document?\n\n// Inspect the category to verify or display how a document is classified within a collection in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetCategory(\"Examples\");\n\nconst category = core.GetCategory();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Category: \" + category);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document category.",
+        "type": "string"
+      },
+      "signature": "GetCategory(): string",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCore class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out what class type the core properties object belongs to in a document?\n\n// Confirm the object identity before calling type-specific methods in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\nconst classType = core.GetClassType();\n\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class type: \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"core\""
+      },
+      "signature": "GetClassType(): \"core\"",
+      "since": "9.0.0"
+    },
+    "GetContentStatus": {
+      "description": "Returns the document content status.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetContentStatus/",
+      "examples": [
+        "// How do I retrieve the content status value from the core properties in a document?\n\n// Check whether a document is marked as Draft, Final, or another status in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetContentStatus(\"Final\");\n\nconst contentStatus = core.GetContentStatus();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText(\"Content Status: \" + contentStatus);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document content status.",
+        "type": "string"
+      },
+      "signature": "GetContentStatus(): string",
+      "since": "9.0.0"
+    },
+    "GetCreated": {
+      "description": "Returns the document creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetCreated/",
+      "examples": [
+        "// How do I get the date a document was created from its core properties in a document?\n\n// Display when a document was first made to track its history in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetCreated(new Date('20 January 2000'));\n\nconst createdDate = core.GetCreated().toDateString();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Created: \" + createdDate);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document creation date.",
+        "type": "Date"
+      },
+      "signature": "GetCreated(): Date",
+      "since": "9.0.0"
+    },
+    "GetCreator": {
+      "description": "Returns the document author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetCreator/",
+      "examples": [
+        "// How do I get the creator's name from the core properties in a document?\n\n// Identify who originally authored a document without opening its file dialog in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetCreator(\"John Smith\");\n\nconst creator = core.GetCreator();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText(\"Creator: \" + creator);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document author.",
+        "type": "string"
+      },
+      "signature": "GetCreator(): string",
+      "since": "9.0.0"
+    },
+    "GetDescription": {
+      "description": "Returns the document description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetDescription/",
+      "examples": [
+        "// How do I retrieve the description text from the core properties in a document?\n\n// Display a document's summary text to give readers context about its contents in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetDescription(\"This is a sample document made to help fellow users understand how to use the ApiCore methods.\");\n\nconst description = core.GetDescription();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Description: \" + description);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document description.",
+        "type": "string"
+      },
+      "signature": "GetDescription(): string",
+      "since": "9.0.0"
+    },
+    "GetIdentifier": {
+      "description": "Returns the document identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetIdentifier/",
+      "examples": [
+        "// How do I get the identifier value from the core properties in a document?\n\n// Look up a document's assigned ID to reference it in an external system in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetIdentifier(\"#ID42\");\n\nconst identifier = core.GetIdentifier();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Identifier: \" + identifier);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document identifier.",
+        "type": "string"
+      },
+      "signature": "GetIdentifier(): string",
+      "since": "9.0.0"
+    },
+    "GetKeywords": {
+      "description": "Returns the document keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetKeywords/",
+      "examples": [
+        "// How do I retrieve the keyword tags from the core properties in a document?\n\n// Extract searchable tags assigned to a document to aid indexing or categorization in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetKeywords(\"Example; ApiCore; Document\");\n\nconst keywords = core.GetKeywords();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Keywords: \" + keywords);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document keywords in the string format.",
+        "type": "string"
+      },
+      "signature": "GetKeywords(): string",
+      "since": "9.0.0"
+    },
+    "GetLanguage": {
+      "description": "Returns the document language.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetLanguage/",
+      "examples": [
+        "// How do I get the language value from the core properties in a document?\n\n// Detect the declared locale of a document to apply the correct spell-check or formatting rules in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetLanguage(\"en-US\");\n\nconst language = core.GetLanguage();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Language: \" + language);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document language.",
+        "type": "string"
+      },
+      "signature": "GetLanguage(): string",
+      "since": "9.0.0"
+    },
+    "GetLastModifiedBy": {
+      "description": "Returns the name of the user who last modified the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetLastModifiedBy/",
+      "examples": [
+        "// How do I find out who last modified a document using its core properties in a document?\n\n// Audit recent changes by identifying which user saved the most recent version in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetLastModifiedBy(\"Mark Pottato\");\n\nconst lastModifiedBy = core.GetLastModifiedBy();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Last modified by: \" + lastModifiedBy);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The name of the user who last modified the document.",
+        "type": "string"
+      },
+      "signature": "GetLastModifiedBy(): string",
+      "since": "9.0.0"
+    },
+    "GetLastPrinted": {
+      "description": "Returns the date when the document was last printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetLastPrinted/",
+      "examples": [
+        "// How do I get the last printed date from the core properties in a document?\n\n// Check the print history of a document to decide whether a fresh copy needs to be produced in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetLastPrinted(new Date());\n\nconst lastPrintedDate = core.GetLastPrinted().toDateString();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Last printed: \" + lastPrintedDate);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The date when the document was last printed.",
+        "type": "Date"
+      },
+      "signature": "GetLastPrinted(): Date",
+      "since": "9.0.0"
+    },
+    "GetModified": {
+      "description": "Returns the date when the document was last modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetModified/",
+      "examples": [
+        "// How do I get the date a document was last modified from its core properties in a document?\n\n// Compare the modification timestamp against a deadline to flag outdated content in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetModified(new Date('1990-03-10'));\n\nconst lastModifiedDate = core.GetModified().toDateString();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Last modified: \" + lastModifiedDate);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The date when the document was last modified.",
+        "type": "Date"
+      },
+      "signature": "GetModified(): Date",
+      "since": "9.0.0"
+    },
+    "GetRevision": {
+      "description": "Returns the document revision.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetRevision/",
+      "examples": [
+        "// How do I read the revision value from a document's metadata in a document?\n\n// Display the current revision string in the document body to confirm it was saved correctly in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetRevision(\"Rev. A\");\n\nconst revision = core.GetRevision();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Revision: \" + revision);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document revision.",
+        "type": "string"
+      },
+      "signature": "GetRevision(): string",
+      "since": "9.0.0"
+    },
+    "GetSubject": {
+      "description": "Returns the document subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetSubject/",
+      "examples": [
+        "// How do I retrieve the subject stored in a document's metadata in a document?\n\n// Verify that a subject was recorded correctly by printing its value into the document body in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetSubject(\"ApiCore Method Showcase\");\n\nconst subject = core.GetSubject();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Subject: \" + subject);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document subject.",
+        "type": "string"
+      },
+      "signature": "GetSubject(): string",
+      "since": "9.0.0"
+    },
+    "GetTitle": {
+      "description": "Returns the document title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetTitle/",
+      "examples": [
+        "// How do I read the title from a document's metadata in a document?\n\n// Confirm the document title is set correctly by inserting it as text into the document body in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetTitle(\"My Document Title\");\n\nconst title = core.GetTitle();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Title: \" + title);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document title.",
+        "type": "string"
+      },
+      "signature": "GetTitle(): string",
+      "since": "9.0.0"
+    },
+    "GetVersion": {
+      "description": "Returns the document version.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetVersion/",
+      "examples": [
+        "// How do I retrieve the version recorded in a document's metadata in a document?\n\n// Confirm the stored version value is accessible by writing it into the document body in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetVersion(\"v9.0\");\n\nconst version = core.GetVersion();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Version: \" + version);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document version.",
+        "type": "string"
+      },
+      "signature": "GetVersion(): string",
+      "since": "9.0.0"
+    },
+    "SetCategory": {
+      "description": "Sets the document category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetCategory/",
+      "examples": [
+        "// How do I tag a document with a category in its metadata in a document?\n\n// Record which group or type a document belongs to so it can be filtered later in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetCategory(\"Examples\");\n\nconst category = core.GetCategory();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Category: \" + category);"
+      ],
+      "params": [
+        {
+          "description": "The document category.",
+          "name": "sCategory",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCategory(sCategory: string): void",
+      "since": "9.0.0"
+    },
+    "SetContentStatus": {
+      "description": "Sets the document content status.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetContentStatus/",
+      "examples": [
+        "// How do I record whether a document is a draft, review, or final version in a document?\n\n// Attach a workflow stage label to the document so collaborators know its current state in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetContentStatus(\"Final\");\n\nconst contentStatus = core.GetContentStatus();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText(\"Content Status: \" + contentStatus);"
+      ],
+      "params": [
+        {
+          "description": "The document content status.",
+          "name": "sStatus",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetContentStatus(sStatus: string): void",
+      "since": "9.0.0"
+    },
+    "SetCreated": {
+      "description": "Sets the document creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetCreated/",
+      "examples": [
+        "// How do I store the date a document was originally created in a document?\n\n// Embed an explicit creation timestamp in the metadata so the document's origin date is preserved in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetCreated(new Date('20 January 2000'));\n\nconst createdDate = core.GetCreated().toDateString();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Created: \" + createdDate);"
+      ],
+      "params": [
+        {
+          "description": "The document creation date.",
+          "name": "oCreated",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCreated(oCreated: Date): void",
+      "since": "9.0.0"
+    },
+    "SetCreator": {
+      "description": "Sets the document author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetCreator/",
+      "examples": [
+        "// How do I set the creator field in a document's metadata in a document?\n\n// Attribute ownership of the document by writing the author's name into the built-in properties in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetCreator(\"John Smith\");\n\nconst creator = core.GetCreator();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText(\"Creator: \" + creator);"
+      ],
+      "params": [
+        {
+          "description": "The document author.",
+          "name": "sCreator",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCreator(sCreator: string): void",
+      "since": "9.0.0"
+    },
+    "SetDescription": {
+      "description": "Sets the document description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetDescription/",
+      "examples": [
+        "// How do I add a description to a document's built-in metadata in a document?\n\n// Provide context about a document's purpose by saving a plain-text summary in its properties in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetDescription(\"This is a sample document made to help fellow users understand how to use the ApiCore methods.\");\n\nconst description = core.GetDescription();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Description: \" + description);"
+      ],
+      "params": [
+        {
+          "description": "The document description.",
+          "name": "sDescription",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetDescription(sDescription: string): void",
+      "since": "9.0.0"
+    },
+    "SetIdentifier": {
+      "description": "Sets the document identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetIdentifier/",
+      "examples": [
+        "// How do I store a custom ID string in a document's metadata in a document?\n\n// Link a document to an external system by embedding its tracking ID in the built-in properties in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetIdentifier(\"#ID42\");\n\nconst identifier = core.GetIdentifier();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Identifier: \" + identifier);"
+      ],
+      "params": [
+        {
+          "description": "The document identifier.",
+          "name": "sIdentifier",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetIdentifier(sIdentifier: string): void",
+      "since": "9.0.0"
+    },
+    "SetKeywords": {
+      "description": "Sets the document keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetKeywords/",
+      "examples": [
+        "// How do I add searchable keywords to a document's metadata in a document?\n\n// Improve discoverability by tagging the document with relevant terms stored in its built-in properties in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetKeywords(\"Example; ApiCore; Document\");\n\nconst keywords = core.GetKeywords();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Keywords: \" + keywords);"
+      ],
+      "params": [
+        {
+          "description": "The document keywords in the string format.",
+          "name": "sKeywords",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetKeywords(sKeywords: string): void",
+      "since": "9.0.0"
+    },
+    "SetLanguage": {
+      "description": "Sets the document language.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetLanguage/",
+      "examples": [
+        "// How do I assign a language tag to a document?\n\n// Specify a locale code to control language settings for spell-check and proofing tools in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetLanguage(\"en-US\");\n\nconst language = core.GetLanguage();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Language: \" + language);"
+      ],
+      "params": [
+        {
+          "description": "The document language.",
+          "name": "sLanguage",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLanguage(sLanguage: string): void",
+      "since": "9.0.0"
+    },
+    "SetLastModifiedBy": {
+      "description": "Sets the name of the user who last modified the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetLastModifiedBy/",
+      "examples": [
+        "// How do I store the author name of the most recent edit in a document?\n\n// Track document ownership and editing history by saving the modifier's name in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetLastModifiedBy(\"Mark Pottato\");\n\nconst lastModifiedBy = core.GetLastModifiedBy();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Last modified by: \" + lastModifiedBy);"
+      ],
+      "params": [
+        {
+          "description": "The name of the user who last modified the document.",
+          "name": "sLastModifiedBy",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLastModifiedBy(sLastModifiedBy: string): void",
+      "since": "9.0.0"
+    },
+    "SetLastPrinted": {
+      "description": "Sets the date when the document was last printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetLastPrinted/",
+      "examples": [
+        "// How do I record the last print date for a document?\n\n// Keep an audit trail of printing activity by saving the most recent print timestamp in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetLastPrinted(new Date());\n\nconst lastPrintedDate = core.GetLastPrinted().toDateString();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Last printed: \" + lastPrintedDate);"
+      ],
+      "params": [
+        {
+          "description": "The date when the document was last printed.",
+          "name": "oLastPrinted",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLastPrinted(oLastPrinted: Date): void",
+      "since": "9.0.0"
+    },
+    "SetModified": {
+      "description": "Sets the date when the document was last modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetModified/",
+      "examples": [
+        "// How do I update the modification timestamp of a document?\n\n// Correct or backdate the recorded edit time to reflect when a document was actually changed in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetModified(new Date('1990-03-10'));\n\nconst lastModifiedDate = core.GetModified().toDateString();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Last modified: \" + lastModifiedDate);"
+      ],
+      "params": [
+        {
+          "description": "The date when the document was last modified.",
+          "name": "oModified",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetModified(oModified: Date): void",
+      "since": "9.0.0"
+    },
+    "SetRevision": {
+      "description": "Sets the document revision.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetRevision/",
+      "examples": [
+        "// How do I mark a document with a specific revision identifier?\n\n// Version-control a document by embedding a revision string in its core metadata in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetRevision(\"Rev. A\");\n\nconst revision = core.GetRevision();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Revision: \" + revision);"
+      ],
+      "params": [
+        {
+          "description": "The document revision.",
+          "name": "sRevision",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetRevision(sRevision: string): void",
+      "since": "9.0.0"
+    },
+    "SetSubject": {
+      "description": "Sets the document subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetSubject/",
+      "examples": [
+        "// How do I define a subject for a document's metadata?\n\n// Categorize or describe document content by writing a subject string to its metadata in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetSubject(\"ApiCore Method Showcase\");\n\nconst subject = core.GetSubject();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Subject: \" + subject);"
+      ],
+      "params": [
+        {
+          "description": "The document subject.",
+          "name": "sSubject",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSubject(sSubject: string): void",
+      "since": "9.0.0"
+    },
+    "SetTitle": {
+      "description": "Sets the document title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetTitle/",
+      "examples": [
+        "// How do I give a document a formal title in its metadata?\n\n// Name a document for easier identification in file managers and document management systems in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetTitle(\"My Document Title\");\n\nconst title = core.GetTitle();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Title: \" + title);"
+      ],
+      "params": [
+        {
+          "description": "The document title.",
+          "name": "sTitle",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTitle(sTitle: string): void",
+      "since": "9.0.0"
+    },
+    "SetVersion": {
+      "description": "Sets the document version.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetVersion/",
+      "examples": [
+        "// How do I tag a document with a version number in its metadata?\n\n// Track release stages by embedding a version label directly in a document's properties in a document.\n\nconst doc = Api.GetDocument();\nconst core = doc.GetCore();\ncore.SetVersion(\"v9.0\");\n\nconst version = core.GetVersion();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Version: \" + version);"
+      ],
+      "params": [
+        {
+          "description": "The document version.",
+          "name": "sVersion",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetVersion(sVersion: string): void",
+      "since": "9.0.0"
+    }
+  }
+}

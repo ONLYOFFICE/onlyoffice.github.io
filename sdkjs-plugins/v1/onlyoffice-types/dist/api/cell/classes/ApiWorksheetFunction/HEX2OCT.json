@@ -1,0 +1,24 @@
+{
+  "description": "Converts a hexadecimal number to octal.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/HEX2OCT/",
+  "examples": [
+    "// How do I convert hexadecimal values to octal format in a spreadsheet?\n\n// Transform a hex value into its octal representation in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.HEX2OCT(\"FFFFFFFF9C\"));"
+  ],
+  "params": [
+    {
+      "description": "The hexadecimal number to convert.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of characters to use.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "HEX2OCT(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number"
+}

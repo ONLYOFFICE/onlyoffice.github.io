@@ -1,0 +1,12 @@
+{
+  "description": "Copies the current graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Copy/",
+  "examples": [
+    "// How do I make a copy of a shape in a document?\n\n// Clone a shape so that two identical shapes appear in a paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"flowChartMagneticTape\", 130 * 36000, 65 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\n\nlet copyShape = shape.Copy();\nparagraph.AddDrawing(copyShape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiDrawing | null"
+  },
+  "signature": "Copy(): ApiDrawing | null"
+}

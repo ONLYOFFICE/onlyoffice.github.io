@@ -1,0 +1,14 @@
+{
+  "description": "Returns a Range object that represents the entire column(s) containing the specified range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetEntireColumn/",
+  "examples": [
+    "// How do I highlight all the columns that a range belongs to in a spreadsheet?\n\n// Fill the complete columns of a range with a background color in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"C3:E5\");\nrange.SetValue(\"Range\");\nrange.SetFillColor(Api.CreateColorFromRGB(173, 216, 230));\n\nlet entireColumns = range.EntireColumn;\nentireColumns.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));\n\nworksheet.GetRange(\"A1\").SetValue(\"Entire columns of C3:E5 are highlighted\");\nworksheet.GetRange(\"A1\").AutoFit(false, true);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Returns the entire column range, or null if invalid.",
+    "type": "ApiRange | null"
+  },
+  "signature": "GetEntireColumn(): ApiRange | null",
+  "since": "9.1.0"
+}

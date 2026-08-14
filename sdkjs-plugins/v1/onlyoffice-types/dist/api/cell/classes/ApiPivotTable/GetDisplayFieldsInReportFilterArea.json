@@ -1,0 +1,13 @@
+{
+  "description": "Returns the pivot table display fields in the report filter area settings.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotTable/Methods/GetDisplayFieldsInReportFilterArea/",
+  "examples": [
+    "// How do I find out the layout type and the number of fields shown in the report filter area in a spreadsheet?\n\n// Inspect the report filter area layout of a pivot table to see its type and field count in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddDataField('Price');\n\npivotTable.AddFields({\n    pages: ['Style', 'Region']\n});\n\nconst info = pivotTable.GetDisplayFieldsInReportFilterArea();\n\nlet pivotWorksheet = Api.GetActiveSheet();\npivotWorksheet.GetRange('A9').SetValue('Type');\npivotWorksheet.GetRange('B9').SetValue(info.Type);\n\npivotWorksheet.GetRange('A10').SetValue('ReportFilterFields');\npivotWorksheet.GetRange('B10').SetValue(info.ReportFilterFields);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "PivotTableFilterAreaInfo"
+  },
+  "signature": "GetDisplayFieldsInReportFilterArea(): PivotTableFilterAreaInfo",
+  "since": "8.2.0"
+}

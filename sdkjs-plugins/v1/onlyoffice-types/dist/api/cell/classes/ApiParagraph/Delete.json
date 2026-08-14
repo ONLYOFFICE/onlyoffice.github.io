@@ -1,0 +1,13 @@
+{
+  "description": "Deletes the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/Delete/",
+  "examples": [
+    "// How do I erase a paragraph that was added to a shape in a spreadsheet?\n\n// Confirm a paragraph is gone by checking the cell value after deleting it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\ncontent.RemoveAllElements();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\nparagraph.Delete();\nworksheet.GetRange(\"A9\").SetValue(\"The paragraph from the shape content was removed.\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns false if paragraph haven't parent.",
+    "type": "boolean"
+  },
+  "signature": "Delete(): boolean"
+}

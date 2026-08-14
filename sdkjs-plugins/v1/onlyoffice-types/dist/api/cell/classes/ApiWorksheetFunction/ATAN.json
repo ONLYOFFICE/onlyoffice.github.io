@@ -1,0 +1,18 @@
+{
+  "description": "Returns the arctangent of a number in radians, in the range from *-Pi/2* to *Pi/2*.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ATAN/",
+  "examples": [
+    "// Find an angle in radians from a decimal value in a spreadsheet.\n\n// Determine what angle produces a specific tangent ratio in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ATAN(0.25));"
+  ],
+  "params": [
+    {
+      "description": "The angle tangent.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ATAN(arg1: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,9 @@
+{
+  "description": "Returns the collection of pivot filters applied to the specified pivot field.",
+  "params": [],
+  "returns": {
+    "type": "ApiPivotFilters"
+  },
+  "signature": "GetPivotFilters(): ApiPivotFilters",
+  "since": "9.1.0"
+}

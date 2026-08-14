@@ -1,0 +1,19 @@
+{
+  "description": "Creates a color selecting it from one of the available color presets.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreatePresetColor/",
+  "examples": [
+    "// How do I pick a preset color by name and use it as the start of a gradient fill in a document?\n\n// Build a radial gradient that blends from a named color to an orange tone on a shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreatePresetColor(\"peachPuff\"), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+  ],
+  "params": [
+    {
+      "description": "A preset selected from the list of the available color preset names.",
+      "name": "presetColor",
+      "type": "PresetColor"
+    }
+  ],
+  "returns": {
+    "description": ";",
+    "type": "ApiPresetColor"
+  },
+  "signature": "CreatePresetColor(presetColor: PresetColor): ApiPresetColor"
+}

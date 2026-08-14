@@ -1,0 +1,61 @@
+{
+  "description": "Creates a chart with the parameters specified.\n:::note\nValues of _nStyleIndex_ outside **1 - 48** are interpreted as a chart style id from the _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).\n:::",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateChart/",
+  "examples": [
+    "// How do I insert a chart and customize its appearance in a presentation?\n\n// Build a chart with multiple data series and apply formatting to each series in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24, [\"0\", \"0.00\"]);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nchart.SetShowPointDataLabel(1, 0, false, false, true, false);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nslide.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The chart type used for the chart display.",
+      "name": "sType",
+      "optional": true,
+      "type": "ChartType"
+    },
+    {
+      "description": "The array of the data used to build the chart from.",
+      "name": "aSeries",
+      "optional": true,
+      "type": "number[][]"
+    },
+    {
+      "description": "The array of the names (the source table column names) used for the data which the chart will be build from.",
+      "name": "aSeriesNames",
+      "optional": true,
+      "type": "number[] | string[]"
+    },
+    {
+      "description": "The array of the names (the source table row names) used for the data which the chart will be build from.",
+      "name": "aCatNames",
+      "optional": true,
+      "type": "number[] | string[]"
+    },
+    {
+      "description": "The chart width in English measure units.",
+      "name": "nWidth",
+      "optional": true,
+      "type": "EMU"
+    },
+    {
+      "description": "The chart height in English measure units.",
+      "name": "nHeight",
+      "optional": true,
+      "type": "EMU"
+    },
+    {
+      "description": "The chart color style index (can be **1 - 48**, as described in OOXML specification).",
+      "name": "nStyleIndex",
+      "optional": true,
+      "type": "number"
+    },
+    {
+      "description": "Numeric formats which will be applied to the series (can be custom formats).\rThe default numeric format is \"General\".",
+      "name": "aNumFormats",
+      "optional": true,
+      "type": "NumFormat[] | string[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiChart"
+  },
+  "signature": "CreateChart(sType?: ChartType, aSeries?: number[][], aSeriesNames?: number[] | string[], aCatNames?: number[] | string[], nWidth?: EMU, nHeight?: EMU, nStyleIndex?: number, aNumFormats?: NumFormat[] | string[]): ApiChart"
+}

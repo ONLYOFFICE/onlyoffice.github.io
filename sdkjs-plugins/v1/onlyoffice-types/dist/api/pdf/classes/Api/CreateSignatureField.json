@@ -1,0 +1,15 @@
+{
+  "description": "Creates a signature field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateSignatureField/",
+  "params": [
+    {
+      "description": "widget rect",
+      "name": "rect",
+      "type": "Rect"
+    }
+  ],
+  "returns": {
+    "type": "ApiSignatureField"
+  },
+  "signature": "CreateSignatureField(rect: Rect): ApiSignatureField"
+}

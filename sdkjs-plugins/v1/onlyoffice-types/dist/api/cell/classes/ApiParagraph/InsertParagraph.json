@@ -1,0 +1,26 @@
+{
+  "description": "Inserts a paragraph at the specified position.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/InsertParagraph/",
+  "params": [
+    {
+      "description": "Text or paragraph.",
+      "name": "paragraph",
+      "type": "string | ApiParagraph"
+    },
+    {
+      "description": "The position where the text or paragraph will be inserted (\"before\" or \"after\" the paragraph specified).",
+      "name": "sPosition",
+      "type": "string"
+    },
+    {
+      "description": "Defines if this method returns a new paragraph (true) or the current paragraph (false).",
+      "name": "beRNewPara",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns null if param paragraph is invalid.",
+    "type": "ApiParagraph | null"
+  },
+  "signature": "InsertParagraph(paragraph: string | ApiParagraph, sPosition: string, beRNewPara: boolean): ApiParagraph | null"
+}

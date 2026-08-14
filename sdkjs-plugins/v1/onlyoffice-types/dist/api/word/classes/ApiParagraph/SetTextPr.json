@@ -1,0 +1,19 @@
+{
+  "description": "Sets the paragraph text properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetTextPr/",
+  "examples": [
+    "// How do I set the same font style and size for every character in a paragraph in a document?\n\n// Uniformly style all text in a paragraph by defining its appearance once in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a sample text with the font size set to 30 and the font weight set to bold.\");\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\nparagraph.SetTextPr(textPr);"
+  ],
+  "params": [
+    {
+      "description": "The paragraph text properties.",
+      "name": "oTextPr",
+      "type": "ApiTextPr"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetTextPr(oTextPr: ApiTextPr): boolean"
+}

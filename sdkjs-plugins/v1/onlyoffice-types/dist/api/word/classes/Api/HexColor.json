@@ -1,0 +1,18 @@
+{
+  "description": "Creates a color from a HEX string.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/HexColor/",
+  "examples": [
+    "// How do I set a font color using a hex value in a document?\n\n// Color paragraph text with a specific hex color in a document.\n\nconst doc = Api.GetDocument();\nconst color = Api.HexColor('#DECADE');\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('This text is in hex color.');\nparagraph.SetColor(color);"
+  ],
+  "params": [
+    {
+      "description": "The HEX string representing a color.",
+      "name": "hexString",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiColor"
+  },
+  "signature": "HexColor(hexString: string): ApiColor"
+}

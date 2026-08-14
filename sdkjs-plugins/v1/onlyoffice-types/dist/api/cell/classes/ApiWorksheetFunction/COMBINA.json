@@ -1,0 +1,23 @@
+{
+  "description": "Returns the number of combinations with repetitions for a given number of items.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COMBINA/",
+  "examples": [
+    "// How many selections can you make if you can reuse items in a spreadsheet?\n\n// Find all possible selections including repeated items in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COMBINA(7, 2));"
+  ],
+  "params": [
+    {
+      "description": "The total number of items, a numeric value greater than or equal to 0.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of items in each combination, a numeric value greater than or equal to 0 but less than the total number of items.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "COMBINA(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

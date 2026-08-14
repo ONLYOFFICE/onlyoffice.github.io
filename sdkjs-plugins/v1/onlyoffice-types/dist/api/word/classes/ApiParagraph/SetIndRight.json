@@ -1,0 +1,18 @@
+{
+  "description": "Sets the paragraph right side indentation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndRight/",
+  "examples": [
+    "// How do I set a right indent on paragraphs using a paragraph style in a document?\n\n// Narrow paragraph text from the right edge to create visual emphasis or a quoted-block effect.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetIndRight(2880);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This offset is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the second paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This offset is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
+      "name": "nValue",
+      "type": "twips"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetIndRight(nValue: twips): boolean"
+}

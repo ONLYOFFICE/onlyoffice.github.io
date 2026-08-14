@@ -1,0 +1,18 @@
+{
+  "description": "Creates a color selecting it from one of the available color presets.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateColorByName/",
+  "examples": [
+    "// How do I select a named color preset to apply to an element in a spreadsheet?\n\n// Style text with a predefined color chosen by its name in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet color = Api.CreateColorByName(\"peachPuff\");\nworksheet.GetRange(\"A2\").SetValue(\"Text with color\");\nworksheet.GetRange(\"A2\").SetFontColor(color);"
+  ],
+  "params": [
+    {
+      "description": "A preset selected from the list of the available color preset names.",
+      "name": "sPresetColor",
+      "type": "PresetColor"
+    }
+  ],
+  "returns": {
+    "type": "ApiColor"
+  },
+  "signature": "CreateColorByName(sPresetColor: PresetColor): ApiColor"
+}

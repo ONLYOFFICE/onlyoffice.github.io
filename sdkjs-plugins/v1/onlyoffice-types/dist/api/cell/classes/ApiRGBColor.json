@@ -1,0 +1,21 @@
+{
+  "description": "Class representing an RGB Color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRGBColor/",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiRGBColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRGBColor/Methods/GetClassType/",
+      "examples": [
+        "// How do I check the category of an RGB color object in a spreadsheet?\n\n// Distinguish an RGB color from other color types by reading its object category in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst rgbColor = Api.CreateRGBColor(255, 213, 191);\nconst gs1 = Api.CreateGradientStop(rgbColor, 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);\nconst classType = rgbColor.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \");\nworksheet.GetRange(\"B1\").SetValue(classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"rgbColor\""
+      },
+      "signature": "GetClassType(): \"rgbColor\""
+    }
+  }
+}

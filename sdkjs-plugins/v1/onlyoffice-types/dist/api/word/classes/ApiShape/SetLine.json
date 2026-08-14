@@ -1,0 +1,19 @@
+{
+  "description": "Sets the outline properties to the current shape.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/SetLine/",
+  "examples": [
+    "// How do I customize the outline stroke around a shape in a document?\n\n// Make a shape stand out by giving its border a specific thickness and color in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 100));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Original shape with no border\");\nparagraph.AddLineBreak();\nlet newStroke = Api.CreateStroke(3 * 12700, Api.CreateSolidFill(Api.CreateRGBColor(0, 0, 255)));\nshape.SetLine(newStroke);\nparagraph.AddText(\"Border changed to 3pt blue line\");"
+  ],
+  "params": [
+    {
+      "description": "The stroke used to create the shape outline.",
+      "name": "oStroke",
+      "type": "ApiStroke"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetLine(oStroke: ApiStroke): boolean"
+}

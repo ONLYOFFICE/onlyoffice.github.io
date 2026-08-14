@@ -1,0 +1,18 @@
+{
+  "description": "Sets a range with the category values to the current chart.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetCatFormula/",
+  "examples": [
+    "// How do I point a chart to a different range for its category labels in a spreadsheet?\n\n// Update the category data driving the horizontal labels of a chart in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"B4\").SetValue(2020);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"C4\").SetValue(2021);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nworksheet.GetRange(\"D4\").SetValue(2022);\nlet chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\nchart.SetTitle(\"Financial Overview\", 13);\nchart.SetCatFormula(\"'Sheet1'!$B$4:$D$4\");\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);"
+  ],
+  "params": [
+    {
+      "description": "A range of cells from the sheet with the category names. For example:\r\"'sheet 1'!$A$2:$A$5\" - must be a single cell, row or column,\r\"A1:A5\" - must be a single cell, row or column.",
+      "name": "sRange",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetCatFormula(sRange: string): void"
+}

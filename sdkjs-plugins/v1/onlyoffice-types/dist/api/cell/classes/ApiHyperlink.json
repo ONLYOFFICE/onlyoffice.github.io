@@ -1,0 +1,240 @@
+{
+  "description": "Class representing a hyperlink.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/",
+  "methods": {
+    "Delete": {
+      "description": "Deletes the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/Delete/",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Delete(): void"
+    },
+    "GetAddress": {
+      "description": "Returns the address of the target document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetAddress/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAddress(): string"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiHyperlink class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out what type a hyperlink object is in a spreadsheet?\n\n// Confirm the category of a hyperlink by checking its type label in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.RGB(160, 100, 130));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('Visit ONLYOFFICE for developers');\nparagraph.AddElement(run, 0);\n\nconst hyperlink = run.AddHyperlink('https://api.onlyoffice.com', 'ONLYOFFICE for developers');\nworksheet.GetRange('A1').SetValue('Class type: ' + hyperlink.GetClassType());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"hyperlink\""
+      },
+      "signature": "GetClassType(): \"hyperlink\""
+    },
+    "GetElement": {
+      "description": "Returns the hyperlink element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetElement/",
+      "examples": [
+        "// How do I read the inner content of a hyperlink in a spreadsheet?\n\n// Pull out an individual piece from a hyperlink by its position in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.RGB(160, 100, 130));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('Visit ONLYOFFICE for developers');\nparagraph.AddElement(run, 0);\n\nconst hyperlink = run.AddHyperlink('https://api.onlyoffice.com', 'ONLYOFFICE for developers');\nconst element = hyperlink.GetElement(0);\nconst classType = element ? element.GetClassType() : 'null';\nworksheet.GetRange('A1').SetValue('Element class type: ' + classType);"
+      ],
+      "params": [
+        {
+          "description": "The position where the element which content we want to get must be located.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ParagraphContent"
+      },
+      "signature": "GetElement(nPos: number): ParagraphContent"
+    },
+    "GetElementsCount": {
+      "description": "Returns a number of elements in the current hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetElementsCount/",
+      "examples": [
+        "// How do I check the number of items inside a hyperlink in a spreadsheet?\n\n// Measure the total pieces of content stored within a hyperlink in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.RGB(160, 100, 130));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('Visit ONLYOFFICE for developers');\nparagraph.AddElement(run, 0);\n\nconst hyperlink = run.AddHyperlink('https://api.onlyoffice.com', 'ONLYOFFICE for developers');\nworksheet.GetRange('A1').SetValue('Elements count: ' + hyperlink.GetElementsCount());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetElementsCount(): number"
+    },
+    "GetLinkedText": {
+      "description": "Returns the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetLinkedText/",
+      "examples": [
+        "// How do I retrieve the destination address of a hyperlink in a spreadsheet?\n\n// Extract the web address that a hyperlink points to in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.RGB(160, 100, 130));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('Visit ONLYOFFICE for developers');\nparagraph.AddElement(run, 0);\n\nconst hyperlink = run.AddHyperlink('https://api.onlyoffice.com', 'ONLYOFFICE for developers');\nworksheet.GetRange('A1').SetValue('Linked text: ' + hyperlink.GetLinkedText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetLinkedText(): string"
+    },
+    "GetName": {
+      "description": "Returns the name of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetName/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string"
+    },
+    "GetRange": {
+      "description": "Returns the range the hyperlink is attached to.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetRange/",
+      "params": [],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRange(): ApiRange"
+    },
+    "GetScreenTip": {
+      "description": "Returns the screen tip text for the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetScreenTip/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetScreenTip(): string"
+    },
+    "GetScreenTipText": {
+      "description": "Returns the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetScreenTipText/",
+      "examples": [
+        "// How do I find out what tooltip is set on a hyperlink in a spreadsheet?\n\n// Retrieve the hover hint message attached to a hyperlink in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.RGB(160, 100, 130));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('Visit ONLYOFFICE for developers');\nparagraph.AddElement(run, 0);\n\nconst hyperlink = run.AddHyperlink('https://api.onlyoffice.com', 'ONLYOFFICE for developers');\nworksheet.GetRange('A1').SetValue('Screen tip: ' + hyperlink.GetScreenTipText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetScreenTipText(): string"
+    },
+    "GetSubAddress": {
+      "description": "Returns the subaddress of the target document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetSubAddress/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetSubAddress(): string"
+    },
+    "GetTextToDisplay": {
+      "description": "Returns the text displayed for the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetTextToDisplay/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetTextToDisplay(): string"
+    },
+    "GetType": {
+      "description": "Returns the type of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetType/",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetType(): number"
+    },
+    "SetAddress": {
+      "description": "Sets the address of the target document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/SetAddress/",
+      "params": [
+        {
+          "description": "The hyperlink address.",
+          "name": "sAddress",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAddress(sAddress: string): void"
+    },
+    "SetLink": {
+      "description": "Sets the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/SetLink/",
+      "examples": [
+        "// How do I update the address a hyperlink points to in a spreadsheet?\n\n// Replace the web address on a hyperlink so it navigates to a new location in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.RGB(160, 100, 130));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('Visit ONLYOFFICE for developers');\nparagraph.AddElement(run, 0);\n\nconst hyperlink = run.AddHyperlink('https://api.onlyoffice.com', 'ONLYOFFICE for developers');\n\nhyperlink.SetLink('https://helpcenter.onlyoffice.com');\nworksheet.GetRange('A1').SetValue('New link: ' + hyperlink.GetLinkedText());"
+      ],
+      "params": [
+        {
+          "description": "The hyperlink address.",
+          "name": "sLink",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLink(sLink: string): boolean"
+    },
+    "SetScreenTip": {
+      "description": "Sets the screen tip text for the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/SetScreenTip/",
+      "params": [
+        {
+          "description": "The screen tip text.",
+          "name": "sScreenTip",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetScreenTip(sScreenTip: string): void"
+    },
+    "SetScreenTipText": {
+      "description": "Sets the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/SetScreenTipText/",
+      "examples": [
+        "// How do I add a hover hint to a hyperlink in a spreadsheet?\n\n// Attach a short description that appears when a user points at the hyperlink in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.RGB(160, 100, 130));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('Visit ONLYOFFICE for developers');\nparagraph.AddElement(run, 0);\n\nconst hyperlink = run.AddHyperlink('https://api.onlyoffice.com', 'NO SCREEN TIP');\n\nhyperlink.SetScreenTipText('ONLYOFFICE for developers');\nworksheet.GetRange('A1').SetValue('Screen tip: ' + hyperlink.GetScreenTipText());"
+      ],
+      "params": [
+        {
+          "description": "The screen tip text of the hyperlink.",
+          "name": "sScreenTipText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScreenTipText(sScreenTipText: string): boolean"
+    },
+    "SetSubAddress": {
+      "description": "Sets the subaddress of the target document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/SetSubAddress/",
+      "params": [
+        {
+          "description": "The subaddress in \"Sheet1!A1\" format.",
+          "name": "sSubAddress",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSubAddress(sSubAddress: string): void"
+    },
+    "SetTextToDisplay": {
+      "description": "Sets the text to be displayed for the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/SetTextToDisplay/",
+      "params": [
+        {
+          "description": "The text to display.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTextToDisplay(sText: string): void"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "description": "Returns the error function integrated between the specified lower and upper limits.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ERF/",
+  "examples": [
+    "// How do I compute the error function between limits in a spreadsheet?\n\n// Evaluate the integral of the error function within a range in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ERF(-2));"
+  ],
+  "params": [
+    {
+      "description": "The lower bound for integrating the error function.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The upper bound for integrating the error function.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ERF(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number"
+}

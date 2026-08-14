@@ -1,0 +1,18 @@
+{
+  "description": "Creates a new custom function.\nThe description of the function parameters and result is specified using JSDoc. The *@customfunction* tag is required in JSDoc.\nParameters and results can be specified as the *number / string / boolean / any / number[][] / string[][] / boolean[][] / any[][]* types.\nParameters can be required or optional. A user can also set a default value.\nThe passed function can be asynchronous (async function or function returning a Promise).\nInside the passed function, you can access the current cell address where the calculation is performed using *this.address*.\nYou can also access the addresses of function arguments using *this.args[0].address*, *this.args[1].address*, etc.\nThis method is not used in ONLYOFFICE Document Builder. Use AddCustomFunctionLibrary instead.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/AddCustomFunction/",
+  "examples": [
+    "// How do I define my own calculation function for use in cells in a spreadsheet?\n\n// Extend built-in formulas with a user-written function that sums two numbers in a spreadsheet.\n\n/**\n * Function that returns the argument\n * @customfunction\n * @param {number} first First argument.\n * @param {number} second Second argument.\n * @returns {number} The sum of the numbers.\n */\nApi.AddCustomFunction(function ADD(first, second) {\n    return first + second;\n});\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('=ADD(1,2)');"
+  ],
+  "params": [
+    {
+      "description": "A new function for calculating. Can be synchronous or asynchronous.",
+      "name": "fCustom",
+      "type": "(...args: unknown[]) => unknown"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "AddCustomFunction(fCustom: (...args: unknown[]) => unknown): void"
+}

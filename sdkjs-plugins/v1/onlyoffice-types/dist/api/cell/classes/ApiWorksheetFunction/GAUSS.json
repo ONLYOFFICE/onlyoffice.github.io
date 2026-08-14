@@ -1,0 +1,18 @@
+{
+  "description": "Calculates the probability that a member of a standard normal population will fall between the mean and arg1 standard deviations from the mean.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GAUSS/",
+  "examples": [
+    "// How do I calculate the area under the normal distribution curve in a spreadsheet?\n\n// Get the cumulative normal probability for a given standard deviation value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.GAUSS(2);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value for which the distribution will be calculated.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GAUSS(arg1: ApiRange | ApiName | number): number"
+}

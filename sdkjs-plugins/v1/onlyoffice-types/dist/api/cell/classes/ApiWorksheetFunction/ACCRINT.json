@@ -1,0 +1,55 @@
+{
+  "description": "Returns the accrued interest for a security that pays periodic interest.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ACCRINT/",
+  "examples": [
+    "// How do I calculate accumulated interest on a bond that pays periodic amounts in a spreadsheet?\n\n// Figure out how much interest income a periodic-pay bond has earned by a specific date in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ACCRINT(\"1/1/2018\", \"6/25/2018\", \"10/15/2018\", \"3.50%\", 1000, 2));"
+  ],
+  "params": [
+    {
+      "description": "The issue date of the security, expressed as a serial date number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The date when the first interest is paid, expressed as a serial date number.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The security settlement date, expressed as a serial date number.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The annual coupon rate of the security.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The par value of the security.",
+      "name": "arg5",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of interest payments per year. The possible values are: 1 for annual payments, 2 for semiannual payments, 4 for quarterly payments.",
+      "name": "arg6",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The day count basis to use: **0** or omitted - US (NASD) 30/360; **1** - Actual/actual; **2** - Actual/360; **3** - Actual/365; **4** - European 30/360.",
+      "name": "arg7",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value: **true** (1) or omitted returns the accrued interest from the issue date to the settlement date.\r**false** (0) returns the accrued interest from the first interest date to the settlement date.",
+      "name": "arg8",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ACCRINT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | number, arg5: ApiRange | ApiName | number, arg6: ApiRange | ApiName | number, arg7?: ApiRange | ApiName | number, arg8?: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Class representing gradient stop.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGradientStop/",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiGradientStop class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGradientStop/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out what type a gradient stop object is in a spreadsheet?\n\n// Confirm the category of a gradient stop by checking its type label in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);\nlet classType = gradientStop1.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"gradientStop\""
+      },
+      "signature": "GetClassType(): \"gradientStop\""
+    }
+  }
+}

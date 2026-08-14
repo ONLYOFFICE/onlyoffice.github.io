@@ -1,0 +1,18 @@
+{
+  "description": "Returns the minute, a number from 0 to 59.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MINUTE/",
+  "examples": [
+    "// What minute does a time represent in a spreadsheet?\n\n// Get the minute portion as a number from a time in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.MINUTE(\"4:25 pm\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A number in the date-time code, or text in the time format, such as \"16:48:00\" or \"4:48:00 PM\", or a result of other formulas or functions.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MINUTE(arg1: ApiRange | ApiName | number | string): number"
+}

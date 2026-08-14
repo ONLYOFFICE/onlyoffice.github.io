@@ -1,0 +1,12 @@
+{
+  "description": "Returns the text of the specified range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetText/",
+  "examples": [
+    "// How do I extract the text stored in a range of cells in a spreadsheet?\n\n// Pull the displayed text from a range and write it into another cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"text1\");\nworksheet.GetRange(\"B1\").SetValue(\"text2\");\nworksheet.GetRange(\"C1\").SetValue(\"text3\");\nlet range = worksheet.GetRange(\"A1:C1\");\nlet text = range.GetText();\nworksheet.GetRange(\"A3\").SetValue(\"Text from the cell A1: \" + text);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "string | string[][]"
+  },
+  "signature": "GetText(): string | string[][]"
+}

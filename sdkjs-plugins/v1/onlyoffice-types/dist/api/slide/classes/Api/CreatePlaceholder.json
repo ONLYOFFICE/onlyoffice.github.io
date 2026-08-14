@@ -1,0 +1,18 @@
+{
+  "description": "Creates a new placeholder.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreatePlaceholder/",
+  "examples": [
+    "// How do I assign a placeholder type to a shape in a presentation?\n\n// Designate a shape as a picture placeholder in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\nconst placeholder = Api.CreatePlaceholder(\"picture\");\nshape.SetPlaceholder(placeholder);\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The placeholder type (\"body\", \"chart\", \"clipArt\", \"ctrTitle\", \"diagram\", \"date\", \"footer\", \"header\", \"media\", \"object\", \"picture\", \"sldImage\", \"sldNumber\", \"subTitle\", \"table\", \"title\").",
+      "name": "sType",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiPlaceholder"
+  },
+  "signature": "CreatePlaceholder(sType: string): ApiPlaceholder"
+}

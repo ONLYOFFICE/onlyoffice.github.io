@@ -1,0 +1,26 @@
+{
+  "description": "Adds a new combo box content control to the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddComboBoxContentControl/",
+  "examples": [
+    "// How do I insert a combo box content control in a document?\n\n// Provide users with a selectable dropdown list by inserting a combo box field in a document.\n\nlet doc = Api.GetDocument();\ndoc.AddComboBoxContentControl();"
+  ],
+  "params": [
+    {
+      "description": "An array of objects representing the items in the combo box.",
+      "name": "list",
+      "optional": true,
+      "type": "ContentControlListItem[]"
+    },
+    {
+      "description": "The optional value of the item that should be selected by default (must match one of the ListItem.Value).",
+      "name": "selected",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiInlineLvlSdt"
+  },
+  "signature": "AddComboBoxContentControl(list?: ContentControlListItem[], selected?: string): ApiInlineLvlSdt",
+  "since": "9.0.0"
+}

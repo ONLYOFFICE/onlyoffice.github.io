@@ -1,0 +1,29 @@
+{
+  "description": "Sets the border style for the conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetBorders/",
+  "examples": [
+    "// How do I make matching cells show a border when a formatting condition is met in a spreadsheet?\n\n// Highlight qualifying cells with edge lines through a conditional formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 255, 0));\n\nlet borderColor = Api.CreateColorFromRGB(255, 0, 0);\ncondition1.SetBorders(\"Top\", \"Thick\", borderColor);\ncondition1.SetBorders(\"Bottom\", \"Thick\", borderColor);\n\nworksheet.GetRange(\"C1\").SetValue(\"Borders applied:\");\nworksheet.GetRange(\"C2\").SetValue(\"Red thick top/bottom borders\");"
+  ],
+  "params": [
+    {
+      "description": "Specifies the cell border position.",
+      "name": "bordersIndex",
+      "type": "BordersIndex"
+    },
+    {
+      "description": "Specifies the line style used to form the cell border.",
+      "name": "lineStyle",
+      "type": "LineStyle"
+    },
+    {
+      "description": "The color object which specifies the color to be set to the cell border.",
+      "name": "oColor",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetBorders(bordersIndex: BordersIndex, lineStyle: LineStyle, oColor: ApiColor): void",
+  "since": "9.1.0"
+}

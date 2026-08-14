@@ -1,0 +1,25 @@
+{
+  "description": "Changes the width of the columns or the height of the rows in the range to achieve the best fit.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/AutoFit/",
+  "examples": [
+    "// How do I automatically adjust column width or row height to fit the text in a spreadsheet?\n\n// Prevent truncated text by letting the spreadsheet size each column and row to match its content in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"This is an example of the column width autofit.\");\nrange.AutoFit(false, true);"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the width of the columns will be autofit.",
+      "name": "bRows",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Specifies if the height of the rows will be autofit.",
+      "name": "bCols",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "AutoFit(bRows?: boolean, bCols?: boolean): void"
+}

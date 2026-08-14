@@ -1,0 +1,13 @@
+{
+  "description": "Add paragraph to the document on the cursor position.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/InsertParagraphBreak/",
+  "examples": [
+    "// How do I insert a paragraph break at a chosen location in a document?\n\n// Divide existing text into separate paragraphs without manually retyping any content.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the first paragraph.\");\ndoc.MoveCursorRight(6, false, true);\ndoc.InsertParagraphBreak();\ndoc.EnterText(\"This is the second paragraph.\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "InsertParagraphBreak(): boolean",
+  "since": "9.2.0"
+}

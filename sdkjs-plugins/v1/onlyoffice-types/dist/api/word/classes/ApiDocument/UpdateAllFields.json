@@ -1,0 +1,20 @@
+{
+  "description": "Updates all fields in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/UpdateAllFields/",
+  "examples": [
+    "// How do I update every field at once in a document?\n\n// Keep page numbers, cross-references, and other dynamic fields current after editing content in a document.\n\nlet doc = Api.GetDocument();\nlet newDocumentStyle = doc.GetStyle(\"Heading 1\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Heading 1\");\nnewDocumentStyle = doc.GetStyle(\"Heading 2\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Heading 2\");\ndoc.Push(paragraph);\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);\nnewDocumentStyle = doc.GetStyle(\"Heading 2\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Heading 3\");\ndoc.AddElement(3, paragraph);\ndoc.UpdateAllFields();"
+  ],
+  "params": [
+    {
+      "description": "Specifies whether all fields will be updated within the selection.",
+      "name": "bBySelection",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "UpdateAllFields(bBySelection?: boolean): boolean",
+  "since": "8.2.0"
+}

@@ -1,0 +1,28 @@
+{
+  "description": "Returns a number that represents the date in the date-time code.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DATE/",
+  "examples": [
+    "// What date do these numbers represent in a spreadsheet?\n\n// Combine date parts into a single date value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DATE(2018, 3, 16));"
+  ],
+  "params": [
+    {
+      "description": "A number from 1900 or 1904 (depending on the workbook's date system) to 9999.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A number from 1 to 12 representing the month of the year.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A number from 1 to 31 representing the day of the month.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DATE(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

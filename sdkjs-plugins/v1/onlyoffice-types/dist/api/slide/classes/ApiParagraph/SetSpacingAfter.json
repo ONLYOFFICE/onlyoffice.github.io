@@ -1,0 +1,24 @@
+{
+  "description": "Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true, then \nany value of the nAfter is ignored. If isAfterAuto parameter is not specified, then it \nwill be interpreted as false.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingAfter/",
+  "examples": [
+    "// How do I set the distance between paragraphs in a presentation?\n\n// Configure the gap after a paragraph using paragraph settings in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingAfter(1440);\nparagraph.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the first paragraph has this offset enabled.\");\n\nconst secondParagraph = Api.CreateParagraph();\nsecondParagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ndocContent.Push(secondParagraph);\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+      "name": "nAfter",
+      "type": "twips"
+    },
+    {
+      "description": "The true value disables the spacing after the current paragraph.",
+      "name": "isAfterAuto",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean"
+}

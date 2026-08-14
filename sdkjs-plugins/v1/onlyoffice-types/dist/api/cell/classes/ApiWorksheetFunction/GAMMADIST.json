@@ -1,0 +1,33 @@
+{
+  "description": "Returns the gamma distribution.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GAMMADIST/",
+  "examples": [
+    "// Calculate the probability distribution for gamma-distributed values.\n\n// Determine gamma distribution using GAMMADIST with shape and scale parameters.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.GAMMADIST(10, 9, 2, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value at which the distribution will be calculated, a nonnegative number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The alpha parameter of the distribution, a positive number.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The beta parameter of the distribution, a positive number. If this parameter is equal to 1, the function returns the standard gamma distribution.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value (**true**> or **false**) that determines the function form.\rIf it is **true**, the function returns the cumulative distribution function. If it is **false**, the function returns the probability density function.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GAMMADIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | boolean): number"
+}

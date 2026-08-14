@@ -1,0 +1,206 @@
+{
+  "description": "Class representing a listbox field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiListboxField/",
+  "extends": [
+    "ApiBaseListField"
+  ],
+  "methods": {
+    "AddOption": {
+      "description": "Adds new option to list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/AddOption/",
+      "examples": [
+        "// How can I add options to a dropdown list in a PDF?\n\n// Populate a form field with multiple selectable items in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetValueIndexes([0]);"
+      ],
+      "params": [
+        {
+          "description": "list option to add",
+          "name": "option",
+          "type": "ListOption"
+        },
+        {
+          "description": "index to add option.",
+          "name": "index",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddOption(option: ListOption, index?: number): boolean"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiListboxField class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiListboxField/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine what kind of field this is in a PDF?\n\n// Retrieve the classification name for this field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet listboxField = Api.CreateListboxField([10, 10, 160, 100]);\npage.AddObject(listboxField);\n\nlistboxField.AddOption('Field type is: ' + listboxField.GetClassType());\nlistboxField.SetValueIndexes([0]);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"listboxField\""
+      },
+      "signature": "GetClassType(): \"listboxField\""
+    },
+    "GetOption": {
+      "description": "Gets option from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetOption/",
+      "examples": [
+        "// How do I access an individual option from a dropdown in a PDF?\n\n// Display a selected choice from a list field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\nlet option = comboboxField.GetOption(0);\ncomboboxField.SetValue('First options is: ' + option);"
+      ],
+      "params": [
+        {
+          "description": "The option index.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ListOption"
+      },
+      "signature": "GetOption(index: number): ListOption"
+    },
+    "GetOptions": {
+      "description": "Gets all options from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetOptions/",
+      "examples": [
+        "// How do I get all options from a list field in a PDF?\n\n// List all items in a dropdown or list field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\nlet options = comboboxField.GetOptions();\nconsole.log('Combobox options is: ' + options);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ListOption[]"
+      },
+      "signature": "GetOptions(): ListOption[]"
+    },
+    "GetValueIndexes": {
+      "description": "Gets selected value indexes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetValueIndexes/",
+      "examples": [
+        "// How do I find which items are selected in a dropdown field in a PDF?\n\n// Get the numeric positions of chosen options in a list field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetValueIndexes([0]);\nconsole.log('Selected indexes is: ' + comboboxField.GetValueIndexes());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number[]"
+      },
+      "signature": "GetValueIndexes(): number[]"
+    },
+    "IsCommitOnSelChange": {
+      "description": "Checks if field can commit on selection change.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/IsCommitOnSelChange/",
+      "examples": [
+        "// How do I determine if a field triggers submission on selection change in a PDF?\n\n// Verify the auto-commit setting for a dropdown list in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetCommitOnSelChange(true);\ncomboboxField.SetValue('Commit on sel change is: ' + comboboxField.IsCommitOnSelChange());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsCommitOnSelChange(): boolean"
+    },
+    "IsMultipleSelection": {
+      "description": "Checks if the field supports multiple selection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiListboxField/Methods/IsMultipleSelection/",
+      "examples": [
+        "// How do I know if multiple choices are allowed in a PDF?\n\n// Verify the selection mode for this field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet listboxField = Api.CreateListboxField([10, 10, 160, 100]);\npage.AddObject(listboxField);\n\nlistboxField.AddOption('Option 1');\nlistboxField.AddOption('Option 2');\nlistboxField.AddOption('Option 3');\nlistboxField.AddOption('Option 4');\nlistboxField.SetMultipleSelection(true);\nlistboxField.SetValueIndexes([0, 3]);\nconsole.log('Multiple selection is: ' + listboxField.IsMultipleSelection());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsMultipleSelection(): boolean"
+    },
+    "MoveOption": {
+      "description": "Moves option to specified position in list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/MoveOption/",
+      "examples": [
+        "// How do I rearrange the order of options in a dropdown in a PDF?\n\n// Change the position of an item in a list field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.MoveOption(2, 0);"
+      ],
+      "params": [
+        {
+          "description": "The current index of the option to move.",
+          "name": "currentIndex",
+          "type": "number"
+        },
+        {
+          "description": "The target index for the option.",
+          "name": "newIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveOption(currentIndex: number, newIndex: number): boolean"
+    },
+    "RemoveOption": {
+      "description": "Removes option from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/RemoveOption/",
+      "examples": [
+        "// How do I remove an option from a list field in a PDF?\n\n// Take out an item from a dropdown's available choices in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetValueIndexes([0]);\ncomboboxField.RemoveOption(2);"
+      ],
+      "params": [
+        {
+          "description": "The option index.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveOption(index: number): boolean"
+    },
+    "SetCommitOnSelChange": {
+      "description": "Sets whether the field commits changes immediately after selection changes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/SetCommitOnSelChange/",
+      "examples": [
+        "// How do I make a field auto-submit when the selection changes in a PDF?\n\n// Configure a dropdown to trigger form submission on selection in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetCommitOnSelChange(true);\ncomboboxField.SetValue('Commit on sel change is: ' + comboboxField.IsCommitOnSelChange());"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether selection changes are committed immediately.",
+          "name": "commitOnSelectionChange",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCommitOnSelChange(commitOnSelectionChange: boolean): boolean"
+    },
+    "SetMultipleSelection": {
+      "description": "Sets whether multiple values can be selected.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiListboxField/Methods/SetMultipleSelection/",
+      "examples": [
+        "// How do I enable multiple selections in a PDF?\n\n// Configure the field to permit picking several options in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet listboxField = Api.CreateListboxField([10, 10, 160, 100]);\npage.AddObject(listboxField);\n\nlistboxField.AddOption('Option 1');\nlistboxField.AddOption('Option 2');\nlistboxField.AddOption('Option 3');\nlistboxField.AddOption('Option 4');\nlistboxField.SetMultipleSelection(true);\nlistboxField.SetValueIndexes([0, 3]);"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether multiple values can be selected.",
+          "name": "allowMultipleSelection",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMultipleSelection(allowMultipleSelection: boolean): boolean"
+    },
+    "SetValueIndexes": {
+      "description": "Sets selected value indexes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/SetValueIndexes/",
+      "examples": [
+        "// How do I select options by index in a dropdown field in a PDF?\n\n// Choose items from a list using their numeric positions in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetValueIndexes([0]);"
+      ],
+      "params": [
+        {
+          "description": "The indexes of the selected values.",
+          "name": "valueIndexes",
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValueIndexes(valueIndexes: number[]): boolean"
+    }
+  }
+}

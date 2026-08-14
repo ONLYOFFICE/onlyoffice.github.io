@@ -1,0 +1,14 @@
+{
+  "description": "Get vertical flip of current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetFlipV/",
+  "examples": [
+    "// How do I read the vertical flip state of a shape in a document?\n\n// Display the vertical flip flag of a drawing as a text label in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetVertFlip(true);\nlet flip = drawing.GetFlipV();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing is flipped vertically: \" + flip);\ndoc.AddElement(0, paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
+    "type": "boolean | null"
+  },
+  "signature": "GetFlipV(): boolean | null",
+  "since": "9.3.0"
+}

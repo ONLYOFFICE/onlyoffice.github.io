@@ -1,0 +1,898 @@
+{
+  "description": "Class representing the paragraph properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/",
+  "methods": {
+    "GetBetweenBorder": {
+      "description": "Returns the between border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetBetweenBorder/",
+      "examples": [
+        "// How do I read the between border from a paragraph's formatting in a document?\n\n// Useful when you need to inspect border details such as type and size set between paragraphs.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetBetweenBorder(\"single\", 24, 0, 255, 111, 61);\nlet border = paraPr.GetBetweenBorder();\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is a paragraph with a between border.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.SetStyle(myStyle);\nparagraph2.AddText(\"Between border type: \" + border.Type + \", size: \" + border.Size);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns the border properties object, or _undefined_ if the between border is not set.",
+        "type": "Border | undefined"
+      },
+      "signature": "GetBetweenBorder(): Border | undefined",
+      "since": "9.4.0"
+    },
+    "GetBottomBorder": {
+      "description": "Returns the bottom border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetBottomBorder/",
+      "examples": [
+        "// How do I read the bottom border from a paragraph's formatting in a document?\n\n// Useful when you need to inspect border details such as type and size drawn below a paragraph.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetBottomBorder(\"single\", 24, 0, 255, 111, 61);\nparagraph.AddText(\"This is a paragraph with a bottom border.\");\nlet border = paraPr.GetBottomBorder();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Bottom border type: \" + border.Type + \", size: \" + border.Size);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns the border properties object, or _undefined_ if the bottom border is not set.",
+        "type": "Border | undefined"
+      },
+      "signature": "GetBottomBorder(): Border | undefined",
+      "since": "9.4.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiParaPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetClassType/",
+      "examples": [
+        "// How do I confirm what kind of object holds paragraph formatting in a document?\n\n// Verify the object type when working with style-level formatting to avoid errors at runtime.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetLeftBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border at its left side.\");\nlet classType = paraPr.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"paraPr\""
+      },
+      "signature": "GetClassType(): \"paraPr\""
+    },
+    "GetContextualSpacing": {
+      "description": "Returns the contextual spacing value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetContextualSpacing/",
+      "examples": [
+        "// How do I check whether contextual spacing is enabled for a paragraph in a document?\n\n// Confirm the spacing behavior between same-styled paragraphs before adjusting layout.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetContextualSpacing(true);\nparagraph.AddText(\"This is a paragraph with contextual spacing enabled.\");\nlet contextualSpacing = paraPr.GetContextualSpacing();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Contextual spacing: \" + contextualSpacing);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns _true_ if the contextual spacing is enabled, _false_ if it is disabled,\ror _undefined_ if the value is not set.",
+        "type": "boolean | undefined"
+      },
+      "signature": "GetContextualSpacing(): boolean | undefined",
+      "since": "9.4.0"
+    },
+    "GetIndFirstLine": {
+      "description": "Returns the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndFirstLine/",
+      "examples": [
+        "// How do I find out how far the first line of a paragraph is indented in a document?\n\n// Check the exact indent size before adjusting paragraph alignment or reusing the style elsewhere.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndFirstLine(1440);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet indFirstLine = paraPr.GetIndFirstLine();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"First line indent: \" + indFirstLine);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndFirstLine(): twips | undefined"
+    },
+    "GetIndLeft": {
+      "description": "Returns the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndLeft/",
+      "examples": [
+        "// How do I find out how far a paragraph is indented from the left margin in a document?\n\n// Check the left indent size before synchronizing paragraph layout across multiple styles.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndLeft(2880);\nparagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet indLeft = paraPr.GetIndLeft();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Left indent: \" + indLeft);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndLeft(): twips | undefined"
+    },
+    "GetIndRight": {
+      "description": "Returns the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndRight/",
+      "examples": [
+        "// How do I find out how far a paragraph is indented from the right margin in a document?\n\n// Check the right indent size before synchronizing paragraph layout across multiple styles.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"right\");\nparaPr.SetIndRight(2880);\nparagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet indRight = paraPr.GetIndRight();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Right indent: \" + indRight);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndRight(): twips | undefined"
+    },
+    "GetJc": {
+      "description": "Returns the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetJc/",
+      "examples": [
+        "// How do I find out how a paragraph's text is aligned in a document?\n\n// Confirm the alignment type before deciding whether to unify or override it across styles.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparaPr.SetJc(\"center\");\nlet paraJc = paraPr.GetJc();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Justification: \" + paraJc);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"left\" | \"right\" | \"both\" | \"center\" | undefined"
+      },
+      "signature": "GetJc(): \"left\" | \"right\" | \"both\" | \"center\" | undefined"
+    },
+    "GetKeepLines": {
+      "description": "Returns the keep lines value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetKeepLines/",
+      "examples": [
+        "// How do I check if a paragraph is set to keep all its lines on the same page in a document?\n\n// Verify the keep-lines setting before modifying pagination rules for multi-line paragraphs.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetKeepLines(true);\nparagraph.AddText(\"This is a paragraph with all lines kept on the same page.\");\nlet keepLines = paraPr.GetKeepLines();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Keep lines: \" + keepLines);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns _true_ if all lines of the paragraph are kept on a single page,\r_false_ if they are not, or _undefined_ if the value is not set.",
+        "type": "boolean | undefined"
+      },
+      "signature": "GetKeepLines(): boolean | undefined",
+      "since": "9.4.0"
+    },
+    "GetKeepNext": {
+      "description": "Returns the keep next value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetKeepNext/",
+      "examples": [
+        "// How do I check if a paragraph is configured to stay with the next paragraph in a document?\n\n// Verify the keep-with-next setting before adjusting page break behavior around headings or captions.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetKeepNext(true);\nparagraph.AddText(\"This is a paragraph kept on the same page as the following paragraph.\");\nlet keepNext = paraPr.GetKeepNext();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Keep next: \" + keepNext);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns _true_ if the paragraph is kept on the same page as the following paragraph,\r_false_ if it is not, or _undefined_ if the value is not set.",
+        "type": "boolean | undefined"
+      },
+      "signature": "GetKeepNext(): boolean | undefined",
+      "since": "9.4.0"
+    },
+    "GetLeftBorder": {
+      "description": "Returns the left border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetLeftBorder/",
+      "examples": [
+        "// How do I read the left border from a paragraph's formatting in a document?\n\n// Useful when you need to inspect border details such as type and size drawn to the left of a paragraph.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetLeftBorder(\"single\", 24, 0, 255, 111, 61);\nparagraph.AddText(\"This is a paragraph with a left border.\");\nlet border = paraPr.GetLeftBorder();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Left border type: \" + border.Type + \", size: \" + border.Size);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns the border properties object, or _undefined_ if the left border is not set.",
+        "type": "Border | undefined"
+      },
+      "signature": "GetLeftBorder(): Border | undefined",
+      "since": "9.4.0"
+    },
+    "GetNumPr": {
+      "description": "Returns the numbering level for the current paragraph referencing the numbering definition instance in the current document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetNumPr/",
+      "examples": [
+        "// How do I read the numbering settings assigned to a paragraph in a document?\n\n// Confirm which list level is active by checking the class type of the numbering properties in a document.\n\nlet doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"bullet\");\nlet numLvl = numbering.GetLevel(0);\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is a bulleted paragraph.\");\nlet paraPr = paragraph.GetParaPr();\nlet numPr = paraPr.GetNumPr();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Numbering class type: \" + (numPr ? numPr.GetClassType() : \"none\"));\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiNumberingLevel | undefined"
+      },
+      "signature": "GetNumPr(): ApiNumberingLevel | undefined"
+    },
+    "GetOutlineLvl": {
+      "description": "Returns the outline level of the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetOutlineLvl/",
+      "examples": [
+        "// How do I get the outline level of a paragraph in a document?\n\n// Verify the heading structure by checking outline levels across multiple paragraphs in a document.\n\nconst doc = Api.GetDocument();\nconst firstParagraph = doc.GetElement(0);\nfirstParagraph.AddText('To see outline levels, open \"Headings\" on the \"View\" tab.');\n\nconst levels = [1, 5, 8];\nfor (let i = 0; i < levels.length; i++) {\n\tconst paragraph = Api.CreateParagraph();\n\tconst paraPr = paragraph.GetParaPr();\n\tparaPr.SetOutlineLvl(levels[i]);\n\tparagraph.AddText('Outline level: ' + paraPr.GetOutlineLvl());\n\tdoc.Push(paragraph);\n}"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number | undefined"
+      },
+      "signature": "GetOutlineLvl(): number | undefined",
+      "since": "8.2.0"
+    },
+    "GetPageBreakBefore": {
+      "description": "Returns the page break before value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetPageBreakBefore/",
+      "examples": [
+        "// How do I check if a page break is applied before a paragraph in a document?\n\n// Confirm that a paragraph's page break setting is active by reading its value and displaying it in a document.\n\nlet doc = Api.GetDocument();\ndoc.Push(Api.CreateParagraph());\nlet paragraph = doc.GetElement(1);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetPageBreakBefore(true);\nparagraph.AddText(\"This paragraph starts on a new page.\");\nlet pageBreakBefore = paraPr.GetPageBreakBefore();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Page break before: \" + pageBreakBefore);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns _true_ if the paragraph is rendered at the beginning of a new page,\r_false_ if it is not, or _undefined_ if the value is not set.",
+        "type": "boolean | undefined"
+      },
+      "signature": "GetPageBreakBefore(): boolean | undefined",
+      "since": "9.4.0"
+    },
+    "GetRightBorder": {
+      "description": "Returns the right border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetRightBorder/",
+      "examples": [
+        "// How do I read the right border settings of a paragraph in a document?\n\n// Inspect a paragraph's right border to display its type and size values in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetRightBorder(\"single\", 24, 0, 255, 111, 61);\nparagraph.AddText(\"This is a paragraph with a right border.\");\nlet border = paraPr.GetRightBorder();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Right border type: \" + border.Type + \", size: \" + border.Size);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns the border properties object, or _undefined_ if the right border is not set.",
+        "type": "Border | undefined"
+      },
+      "signature": "GetRightBorder(): Border | undefined",
+      "since": "9.4.0"
+    },
+    "GetShd": {
+      "description": "Returns the shading applied to the contents of the paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetShd/",
+      "examples": [
+        "// How do I get the shading type and color of a paragraph in a document?\n\n// Reuse a paragraph's background shading by applying the retrieved values to a second paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText('This is the first paragraph with a custom shading applied.');\n\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetShd('clear', Api.HexColor('#ff6f3d'));\n\nlet shd = paraPr.GetShd();\n\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('This is the second paragraph. The shading from the first paragraph is applied here.');\nlet paraPr2 = paragraph2.GetParaPr();\nparaPr2.SetShd(shd.Type, shd.Color);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Shd | undefined"
+      },
+      "signature": "GetShd(): Shd | undefined"
+    },
+    "GetSpacingAfter": {
+      "description": "Returns the spacing after value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingAfter/",
+      "examples": [
+        "// How do I get the amount of spacing after a paragraph in a document?\n\n// Verify the gap between paragraphs by retrieving and printing the spacing-after measurement in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\nlet paraPr = paragraph1.GetParaPr();\nparaPr.SetSpacingAfter(1440);\nparagraph1.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph1.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph1.AddText(\"This is due to the fact that the first paragraph has this offset enabled.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\nparagraph2.AddLineBreak();\nlet spacingAfter = paraPr.GetSpacingAfter();\nparagraph2.AddText(\"Spacing after: \" + spacingAfter);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips"
+      },
+      "signature": "GetSpacingAfter(): twips"
+    },
+    "GetSpacingBefore": {
+      "description": "Returns the spacing before value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingBefore/",
+      "examples": [
+        "// How do I get the amount of spacing before a paragraph in a document?\n\n// Verify the gap above a paragraph by retrieving and printing the spacing-before measurement in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of setting a space before a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingBefore(1440);\nparagraph.AddLineBreak();\nlet spacingBefore = paraPr.GetSpacingBefore();\nparagraph.AddText(\"Spacing before: \" + spacingBefore);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips"
+      },
+      "signature": "GetSpacingBefore(): twips"
+    },
+    "GetSpacingLineRule": {
+      "description": "Returns the paragraph line spacing rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingLineRule/",
+      "examples": [
+        "// How do I get the line spacing rule of a paragraph in a document?\n\n// Confirm the spacing mode in use by printing the line spacing rule after setting triple-line spacing in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddLineBreak();\nlet spacingLineRule = paraPr.GetSpacingLineRule();\nparagraph.AddText(\"Spacing line rule: \" + spacingLineRule);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"auto\" | \"atLeast\" | \"exact\" | undefined"
+      },
+      "signature": "GetSpacingLineRule(): \"auto\" | \"atLeast\" | \"exact\" | undefined"
+    },
+    "GetSpacingLineValue": {
+      "description": "Returns the paragraph line spacing value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingLineValue/",
+      "examples": [
+        "// How do I get the line spacing value of a paragraph in a document?\n\n// Confirm the exact spacing amount by printing the numeric line spacing value after setting triple-line spacing in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddLineBreak();\nlet spacingLineValue = paraPr.GetSpacingLineValue();\nparagraph.AddText(\"Spacing line value: \" + spacingLineValue);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
+        "type": "twips | line240 | undefined"
+      },
+      "signature": "GetSpacingLineValue(): twips | line240 | undefined"
+    },
+    "GetStyle": {
+      "description": "Returns the paragraph style method.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetStyle/",
+      "examples": [
+        "// How do I get the current style of a paragraph in a document?\n\n// Confirm which named style is active on a paragraph by reading and printing the style name in a document.\n\nlet doc = Api.GetDocument();\nlet heading6Style = doc.GetStyle(\"Heading 6\");\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"center\");\nparaPr.SetStyle(heading6Style);\nparagraph.AddText(\"This is a text in a paragraph styled with the 'Heading 6' style.\");\nlet style = paraPr.GetStyle();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Style: \" + style.GetName());"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The style of the paragraph.",
+        "type": "ApiStyle"
+      },
+      "signature": "GetStyle(): ApiStyle"
+    },
+    "GetTabs": {
+      "description": "Returns the custom tab stops of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetTabs/",
+      "examples": [
+        "// How do I read the tab stop positions and alignment types of a paragraph in a document?\n\n// Inspect tab configuration to verify or display custom stop positions after applying them.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetTabs([1440, 4320, 7200], [\"left\", \"center\", \"right\"]);\nparagraph.AddTabStop();\nparagraph.AddText(\"Left tab (1 inch)\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Center tab (3 inches)\");\nlet tabs = paraPr.GetTabs();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Tab count: \" + tabs.length + \", first tab: \" + tabs[0].Pos + \" twips (\" + tabs[0].Val + \")\");\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "TabStop[]"
+      },
+      "signature": "GetTabs(): TabStop[]",
+      "since": "9.4.0"
+    },
+    "GetTopBorder": {
+      "description": "Returns the top border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetTopBorder/",
+      "examples": [
+        "// How do I read the top border type and size from a paragraph in a document?\n\n// Confirm that a border was applied correctly by checking its properties after setting it.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetTopBorder(\"single\", 24, 0, 255, 111, 61);\nparagraph.AddText(\"This is a paragraph with a top border.\");\nlet border = paraPr.GetTopBorder();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Top border type: \" + border.Type + \", size: \" + border.Size);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns the border properties object, or _undefined_ if the top border is not set.",
+        "type": "Border | undefined"
+      },
+      "signature": "GetTopBorder(): Border | undefined",
+      "since": "9.4.0"
+    },
+    "GetWidowControl": {
+      "description": "Returns the widow control value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetWidowControl/",
+      "examples": [
+        "// How do I check whether widow control is enabled for a paragraph in a document?\n\n// Verify the widow control state after toggling it to ensure the setting was applied.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetWidowControl(true);\nparagraph.AddText(\"This is a paragraph with widow control enabled.\");\nlet widowControl = paraPr.GetWidowControl();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Widow control: \" + widowControl);\ndoc.Push(paragraph2);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns _true_ if widow control is enabled, _false_ if it is disabled,\ror _undefined_ if the value is not set.",
+        "type": "boolean | undefined"
+      },
+      "signature": "GetWidowControl(): boolean | undefined",
+      "since": "9.4.0"
+    },
+    "SetBetweenBorder": {
+      "description": "Specifies the border which will be displayed between each paragraph in a set of paragraphs which have the same set of paragraph border settings.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetBetweenBorder/",
+      "examples": [
+        "// How do I draw a dividing line between paragraphs that share the same style in a document?\n\n// Apply a uniform visual separator across a group of related paragraphs using a shared style.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetBetweenBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border between paragraphs.\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the second paragraph. \");\nparagraph.AddText(\"No need to add anything additionally to it. \");\nparagraph.AddText(\"The borders between the paragraphs have already been set.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the third paragraph. \");\nparagraph.AddText(\"No need to add anything additionally to it. \");\nparagraph.AddText(\"The borders between the paragraphs have already been set.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset between the paragraphs measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBetweenBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetBottomBorder": {
+      "description": "Specifies the border which will be displayed below a set of paragraphs which have the same paragraph border settings.\n<note>The paragraphs of the same style going one by one are considered as a single block, so the border is added\nto the whole block rather than to every paragraph in this block.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetBottomBorder/",
+      "examples": [
+        "// How do I place a line below a paragraph using paragraph border settings in a document?\n\n// Visually separate a styled paragraph from content below it by drawing a bottom edge.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetBottomBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border below it.\");"
+      ],
+      "params": [
+        {
+          "description": "The border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current bottom border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset below the paragraph measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBottomBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetContextualSpacing": {
+      "description": "Specifies that any space before or after this paragraph set using the \n{@link ApiParaPr#SetSpacingBefore} or {@link ApiParaPr#SetSpacingAfter} spacing element, should not be applied when the preceding and \nfollowing paragraphs are of the same paragraph style, affecting the top and bottom spacing respectively.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetContextualSpacing/",
+      "examples": [
+        "// How do I remove extra space between paragraphs that share the same style in a document?\n\n// Keep visually grouped paragraphs compact by ignoring before/after spacing within a style.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetContextualSpacing(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with contextual spacing set to 'false' (no paragraph style is applied).\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph with contextual spacing set to 'false' (no paragraph style is applied).\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is a paragraph with contextual spacing set to 'true' (paragraph style is applied).\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is a paragraph with contextual spacing set to 'true' (paragraph style is applied).\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The true value will enable the paragraph contextual spacing.",
+          "name": "isContextualSpacing",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetContextualSpacing(isContextualSpacing: boolean): boolean"
+    },
+    "SetIndFirstLine": {
+      "description": "Sets the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndFirstLine/",
+      "examples": [
+        "// How do I set a first-line indent for paragraphs using a paragraph style in a document?\n\n// Give paragraphs a classic indented opening line to improve readability and visual structure.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetIndFirstLine(1440);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the second paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndFirstLine(nValue: twips): boolean"
+    },
+    "SetIndLeft": {
+      "description": "Sets the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndLeft/",
+      "examples": [
+        "// How do I set a left indent on paragraphs using a paragraph style in a document?\n\n// Offset paragraph text from the left edge to create visual hierarchy or emphasize content.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetIndLeft(2880);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the second paragraph with the indent of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndLeft(nValue: twips): boolean"
+    },
+    "SetIndRight": {
+      "description": "Sets the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndRight/",
+      "examples": [
+        "// How do I set a right indent on paragraphs using a paragraph style in a document?\n\n// Narrow paragraph text from the right edge to create visual emphasis or a quoted-block effect.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetIndRight(2880);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This offset is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the second paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This offset is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndRight(nValue: twips): boolean"
+    },
+    "SetJc": {
+      "description": "Sets the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetJc/",
+      "examples": [
+        "// How do I apply left, right, center, or justified alignment to paragraphs in a document?\n\n// Demonstrate multiple alignment styles side by side to choose the right layout for content.\n\nlet doc = Api.GetDocument();\nlet myStyleLeft = doc.CreateStyle(\"My style with left text alignment\");\nlet paraPr = myStyleLeft.GetParaPr();\nparaPr.SetJc(\"left\");\nlet myStyleRight = doc.CreateStyle(\"My style with right text alignment\");\nparaPr = myStyleRight.GetParaPr();\nparaPr.SetJc(\"right\");\nlet myStyleCenter = doc.CreateStyle(\"My style with center text alignment\");\nparaPr = myStyleCenter.GetParaPr();\nparaPr.SetJc(\"center\");\nlet myStyleBoth = doc.CreateStyle(\"My style with justify text alignment\");\nparaPr = myStyleBoth.GetParaPr();\nparaPr.SetJc(\"both\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the left side. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph.SetStyle(myStyleLeft);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the right side. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph.SetStyle(myStyleRight);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph.SetStyle(myStyleCenter);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph with the text in it aligned by both sides (justified). \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph.SetStyle(myStyleBoth);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The justification type that\rwill be applied to the paragraph contents.",
+          "name": "sJc",
+          "type": "\"left\" | \"right\" | \"both\" | \"center\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetJc(sJc: \"left\" | \"right\" | \"both\" | \"center\"): boolean"
+    },
+    "SetKeepLines": {
+      "description": "Specifies that when rendering the document using a page view, all lines of the current paragraph are maintained on a single page whenever possible.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetKeepLines/",
+      "examples": [
+        "// How do I keep all lines of a paragraph together on one page in a document?\n\n// Ensure that long paragraphs always start on a new page rather than breaking mid-content.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetKeepLines(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of how the paragraph tries to keep lines together. \");\nparagraph.AddText(\"Scroll down to the second page to see it.\");\nfor (let x = 0; x < 5; ++x) {\n\tparagraph = Api.CreateParagraph();\n\tfor (let i = 0; i < 10; ++i) {\n\t\tparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n\t}\n\tdoc.Push(paragraph);\n}\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The paragraph lines are moved to the next page to keep them together. \");\nfor (let i = 0; i < 10; ++i) {\n\tparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n}\nparagraph.SetStyle(myStyle);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The true value enables the option to keep lines of the paragraph on a single page.",
+          "name": "isKeepLines",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetKeepLines(isKeepLines: boolean): boolean"
+    },
+    "SetKeepNext": {
+      "description": "Specifies that when rendering the document using a paginated view, the contents of the current paragraph are at least\npartly rendered on the same page as the following paragraph whenever possible.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetKeepNext/",
+      "examples": [
+        "// How do I prevent a paragraph from being separated from the next paragraph in a document?\n\n// Ensure two consecutive paragraphs always appear together when the page breaks.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetKeepNext(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of how the paragraph tries to keep together with the next paragraph. \");\nparagraph.AddText(\"Scroll down to the second page to see it. \");\nfor (let x = 0; x < 5; ++x) {\n\tparagraph = Api.CreateParagraph();\n\tfor (let i = 0; i < 10; ++i) {\n\t\tparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n\t}\n\tparagraph.SetStyle(myStyle);\n\tdoc.Push(paragraph);\n}\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The paragraph lines stay on the same page as the previous paragraph. \");\nfor (let i = 0; i < 10; ++i) {\n\tparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n}\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The true value enables the option to keep lines of the paragraph on the same\rpage as the following paragraph.",
+          "name": "isKeepNext",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetKeepNext(isKeepNext: boolean): boolean"
+    },
+    "SetLeftBorder": {
+      "description": "Specifies the border which will be displayed at the left side of the page around the specified paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetLeftBorder/",
+      "examples": [
+        "// How do I place a visible border on the left edge of a paragraph in a document?\n\n// Decorate a paragraph with a colored left-side border to make it stand out visually.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetLeftBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border at its left side.\");"
+      ],
+      "params": [
+        {
+          "description": "The border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current left border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset to the left of the paragraph measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLeftBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetNumPr": {
+      "description": "Specifies that the current paragraph references a numbering definition instance in the current document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetNumPr/",
+      "examples": [
+        "// How do I apply a bullet or numbered list style to a paragraph in a document?\n\n// Format a paragraph as a bulleted list item using a shared numbering definition.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nlet numbering = doc.CreateNumbering(\"bullet\");\nparaPr.SetNumPr(numbering);\nfor (let lvl = 0; lvl < 8; ++lvl) {\n\tlet numLvl = numbering.GetLevel(lvl);\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"Default bullet lvl \" + (lvl + 1));\n\tparagraph.SetNumbering(numLvl);\n\tparagraph.SetContextualSpacing(true);\n\tdoc.Push(paragraph);\n}\nlet paragraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is a paragraph styled as a bulleted list.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "Specifies a numbering definition.",
+          "name": "oNumPr",
+          "type": "ApiNumbering"
+        },
+        {
+          "description": "Specifies a numbering level reference. If the current instance of the ApiParaPr class is direct\rformatting of a paragraph, then this parameter MUST BE specified. Otherwise, if the current instance of the ApiParaPr class\ris the part of ApiStyle properties, this parameter will be ignored.",
+          "name": "nLvl",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetNumPr(oNumPr: ApiNumbering, nLvl?: number): boolean"
+    },
+    "SetOutlineLvl": {
+      "description": "Sets the outline level for the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetOutlineLvl/",
+      "examples": [
+        "// How do I set the outline level of a paragraph in a document?\n\n// Change a paragraph's heading depth so it appears correctly in the navigation panel.\n\nconst doc = Api.GetDocument();\n\nconst paragraph = doc.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\n\nconst levelBefore = paraPr.GetOutlineLvl();\nparaPr.SetOutlineLvl(8);\nconst levelAfter = paraPr.GetOutlineLvl();\n\nlet text =  'Outline level (index) for this paragraph is currently set to ' + levelAfter;\ntext += ',\\nbut originally was set to ' + levelBefore;\nparagraph.AddText(text);"
+      ],
+      "params": [
+        {
+          "description": "The outline level. Possible values: 1-9. The 1The desired functionality is as follows: When inserting document A into document B using the merge document API during editing, the source of document A should be visible within document B. By clicking or hovering over the inserted content of document A in document B, information about the insertion of document A should be displayed in a pop-up/floating window, preserving the boundaries of document A. Document A should be able to be inserted between any two characters in document B.\rTo set no outline level, use this method without a parameter.",
+          "name": "lvl",
+          "optional": true,
+          "type": "number | null"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetOutlineLvl(lvl?: number | null): boolean",
+      "since": "8.2.0"
+    },
+    "SetPageBreakBefore": {
+      "description": "Specifies that when rendering the document using a paginated view, the contents of the current paragraph are rendered at\nthe beginning of a new page in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetPageBreakBefore/",
+      "examples": [
+        "// How do I insert a page break before a paragraph in a document?\n\n// Push a section of text onto a fresh page so it always begins on its own page.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetPageBreakBefore(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of setting a page break before a paragraph. \");\nparagraph.AddText(\"The second paragraph will start from a new page, as it has a page break before it. \");\nparagraph.AddText(\"Scroll down to the second page to see it. \");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph and it has page break before it enabled.\");\nparagraph.SetStyle(myStyle);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The true value enables the option to render the contents of the paragraph\rat the beginning of a new page in the document.",
+          "name": "isPageBreakBefore",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPageBreakBefore(isPageBreakBefore: boolean): boolean"
+    },
+    "SetRightBorder": {
+      "description": "Specifies the border which will be displayed at the right side of the page around the specified paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetRightBorder/",
+      "examples": [
+        "// How do I place a visible border on the right edge of a paragraph in a document?\n\n// Highlight a paragraph by drawing a colored line along its right margin.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetRightBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border at its right side.\");"
+      ],
+      "params": [
+        {
+          "description": "The border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current right border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset to the right of the paragraph measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRightBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetShd": {
+      "description": "Specifies the shading applied to the contents of the paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetShd/",
+      "examples": [
+        "// How do I fill the background of a paragraph with a color in a document?\n\n// Highlight a paragraph by setting its shading to make it visually distinct from surrounding text.\n\nlet doc = Api.GetDocument();\n\nlet myStyle = doc.CreateStyle('My document style');\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetShd('clear', Api.RGB(255, 111, 61));\n\nlet paragraph = doc.GetElement(0);\nparagraph.AddText('This is an example of setting a shading to a paragraph.');\nparagraph.SetStyle(myStyle);"
+      ],
+      "params": [
+        {
+          "description": "The shading type which will be applied to the contents of the current paragraph.",
+          "name": "type",
+          "type": "ShdType"
+        },
+        {
+          "description": "The color or pattern used to fill the shading.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetShd(type: ShdType, color: ApiColor): boolean",
+      "since": "9.1.0"
+    },
+    "SetSpacingAfter": {
+      "description": "Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true, then \nany value of the nAfter is ignored. If isAfterAuto parameter is not specified, then it \nwill be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingAfter/",
+      "examples": [
+        "// How do I control the amount of space after a paragraph in a document?\n\n// Push the next paragraph further down the page by increasing the gap below the current one.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetSpacingAfter(1440);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the first paragraph has this offset enabled.\");\nparagraph.SetStyle(myStyle);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nAfter",
+          "type": "twips"
+        },
+        {
+          "description": "The true value disables the spacing after the current paragraph.",
+          "name": "isAfterAuto",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean"
+    },
+    "SetSpacingBefore": {
+      "description": "Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true, then \nany value of the nBefore is ignored. If isBeforeAuto parameter is not specified, then \nit will be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingBefore/",
+      "examples": [
+        "// How do I control the amount of space before a paragraph in a document?\n\n// Create a visual gap above a paragraph so it stands apart from the text above it.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetSpacingBefore(1440);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of setting a space before a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\nparagraph.SetStyle(myStyle);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nBefore",
+          "type": "twips"
+        },
+        {
+          "description": "The true value disables the spacing before the current paragraph.",
+          "name": "isBeforeAuto",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean"
+    },
+    "SetSpacingLine": {
+      "description": "Sets the paragraph line spacing. If the value of the sLineRule parameter is either \n\"atLeast\" or \"exact\", then the value of nLine will be interpreted as twentieths of a point. If \nthe value of the sLineRule parameter is \"auto\", then the value of the \nnLine parameter will be interpreted as 240ths of a line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingLine/",
+      "examples": [
+        "// How do I change the line height inside a paragraph in a document?\n\n// Compare different line-spacing modes — automatic, exact, and at-least — applied to separate paragraphs.\n\nlet doc = Api.GetDocument();\nlet myStyle1 = doc.CreateStyle(\"My document style #1\");\nlet paraPr = myStyle1.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nlet myStyle2 = doc.CreateStyle(\"My document style #2\");\nparaPr = myStyle2.GetParaPr();\nparaPr.SetSpacingLine(200, \"exact\");\nlet myStyle3 = doc.CreateStyle(\"My document style #3\");\nparaPr = myStyle3.GetParaPr();\nparaPr.SetSpacingLine(400, \"atLeast\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle1);\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle2);\nparagraph.AddText(\"Paragraph 2. Spacing: exact 10 points.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle3);\nparagraph.AddText(\"Paragraph 3. Spacing: atLeast 20 points.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The line spacing value measured either in twentieths of a point (1/1440 of an inch) or in 240ths of a line.",
+          "name": "nLine",
+          "type": "twips | line240"
+        },
+        {
+          "description": "The rule that determines the measuring units of the line spacing.",
+          "name": "sLineRule",
+          "type": "\"auto\" | \"atLeast\" | \"exact\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingLine(nLine: twips | line240, sLineRule: \"auto\" | \"atLeast\" | \"exact\"): boolean"
+    },
+    "SetStyle": {
+      "description": "The paragraph style base method.\n<note>This method is not used by itself, as it only forms the basis for the {@link ApiParagraph#SetStyle} method which sets the selected or created style for the paragraph.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetStyle/",
+      "examples": [
+        "// How do I assign a built-in style such as a heading to a paragraph in a document?\n\n// Reuse a predefined heading style on a paragraph instead of applying formatting manually.\n\nlet doc = Api.GetDocument();\nlet heading6Style = doc.GetStyle(\"Heading 6\");\nlet paraPr = heading6Style.GetParaPr();\nparaPr.SetJc(\"center\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(heading6Style);\nparagraph.AddText(\"This is a text in a paragraph styled with the 'Heading 6' style.\");"
+      ],
+      "params": [
+        {
+          "description": "The style of the paragraph to be set.",
+          "name": "oStyle",
+          "type": "ApiStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetStyle(oStyle: ApiStyle): boolean"
+    },
+    "SetTabs": {
+      "description": "Specifies a sequence of custom tab stops which will be used for any tab characters in the current paragraph.\n**Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetTabs/",
+      "examples": [
+        "// How do I control where text jumps when pressing Tab in a document?\n\n// Place text at precise horizontal positions using left, center, and right tab stops in a document.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetTabs([1440, 4320, 7200], [\"left\", \"center\", \"right\"]);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 1 inch left\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 3 inches center\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 5 inches right\");"
+      ],
+      "params": [
+        {
+          "description": "An array of the positions of custom tab stops with respect to the current page margins\rmeasured in twentieths of a point (1/1440 of an inch).",
+          "name": "aPos",
+          "type": "twips[]"
+        },
+        {
+          "description": "An array of the styles of custom tab stops, which determines the behavior of the tab\rstop and the alignment which will be applied to text entered at the current custom tab stop.",
+          "name": "aVal",
+          "type": "TabJc[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTabs(aPos: twips[], aVal: TabJc[]): boolean"
+    },
+    "SetTopBorder": {
+      "description": "Specifies the border which will be displayed above a set of paragraphs which have the same set of paragraph border settings.\n<note>The paragraphs of the same style going one by one are considered as a single block, so the border is added to the whole block rather than to every paragraph in this block.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetTopBorder/",
+      "examples": [
+        "// How do I draw a line above a paragraph in a document?\n\n// Separate a paragraph from the content above it using a visible border line in a document.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetTopBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border above it.\");"
+      ],
+      "params": [
+        {
+          "description": "The border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current top border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset above the paragraph measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTopBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetWidowControl": {
+      "description": "Specifies whether a single line of the current paragraph will be displayed on a separate page from the remaining content at display time by moving the line onto the following page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetWidowControl/",
+      "examples": [
+        "// How do I keep the last line of a paragraph from being stranded on the next page in a document?\n\n// Ensure paragraph lines stay together across page breaks for better readability in a document.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetWidowControl(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"The single line of the last paragraph on this page will be prevented from being displayed on a separate page. \");\nfor (let x = 0; x < 5; ++x) {\n\tparagraph = Api.CreateParagraph();\n\tfor (let i = 0; i < 10; ++i) {\n\t\tparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n\t}\n\tdoc.Push(paragraph);\n}\nparagraph = Api.CreateParagraph();\nfor (let i = 0; i < 3; ++i) {\n\tparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n}\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This last line would be displayed on the next page, if we had not used the set widow control method.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The true value means that a single line of the current paragraph will be displayed on a separate page from the remaining content at display time by moving the line onto the following page.",
+          "name": "isWidowControl",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetWidowControl(isWidowControl: boolean): boolean"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiParaPr object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/ToJSON/",
+      "examples": [
+        "// How do I export paragraph formatting settings as JSON in a document?\n\n// Restore paragraph properties from a JSON representation and verify the class type in a document.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetLeftBorder(\"single\", 24, 0, 0, 255, 0);\nlet json = paraPr.ToJSON(true);\nlet paraPrFromJSON = Api.FromJSON(json);\nlet type = paraPrFromJSON.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class type = \" + type);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the used styles will be written to the JSON object or not.",
+          "name": "bWriteStyles",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteStyles: boolean): object"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "description": "Sets the description of the current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetDescription/",
+  "params": [
+    {
+      "description": "The description to set for the current drawing.",
+      "name": "description",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "Returns true if the operation is successful, false otherwise.",
+    "type": "boolean"
+  },
+  "signature": "SetDescription(description: string): boolean",
+  "since": "9.5.0"
+}

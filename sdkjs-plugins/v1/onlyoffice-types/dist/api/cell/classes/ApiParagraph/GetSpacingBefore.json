@@ -1,0 +1,13 @@
+{
+  "description": "Returns the spacing before value of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingBefore/",
+  "examples": [
+    "// How do I check how much space is added above a paragraph in a spreadsheet?\n\n// Confirm the top spacing value after applying a gap to a paragraph's leading edge in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"This is an example of setting a space before a paragraph.\");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ncontent.Push(paragraph2);\nlet paraPr = paragraph2.GetParaPr();\nparaPr.SetSpacingBefore(1440);\nlet spacingBefore = paraPr.GetSpacingBefore();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing before: \" + spacingBefore);\ncontent.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+    "type": "twips"
+  },
+  "signature": "GetSpacingBefore(): twips"
+}

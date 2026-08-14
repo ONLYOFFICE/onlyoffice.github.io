@@ -1,0 +1,28 @@
+{
+  "description": "Creates an RGB color setting the appropriate values for the red, green and blue color components.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateRGBColor/",
+  "examples": [
+    "// How do I specify exact RGB color values to create a gradient fill on a shape in a document?\n\n// Blend two hand-picked RGB colors across a shape using a linear gradient in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+  ],
+  "params": [
+    {
+      "description": "Red color component value.",
+      "name": "r",
+      "type": "number"
+    },
+    {
+      "description": "Green color component value.",
+      "name": "g",
+      "type": "number"
+    },
+    {
+      "description": "Blue color component value.",
+      "name": "b",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiRGBColor"
+  },
+  "signature": "CreateRGBColor(r: number, g: number, b: number): ApiRGBColor"
+}

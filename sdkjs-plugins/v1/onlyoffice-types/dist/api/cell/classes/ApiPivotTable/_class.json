@@ -1,0 +1,6 @@
+{
+  "description": "Class representing a pivot table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotTable/",
+  "methodCount": 59,
+  "sharded": true
+}

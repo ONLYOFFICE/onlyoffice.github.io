@@ -1,0 +1,23 @@
+{
+  "description": "Creates a blip fill to apply to the object using the selected image as the object background.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateBlipFill/",
+  "examples": [
+    "// How do I use an image as the background fill of a shape in a spreadsheet?\n\n// Apply a repeating image texture to a shape instead of a solid color in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateBlipFill(\"https://static.onlyoffice.com/assets/docs/samples/img/presentation_sky.png\", \"tile\");\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);"
+  ],
+  "params": [
+    {
+      "description": "The path to the image used for the blip fill (currently only internet URL or Base64 encoded images are supported).",
+      "name": "imageUrl",
+      "type": "string"
+    },
+    {
+      "description": "The type of the fill used for the blip fill (tile or stretch).",
+      "name": "blipFillType",
+      "type": "BlipFillType"
+    }
+  ],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateBlipFill(imageUrl: string, blipFillType: BlipFillType): ApiFill"
+}

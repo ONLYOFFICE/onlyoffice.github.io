@@ -1,0 +1,28 @@
+{
+  "description": "Returns the number of periods required by an investment to reach a specified value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PDURATION/",
+  "examples": [
+    "// How do I find the time required for an investment to grow to a specific value in a spreadsheet?\n\n// Determine the number of investment periods until a desired return is achieved in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PDURATION(\"2.50%\", 2000, 2200));"
+  ],
+  "params": [
+    {
+      "description": "The interest rate per period.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The present value of the investment.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The desired future value of the investment.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PDURATION(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,6 @@
+{
+  "description": "Class representing an RGB Color.",
+  "extends": [
+    "ApiUniColor"
+  ]
+}

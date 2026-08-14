@@ -1,0 +1,18 @@
+{
+  "description": "Returns the ratio of the factorial of a sum of numbers to the product of factorials.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MULTINOMIAL/",
+  "examples": [
+    "// What is the multinomial coefficient value for a group of numbers in a spreadsheet?\n\n// Find the ratio of combined factorial to individual factorials in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.MULTINOMIAL(2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 4, 0, 0, 0, 0, 5));"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the multinomial will be returned. The first argument is required, subsequent arguments are optional.",
+      "name": "args",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MULTINOMIAL(args: ApiRange | ApiName | number): number"
+}

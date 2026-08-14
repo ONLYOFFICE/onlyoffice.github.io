@@ -1,0 +1,19 @@
+{
+  "description": "Finds specific information in the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Find/",
+  "examples": [
+    "// How do I locate a cell that contains a particular value using detailed search options in a spreadsheet?\n\n// Scan a data range for matching content and highlight the first cell found in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"A4\").SetValue(\"Cost price\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"B4\").SetValue(50);\nworksheet.GetRange(\"C2\").SetValue(200);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"C4\").SetValue(120);\nworksheet.GetRange(\"D2\").SetValue(200);\nworksheet.GetRange(\"D3\").SetValue(200);\nworksheet.GetRange(\"D4\").SetValue(160);\nlet range = worksheet.GetRange(\"A2:D4\");\nlet searchData = {\n    What: \"200\",\n    After: worksheet.GetRange(\"B1\"),\n    LookIn: \"xlValues\",\n    LookAt: \"xlWhole\",\n    SearchOrder: \"xlByColumns\",\n    SearchDirection: \"xlNext\",\n    MatchCase: true\n};\nlet searchRange = range.Find(searchData);\nsearchRange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+  ],
+  "params": [
+    {
+      "description": "The search data used to make search.",
+      "name": "oSearchData",
+      "type": "SearchData"
+    }
+  ],
+  "returns": {
+    "description": "Returns null if the current range does not contain such text.",
+    "type": "ApiRange | null"
+  },
+  "signature": "Find(oSearchData: SearchData): ApiRange | null"
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Groups an array of drawings in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GroupDrawings/",
+  "examples": [
+    "// How do I combine several shapes into one group in a document?\n\n// Treat two independently placed rectangles as a single unit so they move and resize together.\n\nlet doc = Api.GetDocument();\nlet fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet fill2 = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape1 = Api.CreateShape(\"rect\", 150 * 36000, 65 * 36000, fill1, stroke);\nlet shape2 = Api.CreateShape(\"rect\", 75 * 36000, 40 * 36000, fill2, stroke);\nshape1.SetWrappingStyle(\"inFront\");\nshape2.SetWrappingStyle(\"inFront\");\nlet paragraph = Api.CreateParagraph();\nparagraph.AddDrawing(shape1);\nparagraph.AddDrawing(shape2);\ndoc.Push(paragraph);\ndoc.GroupDrawings([shape1, shape2]);"
+  ],
+  "params": [
+    {
+      "description": "An array of drawings to group.",
+      "name": "aDrawings",
+      "type": "DrawingForGroup[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiGroup"
+  },
+  "signature": "GroupDrawings(aDrawings: DrawingForGroup[]): ApiGroup",
+  "since": "8.3.0"
+}

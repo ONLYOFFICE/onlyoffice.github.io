@@ -1,0 +1,493 @@
+{
+  "description": "Class representing a table cell.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/",
+  "methods": {
+    "AddText": {
+      "description": "Appends text to the end of the cell content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/AddText/",
+      "examples": [
+        "// How do I add text to a table cell in a PDF?\n\n// Insert a sentence into the last paragraph of a cell to populate a table in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 2);\nconst cell = table.GetRow(0).GetCell(0);\ncell.AddText(\"Cell content.\");\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The text to append.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "AddText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "GetBackgroundColor": {
+      "description": "Returns the background color of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetBackgroundColor/",
+      "params": [],
+      "returns": {
+        "type": "ApiColor | null"
+      },
+      "signature": "GetBackgroundColor(): ApiColor | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiTableCell class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetClassType/",
+      "examples": [
+        "// How can I determine the type classification of a cell in a PDF?\n\n// Retrieve the object type information for a table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nconst classType = cell.GetClassType();\nparagraph.AddText(\"Class type: \" + classType);\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"tableCell\""
+      },
+      "signature": "GetClassType(): \"tableCell\""
+    },
+    "GetContent": {
+      "description": "Returns the current cell content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetContent/",
+      "examples": [
+        "// How do I access what is stored inside a table cell in a PDF?\n\n// Extract the document elements contained within a cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a sample text in the cell.\");\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiDocumentContent"
+      },
+      "signature": "GetContent(): ApiDocumentContent"
+    },
+    "GetNext": {
+      "description": "Returns the next cell if exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetNext/",
+      "params": [],
+      "returns": {
+        "description": "returns null if cell is last.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetNext(): ApiTableCell | null",
+      "since": "9.5.0"
+    },
+    "GetParentRow": {
+      "description": "Returns a parent row of the current cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetParentRow/",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent row doesn't exist.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetParentRow(): ApiTableRow | null",
+      "since": "9.5.0"
+    },
+    "GetParentTable": {
+      "description": "Returns a parent table of the current cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetParentTable/",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null",
+      "since": "9.5.0"
+    },
+    "GetPrevious": {
+      "description": "Returns the previous cell if exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetPrevious/",
+      "params": [],
+      "returns": {
+        "description": "returns null is cell is first.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetPrevious(): ApiTableCell | null",
+      "since": "9.5.0"
+    },
+    "GetRowIndex": {
+      "description": "Returns an index of the parent row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetRowIndex/",
+      "params": [],
+      "returns": {
+        "type": "number | null"
+      },
+      "signature": "GetRowIndex(): number | null",
+      "since": "9.5.0"
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetText/",
+      "examples": [
+        "// How do I retrieve the plain text from a table cell in a PDF?\n\n// Extract text from a cell and display it in a separate text box on the page.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 2);\nconst cell = table.GetRow(0).GetCell(0);\ncell.AddText(\"Cell content.\");\nconst text = cell.GetText({TableCellSeparator : \"\"});\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#E8D5B7'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(100), Api.MillimetersToEmus(20), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(120));\nshape.GetContent().GetElement(0).AddText(\"Cell text: \" + text);\n\npage.AddObject(table);\npage.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "Options for formatting the returned text.",
+          "name": "pr",
+          "optional": true,
+          "type": "object"
+        },
+        {
+          "description": "Defines if the resulting string will include numbering or not.",
+          "name": "pr_Numbering",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the resulting string will include mathematical expressions or not.",
+          "name": "pr_Math",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines how the table cell separator will be specified in the resulting string.",
+          "name": "pr_TableCellSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table row separator will be specified in the resulting string.",
+          "name": "pr_TableRowSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the paragraph separator will be specified in the resulting string.",
+          "name": "pr_ParaSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the tab will be specified in the resulting string.",
+          "name": "pr_TabSymbol",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the line separator will be specified in the resulting string.",
+          "name": "pr_NewLineSeparator",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string",
+      "since": "9.4.0"
+    },
+    "Select": {
+      "description": "Selects the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/Select/",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(): boolean",
+      "since": "9.5.0"
+    },
+    "SetBackgroundColor": {
+      "description": "Sets the background color of the current cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetBackgroundColor/",
+      "params": [
+        {
+          "description": "If not passed, the background color will be cleared (see arguments below for RGB triplet form).",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBackgroundColor(color?: ApiColor): boolean",
+      "since": "9.5.0"
+    },
+    "SetCellBorderBottom": {
+      "description": "Sets the border which shall be displayed at the bottom of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellBorderBottom/",
+      "examples": [
+        "// How do I create a border on the bottom edge of a cell in a PDF?\n\n// Draw a styled line along the bottom of a table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ncell.SetCellBorderBottom(2, fill);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The width of the current border.",
+          "name": "borderWidth",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderBottom(borderWidth: mm, fill: ApiFill): boolean"
+    },
+    "SetCellBorderLeft": {
+      "description": "Sets the border which shall be displayed at the left of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellBorderLeft/",
+      "examples": [
+        "// How do I create a border on the left edge of a cell in a PDF?\n\n// Draw a styled line along the left side of a table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ncell.SetCellBorderLeft(2, fill);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The width of the current border.",
+          "name": "borderWidth",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderLeft(borderWidth: mm, fill: ApiFill): boolean"
+    },
+    "SetCellBorderRight": {
+      "description": "Sets the border which shall be displayed at the right of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellBorderRight/",
+      "examples": [
+        "// How do I customize the appearance of the right edge of a cell in a PDF?\n\n// Style the border on the right side of your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ncell.SetCellBorderRight(2, fill);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The width of the current border.",
+          "name": "borderWidth",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderRight(borderWidth: mm, fill: ApiFill): boolean"
+    },
+    "SetCellBorderTop": {
+      "description": "Sets the border which shall be displayed at the top of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellBorderTop/",
+      "examples": [
+        "// How do I customize the appearance of the top edge of a cell in a PDF?\n\n// Style the border on the top side of your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ncell.SetCellBorderTop(2, fill);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The width of the current border.",
+          "name": "borderWidth",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderTop(borderWidth: mm, fill: ApiFill): boolean"
+    },
+    "SetCellMarginBottom": {
+      "description": "Specifies an amount of space which shall be left between the bottom extent of the cell contents and the border\nof a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellMarginBottom/",
+      "examples": [
+        "// How do I add space below the content inside a cell in a PDF?\n\n// Adjust the spacing at the bottom of your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetCellMarginBottom(600);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell bottom margin with specified value for the current cell.",
+          "name": "margin",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginBottom(margin: twips): boolean"
+    },
+    "SetCellMarginLeft": {
+      "description": "Specifies an amount of space which shall be left between the left extent of the current cell contents and the\nleft edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellMarginLeft/",
+      "examples": [
+        "// How do I add space to the left of content inside a cell in a PDF?\n\n// Adjust the spacing on the left side of your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetCellMarginLeft(720);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell left margin with specified value for the current cell.",
+          "name": "margin",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginLeft(margin: twips): boolean"
+    },
+    "SetCellMarginRight": {
+      "description": "Specifies an amount of space which shall be left between the right extent of the current cell contents and the\nright edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellMarginRight/",
+      "examples": [
+        "// How do I add space to the right of content inside a cell in a PDF?\n\n// Adjust the spacing on the right side of your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetCellMarginRight(600);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell right margin with specified value for the current cell.",
+          "name": "margin",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginRight(margin: twips): boolean"
+    },
+    "SetCellMarginTop": {
+      "description": "Specifies an amount of space which shall be left between the top extent of the current cell contents and the\ntop edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellMarginTop/",
+      "examples": [
+        "// How do I add space above the content inside a cell in a PDF?\n\n// Adjust the spacing at the top of your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetCellMarginTop(720);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell top margin with specified value for the current cell.",
+          "name": "margin",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginTop(margin: twips): boolean"
+    },
+    "SetColumnBackgroundColor": {
+      "description": "Sets the background color to all cells in the column containing the current cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetColumnBackgroundColor/",
+      "params": [
+        {
+          "description": "If not passed, the background color will be cleared.",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetColumnBackgroundColor(color?: ApiColor): boolean",
+      "since": "9.5.0"
+    },
+    "SetShd": {
+      "description": "Specifies the shading which shall be applied to the extents of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetShd/",
+      "examples": [
+        "// How do I change the background color of a table cell in a PDF?\n\n// Color the background of your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ncell.SetShd(fill);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The shading type or fill to apply.",
+          "name": "shadingType",
+          "type": "ShdType | ApiFill"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetShd(shadingType: ShdType | ApiFill, r: number, g: number, b: number): boolean"
+    },
+    "SetText": {
+      "description": "Replaces all content of the current table cell with the specified text,\npreserving the formatting of the first paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetText/",
+      "examples": [
+        "// How do I overwrite the text of a table cell in a PDF?\n\n// Clear an existing cell and write a new sentence into it, preserving formatting in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 2);\nconst cell = table.GetRow(0).GetCell(0);\ncell.AddText(\"Original cell content.\");\ncell.SetText(\"Updated cell content.\");\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The text to set.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "SetText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "SetTextDirection": {
+      "description": "Specifies the direction of the text flow for the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetTextDirection/",
+      "examples": [
+        "// How do I rotate text direction in a table cell in a PDF?\n\n// Change the text orientation inside your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nrow.SetHeight(30 * 36000);\nconst cell = row.GetCell(0);\ncell.SetTextDirection(\"tbrl\");\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The text flow direction.",
+          "name": "textDirection",
+          "type": "TextFlowDirection"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTextDirection(textDirection: TextFlowDirection): boolean"
+    },
+    "SetVerticalAlign": {
+      "description": "Specifies the vertical alignment for text within the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetVerticalAlign/",
+      "examples": [
+        "// How do I position text vertically within a cell in a PDF?\n\n// Align content to the top, middle, or bottom of your table cell in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(1);\nrow.SetHeight(30 * 36000);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetVerticalAlign(\"bottom\");\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The vertical alignment type.",
+          "name": "verticalAlign",
+          "type": "VerticalTextAlign"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVerticalAlign(verticalAlign: VerticalTextAlign): boolean"
+    },
+    "SetWidth": {
+      "description": "Specifies the preferred width for this cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetWidth/",
+      "params": [
+        {
+          "description": "The type of the width value.",
+          "name": "sType",
+          "type": "TableWidth"
+        },
+        {
+          "description": "The table width value measured in positive integers.",
+          "name": "nValue",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetWidth(sType: TableWidth, nValue?: number): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

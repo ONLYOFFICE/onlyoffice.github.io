@@ -1,0 +1,29 @@
+{
+  "description": "Returns the one-tailed P-value of a z-test.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/Z_TEST/",
+  "examples": [
+    "// How do I run a one-tailed z-test for statistical hypothesis testing in a spreadsheet?\n\n// Evaluate the p-value for a one-tailed z-test on a dataset in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet argumentsArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];\n\n// Place the numbers in cells\nfor (let i = 0; i < argumentsArr.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(argumentsArr[i]);\n}\n\n// Get values from the range\nlet data = worksheet.GetRange(\"A1:A16\");\n\n// Calculate the TRIMMEAN of the range A1:A16\nlet func = Api.WorksheetFunction;\nlet result = func.Z_TEST(data, 4);\nworksheet.GetRange(\"B1\").SetValue(result);"
+  ],
+  "params": [
+    {
+      "description": "The array or range of data against which to test X.",
+      "name": "arg1",
+      "type": "number[] | ApiRange"
+    },
+    {
+      "description": "The value to test.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The population (known) standard deviation. If omitted, the sample standard deviation is used.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "Z_TEST(arg1: number[] | ApiRange, arg2: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | number): number"
+}

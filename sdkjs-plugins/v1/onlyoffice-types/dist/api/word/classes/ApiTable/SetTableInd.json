@@ -1,0 +1,18 @@
+{
+  "description": "Specifies the indentation which will be added before the leading edge of the current table in the document\n(the left edge in the left-to-right table, and the right edge in the right-to-left table).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableInd/",
+  "examples": [
+    "// How do I control how far a table is pushed in from the left margin in a document?\n\n// Shift a table away from the left edge by applying an indentation value in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We set the indent of 1 inch for the table:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableInd(1440);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "The indentation value measured in twentieths of a point (1/1440 of an inch).",
+      "name": "nValue",
+      "type": "twips"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetTableInd(nValue: twips): boolean"
+}

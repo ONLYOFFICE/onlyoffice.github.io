@@ -1,0 +1,13 @@
+{
+  "description": "Inserts a blank page to the current location.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/InsertBlankPage/",
+  "examples": [
+    "// How do I add an empty page at a specific point in a document?\n\n// Create a visual separator between sections by placing a fully empty page before subsequent content.\n\nconst doc = Api.GetDocument();\ndoc.InsertBlankPage();\n\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText('This text is on the page after the blank one.');\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "InsertBlankPage(): boolean",
+  "since": "9.0.4"
+}

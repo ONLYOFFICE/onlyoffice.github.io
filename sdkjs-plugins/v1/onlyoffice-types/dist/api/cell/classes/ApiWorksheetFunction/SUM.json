@@ -1,0 +1,18 @@
+{
+  "description": "Adds all the numbers in a range of cells.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SUM/",
+  "examples": [
+    "// Sum all values using the SUM function with numeric arguments.\n\n// Returns the total sum of the specified values.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SUM(145, 37, 236, 69, 567, 92));"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values to add. The first argument is required, subsequent arguments are optional.\rArguments can be numbers, logical values, text representations of numbers, ranges, or arrays.",
+      "name": "args",
+      "type": "ApiRange | ApiName | string | number | boolean | (string | number | boolean)[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SUM(args: ApiRange | ApiName | string | number | boolean | (string | number | boolean)[]): number"
+}

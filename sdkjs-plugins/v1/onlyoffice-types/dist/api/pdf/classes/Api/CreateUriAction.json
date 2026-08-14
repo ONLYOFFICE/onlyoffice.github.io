@@ -1,0 +1,14 @@
+{
+  "description": "Creates an URI action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateUriAction/",
+  "params": [
+    {
+      "name": "uri",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiUriAction"
+  },
+  "signature": "CreateUriAction(uri: string): ApiUriAction"
+}

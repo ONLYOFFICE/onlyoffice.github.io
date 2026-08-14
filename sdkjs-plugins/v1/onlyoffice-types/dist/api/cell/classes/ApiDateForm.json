@@ -1,0 +1,7 @@
+{
+  "description": "Class representing a document date field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDateForm/",
+  "extends": [
+    "ApiFormBase"
+  ]
+}

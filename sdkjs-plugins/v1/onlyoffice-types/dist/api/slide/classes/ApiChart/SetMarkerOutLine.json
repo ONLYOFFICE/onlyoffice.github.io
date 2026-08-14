@@ -1,0 +1,34 @@
+{
+  "description": "Sets the outline to the marker in the specified chart series.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMarkerOutLine/",
+  "examples": [
+    "// How do I add an outline around the data point symbols in a chart in a presentation?\n\n// Apply different border colors and widths to markers in different data series in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst chart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nlet stroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\nchart.SetMarkerFill(fill, 0, 0, true);\nchart.SetMarkerOutLine(stroke, 0, 0, true);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetMarkerFill(fill, 1, 0, true);\nchart.SetMarkerOutLine(stroke, 1, 0, true);\nslide.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The stroke used to create the marker outline.",
+      "name": "oStroke",
+      "type": "ApiStroke"
+    },
+    {
+      "description": "The index of the chart series.",
+      "name": "nSeries",
+      "type": "number"
+    },
+    {
+      "description": "The index of the marker in the specified chart series.",
+      "name": "nMarker",
+      "type": "number"
+    },
+    {
+      "description": "Specifies if the outline will be applied to all markers in the specified chart series.",
+      "name": "bAllMarkers",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetMarkerOutLine(oStroke: ApiStroke, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean"
+}

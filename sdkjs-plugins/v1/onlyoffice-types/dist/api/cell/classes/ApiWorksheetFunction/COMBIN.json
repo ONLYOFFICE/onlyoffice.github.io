@@ -1,0 +1,23 @@
+{
+  "description": "Returns the number of combinations for a given number of items.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COMBIN/",
+  "examples": [
+    "// How many different ways can you select items in a spreadsheet?\n\n// Calculate the total number of unique selections you can make in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COMBIN(67, 7));"
+  ],
+  "params": [
+    {
+      "description": "The total number of items, a numeric value greater than or equal to 0.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of items in each combination, a numeric value greater than or equal to 0 but less than the total number of items.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "COMBIN(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

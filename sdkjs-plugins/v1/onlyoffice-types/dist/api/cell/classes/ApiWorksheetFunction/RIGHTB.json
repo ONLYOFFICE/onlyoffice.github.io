@@ -1,0 +1,24 @@
+{
+  "description": "Extracts a substring from a string starting from the right-most character, based on the specified number of characters and is intended for languages that use the double-byte character set (DBCS) like Japanese, Chinese, Korean etc.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/RIGHTB/",
+  "examples": [
+    "// How do I get the last characters from text in Asian languages in a spreadsheet?\n\n// Retrieve characters from the right side of text that uses multi-byte characters in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.RIGHTB(\"Online Office\", 2));"
+  ],
+  "params": [
+    {
+      "description": "The text string that contains the characters to extract.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "A number of the substring characters, based on bytes.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "RIGHTB(arg1: ApiRange | ApiName | string, arg2?: ApiRange | ApiName | number): string"
+}

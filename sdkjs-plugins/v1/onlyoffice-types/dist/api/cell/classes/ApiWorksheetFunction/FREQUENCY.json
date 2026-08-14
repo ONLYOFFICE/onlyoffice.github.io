@@ -1,0 +1,23 @@
+{
+  "description": "Calculates how often values occur within a range of values and then returns the first value of the returned vertical array of numbers.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FREQUENCY/",
+  "examples": [
+    "// Count the frequency of data points that fall within specified bin intervals.\n\n// Determine value distribution across bins using FREQUENCY function.\n\nconst worksheet = Api.GetActiveSheet();\n\n// Configure function parameters\nlet data_array = [78, 74, 13, 17, 60]; // Historical data_array\nlet bins_array = [78, 56, 87, 0, 19]; // Corresponding bins_array in Excel serial number format\n\n// Set data_array and bins_array in cells\nfor (let i = 0; i < data_array.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(bins_array[i])\n  worksheet.GetRange(\"B\" + (i + 1)).SetValue(data_array[i]);\n}\n\n// Get the ranges for data_array and bins_array\nlet data_arrayRange = worksheet.GetRange(\"A1:A5\");\nlet bins_arrayRange = worksheet.GetRange(\"B1:B5\");\n\n// Get the worksheet function object\nlet func = Api.WorksheetFunction;\n\n// Ensure the ranges are properly passed to the function\nlet forecast = func.FREQUENCY(data_arrayRange, bins_arrayRange);\n\n// Print the forecast result\nworksheet.GetRange(\"D1\").SetValue(forecast);"
+  ],
+  "params": [
+    {
+      "description": "An array of values or the selected range for which the frequencies will be counted (blanks and text are ignored).",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "An array of intervals or the selected range into which the values in the first range will be grouped.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "FREQUENCY(arg1: ApiRange | ApiName | number[], arg2: ApiRange | ApiName | number[]): number"
+}

@@ -1,0 +1,23 @@
+{
+  "description": "Returns the Bessel function Jn(x).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BESSELJ/",
+  "examples": [
+    "// Evaluate the Bessel function J at a specific order in a spreadsheet.\n\n// Calculate an oscillatory Bessel value commonly used in signal and vibration analysis in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BESSELJ(1.9, 2));"
+  ],
+  "params": [
+    {
+      "description": "The value at which to evaluate the function.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The order of the Bessel function.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BESSELJ(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

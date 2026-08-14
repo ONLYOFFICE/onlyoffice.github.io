@@ -1,0 +1,13 @@
+{
+  "description": "Clears all contents from the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/ClearContents/",
+  "examples": [
+    "// How do I remove cell data without touching the styling in a spreadsheet?\n\n// Wipe only the text and numbers from selected cells so their appearance stays unchanged in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1:B1\").SetValue(\"Example text\");\nlet range = worksheet.GetRange(\"A1\");\nrange.ClearContents();\nworksheet.GetRange(\"A2\").SetValue(\"Result is contents cleared for A1 cell.\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "ClearContents(): void",
+  "since": "9.1.0"
+}

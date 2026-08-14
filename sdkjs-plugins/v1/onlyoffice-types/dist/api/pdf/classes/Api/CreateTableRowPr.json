@@ -1,0 +1,10 @@
+{
+  "description": "Creates the empty table row properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateTableRowPr/",
+  "params": [],
+  "returns": {
+    "type": "ApiTableRowPr"
+  },
+  "signature": "CreateTableRowPr(): ApiTableRowPr",
+  "since": "9.5.0"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Returns the Fisher transformation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FISHER/",
+  "examples": [
+    "// How do I transform a correlation coefficient for analysis in a spreadsheet?\n\n// Convert a correlation value into its Fisher transformation in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.FISHER(0.56);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value for the transformation, a number between -1 and 1, excluding -1 and 1.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "FISHER(arg1: ApiRange | ApiName | number): number"
+}

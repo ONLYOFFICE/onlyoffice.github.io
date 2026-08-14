@@ -1,0 +1,175 @@
+{
+  "description": "Class representing a path command.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/",
+  "methods": {
+    "GetHR": {
+      "description": "Returns the height radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetHR/",
+      "examples": [
+        "// How do I read the arc height radius in a presentation?\n\n// Extract arc dimensions to display size information in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Arc WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nparagraph.AddText(\", Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nshape.SetPosition(1500000, 1500000);\nshape.SetVerticalTextAlign(\"bottom\");\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetHR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetStartAngle": {
+      "description": "Returns the start angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetStartAngle/",
+      "examples": [
+        "// How do I find the arc starting angle in a presentation?\n\n// Read angle properties to check arc direction in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Arc WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nparagraph.AddText(\", Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nshape.SetPosition(1500000, 1500000);\nshape.SetVerticalTextAlign(\"bottom\");\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetStartAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetSweepAngle": {
+      "description": "Returns the sweep angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetSweepAngle/",
+      "examples": [
+        "// How do I find how far an arc sweeps in a presentation?\n\n// Read angle properties to check arc span in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Arc WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nparagraph.AddText(\", Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nshape.SetPosition(1500000, 1500000);\nshape.SetVerticalTextAlign(\"bottom\");\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetSweepAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the type of the current path command.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetType/",
+      "examples": [
+        "// How do I identify what kind of path command is used in a presentation?\n\n// Check shape geometry commands to find movement or drawing operations in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "PathCommandType"
+      },
+      "signature": "GetType(): PathCommandType",
+      "since": "9.1.0"
+    },
+    "GetWR": {
+      "description": "Returns the width radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetWR/",
+      "examples": [
+        "// How do I read the arc width radius in a presentation?\n\n// Extract arc dimensions to display size information in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Arc WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nparagraph.AddText(\", Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nshape.SetPosition(1500000, 1500000);\nshape.SetVerticalTextAlign(\"bottom\");\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetWR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX": {
+      "description": "Returns the X coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetX/",
+      "examples": [
+        "// How do I find the horizontal position of a path point in a presentation?\n\n// Check shape path coordinates to display point locations in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX0": {
+      "description": "Returns the X coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetX0/",
+      "examples": [
+        "// How do I find the starting control point position of a curve in a presentation?\n\n// Read curve control points to verify bezier path geometry in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX1": {
+      "description": "Returns the X coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetX1/",
+      "examples": [
+        "// How do I find the second control point position of a curve in a presentation?\n\n// Read curve control points to verify bezier path geometry in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX2": {
+      "description": "Returns the X coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetX2/",
+      "examples": [
+        "// How do I find the end position of a curve path in a presentation?\n\n// Read curve endpoints to verify bezier path geometry in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX2(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY": {
+      "description": "Returns the Y coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetY/",
+      "examples": [
+        "// How do I find the vertical position of a path point in a presentation?\n\n// Check shape path coordinates to display point locations in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY0": {
+      "description": "Returns the Y coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetY0/",
+      "examples": [
+        "// How do I find the starting control point position of a curve in a presentation?\n\n// Read curve control points to verify bezier path geometry in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY1": {
+      "description": "Returns the Y coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetY1/",
+      "examples": [
+        "// How do I access the Y coordinate of a control point in a shape path in a presentation?\n\n// Extract and display all control points from a curved shape in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY2": {
+      "description": "Returns the Y coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPathCommand/Methods/GetY2/",
+      "examples": [
+        "// How do I read the endpoint's Y coordinate in a shape path in a presentation?\n\n// Extract and display control points and endpoints from a curved shape in a presentation.\n\nlet presentation = Api.GetPresentation();\nlet slide = presentation.GetSlideByIndex(0);\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY2(): string | null",
+      "since": "9.1.0"
+    }
+  }
+}

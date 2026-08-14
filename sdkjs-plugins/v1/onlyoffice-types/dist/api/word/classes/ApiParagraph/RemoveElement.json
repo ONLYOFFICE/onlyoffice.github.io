@@ -1,0 +1,18 @@
+{
+  "description": "Removes an element using the position specified.\n<note>If the element you remove is the last paragraph element (i.e. all the elements are removed from the paragraph),\na new empty run is automatically created. If you want to add\ncontent to this run, use the {@link ApiParagraph#GetElement} method.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/RemoveElement/",
+  "examples": [
+    "// How do I delete one element at a given index from a paragraph in a document?\n\n// Drop the third run from a paragraph while keeping all surrounding content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.RemoveAllElements();\nlet run = Api.CreateRun();\nrun.AddText(\"This is the first paragraph element. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the second paragraph element. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the third paragraph element (it will be removed from the paragraph and we will not see it). \");\nparagraph.AddElement(run);\nparagraph.AddLineBreak();\nrun = Api.CreateRun();\nrun.AddText(\"This is the fourth paragraph element - it became the third, because we removed the previous run from the paragraph. \");\nparagraph.AddElement(run);\nparagraph.AddLineBreak();\nrun = Api.CreateRun();\nrun.AddText(\"Please note that line breaks are not counted into paragraph elements!\");\nparagraph.AddElement(run);\nparagraph.RemoveElement(2);"
+  ],
+  "params": [
+    {
+      "description": "The element position which we want to remove from the paragraph.",
+      "name": "nPos",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "RemoveElement(nPos: number): boolean"
+}

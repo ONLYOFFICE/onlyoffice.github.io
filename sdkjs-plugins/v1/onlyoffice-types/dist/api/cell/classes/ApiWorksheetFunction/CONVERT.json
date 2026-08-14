@@ -1,0 +1,28 @@
+{
+  "description": "Converts a number from one measurement system to another.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CONVERT/",
+  "examples": [
+    "// How do you change pounds to kilograms in a spreadsheet?\n\n// Transform a value from one measurement standard to another in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CONVERT(2, \"Ibm\", \"kg\"));"
+  ],
+  "params": [
+    {
+      "description": "The value in the specified units to be converted.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The original measurement unit.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "The units for the result.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CONVERT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | string, arg3: ApiRange | ApiName | string): number"
+}

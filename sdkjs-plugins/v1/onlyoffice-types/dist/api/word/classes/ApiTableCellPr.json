@@ -1,0 +1,391 @@
+{
+  "description": "Class representing the table cell properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiTableCellPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify what type of object holds the table cell properties in a document?\n\n// Read and display the category label assigned to a table cell properties object in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet classType = tableCellPr.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class Type = \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"tableCellPr\""
+      },
+      "signature": "GetClassType(): \"tableCellPr\""
+    },
+    "SetCellBorderBottom": {
+      "description": "Sets the border which will be displayed at the bottom of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderBottom/",
+      "examples": [
+        "// How do I draw a line at the bottom of a table cell in a document?\n\n// Define the style and thickness of the lower border for a table cell in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and add the bottom 4 point black border to all cells:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellBorderBottom(\"single\", 32, 0, 51, 51, 51);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The cell bottom border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current cell bottom border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset in the bottom part of the table cell measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetCellBorderLeft": {
+      "description": "Sets the border which will be displayed to the left of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderLeft/",
+      "examples": [
+        "// How do I apply a border to the left edge of a table cell in a document?\n\n// Style a table cell with a visible left-side border in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and add the left 4 point black border to all cells:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellBorderLeft(\"single\", 32, 0, 51, 51, 51);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The cell left border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current cell left border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset in the left part of the table cell measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetCellBorderRight": {
+      "description": "Sets the border which will be displayed to the right of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderRight/",
+      "examples": [
+        "// How do I apply a border to the right edge of a table cell in a document?\n\n// Style a table cell with a visible right-side border in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and add the right 4 point black border to all cells:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellBorderRight(\"single\", 32, 0, 51, 51, 51);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The cell right border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current cell right border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset in the right part of the table cell measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetCellBorderTop": {
+      "description": "Sets the border which will be displayed at the top of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderTop/",
+      "examples": [
+        "// How do I apply a border to the top edge of a table cell in a document?\n\n// Style a table cell with a visible top-side border in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and add the top 4 point black border to all cells:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellBorderTop(\"single\", 32, 0, 51, 51, 51);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The cell top border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current cell top border measured in eighths of a point.",
+          "name": "nSize",
+          "type": "pt_8"
+        },
+        {
+          "description": "The spacing offset in the top part of the table cell measured in points used to place this border.",
+          "name": "nSpace",
+          "type": "pt"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+    },
+    "SetCellMarginBottom": {
+      "description": "Specifies an amount of space which will be left between the bottom extent of the cell contents and the border\nof a specific table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginBottom/",
+      "examples": [
+        "// How do I control the gap between text and the bottom border of a table cell in a document?\n\n// Push cell content away from the bottom boundary of a table cell in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\nlet cell = table.GetRow(0).GetCell(0);\ncell.GetContent().GetElement(0).AddText(\"This is just a sample text to show that the bottom margin for all the table cells is 36 points.\");\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellMarginBottom(720);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The value for the amount of space below the bottom extent of the cell measured in twentieths\rof a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin will be used, otherwise\rthe table cell bottom margin will be overridden with the specified value for the current cell.",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginBottom(nValue: twips): boolean"
+    },
+    "SetCellMarginLeft": {
+      "description": "Specifies an amount of space which will be left between the left extent of the cell contents and \nthe border of a specific table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginLeft/",
+      "examples": [
+        "// How do I control the gap between text and the left border of a table cell in a document?\n\n// Push cell content away from the left boundary of a table cell in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\nlet cell = table.GetRow(0).GetCell(0);\ncell.GetContent().GetElement(0).AddText(\"This is just a sample text to show that the left margin for all the table cells is 36 points.\");\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellMarginLeft(720);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The value for the amount of space to the left extent of the cell measured in twentieths\rof a point (1/1440 of an inch). If this value is `null`, then default table cell left margin will be used, otherwise\rthe table cell left margin will be overridden with the specified value for the current cell.",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginLeft(nValue: twips): boolean"
+    },
+    "SetCellMarginRight": {
+      "description": "Specifies an amount of space which will be left between the right extent of the cell contents and the border of a specific table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginRight/",
+      "examples": [
+        "// How do I control the gap between text and the right border of a table cell in a document?\n\n// Push cell content away from the right boundary of a table cell in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\nlet cell = table.GetRow(0).GetCell(0);\ncell.GetContent().GetElement(0).AddText(\"This is just a sample text to show that the right margin for all the table cells is 36 points.\");\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellMarginRight(720);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The value for the amount of space to the right extent of the cell measured in twentieths\rof a point (1/1440 of an inch). If this value is `null`, then default table cell right margin will be used, otherwise\rthe table cell right margin will be overridden with the specified value for the current cell.",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginRight(nValue: twips): boolean"
+    },
+    "SetCellMarginTop": {
+      "description": "Specifies an amount of space which will be left between the upper extent of the cell contents\nand the border of a specific table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginTop/",
+      "examples": [
+        "// How do I control the gap between text and the top border of a table cell in a document?\n\n// Push cell content away from the top boundary of a table cell in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\nlet cell = table.GetRow(0).GetCell(0);\ncell.GetContent().GetElement(0).AddText(\"This is just a sample text to show that the top margin for all the table cells is 36 points.\");\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellMarginTop(720);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The value for the amount of space above the upper extent of the cell measured in twentieths\rof a point (1/1440 of an inch). If this value is `null`, then default table cell top margin will be used, otherwise\rthe table cell top margin will be overridden with the specified value for the current cell.",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginTop(nValue: twips): boolean"
+    },
+    "SetNoWrap": {
+      "description": "Specifies how the current table cell is laid out when the parent table is displayed in a document. This setting\nonly affects the behavior of the cell when the {@link ApiTablePr#SetTableLayout} table layout for this table is set to use the `\"autofit\"` algorithm.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetNoWrap/",
+      "examples": [
+        "// How do I stop text from breaking onto multiple lines inside a table cell in a document?\n\n// Keep table cell content on a single line regardless of column width in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntablePr.SetTableLayout(\"autofit\");\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\nlet cell = table.GetRow(0).GetCell(0);\ncell.GetContent().GetElement(0).AddText(\"This is a table with the autofit type of the table layout.\");\ndoc.Push(table);\nlet copyTable1 = table.Copy();\ncopyTable1.SetWidth(\"percent\", 10);\ncell = copyTable1.GetRow(0).GetCell(0);\ncell.Clear();\ncell.GetContent().GetElement(0).AddText(\"This is a table cell where text is wrapped when we try to change table width.\");\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetNoWrap(false);\ndoc.Push(copyTable1);\nlet copyTable2 = table.Copy();\ncopyTable2.SetWidth(\"percent\", 10);\ncell = copyTable2.GetRow(0).GetCell(0);\ncell.Clear();\ncell.GetContent().GetElement(0).AddText(\"This is a table cell where text is not wrapped when we try to change table width.\");\ntableCellPr.SetNoWrap(true);\ncopyTable2.SetStyle(tableStyle);\ndoc.Push(copyTable2);"
+      ],
+      "params": [
+        {
+          "description": "The true value means that the current table cell will not be wrapped in the parent table.",
+          "name": "isNoWrap",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetNoWrap(isNoWrap: boolean): boolean"
+    },
+    "SetShd": {
+      "description": "Specifies the shading applied to the contents of the table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetShd/",
+      "examples": [
+        "// How do I fill a table cell with a specific background color in a document?\n\n// Highlight a table cell by giving it a colored background in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and add add an orange shading to all cells:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetShd(\"clear\", Api.HexColor('#FF6F3D'));\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The shading type which will be applied to the contents of the current table cell.",
+          "name": "sType",
+          "type": "ShdType"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        },
+        {
+          "description": "The true value disables the table cell contents shading.",
+          "name": "isAuto",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetShd(sType: ShdType, r: number, g: number, b: number, isAuto?: boolean): boolean"
+    },
+    "SetTextDirection": {
+      "description": "Specifies the direction of the text flow for this table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetTextDirection/",
+      "examples": [
+        "// How do I rotate or reorient the text inside a table cell in a document?\n\n// Display text vertically rather than horizontally within a table cell in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableRow = table.GetRow(0);\ntableRow.SetHeight(\"atLeast\", 1440);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetTextDirection(\"btlr\");\nlet cell = table.GetRow(0).GetCell(0);\nlet paragraph = cell.GetContent().GetElement(0);\nparagraph.AddText(\"btlr\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The available types of the text direction in the table cell: `\"lrtb\"`\r- text direction left-to-right moving from top to bottom, `\"tbrl\"` - text direction top-to-bottom moving from right\rto left, `\"btlr\"` - text direction bottom-to-top moving from left to right.",
+          "name": "sType",
+          "type": "TextFlowDirection"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTextDirection(sType: TextFlowDirection): boolean"
+    },
+    "SetVerticalAlign": {
+      "description": "Specifies the vertical alignment for the text contents within the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetVerticalAlign/",
+      "examples": [
+        "// How do I align text to the top, middle, or bottom of a table cell in a document?\n\n// Anchor cell content to a specific vertical position within a table cell in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableRow = table.GetRow(0);\ntableRow.SetHeight(\"atLeast\", 1440);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetVerticalAlign(\"bottom\");\nlet cell = table.GetRow(0).GetCell(0);\nlet paragraph = cell.GetContent().GetElement(0);\nparagraph.AddText(\"Align bottom\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The available types of the vertical alignment for the text contents of the current table cell.",
+          "name": "sType",
+          "type": "\"top\" | \"center\" | \"bottom\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVerticalAlign(sType: \"top\" | \"center\" | \"bottom\"): boolean"
+    },
+    "SetWidth": {
+      "description": "Sets the preferred width to the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetWidth/",
+      "examples": [
+        "// How do I control how wide a cell appears in a document?\n\n// Enforce a consistent cell size across all columns in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"All cells are at least 2 inches wide:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetWidth(\"twips\", 2880);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "Type of the width value from one of the available width values types.",
+          "name": "sType",
+          "type": "TableWidth"
+        },
+        {
+          "description": "The table cell width value measured in positive integers.",
+          "name": "nValue",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetWidth(sType: TableWidth, nValue?: number): boolean"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiTableCellPr object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/ToJSON/",
+      "examples": [
+        "// How do I save and reuse the formatting of a table cell in a document?\n\n// Preserve cell styling by converting its properties to a transferable format in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableCellPr = tableStyle.GetTableCellPr();\ntableCellPr.SetCellBorderBottom(\"single\", 32, 0, 51, 51, 51);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet json = tableCellPr.ToJSON();\nlet tableCellPrFromJSON = Api.FromJSON(json);\nlet type = tableCellPrFromJSON.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class type = \" + type);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Creates underline annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateUnderlineAnnot/",
+  "examples": [
+    "// How do I underline text with an annotation in a PDF?\n\n// Create an underline annotation at specified coordinates and add it to a page in a PDF.\n\nlet doc = Api.GetDocument();\nlet underlineAnnot = Api.CreateUnderlineAnnot([[85.04985826771654,56.70000000000001,229.27237795275593,56.70000000000001,85.04985826771654,70.9988031496063,229.27237795275593,70.9988031496063]]);\nlet page = doc.GetPage(0);\npage.AddObject(underlineAnnot);"
+  ],
+  "params": [
+    {
+      "description": "region to apply underline.",
+      "name": "rect",
+      "type": "Rect | Quad[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiUnderlineAnnotation"
+  },
+  "signature": "CreateUnderlineAnnot(rect: Rect | Quad[]): ApiUnderlineAnnotation"
+}

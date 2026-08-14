@@ -1,0 +1,18 @@
+{
+  "description": "Converts lines to points (1 line = 12 points).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/LinesToPoints/",
+  "examples": [
+    "// Use the Api object to convert measurement units.\n\n// Display the conversion result in a shape on the slide.\n\nconst lines = 100;\nconst points = Api.LinesToPoints(lines);\n\nconst rgb = Api.RGB(50, 150, 250);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 150 * 36000, fill, stroke);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(lines + ' lines are equal to ' + points + ' points.');\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The number of lines to convert to points.",
+      "name": "lines",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LinesToPoints(lines: number): number"
+}

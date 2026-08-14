@@ -1,0 +1,12 @@
+{
+  "description": "Creates no fill and removes the fill from the element.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateNoFill/",
+  "examples": [
+    "// How do I make a shape border completely transparent in a document?\n\n// Remove all color from a shape's outline so it appears borderless in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateNoFill(): ApiFill"
+}

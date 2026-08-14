@@ -1,0 +1,20 @@
+{
+  "description": "Creates a theme color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/ThemeColor/",
+  "examples": [
+    "// How do I fill a shape with one of the document's built-in theme colors in a spreadsheet?\n\n// Draw a rectangle filled with a coordinated theme color to maintain consistent styling in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst color = Api.ThemeColor('accent6');\nconst fill = Api.CreateSolidFill(color);\nconst stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(0, 0, 0)));\nworksheet.AddShape(\"rect\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);"
+  ],
+  "params": [
+    {
+      "description": "The theme color name. If the provided name is not supported, the 'tx1' color will be used.",
+      "name": "name",
+      "optional": true,
+      "type": "SchemeColorId"
+    }
+  ],
+  "returns": {
+    "description": "Instance of ApiColor with 'theme' type.",
+    "type": "ApiColor"
+  },
+  "signature": "ThemeColor(name?: SchemeColorId): ApiColor"
+}

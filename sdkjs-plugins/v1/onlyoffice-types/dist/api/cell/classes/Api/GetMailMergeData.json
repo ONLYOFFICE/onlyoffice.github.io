@@ -1,0 +1,24 @@
+{
+  "description": "Returns the mail merge data.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/GetMailMergeData/",
+  "examples": [
+    "// How do I pull contact details from a mail merge table at a specific row in a spreadsheet?\n\n// Access a particular record from the merge data set and display the result in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetColumnWidth(0, 20);\nworksheet.GetRange(\"A1\").SetValue(\"Email address\");\nworksheet.GetRange(\"B1\").SetValue(\"Greeting\");\nworksheet.GetRange(\"C1\").SetValue(\"First name\");\nworksheet.GetRange(\"D1\").SetValue(\"Last name\");\nworksheet.GetRange(\"A2\").SetValue(\"user1@example.com\");\nworksheet.GetRange(\"B2\").SetValue(\"Dear\");\nworksheet.GetRange(\"C2\").SetValue(\"John\");\nworksheet.GetRange(\"D2\").SetValue(\"Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"user2@example.com\");\nworksheet.GetRange(\"B3\").SetValue(\"Hello\");\nworksheet.GetRange(\"C3\").SetValue(\"Kate\");\nworksheet.GetRange(\"D3\").SetValue(\"Cage\");\nlet mailMergeData = Api.GetMailMergeData(0);\nworksheet.GetRange(\"A5\").SetValue(\"Mail merge data: \" + mailMergeData);"
+  ],
+  "params": [
+    {
+      "description": "The sheet index.",
+      "name": "nSheet",
+      "type": "number"
+    },
+    {
+      "description": "Specifies that the data will be received with the format.",
+      "name": "bWithFormat",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "string[][]"
+  },
+  "signature": "GetMailMergeData(nSheet: number, bWithFormat?: boolean): string[][]"
+}

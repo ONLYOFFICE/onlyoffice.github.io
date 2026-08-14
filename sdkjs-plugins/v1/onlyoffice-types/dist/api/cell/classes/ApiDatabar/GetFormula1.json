@@ -1,0 +1,14 @@
+{
+  "description": "Returns the first formula used by the current conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFormula1/",
+  "examples": [
+    "// How do I find the first comparison value that a conditional formatting rule uses in a spreadsheet?\n\n// Verify the lower or sole boundary of a formatting condition to confirm it is correctly defined in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet formula1 = condition1.GetFormula1();\n\nworksheet.GetRange(\"C1\").SetValue(\"First formula:\");\nworksheet.GetRange(\"C2\").SetValue(formula1);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The first formula.",
+    "type": "string"
+  },
+  "signature": "GetFormula1(): string",
+  "since": "9.1.0"
+}

@@ -1,0 +1,23 @@
+{
+  "description": "Sets the lock value to the specified lock type of the current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetLockValue/",
+  "examples": [
+    "// How do I lock a shape so users cannot click or select it in a document?\n\n// Apply a selection lock to a shape and confirm the restriction is active in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\ndrawing.SetLockValue(\"noSelect\", true);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetContent();\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This drawing cannot be selected: \" + lockValue);\ndocContent.AddElement(0, paragraph);"
+  ],
+  "params": [
+    {
+      "description": "Lock type in the string format.",
+      "name": "sType",
+      "type": "DrawingLockType"
+    },
+    {
+      "description": "Specifies if the specified lock is applied to the current drawing.",
+      "name": "bValue",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetLockValue(sType: DrawingLockType, bValue: boolean): boolean"
+}

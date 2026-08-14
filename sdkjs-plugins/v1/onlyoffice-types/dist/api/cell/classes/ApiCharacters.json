@@ -1,0 +1,143 @@
+{
+  "description": "Class representing characters in an object that contains text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/",
+  "methods": {
+    "Delete": {
+      "description": "Deletes the ApiCharacters object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/Delete/",
+      "examples": [
+        "// How do I erase a portion of text inside a cell by position in a spreadsheet?\n\n// Trim unwanted characters out of a cell value without replacing the entire contents in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\ncharacters.Delete();"
+      ],
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Delete(): void",
+      "since": "7.4.0"
+    },
+    "GetCaption": {
+      "description": "Returns a string value that represents the text of the specified range of characters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetCaption/",
+      "examples": [
+        "// How do I read the actual text that a character selection represents in a spreadsheet?\n\n// Pull out a substring from a cell by selecting characters at a given position in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet caption = characters.GetCaption();\nworksheet.GetRange(\"B3\").SetValue(\"Caption: \" + caption);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "A string value that represents the text of the specified range of characters.",
+        "type": "string"
+      },
+      "signature": "GetCaption(): string",
+      "since": "7.4.0"
+    },
+    "GetCount": {
+      "description": "Returns a value that represents a number of objects in the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetCount/",
+      "examples": [
+        "// How do I find out how many characters are in a specific portion of a cell's text in a spreadsheet?\n\n// Measure the length of a character selection taken from a cell value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet count = characters.GetCount();\nworksheet.GetRange(\"B3\").SetValue(\"Number of characters: \" + count);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCount(): number",
+      "since": "7.4.0"
+    },
+    "GetFont": {
+      "description": "Returns the ApiFont object that represents the font of the specified characters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetFont/",
+      "examples": [
+        "// How do I read or change the font properties of part of a cell's text in a spreadsheet?\n\n// Target individual characters within a cell to apply bold, size, or other formatting in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFont"
+      },
+      "signature": "GetFont(): ApiFont",
+      "since": "7.4.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent object of the specified characters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetParent/",
+      "examples": [
+        "// How do I find which cell a selected group of characters belongs to in a spreadsheet?\n\n// Trace a character selection back to its containing cell to apply further formatting in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet parent = characters.GetParent();\nparent.SetBorders(\"Bottom\", \"Thick\", Api.CreateColorFromRGB(255, 111, 61));"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetParent(): ApiRange",
+      "since": "7.4.0"
+    },
+    "GetText": {
+      "description": "Returns the text of the specified range of characters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetText/",
+      "examples": [
+        "// How do I extract just the text from a specific portion of a cell's value in a spreadsheet?\n\n// Capture a substring of cell text for comparison or display elsewhere in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet text = characters.GetText();\nworksheet.GetRange(\"B3\").SetValue(\"Text: \" + text);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The text of the specified range of characters.",
+        "type": "string"
+      },
+      "signature": "GetText(): string",
+      "since": "7.4.0"
+    },
+    "Insert": {
+      "description": "Inserts a string replacing the specified characters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/Insert/",
+      "examples": [
+        "// How do I substitute part of a cell's text with different content in a spreadsheet?\n\n// Overwrite a specific slice of characters to correct or update cell content in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.Insert(\"string\");"
+      ],
+      "params": [
+        {
+          "description": "The string to insert.",
+          "name": "String",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Insert(String: string): void",
+      "since": "7.4.0"
+    },
+    "SetCaption": {
+      "description": "Sets a string value that represents the text of the specified range of characters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/SetCaption/",
+      "examples": [
+        "// How do I update the visible text of a specific character range inside a cell in a spreadsheet?\n\n// Relabel a portion of cell content without affecting the rest of the cell's text in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.SetCaption(\"string\");"
+      ],
+      "params": [
+        {
+          "description": "A string value that represents the text of the specified range of characters.",
+          "name": "Caption",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCaption(Caption: string): void",
+      "since": "7.4.0"
+    },
+    "SetText": {
+      "description": "Sets the text for the specified characters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/SetText/",
+      "examples": [
+        "// How do I change the actual text stored in a specific character selection within a cell in a spreadsheet?\n\n// Rewrite a defined portion of cell content to reflect updated information in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.SetText"
+      ],
+      "params": [
+        {
+          "description": "The text to be set.",
+          "name": "Text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetText(Text: string): void",
+      "since": "7.4.0"
+    }
+  }
+}

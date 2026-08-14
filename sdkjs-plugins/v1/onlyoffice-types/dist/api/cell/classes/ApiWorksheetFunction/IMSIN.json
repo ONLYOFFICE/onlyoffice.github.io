@@ -1,0 +1,18 @@
+{
+  "description": "Returns the sine of a complex number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMSIN/",
+  "examples": [
+    "// How do I find the sine value of a complex number in a spreadsheet?\n\n// Get the sine result for complex number trigonometric operations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMSIN(\"-2+2.5i\"));"
+  ],
+  "params": [
+    {
+      "description": "A complex number expressed in the *x + yi* or *x + yj* form.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMSIN(arg1: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Creates an abstract multilevel numbering with a specified type.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/CreateNumbering/",
+  "examples": [
+    "// How do I create a numbered or bulleted list with multiple levels in a document?\n\n// Apply a consistent bullet style to every level so readers can follow nested structure at a glance in a document.\n\nlet doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"bullet\");\nfor (let lvl = 0; lvl < 8; ++lvl) {\n\tlet numLvl = numbering.GetLevel(lvl);\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"Default numbered lvl \" + (lvl + 1));\n\tparagraph.SetNumbering(numLvl);\n\tparagraph.SetContextualSpacing(true);\n\tdoc.Push(paragraph);\n}"
+  ],
+  "params": [
+    {
+      "description": "The type of the numbering which will be created.",
+      "name": "sType",
+      "optional": true,
+      "type": "\"bullet\" | \"numbered\""
+    }
+  ],
+  "returns": {
+    "type": "ApiNumbering"
+  },
+  "signature": "CreateNumbering(sType?: \"bullet\" | \"numbered\"): ApiNumbering"
+}

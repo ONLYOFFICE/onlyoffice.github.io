@@ -1,0 +1,19 @@
+{
+  "description": "Sets the text spacing measured in twentieths of a point.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetSpacing/",
+  "examples": [
+    "// How do I control the amount of space between characters in a paragraph in a document?\n\n// Expand or compress the gaps between letters within a paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\nparagraph.SetSpacing(2);"
+  ],
+  "params": [
+    {
+      "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
+      "name": "nSpacing",
+      "type": "twips"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetSpacing(nSpacing: twips): ApiParagraph"
+}

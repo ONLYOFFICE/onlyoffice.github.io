@@ -1,0 +1,12 @@
+{
+  "description": "Returns the paragraph properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetParaPr/",
+  "examples": [
+    "// How do I retrieve the properties of a paragraph in a PDF?\n\n// Modify paragraph spacing and other settings in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingAfter(1440);\n\nparagraph.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the first paragraph has this offset enabled.\");\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParaPr"
+  },
+  "signature": "GetParaPr(): ApiParaPr"
+}

@@ -1,0 +1,29 @@
+{
+  "description": "Creates a pattern fill to apply to the object using the selected pattern as the object background.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreatePatternFill/",
+  "examples": [
+    "// How do I apply a diagonal dash pattern as the background of a shape in a document?\n\n// Give a shape a decorative patterned fill instead of a solid color in a document.\n\nconst bgColor = Api.HexColor('#abcdef');\nconst fgColor = Api.ThemeColor('accent3');\nconst fill = Api.CreatePatternFill('dashDnDiag', bgColor, fgColor);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\nparagraph.AddDrawing(shape);"
+  ],
+  "params": [
+    {
+      "description": "The pattern type used for the fill selected from one of the available pattern types.",
+      "name": "patternType",
+      "type": "PatternType"
+    },
+    {
+      "description": "The background color used for the pattern creation.",
+      "name": "bgColor",
+      "type": "ApiColor"
+    },
+    {
+      "description": "The foreground color used for the pattern creation.",
+      "name": "fgColor",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreatePatternFill(patternType: PatternType, bgColor: ApiColor, fgColor: ApiColor): ApiFill",
+  "since": "9.1.0"
+}

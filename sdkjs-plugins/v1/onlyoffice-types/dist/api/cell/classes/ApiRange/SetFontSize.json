@@ -1,0 +1,19 @@
+{
+  "description": "Sets the font size to the characters of the current cell range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetFontSize/",
+  "examples": [
+    "// How do I make text larger or smaller in a group of cells in a spreadsheet?\n\n// Adjust the point size of characters across a range to improve readability in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:D5\");\nrange.SetFontSize(20);"
+  ],
+  "params": [
+    {
+      "description": "The font size value measured in points.",
+      "name": "nSize",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the font size was set successfully.",
+    "type": "boolean"
+  },
+  "signature": "SetFontSize(nSize: number): boolean"
+}

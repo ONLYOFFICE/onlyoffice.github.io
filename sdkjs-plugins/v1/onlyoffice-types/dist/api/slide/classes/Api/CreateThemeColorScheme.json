@@ -1,0 +1,23 @@
+{
+  "description": "Creates a new theme color scheme.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateThemeColorScheme/",
+  "examples": [
+    "// How do I define custom colors for the presentation theme in a presentation?\n\n// Create a named color scheme with multiple custom colors and assign it to the presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst clrScheme = Api.CreateThemeColorScheme([\n\tApi.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117),\n\tApi.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), Api.CreateRGBColor(128, 43, 43),\n\tApi.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222),\n\tApi.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)\n], \"New color scheme\");\nconst theme = slide.GetTheme();\ntheme.SetColorScheme(clrScheme);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "Set of colors which are referred to as a color scheme.\rThe color scheme is responsible for defining a list of twelve colors.\rThe array should contain a sequence of colors: 2 dark, 2 light, 6 primary, a color for a hyperlink and a color for the followed hyperlink.",
+      "name": "arrColors",
+      "type": "ApiUniColor[] | ApiRGBColor[] | ApiColor[]"
+    },
+    {
+      "description": "Theme color scheme name.",
+      "name": "sName",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiThemeColorScheme"
+  },
+  "signature": "CreateThemeColorScheme(arrColors: ApiUniColor[] | ApiRGBColor[] | ApiColor[], sName: string): ApiThemeColorScheme"
+}

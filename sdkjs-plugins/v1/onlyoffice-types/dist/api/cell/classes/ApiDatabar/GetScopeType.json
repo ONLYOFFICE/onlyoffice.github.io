@@ -1,0 +1,14 @@
+{
+  "description": "Returns the scope type of the conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetScopeType/",
+  "examples": [
+    "// How do I find out whether a formatting rule targets cells, a table, or a pivot table in a spreadsheet?\n\n// Determine the coverage area defined for a conditional formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet scopeType = condition1.GetScopeType();\n\nworksheet.GetRange(\"C1\").SetValue(\"Scope type:\");\nworksheet.GetRange(\"C2\").SetValue(scopeType);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Returns \"xlSelectionScope\" for normal ranges, \"xlDataFieldScope\" for entire worksheet, \"xlFieldsScope\" for pivot tables.",
+    "type": "XlPivotConditionScope"
+  },
+  "signature": "GetScopeType(): XlPivotConditionScope",
+  "since": "9.1.0"
+}

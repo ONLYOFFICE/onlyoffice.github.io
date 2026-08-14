@@ -1,0 +1,9 @@
+{
+  "description": "Class representing a chart.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methodCount": 69,
+  "sharded": true
+}

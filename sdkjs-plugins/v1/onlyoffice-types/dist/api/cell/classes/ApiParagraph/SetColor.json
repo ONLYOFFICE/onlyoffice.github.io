@@ -1,0 +1,17 @@
+{
+  "description": "Sets the text color to the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/SetColor/",
+  "params": [
+    {
+      "description": "The text color.",
+      "name": "color",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetColor(color: ApiColor): ApiParagraph",
+  "since": "9.1.0"
+}

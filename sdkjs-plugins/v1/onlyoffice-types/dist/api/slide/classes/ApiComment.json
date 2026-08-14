@@ -1,0 +1,345 @@
+{
+  "description": "Class representing a comment.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/",
+  "methods": {
+    "AddReply": {
+      "description": "Adds a reply to a comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/AddReply/",
+      "examples": [
+        "// How do I add a reply to a comment in a presentation?\n\n// Create a new reply thread beneath a comment in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\nconst shapeWidth = 300 * 36000;\nconst shapeHeight = 100 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", shapeWidth, shapeHeight, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment from current user with default params\");\nslide.AddComment(posX + shapeWidth, posY + shapeHeight, \"Comment from another user\", \"John Doe\", \"uid-2\");\n\nconst arrComments = presentation.GetAllComments();\narrComments[0].AddReply(\"Hello, this is a reply\", \"John Smith\", \"uid-1\");\nconst reply = arrComments[0].GetReply(0);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"First comment and its reply are aligned to the top left corner of the shape.\" + \"\\n\");\nparagraph.AddText(\"Comment from John Doe is aligned to the bottom right corner of the shape.\" + \"\\n\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Comment's reply text: \" + reply.GetText());"
+      ],
+      "params": [
+        {
+          "description": "The comment reply text.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The name of the comment reply author.",
+          "name": "sAuthorName",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment reply author.",
+          "name": "sUserId",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The comment reply position. If nPos=-1 add to the end.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "AddReply(sText: string, sAuthorName?: string, sUserId?: string, nPos?: number): ApiComment"
+    },
+    "Delete": {
+      "description": "Deletes the current comment from the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/Delete/",
+      "examples": [
+        "// How do I delete a comment in a presentation?\n\n// Erase an existing comment and all its replies in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\narrComments[0].Delete();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"The comment was just deleted from the current presentation.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAuthorName": {
+      "description": "Returns the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetAuthorName/",
+      "examples": [
+        "// How do I find out who created a comment in a presentation?\n\n// Display the author's name for a comment in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\nconst authorName = arrComments[0].GetAuthorName();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's author: \" + authorName);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiComment class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetClassType/",
+      "examples": [
+        "// How do I find the class type of a comment in a presentation?\n\n// Read the type label that identifies a comment object in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\nconst classType = arrComments[0].GetClassType();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's class type: \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"comment\""
+      },
+      "signature": "GetClassType(): \"comment\""
+    },
+    "GetPosition": {
+      "description": "Returns the position of the comment in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetPosition/",
+      "examples": [
+        "// How do I find the location of a comment in a presentation?\n\n// Retrieve the position of a comment on a slide in a presentation.\n\nconst presentation = Api.GetPresentation();\npresentation.GetAllComments().forEach(comment => {\n\tcomment.Delete();\n});\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#7CA25A'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nslide.AddComment(Api.MillimetersToEmus(15), Api.MillimetersToEmus(35), 'Comment 1', 'John Smith');\nconst arrComments = presentation.GetAllComments();\nconst position = arrComments[0].GetPosition();\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('Comment position - X: ' + position.x + ', Y: ' + position.y);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "An object with the coordinates (in EMU) of the comment position.",
+        "type": "object"
+      },
+      "signature": "GetPosition(): object"
+    },
+    "GetQuoteText": {
+      "description": "Returns the quote text of the current comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetQuoteText/",
+      "examples": [
+        "// How do I access the quoted text from a comment in a presentation?\n\n// Retrieve the passage of text that triggered a comment in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\nconst quoteText = arrComments[0].GetQuoteText();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's quote text: \" + quoteText);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetQuoteText(): number"
+    },
+    "GetRepliesCount": {
+      "description": "Returns a number of the comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetRepliesCount/",
+      "examples": [
+        "// How many replies does a comment have in a presentation?\n\n// Check the reply count for a specific comment in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\nconst repliesCount = 3;\nfor (let i = 0; i < repliesCount; i++) {\n\tarrComments[0].AddReply(\"Reply \" + (i + 1), \"John Smith\", \"uid-\" + (i + 1));\n}\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment replies count: \" + arrComments[0].GetRepliesCount());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRepliesCount(): number"
+    },
+    "GetText": {
+      "description": "Returns the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetText/",
+      "examples": [
+        "// Extract the raw text content from a specific comment.\n\n// Add all comments to the presentation, then display the first comment's text.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\nconst text = arrComments[0].GetText();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's text: \" + text);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(): string"
+    },
+    "GetTime": {
+      "description": "Returns the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetTime/",
+      "examples": [
+        "// Retrieve the creation timestamp of a specific comment.\n\n// Add a comment to the presentation and display its creation time.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\nconst time = arrComments[0].GetTime();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's time: \" + time);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTime(): number"
+    },
+    "GetTimeUTC": {
+      "description": "Returns the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetTimeUTC/",
+      "examples": [
+        "// Retrieve the UTC timestamp of a specific comment.\n\n// Add a comment to the presentation and display its creation time in UTC format.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\nconst timeUTC = arrComments[0].GetTimeUTC();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's time (UTC): \" + timeUTC);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTimeUTC(): number"
+    },
+    "GetUserId": {
+      "description": "Returns the user ID of the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetUserId/",
+      "examples": [
+        "// Retrieve the user identifier associated with a comment.\n\n// Set and retrieve the user ID using a comment object in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst comment = presentation.GetAllComments()[0];\n\ncomment.SetUserId(\"uid-42\");\nconst userId = comment.GetUserId();\n\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"The ID of the user who commented on this presentation is \" + userId);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUserId(): string"
+    },
+    "IsSolved": {
+      "description": "Checks if a comment is solved or not.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/IsSolved/",
+      "examples": [
+        "// Check the resolved status of a comment before and after marking it as solved.\n\n// Display the comment's solved status, then mark it as resolved and check again.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, 'Comment 1');\nconst arrComments = presentation.GetAllComments();\nconst comment = arrComments[0];\n\nconst before = comment.IsSolved() ? 'solved' : 'not solved';\ncomment.SetSolved(true);\nconst after = comment.IsSolved() ? 'solved' : 'not solved';\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('Originally comment was ' + before + ', but currently it is ' + after);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsSolved(): boolean"
+    },
+    "RemoveReplies": {
+      "description": "Removes the specified comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/RemoveReplies/",
+      "examples": [
+        "// Delete specified comment replies while keeping others intact.\n\n// Add multiple replies to a comment, then remove selected ones by index.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1 (own reply)\", \"John Smith\", \"uid-1\");\narrComments[0].AddReply(\"Reply 2\", \"Mark Pottato\", \"uid-2\");\narrComments[0].AddReply(\"Reply 3\", \"Hamish Mitchell\", \"uid-3\");\narrComments[0].RemoveReplies(0, 1, false);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment replies count: \" + arrComments[0].GetRepliesCount());\nparagraph.AddLineBreak();\nparagraph.AddText(\"Own reply was removed, but other two replies are still here.\");"
+      ],
+      "params": [
+        {
+          "description": "The position of the first comment reply to remove.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "A number of comment replies to remove.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to remove all comment replies or not.",
+          "name": "bRemoveAll",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "RemoveReplies(nPos?: number, nCount?: number, bRemoveAll?: boolean): ApiComment"
+    },
+    "SetAuthorName": {
+      "description": "Sets the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetAuthorName/",
+      "examples": [
+        "// Change the author name associated with a comment.\n\n// Retrieve the first comment and update its author name, then display the result.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\narrComments[0].SetAuthorName(\"Mark Pottato\");\nconst authorName = arrComments[0].GetAuthorName();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's author: \" + authorName);"
+      ],
+      "params": [
+        {
+          "description": "The comment author's name.",
+          "name": "sAuthorName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetAuthorName(sAuthorName: string): ApiComment"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the comment in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetPosition/",
+      "examples": [
+        "// Reposition a comment to a different location on the slide.\n\n// Move a comment to a new position and display the updated coordinates.\n\nconst presentation = Api.GetPresentation();\npresentation.GetAllComments().forEach(comment => {\n\tcomment.Delete();\n});\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(173, 216, 150));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nslide.AddComment(0, 0, 'Comment 1', 'John Smith');\nconst arrComments = presentation.GetAllComments();\narrComments[0].SetPosition(Api.MillimetersToEmus(20 + 300), Api.MillimetersToEmus(35 + 130));\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('The comment position was changed from (0, 0) to (320, 165).');"
+      ],
+      "params": [
+        {
+          "description": "The X coordinate of the comment position in EMU.",
+          "name": "x",
+          "type": "number"
+        },
+        {
+          "description": "The Y coordinate of the comment position in EMU.",
+          "name": "y",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetPosition(x: number, y: number): void"
+    },
+    "SetSolved": {
+      "description": "Marks a comment as solved.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetSolved/",
+      "examples": [
+        "// Mark a comment as solved to indicate it has been addressed.\n\n// Set the first comment as resolved and display the result.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\narrComments[0].SetSolved(true);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"The comment is solved.\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies if a comment is solved or not.",
+          "name": "bSolved",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetSolved(bSolved: boolean): ApiComment"
+    },
+    "SetText": {
+      "description": "Sets the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetText/",
+      "examples": [
+        "// Change the text content of a specific comment.\n\n// Update the first comment's text and display the new content.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\narrComments[0].SetText(\"New comment text\");\nconst text = arrComments[0].GetText();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's text: \" + text);"
+      ],
+      "params": [
+        {
+          "description": "The comment text.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetText(sText: string): ApiComment"
+    },
+    "SetTime": {
+      "description": "Sets the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetTime/",
+      "examples": [
+        "// Change the creation timestamp of a specific comment.\n\n// Update the first comment's creation time and display the result.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\narrComments[0].SetTime('Jan 20 2000');\nconst time = arrComments[0].GetTime();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's time: \" + time);"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in the current time zone format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetTime(nTimeStamp: number | string): ApiComment"
+    },
+    "SetTimeUTC": {
+      "description": "Sets the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetTimeUTC/",
+      "examples": [
+        "// How do I change when a comment was created in a presentation?\n\n// Update a comment's timestamp to a specific UTC date in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst arrComments = presentation.GetAllComments();\narrComments[0].SetTimeUTC('Jan 20 2000');\nconst timeUTC = arrComments[0].GetTimeUTC();\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Comment's time (UTC): \" + timeUTC);"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in UTC format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetTimeUTC(nTimeStamp: number | string): ApiComment"
+    },
+    "SetUserId": {
+      "description": "Sets the user ID to the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetUserId/",
+      "examples": [
+        "// How do I assign a user ID to a comment in a presentation?\n\n// Change the author's user ID of a comment to track comment ownership in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst posX = 15 * 36000;\nconst posY = 35 * 36000;\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);\n\nslide.AddComment(posX, posY, \"Comment 1\", \"John Smith\");\nconst comment = presentation.GetAllComments()[0];\n\ncomment.SetUserId(\"uid-42\");\nconst userId = comment.GetUserId();\n\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"The ID of the user who commented on this presentation is \" + userId);"
+      ],
+      "params": [
+        {
+          "description": "The user ID of the comment author.",
+          "name": "sUserId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetUserId(sUserId: string): ApiComment"
+    }
+  }
+}

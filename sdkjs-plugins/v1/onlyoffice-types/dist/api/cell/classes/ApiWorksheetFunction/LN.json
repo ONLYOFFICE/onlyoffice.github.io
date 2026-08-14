@@ -1,0 +1,18 @@
+{
+  "description": "Returns the natural logarithm of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LN/",
+  "examples": [
+    "// How do I find the natural logarithm (base e) of a value in a spreadsheet?\n\n// Get the inverse exponential of a number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.LN(23));"
+  ],
+  "params": [
+    {
+      "description": "The positive real number for which the natural logarithm will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LN(arg1: ApiRange | ApiName | number): number"
+}

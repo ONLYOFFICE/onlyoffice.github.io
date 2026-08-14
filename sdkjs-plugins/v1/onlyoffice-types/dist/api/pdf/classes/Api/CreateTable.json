@@ -1,0 +1,23 @@
+{
+  "description": "Creates a table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateTable/",
+  "examples": [
+    "// How do I add a table to a PDF page?\n\n// Create and place a table with specific dimensions in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\nconst table = Api.CreateTable(2, 4);\npage.AddObject(table);"
+  ],
+  "params": [
+    {
+      "description": "Number of rows.",
+      "name": "rows",
+      "type": "number"
+    },
+    {
+      "description": "Number of columns.",
+      "name": "cols",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiTable"
+  },
+  "signature": "CreateTable(rows: number, cols: number): ApiTable"
+}

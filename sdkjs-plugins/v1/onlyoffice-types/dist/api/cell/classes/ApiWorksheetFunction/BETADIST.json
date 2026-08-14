@@ -1,0 +1,40 @@
+{
+  "description": "Returns the cumulative beta probability density function.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BETADIST/",
+  "examples": [
+    "// How do I calculate what percentage of outcomes fall below a specific value in a spreadsheet?\n\n// Assess the probability that a random result occurs up to a given threshold in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.BETADIST(0.4, 4, 5);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value between A and B at which to evaluate the function.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The alpha parameter of the distribution which must be greater than 0.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The beta parameter of the distribution which must be greater than 0.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional lower bound to the interval of x (A). If omitted, it is equal to 0.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional upper bound to the interval of x (B). If omitted, it is equal to 1.",
+      "name": "arg5",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BETADIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4?: ApiRange | ApiName | number, arg5?: ApiRange | ApiName | number): number"
+}

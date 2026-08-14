@@ -1,0 +1,12 @@
+{
+  "description": "Returns the numbering definition and numbering level for the numbered list.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetNumbering/",
+  "examples": [
+    "// How do I retrieve the numbering settings from a paragraph in a document?\n\n// Build a numbered list and confirm the numbering is applied by reading it back in a document.\n\nlet doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the first element of a numbered list\");\nparagraph.SetNumbering(numLvl);\nparagraph.SetContextualSpacing(true);\nlet numbering1 = paragraph.GetNumbering();\nnumLvl = numbering.GetLevel(0);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second element of a numbered list\");\nparagraph.SetNumbering(numLvl);\nparagraph.SetContextualSpacing(true);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiNumberingLevel"
+  },
+  "signature": "GetNumbering(): ApiNumberingLevel"
+}

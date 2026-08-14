@@ -1,0 +1,18 @@
+{
+  "description": "Specifies major vertical gridline visual properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMajorVerticalGridlines/",
+  "examples": [
+    "// How do I customize the appearance of the main vertical lines in a chart in a presentation?\n\n// Apply a custom color and thickness to the major vertical gridlines in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetTitle(\"Financial Overview\", 13);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nlet stroke = Api.CreateStroke(1 * 15000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\nchart.SetMajorVerticalGridlines(stroke);\nslide.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The stroke used to create the element shadow.",
+      "name": "oStroke",
+      "type": "ApiStroke"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetMajorVerticalGridlines(oStroke: ApiStroke): boolean"
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Sets the text color to the current cell range with the previously created color object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetFontColor/",
+  "examples": [
+    "// How do I make the text in a group of cells a different color in a spreadsheet?\n\n// Give cell text a specific color to highlight or differentiate it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetFontColor(Api.CreateColorFromRGB(255, 111, 61));\nworksheet.GetRange(\"A2\").SetValue(\"This is the text with a color set to it\");\nworksheet.GetRange(\"A4\").SetValue(\"This is the text with a default color\");"
+  ],
+  "params": [
+    {
+      "description": "The color object which specifies the color to be set to the text in the cell / cell range.",
+      "name": "oColor",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the font color was set successfully.",
+    "type": "boolean"
+  },
+  "signature": "SetFontColor(oColor: ApiColor): boolean"
+}

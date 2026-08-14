@@ -1,0 +1,13 @@
+{
+  "description": "Returns the currently selected content control.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetCurrentContentControl/",
+  "examples": [
+    "// How do I get the content control that is active at the cursor position in a document?\n\n// Verify which control is selected before applying conditional formatting or reading its contents.\n\nconst doc = Api.GetDocument();\n\nconst blockSdt = Api.CreateBlockLvlSdt();\nblockSdt.GetContent().GetElement(0).AddText('Content inside the control.');\ndoc.AddElement(0, blockSdt);\n\nblockSdt.Select();\nconst currentCC = doc.GetCurrentContentControl();\n\nconst paragraph = Api.CreateParagraph();\nif (currentCC) {\n\tparagraph.AddText('Current content control class: ' + currentCC.GetClassType());\n} else {\n\tparagraph.AddText('No content control is selected.');\n}\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiBlockLvlSdt | ApiInlineLvlSdt | null"
+  },
+  "signature": "GetCurrentContentControl(): ApiBlockLvlSdt | ApiInlineLvlSdt | null",
+  "since": "9.0.0"
+}

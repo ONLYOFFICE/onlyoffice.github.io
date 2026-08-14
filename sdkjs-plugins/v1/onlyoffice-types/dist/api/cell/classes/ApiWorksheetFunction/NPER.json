@@ -1,0 +1,40 @@
+{
+  "description": "Returns the number of periods for an investment based on periodic, constant payments and a constant interest rate.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NPER/",
+  "examples": [
+    "// How do I find the number of periods needed for an investment in a spreadsheet?\n\n// Determine the time required to pay off a loan or reach an investment target in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NPER(0.1/12, -500, 10000, 0));"
+  ],
+  "params": [
+    {
+      "description": "The interest rate per period. For example, use 6%/4 for quarterly payments at 6% APR.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The payment made each period; it cannot change over the life of the investment.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "Te present value, or the lump-sum amount that a series of future payments is worth now.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The future value, or a cash balance which will be attained after the last payment is made. If omitted, zero is used.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value: payment at the beginning of the period = 1; payment at the end of the period = 0 or omitted.",
+      "name": "arg5",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "NPER(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4?: ApiRange | ApiName | number, arg5?: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Returns the previous paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetPrevious/",
+  "examples": [
+    "// How do I access the paragraph that comes before a given paragraph in a document?\n\n// Bold the preceding paragraph by stepping backward from the current one in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\nparagraph1.AddText(\"This is just a sample paragraph №1.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is just a sample paragraph №2.\");\ndoc.Push(paragraph2);\nlet previousParagraph = paragraph2.GetPrevious();\npreviousParagraph.SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if paragraph is first.",
+    "type": "ApiParagraph"
+  },
+  "signature": "GetPrevious(): ApiParagraph"
+}

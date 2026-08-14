@@ -1,0 +1,18 @@
+{
+  "description": "Converts twips to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/TwipsToPoints/",
+  "examples": [
+    "// How do I translate a twip-based size into points for use with drawing or layout properties in a spreadsheet?\n\n// Express a twip value as points so it can be applied consistently to document elements in a spreadsheet.\n\nconst twips = 100;\nconst points = Api.TwipsToPoints(twips);\nconst text = twips + ' twips are equal to ' + points + ' points.';\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue(text);"
+  ],
+  "params": [
+    {
+      "description": "The number of twips to convert to points.",
+      "name": "twips",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TwipsToPoints(twips: number): number"
+}

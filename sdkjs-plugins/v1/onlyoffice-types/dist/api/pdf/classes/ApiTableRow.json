@@ -1,0 +1,111 @@
+{
+  "description": "Class representing a table row.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/",
+  "extends": [
+    "ApiTableRowPr"
+  ],
+  "methods": {
+    "GetCell": {
+      "description": "Returns a cell by its position in the current row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetCell/",
+      "examples": [
+        "// How do I retrieve a single cell from a row in a PDF?\n\n// Get any cell you want from a table row in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a sample text in the cell of the first row.\");\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The zero-based cell index in the table row.",
+          "name": "cellIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableCell"
+      },
+      "signature": "GetCell(cellIndex: number): ApiTableCell"
+    },
+    "GetCellsCount": {
+      "description": "Returns a number of cells in the current row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetCellsCount/",
+      "examples": [
+        "// How do I find out how many cells are in a row in a PDF?\n\n// Determine the cell count in your table row in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cellsCount = row.GetCellsCount();\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The number of cells in the row: \" + cellsCount);\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCellsCount(): number"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiTableRow class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify what type a table row is in a PDF?\n\n// Find out which class a table row belongs to in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nconst classType = row.GetClassType();\nparagraph.AddText(\"Class type: \" + classType);\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"tableRow\""
+      },
+      "signature": "GetClassType(): \"tableRow\""
+    },
+    "GetHeight": {
+      "description": "Gets the height from the current table row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetHeight/",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetHeight(): EMU"
+    },
+    "GetNext": {
+      "description": "Returns the next row if exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetNext/",
+      "params": [],
+      "returns": {
+        "description": "returns null if row is last.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetNext(): ApiTableRow | null",
+      "since": "9.5.0"
+    },
+    "GetParentTable": {
+      "description": "Returns the parent table of the current row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetParentTable/",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null",
+      "since": "9.5.0"
+    },
+    "GetPrevious": {
+      "description": "Returns the previous row if exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetPrevious/",
+      "params": [],
+      "returns": {
+        "description": "returns null if row is first.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetPrevious(): ApiTableRow | null",
+      "since": "9.5.0"
+    },
+    "SetHeight": {
+      "description": "Sets the height to the current table row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/SetHeight/",
+      "examples": [
+        "// How do I make a row taller or shorter in a PDF?\n\n// Change the row dimensions to a specific measurement in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nrow.SetHeight(30 * 36000);\n\npage.AddObject(table);"
+      ],
+      "params": [
+        {
+          "description": "The row height in English measure units.",
+          "name": "height",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHeight(height: EMU): boolean"
+    }
+  }
+}

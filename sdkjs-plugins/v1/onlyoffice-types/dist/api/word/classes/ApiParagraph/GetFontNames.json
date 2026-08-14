@@ -1,0 +1,13 @@
+{
+  "description": "Returns all font names from all elements inside the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetFontNames/",
+  "examples": [
+    "// How do I list every font used inside a paragraph in a document?\n\n// Display the collected font names as a comma-separated string in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text.\");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetFontFamily(\"Calibri Light\");\nrun.AddText(\"This is a text run with the font family set to 'Calibri Light'.\");\nparagraph.AddElement(run);\nlet fonts = paragraph.GetFontNames();\nlet newParagraph = Api.CreateParagraph();\nnewParagraph.AddText(\"Fonts from previous paragraph: \" + fonts.join(\", \"));\ndoc.AddElement(1, newParagraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The font names used for the current paragraph.",
+    "type": "string[]"
+  },
+  "signature": "GetFontNames(): string[]"
+}

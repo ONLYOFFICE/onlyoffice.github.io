@@ -1,0 +1,12 @@
+{
+  "description": "Adds a tab stop to the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddTabStop/",
+  "examples": [
+    "// How do I add horizontal spacing between words using tab characters in a document?\n\n// Position a block of text further along the line by placing multiple tab stops after an opening sentence in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. After it three tab stops will be added.\");\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"This is the text which starts after the tab stops.\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "AddTabStop(): ApiRun"
+}

@@ -1,0 +1,27 @@
+{
+  "description": "Creates a GoTo action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateGoToAction/",
+  "params": [
+    {
+      "name": "page",
+      "type": "number"
+    },
+    {
+      "name": "goToType",
+      "type": "GoToType"
+    },
+    {
+      "description": "1 = 100% (used only for goToType = \"xyz\")",
+      "name": "zoom",
+      "type": "number"
+    },
+    {
+      "name": "rect",
+      "type": "Rect"
+    }
+  ],
+  "returns": {
+    "type": "ApiGoToAction"
+  },
+  "signature": "CreateGoToAction(page: number, goToType: GoToType, zoom: number, rect: Rect): ApiGoToAction"
+}

@@ -1,0 +1,514 @@
+{
+  "description": "Class representing document properties (similar to BuiltInDocumentProperties in VBA).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/",
+  "methods": {
+    "GetCategory": {
+      "description": "Returns the document category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetCategory/",
+      "examples": [
+        "// How do I check what category a presentation is labeled as in a presentation?\n\n// Retrieve the category value stored in the presentation's core properties in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetCategory(\"Examples\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(200, 50, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 200 * 36000, 100 * 36000, fill, stroke);\nshape.SetPosition(0, 0);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst category = core.GetCategory();\nparagraph.AddText(\"Category: \" + category);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document category.",
+        "type": "string"
+      },
+      "signature": "GetCategory(): string",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCore class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out what type the core properties object is in a presentation?\n\n// Display the class type returned by the presentation's core properties in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\nconst classType = core.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(150, 200, 150));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 100 * 36000, fill, stroke);\nshape.SetPosition(0, 2 * 36000);\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Class type: \" + classType);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"core\""
+      },
+      "signature": "GetClassType(): \"core\"",
+      "since": "9.0.0"
+    },
+    "GetContentStatus": {
+      "description": "Returns the document content status.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetContentStatus/",
+      "examples": [
+        "// How do I check what content status is set for a presentation in a presentation?\n\n// Retrieve and display the content status value stored in core properties in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetContentStatus(\"Final\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst contentStatus = core.GetContentStatus();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Content Status: \" + contentStatus);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document content status.",
+        "type": "string"
+      },
+      "signature": "GetContentStatus(): string",
+      "since": "9.0.0"
+    },
+    "GetCreated": {
+      "description": "Returns the document creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetCreated/",
+      "examples": [
+        "// How do I access the creation date in a presentation?\n\n// Read the date when a presentation was originally created in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetCreated(new Date('20 January 2000'));\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst createdDate = core.GetCreated().toDateString();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Created: \" + createdDate);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document creation date.",
+        "type": "Date"
+      },
+      "signature": "GetCreated(): Date",
+      "since": "9.0.0"
+    },
+    "GetCreator": {
+      "description": "Returns the document author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetCreator/",
+      "examples": [
+        "// How do I find who created a presentation?\n\n// Read the creator information stored in a presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetCreator(\"John Smith\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst creator = core.GetCreator();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Creator: \" + creator);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document author.",
+        "type": "string"
+      },
+      "signature": "GetCreator(): string",
+      "since": "9.0.0"
+    },
+    "GetDescription": {
+      "description": "Returns the document description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetDescription/",
+      "examples": [
+        "// How do I access the description of a presentation?\n\n// Read the descriptive text associated with a presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetDescription(\"This is a sample presentation made to help fellow users understand how to use the ApiCore methods.\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst description = core.GetDescription();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Description: \" + description);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document description.",
+        "type": "string"
+      },
+      "signature": "GetDescription(): string",
+      "since": "9.0.0"
+    },
+    "GetIdentifier": {
+      "description": "Returns the document identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetIdentifier/",
+      "examples": [
+        "// How do I retrieve the identifier for a presentation?\n\n// Read the ID code assigned to a presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetIdentifier(\"#ID42\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst identifier = core.GetIdentifier();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Identifier: \" + identifier);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document identifier.",
+        "type": "string"
+      },
+      "signature": "GetIdentifier(): string",
+      "since": "9.0.0"
+    },
+    "GetKeywords": {
+      "description": "Returns the document keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetKeywords/",
+      "examples": [
+        "// How do I retrieve keywords associated with a presentation?\n\n// Access the keyword list stored in a presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetKeywords(\"Example; ApiCore; Presentation\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst keywords = core.GetKeywords();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Keywords: \" + keywords);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document keywords in the string format.",
+        "type": "string"
+      },
+      "signature": "GetKeywords(): string",
+      "since": "9.0.0"
+    },
+    "GetLanguage": {
+      "description": "Returns the document language.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetLanguage/",
+      "examples": [
+        "// How do I find the language used in a presentation?\n\n// Retrieve the language code defined for a presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetLanguage(\"en-US\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst language = core.GetLanguage();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Language: \" + language);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document language.",
+        "type": "string"
+      },
+      "signature": "GetLanguage(): string",
+      "since": "9.0.0"
+    },
+    "GetLastModifiedBy": {
+      "description": "Returns the name of the user who last modified the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetLastModifiedBy/",
+      "examples": [
+        "// How do I find who last modified a presentation?\n\n// Retrieve the name of the user who made the most recent changes in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetLastModifiedBy(\"Mark Pottato\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst lastModifiedBy = core.GetLastModifiedBy();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Last modified by: \" + lastModifiedBy);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The name of the user who last modified the document.",
+        "type": "string"
+      },
+      "signature": "GetLastModifiedBy(): string",
+      "since": "9.0.0"
+    },
+    "GetLastPrinted": {
+      "description": "Returns the date when the document was last printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetLastPrinted/",
+      "examples": [
+        "// How do I find the date a presentation was printed?\n\n// Read the timestamp of the most recent print event in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetLastPrinted(new Date());\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst lastPrintedDate = core.GetLastPrinted().toDateString();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Last printed: \" + lastPrintedDate);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The date when the document was last printed.",
+        "type": "Date"
+      },
+      "signature": "GetLastPrinted(): Date",
+      "since": "9.0.0"
+    },
+    "GetModified": {
+      "description": "Returns the date when the document was last modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetModified/",
+      "examples": [
+        "// How do I find when a presentation was last changed?\n\n// Retrieve the timestamp of the most recent edit in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetModified(new Date(\"10 March 1990\"));\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst lastModifiedDate = core.GetModified().toDateString();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Last modified: \" + lastModifiedDate);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The date when the document was last modified.",
+        "type": "Date"
+      },
+      "signature": "GetModified(): Date",
+      "since": "9.0.0"
+    },
+    "GetRevision": {
+      "description": "Returns the document revision.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetRevision/",
+      "examples": [
+        "// How do I check the revision information for a presentation?\n\n// Read the revision identifier stored in a presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetRevision(\"Rev. A\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst revision = core.GetRevision();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Revision: \" + revision);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document revision.",
+        "type": "string"
+      },
+      "signature": "GetRevision(): string",
+      "since": "9.0.0"
+    },
+    "GetSubject": {
+      "description": "Returns the document subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetSubject/",
+      "examples": [
+        "// How do I access the subject information in a presentation?\n\n// Display the subject metadata stored in a presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetSubject(\"ApiCore Method Showcase\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst subject = core.GetSubject();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Subject: \" + subject);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document subject.",
+        "type": "string"
+      },
+      "signature": "GetSubject(): string",
+      "since": "9.0.0"
+    },
+    "GetTitle": {
+      "description": "Returns the document title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetTitle/",
+      "examples": [
+        "// How do I get the title of a presentation in a presentation?\n\n// Retrieve and display the title as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetTitle(\"My Presentation Title\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst title = core.GetTitle();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Title: \" + title);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document title.",
+        "type": "string"
+      },
+      "signature": "GetTitle(): string",
+      "since": "9.0.0"
+    },
+    "GetVersion": {
+      "description": "Returns the document version.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/GetVersion/",
+      "examples": [
+        "// How do I get the version of a presentation in a presentation?\n\n// Retrieve and display the version as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetVersion(\"v9.0\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst version = core.GetVersion();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Version: \" + version);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The document version.",
+        "type": "string"
+      },
+      "signature": "GetVersion(): string",
+      "since": "9.0.0"
+    },
+    "SetCategory": {
+      "description": "Sets the document category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetCategory/",
+      "examples": [
+        "// How do I set a category for a presentation in a presentation?\n\n// Set a category and display it as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetCategory(\"Examples\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(200, 50, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 200 * 36000, 100 * 36000, fill, stroke);\nshape.SetPosition(0, 0);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst category = core.GetCategory();\nparagraph.AddText(\"Category: \" + category);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document category.",
+          "name": "sCategory",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCategory(sCategory: string): void",
+      "since": "9.0.0"
+    },
+    "SetContentStatus": {
+      "description": "Sets the document content status.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetContentStatus/",
+      "examples": [
+        "// How do I set the content status of a presentation in a presentation?\n\n// Retrieve and display the content status as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetContentStatus(\"Final\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst contentStatus = core.GetContentStatus();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Content Status: \" + contentStatus);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document content status.",
+          "name": "sStatus",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetContentStatus(sStatus: string): void",
+      "since": "9.0.0"
+    },
+    "SetCreated": {
+      "description": "Sets the document creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetCreated/",
+      "examples": [
+        "// How do I set the creation date of a presentation in a presentation?\n\n// Retrieve and display the creation date as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetCreated(new Date('20 January 2000'));\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst createdDate = core.GetCreated().toDateString();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Created: \" + createdDate);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document creation date.",
+          "name": "oCreated",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCreated(oCreated: Date): void",
+      "since": "9.0.0"
+    },
+    "SetCreator": {
+      "description": "Sets the document author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetCreator/",
+      "examples": [
+        "// How do I set the creator of a presentation in a presentation?\n\n// Retrieve and display the creator as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetCreator(\"John Smith\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst creator = core.GetCreator();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Creator: \" + creator);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document author.",
+          "name": "sCreator",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCreator(sCreator: string): void",
+      "since": "9.0.0"
+    },
+    "SetDescription": {
+      "description": "Sets the document description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetDescription/",
+      "examples": [
+        "// How do I set the description of a presentation in a presentation?\n\n// Retrieve and display the description as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetDescription(\"This is a sample presentation made to help fellow users understand how to use the ApiCore methods.\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst description = core.GetDescription();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Description: \" + description);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document description.",
+          "name": "sDescription",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetDescription(sDescription: string): void",
+      "since": "9.0.0"
+    },
+    "SetIdentifier": {
+      "description": "Sets the document identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetIdentifier/",
+      "examples": [
+        "// How do I set the identifier of a presentation in a presentation?\n\n// Retrieve and display the identifier as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetIdentifier(\"#ID42\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst identifier = core.GetIdentifier();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Identifier: \" + identifier);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document identifier.",
+          "name": "sIdentifier",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetIdentifier(sIdentifier: string): void",
+      "since": "9.0.0"
+    },
+    "SetKeywords": {
+      "description": "Sets the document keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetKeywords/",
+      "examples": [
+        "// How do I set the keywords of a presentation in a presentation?\n\n// Retrieve and display the keywords as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetKeywords(\"Example; ApiCore; Presentation\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst keywords = core.GetKeywords();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Keywords: \" + keywords);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document keywords in the string format.",
+          "name": "sKeywords",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetKeywords(sKeywords: string): void",
+      "since": "9.0.0"
+    },
+    "SetLanguage": {
+      "description": "Sets the document language.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetLanguage/",
+      "examples": [
+        "// How do I set the language of a presentation in a presentation?\n\n// Retrieve and display the language as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetLanguage(\"en-US\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst language = core.GetLanguage();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Language: \" + language);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document language.",
+          "name": "sLanguage",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLanguage(sLanguage: string): void",
+      "since": "9.0.0"
+    },
+    "SetLastModifiedBy": {
+      "description": "Sets the name of the user who last modified the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetLastModifiedBy/",
+      "examples": [
+        "// How do I set the last modifier of a presentation in a presentation?\n\n// Retrieve and display the last modifier as text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetLastModifiedBy(\"Mark Pottato\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst lastModifiedBy = core.GetLastModifiedBy();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Last modified by: \" + lastModifiedBy);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The name of the user who last modified the document.",
+          "name": "sLastModifiedBy",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLastModifiedBy(sLastModifiedBy: string): void",
+      "since": "9.0.0"
+    },
+    "SetLastPrinted": {
+      "description": "Sets the date when the document was last printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetLastPrinted/",
+      "examples": [
+        "// How do I track the last print date of a presentation?\n\n// Store and retrieve the last printed timestamp for a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetLastPrinted(new Date());\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst lastPrintedDate = core.GetLastPrinted().toDateString();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Last printed: \" + lastPrintedDate);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The date when the document was last printed.",
+          "name": "oLastPrinted",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLastPrinted(oLastPrinted: Date): void",
+      "since": "9.0.0"
+    },
+    "SetModified": {
+      "description": "Sets the date when the document was last modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetModified/",
+      "examples": [
+        "// How do I set when a presentation was last edited?\n\n// Update and display the modification timestamp for a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetModified(new Date(\"10 March 1990\"));\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst lastModifiedDate = core.GetModified().toDateString();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Last modified: \" + lastModifiedDate);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The date when the document was last modified.",
+          "name": "oModified",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetModified(oModified: Date): void",
+      "since": "9.0.0"
+    },
+    "SetRevision": {
+      "description": "Sets the document revision.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetRevision/",
+      "examples": [
+        "// How do I add a revision identifier to a presentation?\n\n// Set and read the revision information for a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetRevision(\"Rev. B\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst revision = core.GetRevision();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Revision: \" + revision);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document revision.",
+          "name": "sRevision",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetRevision(sRevision: string): void",
+      "since": "9.0.0"
+    },
+    "SetSubject": {
+      "description": "Sets the document subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetSubject/",
+      "examples": [
+        "// How do I add a subject to my presentation metadata?\n\n// Store and access the subject text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetSubject(\"ApiCore Method Showcase\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst subject = core.GetSubject();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Subject: \" + subject);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document subject.",
+          "name": "sSubject",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSubject(sSubject: string): void",
+      "since": "9.0.0"
+    },
+    "SetTitle": {
+      "description": "Sets the document title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetTitle/",
+      "examples": [
+        "// How do I set the title that identifies my presentation?\n\n// Retrieve and display the presentation title in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetTitle(\"My Presentation Title\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst title = core.GetTitle();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Title: \" + title);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document title.",
+          "name": "sTitle",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTitle(sTitle: string): void",
+      "since": "9.0.0"
+    },
+    "SetVersion": {
+      "description": "Sets the document version.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCore/Methods/SetVersion/",
+      "examples": [
+        "// How do I track the version of my presentation?\n\n// Write and retrieve the version identifier for a presentation.\n\nconst presentation = Api.GetPresentation();\nconst core = presentation.GetCore();\ncore.SetVersion(\"v9.0\");\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 150 * 36000, fill, stroke);\n\nconst version = core.GetVersion();\nconst paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Version: \" + version);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+      ],
+      "params": [
+        {
+          "description": "The document version.",
+          "name": "sVersion",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetVersion(sVersion: string): void",
+      "since": "9.0.0"
+    }
+  }
+}

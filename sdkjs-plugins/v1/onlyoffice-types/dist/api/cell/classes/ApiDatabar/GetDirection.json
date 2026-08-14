@@ -1,0 +1,14 @@
+{
+  "description": "Returns the direction of the data bar.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetDirection/",
+  "examples": [
+    "// How do I find out which direction data bars grow toward in a spreadsheet?\n\n// Confirm whether data bars expand left-to-right or right-to-left in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nlet direction = dataBar.GetDirection();\n\nworksheet.GetRange(\"C1\").SetValue(\"Direction:\");\nworksheet.GetRange(\"C2\").SetValue(direction);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The direction setting for the data bar (context, left-to-right, or right-to-left).",
+    "type": "XlReadingOrder"
+  },
+  "signature": "GetDirection(): XlReadingOrder",
+  "since": "9.1.0"
+}

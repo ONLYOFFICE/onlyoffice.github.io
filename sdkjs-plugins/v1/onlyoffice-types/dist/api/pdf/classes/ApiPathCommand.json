@@ -1,0 +1,175 @@
+{
+  "description": "Class representing a path command.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/",
+  "methods": {
+    "GetHR": {
+      "description": "Returns the height radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetHR/",
+      "examples": [
+        "// How do I find the height measurement of an arc in a PDF?\n\n// Retrieve the vertical span of a curved arc segment in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Arc WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nparagraph.AddText(\", Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nshape.SetPosition(1500000, 1500000);\nshape.SetVerticalTextAlign(\"bottom\");\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetHR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetStartAngle": {
+      "description": "Returns the start angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetStartAngle/",
+      "examples": [
+        "// Where does an arc begin in terms of angle in a PDF?\n\n// Find the initial rotation point of an arc shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Arc WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nparagraph.AddText(\", Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nshape.SetPosition(1500000, 1500000);\nshape.SetVerticalTextAlign(\"bottom\");\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetStartAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetSweepAngle": {
+      "description": "Returns the sweep angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetSweepAngle/",
+      "examples": [
+        "// How much does an arc curve turn in a PDF?\n\n// Measure the angular distance traveled by an arc in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Arc WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nparagraph.AddText(\", Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nshape.SetPosition(1500000, 1500000);\nshape.SetVerticalTextAlign(\"bottom\");\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetSweepAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the type of the current path command.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetType/",
+      "examples": [
+        "// How do I find out the command type in a PDF?\n\n// Identify the type value from a path command in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "PathCommandType"
+      },
+      "signature": "GetType(): PathCommandType",
+      "since": "9.1.0"
+    },
+    "GetWR": {
+      "description": "Returns the width radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetWR/",
+      "examples": [
+        "// How can I get the width radius of an arc in a PDF?\n\n// Retrieve the arc's horizontal radius measurement in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(3); // arc command\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Arc WR: \" + cmd.GetWR() + \", HR: \" + cmd.GetHR());\nparagraph.AddText(\", Start: \" + cmd.GetStartAngle() + \", Sweep: \" + cmd.GetSweepAngle());\nshape.SetPosition(1500000, 1500000);\nshape.SetVerticalTextAlign(\"bottom\");\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetWR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX": {
+      "description": "Returns the X coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetX/",
+      "examples": [
+        "// What is the horizontal position value in a PDF?\n\n// Extract the x position of a path command in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX0": {
+      "description": "Returns the X coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetX0/",
+      "examples": [
+        "// How can I get the first control point's horizontal position in a PDF?\n\n// Extract the first control point's x value from a path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX1": {
+      "description": "Returns the X coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetX1/",
+      "examples": [
+        "// What is the second control point's horizontal position in a PDF?\n\n// Extract the second control point's x value from a path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX2": {
+      "description": "Returns the X coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetX2/",
+      "examples": [
+        "// What is the endpoint's horizontal position in a PDF?\n\n// Extract the endpoint's x value from a path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX2(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY": {
+      "description": "Returns the Y coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetY/",
+      "examples": [
+        "// What is the vertical position value in a PDF?\n\n// Extract the y position of a path command in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY0": {
+      "description": "Returns the Y coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetY0/",
+      "examples": [
+        "// How can I get the first control point's vertical position in a PDF?\n\n// Extract the first control point's y value from a path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY1": {
+      "description": "Returns the Y coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetY1/",
+      "examples": [
+        "// What is the second control point's vertical position in a PDF?\n\n// Extract the second control point's y value from a path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY2": {
+      "description": "Returns the Y coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPathCommand/Methods/GetY2/",
+      "examples": [
+        "// What is the endpoint's vertical position in a PDF?\n\n// Extract the endpoint's y value from a path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.MoveTo(0, 50 * 36000);\npath.CubicBezTo(0, 0, 50 * 36000, 0, 50 * 36000, 50 * 36000);\npath.QuadBezTo(100 * 36000, 50 * 36000, 100 * 36000, 100 * 36000);\npath.ArcTo(50 * 36000, 50 * 36000, 0, 10800000);\npath.Close();\nlet cmd = path.GetCommand(1);\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"CP1: (\" + cmd.GetX0() + \", \" + cmd.GetY0() + \"), \");\nparagraph.AddText(\"CP2: (\" + cmd.GetX1() + \", \" + cmd.GetY1() + \"), \");\nparagraph.AddText(\"End: (\" + cmd.GetX2() + \", \" + cmd.GetY2() + \")\");\nshape.SetVerticalTextAlign(\"bottom\");\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY2(): string | null",
+      "since": "9.1.0"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Calculates variance based on the entire population, including logical values and text. Text and the **false** logical value have the value 0; the **true** logical value has the value 1.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/VARPA/",
+  "examples": [
+    "// The VARPA function computes population variance by treating logical and text values as numbers.\n\n// Apply the function to calculate variance based on population including logical and text values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Data array\nlet data = [\n    [1, 0, 0, false],\n    [\"text\", 1, 0, 0],\n    [2, 3, true, 7],\n    [6, 8, 10, 12]\n];\n\n// Place the data in cells A1:D4\nfor (let i = 0; i < data.length; i++) {\n    for (let j = 0; j < data[i].length; j++) {\n        worksheet.GetRangeByNumber(i, j).SetValue(data[i][j]);\n    }\n}\n\n// Calculate the letPA of the range A1:D4 and place the result in cell D5\nlet func = Api.WorksheetFunction;\nlet letpaResult = func.VARPA(worksheet.GetRange(\"A1:D4\"));\nworksheet.GetRange(\"D5\").SetValue(letpaResult);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 values for which the variance will be calculated.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, logical values or text representations of numbers, names, ranges, or arrays.",
+      "name": "args",
+      "type": "number | string | boolean | (number | string | boolean)[] | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "VARPA(args: number | string | boolean | (number | string | boolean)[] | ApiRange | ApiName): number"
+}

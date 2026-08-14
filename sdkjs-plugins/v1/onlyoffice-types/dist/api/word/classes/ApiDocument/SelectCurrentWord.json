@@ -1,0 +1,13 @@
+{
+  "description": "Selects the current word if it is possible.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SelectCurrentWord/",
+  "examples": [
+    "// How do I programmatically select a word at a given cursor position in a document?\n\n// Move the cursor to a character offset and capture the whole word it lands on in a document.\n\nlet doc = Api.GetDocument();\nlet para1 = doc.GetElement(0);\nlet run = para1.AddText(\"The quick brown fox jumps over the lazy dog\");\nrun.MoveCursorToPos(16);\n\ndoc.SelectCurrentWord();\n\nlet para2 = Api.CreateParagraph();\npara2.AddText(\"The selected text is \" + doc.GetRangeBySelect().GetText());\ndoc.Push(para2);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "object"
+  },
+  "signature": "SelectCurrentWord(): object",
+  "since": "8.2.0"
+}

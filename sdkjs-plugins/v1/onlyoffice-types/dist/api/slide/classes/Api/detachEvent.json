@@ -1,0 +1,18 @@
+{
+  "description": "Unsubscribes from the specified event.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/detachEvent/",
+  "examples": [
+    "// Detaching events removes previously registered listeners to stop event handling.\n\n// Remove the listener from the asc_onHyperlinkClick event using Api.detachEvent().\n\nApi.detachEvent(\"asc_onHyperlinkClick\");"
+  ],
+  "params": [
+    {
+      "description": "The event name.",
+      "name": "eventName",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "detachEvent(eventName: string): void"
+}

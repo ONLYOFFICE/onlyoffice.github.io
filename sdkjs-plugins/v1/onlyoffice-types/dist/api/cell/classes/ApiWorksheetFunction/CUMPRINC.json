@@ -1,0 +1,43 @@
+{
+  "description": "Returns the cumulative principal paid on a loan between two periods.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CUMPRINC/",
+  "examples": [
+    "// What is the total principal paid down during a specific loan period in a spreadsheet?\n\n// Calculate the accumulated principal reduction between payment periods in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CUMPRINC(0.1/12, 2*12, 2000, 1, 24, 0));"
+  ],
+  "params": [
+    {
+      "description": "The interest rate for the investment.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The total number of payment periods.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A present value of the payments.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The first period included into the calculation.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The last period included into the calculation.",
+      "name": "arg5",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The timing of the payment.",
+      "name": "arg6",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CUMPRINC(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | number, arg5: ApiRange | ApiName | number, arg6: ApiRange | ApiName | number): number"
+}

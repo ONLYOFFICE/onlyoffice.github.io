@@ -1,0 +1,28 @@
+{
+  "description": "Returns the cumulative lognormal distribution of x, where ln(x) is normally distributed with the specified parameters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOGNORMDIST/",
+  "examples": [
+    "// How do I find the probability that a value falls below a given threshold in a lognormal distribution in a spreadsheet?\n\n// Determine the cumulative probability of a lognormal dataset in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\n//configure function parameters\nlet numbersArr = [4, 7, 40];\n\n//set values in cells\nfor (let i = 0; i < numbersArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(numbersArr[i]);\n}\n\n//get parameters\nlet xValue = worksheet.GetRange(\"A1\");\nlet mean = worksheet.GetRange(\"A2\");\nlet standardDeviation = worksheet.GetRange(\"A3\");\n\n//invoke LOGNORMDIST method\nlet func = Api.WorksheetFunction;\nlet ans = func.LOGNORMDIST(xValue, mean, standardDeviation);\n\n//print answer\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value at which to evaluate the function, a positive number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The mean of ln(x).",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The standard deviation of ln(x), a positive number.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LOGNORMDIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

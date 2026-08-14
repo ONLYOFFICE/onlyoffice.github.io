@@ -1,0 +1,13 @@
+{
+  "description": "Returns the outline level of the specified properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetOutlineLvl/",
+  "examples": [
+    "// How do I get the outline level of a paragraph in a document?\n\n// Verify the heading structure by checking outline levels across multiple paragraphs in a document.\n\nconst doc = Api.GetDocument();\nconst firstParagraph = doc.GetElement(0);\nfirstParagraph.AddText('To see outline levels, open \"Headings\" on the \"View\" tab.');\n\nconst levels = [1, 5, 8];\nfor (let i = 0; i < levels.length; i++) {\n\tconst paragraph = Api.CreateParagraph();\n\tconst paraPr = paragraph.GetParaPr();\n\tparaPr.SetOutlineLvl(levels[i]);\n\tparagraph.AddText('Outline level: ' + paraPr.GetOutlineLvl());\n\tdoc.Push(paragraph);\n}"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number | undefined"
+  },
+  "signature": "GetOutlineLvl(): number | undefined",
+  "since": "8.2.0"
+}

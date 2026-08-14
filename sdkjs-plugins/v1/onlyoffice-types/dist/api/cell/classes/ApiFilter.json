@@ -1,0 +1,71 @@
+{
+  "description": "Class representing a single AutoFilter column.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/",
+  "methods": {
+    "GetCriteria1": {
+      "description": "Returns the first criteria associated with the filter for this column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetCriteria1/",
+      "examples": [
+        "// How do I find out the main filtering condition set on a column in a spreadsheet?\n\n// Examine the first rule of an active column filter and display its value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare numeric data\nworksheet.GetRange(\"A1\").SetValue(\"Value\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(20);\nworksheet.GetRange(\"A4\").SetValue(30);\nworksheet.GetRange(\"A5\").SetValue(40);\nworksheet.GetRange(\"A6\").SetValue(50);\n\n// Create a custom filter with two criteria (xlOr)\nlet dataRange = worksheet.GetRange(\"A1:A6\");\ndataRange.SetAutoFilter(1, \">20\", \"xlOr\", \"<=30\");\n\n// Get the first filter object\nlet autoFilter = worksheet.AutoFilter;\nlet filters = autoFilter.Filters;\n\nif (filters.length > 0) {\n    let filter = filters[0];\n    let criteria1 = filter.GetCriteria1();  // or filter.Criteria1\n\n    worksheet.GetRange(\"C1\").SetValue(\"Criteria1 (first condition):\");\n    worksheet.GetRange(\"D1\").SetValue(criteria1);\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The first criteria for the filter.",
+        "type": "string | string[] | number | XlDynamicFilterCriteria | null"
+      },
+      "signature": "GetCriteria1(): string | string[] | number | XlDynamicFilterCriteria | null"
+    },
+    "GetCriteria2": {
+      "description": "Returns the second criteria associated with the filter for this column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetCriteria2/",
+      "examples": [
+        "// How do I check the second filtering rule on a column when two conditions are combined in a spreadsheet?\n\n// Inspect the additional constraint set on a filter and display its value alongside the first rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare numeric data\nworksheet.GetRange(\"A1\").SetValue(\"Value\");\nworksheet.GetRange(\"A2\").SetValue(5);\nworksheet.GetRange(\"A3\").SetValue(10);\nworksheet.GetRange(\"A4\").SetValue(15);\nworksheet.GetRange(\"A5\").SetValue(20);\nworksheet.GetRange(\"A6\").SetValue(25);\n\n// Create a custom filter with xlAnd\nlet dataRange = worksheet.GetRange(\"A1:A6\");\ndataRange.SetAutoFilter(1, \">=10\", \"xlAnd\", \"<=20\");\n\n// Get the filter and read both criteria\nlet autoFilter = worksheet.AutoFilter;\nlet filters = autoFilter.Filters;\n\nif (filters.length > 0) {\n    let filter = filters[0];\n\n    worksheet.GetRange(\"C1\").SetValue(\"Criteria2 (second condition):\");\n    worksheet.GetRange(\"D1\").SetValue(filter.GetCriteria2());\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The second criteria for the filter, or null if not applicable.",
+        "type": "string | null"
+      },
+      "signature": "GetCriteria2(): string | null"
+    },
+    "GetOn": {
+      "description": "Indicates whether any filter is applied on this column.\n\nThe property is true when at least one of the following underlying\nstructures is present for the column:\n- Filters\n- CustomFiltersObj\n- DynamicFilter\n- ColorFilter\n- Top10",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetOn/",
+      "examples": [
+        "// How do I tell if a column has an active filter applied to it in a spreadsheet?\n\n// Confirm filtering is turned on for a specific column before reading its data in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare data\nworksheet.GetRange(\"A1\").SetValue(\"Score\");\nworksheet.GetRange(\"A2\").SetValue(1);\nworksheet.GetRange(\"A3\").SetValue(2);\nworksheet.GetRange(\"A4\").SetValue(3);\nworksheet.GetRange(\"A5\").SetValue(4);\nworksheet.GetRange(\"A6\").SetValue(5);\n\n// Apply a filter on column A\nlet dataRange = worksheet.GetRange(\"A1:A6\");\ndataRange.SetAutoFilter(1, \">2\", \"xlOr\");\n\n// Inspect the filter\nlet autoFilter = worksheet.AutoFilter;\nlet filters = autoFilter.Filters;\n\nif (filters.length > 0) {\n    let filter = filters[0];\n\n    worksheet.GetRange(\"C1\").SetValue(\"Filter applied on column A:\");\n    worksheet.GetRange(\"D1\").SetValue(filter.GetOn());    // or filter.On\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "True if a filter is applied; otherwise, false.",
+        "type": "boolean"
+      },
+      "signature": "GetOn(): boolean"
+    },
+    "GetOperator": {
+      "description": "Returns the operator used for the filter on this column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetOperator/",
+      "examples": [
+        "// How do I find out what kind of filtering rule is applied to a column in a spreadsheet?\n\n// Identify the filtering logic behind a column's filter to understand how rows are shown or hidden in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare data\nworksheet.GetRange(\"A1\").SetValue(\"Amount\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(20);\nworksheet.GetRange(\"A4\").SetValue(30);\nworksheet.GetRange(\"A5\").SetValue(40);\nworksheet.GetRange(\"A6\").SetValue(50);\n\n// Apply a Top10 items filter\nlet dataRange = worksheet.GetRange(\"A1:A6\");\ndataRange.SetAutoFilter(1, \"3\", \"xlTop10Items\");\n\n// Get the filter and read its operator\nlet autoFilter = worksheet.AutoFilter;\nlet filters = autoFilter.Filters;\n\nif (filters.length > 0) {\n    let filter = filters[0];\n\n    worksheet.GetRange(\"C1\").SetValue(\"Filter operator:\");\n    worksheet.GetRange(\"D1\").SetValue(filter.GetOperator());   // or filter.Operator\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The operator for the current filter.",
+        "type": "XlAutoFilterOperator | null"
+      },
+      "signature": "GetOperator(): XlAutoFilterOperator | null"
+    },
+    "GetParent": {
+      "description": "Returns the parent filters collection for this filter column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetParent/",
+      "examples": [
+        "// How do I get back to the overall auto-filter from one of its individual column filters in a spreadsheet?\n\n// Trace a column filter up to its containing auto-filter to inspect the filtered range in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\n// Prepare a small table\nworksheet.GetRange(\"A1\").SetValue(\"City\");\nworksheet.GetRange(\"B1\").SetValue(\"Temperature\");\n\nworksheet.GetRange(\"A2\").SetValue(\"London\");\nworksheet.GetRange(\"B2\").SetValue(20);\nworksheet.GetRange(\"A3\").SetValue(\"Paris\");\nworksheet.GetRange(\"B3\").SetValue(10);\nworksheet.GetRange(\"A4\").SetValue(\"Rome\");\nworksheet.GetRange(\"B4\").SetValue(30);\n\n// Apply a filter on column B\nlet dataRange = worksheet.GetRange(\"A1:B4\");\ndataRange.SetAutoFilter(2, \">15\", \"xlOr\");\n\n// Get the first ApiFilter\nlet autoFilter = worksheet.AutoFilter;\nlet filters = autoFilter.Filters;\n\nif (filters.length > 0) {\n    let filter = filters[0];\n    let parentAutoFilter = filter.GetParent();     // or filter.Parent\n\n    worksheet.GetRange(\"D1\").SetValue(\"Parent AutoFilter range:\");\n    let parentRange = parentAutoFilter.GetRange();\n    if (parentRange !== null) {\n        worksheet.GetRange(\"D2\").SetValue(parentRange.GetAddress());\n    }\n\n    worksheet.GetRange(\"D4\").SetValue(\"This filter belongs to the sheet:\");\n    worksheet.GetRange(\"D5\").SetValue(parentAutoFilter.Parent.GetName());\n}"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The parent filters collection.",
+        "type": "ApiAutoFilter"
+      },
+      "signature": "GetParent(): ApiAutoFilter"
+    }
+  }
+}
