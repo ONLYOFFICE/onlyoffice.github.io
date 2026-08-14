@@ -11,6 +11,7 @@
 * New: a "What's new" sparkle on the pane menu whenever Curly ships something — one click opens the changelog, then it stays quiet until the next release.
 * Placeholders typed with fullwidth braces (from Chinese/Japanese keyboards) are now detected and filled.
 * Starting a trial with a brand-new email now shows a confirmation step first; signing in with an address that already has access says so instead of starting a new trial.
+* Fix: the sign-in email field now checks the address format before offering to send a code, so a typo like a missing dot in the domain is caught immediately instead of failing silently.
 
 ## 1.3.0
 
