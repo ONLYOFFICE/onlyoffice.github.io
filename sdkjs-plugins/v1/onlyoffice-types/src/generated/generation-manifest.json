@@ -6,6 +6,11 @@
     "typescript": "5.9.3"
   },
   "repositories": {
+    "sdkjsExt": {
+      "commit": "440f0ab016dad11fb88ce90510014d357aa76891",
+      "describe": "v10.0.0.1",
+      "dirty": false
+    },
     "sdkjs": {
       "commit": "586ec09e2dc845c1287ac78baa5e3baaf0f9e061",
       "describe": "v9.5.0.150-2-g586ec09e2d",
@@ -71,6 +76,18 @@
       "repository": "sdkjs",
       "path": "pdf\\plugin-events.js",
       "sha256": "294890d55ebab7c4fd668d52578493ce1c0499cc2a096bd3f5c774b64090bc0b"
+    }
+  ],
+  "pluginMethodSourceFiles": [
+    {
+      "repository": "sdkjs-ext",
+      "path": "slide/api_plugins.js",
+      "sha256": "9dc4fcc983cc43c578dc64435345a37e231b5bf311f8bac242e66f5b3fefd1cf"
+    },
+    {
+      "repository": "sdkjs-ext",
+      "path": "word/api_plugins.js",
+      "sha256": "f466a47bae514e050475421e058dd8819b53ddc79a0e64d435d4cbb18e2b21a6"
     }
   ]
 }

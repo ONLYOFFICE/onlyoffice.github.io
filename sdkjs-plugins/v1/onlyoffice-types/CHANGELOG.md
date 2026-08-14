@@ -59,6 +59,19 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   `GetClassType`) are Omitted.
 - `any` can no longer reappear through an untested fallback path (undocumented property, empty
   typedef, JSDoc's own `{any}` tag) - all three now resolve to `unknown` instead.
+- Generation was silently non-deterministic in `sdkjs-ext`. It contributes real methods to Word and
+  Slide, but a missing checkout was skipped by a `fs.existsSync` filter: generation exited 0 having
+  produced 104 Word methods instead of 109 and 51 Slide methods instead of 57. A missing declared
+  source is now an error (`--allow-missing-sdkjs-ext` opts out explicitly, with a warning), and the
+  manifest records `sdkjs-ext`'s commit, tag and per-file hashes - previously it recorded only sdkjs
+  and sdkjs-forms, so the determinism guarantee did not cover a repository the build depended on.
+- `--require-clean-sources` only inspected sdkjs and sdkjs-forms. The check now lives in one place
+  and both generators apply it to every repository they actually read.
+- `--require-release-tag` (and `npm run check-release-sources`) reject a source checkout sitting past
+  a tag. The rule was prose in CONTRIBUTING and was violated immediately: `9.5.0`'s manifest records
+  `v9.5.0.150-2-g586ec09e2d`. The two post-tag commits touch only the formula engine, and all ten
+  generator inputs are byte-identical to the tag, so the shipped types are unaffected - but the
+  manifest is a provenance record and should not have been able to disagree with the version.
 - `PluginConfig` required `offered` and `version`, which the reference documents as optional and
   which real plugins omit (only 17 of 54 shipped configs carry `offered`). The mismatch was hidden
   because the checked-in `config.schema.json` had gone stale and still required neither, so

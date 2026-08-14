@@ -1134,14 +1134,15 @@ function packageVersion(packageName) {
   }
 }
 
-function buildGenerationManifest(paths) {
-  const repositories = {
-    sdkjs: getGitMetadata(paths.sdkjs),
-    sdkjsForms: getGitMetadata(paths.sdkjsForms),
-  };
-  if (process.argv.includes('--require-clean-sources') &&
-      Object.values(repositories).some(repo => repo.dirty)) {
-    throw new Error('Source checkout is dirty; --require-clean-sources requires clean sdkjs and sdkjs-forms repositories.');
+// Shared by both generators, because each reads a different set of repositories and a guard that
+// only covers one of them is the bug it is meant to prevent: `--require-clean-sources` used to check
+// sdkjs/sdkjs-forms only, while generate-plugin-methods.js was quietly reading sdkjs-ext too.
+function assertSourcesReleasable(repositories) {
+  if (process.argv.includes('--require-clean-sources')) {
+    const dirty = Object.entries(repositories).filter(([, repo]) => repo.dirty).map(([name]) => name);
+    if (dirty.length > 0) {
+      throw new Error(`--require-clean-sources requires clean source checkouts; dirty: ${dirty.join(', ')}.`);
+    }
   }
 
   // A release's version is the editor version its sources carry, so generating from a checkout that
@@ -1157,6 +1158,14 @@ function buildGenerationManifest(paths) {
       throw new Error(`--require-release-tag requires every source checkout to sit exactly on a tag: ${offTag.join('; ')}. Check out the release tag and regenerate.`);
     }
   }
+}
+
+function buildGenerationManifest(paths) {
+  const repositories = {
+    sdkjs: getGitMetadata(paths.sdkjs),
+    sdkjsForms: getGitMetadata(paths.sdkjsForms),
+  };
+  assertSourcesReleasable(repositories);
 
   const sourceFiles = [];
   const seen = new Set();
@@ -1176,6 +1185,12 @@ function buildGenerationManifest(paths) {
     }
   }
 
+  // generate-plugin-methods.js owns `repositories.sdkjsExt` and `pluginMethodSourceFiles` - it reads
+  // sdkjs-ext, which this generator does not. Carry whatever it recorded through instead of writing
+  // the manifest wholesale, so running this script on its own doesn't erase the other half of the
+  // provenance record.
+  const existing = readExistingManifest();
+
   return {
     generator: {
       packageVersion: JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')).version,
@@ -1184,6 +1199,7 @@ function buildGenerationManifest(paths) {
       typescript: packageVersion('typescript'),
     },
     repositories: {
+      ...(existing.repositories?.sdkjsExt ? { sdkjsExt: existing.repositories.sdkjsExt } : {}),
       ...repositories,
       officeApiDescriptions: {
         repository: `https://github.com/${LEGACY_DECLARATIONS_REPO}.git`,
@@ -1191,7 +1207,18 @@ function buildGenerationManifest(paths) {
       },
     },
     sourceFiles,
+    ...(existing.pluginMethodSourceFiles ? { pluginMethodSourceFiles: existing.pluginMethodSourceFiles } : {}),
   };
+}
+
+function readExistingManifest() {
+  const manifestPath = path.join(OUTPUT_DIR, 'generation-manifest.json');
+  if (!fs.existsSync(manifestPath)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  } catch {
+    return {};
+  }
 }
 
 async function main() {
@@ -1234,6 +1261,9 @@ module.exports = {
   renderJsDoc,
   splitDescription,
   collectCustomTypeRefs,
+  getGitMetadata,
+  sha256File,
+  assertSourcesReleasable,
   TS_BUILTINS,
   DOC_WIDTH,
 };
