@@ -48,5 +48,6 @@
 	{ "name": "chineseautoformattool", "discussion": "" },
 	{ "name": "nlpsolver", "discussion": "" },
 	{ "name": "salesforce", "discussion": "" },
-	{ "name": "curly", "discussion": "607" }
+	{ "name": "curly", "discussion": "607" },
+	{ "name": "onlymath", "discussion": "" }
 ]
