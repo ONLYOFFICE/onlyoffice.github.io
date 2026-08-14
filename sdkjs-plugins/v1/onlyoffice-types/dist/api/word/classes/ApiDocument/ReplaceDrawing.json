@@ -1,0 +1,29 @@
+{
+  "description": "Replaces a drawing with a new drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ReplaceDrawing/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet oldDrawing = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noldDrawing.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noldDrawing.SetSeriesFill(fill, 1, false);\nparagraph.AddDrawing(oldDrawing);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nfill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet newDrawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nlet docContent = newDrawing.GetContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The chart was replaced with the current shape in this document.\");\ndocContent.AddElement(0, paragraph);\ndoc.ReplaceDrawing(oldDrawing, newDrawing, false);"
+  ],
+  "params": [
+    {
+      "description": "A drawing which will be replaced.",
+      "name": "oOldDrawing",
+      "type": "ApiDrawing"
+    },
+    {
+      "description": "A drawing to replace the old drawing.",
+      "name": "oNewDrawing",
+      "type": "ApiDrawing"
+    },
+    {
+      "description": "Specifies if the old drawing settings will be saved.",
+      "name": "bSaveOldDrawingPr",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ReplaceDrawing(oOldDrawing: ApiDrawing, oNewDrawing: ApiDrawing, bSaveOldDrawingPr?: boolean): boolean"
+}

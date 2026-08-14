@@ -1,0 +1,14 @@
+{
+  "description": "Class representing an unsupported element.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiUnsupported class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiUnsupported/Methods/GetClassType/",
+      "params": [],
+      "returns": {
+        "type": "\"unsupported\""
+      },
+      "signature": "GetClassType(): \"unsupported\""
+    }
+  }
+}

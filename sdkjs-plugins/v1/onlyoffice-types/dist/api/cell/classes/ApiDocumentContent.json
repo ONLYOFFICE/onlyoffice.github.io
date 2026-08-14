@@ -1,0 +1,242 @@
+{
+  "description": "Class representing a container for paragraphs and tables.",
+  "methods": {
+    "AddElement": {
+      "description": "Adds a paragraph or a table or a blockLvl content control using its position in the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/AddElement/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 200 * 36000, 60 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\ncontent.RemoveAllElements();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ncontent.AddElement(paragraph);\ncontent.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The position where the current element will be added.",
+          "name": "nPos",
+          "type": "number"
+        },
+        {
+          "description": "The document element which will be added at the current position.",
+          "name": "oElement",
+          "type": "DocumentElement"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddElement(nPos: number, oElement: DocumentElement): boolean"
+    },
+    "AddText": {
+      "description": "Appends the specified text to the end of the document content.",
+      "params": [
+        {
+          "description": "The text to add.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "AddText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "GetAllParagraphs": {
+      "description": "Returns an array of all paragraphs from the current document content.",
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph[]"
+      },
+      "signature": "GetAllParagraphs(): ApiParagraph[]"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiDocumentContent class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 200 * 36000, 60 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet classType = content.GetClassType();\nlet paragraph = content.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class Type = \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"documentContent\""
+      },
+      "signature": "GetClassType(): \"documentContent\""
+    },
+    "GetCurrentParagraph": {
+      "description": "Returns the current paragraph where the cursor is located.",
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph"
+      },
+      "signature": "GetCurrentParagraph(): ApiParagraph",
+      "since": "9.0.0"
+    },
+    "GetCurrentRun": {
+      "description": "Returns the current run where the cursor is located.",
+      "params": [],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "GetCurrentRun(): ApiRun",
+      "since": "9.0.0"
+    },
+    "GetElement": {
+      "description": "Returns an element by its position in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/GetElement/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 200 * 36000, 60 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"center\");\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");"
+      ],
+      "params": [
+        {
+          "description": "The element position that will be taken from the document.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "DocumentElement"
+      },
+      "signature": "GetElement(nPos: number): DocumentElement"
+    },
+    "GetElementsCount": {
+      "description": "Returns a number of elements in the current document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/GetElementsCount/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 200 * 36000, 60 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"We got the first paragraph inside the shape.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Number of elements inside the shape: \" + content.GetElementsCount());\nparagraph.AddLineBreak();\nparagraph.AddText(\"Line breaks are NOT counted into the number of elements.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetElementsCount(): number"
+    },
+    "GetInternalId": {
+      "description": "Returns an internal ID of the current document content.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInternalId(): string",
+      "since": "9.0.4"
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current document content object.",
+      "params": [
+        {
+          "description": "Options for formatting the returned text.",
+          "name": "options",
+          "optional": true,
+          "type": "object"
+        },
+        {
+          "description": "Defines if the resulting string will include numbering or not.",
+          "name": "options_Numbering",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the resulting string will include mathematical expressions or not.",
+          "name": "options_Math",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines how the table cell separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\t\".",
+          "name": "options_TableCellSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table row separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\\n\".",
+          "name": "options_TableRowSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the paragraph separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\\n\".",
+          "name": "options_ParaSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the tab will be specified in the resulting string. Any symbol can be used. The default symbol is \"\\t\".",
+          "name": "options_TabSymbol",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the line separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\".",
+          "name": "options_NewLineSeparator",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string",
+      "since": "8.3.0"
+    },
+    "Push": {
+      "description": "Pushes a paragraph or a table to actually add it to the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/Push/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\ncontent.RemoveAllElements();\nlet paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ncontent.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The element type which will be pushed to the document.",
+          "name": "oElement",
+          "type": "DocumentElement"
+        }
+      ],
+      "returns": {
+        "description": "returns false if oElement is unsupported.",
+        "type": "boolean"
+      },
+      "signature": "Push(oElement: DocumentElement): boolean"
+    },
+    "RemoveAllElements": {
+      "description": "Removes all the elements from the current document or from the current document element.\n<note>When all elements are removed, a new empty paragraph is automatically created. If you want to add\ncontent to this paragraph, use the {@link ApiDocumentContent#GetElement} method.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/RemoveAllElements/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\ncontent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveAllElements(): boolean"
+    },
+    "RemoveElement": {
+      "description": "Removes an element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/RemoveElement/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 200 * 36000, 60 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"This is paragraph #1.\");\nfor (let paraIncrease = 1; paraIncrease < 5; ++paraIncrease) {\n    paragraph = Api.CreateParagraph();\n    paragraph.AddText(\"This is paragraph #\" + (paraIncrease + 1) + \".\");\n    content.Push(paragraph);\n}\ncontent.RemoveElement(2);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed paragraph #3, check that out above.\");\ncontent.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The element number (position) in the document or inside other element.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveElement(nPos: number): boolean"
+    },
+    "SetText": {
+      "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
+      "params": [
+        {
+          "description": "The text to set.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "SetText(text: string): ApiRun",
+      "since": "9.4.0"
+    }
+  }
+}

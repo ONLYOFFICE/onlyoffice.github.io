@@ -1,0 +1,507 @@
+{
+  "CoAuthoringChatSendMessage": {
+    "description": "Sends a message to the co-authoring chat.",
+    "params": [
+      {
+        "description": "Message text.",
+        "name": "sText",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"CoAuthoringChatSendMessage\", [sText: string], callback?): any"
+  },
+  "EndAction": {
+    "description": "Specifies the end action for long operations.",
+    "params": [
+      {
+        "description": "The action type:\r**\"Information\"** - ends a non-blocking informational action,\r**\"Block\"** - ends a blocking interaction action.",
+        "name": "type",
+        "type": "\"Information\" | \"Block\""
+      },
+      {
+        "description": "A string description displayed during the action.",
+        "name": "description",
+        "optional": true,
+        "type": "string"
+      },
+      {
+        "description": "The error status code. If no error occurs, then an empty string is passed.",
+        "name": "status",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"EndAction\", [type: \"Information\" | \"Block\", description?: string, status?: string], callback?): any"
+  },
+  "FocusEditor": {
+    "description": "Returns focus to the editor.",
+    "params": [],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"FocusEditor\", [], callback?): any"
+  },
+  "GetAllComments": {
+    "description": "Returns all the comments from the document.",
+    "params": [],
+    "returns": {
+      "description": "An array of comment objects containing the comment data.",
+      "type": "comment[]"
+    },
+    "signature": "executeMethod(\"GetAllComments\", [], callback?): comment[]"
+  },
+  "GetCurrentPage": {
+    "description": "Returns the current page index.",
+    "params": [],
+    "returns": {
+      "type": "number"
+    },
+    "signature": "executeMethod(\"GetCurrentPage\", [], callback?): number"
+  },
+  "GetFileToDownload": {
+    "description": "Returns the current file to download in the specified format.",
+    "params": [
+      {
+        "description": "A format in which you need to download a file.",
+        "name": "format",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "URL to download the file in the specified format or error.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetFileToDownload\", [format?: string], callback?): string",
+    "since": "7.2.0"
+  },
+  "GetFontList": {
+    "description": "Returns the fonts list.",
+    "params": [],
+    "returns": {
+      "description": "An array of the FontInfo objects containing the data about the used fonts.",
+      "type": "FontInfo[]"
+    },
+    "signature": "executeMethod(\"GetFontList\", [], callback?): FontInfo[]"
+  },
+  "GetInstalledPlugins": {
+    "description": "Returns all the installed plugins.",
+    "params": [],
+    "returns": {
+      "description": "An array of all the installed plugins.",
+      "type": "PluginData[]"
+    },
+    "signature": "executeMethod(\"GetInstalledPlugins\", [], callback?): PluginData[]",
+    "since": "7.2.0"
+  },
+  "GetMacros": {
+    "description": "Returns the document macros.",
+    "params": [
+      {
+        "name": "oContent",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "The Macros object containing the data about all the macros from the document",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetMacros\", [oContent?: string], callback?): string"
+  },
+  "GetPageImage": {
+    "description": "Returns the page image.",
+    "params": [
+      {
+        "description": "The page index.",
+        "name": "nPage",
+        "type": "number"
+      },
+      {
+        "description": "The image parameters.",
+        "name": "oParams",
+        "optional": true,
+        "type": "{ maxSize?: number; annotations?: boolean; fields?: boolean; drawings?: boolean; withInfo?: boolean }"
+      }
+    ],
+    "returns": {
+      "type": "string | object"
+    },
+    "signature": "executeMethod(\"GetPageImage\", [nPage: number, oParams?: { maxSize?: number; annotations?: boolean; fields?: boolean; drawings?: boolean; withInfo?: boolean }], callback?): string | object"
+  },
+  "GetSelectedText": {
+    "description": "Returns the selected text from the document.",
+    "params": [
+      {
+        "description": "The resulting string display properties.",
+        "name": "prop",
+        "optional": true,
+        "type": "{ Numbering?: boolean; Math?: boolean; TableCellSeparator?: string; TableRowSeparator?: string; ParaSeparator?: string; TabSymbol?: string; NewLineSeparator?: string }"
+      }
+    ],
+    "returns": {
+      "description": "Selected text.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetSelectedText\", [prop?: { Numbering?: boolean; Math?: boolean; TableCellSeparator?: string; TableRowSeparator?: string; ParaSeparator?: string; TabSymbol?: string; NewLineSeparator?: string }], callback?): string",
+    "since": "7.1.0"
+  },
+  "GetVersion": {
+    "description": "Returns the editor version.",
+    "params": [],
+    "returns": {
+      "description": "The editor version.",
+      "type": "string"
+    },
+    "signature": "executeMethod(\"GetVersion\", [], callback?): string"
+  },
+  "GoToPage": {
+    "description": "Moves to specified page.",
+    "params": [
+      {
+        "description": "Zero-based page index to navigate to.",
+        "name": "pageIndex",
+        "type": "number"
+      },
+      {
+        "description": "If specified only x1, y1 (ex. [10, 10]) - then moves to them with inherited zoom, if specified whole rect (ex. [10, 10, 100, 100]) then zoom to rect",
+        "name": "rect",
+        "optional": true,
+        "type": "Rect"
+      }
+    ],
+    "returns": {
+      "type": "boolean"
+    },
+    "signature": "executeMethod(\"GoToPage\", [pageIndex: number, rect?: Rect], callback?): boolean"
+  },
+  "InstallPlugin": {
+    "description": "Installs a plugin using the specified plugin config.",
+    "params": [
+      {
+        "description": "The plugin {@link https://api.onlyoffice.com/docs/plugins/configuration/configuration config}.",
+        "name": "config",
+        "optional": true,
+        "type": "object"
+      }
+    ],
+    "returns": {
+      "description": "An object with the result information.",
+      "type": "object"
+    },
+    "signature": "executeMethod(\"InstallPlugin\", [config?: object], callback?): object",
+    "since": "7.2.0"
+  },
+  "MouseMoveWindow": {
+    "description": "Sends an event to the plugin when the mouse button is moved inside the plugin iframe.",
+    "params": [
+      {
+        "description": "The frame ID.",
+        "name": "frameId",
+        "type": "string"
+      },
+      {
+        "description": "The X coordinate.",
+        "name": "x",
+        "type": "number"
+      },
+      {
+        "description": "The Y coordinate.",
+        "name": "y",
+        "type": "number"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"MouseMoveWindow\", [frameId: string, x: number, y: number], callback?): any",
+    "since": "7.4.0"
+  },
+  "MouseUpWindow": {
+    "description": "Sends an event to the plugin when the mouse button is released inside the plugin iframe.",
+    "params": [
+      {
+        "description": "The frame ID.",
+        "name": "frameId",
+        "type": "string"
+      },
+      {
+        "description": "The X coordinate.",
+        "name": "x",
+        "type": "number"
+      },
+      {
+        "description": "The Y coordinate.",
+        "name": "y",
+        "type": "number"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"MouseUpWindow\", [frameId: string, x: number, y: number], callback?): any",
+    "since": "7.4.0"
+  },
+  "OnDropEvent": {
+    "description": "Implements the external drag&drop emulation.",
+    "params": [
+      {
+        "description": "The drag&drop emulation properties.",
+        "name": "obj",
+        "type": "{ type?: string; x?: number; y?: number; html?: string; text?: string }"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"OnDropEvent\", [obj: { type?: string; x?: number; y?: number; html?: string; text?: string }], callback?): any",
+    "since": "7.3.0"
+  },
+  "PasteHtml": {
+    "description": "Pastes text in the HTML format into the document.",
+    "params": [
+      {
+        "description": "A string value that specifies the text in the *HTML* format to be pasted into the document.",
+        "name": "htmlText",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"PasteHtml\", [htmlText: string], callback?): any"
+  },
+  "PasteText": {
+    "description": "Pastes text into the document.",
+    "params": [
+      {
+        "description": "A string value that specifies the text to be pasted into the document.",
+        "name": "text",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"PasteText\", [text: string], callback?): any"
+  },
+  "RemovePlugin": {
+    "description": "Removes a plugin with the specified GUID.",
+    "params": [
+      {
+        "description": "The plugin identifier. It must be of the *asc.{UUID}* type.",
+        "name": "guid",
+        "type": "string"
+      },
+      {
+        "description": "The plugin backup. This parameter is used when working with the desktop editors.",
+        "name": "backup",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "description": "An object with the result information.",
+      "type": "object"
+    },
+    "signature": "executeMethod(\"RemovePlugin\", [guid: string, backup: string], callback?): object",
+    "since": "7.2.0"
+  },
+  "ReplacePageContent": {
+    "description": "Replaces the page content with the specified parameters.",
+    "params": [
+      {
+        "description": "The page index.",
+        "name": "nPage",
+        "type": "number"
+      },
+      {
+        "description": "The replacement parameters.",
+        "name": "oParams",
+        "type": "{ type?: \"xml\" | \"html\"; options?: ReplaceXmlOptions | ReplaceHtmlOptions }"
+      }
+    ],
+    "returns": {
+      "type": "boolean"
+    },
+    "signature": "executeMethod(\"ReplacePageContent\", [nPage: number, oParams: { type?: \"xml\" | \"html\"; options?: ReplaceXmlOptions | ReplaceHtmlOptions }], callback?): boolean"
+  },
+  "SetMacros": {
+    "description": "Sets macros to the document.",
+    "params": [
+      {
+        "description": "The *Macros* object containing the data about all the macros from the document.",
+        "name": "data",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"SetMacros\", [data: string], callback?): any"
+  },
+  "SetPluginsOptions": {
+    "description": "Configures plugins from an external source. The settings can be set for all plugins or for a specific plugin.\nFor example, this method can be used to pass an authorization token to the plugin. This method can be used only with the connector class.",
+    "params": [
+      {
+        "description": "Plugin options.",
+        "name": "options",
+        "type": "PluginOptions"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"SetPluginsOptions\", [options: PluginOptions], callback?): any",
+    "since": "8.1.1"
+  },
+  "SetProperties": {
+    "description": "Sets the properties to the document.",
+    "params": [
+      {
+        "description": "The document properties.",
+        "name": "obj",
+        "type": "{ copyoutenabled?: boolean; hideContentControlTrack?: boolean; watermark_on_draw?: string; disableAutostartMacros?: boolean; fillForms?: string }"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"SetProperties\", [obj: { copyoutenabled?: boolean; hideContentControlTrack?: boolean; watermark_on_draw?: string; disableAutostartMacros?: boolean; fillForms?: string }], callback?): any"
+  },
+  "ShowButton": {
+    "description": "Shows or hides buttons in the header.",
+    "params": [
+      {
+        "description": "The button ID.",
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "description": "The flag specifies whether the button is shown (**true**) or hidden (**false**).",
+        "name": "bShow",
+        "type": "boolean"
+      },
+      {
+        "description": "The parameter indicates whether the button will be displayed on the right side of the window or on the left. The default value is \"left\".",
+        "name": "align",
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"ShowButton\", [id: string, bShow: boolean, align: string], callback?): any",
+    "since": "7.2.0"
+  },
+  "ShowError": {
+    "description": "Shows an error/warning message.",
+    "params": [
+      {
+        "description": "The error text.",
+        "name": "error",
+        "type": "string"
+      },
+      {
+        "description": "-1 or 0 for error or warning.",
+        "name": "level",
+        "type": "number"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"ShowError\", [error: string, level: number], callback?): any",
+    "since": "8.3.0"
+  },
+  "ShowInputHelper": {
+    "description": "Shows the input helper.",
+    "params": [
+      {
+        "description": "A string value which specifies a plugin identifier which must be of the *asc.{UUID}* type.",
+        "name": "guid",
+        "type": "string"
+      },
+      {
+        "description": "A number which specifies the window width measured in millimeters.",
+        "name": "w",
+        "type": "number"
+      },
+      {
+        "description": "A number which specifies the window height measured in millimeters.",
+        "name": "h",
+        "type": "number"
+      },
+      {
+        "description": "Defines if the keyboard is caught (**true**) or not (**false**).",
+        "name": "isKeyboardTake",
+        "type": "boolean"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"ShowInputHelper\", [guid: string, w: number, h: number, isKeyboardTake: boolean], callback?): any"
+  },
+  "StartAction": {
+    "description": "Specifies the start action for long operations.",
+    "params": [
+      {
+        "description": "The action type:\r**\"Information\"** - a non-blocking informational action,\r**\"Block\"** - a blocking interaction action.",
+        "name": "type",
+        "type": "\"Information\" | \"Block\""
+      },
+      {
+        "description": "A string description displayed during the action.",
+        "name": "description",
+        "optional": true,
+        "type": "string"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"StartAction\", [type: \"Information\" | \"Block\", description?: string], callback?): any"
+  },
+  "UnShowInputHelper": {
+    "description": "Unshows the input helper.",
+    "params": [
+      {
+        "description": "A string value which specifies a plugin identifier which must be of the *asc.{UUID}* type.",
+        "name": "guid",
+        "type": "string"
+      },
+      {
+        "description": "Defines if the input context will be cleared (**true**) or not (**false**).",
+        "name": "isclear",
+        "type": "boolean"
+      }
+    ],
+    "returns": {
+      "type": "any"
+    },
+    "signature": "executeMethod(\"UnShowInputHelper\", [guid: string, isclear: boolean], callback?): any"
+  },
+  "UpdatePlugin": {
+    "description": "Updates a plugin using the specified plugin config.",
+    "params": [
+      {
+        "description": "The plugin {@link https://api.onlyoffice.com/docs/plugins/configuration/configuration config}.",
+        "name": "config",
+        "optional": true,
+        "type": "object"
+      }
+    ],
+    "returns": {
+      "description": "An object with the result information.",
+      "type": "object"
+    },
+    "signature": "executeMethod(\"UpdatePlugin\", [config?: object], callback?): object",
+    "since": "7.3.0"
+  }
+}

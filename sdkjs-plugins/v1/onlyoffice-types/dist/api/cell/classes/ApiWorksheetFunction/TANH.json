@@ -1,0 +1,18 @@
+{
+  "description": "Returns the hyperbolic tangent of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TANH/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TANH(6));"
+  ],
+  "params": [
+    {
+      "description": "Any real number for which the hyperbolic tangent will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TANH(arg1: ApiRange | ApiName | number): number"
+}

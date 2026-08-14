@@ -1,0 +1,29 @@
+{
+  "description": "Inserts a paragraph at the specified position.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/InsertParagraph/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\nparagraph1.AddText(\"This is just a sample text.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This paragraph was inserted here.\");\nparagraph1.InsertParagraph(paragraph2, \"after\", true);"
+  ],
+  "params": [
+    {
+      "description": "Text or paragraph.",
+      "name": "paragraph",
+      "type": "string | ApiParagraph"
+    },
+    {
+      "description": "The position where the text or paragraph will be inserted (\"before\" or \"after\" the paragraph specified).",
+      "name": "sPosition",
+      "type": "string"
+    },
+    {
+      "description": "Defines if this method returns a new paragraph (true) or the current paragraph (false).",
+      "name": "beRNewPara",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns null if param paragraph is invalid.",
+    "type": "ApiParagraph | null"
+  },
+  "signature": "InsertParagraph(paragraph: string | ApiParagraph, sPosition: string, beRNewPara: boolean): ApiParagraph | null"
+}

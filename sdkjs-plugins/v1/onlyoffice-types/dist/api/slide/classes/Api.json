@@ -1,0 +1,1447 @@
+{
+  "methods": {
+    "CentimetersToPoints": {
+      "description": "Converts centimeters to points.",
+      "params": [
+        {
+          "description": "The number of centimeters to convert to points.",
+          "name": "cm",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "CentimetersToPoints(cm: number): number"
+    },
+    "Color": {
+      "description": "Creates an ApiColor from a universal input. The method recognizes several call signatures and either delegates to a narrower factory or constructs an ApiColor directly.\n**Numeric components**: \"Api.Color(r, g, b)\" or \"Api.Color(r, g, b, a)\" creates an RGB or RGBA color from byte components (0-255).\n**Packed integer**: \"Api.Color(0xRRGGBB)\" creates an RGB color from a 24-bit integer.\n**Full HEX string**: \"Api.Color('#RRGGBB')\" or \"Api.Color('RRGGBB')\" creates a HEX color; the leading \"#\" is optional.\n**Short HEX string**: \"Api.Color('#RGB')\" expands each digit by duplication, so \"#F0A\" becomes \"#FF00AA\".\n**Theme color name**: \"Api.Color('accent1')\" creates a theme color; any value of SchemeColorId is accepted.\n**Preset color name**: \"Api.Color('aliceBlue')\" resolves any value of PresetColor to its RGB equivalent.\n**Auto color**: \"Api.Color('auto')\" creates an auto color.\nFor a single string argument, the resolution priority is: \"auto\", a string starting with \"#\", a theme name, a preset name, a bare 6-digit HEX. Theme and preset palettes do not overlap. A 3-digit shorthand is accepted only with the leading \"#\".\nUnsupported inputs (objects, arrays, an existing ApiColor, unknown strings, no arguments) return a black color (#000000).",
+      "params": [
+        {
+          "description": "The universal color input. With three or four arguments, the red component (0-255).",
+          "name": "r",
+          "type": "number | string | number | SchemeColorId | PresetColor"
+        },
+        {
+          "description": "The green component (0-255). Used only with the (r, g, b) and (r, g, b, a) forms.",
+          "name": "g",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The blue component (0-255). Used only with the (r, g, b) and (r, g, b, a) forms.",
+          "name": "b",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The alpha component (0-255). Used only with the (r, g, b, a) form.",
+          "name": "a",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "Color(r: number | string | number | SchemeColorId | PresetColor, g?: number, b?: number, a?: number): ApiColor"
+    },
+    "CreateBlipFill": {
+      "description": "Creates a blip fill to apply to the object using the selected image as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateBlipFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateBlipFill(\"https://api.onlyoffice.com/content/img/docbuilder/examples/icon_DocumentEditors.png\", \"tile\");\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"star10\", 300 * 36000, 130 * 36000, oFill, oStroke);\noDrawing.SetPosition(608400, 1267200);\noSlide.AddObject(oDrawing);"
+      ],
+      "params": [
+        {
+          "description": "The path to the image used for the blip fill (currently only internet URL or Base64 encoded images are supported).",
+          "name": "imageUrl",
+          "type": "string"
+        },
+        {
+          "description": "The type of the fill used for the blip fill (tile or stretch).",
+          "name": "blipFillType",
+          "type": "BlipFillType"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateBlipFill(imageUrl: string, blipFillType: BlipFillType): ApiFill"
+    },
+    "CreateBullet": {
+      "description": "Creates a bullet for a paragraph with the character or symbol specified with the sSymbol parameter.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateBullet/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oBullet = Api.CreateBullet(\"-\");\noParagraph.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the bulleted paragraph.\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The character or symbol which will be used to create the bullet for the paragraph.",
+          "name": "sSymbol",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiBullet"
+      },
+      "signature": "CreateBullet(sSymbol: string): ApiBullet"
+    },
+    "CreateChart": {
+      "description": "Creates a chart with the parameters specified.\n:::note\nValues of _nStyleIndex_ outside **1 - 48** are interpreted as a chart style id from the _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).\n:::",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateChart/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24, [\"0\", \"0.00\"]);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetShowPointDataLabel(1, 0, false, false, true, false);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The chart type used for the chart display.",
+          "name": "sType",
+          "optional": true,
+          "type": "ChartType"
+        },
+        {
+          "description": "The array of the data used to build the chart from.",
+          "name": "aSeries",
+          "optional": true,
+          "type": "number[][]"
+        },
+        {
+          "description": "The array of the names (the source table column names) used for the data which the chart will be build from.",
+          "name": "aSeriesNames",
+          "optional": true,
+          "type": "number[] | string[]"
+        },
+        {
+          "description": "The array of the names (the source table row names) used for the data which the chart will be build from.",
+          "name": "aCatNames",
+          "optional": true,
+          "type": "number[] | string[]"
+        },
+        {
+          "description": "The chart width in English measure units.",
+          "name": "nWidth",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The chart height in English measure units.",
+          "name": "nHeight",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The chart color style index (can be **1 - 48**, as described in OOXML specification).",
+          "name": "nStyleIndex",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Numeric formats which will be applied to the series (can be custom formats).\rThe default numeric format is \"General\".",
+          "name": "aNumFormats",
+          "optional": true,
+          "type": "NumFormat[] | string[]"
+        }
+      ],
+      "returns": {
+        "type": "ApiChart"
+      },
+      "signature": "CreateChart(sType?: ChartType, aSeries?: number[][], aSeriesNames?: number[] | string[], aCatNames?: number[] | string[], nWidth?: EMU, nHeight?: EMU, nStyleIndex?: number, aNumFormats?: NumFormat[] | string[]): ApiChart"
+    },
+    "CreateCustomGeometry": {
+      "description": "Creates a new custom geometry.",
+      "params": [],
+      "returns": {
+        "type": "ApiGeometry"
+      },
+      "signature": "CreateCustomGeometry(): ApiGeometry",
+      "since": "9.1.0"
+    },
+    "CreateGradientStop": {
+      "description": "Creates a gradient stop used for different types of gradients.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateGradientStop/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oDrawing);\noDrawing.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "The color used for the gradient stop.",
+          "name": "color",
+          "type": "ApiColor"
+        },
+        {
+          "description": "The position of the gradient stop measured in 1000th of percent.",
+          "name": "pos",
+          "type": "PositivePercentage"
+        }
+      ],
+      "returns": {
+        "type": "ApiGradientStop"
+      },
+      "signature": "CreateGradientStop(color: ApiColor, pos: PositivePercentage): ApiGradientStop",
+      "since": "9.1.0"
+    },
+    "CreateGroup": {
+      "description": "Creates a group of drawings.\n:::note\nThe drawings must not be added to the presentation. To group the drawings which are already in the presentation, use the {@link ApiSlide#GroupDrawings} method.\n:::",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateGroup/",
+      "examples": [
+        "let oPresentation = Api.GetPresentation();\nlet oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nlet oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nlet oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet oShape1 = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, oFill1, oStroke);\nlet oShape2 = Api.CreateShape(\"rect\", 150 * 36000, 80 * 36000, oFill2, oStroke);\noShape1.SetPosition(608400, 1267200);\noShape2.SetPosition(3100000, 1867200);\nlet oGroup = Api.CreateGroup([oShape1, oShape2]);\noSlide.AddObject(oGroup);"
+      ],
+      "params": [
+        {
+          "description": "An array of drawings to group.",
+          "name": "drawings",
+          "type": "DrawingForGroup[]"
+        }
+      ],
+      "returns": {
+        "type": "ApiGroup"
+      },
+      "signature": "CreateGroup(drawings: DrawingForGroup[]): ApiGroup",
+      "since": "8.3.0"
+    },
+    "CreateHyperlink": {
+      "description": "Creates a new hyperlink object to be used for setting hyperlinks on drawing objects (shapes or images).",
+      "params": [
+        {
+          "description": "The hyperlink address. Accepts an external URL (http, https, mailto, ftp) or one of the internal slide actions: \"ppaction://hlinkshowjump?jump=firstslide\", \"ppaction://hlinkshowjump?jump=lastslide\", \"ppaction://hlinkshowjump?jump=nextslide\", \"ppaction://hlinkshowjump?jump=previousslide\", \"ppaction://hlinksldjumpslide{N}\" (N is the zero-based slide index), \"ppaction://hlinkfile?file={path}\" (opens an external file).",
+          "name": "link",
+          "type": "string"
+        },
+        {
+          "description": "The tooltip text.",
+          "name": "tooltip",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiHyperlink"
+      },
+      "signature": "CreateHyperlink(link: string, tooltip: string): ApiHyperlink"
+    },
+    "CreateImage": {
+      "description": "Creates an image with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateImage/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oShape = Api.CreateImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/step2_1.png\", 300 * 36000, 150 * 36000);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The image source where the image to be inserted should be taken from (currently,\ronly internet URL or Base64 encoded images are supported).",
+          "name": "sImageSrc",
+          "type": "string"
+        },
+        {
+          "description": "The image width in English measure units.",
+          "name": "nWidth",
+          "type": "EMU"
+        },
+        {
+          "description": "The image height in English measure units.",
+          "name": "nHeight",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "ApiImage"
+      },
+      "signature": "CreateImage(sImageSrc: string, nWidth: EMU, nHeight: EMU): ApiImage"
+    },
+    "CreateLayout": {
+      "description": "Creates a new slide layout and adds it to the slide master if it is specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateLayout/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = Api.CreateLayout(oMaster);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oPlaceholder = Api.CreatePlaceholder(\"picture\");\noShape.SetPlaceholder(oPlaceholder);\noLayout.AddObject(oShape);\noSlide1.ApplyLayout(oLayout);\nvar oSlide2 = Api.CreateSlide();\noPresentation.AddSlide(oSlide2);\noSlide2.ApplyLayout(oLayout);"
+      ],
+      "params": [
+        {
+          "description": "Parent slide master.",
+          "name": "oMaster",
+          "optional": true,
+          "type": "ApiMaster"
+        }
+      ],
+      "returns": {
+        "type": "ApiLayout"
+      },
+      "signature": "CreateLayout(oMaster?: ApiMaster): ApiLayout"
+    },
+    "CreateLinearGradientFill": {
+      "description": "Creates a linear gradient fill to apply to the object using the selected linear gradient as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateLinearGradientFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oDrawing);\noDrawing.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "The array of gradient color stops measured in 1000th of percent.",
+          "name": "gradientStops",
+          "type": "number[]"
+        },
+        {
+          "description": "The angle measured in 60000th of a degree that will define the gradient direction.",
+          "name": "angle",
+          "type": "PositiveFixedAngle"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateLinearGradientFill(gradientStops: number[], angle: PositiveFixedAngle): ApiFill"
+    },
+    "CreateMaster": {
+      "description": "Creates a new slide master.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateMaster/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = Api.CreateMaster();\nvar nCountBefore = oPresentation.GetMastersCount();\noPresentation.AddMaster(nCountBefore, oMaster);\nvar nCountAfter = oPresentation.GetMastersCount();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Number of masters before adding new master: \" + nCountBefore);\noParagraph.AddLineBreak();\noParagraph.AddText(\"Number of masters after adding new master: \" + nCountAfter);\noSlide.RemoveAllObjects();\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The presentation theme object.",
+          "name": "oTheme",
+          "optional": true,
+          "type": "ApiTheme"
+        }
+      ],
+      "returns": {
+        "description": "returns null if presentation theme doesn't exist.",
+        "type": "ApiMaster"
+      },
+      "signature": "CreateMaster(oTheme?: ApiTheme): ApiMaster"
+    },
+    "CreateMath": {
+      "description": "Creates a math equation from a linear text string. The resulting object can be inserted into\na paragraph the same way as a run (e.g. via {@link ApiParagraph#AddElement} or {@link ApiParagraph#Push}).",
+      "params": [
+        {
+          "description": "An equation written as a linear text string.",
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "description": "The format of the specified linear representation.",
+          "name": "format",
+          "optional": true,
+          "type": "\"unicode\" | \"latex\" | \"mathml\""
+        }
+      ],
+      "returns": {
+        "type": "ApiMath"
+      },
+      "signature": "CreateMath(text: string, format?: \"unicode\" | \"latex\" | \"mathml\"): ApiMath",
+      "since": "9.5.0"
+    },
+    "CreateNoFill": {
+      "description": "Creates no fill and removes the fill from the element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateNoFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"The stroke of this shape is transparent.\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateNoFill(): ApiFill"
+    },
+    "CreateNumbering": {
+      "description": "Creates a bullet for a paragraph with the numbering character or symbol specified with the numType parameter.",
+      "params": [
+        {
+          "description": "The numbering type the paragraphs will be numbered with.",
+          "name": "numType",
+          "type": "BulletType"
+        },
+        {
+          "description": "The number the first numbered paragraph will start with.",
+          "name": "startAt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiBullet"
+      },
+      "signature": "CreateNumbering(numType: BulletType, startAt: number): ApiBullet"
+    },
+    "CreateOleObject": {
+      "description": "Creates an OLE object with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateOleObject/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oOleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\noOleObject.SetSize(200 * 36000, 130 * 36000);\noOleObject.SetPosition(70 * 36000, 30 * 36000);\noSlide.AddObject(oOleObject);"
+      ],
+      "params": [
+        {
+          "description": "The image source where the image to be inserted should be taken from (currently, only internet URL or Base64 encoded images are supported).",
+          "name": "sImageSrc",
+          "type": "string"
+        },
+        {
+          "description": "The OLE object width in English measure units.",
+          "name": "nWidth",
+          "type": "EMU"
+        },
+        {
+          "description": "The OLE object height in English measure units.",
+          "name": "nHeight",
+          "type": "EMU"
+        },
+        {
+          "description": "The OLE object string data.",
+          "name": "sData",
+          "type": "string"
+        },
+        {
+          "description": "The application ID associated with the current OLE object.",
+          "name": "sAppId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiOleObject"
+      },
+      "signature": "CreateOleObject(sImageSrc: string, nWidth: EMU, nHeight: EMU, sData: string, sAppId: string): ApiOleObject"
+    },
+    "CreateParagraph": {
+      "description": "Creates a new paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateParagraph/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\noDocContent.RemoveAllElements();\nvar oParagraph = Api.CreateParagraph();\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph"
+      },
+      "signature": "CreateParagraph(): ApiParagraph"
+    },
+    "CreatePatternFill": {
+      "description": "Creates a pattern fill to apply to the object using the selected pattern as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreatePatternFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oDrawing);\noDrawing.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "The pattern type used for the fill selected from one of the available pattern types.",
+          "name": "patternType",
+          "type": "PatternType"
+        },
+        {
+          "description": "The background color used for the pattern creation.",
+          "name": "bgColor",
+          "type": "ApiColor"
+        },
+        {
+          "description": "The foreground color used for the pattern creation.",
+          "name": "fgColor",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreatePatternFill(patternType: PatternType, bgColor: ApiColor, fgColor: ApiColor): ApiFill",
+      "since": "9.1.0"
+    },
+    "CreatePlaceholder": {
+      "description": "Creates a new placeholder.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreatePlaceholder/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oPlaceholder = Api.CreatePlaceholder(\"picture\");\noShape.SetPlaceholder(oPlaceholder);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The placeholder type (\"body\", \"chart\", \"clipArt\", \"ctrTitle\", \"diagram\", \"date\", \"footer\", \"header\", \"media\", \"object\", \"picture\", \"sldImage\", \"sldNumber\", \"subTitle\", \"table\", \"title\").",
+          "name": "sType",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiPlaceholder"
+      },
+      "signature": "CreatePlaceholder(sType: string): ApiPlaceholder"
+    },
+    "CreatePresetColor": {
+      "description": "Creates a color selecting it from one of the available color presets.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreatePresetColor/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreatePresetColor(\"peachPuff\"), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oDrawing);\noDrawing.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "A preset selected from the list of the available color preset names.",
+          "name": "presetColor",
+          "type": "PresetColor"
+        }
+      ],
+      "returns": {
+        "description": ";",
+        "type": "ApiPresetColor"
+      },
+      "signature": "CreatePresetColor(presetColor: PresetColor): ApiPresetColor"
+    },
+    "CreatePresetGeometry": {
+      "description": "Creates a geometry using one of the available preset shapes.",
+      "params": [
+        {
+          "description": "The preset name.",
+          "name": "preset",
+          "optional": true,
+          "type": "ShapeType"
+        }
+      ],
+      "returns": {
+        "type": "ApiGeometry"
+      },
+      "signature": "CreatePresetGeometry(preset?: ShapeType): ApiGeometry",
+      "since": "9.1.0"
+    },
+    "CreateRGBColor": {
+      "description": "Creates an RGB color setting the appropriate values for the red, green and blue color components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateRGBColor/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oRGBColor = Api.CreateRGBColor(255, 111, 61);\nvar oGs1 = Api.CreateGradientStop(Api.CreatePresetColor(\"peachPuff\"), 0);\nvar oGs2 = Api.CreateGradientStop(oRGBColor, 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oDrawing);\noDrawing.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRGBColor"
+      },
+      "signature": "CreateRGBColor(r: number, g: number, b: number): ApiRGBColor"
+    },
+    "CreateRadialGradientFill": {
+      "description": "Creates a radial gradient fill to apply to the object using the selected radial gradient as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateRadialGradientFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreatePresetColor(\"peachPuff\"), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oDrawing);\noDrawing.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "The array of gradient color stops measured in 1000th of percent.",
+          "name": "gradientStops",
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateRadialGradientFill(gradientStops: number[]): ApiFill"
+    },
+    "CreateRun": {
+      "description": "Creates a new smaller text block to be inserted to the current paragraph or table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateRun/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.SetFontSize(60);\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetFontSize(60);\noRun.SetFontFamily(\"Comic Sans MS\");\noRun.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "CreateRun(): ApiRun"
+    },
+    "CreateSchemeColor": {
+      "description": "Creates a complex color scheme selecting from one of the available schemes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateSchemeColor/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oSchemeColor = Api.CreateSchemeColor(\"dk1\");\nvar oFill = Api.CreateSolidFill(oSchemeColor);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"curvedUpArrow\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oDrawing);\noDrawing.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "The color scheme identifier.",
+          "name": "schemeColorId",
+          "type": "SchemeColorId"
+        }
+      ],
+      "returns": {
+        "type": "ApiSchemeColor"
+      },
+      "signature": "CreateSchemeColor(schemeColorId: SchemeColorId): ApiSchemeColor"
+    },
+    "CreateShadow": {
+      "description": "Creates a shadow which can be applied to a graphic object.",
+      "params": [
+        {
+          "description": "The shadow properties.",
+          "name": "settings",
+          "type": "ShadowSettings"
+        }
+      ],
+      "returns": {
+        "type": "ApiShadow"
+      },
+      "signature": "CreateShadow(settings: ShadowSettings): ApiShadow",
+      "since": "9.5.0"
+    },
+    "CreateShape": {
+      "description": "Creates a shape with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateShape/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.SetFontSize(60);\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetFontSize(60);\noRun.SetFontFamily(\"Comic Sans MS\");\noRun.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The shape type which specifies the preset shape geometry.",
+          "name": "sType",
+          "optional": true,
+          "type": "ShapeType"
+        },
+        {
+          "description": "The shape width in English measure units.",
+          "name": "nWidth",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The shape height in English measure units.",
+          "name": "nHeight",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The color or pattern used to fill the shape. If not specified, the default shape style fill (theme accent) is used.",
+          "name": "oFill",
+          "optional": true,
+          "type": "ApiFill"
+        },
+        {
+          "description": "The stroke used to draw the shape outline. If not specified, the default shape style outline (theme accent) is used.",
+          "name": "oStroke",
+          "optional": true,
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "ApiShape"
+      },
+      "signature": "CreateShape(sType?: ShapeType, nWidth?: EMU, nHeight?: EMU, oFill?: ApiFill, oStroke?: ApiStroke): ApiShape"
+    },
+    "CreateSlide": {
+      "description": "Creates a new slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateSlide/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = Api.CreateSlide();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\noPresentation.AddSlide(oSlide);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiSlide"
+      },
+      "signature": "CreateSlide(): ApiSlide"
+    },
+    "CreateSlideShowTransition": {
+      "description": "Creates a new slide show transition object.",
+      "params": [],
+      "returns": {
+        "description": "Name of the transition effect.",
+        "type": "ApiSlideShowTransition"
+      },
+      "signature": "CreateSlideShowTransition(): ApiSlideShowTransition",
+      "since": "9.3.0"
+    },
+    "CreateSolidFill": {
+      "description": "Creates a solid fill to apply to the object using a selected solid color as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateSolidFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oRGBColor = Api.CreateRGBColor(255, 111, 61);\nvar oFill = Api.CreateSolidFill(oRGBColor);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oDrawing);\noDrawing.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "The color used for the element fill.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateSolidFill(color: ApiColor): ApiFill",
+      "since": "9.1.0"
+    },
+    "CreateStroke": {
+      "description": "Creates a stroke adding shadows to the element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateStroke/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(3 * 36000, oFill1);\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noSlide.AddObject(oShape);\noShape.SetPosition(608400, 1267200);"
+      ],
+      "params": [
+        {
+          "description": "The width of the shadow measured in English measure units.",
+          "name": "width",
+          "type": "EMU"
+        },
+        {
+          "description": "The fill type used to create the shadow.",
+          "name": "fill",
+          "type": "ApiFill"
+        },
+        {
+          "description": "The type of line dash.",
+          "name": "sDash",
+          "optional": true,
+          "type": "DashType"
+        }
+      ],
+      "returns": {
+        "type": "ApiStroke"
+      },
+      "signature": "CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke",
+      "since": "9.3.0"
+    },
+    "CreateTable": {
+      "description": "Creates a table.\n:::danger[Breaking Change]\nStarting from version 9.4.0, the parameter order has been changed from `Api.CreateTable(cols, rows)` to `Api.CreateTable(rows, cols)`.\n:::",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateTable/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "Number of rows.",
+          "name": "rows",
+          "type": "unknown"
+        },
+        {
+          "description": "Number of columns.",
+          "name": "cols",
+          "type": "unknown"
+        }
+      ],
+      "returns": {
+        "type": "ApiTable"
+      },
+      "signature": "CreateTable(rows: unknown, cols: unknown): ApiTable"
+    },
+    "CreateTableRowPr": {
+      "description": "Creates the empty table row properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiTableRowPr"
+      },
+      "signature": "CreateTableRowPr(): ApiTableRowPr",
+      "since": "9.5.0"
+    },
+    "CreateTextPr": {
+      "description": "Creates the empty text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateTextPr/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\noDocContent.RemoveAllElements();\nvar oTextPr = Api.CreateTextPr();\noTextPr.SetFontSize(50);\noTextPr.SetBold(true);\nvar oParagraph = Api.CreateParagraph();\noParagraph.SetJc(\"left\");\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is a sample text with the font size set to 25 points and the font weight set to bold.\");\noRun.SetTextPr(oTextPr);\noParagraph.AddElement(oRun);\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "CreateTextPr(): ApiTextPr"
+    },
+    "CreateTheme": {
+      "description": "Creates a new presentation theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateTheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), \n\tApi.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], \"New color scheme\");\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke1 = Api.CreateStroke(1 * 36000, oFill1);\nvar oFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oBgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oStroke2 = Api.CreateStroke(1 * 36000, oFill2);\nvar oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke3 = Api.CreateStroke(1 * 36000, oFill3);\nvar oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], \"New format scheme\");\nvar oFontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nvar oTheme = Api.CreateTheme(\"New theme\", oMaster, oClrScheme, oFormatScheme, oFontScheme);\noPresentation.ApplyTheme(oTheme);"
+      ],
+      "params": [
+        {
+          "description": "Theme name.",
+          "name": "sName",
+          "type": "string"
+        },
+        {
+          "description": "Slide master. Required parameter.",
+          "name": "oMaster",
+          "type": "ApiMaster"
+        },
+        {
+          "description": "Theme color scheme. Required parameter.",
+          "name": "oClrScheme",
+          "type": "ApiThemeColorScheme"
+        },
+        {
+          "description": "Theme format scheme. Required parameter.",
+          "name": "oFormatScheme",
+          "type": "ApiThemeFormatScheme"
+        },
+        {
+          "description": "Theme font scheme. Required parameter.",
+          "name": "oFontScheme",
+          "type": "ApiThemeFontScheme"
+        }
+      ],
+      "returns": {
+        "type": "ApiTheme | null"
+      },
+      "signature": "CreateTheme(sName: string, oMaster: ApiMaster, oClrScheme: ApiThemeColorScheme, oFormatScheme: ApiThemeFormatScheme, oFontScheme: ApiThemeFontScheme): ApiTheme | null"
+    },
+    "CreateThemeColorScheme": {
+      "description": "Creates a new theme color scheme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateThemeColorScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), \n\tApi.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], \"New color scheme\");\nvar oTheme = oSlide.GetTheme();\noTheme.SetColorScheme(oClrScheme);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n[200, 240, 280],\n[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "Set of colors which are referred to as a color scheme.\rThe color scheme is responsible for defining a list of twelve colors.\rThe array should contain a sequence of colors: 2 dark, 2 light, 6 primary, a color for a hyperlink and a color for the followed hyperlink.",
+          "name": "arrColors",
+          "type": "ApiUniColor[] | ApiRGBColor[] | ApiColor[]"
+        },
+        {
+          "description": "Theme color scheme name.",
+          "name": "sName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiThemeColorScheme"
+      },
+      "signature": "CreateThemeColorScheme(arrColors: ApiUniColor[] | ApiRGBColor[] | ApiColor[], sName: string): ApiThemeColorScheme"
+    },
+    "CreateThemeFontScheme": {
+      "description": "Creates a new theme font scheme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateThemeFontScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), \n\tApi.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], \"New color scheme\");\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke1 = Api.CreateStroke(1 * 36000, oFill1);\nvar oFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oBgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oStroke2 = Api.CreateStroke(1 * 36000, oFill2);\nvar oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke3 = Api.CreateStroke(1 * 36000, oFill3);\nvar oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], \"New format scheme\");\nvar oFontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nvar oTheme = Api.CreateTheme(\"New theme\", oMaster, oClrScheme, oFormatScheme, oFontScheme);\noPresentation.ApplyTheme(oTheme);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"This text is written in the Times New Roman font.\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The major theme font applied to the latin text.",
+          "name": "mjLatin",
+          "type": "string"
+        },
+        {
+          "description": "The major theme font applied to the east asian text.",
+          "name": "mjEa",
+          "type": "string"
+        },
+        {
+          "description": "The major theme font applied to the complex script text.",
+          "name": "mjCs",
+          "type": "string"
+        },
+        {
+          "description": "The minor theme font applied to the latin text.",
+          "name": "mnLatin",
+          "type": "string"
+        },
+        {
+          "description": "The minor theme font applied to the east asian text.",
+          "name": "mnEa",
+          "type": "string"
+        },
+        {
+          "description": "The minor theme font applied to the complex script text.",
+          "name": "mnCs",
+          "type": "string"
+        },
+        {
+          "description": "Theme font scheme name.",
+          "name": "sName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiThemeFontScheme"
+      },
+      "signature": "CreateThemeFontScheme(mjLatin: string, mjEa: string, mjCs: string, mnLatin: string, mnEa: string, mnCs: string, sName: string): ApiThemeFontScheme"
+    },
+    "CreateThemeFormatScheme": {
+      "description": "Creates a new theme format scheme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateThemeFormatScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), \n\tApi.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], \"New color scheme\");\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke1 = Api.CreateStroke(1 * 36000, oFill1);\nvar oFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oBgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oStroke2 = Api.CreateStroke(1 * 36000, oFill2);\nvar oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke3 = Api.CreateStroke(1 * 36000, oFill3);\nvar oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], \"New format scheme\");\nvar oFontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nvar oTheme = Api.CreateTheme(\"New theme\", oMaster, oClrScheme, oFormatScheme, oFontScheme);\noPresentation.ApplyTheme(oTheme);"
+      ],
+      "params": [
+        {
+          "description": "This array contains the fill styles. It should be consist of subtle, moderate and intense fills.",
+          "name": "arrFill",
+          "type": "ApiFill[]"
+        },
+        {
+          "description": "This array contains the background fill styles. It should be consist of subtle, moderate and intense fills.",
+          "name": "arrBgFill",
+          "type": "ApiFill[]"
+        },
+        {
+          "description": "This array contains the line styles. It should be consist of subtle, moderate and intense lines.",
+          "name": "arrLine",
+          "type": "ApiStroke[]"
+        },
+        {
+          "description": "Theme format scheme name.",
+          "name": "sName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiThemeFormatScheme"
+      },
+      "signature": "CreateThemeFormatScheme(arrFill: ApiFill[], arrBgFill: ApiFill[], arrLine: ApiStroke[], sName: string): ApiThemeFormatScheme"
+    },
+    "CreateWordArt": {
+      "description": "Creates a Text Art object with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateWordArt/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oRun = Api.CreateRun();\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetFontSize(72);\noTextPr.SetBold(true);\noTextPr.SetCaps(true);\noTextPr.SetColor(51, 51, 51, false);\noTextPr.SetFontFamily(\"Comic Sans MS\");\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\nvar oTextArt = Api.CreateWordArt(oTextPr, \"onlyoffice\", \"textArchUp\", oFill, oStroke, 0, 100 * 36000, 30 * 36000);\noSlide.AddObject(oTextArt);"
+      ],
+      "params": [
+        {
+          "description": "The text properties.",
+          "name": "oTextPr",
+          "optional": true,
+          "type": "ApiTextPr"
+        },
+        {
+          "description": "The text for the Text Art object.",
+          "name": "sText",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Text transform type.",
+          "name": "sTransform",
+          "optional": true,
+          "type": "TextTransform"
+        },
+        {
+          "description": "The color or pattern used to fill the Text Art object.",
+          "name": "oFill",
+          "optional": true,
+          "type": "ApiFill"
+        },
+        {
+          "description": "The stroke used to create the Text Art object shadow.",
+          "name": "oStroke",
+          "optional": true,
+          "type": "ApiStroke"
+        },
+        {
+          "description": "Rotation angle.",
+          "name": "nRotAngle",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The Text Art width measured in English measure units.",
+          "name": "nWidth",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The Text Art heigth measured in English measure units.",
+          "name": "nHeight",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The Text Art left side indentation value measured in English measure units.",
+          "name": "nIndLeft",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The Text Art top side indentation value measured in English measure units.",
+          "name": "nIndTop",
+          "optional": true,
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "ApiDrawing"
+      },
+      "signature": "CreateWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: EMU, nHeight?: EMU, nIndLeft?: EMU, nIndTop?: EMU): ApiDrawing"
+    },
+    "EmusToMillimeters": {
+      "description": "Converts English Metric Units (EMUs) to millimeters.",
+      "params": [
+        {
+          "description": "The value in English Metric Units (EMUs).",
+          "name": "emu",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "description": "The value in millimeters.",
+        "type": "mm"
+      },
+      "signature": "EmusToMillimeters(emu: EMU): mm"
+    },
+    "EmusToPoints": {
+      "description": "Converts EMUs (English Metric Units) to points.",
+      "params": [
+        {
+          "description": "The number of EMUs to convert to points.",
+          "name": "emu",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "EmusToPoints(emu: number): number"
+    },
+    "FromJSON": {
+      "description": "Converts the specified JSON object into the Document Builder object of the corresponding type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/FromJSON/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oMaster = oPresentation.GetMaster(0);\nvar oThemeMaster = oMaster.GetTheme();\nvar oFontScheme = oThemeMaster.GetFontScheme();\noFontScheme.SetFonts(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\noFontScheme.SetSchemeName(\"New font scheme name\");\nvar json = oFontScheme.ToJSON();\nvar oFontSchemeFromJSON = Api.FromJSON(json);\nvar oTheme = oSlide.GetTheme();\noTheme.SetFontScheme(oFontSchemeFromJSON);\nvar sType = oFontSchemeFromJSON.GetClassType();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The JSON object to convert.",
+          "name": "sMessage",
+          "type": "object"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "FromJSON(sMessage: object): void"
+    },
+    "GetFullName": {
+      "description": "Returns the full name of the currently opened file.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/GetFullName/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar sName = Api.GetFullName();\noParagraph.AddText(\"File name: \" + sName);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFullName(): string"
+    },
+    "GetPresentation": {
+      "description": "Returns the main presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/GetPresentation/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiPresentation"
+      },
+      "signature": "GetPresentation(): ApiPresentation"
+    },
+    "GetSelection": {
+      "description": "Returns the selection from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/GetSelection/",
+      "params": [],
+      "returns": {
+        "type": "ApiSelection"
+      },
+      "signature": "GetSelection(): ApiSelection",
+      "since": "8.3.0"
+    },
+    "HexColor": {
+      "description": "Creates a color from a HEX string.",
+      "params": [
+        {
+          "description": "The HEX string representing a color.",
+          "name": "hexString",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "HexColor(hexString: string): ApiColor"
+    },
+    "InchesToPoints": {
+      "description": "Converts inches to points.",
+      "params": [
+        {
+          "description": "The number of inches to convert to points.",
+          "name": "inches",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "InchesToPoints(inches: number): number"
+    },
+    "LinesToPoints": {
+      "description": "Converts lines to points (1 line = 12 points).",
+      "params": [
+        {
+          "description": "The number of lines to convert to points.",
+          "name": "lines",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "LinesToPoints(lines: number): number"
+    },
+    "MillimetersToEmus": {
+      "description": "Converts millimeters to English Metric Units (EMUs).\nThe result is an integer value.",
+      "params": [
+        {
+          "description": "The value in millimeters.",
+          "name": "mm",
+          "type": "mm"
+        }
+      ],
+      "returns": {
+        "description": "The value in English Metric Units (EMUs), as an integer.",
+        "type": "EMU"
+      },
+      "signature": "MillimetersToEmus(mm: mm): EMU"
+    },
+    "MillimetersToPixels": {
+      "description": "Converts millimeters to pixels.",
+      "params": [
+        {
+          "description": "The number of millimeters to convert to pixels.",
+          "name": "mm",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "MillimetersToPixels(mm: number): number"
+    },
+    "MillimetersToPoints": {
+      "description": "Converts millimeters to points.",
+      "params": [
+        {
+          "description": "The number of millimeters to convert to points.",
+          "name": "mm",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "MillimetersToPoints(mm: number): number"
+    },
+    "PicasToPoints": {
+      "description": "Converts picas to points.",
+      "params": [
+        {
+          "description": "The number of picas to convert to points.",
+          "name": "pc",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PicasToPoints(pc: number): number"
+    },
+    "PixelsToEmus": {
+      "description": "Converts pixels to EMUs (English Metric Units).",
+      "params": [
+        {
+          "description": "The number of pixels to convert to EMUs.",
+          "name": "px",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PixelsToEmus(px: number): number"
+    },
+    "PixelsToPoints": {
+      "description": "Converts pixels to points.",
+      "params": [
+        {
+          "description": "The number of pixels to convert to points.",
+          "name": "px",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PixelsToPoints(px: number): number"
+    },
+    "PointsToCentimeters": {
+      "description": "Converts points to centimeters.",
+      "params": [
+        {
+          "description": "The number of points to convert to centimeters.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToCentimeters(pt: number): number"
+    },
+    "PointsToEmus": {
+      "description": "Converts points to EMUs (English Metric Units).",
+      "params": [
+        {
+          "description": "The number of points to convert to EMUs.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToEmus(pt: number): number"
+    },
+    "PointsToInches": {
+      "description": "Converts points to inches.",
+      "params": [
+        {
+          "description": "The number of points to convert to inches.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToInches(pt: number): number"
+    },
+    "PointsToLines": {
+      "description": "Converts points to lines (1 line = 12 points).",
+      "params": [
+        {
+          "description": "The number of points to convert to lines.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToLines(pt: number): number"
+    },
+    "PointsToMillimeters": {
+      "description": "Converts points to millimeters.",
+      "params": [
+        {
+          "description": "The number of points to convert to millimeters.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToMillimeters(pt: number): number"
+    },
+    "PointsToPicas": {
+      "description": "Converts points to picas (1 pica = 12 points).",
+      "params": [
+        {
+          "description": "The number of points to convert to picas.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToPicas(pt: number): number"
+    },
+    "PointsToPixels": {
+      "description": "Converts points to pixels.",
+      "params": [
+        {
+          "description": "The number of points to convert to pixels.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToPixels(pt: number): number"
+    },
+    "PointsToTwips": {
+      "description": "Converts points to twips.",
+      "params": [
+        {
+          "description": "The number of points to convert to twips.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToTwips(pt: number): number"
+    },
+    "RGB": {
+      "description": "Creates an RGB color from red, green and blue components.",
+      "params": [
+        {
+          "description": "Red component (0-255).",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green component (0-255).",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue component (0-255).",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "RGB(r: number, g: number, b: number): ApiColor"
+    },
+    "RGBA": {
+      "description": "Creates an RGBA color from red, green, blue and alpha components.",
+      "params": [
+        {
+          "description": "Red component (0-255).",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green component (0-255).",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue component (0-255).",
+          "name": "b",
+          "type": "number"
+        },
+        {
+          "description": "Alpha component (0-255).",
+          "name": "a",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "RGBA(r: number, g: number, b: number, a: number): ApiColor"
+    },
+    "ReplaceTextSmart": {
+      "description": "Replaces each paragraph (or text in cell) in the select with the corresponding text from an array of strings.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/ReplaceTextSmart/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oFParagraph = oDocContent.GetElement(0);\noFParagraph.AddText(\"This is the text for the first line. The line break is added after it.\");\noFParagraph.AddLineBreak();\nvar oSParagraph = Api.CreateParagraph();\noSParagraph.AddTabStop();\noSParagraph.AddText(\"This is just a sample text with a tab stop before it.\");\noDocContent.AddElement(oSParagraph);\noSlide.AddObject(oShape);\n// todo_example problem (how to make select in slide)\n// var oRange1 = oFParagraph.GetRange();\n// var oRange2 = oSParagraph.GetRange();\n// var oRange3 = oRange1.ExpandTo(oRange2);\n// oRange3.Select();\nvar arr = [\"test_1\", \"test_2\"];\nApi.ReplaceTextSmart(arr, \"\", \"\");"
+      ],
+      "params": [
+        {
+          "description": "An array of replacement strings.",
+          "name": "textStrings",
+          "type": "string[]"
+        },
+        {
+          "description": "A character which is used to specify the tab in the source text.",
+          "name": "tab",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "A character which is used to specify the line break character in the source text.",
+          "name": "newLine",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean"
+    },
+    "Save": {
+      "description": "Saves changes to the specified document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/Save/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\noDocContent.RemoveAllElements();\nvar oParagraph = Api.CreateParagraph();\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"This shape with paragraph in it is saved to the document.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);\nApi.Save();"
+      ],
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Save(): void"
+    },
+    "ThemeColor": {
+      "description": "Creates a theme color.",
+      "params": [
+        {
+          "description": "The theme color name. If the provided name is not supported, the 'tx1' color will be used.",
+          "name": "name",
+          "optional": true,
+          "type": "SchemeColorId"
+        }
+      ],
+      "returns": {
+        "description": "Instance of ApiColor with 'theme' type.",
+        "type": "ApiColor"
+      },
+      "signature": "ThemeColor(name?: SchemeColorId): ApiColor"
+    },
+    "TwipsToPoints": {
+      "description": "Converts twips to points.",
+      "params": [
+        {
+          "description": "The number of twips to convert to points.",
+          "name": "twips",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "TwipsToPoints(twips: number): number"
+    },
+    "attachEvent": {
+      "description": "Subscribes to the specified event and calls the callback function when the event fires.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/attachEvent/",
+      "examples": [
+        "Api.attachEvent(\"asc_onHyperlinkClick\", function() {\n\tconsole.log(\"HYPERLINK!!!\");\n});"
+      ],
+      "params": [
+        {
+          "description": "The event name.",
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "description": "Function to be called when the event fires.",
+          "name": "callback",
+          "type": "(...args: unknown[]) => unknown"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "attachEvent(eventName: string, callback: (...args: unknown[]) => unknown): void"
+    },
+    "detachEvent": {
+      "description": "Unsubscribes from the specified event.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/detachEvent/",
+      "examples": [
+        "Api.detachEvent(\"asc_onHyperlinkClick\");"
+      ],
+      "params": [
+        {
+          "description": "The event name.",
+          "name": "eventName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "detachEvent(eventName: string): void"
+    }
+  }
+}

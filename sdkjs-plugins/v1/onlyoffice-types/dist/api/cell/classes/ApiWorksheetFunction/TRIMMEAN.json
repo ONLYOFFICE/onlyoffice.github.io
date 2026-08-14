@@ -1,0 +1,23 @@
+{
+  "description": "Returns the mean of the interior portion of a set of data values.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TRIMMEAN/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet argumentsArr = [1, 2, 3, 4];\n\n// Place the numbers in cells\nfor (let i = 0; i < argumentsArr.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(argumentsArr[i]);\n}\n\n// Get values from the range\nlet data = worksheet.GetRange(\"A1:A4\");\n\n// Calculate the TRIMMEAN of the range A1:A6\nlet func = Api.GetWorksheetFunction();\nlet result = func.TRIMMEAN(data, 0.6);\nworksheet.GetRange(\"B1\").SetValue(result);"
+  ],
+  "params": [
+    {
+      "description": "The array or range of values to trim and average.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "The fractional number of data points to exclude from the top and bottom of the data set.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TRIMMEAN(arg1: ApiRange | ApiName | number[], arg2: ApiRange | ApiName | number): number"
+}

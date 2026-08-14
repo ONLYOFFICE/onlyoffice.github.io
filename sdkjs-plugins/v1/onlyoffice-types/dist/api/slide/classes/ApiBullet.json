@@ -1,0 +1,25 @@
+{
+  "description": "Class representing a paragraph bullet.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiBullet class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiBullet/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oBullet = Api.CreateBullet(\"-\");\noParagraph.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the bulleted paragraph.\");\nvar sClassType = oBullet.GetClassType();\noParagraph = Api.CreateParagraph();\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class Type = \" + sClassType);\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"bullet\""
+      },
+      "signature": "GetClassType(): \"bullet\""
+    },
+    "ToJSON": {
+      "description": "Converts the ApiBullet object into the JSON object.",
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

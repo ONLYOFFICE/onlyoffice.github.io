@@ -1,0 +1,625 @@
+{
+  "description": "Class representing a small text block called 'run'.",
+  "extends": [
+    "ApiTextPr"
+  ],
+  "methods": {
+    "AddLineBreak": {
+      "description": "Adds a line break to the current run position and starts the next element from a new line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddLineBreak/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is the text for the first line. Nothing special.\");\noRun.AddLineBreak();\noRun.AddText(\"This is the text which starts from the beginning of the second line. \");\noRun.AddText(\"It is written in two text runs, you need a space at the end of the first run sentence to separate them.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddLineBreak(): boolean"
+    },
+    "AddTabStop": {
+      "description": "Adds a tab stop to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddTabStop/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.SetFontSize(30);\noRun.AddText(\"This is just a sample text. After it three tab stops will be added.\");\noRun.AddTabStop();\noRun.AddTabStop();\noRun.AddTabStop();\noRun.AddText(\"This is the text which starts after the tab stops.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddTabStop(): boolean"
+    },
+    "AddText": {
+      "description": "Adds some text to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddText/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.SetFontSize(30);\noRun.AddText(\"This is just a sample text. Nothing special.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The text which will be added to the current run. It can be a string or an array of Unicode code points.",
+          "name": "text",
+          "type": "string | number[]"
+        },
+        {
+          "description": "An array of character widths (in millimeters). It should be the same length as the array of code points passed in the \"text\" parameter. When the widths are specified, the characters are added preserving these exact widths.",
+          "name": "widths",
+          "optional": true,
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddText(text: string | number[], widths?: number[]): boolean"
+    },
+    "ClearContent": {
+      "description": "Clears the content from the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/ClearContent/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.SetFontSize(30);\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"But you will not see it in the resulting document, as it will be cleared.\");\noParagraph.AddElement(oRun);\noRun.ClearContent();\noParagraph = Api.CreateParagraph();\noRun = Api.CreateRun();\noRun.AddText(\"The text in the previous paragraph cannot be seen, as it has been cleared.\");\noParagraph.AddElement(oRun);\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ClearContent(): boolean"
+    },
+    "Copy": {
+      "description": "Creates a copy of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/Copy/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text that was copied. \");\noParagraph.AddElement(oRun);\nvar oCopyRun = oRun.Copy();\noParagraph.AddElement(oCopyRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "Copy(): ApiRun"
+    },
+    "Delete": {
+      "description": "Deletes the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/Delete/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun.Delete();\noRun = Api.CreateRun();\noRun.AddText(\"This is the second run. The first run was removed from the paragraph.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetBold": {
+      "description": "Gets the bold property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetBold/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetBold(true);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar bBold = oTextPr.GetBold();\noParagraph.AddText(\"Bold property: \" + bBold);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetBold(): boolean",
+      "since": "8.1.0"
+    },
+    "GetCaps": {
+      "description": "Returns whether the text with the current text properties are capitalized.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetCaps/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetCaps(true);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar bCaps = oTextPr.GetCaps();\noParagraph.AddText(\"Property of the capitalized letters: \" + bCaps);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetCaps(): boolean",
+      "since": "8.1.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRun class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\nvar sClassType = oRun.GetClassType();\noRun.SetFontSize(30);\noRun.AddText(\"Class Type = \" + sClassType);\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"run\""
+      },
+      "signature": "GetClassType(): \"run\""
+    },
+    "GetDoubleStrikeout": {
+      "description": "Gets the double strikeout property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetDoubleStrikeout/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetDoubleStrikeout(true);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar bDoubleStrikeout = oTextPr.GetDoubleStrikeout();\noParagraph.AddText(\"Double strikeout property: \" + bDoubleStrikeout);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetDoubleStrikeout(): boolean",
+      "since": "8.1.0"
+    },
+    "GetFill": {
+      "description": "Gets the text color from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noTextPr.SetFill(oFill);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\noFill = oTextPr.GetFill();\nvar sType = oFill.GetClassType();\noParagraph.AddText(\"Text color type: \" + sType);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "GetFill(): ApiFill",
+      "since": "8.1.0"
+    },
+    "GetFontFamily": {
+      "description": "Returns the font family from the current text properties.\nThe method automatically calculates the font from the theme if the font was set via the theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFontFamily/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetFontFamily(\"Arial\");\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar sFontFamily = oTextPr.GetFontFamily();\noParagraph.AddText(\"Font family: \" + sFontFamily);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFontFamily(): string",
+      "since": "8.1.0"
+    },
+    "GetFontNames": {
+      "description": "Returns all font names from all elements inside the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetFontNames/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetFontFamily(\"Comic Sans MS\");\noRun.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\noParagraph.AddElement(oRun);\noParagraph.AddLineBreak();\nvar aFontNames = oRun.GetFontNames();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Run font names: \");\noParagraph.AddLineBreak();\nfor (let i = 0; i < aFontNames.length; i++ ){\n\toParagraph.AddText(aFontNames[i]);\n\toParagraph.AddLineBreak();\n}\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The font names used for the current run.",
+        "type": "string[]"
+      },
+      "signature": "GetFontNames(): string[]"
+    },
+    "GetFontSize": {
+      "description": "Gets the font size from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFontSize/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetFontSize(60);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar nFontSize = oTextPr.GetFontSize();\noParagraph.AddText(\"Font size: \" + nFontSize);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "hps"
+      },
+      "signature": "GetFontSize(): hps",
+      "since": "8.1.0"
+    },
+    "GetHighlight": {
+      "description": "Gets the highlight property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetHighlight/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetHighlight(\"lightGray\");\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar sHighlight = oTextPr.GetHighlight();\noParagraph.AddText(\"Highlight property: \" + sHighlight);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetHighlight(): string",
+      "since": "8.1.0"
+    },
+    "GetItalic": {
+      "description": "Gets the italic property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetItalic/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetItalic(true);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar bItalic = oTextPr.GetItalic();\noParagraph.AddText(\"Italic property: \" + bItalic);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetItalic(): boolean",
+      "since": "8.1.0"
+    },
+    "GetOutLine": {
+      "description": "Gets the text outline from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetOutLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noStroke = Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noTextPr.SetOutLine(oStroke);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\noStroke = oTextPr.GetOutLine();\nvar sType = oStroke.GetClassType();\noParagraph.AddText(\"Text outline type: \" + sType);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiStroke"
+      },
+      "signature": "GetOutLine(): ApiStroke",
+      "since": "8.1.0"
+    },
+    "GetSmallCaps": {
+      "description": "Returns whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSmallCaps/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetSmallCaps(true);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar bSmallCaps = oTextPr.GetSmallCaps();\noParagraph.AddText(\"Property of the small capitalized letters: \" + bSmallCaps);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetSmallCaps(): boolean",
+      "since": "8.1.0"
+    },
+    "GetSpacing": {
+      "description": "Gets the text spacing from the current text properties measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSpacing/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetSpacing(80);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar nSpacing = oTextPr.GetSpacing();\noParagraph.AddText(\"Text spacing: \" + nSpacing);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "twips"
+      },
+      "signature": "GetSpacing(): twips",
+      "since": "8.1.0"
+    },
+    "GetStrikeout": {
+      "description": "Gets the strikeout property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetStrikeout/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetStrikeout(true);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar bStrikeout = oTextPr.GetStrikeout();\noParagraph.AddText(\"Strikeout property: \" + bStrikeout);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetStrikeout(): boolean",
+      "since": "8.1.0"
+    },
+    "GetTextFill": {
+      "description": "Gets the text fill from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetTextFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noTextPr.SetTextFill(oFill);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\noFill = oTextPr.GetTextFill();\nvar sType = oFill.GetClassType();\noParagraph.AddText(\"Text fill type: \" + sType);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "GetTextFill(): ApiFill",
+      "since": "8.1.0"
+    },
+    "GetTextPr": {
+      "description": "Returns the text properties of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetTextPr/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetFontSize(30);\noParagraph.SetJc(\"left\");\noRun.AddText(\"This is a sample text inside the shape with the font size set to 15 points using the text properties.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "GetTextPr(): ApiTextPr"
+    },
+    "GetUnderline": {
+      "description": "Gets the underline property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetUnderline/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noRun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\noRun.AddLineBreak();\noParagraph.AddElement(oRun);\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetUnderline(true);\noSlide.AddObject(oShape);\noParagraph = Api.CreateParagraph();\nvar bUnderline = oTextPr.GetUnderline();\noParagraph.AddText(\"Underline property: \" + bUnderline);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetUnderline(): boolean",
+      "since": "8.1.0"
+    },
+    "RemoveAllElements": {
+      "description": "Removes all the elements from the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/RemoveAllElements/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text.\");\noRun.RemoveAllElements();\noRun.AddText(\"All elements from this run were removed before adding this text.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveAllElements(): boolean"
+    },
+    "SetBold": {
+      "description": "Sets the bold property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetBold/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetBold(true);\noRun.AddText(\"This is a text run with the font set to bold.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the run are displayed bold.",
+          "name": "isBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetBold(isBold: boolean): ApiTextPr"
+    },
+    "SetCaps": {
+      "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetCaps/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetCaps(true);\noRun.AddText(\"This is a text run with the font set to capitalized letters.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed capitalized.",
+          "name": "isCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetCaps(isCaps: boolean): ApiTextPr"
+    },
+    "SetDoubleStrikeout": {
+      "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetDoubleStrikeout/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetDoubleStrikeout(true);\noRun.AddText(\"This is a text run with the text struck out with two lines.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed double struck through.",
+          "name": "isDoubleStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiTextPr"
+    },
+    "SetFill": {
+      "description": "Sets the text color to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noRun.SetFill(oFill);\noRun.AddText(\"This is a text run with the font color set to black.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The color or pattern used to fill the text color.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFill(oApiFill: ApiFill): ApiTextPr"
+    },
+    "SetFontFamily": {
+      "description": "Sets all 4 font slots with the specified font family.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetFontFamily/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetFontFamily(\"Comic Sans MS\");\noRun.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The font family or families used for the current text run.",
+          "name": "sFontFamily",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFontFamily(sFontFamily: string): ApiTextPr"
+    },
+    "SetFontSize": {
+      "description": "Sets the font size to the characters of the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetFontSize/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetFontSize(50);\noRun.AddText(\"This is a text run with the font size set to 25 points (50 half-points).\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The text size value measured in half-points (1/144 of an inch).",
+          "name": "nSize",
+          "type": "hps"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFontSize(nSize: hps): ApiTextPr"
+    },
+    "SetHighlight": {
+      "description": "Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetHighlight/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is a text run with the text highlighted with light gray color.\");\noParagraph.AddElement(oRun);\noRun.SetHighlight(\"lightGray\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Available highlight color.",
+          "name": "sColor",
+          "type": "highlightColor"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "SetHighlight(sColor: highlightColor): ApiTextPr"
+    },
+    "SetItalic": {
+      "description": "Sets the italic property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetItalic/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetItalic(true);\noRun.AddText(\"This is a text run with the font set to italicized letters.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed italicized.",
+          "name": "isItalic",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetItalic(isItalic: boolean): ApiTextPr"
+    },
+    "SetOutLine": {
+      "description": "Sets the text outline to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetOutLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetFontSize(50);\noStroke = Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noTextPr.SetOutLine(oStroke);\noParagraph.SetJc(\"left\");\noRun.AddText(\"This is a text run with the black text outline set using the text properties.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the text outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetOutLine(oStroke: ApiStroke): ApiTextPr"
+    },
+    "SetSmallCaps": {
+      "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetSmallCaps/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetSmallCaps(true);\noRun.AddText(\"This is a text run with the font set to small capitalized letters.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current run are displayed capitalized two points smaller or not.",
+          "name": "isSmallCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetSmallCaps(isSmallCaps: boolean): ApiTextPr"
+    },
+    "SetSpacing": {
+      "description": "Sets the text spacing measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetSpacing/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetSpacing(80);\noRun.AddText(\"This is a text run with the text spacing set to 4 points (20 twentieths of a point).\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nSpacing",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetSpacing(nSpacing: twips): ApiTextPr"
+    },
+    "SetStrikeout": {
+      "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetStrikeout/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetStrikeout(true);\noRun.AddText(\"This is a text run with the text struck out with a single line.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed struck through.",
+          "name": "isStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetStrikeout(isStrikeout: boolean): ApiTextPr"
+    },
+    "SetTextFill": {
+      "description": "Sets the text fill to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetTextFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetFontSize(50);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noTextPr.SetTextFill(oFill);\noParagraph.SetJc(\"left\");\noRun.AddText(\"This is a sample text inside the shape with the black text fill set using the text properties.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The color or pattern used to fill the text color.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetTextFill(oApiFill: ApiFill): ApiTextPr"
+    },
+    "SetTextPr": {
+      "description": "Sets the text properties to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetTextPr/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is a sample text with the font size set to 15 points and the font weight set to bold.\");\nvar oTextPr = oRun.GetTextPr();\noTextPr.SetFontSize(30);\noTextPr.SetBold(true);\noRun.SetTextPr(oTextPr);\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The text properties that will be set to the current run.",
+          "name": "oTextPr",
+          "type": "ApiTextPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "SetTextPr(oTextPr: ApiTextPr): ApiTextPr"
+    },
+    "SetUnderline": {
+      "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetUnderline/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetUnderline(true);\noRun.AddText(\"This is a text run with the text underlined with a single line.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed underlined.",
+          "name": "isUnderline",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetUnderline(isUnderline: boolean): ApiTextPr"
+    },
+    "SetVertAlign": {
+      "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetVertAlign/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetVertAlign(\"subscript\");\noRun.AddText(\"This is a text run with the text aligned below the baseline vertically. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetVertAlign(\"baseline\");\noRun.AddText(\"This is a text run with the text aligned by the baseline vertically. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetVertAlign(\"superscript\");\noRun.AddText(\"This is a text run with the text aligned above the baseline vertically.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The vertical alignment type applied to the text contents.",
+          "name": "sType",
+          "type": "\"baseline\" | \"subscript\" | \"superscript\""
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetVertAlign(sType: \"baseline\" | \"subscript\" | \"superscript\"): ApiTextPr"
+    }
+  }
+}

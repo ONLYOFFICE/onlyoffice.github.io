@@ -1,0 +1,40 @@
+{
+  "description": "Adds a caption cross-reference to the current paragraph.\n<note>Please note that this paragraph must be in the document.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddCaptionCrossRef/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", 60 * 36000, 35 * 36000);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddCaption(\"\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddText('Link to ');\nlet captionParagraphs = doc.GetAllCaptionParagraphs(\"Figure\");\nparagraph.AddCaptionCrossRef(\"Figure\", \"entireCaption\", captionParagraphs[0], true, false);"
+  ],
+  "params": [
+    {
+      "description": "The caption label (\"Equation\", \"Figure\", \"Table\", or another caption label).",
+      "name": "sCaption",
+      "type": "CaptionLabel | string"
+    },
+    {
+      "description": "The text or numeric value of a caption reference you want to insert.",
+      "name": "sRefType",
+      "type": "captionRefTo"
+    },
+    {
+      "description": "The caption paragraph to be referred to (must be in the document).",
+      "name": "oParaTo",
+      "type": "ApiParagraph"
+    },
+    {
+      "description": "Specifies if the reference will be inserted as a hyperlink.",
+      "name": "bLink",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Specifies if the above/below words indicating the position of the reference should be included (used only with the \"pageNum\" sRefType).",
+      "name": "bAboveBelow",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "AddCaptionCrossRef(sCaption: CaptionLabel | string, sRefType: captionRefTo, oParaTo: ApiParagraph, bLink?: boolean, bAboveBelow?: boolean): boolean"
+}

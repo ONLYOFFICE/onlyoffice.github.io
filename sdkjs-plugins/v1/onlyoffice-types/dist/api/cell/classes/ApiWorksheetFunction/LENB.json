@@ -1,0 +1,18 @@
+{
+  "description": "Analyses the specified string and returns the number of characters it contains and is intended for languages that use the double-byte character set (DBCS) like Japanese, Chinese, Korean etc.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LENB/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LENB(\"Online Office\"));"
+  ],
+  "params": [
+    {
+      "description": "The text whose length will be returned. Spaces are considered as characters.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LENB(arg1: ApiRange | ApiName | string): number"
+}

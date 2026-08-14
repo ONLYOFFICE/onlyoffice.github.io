@@ -1,0 +1,339 @@
+{
+  "description": "Class representing the paragraph properties.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiParaPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nlet classType = paraPr.GetClassType();\nparaPr.SetIndFirstLine(1440);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"paraPr\""
+      },
+      "signature": "GetClassType(): \"paraPr\""
+    },
+    "GetIndFirstLine": {
+      "description": "Returns the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndFirstLine/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndFirstLine(1440);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet indFirstLine = paraPr.GetIndFirstLine();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"First line indent: \" + indFirstLine);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndFirstLine(): twips | undefined"
+    },
+    "GetIndLeft": {
+      "description": "Returns the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndLeft/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndLeft(2880);\nparagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nlet indLeft = paraPr.GetIndLeft();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Left indent: \" + indLeft);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndLeft(): twips | undefined"
+    },
+    "GetIndRight": {
+      "description": "Returns the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndRight/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndRight(2880);\nparaPr.SetJc(\"right\");\nparagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nlet indRight = paraPr.GetIndRight();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Right indent: \" + indRight);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndRight(): twips | undefined"
+    },
+    "GetJc": {
+      "description": "Returns the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetJc/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"center\");\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet justification = paraPr.GetJc();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Justification: \" + justification);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"left\" | \"right\" | \"both\" | \"center\" | undefined"
+      },
+      "signature": "GetJc(): \"left\" | \"right\" | \"both\" | \"center\" | undefined"
+    },
+    "GetOutlineLvl": {
+      "description": "Returns the outline level of the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetOutlineLvl/",
+      "params": [],
+      "returns": {
+        "type": "number | undefined"
+      },
+      "signature": "GetOutlineLvl(): number | undefined",
+      "since": "8.2.0"
+    },
+    "GetSpacingAfter": {
+      "description": "Returns the spacing after value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingAfter/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingAfter(1440);\nparagraph.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet spacingAfter = paraPr.GetSpacingAfter();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing after : \" + spacingAfter);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips"
+      },
+      "signature": "GetSpacingAfter(): twips"
+    },
+    "GetSpacingBefore": {
+      "description": "Returns the spacing before value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingBefore/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"This is an example of setting a space before a paragraph.\");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ncontent.Push(paragraph2);\nlet paraPr = paragraph2.GetParaPr();\nparaPr.SetSpacingBefore(1440);\nlet spacingBefore = paraPr.GetSpacingBefore();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing before: \" + spacingBefore);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips"
+      },
+      "signature": "GetSpacingBefore(): twips"
+    },
+    "GetSpacingLineRule": {
+      "description": "Returns the paragraph line spacing rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingLineRule/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet spacingRule = paraPr.GetSpacingLineRule();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing line rule : \" + spacingRule);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"auto\" | \"atLeast\" | \"exact\" | undefined"
+      },
+      "signature": "GetSpacingLineRule(): \"auto\" | \"atLeast\" | \"exact\" | undefined"
+    },
+    "GetSpacingLineValue": {
+      "description": "Returns the paragraph line spacing value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingLineValue/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet spacingLineValue = paraPr.GetSpacingLineValue();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing line value : \" + spacingLineValue);\ncontent.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
+        "type": "twips | line240 | undefined"
+      },
+      "signature": "GetSpacingLineValue(): twips | line240 | undefined"
+    },
+    "GetTabs": {
+      "description": "Returns the custom tab stops of the current paragraph.",
+      "params": [],
+      "returns": {
+        "type": "TabStop[]"
+      },
+      "signature": "GetTabs(): TabStop[]",
+      "since": "9.4.0"
+    },
+    "SetBullet": {
+      "description": "Sets the bullet or numbering to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetBullet/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nlet bullet = Api.CreateBullet(\"-\");\nparaPr.SetBullet(bullet);\nparagraph.AddText(\" This is an example of the bulleted paragraph.\");"
+      ],
+      "params": [
+        {
+          "description": "The bullet object created with the {@link Api#CreateBullet} or {@link Api#CreateNumbering} method.",
+          "name": "oBullet",
+          "type": "ApiBullet"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetBullet(oBullet: ApiBullet): void"
+    },
+    "SetIndFirstLine": {
+      "description": "Sets the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndFirstLine/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndFirstLine(1440);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");"
+      ],
+      "params": [
+        {
+          "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndFirstLine(nValue: twips): boolean"
+    },
+    "SetIndLeft": {
+      "description": "Sets the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndLeft/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndLeft(2880);\nparagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");"
+      ],
+      "params": [
+        {
+          "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndLeft(nValue: twips): boolean"
+    },
+    "SetIndRight": {
+      "description": "Sets the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndRight/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndRight(2880);\nparagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This offset is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");"
+      ],
+      "params": [
+        {
+          "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndRight(nValue: twips): boolean"
+    },
+    "SetJc": {
+      "description": "Sets the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetJc/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"center\");\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");"
+      ],
+      "params": [
+        {
+          "description": "The justification type that\rwill be applied to the paragraph contents.",
+          "name": "sJc",
+          "type": "\"left\" | \"right\" | \"both\" | \"center\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetJc(sJc: \"left\" | \"right\" | \"both\" | \"center\"): boolean"
+    },
+    "SetOutlineLvl": {
+      "description": "Sets the outline level for the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetOutlineLvl/",
+      "params": [
+        {
+          "description": "The outline level. Possible values: 1-9. The 1The desired functionality is as follows: When inserting document A into document B using the merge document API during editing, the source of document A should be visible within document B. By clicking or hovering over the inserted content of document A in document B, information about the insertion of document A should be displayed in a pop-up/floating window, preserving the boundaries of document A. Document A should be able to be inserted between any two characters in document B.\rTo set no outline level, use this method without a parameter.",
+          "name": "lvl",
+          "optional": true,
+          "type": "number | null"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetOutlineLvl(lvl?: number | null): boolean",
+      "since": "8.2.0"
+    },
+    "SetSpacingAfter": {
+      "description": "Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true, then \nany value of the nAfter is ignored. If isAfterAuto parameter is not specified, then it \nwill be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingAfter/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingAfter(1440);\nparagraph.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the first paragraph has this offset enabled.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ncontent.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nAfter",
+          "type": "twips"
+        },
+        {
+          "description": "The true value disables the spacing after the current paragraph.",
+          "name": "isAfterAuto",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean"
+    },
+    "SetSpacingBefore": {
+      "description": "Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true, then \nany value of the nBefore is ignored. If isBeforeAuto parameter is not specified, then \nit will be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingBefore/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"This is an example of setting a space before a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\nparagraph = Api.CreateParagraph();\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingBefore(1440);\nparagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ncontent.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nBefore",
+          "type": "twips"
+        },
+        {
+          "description": "The true value disables the spacing before the current paragraph.",
+          "name": "isBeforeAuto",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean"
+    },
+    "SetSpacingLine": {
+      "description": "Sets the paragraph line spacing. If the value of the sLineRule parameter is either \n\"atLeast\" or \"exact\", then the value of nLine will be interpreted as twentieths of a point. If \nthe value of the sLineRule parameter is \"auto\", then the value of the \nnLine parameter will be interpreted as 240ths of a line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingLine/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");"
+      ],
+      "params": [
+        {
+          "description": "The line spacing value measured either in twentieths of a point (1/1440 of an inch) or in 240ths of a line.",
+          "name": "nLine",
+          "type": "twips | line240"
+        },
+        {
+          "description": "The rule that determines the measuring units of the line spacing.",
+          "name": "sLineRule",
+          "type": "\"auto\" | \"atLeast\" | \"exact\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingLine(nLine: twips | line240, sLineRule: \"auto\" | \"atLeast\" | \"exact\"): boolean"
+    },
+    "SetTabs": {
+      "description": "Specifies a sequence of custom tab stops which will be used for any tab characters in the current paragraph.\n**Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetTabs/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 150 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetTabs([1440, 2880, 4320], [\"left\", \"center\", \"right\"]);\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 1 inch left\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 2 inches center\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 3 inches right\");"
+      ],
+      "params": [
+        {
+          "description": "An array of the positions of custom tab stops with respect to the current page margins\rmeasured in twentieths of a point (1/1440 of an inch).",
+          "name": "aPos",
+          "type": "twips[]"
+        },
+        {
+          "description": "An array of the styles of custom tab stops, which determines the behavior of the tab\rstop and the alignment which will be applied to text entered at the current custom tab stop.",
+          "name": "aVal",
+          "type": "TabJc[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTabs(aPos: twips[], aVal: TabJc[]): boolean"
+    }
+  }
+}

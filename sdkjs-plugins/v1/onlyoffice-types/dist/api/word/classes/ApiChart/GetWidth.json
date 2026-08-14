@@ -1,0 +1,8 @@
+{
+  "description": "Returns the width of the current drawing.",
+  "params": [],
+  "returns": {
+    "type": "EMU"
+  },
+  "signature": "GetWidth(): EMU"
+}

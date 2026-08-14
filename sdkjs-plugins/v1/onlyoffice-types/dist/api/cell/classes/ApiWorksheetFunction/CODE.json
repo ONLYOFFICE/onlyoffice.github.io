@@ -1,0 +1,18 @@
+{
+  "description": "Returns the code number from your computer's character set for the first character in the specified text string.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CODE/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CODE(\"office\"));"
+  ],
+  "params": [
+    {
+      "description": "The text for which to get the code of the first character.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CODE(arg1: ApiRange | ApiName | string): number"
+}

@@ -1,0 +1,28 @@
+{
+  "description": "Moves the cursor to the left.",
+  "params": [
+    {
+      "description": "Number of movements.",
+      "name": "count",
+      "optional": true,
+      "type": "number"
+    },
+    {
+      "description": "Specifies whether to select text during the move.",
+      "name": "addToSelect",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Specifies whether to move by words instead of by character.",
+      "name": "byWords",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "MoveCursorLeft(count?: number, addToSelect?: boolean, byWords?: boolean): boolean",
+  "since": "9.2.0"
+}

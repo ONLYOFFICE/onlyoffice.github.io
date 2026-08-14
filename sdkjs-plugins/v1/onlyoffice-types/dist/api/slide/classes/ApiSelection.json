@@ -1,0 +1,45 @@
+{
+  "description": "Class representing the selection in the presentation.",
+  "methods": {
+    "GetShapes": {
+      "description": "Returns the selected shapes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSelection/Methods/GetShapes/",
+      "params": [],
+      "returns": {
+        "type": "ApiDrawing[]"
+      },
+      "signature": "GetShapes(): ApiDrawing[]",
+      "since": "8.3.0"
+    },
+    "GetSlides": {
+      "description": "Returns the selected slides.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSelection/Methods/GetSlides/",
+      "params": [],
+      "returns": {
+        "type": "ApiSlide[]"
+      },
+      "signature": "GetSlides(): ApiSlide[]",
+      "since": "8.3.0"
+    },
+    "GetType": {
+      "description": "Returns the type of the current selection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSelection/Methods/GetType/",
+      "params": [],
+      "returns": {
+        "type": "SelectionType"
+      },
+      "signature": "GetType(): SelectionType",
+      "since": "8.3.0"
+    },
+    "IsEmpty": {
+      "description": "Specifies whether the current selection is empty or not.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSelection/Methods/IsEmpty/",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsEmpty(): boolean",
+      "since": "8.3.0"
+    }
+  }
+}

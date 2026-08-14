@@ -1,0 +1,22 @@
+{
+  "description": "Adds a new combo box content control to the document.",
+  "params": [
+    {
+      "description": "An array of objects representing the items in the combo box.",
+      "name": "list",
+      "optional": true,
+      "type": "ContentControlListItem[]"
+    },
+    {
+      "description": "The optional value of the item that should be selected by default (must match one of the ListItem.Value).",
+      "name": "selected",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiInlineLvlSdt"
+  },
+  "signature": "AddComboBoxContentControl(list?: ContentControlListItem[], selected?: string): ApiInlineLvlSdt",
+  "since": "9.0.0"
+}

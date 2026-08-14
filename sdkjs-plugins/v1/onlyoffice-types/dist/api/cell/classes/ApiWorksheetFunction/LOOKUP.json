@@ -1,0 +1,29 @@
+{
+  "description": "Looks up a value either from a one-row or one-column range. Provided for backwards compatibility.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOOKUP/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ids = [\"ID\", 1, 2, 3, 4, 5];\nlet clients = [\"Client\", \"John Smith\", \"Ella Tompson\", \"Mary Shinoda\", \"Lily-Ann Bates\", \"Clara Ray\"];\nlet phones = [\"Phone number\", \"12054097166\", \"13343943678\", \"12568542099\", \"12057032298\", \"12052914781\"];\n\nfor (let i = 0; i < ids.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(ids[i]);\n}\nfor (let j = 0; j < clients.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(clients[j]);\n}\nfor (let n = 0; n < phones.length; n++) {\n    worksheet.GetRange(\"C\" + (n + 1)).SetValue(phones[n]);\n}\n\nworksheet.GetRange(\"E1\").SetValue(\"Name\");\nworksheet.GetRange(\"E2\").SetValue(\"Ella Tompson\");\nworksheet.GetRange(\"F1\").SetValue(\"Phone number\");\nlet range1 = worksheet.GetRange(\"B2:B5\");\nlet range2 = worksheet.GetRange(\"C2:C5\");\nworksheet.GetRange(\"F2\").SetValue(func.LOOKUP(\"Ella Tompson\", range1, range2));"
+  ],
+  "params": [
+    {
+      "description": "A value that is searched for in the first vector. It can be a number, text, a logical value, or a name or reference to a value.",
+      "name": "arg1",
+      "type": "number | string | boolean | ApiRange | ApiName"
+    },
+    {
+      "description": "A range that contains only one row or one column of text, numbers, or logical values, placed in ascending order.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "A range that contains only one row or column. It must be the same size as the first vector.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number | string | boolean"
+  },
+  "signature": "LOOKUP(arg1: number | string | boolean | ApiRange | ApiName, arg2: ApiRange | ApiName, arg3?: ApiRange | ApiName): number | string | boolean"
+}

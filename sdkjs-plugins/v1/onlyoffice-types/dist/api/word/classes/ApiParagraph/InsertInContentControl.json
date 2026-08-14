@@ -1,0 +1,18 @@
+{
+  "description": "Wraps the paragraph object with a rich text content control.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/InsertInContentControl/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph inserted into the content control.\");\nlet blockLvlSdt = paragraph.InsertInContentControl(1);\ndoc.AddElement(0, blockLvlSdt);"
+  ],
+  "params": [
+    {
+      "description": "Defines if this method returns the ApiBlockLvlSdt (nType === 1) or ApiParagraph (any value except 1) object.",
+      "name": "nType",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiParagraph | ApiBlockLvlSdt"
+  },
+  "signature": "InsertInContentControl(nType: number): ApiParagraph | ApiBlockLvlSdt"
+}

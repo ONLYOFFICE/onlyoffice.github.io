@@ -1,0 +1,25 @@
+{
+  "description": "Replaces the current word or part of the current word with the specified text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ReplaceCurrentWord/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet para1 = doc.GetElement(0);\npara1.AddText(\"The quick brown \");\nlet run = para1.AddText(\"cat\");\npara1.AddText(\" jumps over the lazy dog\");\nrun.MoveCursorToPos(1);\n\ndoc.ReplaceCurrentWord(\"fox\");"
+  ],
+  "params": [
+    {
+      "description": "The string to replace the current word with.",
+      "name": "sReplace",
+      "type": "string"
+    },
+    {
+      "description": "The desired part of the current word to be replaced.",
+      "name": "sPart",
+      "optional": true,
+      "type": "\"before\" | \"after\""
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ReplaceCurrentWord(sReplace: string, sPart?: \"before\" | \"after\"): boolean",
+  "since": "8.2.0"
+}

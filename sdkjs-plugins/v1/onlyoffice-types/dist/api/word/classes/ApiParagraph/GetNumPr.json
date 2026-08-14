@@ -1,0 +1,8 @@
+{
+  "description": "Returns the numbering level for the current paragraph referencing the numbering definition instance in the current document.",
+  "params": [],
+  "returns": {
+    "type": "ApiNumberingLevel | undefined"
+  },
+  "signature": "GetNumPr(): ApiNumberingLevel | undefined"
+}

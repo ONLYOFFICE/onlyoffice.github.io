@@ -1,0 +1,81 @@
+{
+  "description": "Class representing a custom XML manager, which provides methods to manage custom XML parts in the document.",
+  "methods": {
+    "Add": {
+      "description": "Adds a new custom XML part to the XML manager.",
+      "params": [
+        {
+          "description": "The XML string to be added.",
+          "name": "xml",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The newly created ApiCustomXmlPart object.",
+        "type": "ApiCustomXmlPart"
+      },
+      "signature": "Add(xml: string): ApiCustomXmlPart",
+      "since": "9.0.0"
+    },
+    "GetAll": {
+      "description": "Returns all custom XML parts from the XML manager.",
+      "params": [],
+      "returns": {
+        "description": "An array of all custom XML parts.",
+        "type": "ApiCustomXmlPart[]"
+      },
+      "signature": "GetAll(): ApiCustomXmlPart[]",
+      "since": "9.0.0"
+    },
+    "GetById": {
+      "description": "Returns a custom XML part by its ID from the XML manager.",
+      "params": [
+        {
+          "description": "The XML part ID.",
+          "name": "xmlPartId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The corresponding ApiCustomXmlPart object if found, or null if no match is found.",
+        "type": "ApiCustomXmlPart | null"
+      },
+      "signature": "GetById(xmlPartId: string): ApiCustomXmlPart | null",
+      "since": "9.0.0"
+    },
+    "GetByNamespace": {
+      "description": "Returns custom XML parts by namespace from the XML manager.",
+      "params": [
+        {
+          "description": "The namespace of the XML parts.",
+          "name": "namespace",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "An array of ApiCustomXmlPart objects or null if no matching XML parts are found.",
+        "type": "ApiCustomXmlPart[]"
+      },
+      "signature": "GetByNamespace(namespace: string): ApiCustomXmlPart[]",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCustomXmlParts class.",
+      "params": [],
+      "returns": {
+        "type": "\"customXmlParts\""
+      },
+      "signature": "GetClassType(): \"customXmlParts\""
+    },
+    "GetCount": {
+      "description": "Returns a number of custom XML parts in the XML manager.",
+      "params": [],
+      "returns": {
+        "description": "The number of custom XML parts.",
+        "type": "number"
+      },
+      "signature": "GetCount(): number",
+      "since": "9.0.0"
+    }
+  }
+}

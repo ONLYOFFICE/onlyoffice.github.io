@@ -1,0 +1,151 @@
+{
+  "description": "Class representing a collection of format conditions.",
+  "methods": {
+    "Add": {
+      "description": "Adds a new format condition to the collection.",
+      "params": [
+        {
+          "description": "The format condition type.",
+          "name": "Type",
+          "type": "XlFormatConditionType"
+        },
+        {
+          "description": "The format condition operator.",
+          "name": "Operator",
+          "optional": true,
+          "type": "XlFormatConditionOperator"
+        },
+        {
+          "description": "The first formula.",
+          "name": "Formula1",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        },
+        {
+          "description": "The second formula.",
+          "name": "Formula2",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "The created format condition, or null if the operation failed.",
+        "type": "ApiFormatCondition | null"
+      },
+      "signature": "Add(Type: XlFormatConditionType, Operator?: XlFormatConditionOperator, Formula1?: string | number | ApiRange, Formula2?: string | number | ApiRange): ApiFormatCondition | null",
+      "since": "9.1.0"
+    },
+    "AddAboveAverage": {
+      "description": "Adds a new above average conditional formatting rule to the collection.",
+      "params": [],
+      "returns": {
+        "description": "The created above average rule, or null if the operation fails.",
+        "type": "ApiAboveAverage | null"
+      },
+      "signature": "AddAboveAverage(): ApiAboveAverage | null",
+      "since": "9.1.0"
+    },
+    "AddColorScale": {
+      "description": "Adds a new color scale conditional formatting rule to the collection.",
+      "params": [
+        {
+          "description": "The type of color scale (2 for two-color scale, 3 for three-color scale).",
+          "name": "ColorScaleType",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "The created color scale rule, or null if the operation fails.",
+        "type": "ApiColorScale | null"
+      },
+      "signature": "AddColorScale(ColorScaleType?: number): ApiColorScale | null",
+      "since": "9.1.0"
+    },
+    "AddDatabar": {
+      "description": "Adds a new data bar conditional formatting rule to the collection.",
+      "params": [],
+      "returns": {
+        "description": "The created data bar rule, or null if the operation fails.",
+        "type": "ApiDatabar | null"
+      },
+      "signature": "AddDatabar(): ApiDatabar | null",
+      "since": "9.1.0"
+    },
+    "AddIconSetCondition": {
+      "description": "Adds a new icon set conditional formatting rule to the collection.",
+      "params": [],
+      "returns": {
+        "description": "The created icon set rule, or null if the operation fails.",
+        "type": "ApiIconSetCondition | null"
+      },
+      "signature": "AddIconSetCondition(): ApiIconSetCondition | null",
+      "since": "9.1.0"
+    },
+    "AddTop10": {
+      "description": "Adds a new top 10 conditional formatting rule to the collection.",
+      "params": [],
+      "returns": {
+        "description": "The created top 10 rule, or null if the operation fails.",
+        "type": "ApiTop10 | null"
+      },
+      "signature": "AddTop10(): ApiTop10 | null",
+      "since": "9.1.0"
+    },
+    "AddUniqueValues": {
+      "description": "Adds a new unique values conditional formatting rule to the collection.",
+      "params": [],
+      "returns": {
+        "description": "The created unique values rule, or null if the operation fails.",
+        "type": "ApiUniqueValues | null"
+      },
+      "signature": "AddUniqueValues(): ApiUniqueValues | null",
+      "since": "9.1.0"
+    },
+    "Delete": {
+      "description": "Deletes all format conditions from the collection.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Delete(): void",
+      "since": "9.1.0"
+    },
+    "GetCount": {
+      "description": "Returns the number of conditional formatting rules in the collection.",
+      "params": [],
+      "returns": {
+        "description": "The number of conditional formatting rules in the collection.",
+        "type": "number"
+      },
+      "signature": "GetCount(): number",
+      "since": "9.1.0"
+    },
+    "GetItem": {
+      "description": "Returns a format condition by its index.",
+      "params": [
+        {
+          "description": "The index of the format condition (1-based).",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "The format condition.",
+        "type": "ApiFormatCondition | null"
+      },
+      "signature": "GetItem(index: number): ApiFormatCondition | null",
+      "since": "9.1.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent range object associated with the current conditional formatting collection.",
+      "params": [],
+      "returns": {
+        "description": "The parent range object.",
+        "type": "ApiRange"
+      },
+      "signature": "GetParent(): ApiRange",
+      "since": "9.1.0"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Specifies a highlighting color which is applied as a background to the contents of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetHighlight/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text highlighted with light gray color.\");\nparagraph.SetHighlight(\"lightGray\");"
+  ],
+  "params": [
+    {
+      "description": "Available highlight color.",
+      "name": "sColor",
+      "type": "highlightColor"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetHighlight(sColor: highlightColor): ApiParagraph"
+}

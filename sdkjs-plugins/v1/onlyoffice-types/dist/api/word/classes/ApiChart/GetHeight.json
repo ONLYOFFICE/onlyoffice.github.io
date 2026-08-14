@@ -1,0 +1,8 @@
+{
+  "description": "Returns the height of the current drawing.",
+  "params": [],
+  "returns": {
+    "type": "EMU"
+  },
+  "signature": "GetHeight(): EMU"
+}

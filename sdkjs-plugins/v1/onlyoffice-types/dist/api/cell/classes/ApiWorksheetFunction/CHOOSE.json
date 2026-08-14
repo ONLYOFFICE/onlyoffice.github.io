@@ -1,0 +1,23 @@
+{
+  "description": "Chooses a value or action to perform from a list of values, based on an index number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHOOSE/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CHOOSE(2, 3, 4, 89, 76, 0));"
+  ],
+  "params": [
+    {
+      "description": "The position of the value in the list of values, a numeric value greater than or equal to 1 but less than the number of values in the list of values.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "Up to 254 values or the selected range of cells to analyze.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, ranges, names, or text strings.",
+      "name": "args",
+      "type": "number | string | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CHOOSE(arg1: ApiRange | ApiName | number, args: number | string | ApiRange | ApiName): number"
+}

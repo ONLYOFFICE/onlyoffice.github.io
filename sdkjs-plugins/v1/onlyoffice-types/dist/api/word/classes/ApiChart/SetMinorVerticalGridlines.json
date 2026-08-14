@@ -1,0 +1,18 @@
+{
+  "description": "Specifies minor vertical gridline visual properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetMinorVerticalGridlines/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nlet stroke = Api.CreateStroke(1 * 10000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\nchart.SetMinorVerticalGridlines(stroke);\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph.AddDrawing(chart);"
+  ],
+  "params": [
+    {
+      "description": "The stroke used to create the element shadow.",
+      "name": "oStroke",
+      "type": "ApiStroke"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetMinorVerticalGridlines(oStroke: ApiStroke): boolean"
+}

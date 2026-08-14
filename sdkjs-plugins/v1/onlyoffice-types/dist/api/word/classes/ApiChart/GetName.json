@@ -1,0 +1,10 @@
+{
+  "description": "Returns the name of the current drawing.",
+  "params": [],
+  "returns": {
+    "description": "Name of drawing.",
+    "type": "string"
+  },
+  "signature": "GetName(): string",
+  "since": "9.3.0"
+}

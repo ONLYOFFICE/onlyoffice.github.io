@@ -1,0 +1,18 @@
+{
+  "description": "Returns the natural logarithm of the gamma function.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GAMMALN_PRECISE/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.GAMMALN_PRECISE(0.5);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value for which the natural logarithm of the gamma function will be calculated, a positive number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GAMMALN_PRECISE(arg1: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,20 @@
+{
+  "description": "Class representing a Scheme Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiSchemeColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiSchemeColor/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet schemeColor = Api.CreateSchemeColor(\"dk1\");\nlet fill = Api.CreateSolidFill(schemeColor);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"curvedUpArrow\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);\nlet classType = schemeColor.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \");\nworksheet.GetRange(\"B1\").SetValue(classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"schemeColor\""
+      },
+      "signature": "GetClassType(): \"schemeColor\""
+    }
+  }
+}

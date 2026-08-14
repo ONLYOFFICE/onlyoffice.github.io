@@ -1,0 +1,18 @@
+{
+  "description": "Converts a text string to all uppercase letters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/UPPER/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.UPPER(\"Online Office\"));"
+  ],
+  "params": [
+    {
+      "description": "The text which will be converted to uppercase, a reference or a text string.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "UPPER(arg1: ApiRange | ApiName | string): string"
+}

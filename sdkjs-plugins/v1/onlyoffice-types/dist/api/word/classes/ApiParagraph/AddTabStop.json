@@ -1,0 +1,12 @@
+{
+  "description": "Adds a tab stop to the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddTabStop/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. After it three tab stops will be added.\");\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"This is the text which starts after the tab stops.\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "AddTabStop(): ApiRun"
+}

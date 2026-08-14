@@ -156,8 +156,7 @@ export namespace Word {
   }
 
   /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their comments.
    *
    * @example
    * ```js
@@ -170,7 +169,7 @@ export namespace Word {
   }
 
   /**
-   * Record of one comment.
+   * Represents a single comment record.
    *
    * @example
    * ```js
@@ -178,19 +177,19 @@ export namespace Word {
    * ```
    */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -520,8 +519,7 @@ export namespace Word {
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
   /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their review changes.
    *
    * @example
    * ```js
@@ -539,7 +537,7 @@ export namespace Word {
   }
 
   /**
-   * Record of one review change.
+   * Represents a single review change record.
    *
    * @example
    * ```js
@@ -554,16 +552,16 @@ export namespace Word {
    * ```
    */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
@@ -877,7 +875,7 @@ export namespace Word {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -1368,9 +1366,9 @@ export namespace Word {
      *
      * @param element - The element where the comment will be added. It may be applied to any element which has the
      *   *AddComment* method.
-     * @param text - The comment text (required).
-     * @param author - The author's name (optional).
-     * @param userId - The user ID of the comment author (optional).
+     * @param text - The comment text.
+     * @param author - The author's name.
+     * @param userId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -1445,9 +1443,8 @@ export namespace Word {
      * @param demoteHeadings - Defines if all heading levels in your document will be demoted to conform with the following
      *   standard: single H1 as title, H2 as top-level heading in the text body.
      * @param renderHTMLTags - Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional
-     *   HTML tag, you can avoid using the opening angle bracket
-     *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
-     *   with the special characters.
+     *   HTML tag, you can avoid using the opening angle bracket in the following way: \<tag>text\</tag>.
+     *   By default, the opening angle brackets will be replaced with the special characters.
      * @default convertType = "markdown"
      * @default htmlHeadings = false
      * @default base64img = false
@@ -1526,6 +1523,12 @@ export namespace Word {
 
     /**
      * Creates a chart with the parameters specified.
+     * :::note
+     * Values of _styleIndex_ outside **1 - 48** are interpreted as a chart style id from the
+     * _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs
+     * Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs
+     * Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).
+     * :::
      *
      * @param chartType - The chart type used for the chart display.
      * @param series - The array of the data used to build the chart from.
@@ -1536,8 +1539,8 @@ export namespace Word {
      * @param width - The chart width in English measure units.
      * @param height - The chart height in English measure units.
      * @param styleIndex - The chart color style index (can be 1 - 48, as described in OOXML specification).
-     * @param numFormats - Numeric formats which will be applied to the series (can be custom formats).
-     *   The default numeric format is "General".
+     * @param numFormats - Numeric formats which will be applied to the series (can be custom formats). The default numeric
+     *   format is "General".
      * @default chartType = "bar"
      *
      * @example
@@ -1632,6 +1635,10 @@ export namespace Word {
 
     /**
      * Groups an array of drawings.
+     * :::note
+     * The drawings must not be added to the document. To group the drawings which are already in the
+     * document, use the {@link ApiDocument#GroupDrawings} method.
+     * :::
      *
      * @param drawings - An array of drawings to group.
      * @since 8.3.0
@@ -1771,8 +1778,7 @@ export namespace Word {
     CreateNoFill(): ApiFill;
 
     /**
-     * Creates a bullet for a paragraph with the numbering character or symbol specified with the numType
-     * parameter.
+     * Creates an abstract multilevel numbering with a specified type.
      *
      * @param sType - The type of the numbering which will be created.
      * @default sType = "bullet"
@@ -2013,8 +2019,10 @@ export namespace Word {
      * @param shapeType - The shape type which specifies the preset shape geometry.
      * @param width - The shape width in English measure units.
      * @param height - The shape height in English measure units.
-     * @param fill - The color or pattern used to fill the shape.
-     * @param stroke - The stroke used to create the element shadow.
+     * @param fill - The color or pattern used to fill the shape. If not specified, the default shape style fill
+     *   (theme accent) is used.
+     * @param stroke - The stroke used to draw the shape outline. If not specified, the default shape style outline
+     *   (theme accent) is used.
      * @default shapeType = "rect"
      * @default width = 914400
      * @default height = 914400
@@ -2081,8 +2089,13 @@ export namespace Word {
     /**
      * Creates a new table with a specified number of rows and columns.
      *
-     * @param rows - Number of rows.
-     * @param cols - Number of columns.
+     * :::danger[Breaking Change]
+     * Starting from version 9.4.0, the parameter order has been changed from `Api.CreateTable(cols, rows)`
+     * to `Api.CreateTable(rows, cols)`.
+     * :::
+     *
+     * @param rows - Number of rows. Must be a positive integer.
+     * @param cols - Number of columns. Must be a positive integer.
      *
      * @example
      * ```js
@@ -2360,8 +2373,8 @@ export namespace Word {
     /**
      * Loads data for the mail merge.
      *
-     * @param data - Mail merge data. The first element of the array is the array with names of the merge fields.
-     *   The rest of the array elements are arrays with values for the merge fields.
+     * @param data - Mail merge data. The first element of the array is the array with names of the merge fields. The
+     *   rest of the array elements are arrays with values for the merge fields.
      *
      * @example
      * ```js
@@ -2692,8 +2705,8 @@ export namespace Word {
      * @param numFormat - The possible caption numbering format.
      * @param isBefore - Specifies whether to insert the caption before the current content control (true) or after
      *   (false) (after/before the shape if it is placed in the shape).
-     * @param headingLvl - The heading level (used if you want to specify the chapter number).
-     *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
+     * @param headingLvl - The heading level (used if you want to specify the chapter number). <note>If you want to specify
+     *   "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param captionSep - The caption separator (used if you want to specify the chapter number).
      * @default label = "Table"
      * @default excludeLabel = false
@@ -2721,9 +2734,9 @@ export namespace Word {
      * Adds a comment to the current block content control.
      * <note>Please note that the current block content control must be in the document.</note>
      *
-     * @param text - The comment text (required).
-     * @param author - The author's name (optional).
-     * @param userId - The user ID of the comment author (optional).
+     * @param text - The comment text.
+     * @param author - The author's name.
+     * @param userId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -2779,7 +2792,7 @@ export namespace Word {
     AddText(text: string): boolean;
 
     /**
-     * Creates a copy of an block content control. Ignores comments, footnote references, complex fields.
+     * Creates a copy of a block content control. Ignores comments, footnote references, complex fields.
      *
      * @since 8.3.0
      *
@@ -3015,7 +3028,7 @@ export namespace Word {
     GetDataForXmlMapping(): string;
 
     /**
-     * Returns a list of values of the combo box / dropdown list content control.
+     * Returns a list of values of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -3339,7 +3352,8 @@ export namespace Word {
      * Searches for a scope of a content control object. The search results are a collection of ApiRange
      * objects.
      *
-     * @param text - Search string.
+     * @param text - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -3461,6 +3475,7 @@ export namespace Word {
 
     /**
      * Sets the lock to the current block text content control:
+     * **"unlocked"** - content can be edited and the container can be deleted.
      * **"contentLocked"** - content cannot be edited.
      * **"sdtContentLocked"** - content cannot be edited and the container cannot be deleted.
      * **"sdtLocked"** - the container cannot be deleted.
@@ -5691,7 +5706,7 @@ export namespace Word {
     GetChoiceName(): string;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiCheckBoxForm class.
      *
      * @since 9.0.4
      *
@@ -5844,7 +5859,6 @@ export namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -5864,7 +5878,7 @@ export namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -6168,7 +6182,7 @@ export namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -6253,7 +6267,7 @@ export namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -6330,7 +6344,7 @@ export namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -6429,7 +6443,7 @@ export namespace Word {
     ToJSON(): string;
   }
 
-  /** Class representing a document combo box / dropdown list. */
+  /** Class representing a document combo box / drop-down list. */
   export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
@@ -6493,7 +6507,7 @@ export namespace Word {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComboBoxForm class.
      *
      * @since 9.0.4
      *
@@ -6630,7 +6644,6 @@ export namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -6650,7 +6663,7 @@ export namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -6721,7 +6734,7 @@ export namespace Word {
     GetWrapperShape(): ApiShape;
 
     /**
-     * Checks if the combo box text can be edited. If it is not editable, then this form is a dropdown
+     * Checks if the combo box text can be edited. If it is not editable, then this form is a drop-down
      * list.
      *
      * @example
@@ -6914,7 +6927,7 @@ export namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -6971,7 +6984,7 @@ export namespace Word {
 
     /**
      * Sets the text to the current combo box.
-     * Available only for editable combo box forms.*
+     * *Available only for editable combo box forms.*
      *
      * @param sText - The combo box text.
      *
@@ -6990,7 +7003,7 @@ export namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -7068,7 +7081,7 @@ export namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -7101,10 +7114,10 @@ export namespace Word {
     /**
      * Adds a reply to a comment.
      *
-     * @param sText - The comment reply text (required).
-     * @param sAuthorName - The name of the comment reply author (optional).
-     * @param sUserId - The user ID of the comment reply author (optional).
-     * @param nPos - The comment reply position.
+     * @param sText - The comment reply text.
+     * @param sAuthorName - The name of the comment reply author.
+     * @param sUserId - The user ID of the comment reply author.
+     * @param nPos - The comment reply position. If nPos=-1 add to the end.
      * @default nPos = -1
      * @returns this
      *
@@ -7785,7 +7798,7 @@ export namespace Word {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComplexForm class.
      *
      * @since 9.0.4
      *
@@ -7904,7 +7917,6 @@ export namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -7924,7 +7936,7 @@ export namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -8132,7 +8144,7 @@ export namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -8189,7 +8201,7 @@ export namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -8266,7 +8278,7 @@ export namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -8294,14 +8306,14 @@ export namespace Word {
     ToInline(): boolean;
   }
 
-  /** Class representing a list of values of the combo box / dropdown list content control. */
+  /** Class representing a list of values of the combo box / drop-down list content control. */
   export interface ApiContentControlList {
     /**
-     * Adds a new value to the combo box / dropdown list content control.
+     * Adds a new value to the combo box / drop-down list content control.
      *
      * @param sText - The display text for the list item.
-     * @param sValue - The list item value.
-     * @param nIndex - A position where a new value will be added.
+     * @param sValue - The list item value. By default is equal to sText parameter
+     * @param nIndex - A position where a new value will be added. If nIndex=-1 add to the end.
      * @default nIndex = -1
      *
      * @example
@@ -8319,7 +8331,7 @@ export namespace Word {
     Add(sText: string, sValue: string, nIndex?: number): boolean;
 
     /**
-     * Clears a list of values of the combo box / dropdown list content control.
+     * Clears a list of values of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8336,7 +8348,7 @@ export namespace Word {
     Clear(): boolean;
 
     /**
-     * Returns a collection of items (the ApiContentControlListEntry objects) of the combo box / dropdown
+     * Returns a collection of items (the ApiContentControlListEntry objects) of the combo box / drop-down
      * list content control.
      *
      * @example
@@ -8377,7 +8389,7 @@ export namespace Word {
     GetClassType(): "contentControlList";
 
     /**
-     * Returns a number of items of the combo box / dropdown list content control.
+     * Returns a number of items of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8396,7 +8408,7 @@ export namespace Word {
     GetElementsCount(): number;
 
     /**
-     * Returns an item of the combo box / dropdown list content control by the position specified in the
+     * Returns an item of the combo box / drop-down list content control by the position specified in the
      * request.
      *
      * @param nIndex - Item position.
@@ -8418,7 +8430,7 @@ export namespace Word {
     GetItem(nIndex: number): ApiContentControlListEntry;
 
     /**
-     * Returns a parent of the combo box / dropdown list content control.
+     * Returns a parent of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8437,10 +8449,10 @@ export namespace Word {
     GetParent(): ApiInlineLvlSdt | ApiBlockLvlSdt;
   }
 
-  /** Class representing an entry of the combo box / dropdown list content control. */
+  /** Class representing an entry of the combo box / drop-down list content control. */
   export interface ApiContentControlListEntry {
     /**
-     * Deletes the specified item in the combo box / dropdown list content control.
+     * Deletes the specified item in the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8464,7 +8476,7 @@ export namespace Word {
     GetClassType(): "contentControlList";
 
     /**
-     * Returns an index of the content control list item in the combo box / dropdown list content control.
+     * Returns an index of the content control list item in the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8476,7 +8488,7 @@ export namespace Word {
     GetIndex(): number;
 
     /**
-     * Returns a parent of the content control list item in the combo box / dropdown list content control.
+     * Returns a parent of the content control list item in the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8488,7 +8500,7 @@ export namespace Word {
     GetParent(): ApiContentControlList;
 
     /**
-     * Returns a String that represents the display text of a list item for the combo box / dropdown list
+     * Returns a String that represents the display text of a list item for the combo box / drop-down list
      * content control.
      *
      * @example
@@ -8501,7 +8513,7 @@ export namespace Word {
     GetText(): string;
 
     /**
-     * Returns a String that represents the value of a list item for the combo box / dropdown list content
+     * Returns a String that represents the value of a list item for the combo box / drop-down list content
      * control.
      *
      * @example
@@ -8514,7 +8526,7 @@ export namespace Word {
     GetValue(): string;
 
     /**
-     * Moves the current item in the parent combo box / dropdown list content control down one element, so
+     * Moves the current item in the parent combo box / drop-down list content control down one element, so
      * that it is after the item that originally followed it.
      *
      * @example
@@ -8527,7 +8539,7 @@ export namespace Word {
     MoveDown(): boolean;
 
     /**
-     * Moves the current item in the parent combo box / dropdown list content control up one element.
+     * Moves the current item in the parent combo box / drop-down list content control up one element.
      *
      * @example
      * ```js
@@ -8539,7 +8551,7 @@ export namespace Word {
     MoveUp(): boolean;
 
     /**
-     * Selects the list entry in the combo box / dropdown list content control and sets the text of the
+     * Selects the list entry in the combo box / drop-down list content control and sets the text of the
      * content control to the selected item value.
      *
      * @example
@@ -8552,7 +8564,7 @@ export namespace Word {
     Select(): boolean;
 
     /**
-     * Sets an index to the content control list item in the combo box / dropdown list content control.
+     * Sets an index to the content control list item in the combo box / drop-down list content control.
      *
      * @param nIndex - An index of the content control list item.
      *
@@ -8566,7 +8578,7 @@ export namespace Word {
     SetIndex(nIndex: number): boolean;
 
     /**
-     * Sets a String that represents the display text of a list item for the combo box / dropdown list
+     * Sets a String that represents the display text of a list item for the combo box / drop-down list
      * content control.
      *
      * @param sText - The display text of a list item.
@@ -8581,7 +8593,7 @@ export namespace Word {
     SetText(sText: string): boolean;
 
     /**
-     * Sets a String that represents the value of a list item for the combo box / dropdown list content
+     * Sets a String that represents the value of a list item for the combo box / drop-down list content
      * control.
      *
      * @param sValue - The value of a list item.
@@ -9265,7 +9277,7 @@ export namespace Word {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiDateForm class.
      *
      * @since 9.0.4
      *
@@ -9429,7 +9441,6 @@ export namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -9449,7 +9460,7 @@ export namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -9735,7 +9746,7 @@ export namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -9792,7 +9803,7 @@ export namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -9892,7 +9903,7 @@ export namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -9970,9 +9981,9 @@ export namespace Word {
     /**
      * Adds a comment to the current document selection, or to the current word if no text is selected.
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -9998,12 +10009,12 @@ export namespace Word {
     AddDatePickerContentControl(datePickerPr?: ContentControlDatePr): ApiInlineLvlSdt;
 
     /**
-     * Adds a shape to the specified page.
+     * Adds a drawing to the specified page.
      * <note>This method can be a little bit slow, because it runs the document calculation
      * process to arrange tables on the specified page.</note>
      *
-     * @param oDrawing - A shape to add to the page.
-     * @param nPage - The page number.
+     * @param oDrawing - A drawing to add to the page.
+     * @param nPage - The page index.
      * @param x - The X coordinate in English measure units.
      * @param y - The Y coordinate in English measure units.
      *
@@ -10130,7 +10141,6 @@ export namespace Word {
 
     /**
      * Adds a table of content to the current document.
-     * <note>Please note that the new table of contents replaces the existing table of contents.</note>
      *
      * @param oTocPr - Table of contents properties.
      * @param oRange - The range that the table of contents replaces. If omitted, the table of contents is inserted at
@@ -10161,9 +10171,8 @@ export namespace Word {
     /**
      * Adds a table of figures to the current document.
      *
-     * @param oTofPr - Table of figures properties.
-     *   <note>Please note that the table of figures properties will be filled with the default
-     *   properties if they are undefined.</note>
+     * @param oTofPr - Table of figures properties. <note>Please note that the table of figures properties will be
+     *   filled with the default properties if they are undefined.</note>
      * @param oRange - The range that the table of figures replaces. If omitted, the table of figures is inserted at
      *   the current position.
      * @default oTofPr = {}
@@ -10283,8 +10292,8 @@ export namespace Word {
      * to the current
      * section - page size, footer, header, columns, etc.
      *
-     * @param oParagraph - The paragraph after which a new document section will be inserted.
-     *   Paragraph must be in a document.
+     * @param oParagraph - The paragraph after which a new document section will be inserted. Paragraph must be in a
+     *   document.
      * @returns Returns null if parametr is invalid.
      *
      * @example
@@ -10312,8 +10321,8 @@ export namespace Word {
     CreateSection(oParagraph: ApiParagraph): ApiSection | null;
 
     /**
-     * Creates a new style with the specified type and name. If there is a style with the same name it will
-     * be replaced with a new one.
+     * Creates a new style with the specified type and name. If a style with the specified name already
+     * exists, it will be returned without creating a new one.
      *
      * @param styleName - The name of the style which will be created.
      * @param type - The document element which the style will be applied to.
@@ -10786,7 +10795,7 @@ export namespace Word {
      * <note>This method can be a little bit slow, because it runs the document calculation
      * process to arrange tables on the specified page.</note>
      *
-     * @param nPage - The page number.
+     * @param nPage - The page index.
      *
      * @example
      * ```js
@@ -11930,6 +11939,15 @@ export namespace Word {
 
     /**
      * Inserts an array of elements into the current position of the document.
+     * The array may contain a mix of element types:
+     * - {@link DocumentElement} elements are inserted as-is.
+     * - {@link ParagraphContent} elements are automatically grouped into paragraphs: consecutive
+     * paragraph-level elements
+     * share one new paragraph.
+     * - Plain strings and numbers are wrapped in a new run and added to the current paragraph (same
+     * grouping rules as {@link ParagraphContent}).
+     * - {@link ApiDrawing} elements are wrapped in a new run and added to the current paragraph.
+     * Elements that are already in use in a document are skipped.
      *
      * @param content - An array of elements to insert.
      * @param isInline - Inline insert or not (works only for the last and the first element and only if it's a
@@ -12412,7 +12430,8 @@ export namespace Word {
     /**
      * Searches for a scope of a document object. The search results are a collection of ApiRange objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -12682,9 +12701,8 @@ export namespace Word {
      * @param bDemoteHeadings - Defines if all heading levels in your document will be demoted to conform with the following
      *   standard: single H1 as title, H2 as top-level heading in the text body.
      * @param bRenderHTMLTags - Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional
-     *   HTML tag, you can avoid using the opening angle bracket
-     *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
-     *   with the special characters.
+     *   HTML tag, you can avoid using the opening angle bracket in the following way: \<tag>text\</tag>.
+     *   By default, the opening angle brackets will be replaced with the special characters.
      * @default bHtmlHeadings = false
      * @default bBase64img = false
      * @default bDemoteHeadings = false
@@ -12767,9 +12785,8 @@ export namespace Word {
      * @param bDemoteHeadings - Defines if all heading levels in your document will be demoted to conform with the following
      *   standard: single H1 as title, H2 as top-level heading in the text body.
      * @param bRenderHTMLTags - Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional
-     *   HTML tag, you can avoid using the opening angle bracket
-     *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
-     *   with the special characters.
+     *   HTML tag, you can avoid using the opening angle bracket in the following way: \<tag>text\</tag>.
+     *   By default, the opening angle brackets will be replaced with the special characters.
      * @default bHtmlHeadings = false
      * @default bBase64img = false
      * @default bDemoteHeadings = false
@@ -14272,8 +14289,8 @@ export namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
-     * @param nDistance - The distance from the right side of the document element to the floating object measured in
-     *   English measure units.
+     * @param nDistance - The distance from the right side of the document element to the floating object. Use EMU for
+     *   absolute distance or a number for percent (1 = 1%) when bPercent=true.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
      * @default bPercent = false
      * @since 9.3.0
@@ -14495,8 +14512,8 @@ export namespace Word {
      * Sets the absolute measurement for the vertical positioning of the floating object.
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
-     * @param nDistance - The distance from the bottom part of the document element to the floating object measured in
-     *   English measure units.
+     * @param nDistance - The distance from the bottom part of the document element to the floating object. Use EMU for
+     *   absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
      * @default bPercent = false
      * @since 9.3.0
@@ -14932,7 +14949,6 @@ export namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -14952,7 +14968,7 @@ export namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -15160,7 +15176,7 @@ export namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -15217,7 +15233,7 @@ export namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -15294,7 +15310,7 @@ export namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -16836,9 +16852,9 @@ export namespace Word {
      * Adds a comment to the current inline content control.
      * <note>Please note that this inline content control must be in the document.</note>
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -17053,7 +17069,7 @@ export namespace Word {
     GetDate(): undefined | Date;
 
     /**
-     * Returns a list of values of the combo box / dropdown list content control.
+     * Returns a list of values of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -17141,7 +17157,7 @@ export namespace Word {
     GetId(): string;
 
     /**
-     * Returns an internal id of the current content control.
+     * Returns an internal ID of the current content control.
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetInternalId/
      */
@@ -17696,6 +17712,7 @@ export namespace Word {
 
     /**
      * Sets the lock to the current inline text content control:
+     * **"unlocked"** - content can be edited and the container can be deleted.
      * **"contentLocked"** - content cannot be edited.
      * **"sdtContentLocked"** - content cannot be edited and the container cannot be deleted.
      * **"sdtLocked"** - the container cannot be deleted.
@@ -17748,7 +17765,7 @@ export namespace Word {
 
     /**
      * Sets the placeholder text to the current inline content control.
-     * Can't be set to checkbox or radio button*
+     * *Can't be set to checkbox or radio button*
      *
      * @param sText - The text that will be set to the current inline content control.
      *
@@ -18078,8 +18095,8 @@ export namespace Word {
     GetParaPr(): ApiParaPr;
 
     /**
-     * Specifies the text properties which will be applied to the text in the current numbering level
-     * itself, not to the text in the subsequent paragraph.
+     * Returns the text properties which will be applied to the text in the current numbering level itself,
+     * not to the text in the subsequent paragraph.
      * <note>To change the text style of the paragraph, a style must be applied to it using the
      * {@link ApiRun#SetStyle} method.</note>
      *
@@ -19452,8 +19469,7 @@ export namespace Word {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -19543,8 +19559,8 @@ export namespace Word {
      * paragraph are at least
      * partly rendered on the same page as the following paragraph whenever possible.
      *
-     * @param isKeepNext - The true value enables the option to keep lines of the paragraph on the same
-     *   page as the following paragraph.
+     * @param isKeepNext - The true value enables the option to keep lines of the paragraph on the same page as the
+     *   following paragraph.
      *
      * @example
      * ```js
@@ -19609,8 +19625,8 @@ export namespace Word {
      * @param oNumPr - Specifies a numbering definition.
      * @param nLvl - Specifies a numbering level reference. If the current instance of the ApiParaPr class is direct
      *   formatting of a paragraph, then this parameter MUST BE specified. Otherwise, if the current
-     *   instance of the ApiParaPr class
-     *   is the part of ApiStyle properties, this parameter will be ignored.
+     *   instance of the ApiParaPr class is the part of ApiStyle properties, this parameter will be
+     *   ignored.
      * @default nLvl = 0
      *
      * @example
@@ -19659,8 +19675,8 @@ export namespace Word {
      * paragraph are rendered at
      * the beginning of a new page in the document.
      *
-     * @param isPageBreakBefore - The true value enables the option to render the contents of the paragraph
-     *   at the beginning of a new page in the document.
+     * @param isPageBreakBefore - The true value enables the option to render the contents of the paragraph at the beginning of a
+     *   new page in the document.
      *
      * @example
      * ```js
@@ -19875,10 +19891,10 @@ export namespace Word {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -20038,8 +20054,8 @@ export namespace Word {
      * @param sNumberingFormat - The possible caption numbering format.
      * @param bBefore - Specifies whether to insert the caption before the current paragraph (true) or after (false)
      *   (after/before the shape if it is placed in the shape).
-     * @param nHeadingLvl - The heading level (used if you want to specify the chapter number).
-     *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
+     * @param nHeadingLvl - The heading level (used if you want to specify the chapter number). <note>If you want to specify
+     *   "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param sCaptionSep - The caption separator (used if you want to specify the chapter number).
      * @default sLabel = "Table"
      * @default bExludeLabel = false
@@ -20118,9 +20134,9 @@ export namespace Word {
      * Adds a comment to the current paragraph.
      * <note>Please note that this paragraph must be in the document.</note>
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -20169,10 +20185,10 @@ export namespace Word {
     /**
      * Adds an element to the current paragraph.
      *
-     * @param oElement - The document element which will be added at the current position. Returns false if the
-     *   oElement type is not supported by a paragraph.
-     * @param nPos - The position where the current element will be added. If this value is not
-     *   specified, then the element will be added at the end of the current paragraph.
+     * @param oElement - The document element which will be added at the current position. Returns false if the oElement
+     *   type is not supported by a paragraph.
+     * @param nPos - The position where the current element will be added. If this value is not specified, then the
+     *   element will be added at the end of the current paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
      * @example
@@ -21245,6 +21261,7 @@ export namespace Word {
     /**
      * Returns a Range object that represents the part of the document contained in the specified
      * paragraph.
+     * The paragraph must be attached to the document before calling this method.
      *
      * @param Start - Start position index in the current element.
      * @param End - End position index in the current element.
@@ -21471,7 +21488,7 @@ export namespace Word {
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string;
 
     /**
-     * Returns the paragraph text properties.
+     * Returns the text properties for a paragraph end mark.
      *
      * @example
      * ```js
@@ -21558,7 +21575,7 @@ export namespace Word {
     IsEmpty(): boolean;
 
     /**
-     * Returns the last element of the paragraph which is not empty.
+     * Returns the last element of the paragraph.
      *
      * @example
      * ```js
@@ -21581,8 +21598,8 @@ export namespace Word {
     /**
      * Adds an element to the current paragraph.
      *
-     * @param oElement - The document element which will be added at the current position. Returns false if the
-     *   oElement type is not supported by a paragraph.
+     * @param oElement - The document element which will be added at the current position. Returns false if the oElement
+     *   type is not supported by a paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
      * @example
@@ -21689,7 +21706,8 @@ export namespace Word {
     /**
      * Searches for a scope of a paragraph object. The search results are a collection of ApiRange objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -21830,7 +21848,7 @@ export namespace Word {
     SetCaps(isCaps: boolean): ApiParagraph;
 
     /**
-     * Sets the text color to the current paragraph in the RGB format.
+     * Sets the text color to the current paragraph.
      *
      * @param color - The text color.
      * @returns this
@@ -22087,8 +22105,7 @@ export namespace Word {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -22178,8 +22195,8 @@ export namespace Word {
      * paragraph are at least
      * partly rendered on the same page as the following paragraph whenever possible.
      *
-     * @param isKeepNext - The true value enables the option to keep lines of the paragraph on the same
-     *   page as the following paragraph.
+     * @param isKeepNext - The true value enables the option to keep lines of the paragraph on the same page as the
+     *   following paragraph.
      *
      * @example
      * ```js
@@ -22244,8 +22261,8 @@ export namespace Word {
      * @param oNumPr - Specifies a numbering definition.
      * @param nLvl - Specifies a numbering level reference. If the current instance of the ApiParaPr class is direct
      *   formatting of a paragraph, then this parameter MUST BE specified. Otherwise, if the current
-     *   instance of the ApiParaPr class
-     *   is the part of ApiStyle properties, this parameter will be ignored.
+     *   instance of the ApiParaPr class is the part of ApiStyle properties, this parameter will be
+     *   ignored.
      * @default nLvl = 0
      *
      * @example
@@ -22302,8 +22319,8 @@ export namespace Word {
      * paragraph are rendered at
      * the beginning of a new page in the document.
      *
-     * @param isPageBreakBefore - The true value enables the option to render the contents of the paragraph
-     *   at the beginning of a new page in the document.
+     * @param isPageBreakBefore - The true value enables the option to render the contents of the paragraph at the beginning of a
+     *   new page in the document.
      *
      * @example
      * ```js
@@ -22338,8 +22355,8 @@ export namespace Word {
      * Specifies an amount by which text is raised or lowered for this paragraph in relation to the default
      * baseline of the surrounding non-positioned text.
      *
-     * @param nPosition - Specifies a positive (raised text) or negative (lowered text)
-     *   measurement in half-points (1/144 of an inch).
+     * @param nPosition - Specifies a positive (raised text) or negative (lowered text) measurement in half-points (1/144
+     *   of an inch).
      * @returns this
      *
      * @example
@@ -22652,10 +22669,10 @@ export namespace Word {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -23166,7 +23183,7 @@ export namespace Word {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiPictureForm class.
      *
      * @since 9.0.4
      *
@@ -23346,7 +23363,6 @@ export namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -23366,7 +23382,7 @@ export namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -23692,7 +23708,7 @@ export namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -23796,7 +23812,7 @@ export namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -23873,7 +23889,7 @@ export namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -24035,9 +24051,9 @@ export namespace Word {
     /**
      * Adds a comment to the current range.
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -24458,7 +24474,7 @@ export namespace Word {
     SetCaps(isCaps: boolean): ApiRange | null;
 
     /**
-     * Sets the text color to the current text Range in the RGB format.
+     * Sets the text color to the current text Range.
      *
      * @param color - The text color.
      * @returns returns null if can't apply color.
@@ -24600,8 +24616,8 @@ export namespace Word {
      * default
      * baseline of the surrounding non-positioned text.
      *
-     * @param nPosition - Specifies a positive (raised text) or negative (lowered text)
-     *   measurement in half-points (1/144 of an inch).
+     * @param nPosition - Specifies a positive (raised text) or negative (lowered text) measurement in half-points (1/144
+     *   of an inch).
      * @returns returns null if can't set position.
      *
      * @example
@@ -25186,9 +25202,9 @@ export namespace Word {
      * Adds a comment to the current run.
      * <note>Please note that this run must be in the document.</note>
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -25436,7 +25452,7 @@ export namespace Word {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -25557,7 +25573,8 @@ export namespace Word {
     GetDoubleStrikeout(): boolean;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -25896,6 +25913,7 @@ export namespace Word {
 
     /**
      * Returns a Range object that represents the part of the document contained in the specified run.
+     * The run must be attached to the document before calling this method.
      *
      * @param Start - Start position index in the current element.
      * @param End - End position index in the current element.
@@ -25950,7 +25968,7 @@ export namespace Word {
     GetShd(): Shd | undefined;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -26276,7 +26294,7 @@ export namespace Word {
     /**
      * Sets the bold property to the text character.
      *
-     * @param isBold - Specifies that the contents of the current run are displayed bold.
+     * @param isBold - Specifies that the contents of the run are displayed bold.
      * @returns this text properties.
      *
      * @example
@@ -26297,8 +26315,8 @@ export namespace Word {
     SetBold(isBold: boolean): ApiTextPr;
 
     /**
-     * Specifies that any lowercase characters in the current text run are formatted for display only as
-     * their capital letter character equivalents.
+     * Specifies that any lowercase characters in the text run are formatted for display only as their
+     * capital letter character equivalents.
      *
      * @param isCaps - Specifies that the contents of the current run are displayed capitalized.
      * @returns this text properties.
@@ -26321,7 +26339,7 @@ export namespace Word {
     SetCaps(isCaps: boolean): ApiTextPr;
 
     /**
-     * Sets the text color for the current text run in the RGB format.
+     * Sets the text color to the current text run.
      *
      * @param color - The text color.
      * @returns this text properties.
@@ -26345,7 +26363,7 @@ export namespace Word {
     SetColor(color: ApiColor): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with two horizontal lines through each
+     * Specifies that the contents of the run are displayed with two horizontal lines through each
      * character displayed on the line.
      *
      * @param isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
@@ -26415,7 +26433,8 @@ export namespace Word {
     SetFontSize(nSize: hps): ApiTextPr;
 
     /**
-     * Specifies a highlighting color which is applied as a background to the contents of the current run.
+     * Specifies a highlighting color which is added to the text properties and applied as a background to
+     * the contents of the current run/range/paragraph.
      *
      * @param sColor - Available highlight color.
      *
@@ -26462,10 +26481,10 @@ export namespace Word {
     /**
      * Specifies the languages which will be used to check spelling and grammar (if requested) when
      * processing
-     * the contents of this text run.
+     * the contents of the text run.
      *
-     * @param sLangId - The possible value for this parameter is a language identifier as defined by
-     *   RFC 4646/BCP 47. Example: "en-CA".
+     * @param sLangId - The possible value for this parameter is a language identifier as defined by RFC 4646/BCP 47.
+     *   Example: "en-CA".
      * @returns this text properties.
      *
      * @example
@@ -26514,8 +26533,8 @@ export namespace Word {
      * Specifies an amount by which text is raised or lowered for this run in relation to the default
      * baseline of the surrounding non-positioned text.
      *
-     * @param nPosition - Specifies a positive (raised text) or negative (lowered text)
-     *   measurement in half-points (1/144 of an inch).
+     * @param nPosition - Specifies a positive (raised text) or negative (lowered text) measurement in half-points (1/144
+     *   of an inch).
      * @returns this text properties.
      *
      * @example
@@ -26565,7 +26584,7 @@ export namespace Word {
     SetShd(type: ShdType, color: ApiColor): ApiTextPr;
 
     /**
-     * Specifies that all the small letter characters in this text run are formatted for display only as
+     * Specifies that all the small letter characters in the text run are formatted for display only as
      * their capital
      * letter character equivalents which are two points smaller than the actual font size specified for
      * this text.
@@ -26615,8 +26634,8 @@ export namespace Word {
     SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with a single horizontal line through
-     * the center of the line.
+     * Specifies that the contents of the run are displayed with a single horizontal line through the
+     * center of the line.
      *
      * @param isStrikeout - Specifies that the contents of the current run are displayed struck through.
      * @returns this text properties.
@@ -26639,9 +26658,12 @@ export namespace Word {
     SetStrikeout(isStrikeout: boolean): ApiTextPr;
 
     /**
-     * Sets a style to the current run.
+     * The text style base method.
+     * <note>This method is not used by itself, as it only forms the basis for the {@link ApiRun#SetStyle}
+     * method which sets
+     * the selected or created style to the text.</note>
      *
-     * @param oStyle - The style which must be applied to the text run.
+     * @param oStyle - The style which must be applied to the text character.
      * @returns this text properties.
      *
      * @example
@@ -26714,8 +26736,8 @@ export namespace Word {
     SetTextPr(oTextPr: ApiTextPr): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed along with a line appearing directly
-     * below the character
+     * Specifies that the contents of the run are displayed along with a line appearing directly below the
+     * character
      * (less than all the spacing above and below the characters on the line).
      *
      * @param isUnderline - Specifies that the contents of the current run are displayed underlined.
@@ -26739,8 +26761,8 @@ export namespace Word {
     SetUnderline(isUnderline: boolean): ApiTextPr;
 
     /**
-     * Specifies the alignment which will be applied to the contents of the current run in relation to the
-     * default appearance of the text run:
+     * Specifies the alignment which will be applied to the contents of the run in relation to the default
+     * appearance of the run text:
      * **"baseline"** - the characters in the current text run will be aligned by the default text
      * baseline.
      * **"subscript"** - the characters in the current text run will be aligned below the default text
@@ -26904,8 +26926,8 @@ export namespace Word {
      * Returns the content for the specified footer type.
      *
      * @param sType - Footer type to get the content from.
-     * @param isCreate - Specifies whether to create a new footer or not with the specified footer type in case
-     *   no footer with such a type could be found in the current section.
+     * @param isCreate - Specifies whether to create a new footer or not with the specified footer type in case no footer
+     *   with such a type could be found in the current section.
      * @default isCreate = false
      *
      * @example
@@ -26931,8 +26953,8 @@ export namespace Word {
      * Returns the content for the specified header type.
      *
      * @param sType - Header type to get the content from.
-     * @param isCreate - Specifies whether to create a new header or not with the specified header type in case
-     *   no header with such a type could be found in the current section.
+     * @param isCreate - Specifies whether to create a new header or not with the specified header type in case no header
+     *   with such a type could be found in the current section.
      * @default isCreate = false
      *
      * @example
@@ -27184,8 +27206,8 @@ export namespace Word {
     /**
      * Specifies the distance from the bottom edge of the page to the bottom edge of the footer.
      *
-     * @param nDistance - The distance from the bottom edge of the page to the bottom edge of the footer measured
-     *   in twentieths of a point (1/1440 of an inch).
+     * @param nDistance - The distance from the bottom edge of the page to the bottom edge of the footer measured in
+     *   twentieths of a point (1/1440 of an inch).
      *
      * @example
      * ```js
@@ -29259,8 +29281,8 @@ export namespace Word {
      * @param sNumberingFormat - The possible caption numbering format.
      * @param bBefore - Specifies whether to insert the caption before the current table (true) or after (false)
      *   (after/before the shape if it is placed in the shape).
-     * @param nHeadingLvl - The heading level (used if you want to specify the chapter number).
-     *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
+     * @param nHeadingLvl - The heading level (used if you want to specify the chapter number). <note>If you want to specify
+     *   "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param sCaptionSep - The caption separator (used if you want to specify the chapter number).
      * @default sLabel = "Table"
      * @default bExludeLabel = false
@@ -29347,9 +29369,9 @@ export namespace Word {
      * Adds a comment to all contents of the current table.
      * <note>Please note that this table must be in the document.</note>
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -29401,8 +29423,8 @@ export namespace Word {
     /**
      * Adds a new row to the current table.
      *
-     * @param oCell - The cell after which a new row will be added. If not specified, a new row will
-     *   be added at the end of the table.
+     * @param oCell - The cell after which a new row will be added. If not specified, a new row will be added at the
+     *   end of the table.
      * @param isBefore - Adds a new row before (false) or after (true) the specified cell. If no cell is specified, then
      *   this parameter will be ignored.
      * @default isBefore = false
@@ -29428,12 +29450,11 @@ export namespace Word {
     /**
      * Adds the new rows to the current table.
      *
-     * @param oCell - The cell after which the new rows will be added. If not specified, the new rows will
-     *   be added at the end of the table.
+     * @param oCell - The cell after which the new rows will be added. If not specified, the new rows will be added at
+     *   the end of the table.
      * @param nCount - Count of rows to be added.
      * @param isBefore - Adds the new rows before (false) or after (true) the specified cell. If no cell is specified,
-     *   then
-     *   this parameter will be ignored.
+     *   then this parameter will be ignored.
      * @default isBefore = false
      *
      * @example
@@ -30002,7 +30023,8 @@ export namespace Word {
     /**
      * Searches for a scope of a table object. The search results are a collection of ApiRange objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -30519,8 +30541,8 @@ export namespace Word {
      * the border
      * of all table cells within the parent table (or table row).
      *
-     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in
-     *   twentieths of a point (1/1440 of an inch).
+     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
+     *   a point (1/1440 of an inch).
      *
      * @example
      * ```js
@@ -31312,7 +31334,8 @@ export namespace Word {
      * Searches for a scope of a table cell object. The search results are a collection of ApiRange
      * objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -31481,10 +31504,10 @@ export namespace Word {
      * the border
      * of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin
-     *   will be used, otherwise
-     *   the table cell bottom margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
+     *   a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin will
+     *   be used, otherwise the table cell bottom margin will be overridden with the specified value for
+     *   the current cell.
      *
      * @example
      * ```js
@@ -31510,10 +31533,10 @@ export namespace Word {
      * Specifies an amount of space which will be left between the left extent of the cell contents and
      * the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell left margin
-     *   will be used, otherwise
-     *   the table cell left margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell left margin will be
+     *   used, otherwise the table cell left margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -31539,10 +31562,10 @@ export namespace Word {
      * Specifies an amount of space which will be left between the right extent of the cell contents and
      * the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell right margin
-     *   will be used, otherwise
-     *   the table cell right margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell right margin will be
+     *   used, otherwise the table cell right margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -31568,10 +31591,10 @@ export namespace Word {
      * Specifies an amount of space which will be left between the upper extent of the cell contents
      * and the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space above the upper extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell top margin will
-     *   be used, otherwise
-     *   the table cell top margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space above the upper extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell top margin will be
+     *   used, otherwise the table cell top margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -31731,10 +31754,9 @@ export namespace Word {
     /**
      * Specifies the direction of the text flow for this table cell.
      *
-     * @param sType - The available types of the text direction in the table cell: `"lrtb"`
-     *   - text direction left-to-right moving from top to bottom, `"tbrl"` - text direction
-     *   top-to-bottom moving from right
-     *   to left, `"btlr"` - text direction bottom-to-top moving from left to right.
+     * @param sType - The available types of the text direction in the table cell: `"lrtb"` - text direction
+     *   left-to-right moving from top to bottom, `"tbrl"` - text direction top-to-bottom moving from
+     *   right to left, `"btlr"` - text direction bottom-to-top moving from left to right.
      *
      * @example
      * ```js
@@ -32036,10 +32058,10 @@ export namespace Word {
      * the border
      * of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin
-     *   will be used, otherwise
-     *   the table cell bottom margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
+     *   a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin will
+     *   be used, otherwise the table cell bottom margin will be overridden with the specified value for
+     *   the current cell.
      *
      * @example
      * ```js
@@ -32065,10 +32087,10 @@ export namespace Word {
      * Specifies an amount of space which will be left between the left extent of the cell contents and
      * the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell left margin
-     *   will be used, otherwise
-     *   the table cell left margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell left margin will be
+     *   used, otherwise the table cell left margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -32094,10 +32116,10 @@ export namespace Word {
      * Specifies an amount of space which will be left between the right extent of the cell contents and
      * the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell right margin
-     *   will be used, otherwise
-     *   the table cell right margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell right margin will be
+     *   used, otherwise the table cell right margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -32123,10 +32145,10 @@ export namespace Word {
      * Specifies an amount of space which will be left between the upper extent of the cell contents
      * and the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space above the upper extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell top margin will
-     *   be used, otherwise
-     *   the table cell top margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space above the upper extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell top margin will be
+     *   used, otherwise the table cell top margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -32224,10 +32246,9 @@ export namespace Word {
     /**
      * Specifies the direction of the text flow for this table cell.
      *
-     * @param sType - The available types of the text direction in the table cell: `"lrtb"`
-     *   - text direction left-to-right moving from top to bottom, `"tbrl"` - text direction
-     *   top-to-bottom moving from right
-     *   to left, `"btlr"` - text direction bottom-to-top moving from left to right.
+     * @param sType - The available types of the text direction in the table cell: `"lrtb"` - text direction
+     *   left-to-right moving from top to bottom, `"tbrl"` - text direction top-to-bottom moving from
+     *   right to left, `"btlr"` - text direction bottom-to-top moving from left to right.
      *
      * @example
      * ```js
@@ -32746,8 +32767,8 @@ export namespace Word {
      * the border
      * of all table cells within the parent table (or table row).
      *
-     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in
-     *   twentieths of a point (1/1440 of an inch).
+     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
+     *   a point (1/1440 of an inch).
      *
      * @example
      * ```js
@@ -33274,7 +33295,8 @@ export namespace Word {
     /**
      * Searches for a scope of a table row object. The search results are a collection of ApiRange objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -33874,7 +33896,7 @@ export namespace Word {
     GetCharactersLimit(): number;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiTextForm class.
      *
      * @since 9.0.4
      *
@@ -33989,7 +34011,6 @@ export namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -34009,7 +34030,7 @@ export namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -34278,9 +34299,8 @@ export namespace Word {
     /**
      * Sets the cell width to the applied comb of characters.
      *
-     * @param nCellWidth - The cell width measured in millimeters.
-     *   If this parameter is not specified or equal to 0 or less, then the width will be set
-     *   automatically. Must be >= 1 and <= 558.8.
+     * @param nCellWidth - The cell width measured in millimeters. If this parameter is not specified or equal to 0 or
+     *   less, then the width will be set automatically. Must be >= 1 and <= 558.8.
      * @default nCellWidth = 0
      *
      * @example
@@ -34301,9 +34321,8 @@ export namespace Word {
      * Sets a limit to the text field characters.
      *
      * @param nChars - The maximum number of characters in the text field. If this parameter is equal to -1, no limit
-     *   will be set.
-     *   A limit is required to be set if a comb of characters is applied.
-     *   Maximum value for this parameter is 1000000.
+     *   will be set. A limit is required to be set if a comb of characters is applied. Maximum value for
+     *   this parameter is 1000000.
      *
      * @example
      * ```js
@@ -34410,7 +34429,7 @@ export namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -34485,7 +34504,7 @@ export namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -34562,7 +34581,7 @@ export namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -34626,7 +34645,7 @@ export namespace Word {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -34750,7 +34769,8 @@ export namespace Word {
     GetDoubleStrikeout(): boolean;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -34991,7 +35011,7 @@ export namespace Word {
     GetShd(): Shd | undefined;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -35238,7 +35258,7 @@ export namespace Word {
     SetCaps(isCaps: boolean): ApiTextPr;
 
     /**
-     * Sets the text color to the current text run in the RGB format.
+     * Sets the text color to the current text run.
      *
      * @param color - The text color.
      * @returns this text properties.
@@ -35358,8 +35378,8 @@ export namespace Word {
      * processing
      * the contents of the text run.
      *
-     * @param sLangId - The possible value for this parameter is a language identifier as defined by
-     *   RFC 4646/BCP 47. Example: "en-CA".
+     * @param sLangId - The possible value for this parameter is a language identifier as defined by RFC 4646/BCP 47.
+     *   Example: "en-CA".
      * @returns this text properties.
      *
      * @example
@@ -35410,8 +35430,8 @@ export namespace Word {
      * Specifies an amount by which text is raised or lowered for this run in relation to the default
      * baseline of the surrounding non-positioned text.
      *
-     * @param nPosition - Specifies a positive (raised text) or negative (lowered text)
-     *   measurement in half-points (1/144 of an inch).
+     * @param nPosition - Specifies a positive (raised text) or negative (lowered text) measurement in half-points (1/144
+     *   of an inch).
      * @returns this text properties.
      *
      * @example

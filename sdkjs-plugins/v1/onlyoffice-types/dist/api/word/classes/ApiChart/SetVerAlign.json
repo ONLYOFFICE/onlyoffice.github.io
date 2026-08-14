@@ -1,0 +1,21 @@
+{
+  "description": "Specifies how the floating object will be vertically aligned.",
+  "params": [
+    {
+      "description": "The document element which will be taken as a countdown point for the object vertical alignment.",
+      "name": "sRelativeFrom",
+      "optional": true,
+      "type": "RelFromV"
+    },
+    {
+      "description": "The alingment type which will be used for the object vertical alignment.",
+      "name": "sAlign",
+      "optional": true,
+      "type": "\"top\" | \"bottom\" | \"center\""
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: \"top\" | \"bottom\" | \"center\"): boolean"
+}

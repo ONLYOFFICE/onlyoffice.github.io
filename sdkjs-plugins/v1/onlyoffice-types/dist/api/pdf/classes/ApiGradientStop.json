@@ -1,0 +1,13 @@
+{
+  "description": "Class representing gradient stop.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiGradientStop class.",
+      "params": [],
+      "returns": {
+        "type": "\"gradientStop\""
+      },
+      "signature": "GetClassType(): \"gradientStop\""
+    }
+  }
+}

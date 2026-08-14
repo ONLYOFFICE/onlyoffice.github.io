@@ -1,0 +1,20 @@
+{
+  "description": "Sets the text color to the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetColor/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the font color set to orange.\");\nparagraph.SetColor(255, 111, 61);"
+  ],
+  "params": [
+    {
+      "description": "The text color.",
+      "name": "color",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetColor(color: ApiColor): ApiParagraph",
+  "since": "9.1.0"
+}

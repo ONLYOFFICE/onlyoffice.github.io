@@ -1,0 +1,29 @@
+{
+  "description": "Returns the starting position of one text string within another text string. This function is case-sensitive.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FIND/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FIND(\"line\", \"Online Office\"));"
+  ],
+  "params": [
+    {
+      "description": "The text to find. Use double quotes (empty text) to match the first character in the search string.\rWildcard characters are not allowed.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "The text containing the text to find.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "Specifies the character at which to start the search. The first character in the search string is character number 1.\rIf omitted, this parameter is equal to 1.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "FIND(arg1: ApiRange | ApiName | string, arg2: ApiRange | ApiName | string, arg3?: ApiRange | ApiName | number): number"
+}

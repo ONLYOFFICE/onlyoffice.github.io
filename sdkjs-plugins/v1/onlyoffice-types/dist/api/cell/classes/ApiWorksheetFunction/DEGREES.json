@@ -1,0 +1,18 @@
+{
+  "description": "Converts radians to degrees.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DEGREES/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DEGREES(1.5));"
+  ],
+  "params": [
+    {
+      "description": "The angle in radians to convert.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DEGREES(arg1: ApiRange | ApiName | number): number"
+}

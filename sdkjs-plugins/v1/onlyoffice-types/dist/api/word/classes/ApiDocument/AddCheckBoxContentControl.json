@@ -1,0 +1,16 @@
+{
+  "description": "Adds a new checkbox content control to the document.",
+  "params": [
+    {
+      "description": "The configuration object for the checkbox.",
+      "name": "checkBoxPr",
+      "type": "ContentControlCheckBoxPr"
+    }
+  ],
+  "returns": {
+    "description": "An instance of the ApiInlineLvlSdt object representing the checkbox content control.",
+    "type": "ApiInlineLvlSdt"
+  },
+  "signature": "AddCheckBoxContentControl(checkBoxPr: ContentControlCheckBoxPr): ApiInlineLvlSdt",
+  "since": "9.0.0"
+}

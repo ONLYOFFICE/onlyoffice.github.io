@@ -1,0 +1,87 @@
+{
+  "description": "Class representing a group of drawings.",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiGroup class.",
+      "params": [],
+      "returns": {
+        "type": "\"group\""
+      },
+      "signature": "GetClassType(): \"group\""
+    },
+    "GetParentPage": {
+      "description": "Returns the type of the ApiDrawing class.",
+      "params": [],
+      "returns": {
+        "type": "ApiPage"
+      },
+      "signature": "GetParentPage(): ApiPage"
+    },
+    "GetPosX": {
+      "description": "Gets the x position of the drawing on the page.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosX(): EMU"
+    },
+    "GetPosY": {
+      "description": "Gets the y position of the drawing on the page.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosY(): EMU"
+    },
+    "SetPosX": {
+      "description": "Sets the x position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosX(posX: EMU): boolean"
+    },
+    "SetPosY": {
+      "description": "Sets the y position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosY(posY: EMU): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosition(posX: EMU, posY: EMU): boolean"
+    }
+  }
+}

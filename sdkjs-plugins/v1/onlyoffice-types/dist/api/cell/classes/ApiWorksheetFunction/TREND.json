@@ -1,0 +1,36 @@
+{
+  "description": "Returns numbers in a linear trend matching known data points, using the least squares method.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TREND/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet month = [\"Month\", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nlet sales = [\"Sales\", \"$1,500.00\", \"$1,230.00\", \"$1,700.00\", \"$1,000.00\", \"$980.00\", \"$1,470.00\", \"$1,560.00\", \"$1,640.00\", \"$1,420.00\", \"$1,100.00\"];\n\nfor (let i = 0; i < month.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(month[i]);\n}\nfor (let j = 0; j < sales.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(sales[j]);\n}\n\nworksheet.GetRange(\"C1\").SetValue(\"Trend\");\nlet range1 = worksheet.GetRange(\"B2:B11\");\nlet range2 = worksheet.GetRange(\"A2:A11\");\nworksheet.GetRange(\"C2:C11\").SetValue(func.TREND(range1, range2));"
+  ],
+  "params": [
+    {
+      "description": "A range or array of y-values from the *y = mx + b* equation.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "An optional range or array of x-values from the *y = mx + b* equation, an array of the same size as an array of y-values.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "A range or array of new x-values for which this function will return corresponding y-values.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "A logical value: the constant *b* is calculated normally if this parameter is set to **true** or omitted,\rand *b* is set equal to 0 if the parameter is **false**.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TREND(arg1: ApiRange | ApiName | number[], arg2?: ApiRange | ApiName | number[], arg3?: ApiRange | ApiName | number[], arg4?: ApiRange | ApiName | boolean): number"
+}

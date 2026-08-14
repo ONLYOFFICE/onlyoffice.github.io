@@ -206,8 +206,7 @@ export namespace Forms {
   }
 
   /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their comments.
    *
    * @example
    * ```js
@@ -220,7 +219,7 @@ export namespace Forms {
   }
 
   /**
-   * Record of one comment.
+   * Represents a single comment record.
    *
    * @example
    * ```js
@@ -228,19 +227,19 @@ export namespace Forms {
    * ```
    */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -290,7 +289,7 @@ export namespace Forms {
   export type DashType = "dash" | "dashDot" | "dot" | "lgDash" | "lgDashDot" | "lgDashDotDot" | "solid" | "sysDash" | "sysDashDot" | "sysDashDotDot" | "sysDot";
 
   /**
-   * Date form properties.
+   * The date form properties.
    *
    * @example
    * ```js
@@ -422,13 +421,13 @@ export namespace Forms {
    * ```
    */
   export interface FormPrBase {
-    /** Form key. */
+    /** The form key. */
     key: string;
 
-    /** Form tip text. */
+    /** The form tip text. */
     tip: string;
 
-    /** Form tag. */
+    /** The form tag. */
     tag: string;
 
     /** The role to fill out form. */
@@ -437,7 +436,7 @@ export namespace Forms {
     /** Specifies if the form is required or not. */
     required: boolean;
 
-    /** Form placeholder text. */
+    /** The form placeholder text. */
     placeholder: string;
   }
 
@@ -636,8 +635,7 @@ export namespace Forms {
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
   /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their review changes.
    *
    * @example
    * ```js
@@ -655,7 +653,7 @@ export namespace Forms {
   }
 
   /**
-   * Record of one review change.
+   * Represents a single review change record.
    *
    * @example
    * ```js
@@ -670,16 +668,16 @@ export namespace Forms {
    * ```
    */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
@@ -1056,7 +1054,7 @@ export namespace Forms {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -1676,7 +1674,7 @@ export namespace Forms {
     GetChoiceName(): string;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiCheckBoxForm class.
      *
      * @since 9.0.4
      *
@@ -1829,7 +1827,6 @@ export namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -1849,7 +1846,7 @@ export namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -2153,7 +2150,7 @@ export namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -2238,7 +2235,7 @@ export namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -2315,7 +2312,7 @@ export namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -2347,7 +2344,7 @@ export namespace Forms {
   export interface ApiColor {
   }
 
-  /** Class representing a document combo box / dropdown list. */
+  /** Class representing a document combo box / drop-down list. */
   export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
@@ -2411,7 +2408,7 @@ export namespace Forms {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComboBoxForm class.
      *
      * @since 9.0.4
      *
@@ -2548,7 +2545,6 @@ export namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -2568,7 +2564,7 @@ export namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -2639,7 +2635,7 @@ export namespace Forms {
     GetWrapperShape(): ApiShape;
 
     /**
-     * Checks if the combo box text can be edited. If it is not editable, then this form is a dropdown
+     * Checks if the combo box text can be edited. If it is not editable, then this form is a drop-down
      * list.
      *
      * @example
@@ -2832,7 +2828,7 @@ export namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -2889,7 +2885,7 @@ export namespace Forms {
 
     /**
      * Sets the text to the current combo box.
-     * Available only for editable combo box forms.*
+     * *Available only for editable combo box forms.*
      *
      * @param sText - The combo box text.
      *
@@ -2908,7 +2904,7 @@ export namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -2986,7 +2982,7 @@ export namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -3101,7 +3097,7 @@ export namespace Forms {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComplexForm class.
      *
      * @since 9.0.4
      *
@@ -3220,7 +3216,6 @@ export namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -3240,7 +3235,7 @@ export namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -3448,7 +3443,7 @@ export namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -3505,7 +3500,7 @@ export namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -3582,7 +3577,7 @@ export namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -3713,7 +3708,7 @@ export namespace Forms {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiDateForm class.
      *
      * @since 9.0.4
      *
@@ -3877,7 +3872,6 @@ export namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -3897,7 +3891,7 @@ export namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -4183,7 +4177,7 @@ export namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -4240,7 +4234,7 @@ export namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -4340,7 +4334,7 @@ export namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -4671,7 +4665,6 @@ export namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -4691,7 +4684,7 @@ export namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -4899,7 +4892,7 @@ export namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -4956,7 +4949,7 @@ export namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -5033,7 +5026,7 @@ export namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -5281,7 +5274,7 @@ export namespace Forms {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiPictureForm class.
      *
      * @since 9.0.4
      *
@@ -5461,7 +5454,6 @@ export namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -5481,7 +5473,7 @@ export namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -5807,7 +5799,7 @@ export namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -5911,7 +5903,7 @@ export namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -5988,7 +5980,7 @@ export namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -6437,7 +6429,7 @@ export namespace Forms {
     GetCharactersLimit(): number;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiTextForm class.
      *
      * @since 9.0.4
      *
@@ -6552,7 +6544,6 @@ export namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -6572,7 +6563,7 @@ export namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -6841,9 +6832,8 @@ export namespace Forms {
     /**
      * Sets the cell width to the applied comb of characters.
      *
-     * @param nCellWidth - The cell width measured in millimeters.
-     *   If this parameter is not specified or equal to 0 or less, then the width will be set
-     *   automatically. Must be >= 1 and <= 558.8.
+     * @param nCellWidth - The cell width measured in millimeters. If this parameter is not specified or equal to 0 or
+     *   less, then the width will be set automatically. Must be >= 1 and <= 558.8.
      * @default nCellWidth = 0
      *
      * @example
@@ -6864,9 +6854,8 @@ export namespace Forms {
      * Sets a limit to the text field characters.
      *
      * @param nChars - The maximum number of characters in the text field. If this parameter is equal to -1, no limit
-     *   will be set.
-     *   A limit is required to be set if a comb of characters is applied.
-     *   Maximum value for this parameter is 1000000.
+     *   will be set. A limit is required to be set if a comb of characters is applied. Maximum value for
+     *   this parameter is 1000000.
      *
      * @example
      * ```js
@@ -6973,7 +6962,7 @@ export namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -7048,7 +7037,7 @@ export namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -7125,7 +7114,7 @@ export namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js

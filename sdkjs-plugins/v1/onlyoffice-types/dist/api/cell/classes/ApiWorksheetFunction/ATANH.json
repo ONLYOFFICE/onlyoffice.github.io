@@ -1,0 +1,18 @@
+{
+  "description": "Returns the inverse hyperbolic tangent of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ATANH/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ATANH(0.5));"
+  ],
+  "params": [
+    {
+      "description": "Any real number between -1 and 1 excluding -1 and 1.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ATANH(arg1: ApiRange | ApiName | number): number"
+}

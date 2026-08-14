@@ -1,0 +1,8 @@
+{
+  "description": "Returns a type of the chart object using the chart type names from the {@link ChartType} enumeration.",
+  "params": [],
+  "returns": {
+    "type": "ChartType"
+  },
+  "signature": "GetType(): ChartType"
+}

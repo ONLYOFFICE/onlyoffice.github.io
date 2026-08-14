@@ -1,0 +1,30 @@
+{
+  "description": "Rounds a number to the specified number of decimals and returns the result as text with or without commas.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FIXED/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FIXED(1234.9, 1, false));"
+  ],
+  "params": [
+    {
+      "description": "The number to round and convert to text.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of digits to the right of the decimal point. If omitted, the function will assume it to be 2.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "Specifies whether do display commas in the returned text (**false** or omitted) or not (**true**).",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "FIXED(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | boolean): string"
+}

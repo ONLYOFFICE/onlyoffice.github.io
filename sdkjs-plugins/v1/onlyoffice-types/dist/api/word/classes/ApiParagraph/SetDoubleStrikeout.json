@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that the contents of this paragraph are displayed with two horizontal lines through each character displayed on the line.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetDoubleStrikeout/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text struck out with two lines.\");\nparagraph.SetDoubleStrikeout(true);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed double struck through.",
+      "name": "isDoubleStrikeout",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiParagraph"
+}

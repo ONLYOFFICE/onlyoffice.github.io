@@ -1,0 +1,40 @@
+{
+  "description": "Class representing a Scheme Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiSchemeColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSchemeColor/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet schemeColor = Api.CreateSchemeColor(\"dk1\");\nlet fill = Api.CreateSolidFill(schemeColor);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"curvedUpArrow\", 5930900, 595605, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet classType = schemeColor.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"schemeColor\""
+      },
+      "signature": "GetClassType(): \"schemeColor\""
+    },
+    "GetRGB": {
+      "description": "Returns a color value in RGB format.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRGB(): number"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiSchemeColor object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSchemeColor/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet schemeColor = Api.CreateSchemeColor(\"dk1\");\nlet json = schemeColor.ToJSON();\nlet schemeColorFromJSON = Api.FromJSON(json);\nlet fill = Api.CreateSolidFill(schemeColorFromJSON);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"curvedUpArrow\", 5930900, 595605, fill, stroke);\nparagraph.AddDrawing(drawing);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "description": "Returns the inverse of the (right-tailed) F probability distribution: if p = F.DIST.RT(x,...), then F.INV.RT(p,...) = x.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/F_INV_RT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.F_INV_RT(0.01, 6, 4));"
+  ],
+  "params": [
+    {
+      "description": "A probability associated with the F cumulative distribution, a number between 0 and 1 inclusive.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The numerator degrees of freedom, a number between 1 and 10^10, excluding 10^10.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The denominator degrees of freedom, a number between 1 and 10^10, excluding 10^10.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "F_INV_RT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

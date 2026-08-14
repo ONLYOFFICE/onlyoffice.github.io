@@ -1,0 +1,9 @@
+{
+  "description": "Returns an internal ID of the current paragraph.",
+  "params": [],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetInternalId(): string",
+  "since": "9.2.0"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Returns the square root of (number * pi).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SQRTPI/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SQRTPI(5));"
+  ],
+  "params": [
+    {
+      "description": "The number by which pi is multiplied.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SQRTPI(arg1: ApiRange | ApiName | number): number"
+}

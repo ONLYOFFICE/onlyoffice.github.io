@@ -1,0 +1,8 @@
+{
+  "description": "Returns the drawing inner contents where a paragraph or text runs can be inserted if it exists.",
+  "params": [],
+  "returns": {
+    "type": "ApiDocumentContent"
+  },
+  "signature": "GetContent(): ApiDocumentContent"
+}

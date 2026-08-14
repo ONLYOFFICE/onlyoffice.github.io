@@ -1,0 +1,14 @@
+{
+  "description": "Returns the lock value for the specified lock type of the current drawing.",
+  "params": [
+    {
+      "description": "Lock type in the string format.",
+      "name": "sType",
+      "type": "DrawingLockType"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "GetLockValue(sType: DrawingLockType): boolean"
+}

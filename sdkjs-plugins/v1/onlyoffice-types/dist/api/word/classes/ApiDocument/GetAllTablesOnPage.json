@@ -1,0 +1,18 @@
+{
+  "description": "Returns a collection of tables on a given absolute page.\n<note>This method can be a little bit slow, because it runs the document calculation\nprocess to arrange tables on the specified page.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetAllTablesOnPage/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet tableStyle = doc.GetStyle(\"Bordered\");\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 50);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet tables = doc.GetAllTablesOnPage(0);\nlet row1 = tables[0].GetRow(0);\nrow1.Remove();"
+  ],
+  "params": [
+    {
+      "description": "The page index.",
+      "name": "nPage",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiTable[]"
+  },
+  "signature": "GetAllTablesOnPage(nPage: number): ApiTable[]"
+}

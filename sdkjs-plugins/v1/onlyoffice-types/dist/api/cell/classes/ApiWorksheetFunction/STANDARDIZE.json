@@ -1,0 +1,28 @@
+{
+  "description": "Returns a normalised value from a distribution characterised by a mean and standard deviation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/STANDARDIZE/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet valueArr = [5, -2, 10];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\n// method params\nlet x = worksheet.GetRange(\"A1\");\nlet mean = worksheet.GetRange(\"A2\");\nlet stdDev = worksheet.GetRange(\"A3\");\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.STANDARDIZE(x, mean, stdDev);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value to normalize.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The arithmetic mean of the distribution.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The standard deviation of the distribution, a positive number.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "STANDARDIZE(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

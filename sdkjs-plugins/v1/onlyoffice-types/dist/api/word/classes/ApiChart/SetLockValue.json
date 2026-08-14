@@ -1,0 +1,19 @@
+{
+  "description": "Sets the lock value to the specified lock type of the current drawing.",
+  "params": [
+    {
+      "description": "Lock type in the string format.",
+      "name": "sType",
+      "type": "DrawingLockType"
+    },
+    {
+      "description": "Specifies if the specified lock is applied to the current drawing.",
+      "name": "bValue",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetLockValue(sType: DrawingLockType, bValue: boolean): boolean"
+}

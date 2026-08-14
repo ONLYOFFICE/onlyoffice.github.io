@@ -1,0 +1,10 @@
+{
+  "description": "Returns the keep lines value of the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "Returns _true_ if all lines of the paragraph are kept on a single page,\r_false_ if they are not, or _undefined_ if the value is not set.",
+    "type": "boolean | undefined"
+  },
+  "signature": "GetKeepLines(): boolean | undefined",
+  "since": "9.4.0"
+}

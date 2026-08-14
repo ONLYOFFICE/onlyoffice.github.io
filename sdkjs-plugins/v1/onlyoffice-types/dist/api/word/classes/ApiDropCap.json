@@ -1,0 +1,120 @@
+{
+  "description": "Class representing a drop cap. A drop cap is a large initial letter that is split off from a paragraph into a\nseparate framed paragraph.",
+  "methods": {
+    "Clear": {
+      "description": "Removes the drop cap, merging the drop cap letter back into the paragraph text.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Clear(): boolean",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiDropCap class.",
+      "params": [],
+      "returns": {
+        "type": "\"dropCap\""
+      },
+      "signature": "GetClassType(): \"dropCap\"",
+      "since": "9.5.0"
+    },
+    "GetDistanceFromText": {
+      "description": "Returns the distance between the drop cap and the paragraph text measured in twentieths of a point (1/1440 of\nan inch).",
+      "params": [],
+      "returns": {
+        "type": "twips"
+      },
+      "signature": "GetDistanceFromText(): twips",
+      "since": "9.5.0"
+    },
+    "GetLinesToDrop": {
+      "description": "Returns the number of lines that the drop cap occupies.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetLinesToDrop(): number",
+      "since": "9.5.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent paragraph that holds the drop cap letter.",
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph"
+      },
+      "signature": "GetParent(): ApiParagraph",
+      "since": "9.5.0"
+    },
+    "GetPosition": {
+      "description": "Returns the drop cap type.",
+      "params": [],
+      "returns": {
+        "type": "\"none\" | \"drop\" | \"margin\""
+      },
+      "signature": "GetPosition(): \"none\" | \"drop\" | \"margin\"",
+      "since": "9.5.0"
+    },
+    "SetDistanceFromText": {
+      "description": "Sets the distance between the drop cap and the paragraph text measured in twentieths of a point (1/1440 of an\ninch).",
+      "params": [
+        {
+          "description": "The distance between the drop cap and the paragraph text. Must be a non-negative number.",
+          "name": "distance",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "ApiDropCap"
+      },
+      "signature": "SetDistanceFromText(distance: twips): ApiDropCap",
+      "since": "9.5.0"
+    },
+    "SetFontFamily": {
+      "description": "Sets the font family of the drop cap letter.",
+      "params": [
+        {
+          "description": "The font family name used for the drop cap letter.",
+          "name": "fontFamily",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiDropCap"
+      },
+      "signature": "SetFontFamily(fontFamily: string): ApiDropCap",
+      "since": "9.5.0"
+    },
+    "SetLinesToDrop": {
+      "description": "Sets the number of lines that the drop cap occupies. The drop cap letter is resized accordingly.",
+      "params": [
+        {
+          "description": "The number of lines that the drop cap occupies. Must be a number greater than 0.",
+          "name": "lines",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiDropCap"
+      },
+      "signature": "SetLinesToDrop(lines: number): ApiDropCap",
+      "since": "9.5.0"
+    },
+    "SetPosition": {
+      "description": "Sets the drop cap type.",
+      "params": [
+        {
+          "description": "The drop cap type: \"none\" removes the drop cap, \"drop\" places\rit within the text, \"margin\" places it in the margin.",
+          "name": "position",
+          "type": "\"none\" | \"drop\" | \"margin\""
+        }
+      ],
+      "returns": {
+        "description": "Returns null if the drop cap was removed with \"none\".",
+        "type": "ApiDropCap"
+      },
+      "signature": "SetPosition(position: \"none\" | \"drop\" | \"margin\"): ApiDropCap",
+      "since": "9.5.0"
+    }
+  }
+}

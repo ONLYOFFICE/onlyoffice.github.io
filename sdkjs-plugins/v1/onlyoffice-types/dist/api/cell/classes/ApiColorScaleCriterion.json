@@ -1,0 +1,90 @@
+{
+  "description": "Class representing single criterion in a color scale conditional formatting rule.",
+  "methods": {
+    "GetColor": {
+      "description": "Returns the format color of the color scale criterion.",
+      "params": [],
+      "returns": {
+        "description": "An ApiColor object representing the criterion's color, or `null` if no color is set.",
+        "type": "ApiColor | null"
+      },
+      "signature": "GetColor(): ApiColor | null",
+      "since": "9.1.0"
+    },
+    "GetIndex": {
+      "description": "Returns the index indicating which threshold the criterion represents.",
+      "params": [],
+      "returns": {
+        "description": "Returns 0 for minimum threshold, 1 for midpoint (3-color scale) or maximum (2-color scale), and 2 for maximum threshold (3-color scale only).",
+        "type": "number"
+      },
+      "signature": "GetIndex(): number",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the type of the color scale criterion.",
+      "params": [],
+      "returns": {
+        "description": "The type of the color scale criterion.",
+        "type": "XlConditionValueTypes | null"
+      },
+      "signature": "GetType(): XlConditionValueTypes | null",
+      "since": "9.1.0"
+    },
+    "GetValue": {
+      "description": "Returns the value of the color scale criterion.",
+      "params": [],
+      "returns": {
+        "description": "The value of the color scale criterion, or `null` if not set.",
+        "type": "string | null"
+      },
+      "signature": "GetValue(): string | null",
+      "since": "9.1.0"
+    },
+    "SetColor": {
+      "description": "Sets the format color for the color scale criterion.",
+      "params": [
+        {
+          "description": "The ApiColor object specifying the color.",
+          "name": "oColor",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetColor(oColor: ApiColor): void",
+      "since": "9.1.0"
+    },
+    "SetType": {
+      "description": "Sets the type for the color scale criterion.",
+      "params": [
+        {
+          "description": "The type of the color scale criterion.",
+          "name": "type",
+          "type": "XlConditionValueTypes"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetType(type: XlConditionValueTypes): void",
+      "since": "9.1.0"
+    },
+    "SetValue": {
+      "description": "Sets the value for the color scale criterion.",
+      "params": [
+        {
+          "description": "The value of the color scale criterion.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetValue(value: string): void",
+      "since": "9.1.0"
+    }
+  }
+}

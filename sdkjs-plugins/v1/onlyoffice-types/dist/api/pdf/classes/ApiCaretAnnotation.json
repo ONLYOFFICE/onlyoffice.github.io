@@ -1,0 +1,38 @@
+{
+  "description": "Class representing a caret annotation.",
+  "extends": [
+    "ApiBaseMarkupAnnotation"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiCaretAnnotation class.",
+      "params": [],
+      "returns": {
+        "type": "\"caretAnnot\""
+      },
+      "signature": "GetClassType(): \"caretAnnot\""
+    },
+    "GetQuads": {
+      "description": "Gets quads from current markup annotation.",
+      "params": [],
+      "returns": {
+        "type": "Quad[]"
+      },
+      "signature": "GetQuads(): Quad[]"
+    },
+    "SetQuads": {
+      "description": "Sets quads to current markup annotation.",
+      "params": [
+        {
+          "description": "An array of quadrilaterals defining the highlighted regions.",
+          "name": "quads",
+          "type": "Quad[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetQuads(quads: Quad[]): boolean"
+    }
+  }
+}

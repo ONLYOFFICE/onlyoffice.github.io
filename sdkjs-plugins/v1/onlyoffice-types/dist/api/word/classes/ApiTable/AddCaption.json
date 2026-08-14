@@ -1,0 +1,54 @@
+{
+  "description": "Adds a caption paragraph after (or before) the current table.\n<note>Please note that the current table must be in the document (not in the footer/header).\nAnd if the current table is placed in a shape, then a caption is added after (or before) the parent shape.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddCaption/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text in the first cell.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\ntable.AddCaption(\"\", \"Table\", false, \"Arabic\", false, undefined, \"hyphen\");"
+  ],
+  "params": [
+    {
+      "description": "The additional text.",
+      "name": "sAdditional",
+      "type": "string"
+    },
+    {
+      "description": "The caption label.",
+      "name": "sLabel",
+      "optional": true,
+      "type": "CaptionLabel | string"
+    },
+    {
+      "description": "Specifies whether to exclude the label from the caption.",
+      "name": "bExludeLabel",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "The possible caption numbering format.",
+      "name": "sNumberingFormat",
+      "optional": true,
+      "type": "CaptionNumberingFormat"
+    },
+    {
+      "description": "Specifies whether to insert the caption before the current table (true) or after (false) (after/before the shape if it is placed in the shape).",
+      "name": "bBefore",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "The heading level (used if you want to specify the chapter number).\r<note>If you want to specify \"Heading 1\", then nHeadingLvl === 0 and etc.</note>",
+      "name": "nHeadingLvl",
+      "optional": true,
+      "type": "number"
+    },
+    {
+      "description": "The caption separator (used if you want to specify the chapter number).",
+      "name": "sCaptionSep",
+      "optional": true,
+      "type": "CaptionSep"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "AddCaption(sAdditional: string, sLabel?: CaptionLabel | string, bExludeLabel?: boolean, sNumberingFormat?: CaptionNumberingFormat, bBefore?: boolean, nHeadingLvl?: number, sCaptionSep?: CaptionSep): boolean"
+}

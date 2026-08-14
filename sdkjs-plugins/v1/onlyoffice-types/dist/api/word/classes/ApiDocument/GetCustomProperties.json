@@ -1,0 +1,9 @@
+{
+  "description": "Retrieves the custom properties from the document.",
+  "params": [],
+  "returns": {
+    "type": "ApiCustomProperties"
+  },
+  "signature": "GetCustomProperties(): ApiCustomProperties",
+  "since": "9.0.0"
+}

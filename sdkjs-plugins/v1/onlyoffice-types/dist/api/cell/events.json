@@ -1,0 +1,11 @@
+{
+  "onChangeCurrentSheet": {
+    "description": "The function called when the current sheet has changed.",
+    "params": [
+      {
+        "name": "index",
+        "type": "number"
+      }
+    ]
+  }
+}

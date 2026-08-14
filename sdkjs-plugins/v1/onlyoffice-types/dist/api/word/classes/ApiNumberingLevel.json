@@ -1,0 +1,190 @@
+{
+  "description": "Class representing a reference to a specified level of the numbering.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiNumberingLevel class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"bullet\");\nfor (let lvl = 0; lvl < 8; ++lvl) {\n\tlet numLvl = numbering.GetLevel(lvl);\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"Default bullet lvl \" + (lvl + 1));\n\tparagraph.SetNumbering(numLvl);\n\tparagraph.SetContextualSpacing(true);\n\tdoc.Push(paragraph);\n}\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class Type = \" + numbering.GetLevel(0).GetClassType());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"numberingLevel\""
+      },
+      "signature": "GetClassType(): \"numberingLevel\""
+    },
+    "GetLevelIndex": {
+      "description": "Returns the level index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/GetLevelIndex/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nlet numLvl1 = numbering.GetLevel(1);\nnumLvl1.SetRestart(false);\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the first element of a parent numbered list which starts with '1'\");\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the first element of a child numbered list which starts with 'a'\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the second element of a child numbered list which starts with 'b'\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nlet levelIndex = numLvl.GetLevelIndex();\nparagraph.AddText(\"Level index for the parent numbered list = \" + levelIndex);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nlevelIndex = numLvl1.GetLevelIndex();\nparagraph.AddText(\"Level index for the element of a child numbered list  = \" + levelIndex);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetLevelIndex(): number"
+    },
+    "GetNumbering": {
+      "description": "Returns the numbering definition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/GetNumbering/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nlet numLvl1 = numbering.GetLevel(1);\nnumLvl1.SetRestart(false);\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the first element of a parent numbered list which starts with '1'\");\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the first element of a child numbered list which starts with 'a'\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the second element of a child numbered list which starts with 'b'\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph without a numbering. \");\nparagraph.AddText(\"It can be inserted between the numbered elements.\");\ndoc.Push(paragraph);\nnumbering = numLvl.GetNumbering();\nlet numLvl2 = numbering.GetLevel(numLvl.GetLevelIndex());\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second element of a parent numbered list which starts with '2'\");\nparagraph.SetNumbering(numLvl2);\nparagraph.SetContextualSpacing(true);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiNumbering"
+      },
+      "signature": "GetNumbering(): ApiNumbering"
+    },
+    "GetParaPr": {
+      "description": "Returns the paragraph properties which are applied to any numbered paragraph that references the given numbering definition and numbering level.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/GetParaPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nlet paraPr = numLvl.GetParaPr();\nparaPr.SetSpacingLine(480, \"auto\");\nparaPr.SetJc(\"both\");\nparaPr.SetIndFirstLine(720);\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the first element of a parent numbered list which starts with '1'\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second element of a parent numbered list which starts with '2'\");\nparagraph.SetNumbering(numLvl);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiParaPr"
+      },
+      "signature": "GetParaPr(): ApiParaPr"
+    },
+    "GetTextPr": {
+      "description": "Returns the text properties which will be applied to the text in the current numbering level itself, not to the text in the subsequent paragraph.\n<note>To change the text style of the paragraph, a style must be applied to it using the {@link ApiRun#SetStyle} method.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/GetTextPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nlet textPr = numLvl.GetTextPr();\ntextPr.SetBold(true);\ntextPr.SetFontFamily(\"Calibri\");\ntextPr.SetFontSize(28);\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the first element of a numbered list which starts with '1'\");\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the second element of a numbered list which starts with '2'\");\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "GetTextPr(): ApiTextPr"
+    },
+    "LinkWithStyle": {
+      "description": "Links the specified paragraph style with the current numbering level.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/LinkWithStyle/",
+      "examples": [
+        "var oDocument = Api.GetDocument();\nlet aHeadings = [];\nfor (var nLvl = 0; nLvl < 3; ++nLvl) {\n    var oHeadingLvlStyle = oDocument.CreateStyle(\"Heading \" + (nLvl + 1));\n    var oTextPr = oHeadingLvlStyle.GetTextPr();\n    oTextPr.SetBold(true);\n    oTextPr.SetColor(nLvl*125, 0, 0, false);\n    aHeadings.push(oHeadingLvlStyle);\n}\nvar oNumbering = oDocument.CreateNumbering(\"numbered\");\nvar oNumLvl, sFormatString;\nfor (var nLvl = 0; nLvl < 3; ++nLvl) {\n    oNumLvl = oNumbering.GetLevel(nLvl);\n    sFormatString = \"\";\n    for (var nFSLvl = 1; nFSLvl <= (nLvl + 1); ++nFSLvl) {\n        sFormatString += \"%\" + nFSLvl + \".\";\n    }\n        \n    oNumLvl.SetCustomType(\"decimal\", sFormatString, \"left\");\n    oNumLvl.LinkWithStyle(aHeadings[nLvl]);\n\n    let oPara = Api.CreateParagraph();\n    oPara.SetStyle(aHeadings[nLvl]);\n    oPara.AddText(\"This paragraph with style: \" + aHeadings[nLvl].GetName());\n    oDocument.Push(oPara);\n}"
+      ],
+      "params": [
+        {
+          "description": "The paragraph style.",
+          "name": "oStyle",
+          "type": "ApiStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "LinkWithStyle(oStyle: ApiStyle): boolean",
+      "since": "8.3.0"
+    },
+    "SetCustomType": {
+      "description": "Sets your own customized numbering type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/SetCustomType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nfor (let lvl = 0; lvl < 8; ++lvl) {\n\tlet numLvl = numbering.GetLevel(lvl);\n\tlet formatString = \"\";\n\tfor (let nTempLvl = 1; nTempLvl <= (lvl + 1); ++nTempLvl) formatString += \"%\" + nTempLvl + \".\";\n\tnumLvl.SetCustomType(\"lowerRoman\", formatString, \"left\");\n\tnumLvl.SetStart(lvl + 1);\n\tnumLvl.SetSuff(\"space\");\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"Custom numbered lvl \" + (lvl + 1));\n\tparagraph.SetNumbering(numLvl);\n\tparagraph.SetContextualSpacing(true);\n\tdoc.Push(paragraph);\n}"
+      ],
+      "params": [
+        {
+          "description": "The custom numbering type used for the current numbering definition.",
+          "name": "sType",
+          "type": "\"none\" | \"bullet\" | \"decimal\" | \"lowerRoman\" | \"upperRoman\" | \"lowerLetter\" | \"upperLetter\" | \"decimalZero\""
+        },
+        {
+          "description": "Any text in this parameter will be taken as literal text to be repeated in each instance of this numbering level, except for any use of the percent symbol (%) followed by a number, which will be used to indicate the one-based index of the number to be used at this level. Any number of a level higher than this level will be ignored.",
+          "name": "sTextFormatString",
+          "type": "string"
+        },
+        {
+          "description": "Type of justification applied to the text run in the current numbering level.",
+          "name": "sAlign",
+          "type": "\"left\" | \"right\" | \"center\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCustomType(sType: \"none\" | \"bullet\" | \"decimal\" | \"lowerRoman\" | \"upperRoman\" | \"lowerLetter\" | \"upperLetter\" | \"decimalZero\", sTextFormatString: string, sAlign: \"left\" | \"right\" | \"center\"): boolean"
+    },
+    "SetRestart": {
+      "description": "Specifies a one-based index which determines when a numbering level should restart to its starting value. A numbering level restarts when an instance of the specified numbering level which is higher (earlier than this level) is used in the given document contents. By default this value is true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/SetRestart/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nlet numLvl1 = numbering.GetLevel(1);\nnumLvl1.SetRestart(false);\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the first element of a parent numbered list which starts with '1'\");\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the first element of a child numbered list which starts with 'a'\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the second element of a child numbered list which starts with 'b'\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the second element of a parent numbered list which starts with '2'\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the third element of a child numbered list which starts with 'c'\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the fourth element of a child numbered list which starts with 'd'\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The true value means that a numbering level will be restarted to its starting value.",
+          "name": "isRestart",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRestart(isRestart: boolean): boolean"
+    },
+    "SetStart": {
+      "description": "Specifies the starting value for the numbering used by the parent numbering level within a given numbering level definition. By default this value is 1.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/SetStart/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nlet numLvl1 = numbering.GetLevel(1);\nnumLvl1.SetStart(5);\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the first element of a parent numbered list which starts with '1'\");\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl1);\nparagraph.AddText(\"This is the first element of a child numbered list which starts with 'e'\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The starting value for the numbering used by the parent numbering level.",
+          "name": "nStart",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetStart(nStart: number): boolean"
+    },
+    "SetSuff": {
+      "description": "Specifies the content which will be added between the given numbering level text and the text of every numbered paragraph which references that numbering level. By default this value is \"tab\".",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/SetSuff/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nnumLvl.SetCustomType(\"decimalZero\", \"repeating text %1\", \"left\");\nnumLvl.SetSuff(\"space\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the first element of a numbered list using custom text with numbering\");\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the second element of a numbered list using custom text with numbering\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The content added between the numbering level text and the text in the numbered paragraph.",
+          "name": "sType",
+          "type": "\"space\" | \"tab\" | \"none\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSuff(sType: \"space\" | \"tab\" | \"none\"): boolean"
+    },
+    "SetTemplateType": {
+      "description": "Sets one of the existing predefined numbering templates.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/Methods/SetTemplateType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"numbered\");\nlet numLvl = numbering.GetLevel(0);\nnumLvl.SetTemplateType(\"A.\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the first element of an A.-B.-C. numbered list\");\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the second element of an A.-B.-C. numbered list\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetNumbering(numLvl);\nparagraph.AddText(\"This is the third element of an A.-B.-C. numbered list\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The predefined numbering template.",
+          "name": "sType",
+          "type": "\"none\" | \"bullet\" | \"1)\" | \"1.\" | \"I.\" | \"A.\" | \"a)\" | \"a.\" | \"i.\""
+        },
+        {
+          "description": "The symbol used for the list numbering. This parameter has the meaning only if the predefined numbering template is \"bullet\".",
+          "name": "sSymbol",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTemplateType(sType: \"none\" | \"bullet\" | \"1)\" | \"1.\" | \"I.\" | \"A.\" | \"a)\" | \"a.\" | \"i.\", sSymbol?: string): boolean"
+    }
+  }
+}

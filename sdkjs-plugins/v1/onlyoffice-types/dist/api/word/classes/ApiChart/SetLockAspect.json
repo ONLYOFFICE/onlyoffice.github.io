@@ -1,0 +1,16 @@
+{
+  "description": "Sets whether the aspect ratio of the drawing is locked.",
+  "params": [
+    {
+      "description": "Specifies whether the aspect ratio of this drawing is locked.",
+      "name": "bAspect",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "Returns `true` if the lock aspect was successfully set, otherwise returns `false`.",
+    "type": "boolean"
+  },
+  "signature": "SetLockAspect(bAspect: boolean): boolean",
+  "since": "9.5.0"
+}

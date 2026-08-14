@@ -1,0 +1,6 @@
+{
+  "description": "Class representing a document combo box / drop-down list.",
+  "extends": [
+    "ApiFormBase"
+  ]
+}

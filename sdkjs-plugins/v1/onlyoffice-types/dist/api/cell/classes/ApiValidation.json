@@ -1,0 +1,314 @@
+{
+  "description": "Class representing data validation.",
+  "methods": {
+    "Add": {
+      "description": "Adds data validation to the specified range.",
+      "params": [
+        {
+          "description": "The validation type.",
+          "name": "Type",
+          "type": "ValidationType"
+        },
+        {
+          "description": "The validation alert style.",
+          "name": "AlertStyle",
+          "optional": true,
+          "type": "ValidationAlertStyle"
+        },
+        {
+          "description": "The data validation operator.",
+          "name": "Operator",
+          "optional": true,
+          "type": "ValidationOperator"
+        },
+        {
+          "description": "The first formula in the data validation.",
+          "name": "Formula1",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        },
+        {
+          "description": "The second formula in the data validation.",
+          "name": "Formula2",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        }
+      ],
+      "returns": {
+        "type": "ApiValidation | null"
+      },
+      "signature": "Add(Type: ValidationType, AlertStyle?: ValidationAlertStyle, Operator?: ValidationOperator, Formula1?: string | number | ApiRange, Formula2?: string | number | ApiRange): ApiValidation | null"
+    },
+    "Delete": {
+      "description": "Deletes the object.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Delete(): void"
+    },
+    "GetAlertStyle": {
+      "description": "Returns the validation alert style.",
+      "params": [],
+      "returns": {
+        "type": "ValidationAlertStyle"
+      },
+      "signature": "GetAlertStyle(): ValidationAlertStyle"
+    },
+    "GetErrorMessage": {
+      "description": "Returns the data validation error message.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetErrorMessage(): string"
+    },
+    "GetErrorTitle": {
+      "description": "Returns the title of the data-validation error dialog box.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetErrorTitle(): string"
+    },
+    "GetFormula1": {
+      "description": "Returns the first formula in the data validation.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFormula1(): string"
+    },
+    "GetFormula2": {
+      "description": "Returns the second formula in the data validation.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFormula2(): string"
+    },
+    "GetIgnoreBlank": {
+      "description": "Returns whether blank values are permitted by the range data validation.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetIgnoreBlank(): boolean"
+    },
+    "GetInCellDropdown": {
+      "description": "Returns whether data validation displays a drop-down list that contains acceptable values.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetInCellDropdown(): boolean"
+    },
+    "GetInputMessage": {
+      "description": "Returns the data validation input message.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInputMessage(): string"
+    },
+    "GetInputTitle": {
+      "description": "Returns the title of the data-validation input dialog box.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInputTitle(): string"
+    },
+    "GetOperator": {
+      "description": "Returns the data validation operator.",
+      "params": [],
+      "returns": {
+        "type": "ValidationOperator"
+      },
+      "signature": "GetOperator(): ValidationOperator"
+    },
+    "GetParent": {
+      "description": "Returns the parent range object.",
+      "params": [],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetParent(): ApiRange"
+    },
+    "GetShowError": {
+      "description": "Returns whether the data validation error message will be displayed.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetShowError(): boolean"
+    },
+    "GetShowInput": {
+      "description": "Returns whether the data validation input message will be displayed.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetShowInput(): boolean"
+    },
+    "GetType": {
+      "description": "Returns the validation type.",
+      "params": [],
+      "returns": {
+        "type": "ValidationType"
+      },
+      "signature": "GetType(): ValidationType"
+    },
+    "Modify": {
+      "description": "Modifies data validation for a range.",
+      "params": [
+        {
+          "description": "The validation type.",
+          "name": "Type",
+          "optional": true,
+          "type": "ValidationType"
+        },
+        {
+          "description": "The validation alert style.",
+          "name": "AlertStyle",
+          "optional": true,
+          "type": "ValidationAlertStyle"
+        },
+        {
+          "description": "The data validation operator.",
+          "name": "Operator",
+          "optional": true,
+          "type": "ValidationOperator"
+        },
+        {
+          "description": "The first formula in the data validation.",
+          "name": "Formula1",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        },
+        {
+          "description": "The second formula in the data validation.",
+          "name": "Formula2",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        }
+      ],
+      "returns": {
+        "type": "ApiValidation | null"
+      },
+      "signature": "Modify(Type?: ValidationType, AlertStyle?: ValidationAlertStyle, Operator?: ValidationOperator, Formula1?: string | number | ApiRange, Formula2?: string | number | ApiRange): ApiValidation | null"
+    },
+    "SetErrorMessage": {
+      "description": "Sets the data validation error message.",
+      "params": [
+        {
+          "description": "The error message.",
+          "name": "ErrorMessage",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetErrorMessage(ErrorMessage: string): void"
+    },
+    "SetErrorTitle": {
+      "description": "Sets the title of the data-validation error dialog box.",
+      "params": [
+        {
+          "description": "The error dialog title.",
+          "name": "ErrorTitle",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetErrorTitle(ErrorTitle: string): void"
+    },
+    "SetIgnoreBlank": {
+      "description": "Sets whether blank values are permitted by the range data validation.",
+      "params": [
+        {
+          "description": "Specifies whether blank values are permitted.",
+          "name": "IgnoreBlank",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetIgnoreBlank(IgnoreBlank: boolean): void"
+    },
+    "SetInCellDropdown": {
+      "description": "Sets whether data validation displays a drop-down list that contains acceptable values.",
+      "params": [
+        {
+          "description": "Specifies whether to display a drop-down list.",
+          "name": "InCellDropdown",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetInCellDropdown(InCellDropdown: boolean): void"
+    },
+    "SetInputMessage": {
+      "description": "Sets the data validation input message.",
+      "params": [
+        {
+          "description": "The input message.",
+          "name": "InputMessage",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetInputMessage(InputMessage: string): void"
+    },
+    "SetInputTitle": {
+      "description": "Sets the title of the data-validation input dialog box.",
+      "params": [
+        {
+          "description": "The input dialog title.",
+          "name": "InputTitle",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetInputTitle(InputTitle: string): void"
+    },
+    "SetShowError": {
+      "description": "Sets whether the data validation error message will be displayed.",
+      "params": [
+        {
+          "description": "Specifies whether to show error message.",
+          "name": "ShowError",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetShowError(ShowError: boolean): void"
+    },
+    "SetShowInput": {
+      "description": "Sets whether the data validation input message will be displayed.",
+      "params": [
+        {
+          "description": "Specifies whether to show input message.",
+          "name": "ShowInput",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetShowInput(ShowInput: boolean): void"
+    }
+  }
+}

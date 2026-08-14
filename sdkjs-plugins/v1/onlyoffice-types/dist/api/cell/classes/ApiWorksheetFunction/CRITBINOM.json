@@ -1,0 +1,28 @@
+{
+  "description": "Returns the smallest value for which the cumulative binomial distribution is greater than or equal to a criterion value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CRITBINOM/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.CRITBINOM(678, 0.1, 0.007);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The number of Bernoulli trials.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The probability of success on each trial, a number between 0 and 1 inclusive.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The criterion value, a number between 0 and 1 inclusive.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CRITBINOM(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

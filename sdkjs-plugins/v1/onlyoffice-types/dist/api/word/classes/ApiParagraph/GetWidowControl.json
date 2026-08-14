@@ -1,0 +1,10 @@
+{
+  "description": "Returns the widow control value of the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "Returns _true_ if widow control is enabled, _false_ if it is disabled,\ror _undefined_ if the value is not set.",
+    "type": "boolean | undefined"
+  },
+  "signature": "GetWidowControl(): boolean | undefined",
+  "since": "9.4.0"
+}

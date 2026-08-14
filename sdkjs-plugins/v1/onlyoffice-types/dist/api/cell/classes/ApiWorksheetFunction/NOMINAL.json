@@ -1,0 +1,23 @@
+{
+  "description": "Returns the annual nominal interest rate.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NOMINAL/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.NOMINAL(0.7, 4));"
+  ],
+  "params": [
+    {
+      "description": "The effective interest rate of the security.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of compounding periods per year.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "NOMINAL(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

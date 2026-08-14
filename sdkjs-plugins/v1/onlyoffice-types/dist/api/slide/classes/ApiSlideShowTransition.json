@@ -1,0 +1,170 @@
+{
+  "description": "Class representing a slide show transition.",
+  "methods": {
+    "GetAdvanceOnClick": {
+      "description": "Returns whether the slide advances on mouse click.",
+      "params": [],
+      "returns": {
+        "description": "True if the slide advances on mouse click; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "GetAdvanceOnClick(): boolean",
+      "since": "9.3.0"
+    },
+    "GetAdvanceOnTime": {
+      "description": "Returns whether the slide advances after a specified time.",
+      "params": [],
+      "returns": {
+        "description": "True if the slide advances after a specified time; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "GetAdvanceOnTime(): boolean",
+      "since": "9.3.0"
+    },
+    "GetAdvanceTime": {
+      "description": "Returns the slide advance time in milliseconds.",
+      "params": [],
+      "returns": {
+        "description": "The slide advance time in milliseconds if set; otherwise undefined.",
+        "type": "number | undefined"
+      },
+      "signature": "GetAdvanceTime(): number | undefined",
+      "since": "9.3.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiSlideShowTransition class.",
+      "params": [],
+      "returns": {
+        "type": "\"slideShowTransition\""
+      },
+      "signature": "GetClassType(): \"slideShowTransition\"",
+      "since": "9.3.0"
+    },
+    "GetDuration": {
+      "description": "Returns the transition duration in milliseconds for the slide show transition.",
+      "params": [],
+      "returns": {
+        "description": "The transition duration in milliseconds.",
+        "type": "number"
+      },
+      "signature": "GetDuration(): number",
+      "since": "9.3.0"
+    },
+    "GetEntryEffect": {
+      "description": "Returns the entry effect for the slide show transition.",
+      "params": [],
+      "returns": {
+        "description": "The name of the entry effect in string format.",
+        "type": "EntryEffect"
+      },
+      "signature": "GetEntryEffect(): EntryEffect",
+      "since": "9.3.0"
+    },
+    "GetSpeed": {
+      "description": "Returns the transition speed (similar to PowerPoint VBA Speed property).\nMaps duration to speed based on OOXML spd attribute logic:\n- fast: duration <= 500ms\n- medium: 500ms < duration <= 750ms\n- slow: duration > 750ms",
+      "params": [],
+      "returns": {
+        "description": "The transition speed in string format.",
+        "type": "TransitionSpeed"
+      },
+      "signature": "GetSpeed(): TransitionSpeed",
+      "since": "9.3.0"
+    },
+    "SetAdvanceOnClick": {
+      "description": "Sets whether the slide advances on mouse click.",
+      "params": [
+        {
+          "description": "True to advance the slide on mouse click; otherwise false.",
+          "name": "advanceOnClick",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "True if the value was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetAdvanceOnClick(advanceOnClick: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetAdvanceOnTime": {
+      "description": "Sets whether the slide advances after a specified time.",
+      "params": [
+        {
+          "description": "True to advance the slide after a specified time; otherwise false.",
+          "name": "advanceOnTime",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "True if the setting was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetAdvanceOnTime(advanceOnTime: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetAdvanceTime": {
+      "description": "Sets the slide advance time in milliseconds.",
+      "params": [
+        {
+          "description": "The slide advance time in milliseconds.",
+          "name": "advanceTime",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "True if the time was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetAdvanceTime(advanceTime: number): boolean",
+      "since": "9.3.0"
+    },
+    "SetDuration": {
+      "description": "Sets the transition duration in milliseconds for the slide show transition.",
+      "params": [
+        {
+          "description": "The transition duration in milliseconds.",
+          "name": "duration",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "True if the duration was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetDuration(duration: number): boolean",
+      "since": "9.3.0"
+    },
+    "SetEntryEffect": {
+      "description": "Sets the entry effect for the slide show transition.",
+      "params": [
+        {
+          "description": "The name of the entry effect in string format.",
+          "name": "entryEffectName",
+          "type": "EntryEffect"
+        }
+      ],
+      "returns": {
+        "description": "True if the entry effect name is supported and was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetEntryEffect(entryEffectName: EntryEffect): boolean",
+      "since": "9.3.0"
+    },
+    "SetSpeed": {
+      "description": "Sets the transition speed (similar to PowerPoint VBA Speed property).\nConverts speed to duration based on standard values:\n- fast = 500ms\n- medium = 750ms\n- slow = 1000ms",
+      "params": [
+        {
+          "description": "The transition speed in string format.",
+          "name": "speed",
+          "type": "TransitionSpeed"
+        }
+      ],
+      "returns": {
+        "description": "True if the given parameter is valid and was set successfully; otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "SetSpeed(speed: TransitionSpeed): boolean",
+      "since": "9.3.0"
+    }
+  }
+}

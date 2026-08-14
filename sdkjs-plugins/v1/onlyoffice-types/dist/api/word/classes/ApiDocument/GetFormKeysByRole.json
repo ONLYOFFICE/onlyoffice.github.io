@@ -1,0 +1,16 @@
+{
+  "description": "Returns a list of all form keys attached to the specified role.",
+  "params": [
+    {
+      "description": "The form role.",
+      "name": "role",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "A list of all form keys attached to the specified role.",
+    "type": "string[]"
+  },
+  "signature": "GetFormKeysByRole(role: string): string[]",
+  "since": "9.0.0"
+}

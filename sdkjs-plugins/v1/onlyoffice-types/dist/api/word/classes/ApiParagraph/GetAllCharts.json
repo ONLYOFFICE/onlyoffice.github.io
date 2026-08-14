@@ -1,0 +1,12 @@
+{
+  "description": "Returns a collection of chart objects in the paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetAllCharts/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart1 = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nparagraph.AddDrawing(chart1);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart1.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart1.SetSeriesFill(fill, 1, false);\nlet chart2 = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart2.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart2.SetSeriesFill(fill, 1, false);\nchart2.SetTitle(\"Financial Overview\", 13);\nparagraph.AddDrawing(chart2);\nlet charts = paragraph.GetAllCharts();\nlet stroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\ncharts[1].SetMinorHorizontalGridlines(stroke);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiChart[]"
+  },
+  "signature": "GetAllCharts(): ApiChart[]"
+}

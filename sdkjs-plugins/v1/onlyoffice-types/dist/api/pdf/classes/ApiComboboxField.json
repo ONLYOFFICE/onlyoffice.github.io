@@ -1,0 +1,359 @@
+{
+  "description": "Class representing a combobox field.",
+  "extends": [
+    "ApiBaseListField"
+  ],
+  "methods": {
+    "AddOption": {
+      "description": "Adds new option to list options.",
+      "params": [
+        {
+          "description": "list option to add",
+          "name": "option",
+          "type": "ListOption"
+        },
+        {
+          "description": "index to add option.",
+          "name": "index",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddOption(option: ListOption, index?: number): boolean"
+    },
+    "ClearFormat": {
+      "description": "Clears format of field.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ClearFormat(): boolean"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiComboboxField class.",
+      "params": [],
+      "returns": {
+        "type": "\"comboboxField\""
+      },
+      "signature": "GetClassType(): \"comboboxField\""
+    },
+    "GetFormattedValue": {
+      "description": "Gets formatted value of a field.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFormattedValue(): string"
+    },
+    "GetOption": {
+      "description": "Gets option from list options.",
+      "params": [
+        {
+          "description": "The option index.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ListOption"
+      },
+      "signature": "GetOption(index: number): ListOption"
+    },
+    "GetOptions": {
+      "description": "Gets all options from list options.",
+      "params": [],
+      "returns": {
+        "type": "ListOption[]"
+      },
+      "signature": "GetOptions(): ListOption[]"
+    },
+    "GetPlaceholder": {
+      "description": "Gets text field placeholder.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetPlaceholder(): string"
+    },
+    "GetRegularExp": {
+      "description": "Gets text widget regular validate expression.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetRegularExp(): boolean"
+    },
+    "GetValueIndexes": {
+      "description": "Gets selected value indexes.",
+      "params": [],
+      "returns": {
+        "type": "number[]"
+      },
+      "signature": "GetValueIndexes(): number[]"
+    },
+    "IsCommitOnSelChange": {
+      "description": "Checks if field can commit on selection change.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsCommitOnSelChange(): boolean"
+    },
+    "IsEditable": {
+      "description": "Checks if field is editable.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsEditable(): boolean"
+    },
+    "MoveOption": {
+      "description": "Moves option to specified position in list options.",
+      "params": [
+        {
+          "description": "The current index of the option to move.",
+          "name": "currentIndex",
+          "type": "number"
+        },
+        {
+          "description": "The target index for the option.",
+          "name": "newIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveOption(currentIndex: number, newIndex: number): boolean"
+    },
+    "RemoveOption": {
+      "description": "Removes option from list options.",
+      "params": [
+        {
+          "description": "The option index.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveOption(index: number): boolean"
+    },
+    "SetCommitOnSelChange": {
+      "description": "Sets whether the field commits changes immediately after selection changes.",
+      "params": [
+        {
+          "description": "Specifies whether selection changes are committed immediately.",
+          "name": "commitOnSelectionChange",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCommitOnSelChange(commitOnSelectionChange: boolean): boolean"
+    },
+    "SetDateFormat": {
+      "description": "Sets date format for field.",
+      "params": [
+        {
+          "description": "date format (e.g. \"dd.mm.yyyy\")",
+          "name": "format",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDateFormat(format: string): boolean"
+    },
+    "SetEditable": {
+      "description": "Sets whether custom text can be entered.",
+      "params": [
+        {
+          "description": "Specifies whether custom text can be entered.",
+          "name": "allowCustomText",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetEditable(allowCustomText: boolean): boolean"
+    },
+    "SetMask": {
+      "description": "Sets mask for field.",
+      "params": [
+        {
+          "description": "The input mask (e.g. \"(999)999-9999\").",
+          "name": "inputMask",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMask(inputMask: string): boolean"
+    },
+    "SetNumberFormat": {
+      "description": "Sets number format for field.",
+      "params": [
+        {
+          "description": "The number of digits after the decimal point.",
+          "name": "decimalPlaces",
+          "type": "number"
+        },
+        {
+          "description": "The number separator style.",
+          "name": "separatorStyle",
+          "type": "NumberSepStyle"
+        },
+        {
+          "description": "The negative number display style.",
+          "name": "negativeStyle",
+          "type": "NumberNegStyle"
+        },
+        {
+          "description": "The currency symbol.",
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "description": "If true, places the currency symbol before the number (e.g., $1,234.56);\rif false, places it after (e.g., 1,234.56$).",
+          "name": "currencyPrepend",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetNumberFormat(decimalPlaces: number, separatorStyle: NumberSepStyle, negativeStyle: NumberNegStyle, currency: string, currencyPrepend: boolean): boolean"
+    },
+    "SetPercentageFormat": {
+      "description": "Sets percentage format for field.",
+      "params": [
+        {
+          "description": "The number of digits after the decimal point.",
+          "name": "decimalPlaces",
+          "type": "number"
+        },
+        {
+          "description": "The number separator style.",
+          "name": "separatorStyle",
+          "type": "NumberSepStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPercentageFormat(decimalPlaces: number, separatorStyle: NumberSepStyle): boolean"
+    },
+    "SetPlaceholder": {
+      "description": "Sets text field placeholder.\n<note>Makes combobox editable</note>",
+      "params": [
+        {
+          "description": "field placeholder",
+          "name": "sPlaceholder",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPlaceholder(sPlaceholder: string): boolean"
+    },
+    "SetRegularExp": {
+      "description": "Sets regular expression validate string for field.",
+      "params": [
+        {
+          "description": "The validation regular expression (e.g. \"\\\\S+@\\\\S+\\\\.\\\\S+\")",
+          "name": "regularExpression",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRegularExp(regularExpression: string): boolean"
+    },
+    "SetSpecialFormat": {
+      "description": "Sets special format for field.",
+      "params": [
+        {
+          "description": "the formatting style to apply to the value",
+          "name": "format",
+          "type": "PsfFormat"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpecialFormat(format: PsfFormat): boolean"
+    },
+    "SetTimeFormat": {
+      "description": "Sets time format for field.",
+      "params": [
+        {
+          "description": "available time format",
+          "name": "format",
+          "type": "TimeFormat"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTimeFormat(format: TimeFormat): boolean"
+    },
+    "SetValidateRange": {
+      "description": "Sets validate range for field.\n<note> Can only be applied to fields with a percentage or number format. </note>",
+      "params": [
+        {
+          "description": "If true, enables minimum value validation using `greaterThanValue`.",
+          "name": "greaterThan",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "The minimum allowed value.",
+          "name": "greaterThanValue",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "If true, enables maximum value validation using `lessThanValue`.",
+          "name": "lessThan",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "The maximum allowed value.",
+          "name": "lessThanValue",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValidateRange(greaterThan?: boolean, greaterThanValue?: number, lessThan?: boolean, lessThanValue?: number): boolean"
+    },
+    "SetValueIndexes": {
+      "description": "Sets selected value indexes.",
+      "params": [
+        {
+          "description": "The indexes of the selected values.",
+          "name": "valueIndexes",
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValueIndexes(valueIndexes: number[]): boolean"
+    }
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "description": "Base class",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/",
+  "methods": {
+    "ConvertDocument": {
+      "description": "Converts a document to Markdown or HTML text.",
+      "params": [
+        {
+          "description": "Conversion type.",
+          "name": "convertType",
+          "optional": true,
+          "type": "\"markdown\" | \"html\""
+        },
+        {
+          "description": "Defines if the HTML headings and IDs will be generated when the Markdown renderer of your target platform does not handle Markdown-style IDs.",
+          "name": "htmlHeadings",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the images will be created in the base64 format.",
+          "name": "base64img",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if all heading levels in your document will be demoted to conform with the following standard: single H1 as title, H2 as top-level heading in the text body.",
+          "name": "demoteHeadings",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional HTML tag, you can avoid using the opening angle bracket\rin the following way: \\<tag>text\\</tag>. By default, the opening angle brackets will be replaced with the special characters.",
+          "name": "renderHTMLTags",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "ConvertDocument(convertType?: \"markdown\" | \"html\", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string"
+    },
+    "CreateCheckBoxForm": {
+      "description": "Creates a checkbox / radio button with the specified checkbox / radio button properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateCheckBoxForm/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet checkBoxForm = Api.CreateCheckBoxForm({\"key\": \"Marital status\", \"tip\": \"Specify your marital status\", \"required\": true, \"placeholder\": \"Marital status\", \"radio\": true});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(checkBoxForm);\nparagraph.AddText(\" Married\");\nparagraph.AddLineBreak();\ncheckBoxForm = Api.CreateCheckBoxForm({\"key\": \"Marital status\", \"tip\": \"Specify your marital status\", \"required\": true, \"placeholder\": \"Marital status\", \"radio\": true});\nparagraph.AddElement(checkBoxForm);\nparagraph.AddText(\" Single\");"
+      ],
+      "params": [
+        {
+          "description": "Checkbox / radio button properties.",
+          "name": "formPr",
+          "type": "CheckBoxFormPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiCheckBoxForm"
+      },
+      "signature": "CreateCheckBoxForm(formPr: CheckBoxFormPr): ApiCheckBoxForm"
+    },
+    "CreateComboBoxForm": {
+      "description": "Creates a combo box / dropdown list with the specified combo box / dropdown list properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateComboBoxForm/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);"
+      ],
+      "params": [
+        {
+          "description": "Combo box / dropdown list properties.",
+          "name": "formPr",
+          "type": "ComboBoxFormPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiComboBoxForm"
+      },
+      "signature": "CreateComboBoxForm(formPr: ComboBoxFormPr): ApiComboBoxForm"
+    },
+    "CreateComplexForm": {
+      "description": "Creates a complex form with the specified complex form properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateComplexForm/",
+      "params": [
+        {
+          "description": "Complex form properties.",
+          "name": "formPr",
+          "type": "FormPrBase"
+        }
+      ],
+      "returns": {
+        "type": "ApiComplexForm"
+      },
+      "signature": "CreateComplexForm(formPr: FormPrBase): ApiComplexForm"
+    },
+    "CreateDateForm": {
+      "description": "Creates a date form with the specified date form properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateDateForm/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet dateForm = Api.CreateDateForm({\"key\": \"Nowadays\", \"tip\": \"Enter current date\", \"required\": true, \"placeholder\": \"Your date here\", \"format\": \"mm.dd.yyyy\", \"lang\": \"en-US\"});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(dateForm);"
+      ],
+      "params": [
+        {
+          "description": "Date form properties.",
+          "name": "formPr",
+          "type": "DateFormPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiDateForm"
+      },
+      "signature": "CreateDateForm(formPr: DateFormPr): ApiDateForm"
+    },
+    "CreatePictureForm": {
+      "description": "Creates a picture form with the specified picture form properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreatePictureForm/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet pictureForm = Api.CreatePictureForm({\"key\": \"Personal information\", \"tip\": \"Upload your photo\", \"required\": true, \"placeholder\": \"Photo\", \"scaleFlag\": \"tooBig\", \"lockAspectRatio\": true, \"respectBorders\": false, \"shiftX\": 50, \"shiftY\": 50});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(pictureForm);\npictureForm.SetImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png\");"
+      ],
+      "params": [
+        {
+          "description": "Picture form properties.",
+          "name": "formPr",
+          "type": "PictureFormPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiPictureForm"
+      },
+      "signature": "CreatePictureForm(formPr: PictureFormPr): ApiPictureForm"
+    },
+    "CreateSignatureForm": {
+      "description": "Creates a signature form with the specified form properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateSignatureForm/",
+      "params": [
+        {
+          "description": "Signature form properties.",
+          "name": "formPr",
+          "type": "FormPrBase"
+        }
+      ],
+      "returns": {
+        "type": "ApiSignatureForm"
+      },
+      "signature": "CreateSignatureForm(formPr: FormPrBase): ApiSignatureForm",
+      "since": "9.4.0"
+    },
+    "CreateTextForm": {
+      "description": "Creates a text field with the specified text field properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateTextForm/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);"
+      ],
+      "params": [
+        {
+          "description": "Text field properties.",
+          "name": "formPr",
+          "type": "TextFormPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextForm"
+      },
+      "signature": "CreateTextForm(formPr: TextFormPr): ApiTextForm"
+    },
+    "ReplaceTextSmart": {
+      "description": "Replaces each paragraph (or text in cell) in the select with the corresponding text from an array of strings.",
+      "params": [
+        {
+          "description": "An array of replacement strings.",
+          "name": "textStrings",
+          "type": "string[]"
+        },
+        {
+          "description": "A character which is used to specify the tab in the source text.",
+          "name": "tab",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "A character which is used to specify the line break character in the source text.",
+          "name": "newLine",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Returns the next inline chart if exists.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/GetNextChart/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph.AddDrawing(chart);\nlet copyChart = chart.Copy();\nparagraph.AddDrawing(copyChart);\nlet nextChart = chart.GetNextChart();\nlet stroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\nnextChart.SetMinorHorizontalGridlines(stroke);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if chart is last.",
+    "type": "ApiChart | null"
+  },
+  "signature": "GetNextChart(): ApiChart | null"
+}

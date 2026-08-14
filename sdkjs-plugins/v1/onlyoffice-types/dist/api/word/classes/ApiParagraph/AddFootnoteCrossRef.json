@@ -1,0 +1,35 @@
+{
+  "description": "Adds a footnote cross-reference to the current paragraph.\n<note>Please note that this paragraph must be in the document.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddFootnoteCrossRef/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"This is just a sample text.\");\ndoc.AddFootnote();\nlet footnotesFirstParagraphs = doc.GetFootnotesFirstParagraphs();\nfootnotesFirstParagraphs[0].AddText(\"Footnote 1\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"For more information on previous sentences see footnote \");\ndoc.Push(paragraph);\nparagraph.AddFootnoteCrossRef(\"formFootnoteNum\", footnotesFirstParagraphs[0]);"
+  ],
+  "params": [
+    {
+      "description": "The text or numeric value of a footnote reference you want to insert.",
+      "name": "sRefType",
+      "type": "footnoteRefTo"
+    },
+    {
+      "description": "The first paragraph from a footnote to be referred to (must be in the document).",
+      "name": "oParaTo",
+      "type": "ApiParagraph"
+    },
+    {
+      "description": "Specifies if the reference will be inserted as a hyperlink.",
+      "name": "bLink",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Specifies if the above/below words indicating the position of the reference should be included (don't used with the \"aboveBelow\" sRefType).",
+      "name": "bAboveBelow",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "AddFootnoteCrossRef(sRefType: footnoteRefTo, oParaTo: ApiParagraph, bLink?: boolean, bAboveBelow?: boolean): boolean"
+}

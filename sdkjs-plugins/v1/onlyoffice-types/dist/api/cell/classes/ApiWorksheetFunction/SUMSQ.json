@@ -1,0 +1,18 @@
+{
+  "description": "Returns the sum of the squares of the arguments.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SUMSQ/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SUMSQ(1, 0, 0, 0, 4, 1, 0, 0, 2, 3, 6, 7, 6, 8, 10, 12));"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the sum of the squares will be calculated.\rThe first argument is required, subsequent arguments are optional.\rThe arguments can be numbers, names, logical values or text representations of numbers, ranges of cells that contain numbers, or arrays.",
+      "name": "args",
+      "type": "ApiRange | ApiName | number | string | boolean | (number | string | boolean)[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SUMSQ(args: ApiRange | ApiName | number | string | boolean | (number | string | boolean)[]): number"
+}

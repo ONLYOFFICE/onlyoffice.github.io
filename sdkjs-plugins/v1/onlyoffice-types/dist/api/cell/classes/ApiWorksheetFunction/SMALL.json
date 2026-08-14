@@ -1,0 +1,23 @@
+{
+  "description": "Returns the k-th smallest value in a data set. For example, the fifth smallest number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SMALL/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet valueArr = [1, 0, 0, 0, 0, 1, 0, 0, 2, 3, 4, 5, 6, 8, 10, 12];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\n// method params\nlet range = worksheet.GetRange(\"A1:A16\");\nlet position = 8;\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.SMALL(range, position);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "An array or range of numerical data for which the k-th smallest value will be determined.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "The position (from the smallest) in the range of the value to return.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SMALL(arg1: ApiRange | ApiName | number[], arg2: ApiRange | ApiName | number): number"
+}

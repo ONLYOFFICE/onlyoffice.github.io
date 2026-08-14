@@ -1,0 +1,44 @@
+{
+  "description": "Class representing a collection of pivot filters applied to a pivot field.",
+  "methods": {
+    "Add": {
+      "description": "Adds a new filter to the pivot field. This method is VBA-compatible and follows the PivotFilters.Add signature from Excel VBA.\nSupports all major filter types including label filters, value filters, top/bottom filters, and date filters.",
+      "params": [
+        {
+          "description": "The type of filter to add. Must match VBA XlPivotFilterType enum values.",
+          "name": "filterType",
+          "type": "XlPivotFilterType"
+        },
+        {
+          "description": "The data field object to filter by. Required for value filters (xlValue* types) and top/bottom filters.",
+          "name": "dataField",
+          "optional": true,
+          "type": "ApiPivotDataField"
+        },
+        {
+          "description": "The first value for the filter condition. Required for comparison, between, and top/bottom count filters.",
+          "name": "value1",
+          "optional": true,
+          "type": "string | number | Date"
+        },
+        {
+          "description": "The second value for \"Between\" conditions (xlCaptionIsBetween, xlCaptionIsNotBetween, xlValueIsBetween).",
+          "name": "value2",
+          "optional": true,
+          "type": "string | number | Date"
+        },
+        {
+          "description": "Specifies whether to filter by whole day for date filters. Reserved for future use, currently not implemented.",
+          "name": "wholeDayFilter",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Add(filterType: XlPivotFilterType, dataField?: ApiPivotDataField, value1?: string | number | Date, value2?: string | number | Date, wholeDayFilter?: boolean): void",
+      "since": "9.1.0"
+    }
+  }
+}

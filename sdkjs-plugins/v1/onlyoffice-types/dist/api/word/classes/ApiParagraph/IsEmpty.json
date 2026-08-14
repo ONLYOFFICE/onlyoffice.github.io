@@ -1,0 +1,9 @@
+{
+  "description": "Returns true if the paragraph has no content elements (only the paragraph end mark).",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "IsEmpty(): boolean",
+  "since": "9.5.0"
+}

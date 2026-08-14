@@ -1,0 +1,13 @@
+{
+  "description": "Returns the indexes of the currently visible pages.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCurrentVisiblePages/",
+  "examples": [
+    "var oDocument = Api.GetDocument();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"The current visibles pages indexes is: \" + oDocument.GetCurrentVisiblePages());\noDocument.Push(oParagraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number[]"
+  },
+  "signature": "GetCurrentVisiblePages(): number[]",
+  "since": "8.3.0"
+}

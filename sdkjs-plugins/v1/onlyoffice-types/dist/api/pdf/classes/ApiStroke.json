@@ -1,0 +1,110 @@
+{
+  "description": "Class representing a stroke.",
+  "methods": {
+    "GetBeginArrow": {
+      "description": "Returns the beginning arrow properties of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetBeginArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiStroke class.",
+      "params": [],
+      "returns": {
+        "type": "\"stroke\""
+      },
+      "signature": "GetClassType(): \"stroke\""
+    },
+    "GetDashType": {
+      "description": "Gets the dash type of the stroke.",
+      "params": [],
+      "returns": {
+        "description": "returns dash type (\"solid\", \"dash\", etc.) or null.",
+        "type": "DashType | null"
+      },
+      "signature": "GetDashType(): DashType | null"
+    },
+    "GetEndArrow": {
+      "description": "Returns the ending arrow properties of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetEndArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetFill": {
+      "description": "Gets the fill (color) of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null"
+    },
+    "GetWidth": {
+      "description": "Gets the width of the stroke in English Metric Units.",
+      "params": [],
+      "returns": {
+        "type": "EMU | null"
+      },
+      "signature": "GetWidth(): EMU | null"
+    },
+    "SetBeginArrow": {
+      "description": "Sets the beginning arrow of the stroke.",
+      "params": [
+        {
+          "description": "The type of the beginning arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the beginning arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the beginning arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    },
+    "SetEndArrow": {
+      "description": "Sets the ending arrow of the stroke.",
+      "params": [
+        {
+          "description": "The type of the ending arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the ending arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the ending arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

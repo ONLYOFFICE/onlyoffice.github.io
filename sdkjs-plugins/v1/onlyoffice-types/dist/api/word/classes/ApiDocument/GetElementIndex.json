@@ -1,0 +1,16 @@
+{
+  "description": "Returns the position (index) of the specified element within the current document content.",
+  "params": [
+    {
+      "description": "The document element (paragraph, table or block content control) whose index will be returned.",
+      "name": "element",
+      "type": "DocumentElement"
+    }
+  ],
+  "returns": {
+    "description": "returns -1 if the element is not a direct child of the current document content.",
+    "type": "number"
+  },
+  "signature": "GetElementIndex(element: DocumentElement): number",
+  "since": "9.5.0"
+}

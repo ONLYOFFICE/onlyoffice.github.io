@@ -1,0 +1,23 @@
+{
+  "description": "Adds a paragraph or a table or a blockLvl content control using its position in the document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/AddElement/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.AddElement(0, paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The position where the current element will be added.",
+      "name": "nPos",
+      "type": "number"
+    },
+    {
+      "description": "The document element which will be added at the current position.",
+      "name": "oElement",
+      "type": "DocumentElement"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "AddElement(nPos: number, oElement: DocumentElement): boolean"
+}

@@ -1,0 +1,90 @@
+{
+  "description": "Class representing a table row.",
+  "extends": [
+    "ApiTableRowPr"
+  ],
+  "methods": {
+    "GetCell": {
+      "description": "Returns a cell by its position in the current row.",
+      "params": [
+        {
+          "description": "The zero-based cell index in the table row.",
+          "name": "cellIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableCell"
+      },
+      "signature": "GetCell(cellIndex: number): ApiTableCell"
+    },
+    "GetCellsCount": {
+      "description": "Returns a number of cells in the current row.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCellsCount(): number"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiTableRow class.",
+      "params": [],
+      "returns": {
+        "type": "\"tableRow\""
+      },
+      "signature": "GetClassType(): \"tableRow\""
+    },
+    "GetHeight": {
+      "description": "Gets the height from the current table row.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetHeight(): EMU"
+    },
+    "GetNext": {
+      "description": "Returns the next row if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null if row is last.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetNext(): ApiTableRow | null",
+      "since": "9.5.0"
+    },
+    "GetParentTable": {
+      "description": "Returns the parent table of the current row.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null",
+      "since": "9.5.0"
+    },
+    "GetPrevious": {
+      "description": "Returns the previous row if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null if row is first.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetPrevious(): ApiTableRow | null",
+      "since": "9.5.0"
+    },
+    "SetHeight": {
+      "description": "Sets the height to the current table row.",
+      "params": [
+        {
+          "description": "The row height in English measure units.",
+          "name": "height",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHeight(height: EMU): boolean"
+    }
+  }
+}

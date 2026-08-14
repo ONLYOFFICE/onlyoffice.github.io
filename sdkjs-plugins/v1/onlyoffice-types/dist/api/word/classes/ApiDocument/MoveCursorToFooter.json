@@ -1,0 +1,16 @@
+{
+  "description": "Moves the cursor into the footer of the specified page and switches the document into the footer editing mode. The cursor is positioned at the beginning of the footer.",
+  "params": [
+    {
+      "description": "The page number. If not specified, the current page is used.",
+      "name": "page",
+      "optional": true,
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "MoveCursorToFooter(page?: number): boolean",
+  "since": "9.5.0"
+}

@@ -1,0 +1,23 @@
+{
+  "description": "Returns the effective annual interest rate.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/EFFECT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.EFFECT(0.57, 4));"
+  ],
+  "params": [
+    {
+      "description": "The nominal interest rate.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of compounding periods per year.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "EFFECT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

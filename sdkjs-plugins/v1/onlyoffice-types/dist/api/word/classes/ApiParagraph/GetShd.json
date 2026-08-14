@@ -1,0 +1,12 @@
+{
+  "description": "Returns the shading applied to the contents of the paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetShd/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of setting a shade to a paragraph. \");\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetShd(\"clear\", 255, 111, 61, false);\nlet shade = paraPr.GetShd();\nparagraph = Api.CreateParagraph();\nlet fill = Api.CreateSolidFill(shade);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 10 * 36000, 3 * 36000, fill, stroke);\nparagraph.AddText(\"Shade: \");\nparagraph.AddDrawing(drawing);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "Shd | undefined"
+  },
+  "signature": "GetShd(): Shd | undefined"
+}

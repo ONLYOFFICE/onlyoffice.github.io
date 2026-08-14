@@ -1,0 +1,12 @@
+{
+  "description": "Returns a collection of shape objects in the paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetAllShapes/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing1);\nlet drawing2 = Api.CreateShape(\"wave\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing2);\nlet drawings = paragraph.GetAllShapes();\nfill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ndrawings[1].Fill(fill);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiShape[]"
+  },
+  "signature": "GetAllShapes(): ApiShape[]"
+}

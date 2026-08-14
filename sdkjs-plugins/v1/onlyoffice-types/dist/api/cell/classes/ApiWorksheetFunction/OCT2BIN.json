@@ -1,0 +1,24 @@
+{
+  "description": "Converts an octal number to binary.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/OCT2BIN/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.OCT2BIN(7777777634));"
+  ],
+  "params": [
+    {
+      "description": "The octal number to convert.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of characters to use.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "OCT2BIN(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number"
+}

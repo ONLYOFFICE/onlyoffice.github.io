@@ -1,0 +1,18 @@
+{
+  "description": "Replaces the current table with a new element.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/ReplaceByElement/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet table = Api.CreateTable(3, 3);\ndoc.AddElement(0, table);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\ntable.SetStyle(tableStyle);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The table was replaced with the current paragraph.\");\ntable.ReplaceByElement(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The element to replace the current table with.",
+      "name": "oElement",
+      "type": "DocumentElement"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ReplaceByElement(oElement: DocumentElement): boolean"
+}

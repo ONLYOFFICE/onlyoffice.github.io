@@ -1,0 +1,10 @@
+{
+  "description": "Returns the outline level of the specified properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetOutlineLvl/",
+  "params": [],
+  "returns": {
+    "type": "number | undefined"
+  },
+  "signature": "GetOutlineLvl(): number | undefined",
+  "since": "8.2.0"
+}

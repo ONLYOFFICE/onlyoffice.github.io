@@ -1,0 +1,10 @@
+{
+  "description": "Returns the page break before value of the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "Returns _true_ if the paragraph is rendered at the beginning of a new page,\r_false_ if it is not, or _undefined_ if the value is not set.",
+    "type": "boolean | undefined"
+  },
+  "signature": "GetPageBreakBefore(): boolean | undefined",
+  "since": "9.4.0"
+}

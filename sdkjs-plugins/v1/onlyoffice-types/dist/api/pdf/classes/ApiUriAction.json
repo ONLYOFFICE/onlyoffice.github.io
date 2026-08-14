@@ -1,0 +1,34 @@
+{
+  "description": "Class representing a uri action.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiUriAction class.",
+      "params": [],
+      "returns": {
+        "type": "\"uriAction\""
+      },
+      "signature": "GetClassType(): \"uriAction\""
+    },
+    "GetUri": {
+      "description": "Gets uri string",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUri(): string"
+    },
+    "SetUri": {
+      "description": "Sets uri to action",
+      "params": [
+        {
+          "name": "uri",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetUri(uri: string): boolean"
+    }
+  }
+}

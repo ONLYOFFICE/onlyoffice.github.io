@@ -1,0 +1,34 @@
+{
+  "description": "Class representing a js action.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiJsAction class.",
+      "params": [],
+      "returns": {
+        "type": "\"jsAction\""
+      },
+      "signature": "GetClassType(): \"jsAction\""
+    },
+    "GetScript": {
+      "description": "Gets action script",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetScript(): string"
+    },
+    "SetScript": {
+      "description": "Sets action script.",
+      "params": [
+        {
+          "name": "script",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScript(script: string): boolean"
+    }
+  }
+}

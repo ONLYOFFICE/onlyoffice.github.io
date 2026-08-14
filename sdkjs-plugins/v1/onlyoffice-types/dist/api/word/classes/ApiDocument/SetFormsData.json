@@ -1,0 +1,19 @@
+{
+  "description": "Sets the data to the specified forms.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SetFormsData/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\nlet checkBox = Api.CreateCheckBoxForm({key: \"BestCompany\"});\nparagraph1.Push(checkBox);\nlet textForm = Api.CreateTextForm({key: \"CompanyName\"});\nparagraph1.Push(textForm);\n\ndoc.SetFormsData([\n    {key: \"BestCompany\", value: true},\n    {key: \"CompanyName\", value: \"OnlyOffice\"}\n]);"
+  ],
+  "params": [
+    {
+      "description": "An array of form data to set to the specified forms.",
+      "name": "arrData",
+      "type": "FormData[]"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetFormsData(arrData: FormData[]): boolean",
+  "since": "8.0.0"
+}

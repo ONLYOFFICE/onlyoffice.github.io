@@ -1,0 +1,34 @@
+{
+  "description": "Class representing a named action.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiNamedAction class.",
+      "params": [],
+      "returns": {
+        "type": "\"namedAction\""
+      },
+      "signature": "GetClassType(): \"namedAction\""
+    },
+    "GetName": {
+      "description": "Gets a name of action.",
+      "params": [],
+      "returns": {
+        "type": "NamedActionType"
+      },
+      "signature": "GetName(): NamedActionType"
+    },
+    "SetName": {
+      "description": "Sets a name of action.",
+      "params": [
+        {
+          "name": "name",
+          "type": "NamedActionType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetName(name: NamedActionType): boolean"
+    }
+  }
+}

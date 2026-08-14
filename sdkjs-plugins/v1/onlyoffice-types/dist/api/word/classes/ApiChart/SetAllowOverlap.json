@@ -1,0 +1,15 @@
+{
+  "description": "Sets whether the drawing object is allowed to overlap other drawing objects.",
+  "params": [
+    {
+      "description": "Specifies whether this drawing object can overlap other drawing objects.",
+      "name": "bOverlap",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetAllowOverlap(bOverlap: boolean): void",
+  "since": "9.5.0"
+}

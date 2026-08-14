@@ -1,0 +1,391 @@
+{
+  "description": "Class representing a shape.",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methods": {
+    "CreateTextRange": {
+      "description": "Creates a text body for the drawing if it does not already exist and returns its full text range.",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "CreateTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiShape class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiShape/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\noPresentation.SetSizes(254 * 36000, 190 * 36000);\nvar oSlide = oPresentation.GetCurrentSlide();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartOnlineStorage\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar sClassType = oShape.GetClassType();\noParagraph.AddText(\"Class Type = \" + sClassType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"shape\""
+      },
+      "signature": "GetClassType(): \"shape\""
+    },
+    "GetContent": {
+      "description": "Returns the shape inner contents where a paragraph or text runs can be inserted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiShape/Methods/GetContent/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\noPresentation.SetSizes(254 * 36000, 190 * 36000);\nvar oSlide = oPresentation.GetCurrentSlide();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartOnlineStorage\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetContent();\noShape.SetVerticalTextAlign(\"bottom\");\nvar oParagraph = Api.CreateParagraph();\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it \");\noParagraph.AddText(\"aligning it vertically by the bottom.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiDocumentContent"
+      },
+      "signature": "GetContent(): ApiDocumentContent"
+    },
+    "GetDocContent": {
+      "description": "Deprecated in 6.2.\nReturns the shape inner contents where a paragraph or text runs can be inserted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiShape/Methods/GetDocContent/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\noPresentation.SetSizes(254 * 36000, 190 * 36000);\nvar oSlide = oPresentation.GetCurrentSlide();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartOnlineStorage\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\noShape.SetVerticalTextAlign(\"bottom\");\nvar oParagraph = Api.CreateParagraph();\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it \");\noParagraph.AddText(\"aligning it vertically by the bottom.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiDocumentContent"
+      },
+      "signature": "GetDocContent(): ApiDocumentContent"
+    },
+    "GetFill": {
+      "description": "Gets the fill properties from the current shape.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null"
+    },
+    "GetGeometry": {
+      "description": "Returns the geometry object from the current shape.",
+      "params": [],
+      "returns": {
+        "type": "ApiGeometry"
+      },
+      "signature": "GetGeometry(): ApiGeometry",
+      "since": "9.1.0"
+    },
+    "GetHyperlink": {
+      "description": "Returns the hyperlink from the current drawing object (shape or image).",
+      "params": [],
+      "returns": {
+        "description": "Returns the hyperlink object or null if no hyperlink is set.",
+        "type": "ApiHyperlink | null"
+      },
+      "signature": "GetHyperlink(): ApiHyperlink | null"
+    },
+    "GetInternalId": {
+      "description": "Returns an internal ID of the current drawing object.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInternalId(): string"
+    },
+    "GetLine": {
+      "description": "Gets the outline properties from the current shape.",
+      "params": [],
+      "returns": {
+        "type": "ApiStroke | null"
+      },
+      "signature": "GetLine(): ApiStroke | null"
+    },
+    "GetParent": {
+      "description": "Returns the drawing parent object.",
+      "params": [],
+      "returns": {
+        "type": "ApiSlide | ApiLayout | ApiMaster | null"
+      },
+      "signature": "GetParent(): ApiSlide | ApiLayout | ApiMaster | null"
+    },
+    "GetParentLayout": {
+      "description": "Returns the drawing parent slide layout.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide layout.",
+        "type": "ApiLayout | null"
+      },
+      "signature": "GetParentLayout(): ApiLayout | null"
+    },
+    "GetParentMaster": {
+      "description": "Returns the drawing parent slide master.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide master.",
+        "type": "ApiMaster | null"
+      },
+      "signature": "GetParentMaster(): ApiMaster | null"
+    },
+    "GetParentSlide": {
+      "description": "Returns the drawing parent slide.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide.",
+        "type": "ApiSlide | null"
+      },
+      "signature": "GetParentSlide(): ApiSlide | null"
+    },
+    "GetPlaceholder": {
+      "description": "Returns a placeholder from the current drawing object.",
+      "params": [],
+      "returns": {
+        "description": "returns null if placeholder doesn't exist.",
+        "type": "ApiPlaceholder | null"
+      },
+      "signature": "GetPlaceholder(): ApiPlaceholder | null"
+    },
+    "GetPosX": {
+      "description": "Gets the x position of the drawing on the slide.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosX(): EMU"
+    },
+    "GetPosY": {
+      "description": "Gets the y position of the drawing on the slide.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosY(): EMU"
+    },
+    "GetTextFit": {
+      "description": "Returns the text autofit type of the current shape.",
+      "params": [],
+      "returns": {
+        "description": "The text autofit type.",
+        "type": "TextFitType"
+      },
+      "signature": "GetTextFit(): TextFitType",
+      "since": "9.5.0"
+    },
+    "GetTextRange": {
+      "description": "Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no text body (use CreateTextRange to create one).",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "GetTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "GetVerticalTextAlign": {
+      "description": "Gets the vertical alignment from the shape content where a paragraph or text runs can be inserted.",
+      "params": [],
+      "returns": {
+        "type": "VerticalTextAlign"
+      },
+      "signature": "GetVerticalTextAlign(): VerticalTextAlign"
+    },
+    "IsTextRange": {
+      "description": "Checks whether the drawing has an associated text body.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsTextRange(): boolean",
+      "since": "9.5.0"
+    },
+    "ReplacePlaceholder": {
+      "description": "Replaces the placeholder by a drawing on the slide.",
+      "params": [
+        {
+          "description": "The drawing object that will replace the placeholder.",
+          "name": "drawing",
+          "type": "Drawing"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ReplacePlaceholder(drawing: Drawing): boolean"
+    },
+    "SetFill": {
+      "description": "Sets the fill properties to the current shape.",
+      "params": [
+        {
+          "description": "The fill type used to fill the shape.",
+          "name": "oFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid.",
+        "type": "boolean"
+      },
+      "signature": "SetFill(oFill: ApiFill): boolean"
+    },
+    "SetGeometry": {
+      "description": "Sets a custom geometry for the current shape.",
+      "params": [
+        {
+          "description": "The geometry to set.",
+          "name": "oGeometry",
+          "type": "ApiGeometry"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetGeometry(oGeometry: ApiGeometry): boolean",
+      "since": "9.1.0"
+    },
+    "SetHyperlink": {
+      "description": "Sets a hyperlink to the current drawing object (shape or image).\nPass null to remove the hyperlink.",
+      "params": [
+        {
+          "description": "The hyperlink object to be set to the drawing, or null to remove the hyperlink.",
+          "name": "hyperlink",
+          "type": "ApiHyperlink | null"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the hyperlink was set or removed successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetHyperlink(hyperlink: ApiHyperlink | null): boolean"
+    },
+    "SetLine": {
+      "description": "Sets the outline properties to the current shape.",
+      "params": [
+        {
+          "description": "The stroke used to create the shape outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid.",
+        "type": "boolean"
+      },
+      "signature": "SetLine(oStroke: ApiStroke): boolean"
+    },
+    "SetPaddings": {
+      "description": "Sets the text paddings to the current shape.",
+      "params": [
+        {
+          "description": "Left padding.",
+          "name": "nLeft",
+          "type": "EMU"
+        },
+        {
+          "description": "Top padding.",
+          "name": "nTop",
+          "type": "EMU"
+        },
+        {
+          "description": "Right padding.",
+          "name": "nRight",
+          "type": "EMU"
+        },
+        {
+          "description": "Bottom padding.",
+          "name": "nBottom",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPaddings(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean",
+      "since": "9.3.0"
+    },
+    "SetPlaceholder": {
+      "description": "Sets the specified placeholder to the current drawing object.",
+      "params": [
+        {
+          "description": "Placeholder object.",
+          "name": "oPlaceholder",
+          "type": "ApiPlaceholder"
+        }
+      ],
+      "returns": {
+        "description": "returns false if parameter isn't a placeholder.",
+        "type": "boolean"
+      },
+      "signature": "SetPlaceholder(oPlaceholder: ApiPlaceholder): boolean"
+    },
+    "SetPosX": {
+      "description": "Sets the x position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosX(posX: EMU): boolean"
+    },
+    "SetPosY": {
+      "description": "Sets the y position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosY(posY: EMU): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
+          "name": "nPosX",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
+          "name": "nPosY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetPosition(nPosX: EMU, nPosY: EMU): void"
+    },
+    "SetTextFit": {
+      "description": "Sets the text autofit type to the current shape.",
+      "params": [
+        {
+          "description": "The text autofit type.",
+          "name": "fitType",
+          "type": "TextFitType"
+        }
+      ],
+      "returns": {
+        "description": "returns false if the type is invalid or the shape doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetTextFit(fitType: TextFitType): boolean",
+      "since": "9.5.0"
+    },
+    "SetVerticalTextAlign": {
+      "description": "Sets the vertical alignment to the shape content where a paragraph or text runs can be inserted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiShape/Methods/SetVerticalTextAlign/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\noPresentation.SetSizes(254 * 36000, 190 * 36000);\nvar oSlide = oPresentation.GetCurrentSlide();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartOnlineStorage\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\noShape.SetVerticalTextAlign(\"bottom\");\nvar oParagraph = Api.CreateParagraph();\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it \");\noParagraph.AddText(\"aligning it vertically by the bottom.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The type of the vertical alignment for the shape inner contents.",
+          "name": "verticalAlign",
+          "type": "VerticalTextAlign"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVerticalTextAlign(verticalAlign: VerticalTextAlign): boolean"
+    }
+  }
+}

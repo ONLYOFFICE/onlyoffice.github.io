@@ -186,8 +186,7 @@ export namespace Cell {
   }
 
   /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their comments.
    *
    * @example
    * ```js
@@ -200,7 +199,7 @@ export namespace Cell {
   }
 
   /**
-   * Record of one comment.
+   * Represents a single comment record.
    *
    * @example
    * ```js
@@ -208,19 +207,19 @@ export namespace Cell {
    * ```
    */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -469,7 +468,7 @@ export namespace Cell {
    * * **-1** - The values must be sorted in descending order. If the exact match is not found, the
    * function will return the smallest value that is greater than the searched value.
    * * **0** - The values can be sorted in any order. If the exact match is not found, the function will
-   * return the _#N/A_ error.
+   * return the *#N/A* error.
    * * **1** (or omitted) - The values must be sorted in ascending order. If the exact match is not
    * found, the function will return the largest value that is less than the searched value.
    */
@@ -733,8 +732,7 @@ export namespace Cell {
   }
 
   /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their review changes.
    *
    * @example
    * ```js
@@ -752,7 +750,7 @@ export namespace Cell {
   }
 
   /**
-   * Record of one review change.
+   * Represents a single review change record.
    *
    * @example
    * ```js
@@ -767,16 +765,16 @@ export namespace Cell {
    * ```
    */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
@@ -1168,7 +1166,7 @@ export namespace Cell {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -1804,21 +1802,27 @@ export namespace Cell {
     /**
      * Creates a new custom function.
      * The description of the function parameters and result is specified using JSDoc. The
-     * _@customfunction_ tag is required in JSDoc.
-     * Parameters and results can be specified as the _number / string / bool / any / number[][] /
-     * string[][] / bool[][] / any[][]_ types.
+     * *@customfunction* tag is required in JSDoc.
+     * Parameters and results can be specified as the *number / string / boolean / any / number[][] /
+     * string[][] / boolean[][] / any[][]* types.
      * Parameters can be required or optional. A user can also set a default value.
+     * The passed function can be asynchronous (async function or function returning a Promise).
+     * Inside the passed function, you can access the current cell address where the calculation is
+     * performed using *this.address*.
+     * You can also access the addresses of function arguments using *this.args[0].address*,
+     * *this.args[1].address*, etc.
+     * This method is not used in ONLYOFFICE Document Builder. Use AddCustomFunctionLibrary instead.
      *
-     * @param fCustom - A new function for calculating.
+     * @param fCustom - A new function for calculating. Can be synchronous or asynchronous.
      */
     AddCustomFunction(fCustom: (...args: unknown[]) => unknown): void;
 
     /**
      * Registers a new custom functions library (see the **SetCustomFunctions** plugin method).
      * The description of the function parameters and result is specified using JSDoc. The
-     * _@customfunction_ tag is required in JSDoc.
-     * Parameters and results can be specified as the _number / string / bool / any / number[][] /
-     * string[][] / bool[][] / any[][]_ types.
+     * *@customfunction* tag is required in JSDoc.
+     * Parameters and results can be specified as the *number / string / boolean / any / number[][] /
+     * string[][] / boolean[][] / any[][]* types.
      * Parameters can be required or optional. A user can also set a default value.
      *
      * @param sName - The library name.
@@ -1852,8 +1856,7 @@ export namespace Cell {
      *
      * @param sName - The range name.
      * @param sRef - The reference to the specified range. It must contain the sheet name, followed by sign ! and a
-     *   range of cells.
-     *   Example: "Sheet1!$A$1:$B$2".
+     *   range of cells. Example: "Sheet1!$A$1:$B$2".
      * @param isHidden - Defines if the range name is hidden or not.
      * @returns returns false if sName or sRef are invalid.
      *
@@ -2544,7 +2547,7 @@ export namespace Cell {
      * **LastModifiedRaw** - the date and time when the file was last modified.
      * **LastModified** - the parsed date and time when the file was last modified.
      * **LastModifiedBy** - the name of the user who has made the latest change to the document.
-     * **Autrors** - the persons who has created the file.
+     * **Authors** - the persons who has created the file.
      * **Title** - this property allows you to simplify your documents classification.
      * **Tags** - this property allows you to simplify your documents classification.
      * **Subject** - this property allows you to simplify your documents classification.
@@ -3896,17 +3899,14 @@ export namespace Cell {
     /**
      * Adds a new series to the current chart.
      *
-     * @param sNameRange - The series name. Can be a range of cells or usual text. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column,
-     *   "Example series".
-     * @param sValuesRange - A range of cells from the sheet with series values. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column.
+     * @param sNameRange - The series name. Can be a range of cells or usual text. For example: "'sheet 1'!$A$2:$A$5" -
+     *   must be a single cell, row or column, "A1:A5" - must be a single cell, row or column, "Example
+     *   series".
+     * @param sValuesRange - A range of cells from the sheet with series values. For example: "'sheet 1'!$A$2:$A$5" - must be
+     *   a single cell, row or column, "A1:A5" - must be a single cell, row or column.
      * @param sXValuesRange - A range of cells from the sheet with series x-axis values. It is used with the scatter charts
-     *   only. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column.
+     *   only. For example: "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column, "A1:A5" - must
+     *   be a single cell, row or column.
      *
      * @example
      * ```js
@@ -4145,9 +4145,8 @@ export namespace Cell {
     /**
      * Sets a range with the category values to the current chart.
      *
-     * @param sRange - A range of cells from the sheet with the category names. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column.
+     * @param sRange - A range of cells from the sheet with the category names. For example: "'sheet 1'!$A$2:$A$5" -
+     *   must be a single cell, row or column, "A1:A5" - must be a single cell, row or column.
      *
      * @example
      * ```js
@@ -4858,10 +4857,9 @@ export namespace Cell {
     /**
      * Sets a name to the specified series.
      *
-     * @param sNameRange - The series name. Can be a range of cells or usual text. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column,
-     *   "Example series".
+     * @param sNameRange - The series name. Can be a range of cells or usual text. For example: "'sheet 1'!$A$2:$A$5" -
+     *   must be a single cell, row or column, "A1:A5" - must be a single cell, row or column, "Example
+     *   series".
      * @param nSeria - The index of the chart series.
      *
      * @example
@@ -4894,10 +4892,8 @@ export namespace Cell {
     /**
      * Sets values from the specified range to the specified series.
      *
-     * @param sRange - A range of cells from the sheet with series values. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column,
-     *   "Example series".
+     * @param sRange - A range of cells from the sheet with series values. For example: "'sheet 1'!$A$2:$A$5" - must be
+     *   a single cell, row or column, "A1:A5" - must be a single cell, row or column, "Example series".
      * @param nSeria - The index of the chart series.
      *
      * @example
@@ -4937,10 +4933,9 @@ export namespace Cell {
      * Sets the x-axis values from the specified range to the specified series. It is used with the scatter
      * charts only.
      *
-     * @param sRange - A range of cells from the sheet with series x-axis values. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column,
-     *   "Example series".
+     * @param sRange - A range of cells from the sheet with series x-axis values. For example: "'sheet 1'!$A$2:$A$5" -
+     *   must be a single cell, row or column, "A1:A5" - must be a single cell, row or column, "Example
+     *   series".
      * @param nSeria - The index of the chart series.
      *
      * @example
@@ -5564,7 +5559,7 @@ export namespace Cell {
     GetHex(): string;
 
     /**
-     * Returns a color value in RGB format.
+     * Gets the RGB components of the color.
      *
      * @since 9.1.0
      *
@@ -9560,6 +9555,7 @@ export namespace Cell {
 
     /**
      * Ungroups the current group of drawings.
+     * <note>This method is not supported in the document builder and works only in the editor.</note>
      *
      * @returns The array of the ungrouped objects, or null if the group is not in the document, cannot be
      *   ungrouped, or when called in the document builder.
@@ -9611,7 +9607,7 @@ export namespace Cell {
     SetText(sText: string): boolean;
   }
 
-  /** Class representing a Paragraph hyperlink. */
+  /** Class representing a hyperlink. */
   export interface ApiHyperlink {
     /** Deletes the hyperlink. */
     Delete(): void;
@@ -11353,8 +11349,7 @@ export namespace Cell {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -11493,10 +11488,10 @@ export namespace Cell {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -11531,10 +11526,10 @@ export namespace Cell {
     /**
      * Adds an element to the current paragraph.
      *
-     * @param oElement - The document element which will be added at the current position. Returns false if the
-     *   oElement type is not supported by a paragraph.
-     * @param nPos - The position where the current element will be added. If this value is not
-     *   specified, then the element will be added at the end of the current paragraph.
+     * @param oElement - The document element which will be added at the current position. Returns false if the oElement
+     *   type is not supported by a paragraph.
+     * @param nPos - The position where the current element will be added. If this value is not specified, then the
+     *   element will be added at the end of the current paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
      * @example
@@ -12371,8 +12366,7 @@ export namespace Cell {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -12540,10 +12534,10 @@ export namespace Cell {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -14494,11 +14488,10 @@ export namespace Cell {
     GetValue(): string;
 
     /**
-     * Moves the current data field inside the category.
+     * Moves the current pivot field inside the category.
      *
-     * @param type - The direction to move the pivot table field,
-     *   or the pivot field orientation type.
-     * @param index - The index of the data field in a new category.
+     * @param type - The direction to move the pivot table field, or the pivot field orientation type.
+     * @param index - The field index in a new category.
      * @since 8.2.0
      *
      * @example
@@ -14549,7 +14542,7 @@ export namespace Cell {
     Move(type: PivotMoveFieldType | PivotFieldOrientationType, index?: number): void;
 
     /**
-     * Removes the current data field from the category.
+     * Removes the current pivot field from the pivot table.
      *
      * @since 8.2.0
      *
@@ -14600,9 +14593,9 @@ export namespace Cell {
     Remove(): void;
 
     /**
-     * Sets a value that represents the label text for the data field.
+     * Sets a value that represents the label text for the pivot field.
      *
-     * @param caption - The label text for the data field.
+     * @param caption - The label text for the pivot field.
      * @since 8.2.0
      *
      * @example
@@ -15372,9 +15365,10 @@ export namespace Cell {
     SetOrientation(type: PivotFieldOrientationType): void;
 
     /**
-     * Sets a value that represents the data field position within a category.
+     * Sets a value that represents the position of the field (first, second, third, and so on)
+     * among all the fields in its orientation (Rows, Columns, Pages, Data).
      *
-     * @param position - The data field position.
+     * @param position - The field position.
      * @since 8.2.0
      *
      * @example
@@ -15636,7 +15630,7 @@ export namespace Cell {
     SetSubtotals(subtotals: PivotFieldSubtotals): void;
 
     /**
-     * Sets a value representing the name of the specified data field in the pivot table report.
+     * Sets a value representing the name of the specified field in the pivot table report.
      *
      * @param name - The name of the specified field in the pivot table report.
      * @since 8.2.0
@@ -17179,8 +17173,7 @@ export namespace Cell {
     /**
      * Moves the current pivot field inside the category.
      *
-     * @param type - The direction to move the pivot table field,
-     *   or the pivot field orientation type.
+     * @param type - The direction to move the pivot table field, or the pivot field orientation type.
      * @param index - The field index in a new category.
      * @since 8.2.0
      *
@@ -18839,9 +18832,9 @@ export namespace Cell {
     /**
      * Returns the value for the data field in a pivot table.
      *
-     * @param items - Describes a single cell in the pivot table report.
-     *   For example, "'Estimated Costs' Tables May", which shows the estimated costs for tables in May
-     *   (Data field = Costs, Product = Tables, Month = May).
+     * @param items - Describes a single cell in the pivot table report. For example, "'Estimated Costs' Tables May",
+     *   which shows the estimated costs for tables in May (Data field = Costs, Product = Tables, Month =
+     *   May).
      * @since 8.2.0
      *
      * @example
@@ -20109,8 +20102,7 @@ export namespace Cell {
      * Moves the specified field from one category to another.
      *
      * @param identifier - The index number or name of the field.
-     * @param type - The direction to move the pivot table field,
-     *   or the pivot field orientation type.
+     * @param type - The direction to move the pivot table field, or the pivot field orientation type.
      * @param index - The field index in a new category.
      * @since 8.2.0
      *
@@ -20451,7 +20443,7 @@ export namespace Cell {
     SetDescription(description: string): void;
 
     /**
-     * Returns the setting which specifies whether to display field headers for rows and columns.
+     * Sets whether to display field headers for rows and columns.
      *
      * @param show - Specifies whether to display field headers for rows and columns.
      * @since 8.2.0
@@ -21780,7 +21772,8 @@ export namespace Cell {
     /**
      * Deletes the Range object.
      *
-     * @param shift - Specifies how to shift cells to replace the deleted cells.
+     * @param shift - Specifies how to shift cells to replace the deleted cells. If omitted, the direction is
+     *   determined automatically: _"up"_ if the range has more columns than rows, otherwise _"left"_.
      *
      * @example
      * ```js
@@ -22552,9 +22545,9 @@ export namespace Cell {
     /**
      * Merges the selected cell range into a single cell or a cell row.
      *
-     * @param isAcross - When set to **true**, the cells within the selected range will be merged along the rows,
-     *   but remain split in the columns. When set to **false**, the whole selected range of cells will
-     *   be merged into a single cell.
+     * @param isAcross - When set to **true**, the cells within the selected range will be merged along the rows, but
+     *   remain split in the columns. When set to **false**, the whole selected range of cells will be
+     *   merged into a single cell.
      * @returns returns true if the range was merged successfully.
      *
      * @example
@@ -22605,9 +22598,9 @@ export namespace Cell {
      *
      * @param sPasteType - Paste option.
      * @param sPasteSpecialOperation - The mathematical operation which will be applied to the copied data.
-     * @param bSkipBlanks - [bSkipBlanks=false] - Specifies whether to avoid replacing values in the paste area when blank
-     *   cells occur in the copy area.
-     * @param bTranspose - [bTranspose=false] - Specifies whether the pasted data will be transposed from rows to columns.
+     * @param bSkipBlanks - Specifies whether to avoid replacing values in the paste area when blank cells occur in the copy
+     *   area.
+     * @param bTranspose - Specifies whether the pasted data will be transposed from rows to columns.
      * @default sPasteType = "xlPasteAll"
      * @default sPasteSpecialOperation = "xlPasteSpecialOperationNone"
      * @default bSkipBlanks = false
@@ -22738,11 +22731,11 @@ export namespace Cell {
      * Adds an AutoFilter to the current range.
      *
      * @param Field - The integer offset of the field on which you want to base the filter (from the left of the list;
-     *   the leftmost field is field one).
+     *   the leftmost field is field one). If {null} provided, clears the AutoFilter for the range.
      * @param Criteria1 - The criteria (a string; for example, "101"). Use "=" to find blank fields, "<>" to find
-     *   non-blank fields, and "><" to select (No Data) fields in data types.
-     *   If this argument is omitted, the criteria is All. If Operator is xlTop10Items, Criteria1
-     *   specifies the number of items (for example, "10").
+     *   non-blank fields, and "><" to select (No Data) fields in data types. If this argument is
+     *   omitted, the criteria is All. If Operator is xlTop10Items, Criteria1 specifies the number of
+     *   items (for example, "10").
      * @param Operator - An XlAutoFilterOperator constant specifying the type of filter.
      * @param Criteria2 - The second criteria (a string). Used with Criteria1 and Operator to construct compound criteria.
      * @param VisibleDropDown - True to display the AutoFilter drop-down arrow for the filtered field. False to hide the
@@ -22810,7 +22803,7 @@ export namespace Cell {
 
     /**
      * Sets the background color to the current cell range with the previously created color object.
-     * Sets 'No Fill' when previously created color object is null.
+     * Sets 'No Fill' when the previously created color object is 'No Fill' or null.
      *
      * @param color - The color object which specifies the color to be set to the background in the cell / cell range.
      *   Pass 'No Fill' or null to clear the background color.
@@ -23107,15 +23100,12 @@ export namespace Cell {
      * Specifies that the contents of the current cell / cell range are displayed along with a line
      * appearing directly below the character.
      *
-     * @param undelineType - Specifies the type of the
-     *   line displayed under the characters. The following values are available:
-     *   **"none"** - for no underlining;
-     *   **"single"** - for a single line underlining the cell contents;
-     *   **"singleAccounting"** - for a single line underlining the cell contents but not protruding
-     *   beyond the cell borders;
-     *   **"double"** - for a double line underlining the cell contents;
-     *   **"doubleAccounting"** - for a double line underlining the cell contents but not protruding
-     *   beyond the cell borders.
+     * @param undelineType - Specifies the type of the line displayed under the characters. The following values are
+     *   available: **"none"** - for no underlining; **"single"** - for a single line underlining the
+     *   cell contents; **"singleAccounting"** - for a single line underlining the cell contents but not
+     *   protruding beyond the cell borders; **"double"** - for a double line underlining the cell
+     *   contents; **"doubleAccounting"** - for a double line underlining the cell contents but not
+     *   protruding beyond the cell borders.
      * @returns returns true if the underline property was set successfully.
      *
      * @example
@@ -23591,7 +23581,7 @@ export namespace Cell {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -23705,7 +23695,8 @@ export namespace Cell {
     GetFill(): ApiFill;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -23863,7 +23854,7 @@ export namespace Cell {
     GetOutLine(): ApiStroke;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -24063,7 +24054,7 @@ export namespace Cell {
     /**
      * Sets the bold property to the text character.
      *
-     * @param isBold - Specifies that the contents of the current run are displayed bold.
+     * @param isBold - Specifies that the contents of the run are displayed bold.
      * @returns this text properties.
      *
      * @example
@@ -24088,8 +24079,8 @@ export namespace Cell {
     SetBold(isBold: boolean): ApiTextPr;
 
     /**
-     * Specifies that any lowercase characters in the current text run are formatted for display only as
-     * their capital letter character equivalents.
+     * Specifies that any lowercase characters in the text run are formatted for display only as their
+     * capital letter character equivalents.
      *
      * @param isCaps - Specifies that the contents of the current run are displayed capitalized.
      * @returns this text properties.
@@ -24116,7 +24107,7 @@ export namespace Cell {
     SetCaps(isCaps: boolean): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with two horizontal lines through each
+     * Specifies that the contents of the run are displayed with two horizontal lines through each
      * character displayed on the line.
      *
      * @param isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
@@ -24281,7 +24272,7 @@ export namespace Cell {
     SetOutLine(oStroke: ApiStroke): ApiTextPr;
 
     /**
-     * Specifies that all the small letter characters in this text run are formatted for display only as
+     * Specifies that all the small letter characters in the text run are formatted for display only as
      * their capital
      * letter character equivalents which are two points smaller than the actual font size specified for
      * this text.
@@ -24339,8 +24330,8 @@ export namespace Cell {
     SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with a single horizontal line through
-     * the center of the line.
+     * Specifies that the contents of the run are displayed with a single horizontal line through the
+     * center of the line.
      *
      * @param isStrikeout - Specifies that the contents of the current run are displayed struck through.
      * @returns this text properties.
@@ -24421,8 +24412,8 @@ export namespace Cell {
     SetTextPr(oTextPr: ApiTextPr): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed along with a line appearing directly
-     * below the character
+     * Specifies that the contents of the run are displayed along with a line appearing directly below the
+     * character
      * (less than all the spacing above and below the characters on the line).
      *
      * @param isUnderline - Specifies that the contents of the current run are displayed underlined.
@@ -24450,8 +24441,8 @@ export namespace Cell {
     SetUnderline(isUnderline: boolean): ApiTextPr;
 
     /**
-     * Specifies the alignment which will be applied to the contents of the current run in relation to the
-     * default appearance of the text run:
+     * Specifies the alignment which will be applied to the contents of the run in relation to the default
+     * appearance of the run text:
      * **"baseline"** - the characters in the current text run will be aligned by the default text
      * baseline.
      * **"subscript"** - the characters in the current text run will be aligned below the default text
@@ -24856,7 +24847,7 @@ export namespace Cell {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -24972,7 +24963,8 @@ export namespace Cell {
     GetFill(): ApiFill;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -25094,7 +25086,7 @@ export namespace Cell {
     GetOutLine(): ApiStroke;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -26525,6 +26517,12 @@ export namespace Cell {
      * specified column and
      * row cells only. If this value exceeds the cell width or height, another vertical/horizontal position
      * will be set.</note>
+     * :::note
+     * Values of _nStyleIndex_ outside **1 - 48** are interpreted as a chart style id from the
+     * _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs
+     * Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs
+     * Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).
+     * :::
      *
      * @param sDataRange - The selected cell range which will be used to get the data for the chart, formed specifically
      *   and including the sheet name.
@@ -26571,8 +26569,8 @@ export namespace Cell {
      * Adds a new name to the current worksheet.
      *
      * @param sName - The range name.
-     * @param sRef - Must contain the sheet name, followed by sign ! and a range of cells.
-     *   Example: "Sheet1!$A$1:$B$2".
+     * @param sRef - Must contain the sheet name, followed by sign ! and a range of cells. Example:
+     *   "Sheet1!$A$1:$B$2".
      * @param isHidden - Defines if the range name is hidden or not.
      * @returns returns false if sName or sRef are invalid.
      *
@@ -26668,8 +26666,10 @@ export namespace Cell {
      * @param sType - The shape type which specifies the preset shape geometry.
      * @param nWidth - The shape width in English measure units.
      * @param nHeight - The shape height in English measure units.
-     * @param oFill - The color or pattern used to fill the shape.
-     * @param oStroke - The stroke used to create the element shadow.
+     * @param oFill - The color or pattern used to fill the shape. If not specified, the default shape style fill
+     *   (theme accent) is used.
+     * @param oStroke - The stroke used to draw the shape outline. If not specified, the default shape style outline
+     *   (theme accent) is used.
      * @param nFromCol - The number of the column where the beginning of the shape will be placed.
      * @param nColOffset - The offset from the nFromCol column to the left part of the shape measured in English measure
      *   units.
@@ -27411,7 +27411,8 @@ export namespace Cell {
     GetVisible(): boolean;
 
     /**
-     * Groups an array of drawings in the current worksheet.
+     * Groups an array of drawings in the current sheet.
+     * <note>This method is not supported in the document builder and works only in the editor.</note>
      *
      * @param aDrawings - An array of drawings to group.
      * @returns Returns null if the drawings cannot be grouped or when called in the document builder.
@@ -27830,8 +27831,8 @@ export namespace Cell {
      * @param arg7 - The day count basis to use: **0** or omitted - US (NASD) 30/360; **1** - Actual/actual; **2** -
      *   Actual/360; **3** - Actual/365; **4** - European 30/360.
      * @param arg8 - A logical value: **true** (1) or omitted returns the accrued interest from the issue date to the
+     *   settlement date. **false** (0) returns the accrued interest from the first interest date to the
      *   settlement date.
-     *   **false** (0) returns the accrued interest from the first interest date to the settlement date.
      *
      * @example
      * ```js
@@ -27934,21 +27935,18 @@ export namespace Cell {
      * Returns an aggregate in a list or database.
      *
      * @param arg1 - A numeric value that specifies which function to use: **1** - AVERAGE, **2** - COUNT, **3** -
-     *   COUNTA, **4** - MAX, **5** - MIN,
-     *   **6** - PRODUCT, **7** - STDEV.S, **8** - STDEV.P, **9** - SUM, **10** - VAR.S, **11** - VAR.P,
-     *   **12** - MEDIAN, **13** - MODE.SNGL, **14** - LARGE,
-     *   **15** - SMALL, **16** - PERCENTILE.INC, **17** - QUARTILE.INC, **18** - PERCENTILE.EXC, **19**
-     *   - QUARTILE.EXC.
+     *   COUNTA, **4** - MAX, **5** - MIN, **6** - PRODUCT, **7** - STDEV.S, **8** - STDEV.P, **9** -
+     *   SUM, **10** - VAR.S, **11** - VAR.P, **12** - MEDIAN, **13** - MODE.SNGL, **14** - LARGE, **15**
+     *   - SMALL, **16** - PERCENTILE.INC, **17** - QUARTILE.INC, **18** - PERCENTILE.EXC, **19** -
+     *   QUARTILE.EXC.
      * @param arg2 - A numeric value that specifies which values should be ignored: **0** or omitted - nested
-     *   SUBTOTAL and AGGREGATE functions,
-     *   **1** - hidden rows, nested SUBTOTAL and AGGREGATE functions, **2** - error values, nested
-     *   SUBTOTAL and AGGREGATE functions,
-     *   **3** - hidden rows, error values, nested SUBTOTAL and AGGREGATE functions, **4** - nothing,
-     *   **5** - hidden rows, **6** - error values, **7** - hidden rows and error values.
+     *   SUBTOTAL and AGGREGATE functions, **1** - hidden rows, nested SUBTOTAL and AGGREGATE functions,
+     *   **2** - error values, nested SUBTOTAL and AGGREGATE functions, **3** - hidden rows, error
+     *   values, nested SUBTOTAL and AGGREGATE functions, **4** - nothing, **5** - hidden rows, **6** -
+     *   error values, **7** - hidden rows and error values.
      * @param arg3 - The first numeric value for which the aggregate value will be returned.
      * @param args - Up to 253 numeric values or a range of cells containing the values for which the aggregate value
-     *   will be returned.
-     *   Arguments can be numbers, ranges, or arrays of numbers.
+     *   will be returned. Arguments can be numbers, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -28060,7 +28058,7 @@ export namespace Cell {
     ASC(arg1: ApiRange | ApiName | string): string;
 
     /**
-     * Returns the arcsine of a number in radians, in the range from _-Pi/2_ to _Pi/2_.
+     * Returns the arcsine of a number in radians, in the range from *-Pi/2* to *Pi/2*.
      *
      * @param arg1 - The angle sine. It must be from -1 to 1.
      *
@@ -28092,7 +28090,7 @@ export namespace Cell {
     ASINH(arg1: ApiRange | ApiName | number): number;
 
     /**
-     * Returns the arctangent of a number in radians, in the range from _-Pi/2_ to _Pi/2_.
+     * Returns the arctangent of a number in radians, in the range from *-Pi/2* to *Pi/2*.
      *
      * @param arg1 - The angle tangent.
      *
@@ -28145,8 +28143,8 @@ export namespace Cell {
      * Returns the average of the absolute deviations of data points from their mean.
      *
      * @param args - Up to 255 numeric values for which the average of the absolute deviations will be returned. The
-     *   first argument is required,
-     *   subsequent arguments are optional. Arguments can be numbers, names, or arrays of numbers.
+     *   first argument is required, subsequent arguments are optional. Arguments can be numbers, names,
+     *   or arrays of numbers.
      *
      * @example
      * ```js
@@ -28163,8 +28161,8 @@ export namespace Cell {
      * Returns the average (arithmetic mean) of the specified arguments.
      *
      * @param args - Up to 255 numeric values for which the average value will be returned. The first argument is
-     *   required,
-     *   subsequent arguments are optional. Arguments can be numbers, names, or arrays of numbers.
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, or arrays of
+     *   numbers.
      *
      * @example
      * ```js
@@ -28183,9 +28181,8 @@ export namespace Cell {
      * arguments as 0; **true** evaluates as 1.
      *
      * @param args - Up to 255 numeric values for which the average value will be returned. The first argument is
-     *   required,
-     *   subsequent arguments are optional. Arguments can be numbers, text, or logical values, such as
-     *   **true** and **false**, names, or arrays of numbers.
+     *   required, subsequent arguments are optional. Arguments can be numbers, text, or logical values,
+     *   such as **true** and **false**, names, or arrays of numbers.
      *
      * @example
      * ```js
@@ -28234,8 +28231,7 @@ export namespace Cell {
      *   cells will be used to find the average.
      * @param arg3 - The actual cells to be used to find the average. If omitted, the cells in the range are used.
      * @param arg4 - Up to 127 additional conditions or criteria in the form of a number, expression, or text that
-     *   defines which cells will be used to find the average.
-     *   These arguments are optional.
+     *   defines which cells will be used to find the average. These arguments are optional.
      * @param arg5 - Up to 127 actual ranges to be used to find the average. If omitted, the cells in the range are
      *   used. These arguments are optional.
      *
@@ -28538,8 +28534,8 @@ export namespace Cell {
      * @param arg2 - The probability of success on each trial.
      * @param arg3 - The minimum number of successes in the trials to calculate probability for, a numeric value
      *   greater than or equal to 0.
-     * @param arg4 - The maximum number of successes in the trials to calculate probability for,
-     *   a numeric value greater than the minimum number of successes and less than or equal to trials.
+     * @param arg4 - The maximum number of successes in the trials to calculate probability for, a numeric value
+     *   greater than the minimum number of successes and less than or equal to trials.
      *
      * @example
      * ```js
@@ -28680,8 +28676,8 @@ export namespace Cell {
      * @param arg1 - The value to round up.
      * @param arg2 - The multiple of significance to round up to. If it is omitted, the default value of 1 is used.
      * @param arg3 - Specifies if negative numbers are rounded towards or away from zero. If it is omitted or set to
-     *   0, negative numbers are rounded towards zero.
-     *   If any other numeric value is specified, negative numbers are rounded away from zero.
+     *   0, negative numbers are rounded towards zero. If any other numeric value is specified, negative
+     *   numbers are rounded away from zero.
      *
      * @example
      * ```js
@@ -28882,9 +28878,8 @@ export namespace Cell {
      *
      * @param arg1 - The position of the value in the list of values, a numeric value greater than or equal to 1 but
      *   less than the number of values in the list of values.
-     * @param args - Up to 254 values or the selected range of cells to analyze.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   ranges, names, or text strings.
+     * @param args - Up to 254 values or the selected range of cells to analyze. The first argument is required,
+     *   subsequent arguments are optional. Arguments can be numbers, ranges, names, or text strings.
      *
      * @example
      * ```js
@@ -28999,8 +28994,7 @@ export namespace Cell {
      * @param arg1 - The real coefficient of the complex number.
      * @param arg2 - The imaginary coefficient of the complex number.
      * @param arg3 - The suffix for the imaginary component of the complex number. It can be either "i" or "j" in
-     *   lowercase.
-     *   If it is omitted, the function will assume suffix to be "i".
+     *   lowercase. If it is omitted, the function will assume suffix to be "i".
      *
      * @example
      * ```js
@@ -29162,7 +29156,7 @@ export namespace Cell {
      * Returns the hyperbolic cotangent of a number.
      *
      * @param arg1 - The angle in radians for which the hyperbolic cotangent will be calculated. Its absolute value
-     *   must be less than _2^27_.
+     *   must be less than *2^27*.
      *
      * @example
      * ```js
@@ -29179,9 +29173,9 @@ export namespace Cell {
      * Counts a number of cells in a range that contains numbers ignoring empty cells or those contaning
      * text.
      *
-     * @param args - Up to 255 items, or ranges to count numbers.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values and text representations of numbers, ranges, names, or arrays.
+     * @param args - Up to 255 items, or ranges to count numbers. The first argument is required, subsequent
+     *   arguments are optional. Arguments can be numbers, logical values and text representations of
+     *   numbers, ranges, names, or arrays.
      *
      * @example
      * ```js
@@ -29211,9 +29205,8 @@ export namespace Cell {
     /**
      * Counts a number of cells in a range that are not empty.
      *
-     * @param args - Up to 255 items, or ranges to count values.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values, text strings, ranges, names, or arrays.
+     * @param args - Up to 255 items, or ranges to count values. The first argument is required, subsequent arguments
+     *   are optional. Arguments can be numbers, logical values, text strings, ranges, names, or arrays.
      *
      * @example
      * ```js
@@ -29502,7 +29495,7 @@ export namespace Cell {
      * Returns the hyperbolic cosecant of an angle.
      *
      * @param arg1 - The angle in radians for which the hyperbolic cosecant will be calculated. Its absolute value
-     *   must be less than _2^27_.
+     *   must be less than *2^27*.
      *
      * @example
      * ```js
@@ -29674,14 +29667,12 @@ export namespace Cell {
      * @param arg1 - Start date from which days will be counted.
      * @param arg2 - End date until which days will be counted.
      * @param arg3 - A logical value that specifies whether to use the U.S. (NASD) (false or omitted) or European
-     *   (true) method in the calculation.
-     *   According to the European method, the start and end dates that occur on the 31st of a month
-     *   become equal to the 30th of the same month.
-     *   According to the U.S. method, the start date is the last day of a month, it becomes equal to the
-     *   30th of the same month.
-     *   If the end date is the last day of a month and the start date is earlier than the 30th of a
-     *   month, the end date becomes equal to the 1st of the next month.
-     *   Otherwise the end date becomes equal to the 30th of the same month.
+     *   (true) method in the calculation. According to the European method, the start and end dates that
+     *   occur on the 31st of a month become equal to the 30th of the same month. According to the U.S.
+     *   method, the start date is the last day of a month, it becomes equal to the 30th of the same
+     *   month. If the end date is the last day of a month and the start date is earlier than the 30th of
+     *   a month, the end date becomes equal to the 1st of the next month. Otherwise the end date becomes
+     *   equal to the 30th of the same month.
      *
      * @example
      * ```js
@@ -29918,9 +29909,9 @@ export namespace Cell {
     /**
      * Returns the sum of squares of deviations of data points from their sample mean.
      *
-     * @param args - Up to 255 numerical values for which to find the sum of squares of deviations.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, or arrays of numbers.
+     * @param args - Up to 255 numerical values for which to find the sum of squares of deviations. The first
+     *   argument is required, subsequent arguments are optional. Arguments can be numbers, names, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -30096,8 +30087,8 @@ export namespace Cell {
      * Converts a number to text, using a currency format $#.##.
      *
      * @param arg1 - A number, a reference to a cell containing a number, or a formula that returns a number.
-     * @param arg2 - A number of digits to the right of the decimal point. The number is rounded as necessary.
-     *   If it is omitted, the function will assume it to be 2.
+     * @param arg2 - A number of digits to the right of the decimal point. The number is rounded as necessary. If it
+     *   is omitted, the function will assume it to be 2.
      *
      * @example
      * ```js
@@ -30612,9 +30603,9 @@ export namespace Cell {
      *
      * @param arg1 - The value of the x function, a nonnegative number.
      * @param arg2 - The lambda parameter value, a positive number.
-     * @param arg3 - A logical value that determines the function form. If this parameter is **true**,
-     *   the function will return the cumulative distribution function, if it is **false**, it will
-     *   return the probability density function.
+     * @param arg3 - A logical value that determines the function form. If this parameter is **true**, the function
+     *   will return the cumulative distribution function, if it is **false**, it will return the
+     *   probability density function.
      *
      * @example
      * ```js
@@ -30633,9 +30624,9 @@ export namespace Cell {
      *
      * @param arg1 - The value of the x function, a nonnegative number.
      * @param arg2 - The lambda parameter value, a positive number.
-     * @param arg3 - A logical value that determines the function form. If this parameter is **true**,
-     *   the function will return the cumulative distribution function, if it is **false**, it will
-     *   return the probability density function.
+     * @param arg3 - A logical value that determines the function form. If this parameter is **true**, the function
+     *   will return the cumulative distribution function, if it is **false**, it will return the
+     *   probability density function.
      *
      * @example
      * ```js
@@ -30650,7 +30641,7 @@ export namespace Cell {
     EXPON_DIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | boolean): number;
 
     /**
-     * Returns the factorial of a number, which is equal to _1*2*3*...*_ number.
+     * Returns the factorial of a number, which is equal to *1*2*3*...** number.
      *
      * @param arg1 - The nonnegative number for which the factorial will be calculated.
      *
@@ -30720,12 +30711,10 @@ export namespace Cell {
      * case-sensitive.
      *
      * @param arg1 - The text to find. Use double quotes (empty text) to match the first character in the search
-     *   string.
-     *   Wildcard characters are not allowed.
+     *   string. Wildcard characters are not allowed.
      * @param arg2 - The text containing the text to find.
      * @param arg3 - Specifies the character at which to start the search. The first character in the search string
-     *   is character number 1.
-     *   If omitted, this parameter is equal to 1.
+     *   is character number 1. If omitted, this parameter is equal to 1.
      *
      * @example
      * ```js
@@ -30743,12 +30732,10 @@ export namespace Cell {
      * double-byte character set (DBCS) like Japanese, Chinese, Korean etc.
      *
      * @param arg1 - The text to find. Use double quotes (empty text) to match the first character in the search
-     *   string.
-     *   Wildcard characters are not allowed.
+     *   string. Wildcard characters are not allowed.
      * @param arg2 - The text containing the text to find.
      * @param arg3 - Specifies the character at which to start the search. The first character in the search string
-     *   is character number 1.
-     *   If omitted, this parameter is equal to 1.
+     *   is character number 1. If omitted, this parameter is equal to 1.
      *
      * @example
      * ```js
@@ -30860,8 +30847,8 @@ export namespace Cell {
      * @param arg1 - The numeric value to round down.
      * @param arg2 - The multiple of significance to round down to. If it is omitted, the default value of 1 is used.
      * @param arg3 - Specifies if negative numbers are rounded towards or away from zero. If it is omitted or set to
-     *   0, negative numbers are rounded away from zero.
-     *   If any other numeric value is specified, negative numbers are rounded towards zero.
+     *   0, negative numbers are rounded away from zero. If any other numeric value is specified,
+     *   negative numbers are rounded towards zero.
      *
      * @example
      * ```js
@@ -30894,18 +30881,17 @@ export namespace Cell {
     FLOOR_PRECISE(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number;
 
     /**
-     * Сalculates or predicts a future value based on existing (historical) values by using the AAA version
+     * Calculates or predicts a future value based on existing (historical) values by using the AAA version
      * of the Exponential Smoothing (ETS) algorithm.
      *
      * @param arg1 - A date for which a new value will be predicted. Must be after the last date in the timeline.
      * @param arg2 - A range or an array of numeric data that determines the historical values for which a new point
      *   will be predicted.
-     * @param arg3 - A range of date/time values that correspond to the historical values.
-     *   The timeline range must be of the same size as the second argument. Date/time values must have a
-     *   constant step between them and can't be zero.
+     * @param arg3 - A range of date/time values that correspond to the historical values. The timeline range must be
+     *   of the same size as the second argument. Date/time values must have a constant step between them
+     *   and can't be zero.
      * @param arg4 - An optional numeric value that specifies the length of the seasonal pattern. The default value
-     *   of 1 indicates seasonality is detected automatically.
-     *   The 0 value means no seasonality.
+     *   of 1 indicates seasonality is detected automatically. The 0 value means no seasonality.
      * @param arg5 - An optional numeric value to handle missing values. The default value of 1 replaces missing
      *   values by interpolation, and 0 replaces them with zeros.
      * @param arg6 - An optional numeric value to aggregate multiple values with the same time stamp.
@@ -30940,14 +30926,13 @@ export namespace Cell {
      * @param arg1 - A date for which a new value will be predicted. Must be after the last date in the timeline.
      * @param arg2 - A range or an array of numeric data that determines the historical values for which a new point
      *   will be predicted.
-     * @param arg3 - A range of date/time values that correspond to the historical values.
-     *   The timeline range must be of the same size as the second argument. Date/time values must have a
-     *   constant step between them and can't be zero.
+     * @param arg3 - A range of date/time values that correspond to the historical values. The timeline range must be
+     *   of the same size as the second argument. Date/time values must have a constant step between them
+     *   and can't be zero.
      * @param arg4 - A number between 0 and 1 that shows the confidence level for the calculated confidence interval.
      *   The default value is .95.
      * @param arg5 - An optional numeric value that specifies the length of the seasonal pattern. The default value
-     *   of 1 indicates seasonality is detected automatically.
-     *   The 0 value means no seasonality.
+     *   of 1 indicates seasonality is detected automatically. The 0 value means no seasonality.
      * @param arg6 - An optional numeric value to handle missing values. The default value of 1 replaces missing
      *   values by interpolation, and 0 replaces them with zeros.
      * @param arg7 - An optional numeric value to aggregate multiple values with the same time stamp.
@@ -30980,9 +30965,9 @@ export namespace Cell {
      *
      * @param arg1 - A range or an array of numeric data that determines the historical values for which a new point
      *   will be predicted.
-     * @param arg2 - A range of date/time values that correspond to the historical values.
-     *   The timeline range must be of the same size as the second argument. Date/time values must have a
-     *   constant step between them and can't be zero.
+     * @param arg2 - A range of date/time values that correspond to the historical values. The timeline range must be
+     *   of the same size as the second argument. Date/time values must have a constant step between them
+     *   and can't be zero.
      * @param arg3 - An optional numeric value to handle missing values. The default value of 1 replaces missing
      *   values by interpolation, and 0 replaces them with zeros.
      * @param arg4 - An optional numeric value to aggregate multiple values with the same time stamp.
@@ -31015,14 +31000,13 @@ export namespace Cell {
      *
      * @param arg1 - A range or an array of numeric data that determines the historical values for which a new point
      *   will be predicted.
-     * @param arg2 - A range of date/time values that correspond to the historical values.
-     *   The timeline range must be of the same size as the second argument. Date/time values must have a
-     *   constant step between them and can't be zero.
+     * @param arg2 - A range of date/time values that correspond to the historical values. The timeline range must be
+     *   of the same size as the second argument. Date/time values must have a constant step between them
+     *   and can't be zero.
      * @param arg3 - A number between 1 and 8, indicating which statistic will be returned for the calculated
      *   forecast.
      * @param arg4 - An optional numeric value that specifies the length of the seasonal pattern. The default value
-     *   of 1 indicates seasonality is detected automatically.
-     *   The 0 value means no seasonality.
+     *   of 1 indicates seasonality is detected automatically. The 0 value means no seasonality.
      * @param arg5 - An optional numeric value to handle missing values. The default value of 1 replaces missing
      *   values by interpolation, and 0 replaces them with zeros.
      * @param arg6 - An optional numeric value to aggregate multiple values with the same time stamp.
@@ -31147,9 +31131,9 @@ export namespace Cell {
      * @param arg1 - The value at which to evaluate the function, a nonnegative number.
      * @param arg2 - The numerator degrees of freedom, a number between 1 and 10^10, excluding 10^10.
      * @param arg3 - The denominator degrees of freedom, a number between 1 and 10^10, excluding 10^10.
-     * @param arg4 - A logical value that determines the function form. If this parameter is **true**,
-     *   the function will return the cumulative distribution function, if it is **false**, it will
-     *   return the probability density function.
+     * @param arg4 - A logical value that determines the function form. If this parameter is **true**, the function
+     *   will return the cumulative distribution function, if it is **false**, it will return the
+     *   probability density function.
      *
      * @example
      * ```js
@@ -31245,9 +31229,9 @@ export namespace Cell {
      * @param arg2 - The alpha parameter of the distribution, a positive number.
      * @param arg3 - The beta parameter of the distribution, a positive number. If this parameter is equal to 1, the
      *   function returns the standard gamma distribution.
-     * @param arg4 - A logical value (**true**> or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function. If it is
-     *   **false**, the function returns the probability density function.
+     * @param arg4 - A logical value (**true**> or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -31325,9 +31309,9 @@ export namespace Cell {
      * @param arg2 - The alpha parameter of the distribution, a positive number.
      * @param arg3 - The beta parameter of the distribution, a positive number. If this parameter is equal to 1, the
      *   function returns the standard gamma distribution.
-     * @param arg4 - A logical value (**true**> or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function. If it is
-     *   **false**, the function returns the probability density function.
+     * @param arg4 - A logical value (**true**> or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -31400,8 +31384,8 @@ export namespace Cell {
     /**
      * Returns the geometric mean of positive numeric data.
      *
-     * @param args - Up to 255 numeric values for which the geometric mean will be calculated.
-     *   Arguments can be numbers, names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the geometric mean will be calculated. Arguments can be
+     *   numbers, names, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -31436,12 +31420,12 @@ export namespace Cell {
     /**
      * Calculates predicted exponential growth by using existing data.
      *
-     * @param arg1 - The set of y-values from the _y = b*m^x_ equation, an array or range of positive numbers.
-     * @param arg2 - An optional set of x-values from the _y = b*m^x_ equation, an array or range of positive numbers
+     * @param arg1 - The set of y-values from the *y = b*m^x* equation, an array or range of positive numbers.
+     * @param arg2 - An optional set of x-values from the *y = b*m^x* equation, an array or range of positive numbers
      *   that has the same size as the set of y-values.
      * @param arg3 - New x-values for which the function will return the corresponding y-values.
-     * @param arg4 - A logical value: the constant _b_ is calculated normally if this parameter is set to **true**,
-     *   and _b_ is set equal to 1 if the parameter is **false** or omitted.
+     * @param arg4 - A logical value: the constant *b* is calculated normally if this parameter is set to **true**,
+     *   and *b* is set equal to 1 if the parameter is **false** or omitted.
      *
      * @example
      * ```js
@@ -31482,8 +31466,8 @@ export namespace Cell {
      * Returns the harmonic mean of a data set of positive numbers: the reciprocal of the arithmetic mean
      * of reciprocals.
      *
-     * @param args - Up to 255 numeric values for which the harmonic mean will be calculated.
-     *   Arguments can be numbers, names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the harmonic mean will be calculated. Arguments can be
+     *   numbers, names, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -31554,13 +31538,11 @@ export namespace Cell {
      * @param arg1 - The value to be found in the first row of the table and can be a value, a reference, or a text
      *   string.
      * @param arg2 - A table of text, numbers, or logical values in which data is looked up. The data is sorted in
-     *   ascending order.
-     *   This argument can be a range of cells or a range name.
+     *   ascending order. This argument can be a range of cells or a range name.
      * @param arg3 - The row number in data table from which the matching value should be returned. The first row of
      *   values in the table is row 1.
      * @param arg4 - A logical value which specifies whether to find the closest match in the top row (sorted in
-     *   ascending order) (**true** or omitted)
-     *   or find an exact match (**false**).
+     *   ascending order) (**true** or omitted) or find an exact match (**false**).
      *
      * @example
      * ```js
@@ -31657,9 +31639,9 @@ export namespace Cell {
      * @param arg2 - The size of the sample.
      * @param arg3 - The number of successes in the population.
      * @param arg4 - The population size.
-     * @param arg5 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function. If it is
-     *   **false**, the function returns the probability mass function.
+     * @param arg5 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -31727,10 +31709,10 @@ export namespace Cell {
 
     /**
      * Checks if there is an error in the formula in the first argument. The function returns the specified
-     * value if the formula returns the _#N/A_ error value, otherwise returns the result of the formula.
+     * value if the formula returns the *#N/A* error value, otherwise returns the result of the formula.
      *
      * @param arg1 - The value, expression, or reference that is checked for an error.
-     * @param arg2 - The value to return if the formula evaluates to the _#N/A_ error value.
+     * @param arg2 - The value to return if the formula evaluates to the *#N/A* error value.
      *
      * @example
      * ```js
@@ -31761,7 +31743,7 @@ export namespace Cell {
     /**
      * Returns the absolute value (modulus) of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31777,7 +31759,7 @@ export namespace Cell {
     /**
      * Returns the imaginary coefficient of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31793,7 +31775,7 @@ export namespace Cell {
     /**
      * Returns the argument Theta, an angle expressed in radians.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31809,7 +31791,7 @@ export namespace Cell {
     /**
      * Returns the complex conjugate of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31825,7 +31807,7 @@ export namespace Cell {
     /**
      * Returns the cosine of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31841,7 +31823,7 @@ export namespace Cell {
     /**
      * Returns the hyperbolic cosine of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31857,7 +31839,7 @@ export namespace Cell {
     /**
      * Returns the cotangent of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31873,7 +31855,7 @@ export namespace Cell {
     /**
      * Returns the cosecant of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31889,7 +31871,7 @@ export namespace Cell {
     /**
      * Returns the hyperbolic cosecant of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31905,8 +31887,8 @@ export namespace Cell {
     /**
      * Returns the quotient of two complex numbers.
      *
-     * @param arg1 - The complex numerator or dividend in the _x + yi_ or _x + yj_ form.
-     * @param arg2 - The complex denominator or divisor in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - The complex numerator or dividend in the *x + yi* or *x + yj* form.
+     * @param arg2 - The complex denominator or divisor in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31922,7 +31904,7 @@ export namespace Cell {
     /**
      * Returns the exponential of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31938,7 +31920,7 @@ export namespace Cell {
     /**
      * Returns the natural logarithm of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31954,7 +31936,7 @@ export namespace Cell {
     /**
      * Returns the base-10 logarithm of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31970,7 +31952,7 @@ export namespace Cell {
     /**
      * Returns the base-2 logarithm of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -31986,7 +31968,7 @@ export namespace Cell {
     /**
      * Returns a complex number raised to an integer power.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      * @param arg2 - The power to which the complex number will be raised.
      *
      * @example
@@ -32003,7 +31985,7 @@ export namespace Cell {
     /**
      * Returns the product of the specified complex numbers.
      *
-     * @param args - Up to 255 complex numbers expressed in the _x + yi_ or _x + yj_ form.
+     * @param args - Up to 255 complex numbers expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32019,7 +32001,7 @@ export namespace Cell {
     /**
      * Returns the real coefficient of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32035,7 +32017,7 @@ export namespace Cell {
     /**
      * Returns the secant of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32051,7 +32033,7 @@ export namespace Cell {
     /**
      * Returns the hyperbolic secant of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32067,7 +32049,7 @@ export namespace Cell {
     /**
      * Returns the sine of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32083,7 +32065,7 @@ export namespace Cell {
     /**
      * Returns the hyperbolic sine of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32099,7 +32081,7 @@ export namespace Cell {
     /**
      * Returns the square root of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32113,7 +32095,7 @@ export namespace Cell {
     IMSQRT(arg1: ApiRange | ApiName | number): number;
 
     /**
-     * Returns the difference of two complex numbers expressed in the _x + yi_ or _x + yj_ form.
+     * Returns the difference of two complex numbers expressed in the *x + yi* or *x + yj* form.
      *
      * @param arg1 - The complex number from which to subtract the second number.
      * @param arg2 - The complex number to subtract from the first number.
@@ -32132,7 +32114,7 @@ export namespace Cell {
     /**
      * Returns the sum of the specified complex numbers.
      *
-     * @param args - Up to 255 complex numbers expressed in the _x + yi_ or _x + yj_ form.
+     * @param args - Up to 255 complex numbers expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32148,7 +32130,7 @@ export namespace Cell {
     /**
      * Returns the tangent of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -32286,10 +32268,10 @@ export namespace Cell {
     IRR(arg1: number[] | ApiRange, arg2?: ApiRange | ApiName | number): number;
 
     /**
-     * Checks whether a value is an error other than _#N/A_, and returns **true** or **false**.
+     * Checks whether a value is an error other than *#N/A*, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -32307,8 +32289,8 @@ export namespace Cell {
     /**
      * Checks whether a value is an error, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -32366,8 +32348,8 @@ export namespace Cell {
      * Checks whether a value is a logical value (**true** or **false**), and returns **true** or
      * **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -32384,10 +32366,10 @@ export namespace Cell {
     ISLOGICAL(arg1: ApiRange | string | number | boolean | ApiName): boolean;
 
     /**
-     * Checks whether a value is _#N/A_, and returns **true** or **false**.
+     * Checks whether a value is *#N/A*, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -32405,8 +32387,8 @@ export namespace Cell {
     /**
      * Checks whether a value is not text (blank cells are not text), and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -32424,8 +32406,8 @@ export namespace Cell {
     /**
      * Checks whether a value is a number, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -32520,8 +32502,8 @@ export namespace Cell {
     /**
      * Checks whether a value is a reference, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -32538,8 +32520,8 @@ export namespace Cell {
     /**
      * Checks whether a value is text, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -32557,8 +32539,8 @@ export namespace Cell {
     /**
      * Returns the kurtosis of a data set.
      *
-     * @param args - Up to 255 numeric values for which the kurtosis will be calculated.
-     *   Arguments can be numbers, names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the kurtosis will be calculated. Arguments can be numbers,
+     *   names, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -32689,13 +32671,12 @@ export namespace Cell {
      * Returns statistics that describe a linear trend matching known data points, by fitting a straight
      * line using the least squares method.
      *
-     * @param arg1 - The set of y-values from the _y = mx + b_ equation.
-     * @param arg2 - An optional set of x-values from the _y = mx + b_ equation.
-     * @param arg3 - A logical value: the constant _b_ is calculated normally if this parameter is set to **true** or
-     *   omitted,
-     *   and _b_ is set equal to 0 if the parameter is **false**.
+     * @param arg1 - The set of y-values from the *y = mx + b* equation.
+     * @param arg2 - An optional set of x-values from the *y = mx + b* equation.
+     * @param arg3 - A logical value: the constant *b* is calculated normally if this parameter is set to **true** or
+     *   omitted, and *b* is set equal to 0 if the parameter is **false**.
      * @param arg4 - A logical value: return additional regression statistics if this parameter is set to **true**,
-     *   and return m-coefficients and the constant _b_ if the parameter is **false** or omitted.
+     *   and return m-coefficients and the constant *b* if the parameter is **false** or omitted.
      *
      * @example
      * ```js
@@ -32783,13 +32764,12 @@ export namespace Cell {
     /**
      * Returns statistics that describe an exponential curve matching known data points.
      *
-     * @param arg1 - The set of y-values from the _y = b*m^x_ equation.
-     * @param arg2 - An optional set of x-values from the _y = b*m^x_ equation.
-     * @param arg3 - A logical value: the constant _b_ is calculated normally if this parameter is set to **true** or
-     *   omitted,
-     *   and _b_ is set equal to 1 if the parameter is **false**.
+     * @param arg1 - The set of y-values from the *y = b*m^x* equation.
+     * @param arg2 - An optional set of x-values from the *y = b*m^x* equation.
+     * @param arg3 - A logical value: the constant *b* is calculated normally if this parameter is set to **true** or
+     *   omitted, and *b* is set equal to 1 if the parameter is **false**.
      * @param arg4 - A logical value: return additional regression statistics if this parameter is set to **true**,
-     *   and return m-coefficients and the constant _b_ if the parameter is **false** or omitted.
+     *   and return m-coefficients and the constant *b* if the parameter is **false** or omitted.
      *
      * @example
      * ```js
@@ -32906,9 +32886,9 @@ export namespace Cell {
      * @param arg1 - The value at which to evaluate the function, a positive number.
      * @param arg2 - The mean of ln(x).
      * @param arg3 - The standard deviation of ln(x), a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability density function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -33052,9 +33032,9 @@ export namespace Cell {
     /**
      * Returns the largest value in a set of values. Ignores logical values and text.
      *
-     * @param args - Up to 255 numeric values for which the largest number will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the largest number will be returned. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -33071,9 +33051,9 @@ export namespace Cell {
     /**
      * Returns the largest value in a set of values. Does not ignore logical values and text.
      *
-     * @param args - Up to 255 values (number, text, logical value) for which the largest value will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values and text representations of numbers, names, ranges, or arrays.
+     * @param args - Up to 255 values (number, text, logical value) for which the largest value will be returned. The
+     *   first argument is required, subsequent arguments are optional. Arguments can be numbers, logical
+     *   values and text representations of numbers, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -33114,9 +33094,9 @@ export namespace Cell {
     /**
      * Returns the median, or the number in the middle of the set of given numbers.
      *
-     * @param args - Up to 255 numeric values for which the median will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the median will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -33170,9 +33150,9 @@ export namespace Cell {
     /**
      * Returns the smallest number in a set of values. Ignores logical values and text.
      *
-     * @param args - Up to 255 numeric values for which the smallest number will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the smallest number will be returned. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -33361,7 +33341,7 @@ export namespace Cell {
     N(arg1: ApiRange | ApiName | number | string | boolean): number;
 
     /**
-     * Returns the _#N/A_ error value which means "no value is available".
+     * Returns the *#N/A* error value which means "no value is available".
      *
      * @example
      * ```js
@@ -33416,9 +33396,9 @@ export namespace Cell {
      * @param arg1 - The number of failures.
      * @param arg2 - The threshold number of successes.
      * @param arg3 - The probability of a success; a number between 0 and 1.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability density function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -33496,9 +33476,9 @@ export namespace Cell {
      * @param arg1 - The value for which the distribution will be returned.
      * @param arg2 - The arithmetic mean of the distribution.
      * @param arg3 - The standard deviation of the distribution, a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -33603,9 +33583,9 @@ export namespace Cell {
      * @param arg1 - The value for which the distribution will be returned.
      * @param arg2 - The arithmetic mean of the distribution.
      * @param arg3 - The standard deviation of the distribution, a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -33662,9 +33642,9 @@ export namespace Cell {
      * Returns the standard normal distribution (has a mean of zero and a standard deviation of one).
      *
      * @param arg1 - The value for which the distribution will be returned.
-     * @param arg2 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg2 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -33716,7 +33696,7 @@ export namespace Cell {
     NOT(arg1: ApiRange | ApiName | number | string | boolean): boolean;
 
     /**
-     * Returns the current date and time in the _MM/dd/yy hh:mm_ format.
+     * Returns the current date and time in the *MM/dd/yy hh:mm* format.
      *
      * @example
      * ```js
@@ -33925,7 +33905,7 @@ export namespace Cell {
      * @param arg1 - The security settlement date, expressed as a serial date number.
      * @param arg2 - The maturity date of the security, expressed as a serial date number.
      * @param arg3 - The last coupon date of the security, expressed as a serial date number.
-     * @param arg5 - The annual yield of the security.
+     * @param arg5 - The interest rate of the security.
      * @param arg5_2 - The annual yield of the security.
      * @param arg6 - The redemption value of the security, per $100 par value.
      * @param arg8 - The number of interest payments per year. The possible values are: 1 for annual payments, 2 for
@@ -33951,7 +33931,7 @@ export namespace Cell {
      * @param arg2 - The maturity date of the security, expressed as a serial date number.
      * @param arg3 - The last coupon date of the security, expressed as a serial date number.
      * @param arg5 - The interest rate of the security.
-     * @param arg6 - The redemption value of the security, per $100 par value.
+     * @param arg6 - The purchase price of the security, per $100 par value.
      * @param arg6_2 - The redemption value of the security, per $100 par value.
      * @param arg8 - The number of interest payments per year. The possible values are: 1 for annual payments, 2 for
      *   semiannual payments, 4 for quarterly payments.
@@ -34346,9 +34326,9 @@ export namespace Cell {
      *
      * @param arg1 - The number of events.
      * @param arg2 - The expected numeric value, a positive number.
-     * @param arg3 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative Poisson probability.
-     *   If it is **false**, the function returns the Poisson probability mass function.
+     * @param arg3 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative Poisson probability. If it is **false**, the function
+     *   returns the Poisson probability mass function.
      *
      * @example
      * ```js
@@ -34374,9 +34354,9 @@ export namespace Cell {
      *
      * @param arg1 - The number of events.
      * @param arg2 - The expected numeric value, a positive number.
-     * @param arg3 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative Poisson probability.
-     *   If it is **false**, the function returns the Poisson probability mass function.
+     * @param arg3 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative Poisson probability. If it is **false**, the function
+     *   returns the Poisson probability mass function.
      *
      * @example
      * ```js
@@ -34509,8 +34489,7 @@ export namespace Cell {
      * Multiplies all the numbers given as arguments.
      *
      * @param args - Up to 255 numeric values that will be multiplied. The first argument is required, subsequent
-     *   arguments are optional.
-     *   Arguments can be numbers, ranges, or arrays of numbers.
+     *   arguments are optional. Arguments can be numbers, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -34730,8 +34709,8 @@ export namespace Cell {
      * @param arg1 - The number for which the rank will be returned.
      * @param arg2 - An array or range of numbers. Nonnumeric values are ignored.
      * @param arg3 - The numeric value that specifyes how to order the numbers. If it is 0 or omitted, the rank in
-     *   the list will be sorted in descending order.
-     *   Any other numeric value means that the rank in the list will be sorted in ascending order.
+     *   the list will be sorted in descending order. Any other numeric value means that the rank in the
+     *   list will be sorted in ascending order.
      *
      * @example
      * ```js
@@ -34766,8 +34745,8 @@ export namespace Cell {
      * @param arg1 - The number for which the rank will be returned.
      * @param arg2 - An array or range of numbers. Nonnumeric values are ignored.
      * @param arg3 - The numeric value that specifyes how to order the numbers. If it is 0 or omitted, the rank in
-     *   the list will be sorted in descending order.
-     *   Any other numeric value means that the rank in the list will be sorted in ascending order.
+     *   the list will be sorted in descending order. Any other numeric value means that the rank in the
+     *   list will be sorted in ascending order.
      *
      * @example
      * ```js
@@ -34802,8 +34781,8 @@ export namespace Cell {
      * @param arg1 - The number for which the rank will be returned.
      * @param arg2 - An array or range of numbers. Nonnumeric values are ignored.
      * @param arg3 - The numeric value that specifyes how to order the numbers. If it is 0 or omitted, the rank in
-     *   the list will be sorted in descending order.
-     *   Any other numeric value means that the rank in the list will be sorted in ascending order.
+     *   the list will be sorted in descending order. Any other numeric value means that the rank in the
+     *   list will be sorted in ascending order.
      *
      * @example
      * ```js
@@ -34994,8 +34973,8 @@ export namespace Cell {
      *
      * @param arg1 - The number to round.
      * @param arg2 - The number of digits to round to. If this argument is negative, the number will be rounded to
-     *   the left of the decimal point.
-     *   If it is equal to zero, the number will be rounded to the nearest integer.
+     *   the left of the decimal point. If it is equal to zero, the number will be rounded to the nearest
+     *   integer.
      *
      * @example
      * ```js
@@ -35013,8 +34992,8 @@ export namespace Cell {
      *
      * @param arg1 - Any real number that will be rounded down.
      * @param arg2 - The number of digits to round to. If this argument is negative, the number will be rounded to
-     *   the left of the decimal point.
-     *   If it is equal to zero, the number will be rounded to the nearest integer.
+     *   the left of the decimal point. If it is equal to zero, the number will be rounded to the nearest
+     *   integer.
      *
      * @example
      * ```js
@@ -35032,8 +35011,8 @@ export namespace Cell {
      *
      * @param arg1 - Any real number that will be rounded up.
      * @param arg2 - The number of digits to round to. If this argument is negative, the number will be rounded to
-     *   the left of the decimal point.
-     *   If it is equal to zero, the number will be rounded to the nearest integer.
+     *   the left of the decimal point. If it is equal to zero, the number will be rounded to the nearest
+     *   integer.
      *
      * @example
      * ```js
@@ -35266,7 +35245,7 @@ export namespace Cell {
      * Returns the sine of an angle.
      *
      * @param arg1 - The angle in radians for which the sine will be returned. If your argument is in degrees,
-     *   multiply it by _PI()/180_.
+     *   multiply it by *PI()/180*.
      *
      * @example
      * ```js
@@ -35299,9 +35278,9 @@ export namespace Cell {
      * Returns the skewness of a distribution: a characterization of the degree of asymmetry of a
      * distribution around its mean.
      *
-     * @param args - Up to 255 numeric values for which the skewness of a distribution will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the skewness of a distribution will be returned. The first
+     *   argument is required, subsequent arguments are optional. Arguments can be numbers, names,
+     *   ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -35328,9 +35307,9 @@ export namespace Cell {
      * Returns the skewness of a distribution based on a population: a characterization of the degree of
      * asymmetry of a distribution around its mean.
      *
-     * @param args - Up to 255 numeric values for which the skewness of a distribution will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the skewness of a distribution will be returned. The first
+     *   argument is required, subsequent arguments are optional. Arguments can be numbers, names,
+     *   ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -35471,9 +35450,9 @@ export namespace Cell {
     /**
      * Estimates standard deviation based on a sample (ignores logical values and text in the sample).
      *
-     * @param args - Up to 255 numeric values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the standard deviation will be calculated. The first argument
+     *   is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -35500,9 +35479,9 @@ export namespace Cell {
      * Estimates standard deviation based on a sample, including logical values and text. Text and the
      * **false** logical value have the value 0; the **true** logical value has the value 1.
      *
-     * @param args - Up to 255 values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values, text strings, names, ranges, or arrays.
+     * @param args - Up to 255 values for which the standard deviation will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, logical values, text
+     *   strings, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -35546,9 +35525,9 @@ export namespace Cell {
      * Calculates standard deviation based on the entire population given as arguments (ignores logical
      * values and text).
      *
-     * @param args - Up to 255 numeric values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the standard deviation will be calculated. The first argument
+     *   is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -35575,9 +35554,9 @@ export namespace Cell {
      * Calculates standard deviation based on the entire population, including logical values and text.
      * Text and the **false** logical value have the value 0; the **true** logical value has the value 1.
      *
-     * @param args - Up to 255 values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values, text strings, names, ranges, or arrays.
+     * @param args - Up to 255 values for which the standard deviation will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, logical values, text
+     *   strings, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -35604,9 +35583,9 @@ export namespace Cell {
      * Calculates standard deviation based on the entire population given as arguments (ignores logical
      * values and text).
      *
-     * @param args - Up to 255 numeric values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the standard deviation will be calculated. The first argument
+     *   is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -35634,9 +35613,9 @@ export namespace Cell {
     /**
      * Estimates standard deviation based on a sample (ignores logical values and text in the sample).
      *
-     * @param args - Up to 255 numeric values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the standard deviation will be calculated. The first argument
+     *   is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -35684,12 +35663,10 @@ export namespace Cell {
      * Returns a subtotal in a list or database.
      *
      * @param arg1 - A numeric value that specifies which function to use for the subtotal: **1 (101)** - AVERAGE,
-     *   **2 (102)** - COUNT,
-     *   **3 (103)** - COUNTA, **4 (104)** - MAX, **5 (105)** - MIN,
-     *   **6 (106)** - PRODUCT, **7 (107)** - STDEV, **8 (108)** - STDEVP, **9 (109)** - SUM, **10
-     *   (110)** - VAR, **11 (111)** - VARP.
-     *   1-11 includes manually-hidden rows, while 101-111 excludes them;
-     *   filtered-out cells are always excluded.
+     *   **2 (102)** - COUNT, **3 (103)** - COUNTA, **4 (104)** - MAX, **5 (105)** - MIN, **6 (106)** -
+     *   PRODUCT, **7 (107)** - STDEV, **8 (108)** - STDEVP, **9 (109)** - SUM, **10 (110)** - VAR, **11
+     *   (111)** - VARP. 1-11 includes manually-hidden rows, while 101-111 excludes them; filtered-out
+     *   cells are always excluded.
      * @param args - Up to 255 ranges containing the values for which the subtotal will be returned. The first
      *   argument is required, subsequent arguments are optional.
      *
@@ -35708,8 +35685,8 @@ export namespace Cell {
      * Adds all the numbers in a range of cells.
      *
      * @param args - Up to 255 numeric values to add. The first argument is required, subsequent arguments are
-     *   optional.
-     *   Arguments can be numbers, logical values, text representations of numbers, ranges, or arrays.
+     *   optional. Arguments can be numbers, logical values, text representations of numbers, ranges, or
+     *   arrays.
      *
      * @example
      * ```js
@@ -35760,8 +35737,7 @@ export namespace Cell {
      *   cells will be added.
      * @param arg3 - The first range to sum. If omitted, the cells in range are used.
      * @param arg4 - Up to 127 additional conditions or criteria in the form of a number, expression, or text that
-     *   defines which cells will be added.
-     *   These arguments are optional.
+     *   defines which cells will be added. These arguments are optional.
      * @param arg5 - Up to 127 actual ranges to be used to be added. If omitted, the cells in the range are used.
      *   These arguments are optional.
      *
@@ -35797,10 +35773,9 @@ export namespace Cell {
     /**
      * Returns the sum of the squares of the arguments.
      *
-     * @param args - Up to 255 numeric values for which the sum of the squares will be calculated.
-     *   The first argument is required, subsequent arguments are optional.
-     *   The arguments can be numbers, names, logical values or text representations of numbers, ranges
-     *   of cells that contain numbers, or arrays.
+     * @param args - Up to 255 numeric values for which the sum of the squares will be calculated. The first argument
+     *   is required, subsequent arguments are optional. The arguments can be numbers, names, logical
+     *   values or text representations of numbers, ranges of cells that contain numbers, or arrays.
      *
      * @example
      * ```js
@@ -35855,7 +35830,7 @@ export namespace Cell {
      * Returns the tangent of an angle.
      *
      * @param arg1 - The angle in radians for which the tangent will be returned. If the argument is in degrees,
-     *   multiply it by _PI()/180_.
+     *   multiply it by *PI()/180*.
      *
      * @example
      * ```js
@@ -36036,7 +36011,7 @@ export namespace Cell {
     TINV(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number;
 
     /**
-     * Returns the current date in the _MM/dd/yy_ format.
+     * Returns the current date in the *MM/dd/yy* format.
      *
      * @example
      * ```js
@@ -36073,13 +36048,12 @@ export namespace Cell {
     /**
      * Returns numbers in a linear trend matching known data points, using the least squares method.
      *
-     * @param arg1 - A range or array of y-values from the _y = mx + b_ equation.
-     * @param arg2 - An optional range or array of x-values from the _y = mx + b_ equation, an array of the same size
+     * @param arg1 - A range or array of y-values from the *y = mx + b* equation.
+     * @param arg2 - An optional range or array of x-values from the *y = mx + b* equation, an array of the same size
      *   as an array of y-values.
      * @param arg3 - A range or array of new x-values for which this function will return corresponding y-values.
-     * @param arg4 - A logical value: the constant _b_ is calculated normally if this parameter is set to **true** or
-     *   omitted,
-     *   and _b_ is set equal to 0 if the parameter is **false**.
+     * @param arg4 - A logical value: the constant *b* is calculated normally if this parameter is set to **true** or
+     *   omitted, and *b* is set equal to 0 if the parameter is **false**.
      *
      * @example
      * ```js
@@ -36212,9 +36186,9 @@ export namespace Cell {
      *
      * @param arg1 - The numeric value at which to evaluate the distribution.
      * @param arg2 - An integer indicating the number of degrees of freedom that characterize the distribution.
-     * @param arg3 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability density function.
+     * @param arg3 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -36367,9 +36341,9 @@ export namespace Cell {
     /**
      * Estimates variance based on a sample (ignores logical values and text in the sample).
      *
-     * @param args - Up to 255 numeric values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the variance will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -36387,9 +36361,9 @@ export namespace Cell {
      * Estimates variance based on a sample, including logical values and text. Text and the **false**
      * logical value have the value 0; the **true** logical value has the value 1.
      *
-     * @param args - Up to 255 values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values or text representations of numbers, names, ranges, or arrays.
+     * @param args - Up to 255 values for which the variance will be calculated. The first argument is required,
+     *   subsequent arguments are optional. Arguments can be numbers, logical values or text
+     *   representations of numbers, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -36424,9 +36398,9 @@ export namespace Cell {
      * Calculates variance based on the entire population (ignores logical values and text in the
      * population).
      *
-     * @param args - Up to 255 numeric values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the variance will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -36444,9 +36418,9 @@ export namespace Cell {
      * Calculates variance based on the entire population, including logical values and text. Text and the
      * **false** logical value have the value 0; the **true** logical value has the value 1.
      *
-     * @param args - Up to 255 values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values or text representations of numbers, names, ranges, or arrays.
+     * @param args - Up to 255 values for which the variance will be calculated. The first argument is required,
+     *   subsequent arguments are optional. Arguments can be numbers, logical values or text
+     *   representations of numbers, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -36481,9 +36455,9 @@ export namespace Cell {
      * Calculates variance based on the entire population (ignores logical values and text in the
      * population).
      *
-     * @param args - Up to 255 numeric values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the variance will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -36500,9 +36474,9 @@ export namespace Cell {
     /**
      * Estimates variance based on a sample (ignores logical values and text in the sample).
      *
-     * @param args - Up to 255 numeric values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the variance will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -36530,8 +36504,8 @@ export namespace Cell {
      *   life of the asset.
      * @param arg6 - The rate at which the balance declines. If it is omitted, the function will assume it to be 2
      * @param arg7 - Specifies whether to use straight-line depreciation when depreciation is greater than the
-     *   declining balance calculation (**false** or omitted).
-     *   If it is set to **true**, the function uses the declining balance method.
+     *   declining balance calculation (**false** or omitted). If it is set to **true**, the function
+     *   uses the declining balance method.
      *
      * @example
      * ```js
@@ -36555,8 +36529,7 @@ export namespace Cell {
      * @param arg3 - The column number in the data table from which the matching value should be returned. The first
      *   column of values in the table is column 1.
      * @param arg4 - A logical value that specifies whether to find the closest match in the first column (sorted in
-     *   ascending order) (**true** or omitted)
-     *   or find an exact match (**false**).
+     *   ascending order) (**true** or omitted) or find an exact match (**false**).
      *
      * @example
      * ```js
@@ -36589,9 +36562,8 @@ export namespace Cell {
      *
      * @param arg1 - A number that represents a date, or a result of other formulas or functions.
      * @param arg2 - A number that determines the type of return value: **1** - returns a number from 1 (Sunday) to 7
-     *   (Saturday);
-     *   **2** - returns a number from 1 (Monday) to 7 (Sunday); **3** - returns a number from 0 (Monday)
-     *   to 6 (Sunday).
+     *   (Saturday); **2** - returns a number from 1 (Monday) to 7 (Sunday); **3** - returns a number
+     *   from 0 (Monday) to 6 (Sunday).
      *
      * @example
      * ```js
@@ -36633,9 +36605,9 @@ export namespace Cell {
      * @param arg1 - The value at which to evaluate the function, a nonnegative number.
      * @param arg2 - The alpha parameter of the distribution, a positive number.
      * @param arg3 - The beta parameter of the distribution, a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -36655,9 +36627,9 @@ export namespace Cell {
      * @param arg1 - The value at which to evaluate the function, a nonnegative number.
      * @param arg2 - The alpha parameter of the distribution, a positive number.
      * @param arg3 - The beta parameter of the distribution, a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js

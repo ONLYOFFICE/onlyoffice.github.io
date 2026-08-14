@@ -1,0 +1,446 @@
+{
+  "description": "Class representing a graphical object.",
+  "methods": {
+    "Copy": {
+      "description": "Creates a copy of the specified drawing object.",
+      "params": [],
+      "returns": {
+        "type": "ApiDrawing"
+      },
+      "signature": "Copy(): ApiDrawing"
+    },
+    "Delete": {
+      "description": "Deletes the specified drawing object from the parent.",
+      "params": [],
+      "returns": {
+        "description": "false if drawing doesn't exist or drawing hasn't a parent.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiDrawing class.",
+      "params": [],
+      "returns": {
+        "type": "\"drawing\""
+      },
+      "signature": "GetClassType(): \"drawing\""
+    },
+    "GetDescription": {
+      "description": "Gets the description of the current drawing.",
+      "params": [],
+      "returns": {
+        "description": "The description of the current drawing, or null if not set.",
+        "type": "string | null"
+      },
+      "signature": "GetDescription(): string | null",
+      "since": "9.5.0"
+    },
+    "GetFill": {
+      "description": "Gets the fill formatting properties from the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null",
+      "since": "9.5.0"
+    },
+    "GetFlipH": {
+      "description": "Get horizontal flip of current drawing.",
+      "params": [],
+      "returns": {
+        "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",
+        "type": "boolean | null"
+      },
+      "signature": "GetFlipH(): boolean | null",
+      "since": "9.5.0"
+    },
+    "GetFlipV": {
+      "description": "Get vertical flip of current drawing.",
+      "params": [],
+      "returns": {
+        "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
+        "type": "boolean | null"
+      },
+      "signature": "GetFlipV(): boolean | null",
+      "since": "9.5.0"
+    },
+    "GetHeight": {
+      "description": "Returns the height of the current drawing.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetHeight(): EMU"
+    },
+    "GetLine": {
+      "description": "Gets the outline properties from the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiStroke | null"
+      },
+      "signature": "GetLine(): ApiStroke | null",
+      "since": "9.5.0"
+    },
+    "GetLockAspect": {
+      "description": "Returns whether the aspect ratio of the drawing is locked.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetLockAspect(): boolean",
+      "since": "9.5.0"
+    },
+    "GetLockValue": {
+      "description": "Returns the lock value for the specified lock type of the current drawing.",
+      "params": [
+        {
+          "description": "Lock type in the string format.",
+          "name": "sType",
+          "type": "DrawingLockType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetLockValue(sType: DrawingLockType): boolean",
+      "since": "9.5.0"
+    },
+    "GetName": {
+      "description": "Returns the name of the current drawing.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string",
+      "since": "9.5.0"
+    },
+    "GetParentPage": {
+      "description": "Returns the type of the ApiDrawing class.",
+      "params": [],
+      "returns": {
+        "type": "ApiPage"
+      },
+      "signature": "GetParentPage(): ApiPage"
+    },
+    "GetPosX": {
+      "description": "Gets the x position of the drawing on the page.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosX(): EMU"
+    },
+    "GetPosY": {
+      "description": "Gets the y position of the drawing on the page.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosY(): EMU"
+    },
+    "GetRotation": {
+      "description": "Returns the rotation angle of the current drawing object.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRotation(): number"
+    },
+    "GetShadow": {
+      "description": "Returns the shadow of the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiShadow | null"
+      },
+      "signature": "GetShadow(): ApiShadow | null",
+      "since": "9.5.0"
+    },
+    "GetTitle": {
+      "description": "Gets the title of the current drawing.",
+      "params": [],
+      "returns": {
+        "description": "The title of the current drawing, or null if not set.",
+        "type": "string | null"
+      },
+      "signature": "GetTitle(): string | null",
+      "since": "9.5.0"
+    },
+    "GetWidth": {
+      "description": "Returns the width of the current drawing.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetWidth(): EMU"
+    },
+    "Select": {
+      "description": "Selects the current graphic object.",
+      "params": [
+        {
+          "description": "Specifies whether the selection should replace the current selection (true) or be added to it (false).",
+          "name": "isReplace",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(isReplace?: boolean): boolean"
+    },
+    "SetDescription": {
+      "description": "Sets the description of the current drawing.",
+      "params": [
+        {
+          "description": "The description to set for the current drawing.",
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetDescription(description: string): boolean",
+      "since": "9.5.0"
+    },
+    "SetFill": {
+      "description": "Sets the fill formatting properties to the current graphic object.",
+      "params": [
+        {
+          "description": "The fill type used to fill the graphic object.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid or not supported for the current graphic object.",
+        "type": "boolean"
+      },
+      "signature": "SetFill(fill: ApiFill): boolean",
+      "since": "9.5.0"
+    },
+    "SetFlipH": {
+      "description": "Sets the horizontal flip of the current drawing.",
+      "params": [
+        {
+          "description": "Specifies if the figure will be flipped horizontally or not.",
+          "name": "bFlip",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetFlipH(bFlip: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "SetFlipV": {
+      "description": "Sets the vertical flip of the current drawing.",
+      "params": [
+        {
+          "description": "Specifies if the figure will be flipped vertically or not.",
+          "name": "bFlip",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetFlipV(bFlip: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "SetLine": {
+      "description": "Sets the outline properties to the current graphic object.",
+      "params": [
+        {
+          "description": "The stroke used to create the graphic object outline.",
+          "name": "stroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid or not supported for the current graphic object.",
+        "type": "boolean"
+      },
+      "signature": "SetLine(stroke: ApiStroke): boolean",
+      "since": "9.5.0"
+    },
+    "SetLockAspect": {
+      "description": "Sets whether the aspect ratio of the drawing is locked.",
+      "params": [
+        {
+          "description": "Specifies whether the aspect ratio of this drawing is locked.",
+          "name": "bAspect",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the lock aspect was successfully set, otherwise returns `false`.",
+        "type": "boolean"
+      },
+      "signature": "SetLockAspect(bAspect: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "SetLockValue": {
+      "description": "Sets the lock value to the specified lock type of the current drawing.",
+      "params": [
+        {
+          "description": "Lock type in the string format.",
+          "name": "sType",
+          "type": "DrawingLockType"
+        },
+        {
+          "description": "Specifies if the specified lock is applied to the current drawing.",
+          "name": "bValue",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLockValue(sType: DrawingLockType, bValue: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "SetName": {
+      "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
+      "params": [
+        {
+          "description": "The name which will be set to the current drawing.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the name was successfully set, otherwise returns false.",
+        "type": "boolean"
+      },
+      "signature": "SetName(name: string): boolean",
+      "since": "9.5.0"
+    },
+    "SetPosX": {
+      "description": "Sets the x position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosX(posX: EMU): boolean"
+    },
+    "SetPosY": {
+      "description": "Sets the y position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosY(posY: EMU): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosition(posX: EMU, posY: EMU): boolean"
+    },
+    "SetRotation": {
+      "description": "Sets the rotation angle to the current drawing object.",
+      "params": [
+        {
+          "description": "New drawing rotation angle.",
+          "name": "rotAngle",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRotation(rotAngle: number): boolean"
+    },
+    "SetShadow": {
+      "description": "Sets the shadow to the current graphic object.",
+      "params": [
+        {
+          "description": "The shadow to apply, or null to remove the current shadow.",
+          "name": "shadow",
+          "type": "ApiShadow"
+        }
+      ],
+      "returns": {
+        "description": "returns false if the graphic object does not support shadow.",
+        "type": "boolean"
+      },
+      "signature": "SetShadow(shadow: ApiShadow): boolean",
+      "since": "9.5.0"
+    },
+    "SetSize": {
+      "description": "Sets the size of the object (image, shape, chart) bounding box.",
+      "params": [
+        {
+          "description": "The object width measured in English measure units.",
+          "name": "width",
+          "type": "EMU"
+        },
+        {
+          "description": "The object height measured in English measure units.",
+          "name": "height",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSize(width: EMU, height: EMU): boolean"
+    },
+    "SetTitle": {
+      "description": "Sets the title of the current drawing.",
+      "params": [
+        {
+          "description": "The title to set for the current drawing.",
+          "name": "title",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetTitle(title: string): boolean",
+      "since": "9.5.0"
+    },
+    "Unselect": {
+      "description": "Removes the current graphic object from the selection.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Unselect(): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "description": "Returns the two-tailed inverse of the Student's t-distribution.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/T_INV_2T/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.T_INV_2T(0.5, 10));"
+  ],
+  "params": [
+    {
+      "description": "The probability associated with the two-tailed Student's t-distribution, a number between 0 and 1 inclusive.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A positive integer indicating the number of degrees of freedom to characterize the distribution.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "T_INV_2T(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

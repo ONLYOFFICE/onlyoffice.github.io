@@ -1,0 +1,178 @@
+{
+  "description": "Class representing a comment reply.",
+  "methods": {
+    "GetAuthorName": {
+      "description": "Returns the comment reply author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/GetAuthorName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply author: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetAuthorName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string",
+      "since": "7.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCommentReply class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nlet type = reply.GetClassType();\nworksheet.GetRange(\"A3\").SetValue(\"Type: \" + type);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"commentReply\""
+      },
+      "signature": "GetClassType(): \"commentReply\"",
+      "since": "7.5.0"
+    },
+    "GetText": {
+      "description": "Returns the comment reply text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/GetText/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply text: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(): string",
+      "since": "7.5.0"
+    },
+    "GetTime": {
+      "description": "Returns the timestamp of the comment reply creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/GetTime/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply timestamp: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetTime());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTime(): number",
+      "since": "7.5.0"
+    },
+    "GetTimeUTC": {
+      "description": "Returns the timestamp of the comment reply creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/GetTimeUTC/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply timestamp UTC: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetTimeUTC());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTimeUTC(): number",
+      "since": "7.5.0"
+    },
+    "GetUserId": {
+      "description": "Returns the user ID of the comment reply author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/GetUserId/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply user Id: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetUserId());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUserId(): string",
+      "since": "7.5.0"
+    },
+    "SetAuthorName": {
+      "description": "Sets the comment reply author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/SetAuthorName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nreply.SetAuthorName(\"Mark Potato\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply author: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetAuthorName());"
+      ],
+      "params": [
+        {
+          "description": "The comment reply author's name.",
+          "name": "sAuthorName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAuthorName(sAuthorName: string): void",
+      "since": "7.5.0"
+    },
+    "SetText": {
+      "description": "Sets the comment reply text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/SetText/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nreply.SetText(\"New reply text.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply text: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetText());"
+      ],
+      "params": [
+        {
+          "description": "The comment reply text.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetText(sText: string): void",
+      "since": "7.5.0"
+    },
+    "SetTime": {
+      "description": "Sets the timestamp of the comment reply creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/SetTime/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nreply.SetTime(Date.now());\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply timestamp: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetTime());"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment reply creation in the current time zone format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTime(nTimeStamp: number | string): void",
+      "since": "7.5.0"
+    },
+    "SetTimeUTC": {
+      "description": "Sets the timestamp of the comment reply creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/SetTimeUTC/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nreply.SetTimeUTC(Date.now());\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply timestamp UTC: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetTimeUTC());"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment reply creation in UTC format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTimeUTC(nTimeStamp: number | string): void",
+      "since": "7.5.0"
+    },
+    "SetUserId": {
+      "description": "Sets the user ID to the comment reply author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCommentReply/Methods/SetUserId/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nreply.SetUserId(\"uid-2\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply user Id: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetUserId());"
+      ],
+      "params": [
+        {
+          "description": "The user ID of the comment reply author.",
+          "name": "sUserId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetUserId(sUserId: string): void",
+      "since": "7.5.0"
+    }
+  }
+}

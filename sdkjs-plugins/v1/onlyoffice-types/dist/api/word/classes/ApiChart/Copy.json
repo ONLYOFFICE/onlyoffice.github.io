@@ -1,0 +1,8 @@
+{
+  "description": "Copies the current graphic object.",
+  "params": [],
+  "returns": {
+    "type": "ApiDrawing | null"
+  },
+  "signature": "Copy(): ApiDrawing | null"
+}

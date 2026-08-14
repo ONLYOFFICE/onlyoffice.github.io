@@ -1,0 +1,114 @@
+{
+  "description": "Class representing a stroke.",
+  "methods": {
+    "GetBeginArrow": {
+      "description": "Returns the beginning arrow properties of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetBeginArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiStroke class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiStroke/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(3 * 36000, oFill1);\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\nvar oDocContent = oShape.GetDocContent();\nvar sClassType = oStroke.GetClassType();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class Type = \" + sClassType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"stroke\""
+      },
+      "signature": "GetClassType(): \"stroke\""
+    },
+    "GetDashType": {
+      "description": "Gets the dash type of the stroke.",
+      "params": [],
+      "returns": {
+        "description": "returns dash type (\"solid\", \"dash\", etc.) or null.",
+        "type": "DashType | null"
+      },
+      "signature": "GetDashType(): DashType | null"
+    },
+    "GetEndArrow": {
+      "description": "Returns the ending arrow properties of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetEndArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetFill": {
+      "description": "Gets the fill (color) of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null"
+    },
+    "GetWidth": {
+      "description": "Gets the width of the stroke in English Metric Units.",
+      "params": [],
+      "returns": {
+        "type": "EMU | null"
+      },
+      "signature": "GetWidth(): EMU | null"
+    },
+    "SetBeginArrow": {
+      "description": "Sets the beginning arrow of the stroke.",
+      "params": [
+        {
+          "description": "The type of the beginning arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the beginning arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the beginning arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    },
+    "SetEndArrow": {
+      "description": "Sets the ending arrow of the stroke.",
+      "params": [
+        {
+          "description": "The type of the ending arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the ending arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the ending arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

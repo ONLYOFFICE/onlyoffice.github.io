@@ -1,0 +1,18 @@
+{
+  "description": "Returns the sine of an angle.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SIN/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SIN(0.5));"
+  ],
+  "params": [
+    {
+      "description": "The angle in radians for which the sine will be returned. If your argument is in degrees, multiply it by *PI()/180*.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SIN(arg1: ApiRange | ApiName | number): number"
+}

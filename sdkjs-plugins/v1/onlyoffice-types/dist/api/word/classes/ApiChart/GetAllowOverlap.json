@@ -1,0 +1,9 @@
+{
+  "description": "Returns whether the drawing object is allowed to overlap other drawing objects.",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "GetAllowOverlap(): boolean",
+  "since": "9.5.0"
+}

@@ -1,0 +1,24 @@
+{
+  "description": "Returns a number from 1 to 7 identifying the day of the week of the specified date.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/WEEKDAY/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.WEEKDAY(\"11/5/2018\", 2); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A number that represents a date, or a result of other formulas or functions.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A number that determines the type of return value: **1** - returns a number from 1 (Sunday) to 7 (Saturday);\r**2** - returns a number from 1 (Monday) to 7 (Sunday); **3** - returns a number from 0 (Monday) to 6 (Sunday).",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "WEEKDAY(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number"
+}

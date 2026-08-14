@@ -1,0 +1,430 @@
+{
+  "description": "Class representing a graphical object.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiDrawing class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet classType = drawing.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"drawing\""
+      },
+      "signature": "GetClassType(): \"drawing\""
+    },
+    "GetDescription": {
+      "description": "Gets the description of the current drawing.",
+      "params": [],
+      "returns": {
+        "description": "The description of the current drawing, or null if not set.",
+        "type": "string | null"
+      },
+      "signature": "GetDescription(): string | null",
+      "since": "9.5.0"
+    },
+    "GetFill": {
+      "description": "Gets the fill formatting properties from the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null",
+      "since": "9.5.0"
+    },
+    "GetFlipH": {
+      "description": "Get horizontal flip of current drawing.",
+      "params": [],
+      "returns": {
+        "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",
+        "type": "boolean | null"
+      },
+      "signature": "GetFlipH(): boolean | null",
+      "since": "9.3.0"
+    },
+    "GetFlipV": {
+      "description": "Get vertical flip of current drawing.",
+      "params": [],
+      "returns": {
+        "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
+        "type": "boolean | null"
+      },
+      "signature": "GetFlipV(): boolean | null",
+      "since": "9.3.0"
+    },
+    "GetHeight": {
+      "description": "Returns the height of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetHeight/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet height = drawing.GetHeight();\nworksheet.GetRange(\"A1\").SetValue(\"Drawing height = \" + height);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetHeight(): EMU"
+    },
+    "GetLine": {
+      "description": "Gets the outline properties from the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiStroke | null"
+      },
+      "signature": "GetLine(): ApiStroke | null",
+      "since": "9.5.0"
+    },
+    "GetLockAspect": {
+      "description": "Returns whether the aspect ratio of the drawing is locked.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetLockAspect(): boolean",
+      "since": "9.5.0"
+    },
+    "GetLockValue": {
+      "description": "Returns the lock value for the specified lock type of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetLockValue/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\ndrawing.SetLockValue(\"noSelect\", true);\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nworksheet.GetRange(\"A1\").SetValue(\"This drawing cannot be selected: \" + lockValue);"
+      ],
+      "params": [
+        {
+          "description": "Lock type in the string format.",
+          "name": "sType",
+          "type": "DrawingLockType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetLockValue(sType: DrawingLockType): boolean"
+    },
+    "GetName": {
+      "description": "Returns the name of the current drawing.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string",
+      "since": "9.3.0"
+    },
+    "GetParentSheet": {
+      "description": "Returns the parent sheet of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetParentSheet/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet parentSheet = shape.GetParentSheet();\nlet content = shape.GetDocContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"Parent sheet name is \" + parentSheet.GetName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiWorksheet"
+      },
+      "signature": "GetParentSheet(): ApiWorksheet",
+      "since": "8.3.0"
+    },
+    "GetRotation": {
+      "description": "Returns the rotation angle of the current drawing object.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRotation(): number",
+      "since": "9.0.0"
+    },
+    "GetShadow": {
+      "description": "Returns the shadow of the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiShadow | null"
+      },
+      "signature": "GetShadow(): ApiShadow | null",
+      "since": "9.5.0"
+    },
+    "GetTitle": {
+      "description": "Gets the title of the current drawing.",
+      "params": [],
+      "returns": {
+        "description": "The title of the current drawing, or null if not set.",
+        "type": "string | null"
+      },
+      "signature": "GetTitle(): string | null",
+      "since": "9.5.0"
+    },
+    "GetWidth": {
+      "description": "Returns the width of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetWidth/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet width = drawing.GetWidth();\nworksheet.GetRange(\"A1\").SetValue(\"Drawing width = \" + width);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetWidth(): EMU"
+    },
+    "Select": {
+      "description": "Selects the current graphic object.",
+      "params": [
+        {
+          "description": "Specifies whether the selection should replace the current selection (true) or be added to it (false).",
+          "name": "isReplace",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Select(isReplace?: boolean): void",
+      "since": "9.3.0"
+    },
+    "SetDescription": {
+      "description": "Sets the description of the current drawing.",
+      "params": [
+        {
+          "description": "The description to set for the current drawing.",
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetDescription(description: string): boolean",
+      "since": "9.5.0"
+    },
+    "SetFill": {
+      "description": "Sets the fill formatting properties to the current graphic object.",
+      "params": [
+        {
+          "description": "The fill type used to fill the graphic object.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid or not supported for the current graphic object.",
+        "type": "boolean"
+      },
+      "signature": "SetFill(fill: ApiFill): boolean",
+      "since": "9.5.0"
+    },
+    "SetFlipH": {
+      "description": "Sets the horizontal flip of the current drawing.",
+      "params": [
+        {
+          "description": "Specifies if the figure will be flipped horizontally or not.",
+          "name": "bFlip",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetFlipH(bFlip: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetFlipV": {
+      "description": "Sets the vertical flip of the current drawing.",
+      "params": [
+        {
+          "description": "Specifies if the figure will be flipped vertically or not.",
+          "name": "bFlip",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetFlipV(bFlip: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetLockAspect": {
+      "description": "Sets whether the aspect ratio of the drawing is locked.",
+      "params": [
+        {
+          "description": "Specifies whether the aspect ratio of this drawing is locked.",
+          "name": "bAspect",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the lock aspect was successfully set, otherwise returns `false`.",
+        "type": "boolean"
+      },
+      "signature": "SetLockAspect(bAspect: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "SetLockValue": {
+      "description": "Sets the lock value to the specified lock type of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetLockValue/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\ndrawing.SetLockValue(\"noSelect\", true);\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nworksheet.GetRange(\"A1\").SetValue(\"This drawing cannot be selected: \" + lockValue);"
+      ],
+      "params": [
+        {
+          "description": "Lock type in the string format.",
+          "name": "sType",
+          "type": "DrawingLockType"
+        },
+        {
+          "description": "Specifies if the specified lock is applied to the current drawing.",
+          "name": "bValue",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLockValue(sType: DrawingLockType, bValue: boolean): boolean"
+    },
+    "SetName": {
+      "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
+      "params": [
+        {
+          "description": "The name which will be set to the current drawing.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the name was successfully set, otherwise returns false.",
+        "type": "boolean"
+      },
+      "signature": "SetName(name: string): boolean",
+      "since": "9.3.0"
+    },
+    "SetOutLine": {
+      "description": "Sets the outline properties to the specified graphic object.",
+      "params": [
+        {
+          "description": "The stroke used to create the graphic object outline.",
+          "name": "stroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid.",
+        "type": "boolean"
+      },
+      "signature": "SetOutLine(stroke: ApiStroke): boolean",
+      "since": "9.3.0"
+    },
+    "SetPosition": {
+      "description": "Changes the position for the drawing object.\n<note>Please note that the horizontal and vertical offsets are calculated within the limits of\nthe specified column and row cells only. If this value exceeds the cell width or height, another vertical/horizontal position will be set.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetPosition/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 2, 3 * 36000);"
+      ],
+      "params": [
+        {
+          "description": "The number of the column where the beginning of the drawing object will be placed.",
+          "name": "nFromCol",
+          "type": "number"
+        },
+        {
+          "description": "The offset from the nFromCol column to the left part of the drawing object measured in English measure units.",
+          "name": "nColOffset",
+          "type": "EMU"
+        },
+        {
+          "description": "The number of the row where the beginning of the drawing object will be placed.",
+          "name": "nFromRow",
+          "type": "number"
+        },
+        {
+          "description": "The offset from the nFromRow row to the upper part of the drawing object measured in English measure units.",
+          "name": "nRowOffset",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetPosition(nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): void"
+    },
+    "SetRotation": {
+      "description": "Sets the rotation angle to the current drawing object.",
+      "params": [
+        {
+          "description": "New drawing rotation angle.",
+          "name": "nRotAngle",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRotation(nRotAngle: number): boolean",
+      "since": "9.0.0"
+    },
+    "SetShadow": {
+      "description": "Sets the shadow to the current graphic object.",
+      "params": [
+        {
+          "description": "The shadow to apply, or null to remove the current shadow.",
+          "name": "shadow",
+          "type": "ApiShadow"
+        }
+      ],
+      "returns": {
+        "description": "returns false if the graphic object does not support shadow.",
+        "type": "boolean"
+      },
+      "signature": "SetShadow(shadow: ApiShadow): boolean",
+      "since": "9.5.0"
+    },
+    "SetSize": {
+      "description": "Sets a size of the object (image, shape, chart) bounding box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetSize/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 2, 3 * 36000);"
+      ],
+      "params": [
+        {
+          "description": "The object width measured in English measure units.",
+          "name": "nWidth",
+          "type": "EMU"
+        },
+        {
+          "description": "The object height measured in English measure units.",
+          "name": "nHeight",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSize(nWidth: EMU, nHeight: EMU): void"
+    },
+    "SetTitle": {
+      "description": "Sets the title of the current drawing.",
+      "params": [
+        {
+          "description": "The title to set for the current drawing.",
+          "name": "title",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetTitle(title: string): boolean",
+      "since": "9.5.0"
+    },
+    "Unselect": {
+      "description": "Removes the current drawing from the selection.",
+      "params": [],
+      "returns": {
+        "description": "Returns false if the drawing or controller is not available, otherwise returns true.",
+        "type": "boolean"
+      },
+      "signature": "Unselect(): boolean",
+      "since": "9.3.0"
+    }
+  }
+}

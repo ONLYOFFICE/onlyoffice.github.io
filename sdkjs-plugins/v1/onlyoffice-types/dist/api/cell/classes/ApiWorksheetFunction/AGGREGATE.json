@@ -1,0 +1,33 @@
+{
+  "description": "Returns an aggregate in a list or database.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/AGGREGATE/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.AGGREGATE(9, 4, 10, 30, 50, 5));"
+  ],
+  "params": [
+    {
+      "description": "A numeric value that specifies which function to use: **1** - AVERAGE, **2** - COUNT, **3** - COUNTA, **4** - MAX, **5** - MIN,\r**6** - PRODUCT, **7** - STDEV.S, **8** - STDEV.P, **9** - SUM, **10** - VAR.S, **11** - VAR.P, **12** - MEDIAN, **13** - MODE.SNGL, **14** - LARGE,\r**15** - SMALL, **16** - PERCENTILE.INC, **17** - QUARTILE.INC, **18** - PERCENTILE.EXC, **19** - QUARTILE.EXC.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A numeric value that specifies which values should be ignored: **0** or omitted - nested SUBTOTAL and AGGREGATE functions,\r**1** - hidden rows, nested SUBTOTAL and AGGREGATE functions, **2** - error values, nested SUBTOTAL and AGGREGATE functions,\r**3** - hidden rows, error values, nested SUBTOTAL and AGGREGATE functions, **4** - nothing, **5** - hidden rows, **6** - error values, **7** - hidden rows and error values.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The first numeric value for which the aggregate value will be returned.",
+      "name": "arg3",
+      "type": "number | ApiRange | number[]"
+    },
+    {
+      "description": "Up to 253 numeric values or a range of cells containing the values for which the aggregate value will be returned.\rArguments can be numbers, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "number | ApiRange | number[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "AGGREGATE(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: number | ApiRange | number[], args: number | ApiRange | number[]): number"
+}

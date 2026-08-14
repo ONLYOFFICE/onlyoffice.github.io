@@ -1,0 +1,18 @@
+{
+  "description": "Returns the ISO week number in the year for a given date.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ISOWEEKNUM/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.ISOWEEKNUM(\"9/1/2017\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The date-time code used for date and time calculation.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ISOWEEKNUM(arg1: ApiRange | ApiName | number): number"
+}

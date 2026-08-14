@@ -1,0 +1,33 @@
+{
+  "description": "Returns the normal distribution for the specified mean and standard deviation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NORM_DIST/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\nlet valueArr = [36, 6, 7, false];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\n//method params\nlet x = worksheet.GetRange(\"A1\").GetValue();\nlet mean = worksheet.GetRange(\"A2\").GetValue();\nlet standardDeviation = worksheet.GetRange(\"A3\").GetValue();\nlet cumulative = worksheet.GetRange(\"A4\").GetValue();\nlet func = Api.GetWorksheetFunction();\nlet normalDist = func.NORM_DIST(x, mean, standardDeviation, cumulative);\nworksheet.GetRange(\"C1\").SetValue(normalDist);"
+  ],
+  "params": [
+    {
+      "description": "The value for which the distribution will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The arithmetic mean of the distribution.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The standard deviation of the distribution, a positive number.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value (**true** or **false**) that determines the function form.\rIf it is **true**, the function returns the cumulative distribution function.\rIf it is **false**, the function returns the probability mass function.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "NORM_DIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | boolean): number"
+}

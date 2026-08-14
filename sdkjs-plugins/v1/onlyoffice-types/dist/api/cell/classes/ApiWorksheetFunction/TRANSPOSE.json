@@ -1,0 +1,18 @@
+{
+  "description": "Converts a vertical range of cells to a horizontal range, or vice versa.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TRANSPOSE/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(\"Ann\");\nworksheet.GetRange(\"A2\").SetValue(\"Bob\");\nworksheet.GetRange(\"B1\").SetValue(\"Apples\");\nworksheet.GetRange(\"B2\").SetValue(\"ranges\");\nlet range = worksheet.GetRange(\"A1:B2\");\nworksheet.GetRange(\"A4:B5\").SetValue(func.TRANSPOSE(range));"
+  ],
+  "params": [
+    {
+      "description": "A range of cells on a worksheet or an array that will be transposed.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | (number | string | boolean)[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange"
+  },
+  "signature": "TRANSPOSE(arg1: ApiRange | ApiName | (number | string | boolean)[]): ApiRange"
+}

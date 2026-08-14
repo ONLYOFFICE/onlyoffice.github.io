@@ -1,0 +1,520 @@
+{
+  "description": "Class representing a table cell.",
+  "methods": {
+    "AddText": {
+      "description": "Appends text to the end of the cell content.",
+      "params": [
+        {
+          "description": "The text to append.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "AddText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "GetBackgroundColor": {
+      "description": "Returns the background color of the current table cell.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor | null"
+      },
+      "signature": "GetBackgroundColor(): ApiColor | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiTableCell class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\nvar sClassType = oCell.GetClassType();\noParagraph.AddText(\"Class type: \" + sClassType);\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"tableCell\""
+      },
+      "signature": "GetClassType(): \"tableCell\""
+    },
+    "GetContent": {
+      "description": "Returns the current cell content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/GetContent/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is a sample text in the cell.\");\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiDocumentContent"
+      },
+      "signature": "GetContent(): ApiDocumentContent"
+    },
+    "GetIndex": {
+      "description": "Returns the current cell index.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetIndex(): number",
+      "since": "9.5.0"
+    },
+    "GetInternalId": {
+      "description": "Returns an internal id of the current table cell.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInternalId(): string",
+      "since": "9.5.0"
+    },
+    "GetNext": {
+      "description": "Returns the next cell if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null if cell is last.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetNext(): ApiTableCell | null",
+      "since": "9.5.0"
+    },
+    "GetParentRow": {
+      "description": "Returns a parent row of the current cell.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent row doesn't exist.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetParentRow(): ApiTableRow | null",
+      "since": "9.5.0"
+    },
+    "GetParentTable": {
+      "description": "Returns a parent table of the current cell.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null",
+      "since": "9.5.0"
+    },
+    "GetPrevious": {
+      "description": "Returns the previous cell if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null is cell is first.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetPrevious(): ApiTableCell | null",
+      "since": "9.5.0"
+    },
+    "GetRowIndex": {
+      "description": "Returns an index of the parent row.",
+      "params": [],
+      "returns": {
+        "type": "number | null"
+      },
+      "signature": "GetRowIndex(): number | null",
+      "since": "9.5.0"
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current table cell.",
+      "params": [
+        {
+          "description": "Options for formatting the returned text.",
+          "name": "pr",
+          "optional": true,
+          "type": "object"
+        },
+        {
+          "description": "Defines if the resulting string will include numbering or not.",
+          "name": "pr_Numbering",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the resulting string will include mathematical expressions or not.",
+          "name": "pr_Math",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines how the table cell separator will be specified in the resulting string.",
+          "name": "pr_TableCellSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table row separator will be specified in the resulting string.",
+          "name": "pr_TableRowSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the paragraph separator will be specified in the resulting string.",
+          "name": "pr_ParaSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the tab will be specified in the resulting string.",
+          "name": "pr_TabSymbol",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the line separator will be specified in the resulting string.",
+          "name": "pr_NewLineSeparator",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string",
+      "since": "9.4.0"
+    },
+    "GetTextRange": {
+      "description": "Returns an ApiTextRange covering the full text content of the table cell.",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "GetTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "Select": {
+      "description": "Selects the current table cell in the presentation.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Select(): void",
+      "since": "9.5.0"
+    },
+    "SetBackgroundColor": {
+      "description": "Sets the background color to the current table cell.",
+      "params": [
+        {
+          "description": "If not passed, the background color will be cleared.",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBackgroundColor(color?: ApiColor): boolean",
+      "since": "9.5.0"
+    },
+    "SetCellBorderBottom": {
+      "description": "Sets the border which shall be displayed at the bottom of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderBottom/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetCellBorderBottom(2, oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The cell bottom border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current border.",
+          "name": "fSize",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderBottom(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean",
+      "since": "9.5.0"
+    },
+    "SetCellBorderLeft": {
+      "description": "Sets the border which shall be displayed at the left of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderLeft/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetCellBorderLeft(2, oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The cell bottom border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current border.",
+          "name": "fSize",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderLeft(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean",
+      "since": "9.5.0"
+    },
+    "SetCellBorderRight": {
+      "description": "Sets the border which shall be displayed at the right of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderRight/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetCellBorderRight(2, oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The cell bottom border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current border.",
+          "name": "fSize",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderRight(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean",
+      "since": "9.5.0"
+    },
+    "SetCellBorderTop": {
+      "description": "Sets the border which shall be displayed at the top of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderTop/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetCellBorderTop(2, oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The cell bottom border style.",
+          "name": "sType",
+          "type": "BorderType"
+        },
+        {
+          "description": "The width of the current border.",
+          "name": "fSize",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderTop(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean",
+      "since": "9.5.0"
+    },
+    "SetCellMarginBottom": {
+      "description": "Specifies an amount of space which shall be left between the bottom extent of the cell contents and the border\nof a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginBottom/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetCellMarginBottom(600);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "If this value is `null`, then default table cell bottom margin shall be used,\rotherwise override the table cell bottom margin with specified value for the current cell.",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCellMarginBottom(nValue: twips): void"
+    },
+    "SetCellMarginLeft": {
+      "description": "Specifies an amount of space which shall be left between the left extent of the current cell contents and the\nleft edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginLeft/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetCellMarginLeft(720);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "If this value is `null`, then default table cell left margin shall be used,\rotherwise override the table cell left margin with specified value for the current cell.",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCellMarginLeft(nValue: twips): void"
+    },
+    "SetCellMarginRight": {
+      "description": "Specifies an amount of space which shall be left between the right extent of the current cell contents and the\nright edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginRight/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetCellMarginRight(600);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "If this value is `null`, then default table cell right margin shall be used,\rotherwise override the table cell right margin with specified value for the current cell.",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCellMarginRight(nValue: twips): void"
+    },
+    "SetCellMarginTop": {
+      "description": "Specifies an amount of space which shall be left between the top extent of the current cell contents and the\ntop edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginTop/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetCellMarginTop(720);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "If this value is `null`, then default table cell top margin shall be used,\rotherwise override the table cell top margin with specified value for the current cell.",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetCellMarginTop(nValue: twips): void"
+    },
+    "SetColumnBackgroundColor": {
+      "description": "Sets the background color to all cells in the column containing the current cell.",
+      "params": [
+        {
+          "description": "If not passed, the background color will be cleared.",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetColumnBackgroundColor(color?: ApiColor): boolean",
+      "since": "9.5.0"
+    },
+    "SetShd": {
+      "description": "Specifies the shading which shall be applied to the extents of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetShd/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetShd(oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The shading type applied to the contents of the current table. Can be ShdType or ApiFill.",
+          "name": "sType",
+          "type": "ShdType | ApiFill"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetShd(sType: ShdType | ApiFill, r: number, g: number, b: number): void"
+    },
+    "SetText": {
+      "description": "Replaces all content of the current table cell with the specified text,\npreserving the formatting of the first paragraph.",
+      "params": [
+        {
+          "description": "The text to set.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "SetText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "SetTextDirection": {
+      "description": "Specifies the direction of the text flow for the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetTextDirection/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\noRow.SetHeight(30 * 36000);\nvar oCell = oRow.GetCell(0);\noCell.SetTextDirection(\"tbrl\");\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The type of the text flow direction.",
+          "name": "sType",
+          "type": "TextFlowDirection"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTextDirection(sType: TextFlowDirection): void"
+    },
+    "SetVerticalAlign": {
+      "description": "Specifies the vertical alignment for text within the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetVerticalAlign/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(1);\noRow.SetHeight(30 * 36000);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetVerticalAlign(\"bottom\");\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The type of the vertical alignment.",
+          "name": "sType",
+          "type": "VerticalTextAlign"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetVerticalAlign(sType: VerticalTextAlign): void"
+    },
+    "SetWidth": {
+      "description": "Specifies the preferred width for this cell.",
+      "params": [
+        {
+          "description": "The type of the width value.",
+          "name": "sType",
+          "type": "TableWidth"
+        },
+        {
+          "description": "The table width value measured in positive integers.",
+          "name": "nValue",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetWidth(sType: TableWidth, nValue?: number): boolean"
+    }
+  }
+}

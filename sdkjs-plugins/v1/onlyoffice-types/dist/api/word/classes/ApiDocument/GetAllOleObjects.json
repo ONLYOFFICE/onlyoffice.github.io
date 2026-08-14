@@ -1,0 +1,12 @@
+{
+  "description": "Returns a collection of OLE objects from the document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllOleObjects/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet oleObject = Api.CreateOleObject(\"https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp\", 95 * 36000, 70 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nparagraph = Api.CreateParagraph();\nparagraph.AddDrawing(oleObject);\nlet docContent = shape.GetDocContent();\ndocContent.AddElement(0, paragraph);\nlet oleObjects = docContent.GetAllOleObjects();\nlet appId = oleObjects[0].GetApplicationId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The application ID for the current OLE object: \" + appId);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiOleObject[]"
+  },
+  "signature": "GetAllOleObjects(): ApiOleObject[]"
+}

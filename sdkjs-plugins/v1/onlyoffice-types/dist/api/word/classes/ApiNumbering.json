@@ -1,0 +1,47 @@
+{
+  "description": "Class representing the numbering properties.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiNumbering class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumbering/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"bullet\");\nfor (let nLvl = 0; nLvl < 8; ++nLvl) {\n\tlet numLvl = numbering.GetLevel(nLvl);\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"Default bullet lvl \" + (nLvl + 1));\n\tparagraph.SetNumbering(numLvl);\n\tparagraph.SetContextualSpacing(true);\n\tdoc.Push(paragraph);\n}\nlet classType = numbering.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"numbering\""
+      },
+      "signature": "GetClassType(): \"numbering\""
+    },
+    "GetLevel": {
+      "description": "Returns the specified level of the current numbering.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumbering/Methods/GetLevel/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"bullet\");\nfor (let nLvl = 0; nLvl < 8; ++nLvl) {\n\tlet numLvl = numbering.GetLevel(nLvl);\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"Default bullet lvl \" + (nLvl + 1));\n\tparagraph.SetNumbering(numLvl);\n\tparagraph.SetContextualSpacing(true);\n\tdoc.Push(paragraph);\n}"
+      ],
+      "params": [
+        {
+          "description": "The numbering level index. This value MUST BE from 0 to 8.",
+          "name": "nLevel",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiNumberingLevel"
+      },
+      "signature": "GetLevel(nLevel: number): ApiNumberingLevel"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiNumbering object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumbering/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"bullet\");\nlet json = numbering.ToJSON();\nlet numberingFromJSON = Api.FromJSON(json);\nfor (let lvl = 0; lvl < 2; ++lvl) {\n\tlet numLvl = numberingFromJSON.GetLevel(lvl);\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"This is an example of the bulleted paragraph № \" + (lvl + 1));\n\tparagraph.SetNumbering(numLvl);\n\tdoc.Push(paragraph);\n}\nlet type = numberingFromJSON.GetClassType();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type = \" + type);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

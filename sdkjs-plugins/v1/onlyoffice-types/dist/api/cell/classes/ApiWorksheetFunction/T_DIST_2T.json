@@ -1,0 +1,23 @@
+{
+  "description": "Returns the two-tailed Student's t-distribution.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/T_DIST_2T/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.T_DIST_2T(1.5, 10));"
+  ],
+  "params": [
+    {
+      "description": "The numeric value at which to evaluate the distribution.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An integer indicating the number of degrees of freedom that characterize the distribution.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "T_DIST_2T(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

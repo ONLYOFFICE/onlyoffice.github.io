@@ -1,0 +1,84 @@
+{
+  "description": "Class representing a GoTo action.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiGoToAction class.",
+      "params": [],
+      "returns": {
+        "type": "\"goToAction\""
+      },
+      "signature": "GetClassType(): \"goToAction\""
+    },
+    "GetPage": {
+      "description": "Gets desctination page index",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetPage(): number"
+    },
+    "GetRect": {
+      "description": "Gets goto destination rect",
+      "params": [],
+      "returns": {
+        "type": "Rect"
+      },
+      "signature": "GetRect(): Rect"
+    },
+    "GetType": {
+      "description": "Gets goto type",
+      "params": [],
+      "returns": {
+        "type": "GoToType"
+      },
+      "signature": "GetType(): GoToType"
+    },
+    "GetZoom": {
+      "description": "Gets goto destination rect",
+      "params": [],
+      "returns": {
+        "type": "Rect"
+      },
+      "signature": "GetZoom(): Rect"
+    },
+    "SetPage": {
+      "description": "Sets desctination page index",
+      "params": [
+        {
+          "name": "page",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPage(page: number): boolean"
+    },
+    "SetRect": {
+      "description": "Sets goto destination rect",
+      "params": [
+        {
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRect(rect: Rect): boolean"
+    },
+    "SetType": {
+      "description": "Sets goto type",
+      "params": [
+        {
+          "name": "type",
+          "type": "GoToType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetType(type: GoToType): boolean"
+    }
+  }
+}

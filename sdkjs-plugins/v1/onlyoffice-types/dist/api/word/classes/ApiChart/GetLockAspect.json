@@ -1,0 +1,9 @@
+{
+  "description": "Returns whether the aspect ratio of the drawing is locked.",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "GetLockAspect(): boolean",
+  "since": "9.5.0"
+}

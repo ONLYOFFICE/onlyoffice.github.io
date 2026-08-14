@@ -1,0 +1,17 @@
+{
+  "description": "Class representing a base class for color types.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiUniColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiUniColor/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oPresetColor = Api.CreatePresetColor(\"lightYellow\");\nvar oGs1 = Api.CreateGradientStop(oPresetColor, 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar sClassType = oPresetColor.GetClassType();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class Type = \" + sClassType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"uniColor\""
+      },
+      "signature": "GetClassType(): \"uniColor\""
+    }
+  }
+}

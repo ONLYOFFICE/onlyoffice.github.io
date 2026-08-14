@@ -1,0 +1,18 @@
+{
+  "description": "Returns the largest value in a set of values. Ignores logical values and text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MAX/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet max = func.MAX(123, 197, 46, 354, 67, 456);\nworksheet.GetRange(\"C1\").SetValue(max);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the largest number will be returned.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "number | number[] | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MAX(args: number | number[] | ApiRange | ApiName): number"
+}

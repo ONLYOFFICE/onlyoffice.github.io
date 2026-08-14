@@ -1,0 +1,15 @@
+{
+  "description": "Scales the width of the figure using the specified coefficient.",
+  "params": [
+    {
+      "description": "The coefficient by which the figure width will be scaled.",
+      "name": "coefficient",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "description": "return false if param is invali.",
+    "type": "boolean"
+  },
+  "signature": "ScaleWidth(coefficient: number): boolean"
+}

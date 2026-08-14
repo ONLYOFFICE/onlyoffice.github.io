@@ -1,0 +1,18 @@
+{
+  "description": "Checks whether a value is *#N/A*, and returns **true** or **false**.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ISNA/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ISNA(\"#N/A\"));\nworksheet.GetRange(\"A2\").SetValue(func.ISNA(255));\nworksheet.GetRange(\"A3\").SetValue(func.ISNA(\"www.example.com\"));"
+  ],
+  "params": [
+    {
+      "description": "The value to test.\rThe value can be an empty cell, error, logical value, text, number, range, or range name.",
+      "name": "arg1",
+      "type": "ApiRange | string | number | boolean | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ISNA(arg1: ApiRange | string | number | boolean | ApiName): boolean"
+}

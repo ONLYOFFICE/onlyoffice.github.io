@@ -1,0 +1,16 @@
+{
+  "description": "Class representing a Preset Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiPresetColor class.",
+      "params": [],
+      "returns": {
+        "type": "\"presetColor\""
+      },
+      "signature": "GetClassType(): \"presetColor\""
+    }
+  }
+}

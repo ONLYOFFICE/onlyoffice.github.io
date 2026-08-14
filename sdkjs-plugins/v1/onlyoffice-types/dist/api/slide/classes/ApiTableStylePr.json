@@ -1,0 +1,20 @@
+{
+  "description": "Class representing a set of formatting properties which shall be conditionally applied to the parts of a table\nwhich match the requirement specified on the `Type`.",
+  "methods": {
+    "SetTablePr": {
+      "description": "Sets the table properties to the current table style properties.",
+      "params": [
+        {
+          "description": "The table properties to apply.",
+          "name": "oTablePr",
+          "type": "ApiTablePr"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTablePr(oTablePr: ApiTablePr): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

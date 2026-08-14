@@ -1,0 +1,18 @@
+{
+  "description": "Returns an integer representing the data type of a value: number = 1; text = 2; logical value = 4; error value = 16; array = 64; compound data = 128.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TYPE/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TYPE(255));\nworksheet.GetRange(\"A2\").SetValue(func.TYPE(true));\nworksheet.GetRange(\"A3\").SetValue(func.TYPE(\"Online Office\"));"
+  ],
+  "params": [
+    {
+      "description": "A value to test.",
+      "name": "arg1",
+      "type": "number | string | boolean | (number | string | boolean)[] | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TYPE(arg1: number | string | boolean | (number | string | boolean)[] | ApiRange | ApiName): number"
+}

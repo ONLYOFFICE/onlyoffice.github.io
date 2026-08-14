@@ -1,0 +1,36 @@
+{
+  "description": "Returns statistics that describe a linear trend matching known data points, by fitting a straight line using the least squares method.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LINEST/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\n//configure function parameters\nlet yValues = [1.5, 2, 3];\nlet xValues = [2, 3.1, 3.5];\nlet constant = true;\nlet stats = true;\n\n//set values in cells\nfor (let i = 0; i < yValues.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(yValues[i]);\n}\nfor (let n = 0; n < xValues.length; n++) {\n  worksheet.GetRange(\"B\" + (n + 1)).SetValue(xValues[n]);\n}\n\n//get x and y ranges\nlet yRange = worksheet.GetRange(\"A1:A3\");\nlet xRange = worksheet.GetRange(\"B1:B3\");\nlet func = Api.GetWorksheetFunction();\n\n//invoke LINEST method\nlet ans = func.LINEST(yRange, xRange, constant, stats);\n\n//print answer \n worksheet.GetRange(\"D1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The set of y-values from the *y = mx + b* equation.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "An optional set of x-values from the *y = mx + b* equation.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "A logical value: the constant *b* is calculated normally if this parameter is set to **true** or omitted,\rand *b* is set equal to 0 if the parameter is **false**.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | boolean"
+    },
+    {
+      "description": "A logical value: return additional regression statistics if this parameter is set to **true**,\rand return m-coefficients and the constant *b* if the parameter is **false** or omitted.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LINEST(arg1: ApiRange | ApiName, arg2?: ApiRange | ApiName, arg3?: ApiRange | ApiName | boolean, arg4?: ApiRange | ApiName | boolean): number"
+}

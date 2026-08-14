@@ -1,0 +1,946 @@
+{
+  "description": "Class representing a container for the paragraph elements.",
+  "methods": {
+    "AddComment": {
+      "description": "Adds a comment to the current inline content control.\n<note>Please note that this inline content control must be in the document.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/AddComment/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.AddComment(\"comment\", \"John Smith\");"
+      ],
+      "params": [
+        {
+          "description": "The comment text.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The author's name.",
+          "name": "sAuthor",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment author.",
+          "name": "sUserId",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns null if the comment was not added.",
+        "type": "ApiComment"
+      },
+      "signature": "AddComment(sText: string, sAuthor?: string, sUserId?: string): ApiComment"
+    },
+    "AddElement": {
+      "description": "Adds an element to the inline text content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/AddElement/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a text run in it.\");\ninlineLvlSdt.AddElement(run, 0);"
+      ],
+      "params": [
+        {
+          "description": "The document element which will be added at the position specified. Returns **false** if the type of *oElement* is not supported by an inline text content control.",
+          "name": "oElement",
+          "type": "ParagraphContent"
+        },
+        {
+          "description": "The position of the element where it will be added to the current inline text content control. If this value is not specified, then the element will be added to the end of the current inline text content control.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "returns false if oElement unsupported.",
+        "type": "boolean"
+      },
+      "signature": "AddElement(oElement: ParagraphContent, nPos?: number): boolean"
+    },
+    "AddListItem": {
+      "description": "Adds an item to a combo box list or drop-down list.",
+      "params": [
+        {
+          "description": "The name of the item to add to the list.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The value of the item to add to the list.",
+          "name": "value",
+          "type": "string"
+        },
+        {
+          "description": "The optional position at which to insert the new item in the list.",
+          "name": "pos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the item was successfully added, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "AddListItem(name: string, value: string, pos?: number): boolean",
+      "since": "9.0.0"
+    },
+    "AddText": {
+      "description": "Adds text to the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/AddText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+      ],
+      "params": [
+        {
+          "description": "The text which will be added to the content control.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns null if content control can't be edited.",
+        "type": "ApiRun"
+      },
+      "signature": "AddText(text: string): ApiRun"
+    },
+    "Copy": {
+      "description": "Creates a copy of an inline content control. Ignores comments, footnote references, complex fields.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/Copy/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet copyInlineLvlSdt = inlineLvlSdt.Copy();\nparagraph.AddLineBreak();\nparagraph.AddInlineLvlSdt(copyInlineLvlSdt);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiInlineLvlSdt"
+      },
+      "signature": "Copy(): ApiInlineLvlSdt"
+    },
+    "Delete": {
+      "description": "Removes a content control and its content. If keepContent is true, the content is not deleted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/Delete/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.Delete(false);\nparagraph.AddText(\"The inline text content control was removed.\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the content will be deleted or not.",
+          "name": "keepContent",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns false if control haven't parent paragraph.",
+        "type": "boolean"
+      },
+      "signature": "Delete(keepContent: boolean): boolean"
+    },
+    "GetAlias": {
+      "description": "Returns the alias attribute for the current container.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetAlias/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with alias '№1'.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetAlias(\"№1\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet alias = inlineLvlSdt.GetAlias();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Alias: \" + alias);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAlias(): string"
+    },
+    "GetAppearance": {
+      "description": "Returns the visualization type of the content control.",
+      "params": [],
+      "returns": {
+        "description": "type - The visualization type of the content control.",
+        "type": "\"boundingBox\" | \"hidden\""
+      },
+      "signature": "GetAppearance(): \"boundingBox\" | \"hidden\"",
+      "since": "9.0.0"
+    },
+    "GetBackgroundColor": {
+      "description": "Returns the background color of the current content control.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetBackgroundColor(): ApiColor",
+      "since": "8.3.2"
+    },
+    "GetBorderColor": {
+      "description": "Returns the border color of the current content control.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetBorderColor(): ApiColor",
+      "since": "8.3.2"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiInlineLvlSdt class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.AddElement(run, 0);\nlet classType = inlineLvlSdt.GetClassType();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Class Type = \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"inlineLvlSdt\""
+      },
+      "signature": "GetClassType(): \"inlineLvlSdt\""
+    },
+    "GetColor": {
+      "description": "Returns the tag color of the content control.",
+      "params": [],
+      "returns": {
+        "description": "Returns the tag color, or _null_ if no color is set.",
+        "type": "ApiColor | null"
+      },
+      "signature": "GetColor(): ApiColor | null",
+      "since": "9.4.0"
+    },
+    "GetDataBinding": {
+      "description": "Retrieves the data binding of the content control.",
+      "params": [],
+      "returns": {
+        "description": "Returns the data binding of the content control if it exists, otherwise `null`.",
+        "type": "XmlMapping"
+      },
+      "signature": "GetDataBinding(): XmlMapping",
+      "since": "9.0.0"
+    },
+    "GetDataForXmlMapping": {
+      "description": "Returns the content control data for the XML mapping.",
+      "params": [],
+      "returns": {
+        "description": "The string data representing the contents of the current content control.",
+        "type": "string"
+      },
+      "signature": "GetDataForXmlMapping(): string",
+      "since": "9.0.0"
+    },
+    "GetDate": {
+      "description": "Retrieves the selected date value from a date picker content control and returns it as a Date object.\n\nThrows: Error if the content control is not a date picker.",
+      "params": [],
+      "returns": {
+        "description": "Date object representing the selected date in the date picker control, or undefined if the form is a placeholder.",
+        "type": "undefined | Date"
+      },
+      "signature": "GetDate(): undefined | Date",
+      "since": "9.0.0"
+    },
+    "GetDropdownList": {
+      "description": "Returns a list of values of the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetDropdownList/",
+      "examples": [
+        "// todo_example we don't have ability to create such class in builder"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiContentControlList"
+      },
+      "signature": "GetDropdownList(): ApiContentControlList"
+    },
+    "GetElement": {
+      "description": "Returns an element of the current inline text content control using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetElement/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nfor (let i = 0; i < 10; ++i) {\n\tlet run = Api.CreateRun();\n\trun.AddText(\"This is text run \" + (i + 1) + \". \");\n\tinlineLvlSdt.AddElement(run);\n}\nlet changeRun = inlineLvlSdt.GetElement(4);\nchangeRun.SetBold(true);\nparagraph.AddLineBreak();\nparagraph.AddLineBreak();\nparagraph.AddLineBreak();\nparagraph.AddText(\"We added 10 text runs to the above inline text content control. Then we changed the fifth run, so it is different from the others.\");"
+      ],
+      "params": [
+        {
+          "description": "The position where the element which content we want to get must be located.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ParagraphContent"
+      },
+      "signature": "GetElement(nPos: number): ParagraphContent"
+    },
+    "GetElementIndex": {
+      "description": "Returns the position (index) of the specified element within the current inline content control.",
+      "params": [
+        {
+          "description": "The inline element (run, inline content control, form, etc.) whose index will be returned.",
+          "name": "element",
+          "type": "ParagraphContent"
+        }
+      ],
+      "returns": {
+        "description": "returns -1 if the element is not a direct child of the current inline content control.",
+        "type": "number"
+      },
+      "signature": "GetElementIndex(element: ParagraphContent): number",
+      "since": "9.5.0"
+    },
+    "GetElementsCount": {
+      "description": "Returns a number of elements in the current inline text content control. The text content \ncontrol is created with one text run present in it by default, so even without any \nelement added this method will return the value of '1'.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetElementsCount/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nparagraph.AddLineBreak();\nlet inlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (before adding anything) = \" + inlineLvlSdtCount);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control. \");\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddLineBreak();\ninlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (after adding one element) = \" + inlineLvlSdtCount);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"One more element of the inline text content control.\");\ninlineLvlSdt.AddElement(run1, 1);\ninlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (after adding one more element) = \" + inlineLvlSdtCount);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetElementsCount(): number"
+    },
+    "GetId": {
+      "description": "Returns a unique ID for the current content control.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetId(): string",
+      "since": "8.3.2"
+    },
+    "GetInternalId": {
+      "description": "Returns an internal ID of the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetInternalId/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInternalId(): string"
+    },
+    "GetLabel": {
+      "description": "Returns the label attribute for the current container.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetLabel/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a label set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetLabel(\"2147483647\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet label = inlineLvlSdt.GetLabel();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Label: \" + label);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetLabel(): number"
+    },
+    "GetLock": {
+      "description": "Returns the lock type of the current container.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetLock/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with the content lock set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetLock(\"sdtContentLocked\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet lock = inlineLvlSdt.GetLock();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Lock type: \" + lock);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "SdtLock"
+      },
+      "signature": "GetLock(): SdtLock"
+    },
+    "GetParent": {
+      "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current inline content control.",
+      "params": [],
+      "returns": {
+        "description": "returns null if the content control has no parent.",
+        "type": "ParagraphLikeContainer"
+      },
+      "signature": "GetParent(): ParagraphLikeContainer",
+      "since": "9.5.0"
+    },
+    "GetParentContentControl": {
+      "description": "Returns a content control that contains the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParentContentControl/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt1 = Api.CreateInlineLvlSdt();\ninlineLvlSdt1.AddText(\"This is a parent inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt1);\nlet inlineLvlSdt2 = Api.CreateInlineLvlSdt();\ninlineLvlSdt2.AddText(\"This is an inline text content control added in another content control.\");\ninlineLvlSdt1.AddElement(inlineLvlSdt2, 0);\nlet parentInlineLvlSdt = inlineLvlSdt2.GetParentContentControl();\nparentInlineLvlSdt.SetAlias(\"№1\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if parent content control doesn't exist.",
+        "type": "ApiBlockLvlSdt | ApiInlineLvlSdt | null"
+      },
+      "signature": "GetParentContentControl(): ApiBlockLvlSdt | ApiInlineLvlSdt | null"
+    },
+    "GetParentParagraph": {
+      "description": "Returns a paragraph that contains the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParentParagraph/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a parent paragraph. \");\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control added to the paragraph.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet parentParagraph = inlineLvlSdt.GetParentParagraph();\nparentParagraph.SetBold(true);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if parent paragraph doesn't exist.",
+        "type": "ApiParagraph | null"
+      },
+      "signature": "GetParentParagraph(): ApiParagraph | null"
+    },
+    "GetParentTable": {
+      "description": "Returns a table that contains the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParentTable/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nlet paragraph = Api.CreateParagraph();\nparagraph.AddElement(inlineLvlSdt, 0);\nlet cell = table.GetRow(0).GetCell(0);\ncell.AddElement(0, paragraph);\nlet parentTable = inlineLvlSdt.GetParentTable();\ncell = parentTable.GetRow(2).GetCell(0);\nparentTable.RemoveRow(cell);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null"
+    },
+    "GetParentTableCell": {
+      "description": "Returns a table cell that contains the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParentTableCell/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nlet paragraph = Api.CreateParagraph();\nparagraph.AddElement(inlineLvlSdt, 0);\nlet cell = table.GetRow(0).GetCell(0);\ncell.AddElement(0, paragraph);\nlet parentTableCell = inlineLvlSdt.GetParentTableCell();\nparentTableCell.SetShd(\"clear\", 255, 111, 61, false);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "return null if parent cell doesn't exist.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetParentTableCell(): ApiTableCell | null"
+    },
+    "GetPlaceholderText": {
+      "description": "Returns the placeholder text from the current inline content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetPlaceholderText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.SetPlaceholderText(\"Enter your text here\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet placeholderText = inlineLvlSdt.GetPlaceholderText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Placeholder text: \" + placeholderText);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetPlaceholderText(): string"
+    },
+    "GetPosInParent": {
+      "description": "Returns the position (index) of the current inline content control within its parent element.",
+      "params": [],
+      "returns": {
+        "description": "returns -1 if the content control has no parent.",
+        "type": "number"
+      },
+      "signature": "GetPosInParent(): number",
+      "since": "9.5.0"
+    },
+    "GetRange": {
+      "description": "Returns a Range object that represents the part of the document contained in the specified content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetRange/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet range = inlineLvlSdt.GetRange(11, 16);\nrange.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "Start position index in the current element.",
+          "name": "Start",
+          "type": "number"
+        },
+        {
+          "description": "End position index in the current element.",
+          "name": "End",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRange(Start: number, End: number): ApiRange"
+    },
+    "GetTag": {
+      "description": "Returns the tag attribute for the current container.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetTag/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a tag set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetTag(\"This is a tag\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet tag = inlineLvlSdt.GetTag();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tag: \" + tag);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetTag(): string"
+    },
+    "IsCheckBox": {
+      "description": "Checks if the content control is a checkbox.",
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the content control is a checkbox, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "IsCheckBox(): boolean",
+      "since": "9.0.0"
+    },
+    "IsCheckBoxChecked": {
+      "description": "Determines whether a checkbox content control is currently checked or unchecked.\n\nThrows: Error if the content control is not a checkbox.",
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the checkbox is checked, `false` if the checkbox is unchecked.",
+        "type": "boolean"
+      },
+      "signature": "IsCheckBoxChecked(): boolean",
+      "since": "9.0.0"
+    },
+    "IsComboBox": {
+      "description": "Checks whether the content control is a combo box list.",
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the content control is a combo box list, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "IsComboBox(): boolean",
+      "since": "9.0.0"
+    },
+    "IsDatePicker": {
+      "description": "Checks whether the content control is a datepicker.",
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the content control is a datepicker, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "IsDatePicker(): boolean",
+      "since": "9.0.0"
+    },
+    "IsDropDownList": {
+      "description": "Checks whether the content control is a drop-down list.",
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the content control is a drop-down list, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "IsDropDownList(): boolean",
+      "since": "9.0.0"
+    },
+    "IsForm": {
+      "description": "Checks if the content control is a form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsForm/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet isForm = inlineLvlSdt.IsForm();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first content control from this document is a form: \" + isForm);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsForm(): boolean"
+    },
+    "IsPicture": {
+      "description": "Checks whether the content control is a picture control.\nThis method verifies if the content control is specifically a picture control.",
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the content control is a picture, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "IsPicture(): boolean",
+      "since": "9.0.0"
+    },
+    "MoveCursorOutside": {
+      "description": "Places a cursor before/after the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/MoveCursorOutside/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"The cursor will be placed after the current content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.MoveCursorOutside(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether a cursor will be placed before (false) or after (true) the current content control.",
+          "name": "isAfter",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveCursorOutside(isAfter?: boolean): boolean",
+      "since": "8.1.0"
+    },
+    "Push": {
+      "description": "Adds an element to the end of inline text content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/Push/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control. \");\ninlineLvlSdt.AddElement(run, 0);\nrun = Api.CreateRun();\nrun.AddText(\"This sentence was pushed here.\");\ninlineLvlSdt.Push(run);"
+      ],
+      "params": [
+        {
+          "description": "The document element which will be added to the end of the container.",
+          "name": "oElement",
+          "type": "DocumentElement"
+        }
+      ],
+      "returns": {
+        "description": "returns false if oElement unsupported.",
+        "type": "boolean"
+      },
+      "signature": "Push(oElement: DocumentElement): boolean"
+    },
+    "RemoveAllElements": {
+      "description": "Removes all the elements from the current inline text content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/RemoveAllElements/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.RemoveAllElements();\ninlineLvlSdt.AddText(\"We removed all the inline content control elements.\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns false if control has not elements.",
+        "type": "boolean"
+      },
+      "signature": "RemoveAllElements(): boolean"
+    },
+    "RemoveElement": {
+      "description": "Removes an element using the position specified from the current inline text content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/RemoveElement/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"This is the first text run in the inline text content control.\");\ninlineLvlSdt.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\"This is the second text run in the inline text content control. The first text run was removed.\");\ninlineLvlSdt.AddElement(run2, 1);\ninlineLvlSdt.RemoveElement(0);"
+      ],
+      "params": [
+        {
+          "description": "The position of the element which we want to remove from the current inline text content control.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveElement(nPos: number): boolean"
+    },
+    "RemoveListItem": {
+      "description": "Removes an item from a combo box list or drop-down list.",
+      "params": [
+        {
+          "description": "The value of the item to remove from the list.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the item was successfully removed, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "RemoveListItem(value: string): boolean",
+      "since": "9.0.0"
+    },
+    "Select": {
+      "description": "Selects the current content control.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(): boolean",
+      "since": "9.0.0"
+    },
+    "SelectListItem": {
+      "description": "Sets the selected item for a combo box list or drop-down list.",
+      "params": [
+        {
+          "description": "The name of the item to be selected in the list.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the item was successfully selected, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "SelectListItem(name: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetAlias": {
+      "description": "Sets the alias attribute to the current container.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetAlias/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with alias '№1'.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetAlias(\"№1\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet alias = inlineLvlSdt.GetAlias();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Alias: \" + alias);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The alias which will be added to the current inline text content control.",
+          "name": "sAlias",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetAlias(sAlias: string): boolean"
+    },
+    "SetAppearance": {
+      "description": "Sets the visualization type of the content control.",
+      "params": [
+        {
+          "description": "The desired visualization type.",
+          "name": "type",
+          "type": "\"boundingBox\" | \"hidden\""
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAppearance(type: \"boundingBox\" | \"hidden\"): void",
+      "since": "9.0.0"
+    },
+    "SetBackgroundColor": {
+      "description": "Sets the background color to the current content control.",
+      "params": [
+        {
+          "description": "The background color.",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBackgroundColor(color?: ApiColor): boolean",
+      "since": "9.1.0"
+    },
+    "SetBorderColor": {
+      "description": "Sets the border color to the current content control.",
+      "params": [
+        {
+          "description": "The border color.",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderColor(color?: ApiColor): boolean",
+      "since": "9.1.0"
+    },
+    "SetCheckBoxChecked": {
+      "description": "Sets the checkbox value for the content control.\nThis method updates the checkbox state of the content control to either checked or unchecked.",
+      "params": [
+        {
+          "description": "The state to set for the checkbox. `true` for checked, `false` for unchecked.",
+          "name": "isChecked",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the checkbox value was successfully set, `false` if the content control is not a checkbox.",
+        "type": "boolean"
+      },
+      "signature": "SetCheckBoxChecked(isChecked: boolean): boolean",
+      "since": "9.0.0"
+    },
+    "SetColor": {
+      "description": "Sets the tag color of the content control.",
+      "params": [
+        {
+          "description": "The tag color. Pass _null_ to remove the color.",
+          "name": "color",
+          "type": "ApiColor | null"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetColor(color: ApiColor | null): boolean",
+      "since": "9.4.0"
+    },
+    "SetDataBinding": {
+      "description": "Sets the data binding for the current content control.",
+      "params": [
+        {
+          "description": "The data binding to associate with the content control.",
+          "name": "xmlMapping",
+          "type": "XmlMapping | null"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDataBinding(xmlMapping: XmlMapping | null): boolean",
+      "since": "9.0.0"
+    },
+    "SetDate": {
+      "description": "Sets the value for the datepicker content control.",
+      "params": [
+        {
+          "description": "The date value to set for the datepicker.",
+          "name": "date",
+          "type": "Date"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the date was successfully set, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "SetDate(date: Date): boolean",
+      "since": "9.0.0"
+    },
+    "SetDateFormat": {
+      "description": "Sets the date format for the datepicker content control.\nThis method allows setting the format in which the date should be displayed in the datepicker content control.\nThe format string should be specified using common date format patterns (e.g., \"mm.dd.yyyy\").",
+      "params": [
+        {
+          "description": "The desired date format (e.g., \"mm.dd.yyyy\").",
+          "name": "dateFormat",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the date format was successfully set, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "SetDateFormat(dateFormat: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetId": {
+      "description": "Specifies a unique ID for the current content control.",
+      "params": [
+        {
+          "description": "The numerical ID which will be specified for the current content control.",
+          "name": "id",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetId(id: number): boolean",
+      "since": "8.3.2"
+    },
+    "SetLabel": {
+      "description": "Adds a string label to the current inline text content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetLabel/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a label set to it.\");\ninlineLvlSdt.SetLabel(\"2147483647\");\ninlineLvlSdt.AddElement(run, 0);\nlet label = inlineLvlSdt.GetLabel();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Label: \" + label);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The label which will be added to the current inline text content control. Can be a positive or negative integer from **-2147483647** to **2147483647**.",
+          "name": "label",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLabel(label: number): boolean"
+    },
+    "SetLock": {
+      "description": "Sets the lock to the current inline text content control:\n**\"unlocked\"** - content can be edited and the container can be deleted.\n**\"contentLocked\"** - content cannot be edited.\n**\"sdtContentLocked\"** - content cannot be edited and the container cannot be deleted.\n**\"sdtLocked\"** - the container cannot be deleted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetLock/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with the content lock set to it.\");\ninlineLvlSdt.SetLock(\"sdtContentLocked\");\ninlineLvlSdt.AddElement(run, 0);\nlet lock = inlineLvlSdt.GetLock();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Lock type: \" + lock);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The lock type applied to the inline text content control.",
+          "name": "lockType",
+          "type": "\"unlocked\" | \"contentLocked\" | \"sdtContentLocked\" | \"sdtLocked\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLock(lockType: \"unlocked\" | \"contentLocked\" | \"sdtContentLocked\" | \"sdtLocked\"): boolean"
+    },
+    "SetPicture": {
+      "description": "Sets the content (image) for the picture content control.\nThis method updates the picture inside a content control by setting an image from a provided URL.\nThe URL should be an internet link to the image.",
+      "params": [
+        {
+          "description": "The URL of the image to be used for the content control.\rCurrently, only internet URLs are supported.",
+          "name": "imageUrl",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the image was successfully set, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "SetPicture(imageUrl: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetPictureSize": {
+      "description": "Sets the size for the picture in a content control.\nThis method adjusts the width and height of the image if the content control is a picture.",
+      "params": [
+        {
+          "description": "The desired image width .",
+          "name": "width",
+          "type": "EMU"
+        },
+        {
+          "description": "The desired image height.",
+          "name": "height",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the size was successfully set, or `false` if the content control is not a picture.",
+        "type": "boolean"
+      },
+      "signature": "SetPictureSize(width: EMU, height: EMU): boolean",
+      "since": "9.0.0"
+    },
+    "SetPlaceholderText": {
+      "description": "Sets the placeholder text to the current inline content control.\n*Can't be set to checkbox or radio button*",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetPlaceholderText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.SetPlaceholderText(\"Custom placeholder\");"
+      ],
+      "params": [
+        {
+          "description": "The text that will be set to the current inline content control.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPlaceholderText(sText: string): boolean"
+    },
+    "SetTag": {
+      "description": "Adds a string tag to the current inline text content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetTag/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a tag set to it.\");\ninlineLvlSdt.SetTag(\"This is a tag\");\ninlineLvlSdt.AddElement(run, 0);\nlet tag = inlineLvlSdt.GetTag();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tag: \" + tag);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The tag which will be added to the current inline text content control.",
+          "name": "sTag",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTag(sTag: string): boolean"
+    },
+    "SetTextPr": {
+      "description": "Applies text settings to the content of the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetTextPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control with the font size set to 30 and the font weight set to bold.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ninlineLvlSdt.SetTextPr(textPr);"
+      ],
+      "params": [
+        {
+          "description": "The properties that will be set to the content of the content control.",
+          "name": "oTextPr",
+          "type": "ApiTextPr"
+        }
+      ],
+      "returns": {
+        "description": "this.",
+        "type": "ApiInlineLvlSdt"
+      },
+      "signature": "SetTextPr(oTextPr: ApiTextPr): ApiInlineLvlSdt"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiInlineLvlSdt object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.SetAlias(\"№1\");\nlet json = inlineLvlSdt.ToJSON(true);\nlet inlineLvlSdtFromJSON = Api.FromJSON(json);\nparagraph.AddInlineLvlSdt(inlineLvlSdtFromJSON);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdtFromJSON.AddElement(run, 0);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the used styles will be written to the JSON object or not.",
+          "name": "bWriteStyles",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteStyles: boolean): object"
+    },
+    "UpdateFromXmlMapping": {
+      "description": "Updates the content control using the value from the XML mapping.",
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the update was successful, otherwise `false`.",
+        "type": "boolean"
+      },
+      "signature": "UpdateFromXmlMapping(): boolean",
+      "since": "9.0.0"
+    }
+  }
+}

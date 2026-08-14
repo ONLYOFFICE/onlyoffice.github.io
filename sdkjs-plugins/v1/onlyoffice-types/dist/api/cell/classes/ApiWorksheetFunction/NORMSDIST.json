@@ -1,0 +1,18 @@
+{
+  "description": "Returns the standard normal cumulative distribution (has a mean of zero and a standard deviation of one).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NORMSDIST/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\nlet valueArr = [0.34, 7, 3];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\n//method params\nlet probability = worksheet.GetRange(\"A1\").GetValue();\nlet mean = worksheet.GetRange(\"A2\").GetValue();\nlet standardDeviation = worksheet.GetRange(\"A3\").GetValue();\n\nlet func = Api.GetWorksheetFunction();\nlet inv = func.NORM_INV(probability, mean, standardDeviation);\nworksheet.GetRange(\"C1\").SetValue(inv);"
+  ],
+  "params": [
+    {
+      "description": "The value for which the distribution will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "NORMSDIST(arg1: ApiRange | ApiName | number): number"
+}

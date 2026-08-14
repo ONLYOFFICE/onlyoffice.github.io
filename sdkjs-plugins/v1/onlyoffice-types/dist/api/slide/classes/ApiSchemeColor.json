@@ -1,0 +1,20 @@
+{
+  "description": "Class representing a Scheme Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiSchemeColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSchemeColor/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oSchemeColor = Api.CreateSchemeColor(\"dk1\");\nvar oFill = Api.CreateSolidFill(oSchemeColor);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar sClassType = oSchemeColor.GetClassType();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class Type = \" + sClassType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"schemeColor\""
+      },
+      "signature": "GetClassType(): \"schemeColor\""
+    }
+  }
+}

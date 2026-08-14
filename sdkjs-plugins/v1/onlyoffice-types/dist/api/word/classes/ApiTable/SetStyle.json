@@ -1,0 +1,19 @@
+{
+  "description": "Sets a style to the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetStyle/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a table and apply one of the existing styles to it:\");\nlet tableStyle = doc.GetStyle(\"Bordered\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "The style which will be applied to the current table.",
+      "name": "oStyle",
+      "type": "ApiStyle"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetStyle(oStyle: ApiStyle): boolean"
+}

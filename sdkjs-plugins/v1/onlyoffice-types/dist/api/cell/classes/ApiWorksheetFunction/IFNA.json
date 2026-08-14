@@ -1,0 +1,23 @@
+{
+  "description": "Checks if there is an error in the formula in the first argument. The function returns the specified value if the formula returns the *#N/A* error value, otherwise returns the result of the formula.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IFNA/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ids = [\"ID\", 1, 2, 3, 4, 5];\nlet clients = [\"Client\", \"John Smith\", \"Ella Tompson\", \"Mary Shinoda\", \"Lily-Ann Bates\", \"Clara Ray\"];\nlet phones = [\"Phone number\", \"12054097166\", \"13343943678\", \"12568542099\", \"12057032298\", \"12052914781\"];\n\nfor (let i = 0; i < ids.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(ids[i]);\n}\nfor (let j = 0; j < clients.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(clients[j]);\n}\nfor (let n = 0; n < phones.length; n++) {\n    worksheet.GetRange(\"C\" + (n + 1)).SetValue(phones[n]);\n}\n\nlet range = worksheet.GetRange(\"B1:B5\");\nworksheet.GetRange(\"D6\").SetValue(func.IFNA(func.MATCH(\"Mark Potato\", range, 0), \"Not found\"));"
+  ],
+  "params": [
+    {
+      "description": "The value, expression, or reference that is checked for an error.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number | string | boolean"
+    },
+    {
+      "description": "The value to return if the formula evaluates to the *#N/A* error value.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number | string | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number | string | boolean"
+  },
+  "signature": "IFNA(arg1: ApiRange | ApiName | number | string | boolean, arg2: ApiRange | ApiName | number | string | boolean): number | string | boolean"
+}

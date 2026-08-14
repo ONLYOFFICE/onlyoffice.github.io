@@ -1,0 +1,584 @@
+{
+  "description": "Class representing a table.",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methods": {
+    "AddColumn": {
+      "description": "Adds a new column to the end of the current table.",
+      "params": [
+        {
+          "description": "The cell used as an insertion reference.",
+          "name": "referenceCell",
+          "optional": true,
+          "type": "ApiTableCell"
+        },
+        {
+          "description": "Add a new column before or after the specified cell. If no cell is specified,\rthen this parameter will be ignored.",
+          "name": "before",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddColumn(referenceCell?: ApiTableCell, before?: boolean): boolean"
+    },
+    "AddColumns": {
+      "description": "Adds the new columns to the current table.",
+      "params": [
+        {
+          "description": "The cell after which the new columns will be added. If not specified, the new columns will be added at the end of the table.",
+          "name": "oCell",
+          "optional": true,
+          "type": "ApiTableCell"
+        },
+        {
+          "description": "Count of columns to be added.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Adds the new columns before (true) or after (false) the specified cell.",
+          "name": "isBefore",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "ApiTable"
+      },
+      "signature": "AddColumns(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable",
+      "since": "9.5.0"
+    },
+    "AddElement": {
+      "description": "Adds a paragraph using its position in the cell.",
+      "params": [
+        {
+          "description": "The cell where the specified element will be added.",
+          "name": "oCell",
+          "type": "ApiTableCell"
+        },
+        {
+          "description": "The position in the cell where the specified element will be added.",
+          "name": "nPos",
+          "type": "number"
+        },
+        {
+          "description": "The document element which will be added at the current position.",
+          "name": "oElement",
+          "type": "DocumentElement"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddElement(oCell: ApiTableCell, nPos: number, oElement: DocumentElement): boolean",
+      "since": "9.5.0"
+    },
+    "AddRow": {
+      "description": "Adds a new row to the current table.",
+      "params": [
+        {
+          "description": "The cell used as an insertion reference.",
+          "name": "referenceCell",
+          "optional": true,
+          "type": "ApiTableCell"
+        },
+        {
+          "description": "Adds a new row before or after the specified cell. If no cell is specified,\rthen this parameter will be ignored.",
+          "name": "isBefore",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableRow"
+      },
+      "signature": "AddRow(referenceCell?: ApiTableCell, isBefore?: boolean): ApiTableRow"
+    },
+    "AddRows": {
+      "description": "Adds the new rows to the current table.",
+      "params": [
+        {
+          "description": "The cell after which the new rows will be added. If not specified, the new rows will be added at the end of the table.",
+          "name": "oCell",
+          "optional": true,
+          "type": "ApiTableCell"
+        },
+        {
+          "description": "Count of rows to be added.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Adds the new rows before (true) or after (false) the specified cell.",
+          "name": "isBefore",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "ApiTable"
+      },
+      "signature": "AddRows(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable",
+      "since": "9.5.0"
+    },
+    "GetCell": {
+      "description": "Returns a cell by its position.",
+      "params": [
+        {
+          "description": "The row index in the current table.",
+          "name": "rowIndex",
+          "type": "number"
+        },
+        {
+          "description": "The cell index in the specified row.",
+          "name": "cellIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableCell"
+      },
+      "signature": "GetCell(rowIndex: number, cellIndex: number): ApiTableCell",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiTable object.",
+      "params": [],
+      "returns": {
+        "type": "\"table\""
+      },
+      "signature": "GetClassType(): \"table\""
+    },
+    "GetColumnWidth": {
+      "description": "Returns the width of the specified column (by index) of the current table.",
+      "params": [
+        {
+          "description": "The zero-based column index.",
+          "name": "columnIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "EMU | null"
+      },
+      "signature": "GetColumnWidth(columnIndex: number): EMU | null",
+      "since": "9.5.0"
+    },
+    "GetParentPage": {
+      "description": "Returns the type of the ApiDrawing class.",
+      "params": [],
+      "returns": {
+        "type": "ApiPage"
+      },
+      "signature": "GetParentPage(): ApiPage"
+    },
+    "GetPosX": {
+      "description": "Gets the x position of the drawing on the page.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosX(): EMU"
+    },
+    "GetPosY": {
+      "description": "Gets the y position of the drawing on the page.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosY(): EMU"
+    },
+    "GetRow": {
+      "description": "Returns a row by its index.",
+      "params": [
+        {
+          "description": "The zero-based row index in the table.",
+          "name": "rowIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableRow"
+      },
+      "signature": "GetRow(rowIndex: number): ApiTableRow"
+    },
+    "GetRowsCount": {
+      "description": "Returns a number of rows in the current table.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRowsCount(): number",
+      "since": "9.5.0"
+    },
+    "GetSelectedCells": {
+      "description": "Returns the selected cells of the current table.",
+      "params": [],
+      "returns": {
+        "description": "An array of the currently selected cells (empty if there is no cell selection).",
+        "type": "ApiTableCell[]"
+      },
+      "signature": "GetSelectedCells(): ApiTableCell[]",
+      "since": "9.5.0"
+    },
+    "GetSelectedColumnsCells": {
+      "description": "Returns all cells from the columns that contain the currently selected cells.\nThis method identifies which columns contain selected cells and then returns all cells\nin those columns, not just the selected cells themselves.",
+      "params": [],
+      "returns": {
+        "description": "An array of all cells from the columns that contain selected cells.",
+        "type": "ApiTableCell[]"
+      },
+      "signature": "GetSelectedColumnsCells(): ApiTableCell[]",
+      "since": "9.5.0"
+    },
+    "GetSelectedRows": {
+      "description": "Returns the rows that contain the currently selected cells of the current table.",
+      "params": [],
+      "returns": {
+        "description": "An array of the rows that contain selected cells (empty if there is no cell selection).",
+        "type": "ApiTableRow[]"
+      },
+      "signature": "GetSelectedRows(): ApiTableRow[]",
+      "since": "9.5.0"
+    },
+    "GetTableDescription": {
+      "description": "Returns the table description.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetTableDescription(): string",
+      "since": "9.5.0"
+    },
+    "GetTableLook": {
+      "description": "Gets table look properties",
+      "params": [],
+      "returns": {
+        "type": "TableLook"
+      },
+      "signature": "GetTableLook(): TableLook"
+    },
+    "GetTableTitle": {
+      "description": "Returns the table title.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetTableTitle(): string",
+      "since": "9.5.0"
+    },
+    "MergeCells": {
+      "description": "Merges an array of cells. If merge is successful, it will return merged cell, otherwise \"null\".\n**Warning**: The number of cells in any row and the number of rows in the current table may be changed.",
+      "params": [
+        {
+          "description": "The cells to merge.",
+          "name": "cells",
+          "type": "ApiTableCell[]"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableCell"
+      },
+      "signature": "MergeCells(cells: ApiTableCell[]): ApiTableCell"
+    },
+    "RemoveColumn": {
+      "description": "Removes a table column with the specified cell.",
+      "params": [
+        {
+          "description": "A cell from the column to remove.",
+          "name": "columnCell",
+          "type": "ApiTableCell"
+        }
+      ],
+      "returns": {
+        "description": "result of deletion",
+        "type": "boolean"
+      },
+      "signature": "RemoveColumn(columnCell: ApiTableCell): boolean"
+    },
+    "RemoveRow": {
+      "description": "Removes a table row with the specified cell.",
+      "params": [
+        {
+          "description": "A cell from the row to remove.",
+          "name": "rowCell",
+          "type": "ApiTableCell"
+        }
+      ],
+      "returns": {
+        "description": "result of deletion",
+        "type": "boolean"
+      },
+      "signature": "RemoveRow(rowCell: ApiTableCell): boolean"
+    },
+    "SelectRange": {
+      "description": "Selects a range of cells in the current table.",
+      "params": [
+        {
+          "description": "The start cell index within the start row.",
+          "name": "startCellIndex",
+          "type": "number"
+        },
+        {
+          "description": "The start row index.",
+          "name": "startRowIndex",
+          "type": "number"
+        },
+        {
+          "description": "The end cell index within the end row.",
+          "name": "endCellIndex",
+          "type": "number"
+        },
+        {
+          "description": "The end row index.",
+          "name": "endRowIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SelectRange(startCellIndex: number, startRowIndex: number, endCellIndex: number, endRowIndex: number): boolean",
+      "since": "9.5.0"
+    },
+    "SetBackgroundColor": {
+      "description": "Sets the background color for all cells in the current table.",
+      "params": [
+        {
+          "description": "If not passed, the background color will be cleared.",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBackgroundColor(color?: ApiColor): boolean",
+      "since": "9.5.0"
+    },
+    "SetColumnWidth": {
+      "description": "Sets the width of the specified column in the current table.",
+      "params": [
+        {
+          "description": "The zero-based column index.",
+          "name": "columnIndex",
+          "type": "number"
+        },
+        {
+          "description": "The column width measured in English measure units.",
+          "name": "width",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "description": "Returns the actual column width set (in EMU), or null if the column index is invalid.",
+        "type": "EMU | null"
+      },
+      "signature": "SetColumnWidth(columnIndex: number, width: EMU): EMU | null",
+      "since": "9.5.0"
+    },
+    "SetHeight": {
+      "description": "Sets the total height of the current table, distributing it evenly among the table rows.\nThe value is applied as a minimum height for each row, so a row can be taller if its content requires more space.",
+      "params": [
+        {
+          "description": "The table height in English measure units.",
+          "name": "nValue",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "description": "Returns the requested height (in EMU), or null if the table has no rows.",
+        "type": "EMU | null"
+      },
+      "signature": "SetHeight(nValue: EMU): EMU | null",
+      "since": "9.5.0"
+    },
+    "SetPosX": {
+      "description": "Sets the x position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosX(posX: EMU): boolean"
+    },
+    "SetPosY": {
+      "description": "Sets the y position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosY(posY: EMU): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the drawing on the page.",
+      "params": [
+        {
+          "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosition(posX: EMU, posY: EMU): boolean"
+    },
+    "SetShd": {
+      "description": "Specifies the shading which shall be applied to the extents of the current table.",
+      "params": [
+        {
+          "description": "The shading type or fill to apply.",
+          "name": "shadingType",
+          "type": "ShdType | ApiFill"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetShd(shadingType: ShdType | ApiFill, r: number, g: number, b: number): boolean"
+    },
+    "SetSize": {
+      "description": "Sets the table size.",
+      "params": [
+        {
+          "description": "The table width measured in English measure units.",
+          "name": "width",
+          "type": "EMU"
+        },
+        {
+          "description": "The table height measured in English measure units.",
+          "name": "height",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSize(width: EMU, height: EMU): boolean",
+      "since": "9.5.0"
+    },
+    "SetStyle": {
+      "description": "Sets the style for the current table.",
+      "params": [
+        {
+          "description": "The table style to apply.",
+          "name": "oStyle",
+          "type": "ApiStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetStyle(oStyle: ApiStyle): boolean",
+      "since": "9.5.0"
+    },
+    "SetTableDescription": {
+      "description": "Sets the table description.",
+      "params": [
+        {
+          "description": "The table description to be set.",
+          "name": "sDescr",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTableDescription(sDescr: string): boolean",
+      "since": "9.5.0"
+    },
+    "SetTableLook": {
+      "description": "Specifies the components of the conditional formatting of the referenced table style (if one exists)\nwhich shall be applied to the set of table rows with the current table-level property exceptions. A table style\ncan specify up to six different optional conditional formats [Example: Different formatting for first column],\nwhich then can be applied or omitted from individual table rows in the parent table.\n\nThe default setting is to apply the row and column banding formatting, but not the first row, last row, first\ncolumn, or last column formatting.",
+      "params": [
+        {
+          "description": "Specifies that the first column conditional formatting shall be applied to the\r    table.",
+          "name": "isFirstColumn",
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies that the first row conditional formatting shall be applied to the table.",
+          "name": "isFirstRow",
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies that the last column conditional formatting shall be applied to the\r    table.",
+          "name": "isLastColumn",
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies that the last row conditional formatting shall be applied to the table.",
+          "name": "isLastRow",
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies that the horizontal banding conditional formatting shall not be applied\r    to the table.",
+          "name": "isHorBand",
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies that the vertical banding conditional formatting shall not be applied to\r    the table.",
+          "name": "isVerBand",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTableLook(isFirstColumn: boolean, isFirstRow: boolean, isLastColumn: boolean, isLastRow: boolean, isHorBand: boolean, isVerBand: boolean): boolean"
+    },
+    "SetTableTitle": {
+      "description": "Sets the table title.",
+      "params": [
+        {
+          "description": "The table title to be set.",
+          "name": "sTitle",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTableTitle(sTitle: string): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

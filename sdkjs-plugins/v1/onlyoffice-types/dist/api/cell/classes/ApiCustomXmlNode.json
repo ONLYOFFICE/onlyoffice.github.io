@@ -1,0 +1,248 @@
+{
+  "description": "Class representing a custom XML node.",
+  "methods": {
+    "Add": {
+      "description": "Creates a child node for the current XML node.",
+      "params": [
+        {
+          "description": "The name of the new child node.",
+          "name": "nodeName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The newly created child node.",
+        "type": "ApiCustomXmlNode"
+      },
+      "signature": "Add(nodeName: string): ApiCustomXmlNode",
+      "since": "9.0.0"
+    },
+    "Delete": {
+      "description": "Deletes the current XML node.",
+      "params": [],
+      "returns": {
+        "description": "Returns `true` if the node was successfully deleted.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean",
+      "since": "9.0.0"
+    },
+    "DeleteAttribute": {
+      "description": "Deletes an attribute from the custom XML node.\nIf the attribute exists, it will be removed.",
+      "params": [
+        {
+          "description": "The name of the attribute to delete.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the attribute was successfully deleted, `false` if the attribute didn't exist.",
+        "type": "boolean"
+      },
+      "signature": "DeleteAttribute(name: string): boolean",
+      "since": "9.0.0"
+    },
+    "GetAttribute": {
+      "description": "Retrieves the attribute value from the custom XML node.\nIf the attribute doesn't exist, it returns `false`.",
+      "params": [
+        {
+          "description": "The name of the attribute to retrieve.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The value of the attribute if it exists, or `null` if the attribute is not found.",
+        "type": "string | null"
+      },
+      "signature": "GetAttribute(name: string): string | null",
+      "since": "9.0.0"
+    },
+    "GetAttributes": {
+      "description": "Returns a list of attributes of the current XML node.",
+      "params": [],
+      "returns": {
+        "description": "An array of attribute objects.",
+        "type": "CustomXmlNodeAttribute[]"
+      },
+      "signature": "GetAttributes(): CustomXmlNodeAttribute[]",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCustomXmlNode class.",
+      "params": [],
+      "returns": {
+        "type": "\"customXmlNode\""
+      },
+      "signature": "GetClassType(): \"customXmlNode\""
+    },
+    "GetNodeName": {
+      "description": "Returns the name of the current XML node.",
+      "params": [],
+      "returns": {
+        "description": "The name of the current node.",
+        "type": "string"
+      },
+      "signature": "GetNodeName(): string",
+      "since": "9.0.0"
+    },
+    "GetNodeValue": {
+      "description": "Returns the XML string representation of the current node content.",
+      "params": [],
+      "returns": {
+        "description": "The XML string representation of the current node content.",
+        "type": "string"
+      },
+      "signature": "GetNodeValue(): string",
+      "since": "9.0.0"
+    },
+    "GetNodes": {
+      "description": "Returns nodes from the custom XML node based on the given XPath.",
+      "params": [
+        {
+          "description": "The XPath expression to match nodes.",
+          "name": "xPath",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "An array of nodes that match the given XPath.",
+        "type": "ApiCustomXmlNode[]"
+      },
+      "signature": "GetNodes(xPath: string): ApiCustomXmlNode[]",
+      "since": "9.0.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent of the current XML node.",
+      "params": [],
+      "returns": {
+        "description": "The parent node, or `null` if the current node has no parent.",
+        "type": "ApiCustomXmlNode | null"
+      },
+      "signature": "GetParent(): ApiCustomXmlNode | null",
+      "since": "9.0.0"
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current node and its child nodes.\nFor example: `<text>123<one>4</one></text>` returns `\"1234\"`.",
+      "params": [],
+      "returns": {
+        "description": "The combined text content of the node and its descendants.",
+        "type": "string"
+      },
+      "signature": "GetText(): string",
+      "since": "9.0.0"
+    },
+    "GetXPath": {
+      "description": "Returns the absolute XPath of the current XML node.",
+      "params": [],
+      "returns": {
+        "description": "The absolute XPath of the current node.",
+        "type": "string"
+      },
+      "signature": "GetXPath(): string",
+      "since": "9.0.0"
+    },
+    "GetXml": {
+      "description": "Returns the XML string of the current node.",
+      "params": [],
+      "returns": {
+        "description": "The XML string representation of the current node.",
+        "type": "string"
+      },
+      "signature": "GetXml(): string",
+      "since": "9.0.0"
+    },
+    "SetAttribute": {
+      "description": "Sets an attribute for the custom XML node.\nIf the attribute already exists, it will not be modified.",
+      "params": [
+        {
+          "description": "The name of the attribute to set.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The value to assign to the attribute.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the attribute was successfully set, `false` if the attribute already exists.",
+        "type": "boolean"
+      },
+      "signature": "SetAttribute(name: string, value: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetNodeValue": {
+      "description": "Sets the XML content for the current node.",
+      "params": [
+        {
+          "description": "The XML string to set as the content of the current node.",
+          "name": "xml",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the XML was successfully set.",
+        "type": "boolean"
+      },
+      "signature": "SetNodeValue(xml: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetText": {
+      "description": "Sets the text content of the current XML node.",
+      "params": [
+        {
+          "description": "The text content to set for the node.",
+          "name": "str",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the text was successfully set.",
+        "type": "boolean"
+      },
+      "signature": "SetText(str: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetXml": {
+      "description": "Sets the XML content of the current XML node.",
+      "params": [
+        {
+          "description": "The XML string to set as the node content.",
+          "name": "strXml",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the XML was successfully set.",
+        "type": "boolean"
+      },
+      "signature": "SetXml(strXml: string): boolean",
+      "since": "9.0.0"
+    },
+    "UpdateAttribute": {
+      "description": "Updates the value of an existing attribute in the custom XML node.\nIf the attribute doesn't exist, the update will not occur.",
+      "params": [
+        {
+          "description": "The name of the attribute to update.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The new value to assign to the attribute.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the attribute was successfully updated, `false` if the attribute doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "UpdateAttribute(name: string, value: string): boolean",
+      "since": "9.0.0"
+    }
+  },
+  "since": "9.0.0"
+}

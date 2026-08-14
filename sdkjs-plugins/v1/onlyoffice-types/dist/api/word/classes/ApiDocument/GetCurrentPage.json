@@ -1,0 +1,13 @@
+{
+  "description": "Returns the index of the current page.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCurrentPage/",
+  "examples": [
+    "var oDocument = Api.GetDocument();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"The current page index is: \" + oDocument.GetCurrentPage());\noDocument.Push(oParagraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetCurrentPage(): number",
+  "since": "8.3.0"
+}

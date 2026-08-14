@@ -1,0 +1,10 @@
+{
+  "description": "Get vertical flip of current drawing.",
+  "params": [],
+  "returns": {
+    "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
+    "type": "boolean | null"
+  },
+  "signature": "GetFlipV(): boolean | null",
+  "since": "9.3.0"
+}

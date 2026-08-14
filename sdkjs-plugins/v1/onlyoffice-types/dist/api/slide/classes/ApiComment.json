@@ -1,0 +1,329 @@
+{
+  "description": "Class representing a comment.",
+  "methods": {
+    "AddReply": {
+      "description": "Adds a reply to a comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/AddReply/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nvar oReply = arrComments[0].GetReply(0);\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment's reply text: \" + oReply.GetText());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The comment reply text.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The name of the comment reply author.",
+          "name": "sAuthorName",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment reply author.",
+          "name": "sUserId",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The comment reply position. If nPos=-1 add to the end.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "AddReply(sText: string, sAuthorName?: string, sUserId?: string, nPos?: number): ApiComment"
+    },
+    "Delete": {
+      "description": "Deletes the current comment from the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/Delete/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].Delete();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"The comment was just deleted from the current presentation.\");\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAuthorName": {
+      "description": "Returns the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetAuthorName/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment's author: \" + arrComments[0].GetAuthorName());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiComment class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\nvar sType = arrComments[0].GetClassType();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Type: \" + sType);\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"comment\""
+      },
+      "signature": "GetClassType(): \"comment\""
+    },
+    "GetPosition": {
+      "description": "Returns the position of the comment in the document.",
+      "params": [],
+      "returns": {
+        "description": "An object with the coordinates (in EMU) of the comment position.",
+        "type": "object"
+      },
+      "signature": "GetPosition(): object"
+    },
+    "GetQuoteText": {
+      "description": "Returns the quote text of the current comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetQuoteText/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment's quote text: \" + arrComments[0].GetQuoteText());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetQuoteText(): number"
+    },
+    "GetRepliesCount": {
+      "description": "Returns a number of the comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetRepliesCount/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment replies count: \" + arrComments[0].GetRepliesCount());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRepliesCount(): number"
+    },
+    "GetText": {
+      "description": "Returns the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetText/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment: \" + arrComments[0].GetText());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(): string"
+    },
+    "GetTime": {
+      "description": "Returns the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetTime/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Timestamp: \" + arrComments[0].GetTime());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTime(): number"
+    },
+    "GetTimeUTC": {
+      "description": "Returns the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetTimeUTC/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Timestamp UTC: \" + arrComments[0].GetTimeUTC());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTimeUTC(): number"
+    },
+    "GetUserId": {
+      "description": "Returns the user ID of the comment author.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUserId(): string"
+    },
+    "IsSolved": {
+      "description": "Checks if a comment is solved or not.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/IsSolved/",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsSolved(): boolean"
+    },
+    "RemoveReplies": {
+      "description": "Removes the specified comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/RemoveReplies/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\narrComments[0].AddReply(\"Reply 2\", \"John Smith\", \"uid-1\");\narrComments[0].RemoveReplies(0, 1, false);\nvar oReply = arrComments[0].GetReply(0);\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment replies count: \" + arrComments[0].GetRepliesCount());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The position of the first comment reply to remove.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "A number of comment replies to remove.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to remove all comment replies or not.",
+          "name": "bRemoveAll",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "RemoveReplies(nPos?: number, nCount?: number, bRemoveAll?: boolean): ApiComment"
+    },
+    "SetAuthorName": {
+      "description": "Sets the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetAuthorName/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].SetAuthorName(\"Mark Potato\");\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment's author: \" + arrComments[0].GetAuthorName());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The comment author's name.",
+          "name": "sAuthorName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetAuthorName(sAuthorName: string): ApiComment"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the comment in the document.",
+      "params": [
+        {
+          "description": "The X coordinate of the comment position in EMU.",
+          "name": "x",
+          "type": "number"
+        },
+        {
+          "description": "The Y coordinate of the comment position in EMU.",
+          "name": "y",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetPosition(x: number, y: number): void"
+    },
+    "SetSolved": {
+      "description": "Marks a comment as solved.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetSolved/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].SetSolved(true);\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"The comment is solved.\");\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if a comment is solved or not.",
+          "name": "bSolved",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetSolved(bSolved: boolean): ApiComment"
+    },
+    "SetText": {
+      "description": "Sets the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetText/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].SetText(\"New comment text\");\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment text: \" + arrComments[0].GetText());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The comment text.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetText(sText: string): ApiComment"
+    },
+    "SetTime": {
+      "description": "Sets the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetTime/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].SetTime(Date.now());\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Timestamp: \" + arrComments[0].GetTime());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in the current time zone format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetTime(nTimeStamp: number | string): ApiComment"
+    },
+    "SetTimeUTC": {
+      "description": "Sets the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetTimeUTC/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].SetTimeUTC(Date.now());\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Timestamp UTC: \" + arrComments[0].GetTimeUTC());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in UTC format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetTimeUTC(nTimeStamp: number | string): ApiComment"
+    },
+    "SetUserId": {
+      "description": "Sets the user ID to the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetUserId/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].SetUserId(\"uid-2\");\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"The ID of the user who commented on this presentation is uid-2.\");\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The user ID of the comment author.",
+          "name": "sUserId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiComment"
+      },
+      "signature": "SetUserId(sUserId: string): ApiComment"
+    }
+  }
+}

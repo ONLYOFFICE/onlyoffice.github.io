@@ -1,0 +1,23 @@
+{
+  "description": "Repeats text a given number of times. Use this function to fill a cell with a number of instances of a text string.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/REPT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.REPT(\"Text\", 3));"
+  ],
+  "params": [
+    {
+      "description": "The text that will be repeated.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "A positive number specifying the number of times to repeat text.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "REPT(arg1: ApiRange | ApiName | string, arg2: ApiRange | ApiName | number): string"
+}

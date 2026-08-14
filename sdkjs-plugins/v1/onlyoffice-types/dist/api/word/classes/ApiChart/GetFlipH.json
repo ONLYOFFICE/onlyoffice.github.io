@@ -1,0 +1,10 @@
+{
+  "description": "Get horizontal flip of current drawing.",
+  "params": [],
+  "returns": {
+    "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",
+    "type": "boolean | null"
+  },
+  "signature": "GetFlipH(): boolean | null",
+  "since": "9.3.0"
+}

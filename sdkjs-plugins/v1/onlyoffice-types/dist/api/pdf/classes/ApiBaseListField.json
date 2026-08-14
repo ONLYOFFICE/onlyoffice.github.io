@@ -1,0 +1,273 @@
+{
+  "description": "Class representing a base list field.",
+  "extends": [
+    "ApiBaseField"
+  ],
+  "methods": {
+    "AddOption": {
+      "description": "Adds new option to list options.",
+      "params": [
+        {
+          "description": "list option to add",
+          "name": "option",
+          "type": "ListOption"
+        },
+        {
+          "description": "index to add option.",
+          "name": "index",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddOption(option: ListOption, index?: number): boolean"
+    },
+    "AddWidget": {
+      "description": "Adds new widget - visual representation for field",
+      "params": [
+        {
+          "description": "page index to add widget",
+          "name": "pageIndex",
+          "type": "number"
+        },
+        {
+          "description": "field rect",
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "ApiWidget"
+      },
+      "signature": "AddWidget(pageIndex: number, rect: Rect): ApiWidget"
+    },
+    "Delete": {
+      "description": "Removes field from document.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAllWidgets": {
+      "description": "Gets array with widgets of the current field.",
+      "params": [],
+      "returns": {
+        "description": "returns emptry array if the field is not added to the document.",
+        "type": "ApiWidget[]"
+      },
+      "signature": "GetAllWidgets(): ApiWidget[]"
+    },
+    "GetFullName": {
+      "description": "Gets field full name.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFullName(): string"
+    },
+    "GetOption": {
+      "description": "Gets option from list options.",
+      "params": [
+        {
+          "description": "The option index.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ListOption"
+      },
+      "signature": "GetOption(index: number): ListOption"
+    },
+    "GetOptions": {
+      "description": "Gets all options from list options.",
+      "params": [],
+      "returns": {
+        "type": "ListOption[]"
+      },
+      "signature": "GetOptions(): ListOption[]"
+    },
+    "GetPartialName": {
+      "description": "Gets field partial name.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetPartialName(): string"
+    },
+    "GetValue": {
+      "description": "Gets field value",
+      "params": [],
+      "returns": {
+        "type": "string | string[]"
+      },
+      "signature": "GetValue(): string | string[]"
+    },
+    "GetValueIndexes": {
+      "description": "Gets selected value indexes.",
+      "params": [],
+      "returns": {
+        "type": "number[]"
+      },
+      "signature": "GetValueIndexes(): number[]"
+    },
+    "IsCommitOnSelChange": {
+      "description": "Checks if field can commit on selection change.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsCommitOnSelChange(): boolean"
+    },
+    "IsReadOnly": {
+      "description": "Checks if field is read only",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsReadOnly(): boolean"
+    },
+    "IsRequired": {
+      "description": "Checks if field is required",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsRequired(): boolean"
+    },
+    "MoveOption": {
+      "description": "Moves option to specified position in list options.",
+      "params": [
+        {
+          "description": "The current index of the option to move.",
+          "name": "currentIndex",
+          "type": "number"
+        },
+        {
+          "description": "The target index for the option.",
+          "name": "newIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveOption(currentIndex: number, newIndex: number): boolean"
+    },
+    "RemoveOption": {
+      "description": "Removes option from list options.",
+      "params": [
+        {
+          "description": "The option index.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveOption(index: number): boolean"
+    },
+    "SetCommitOnSelChange": {
+      "description": "Sets whether the field commits changes immediately after selection changes.",
+      "params": [
+        {
+          "description": "Specifies whether selection changes are committed immediately.",
+          "name": "commitOnSelectionChange",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCommitOnSelChange(commitOnSelectionChange: boolean): boolean"
+    },
+    "SetFullName": {
+      "description": "Sets new field name if possible.",
+      "params": [
+        {
+          "description": "The new full name for the field.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFullName(name: string): boolean"
+    },
+    "SetPartialName": {
+      "description": "Sets new field partial name.",
+      "params": [
+        {
+          "description": "The new partial name for the field.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPartialName(name: string): boolean"
+    },
+    "SetReadOnly": {
+      "description": "Sets field read only",
+      "params": [
+        {
+          "description": "Specifies whether the field is read-only.",
+          "name": "readOnly",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetReadOnly(readOnly: boolean): boolean"
+    },
+    "SetRequired": {
+      "description": "Sets field required",
+      "params": [
+        {
+          "description": "Specifies whether the field is required.",
+          "name": "required",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRequired(required: boolean): boolean"
+    },
+    "SetValue": {
+      "description": "Sets field value",
+      "params": [
+        {
+          "description": "The new value for the field.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValue(value: string): boolean"
+    },
+    "SetValueIndexes": {
+      "description": "Sets selected value indexes.",
+      "params": [
+        {
+          "description": "The indexes of the selected values.",
+          "name": "valueIndexes",
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValueIndexes(valueIndexes: number[]): boolean"
+    }
+  }
+}

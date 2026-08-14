@@ -1,0 +1,18 @@
+{
+  "description": "Sets the type of the watermark in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiWatermarkSettings/Methods/SetType/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet watermarkSettings = doc.GetWatermarkSettings();\nwatermarkSettings.SetType(\"text\");\nwatermarkSettings.SetText(\"Example\");\nlet textPr = watermarkSettings.GetTextPr();\ntextPr.SetFontFamily(\"Calibri\");\ntextPr.SetFontSize(-1);\ntextPr.SetDoubleStrikeout(true);\ntextPr.SetItalic(true);\ntextPr.SetBold(true);\ntextPr.SetUnderline(true);\ntextPr.SetColor(0, 255, 0);\ntextPr.SetHighlight(\"blue\");\nwatermarkSettings.SetTextPr(textPr);\ndoc.SetWatermarkSettings(watermarkSettings);"
+  ],
+  "params": [
+    {
+      "description": "The watermark type.",
+      "name": "sType",
+      "type": "WatermarkType"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetType(sType: WatermarkType): boolean"
+}

@@ -1,0 +1,16 @@
+{
+  "description": "Class representing an RGB Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiRGBColor class.",
+      "params": [],
+      "returns": {
+        "type": "\"rgbColor\""
+      },
+      "signature": "GetClassType(): \"rgbColor\""
+    }
+  }
+}

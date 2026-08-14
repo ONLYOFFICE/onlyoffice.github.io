@@ -1,0 +1,12 @@
+{
+  "description": "Returns the last document element.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/Last/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a sample text №1.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a sample text №2.\");\ndoc.Push(paragraph);\nlet element = doc.Last();\nelement.SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "DocumentElement"
+  },
+  "signature": "Last(): DocumentElement"
+}

@@ -1,0 +1,9 @@
+{
+  "description": "Creates a new empty paragraph.",
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph"
+  },
+  "signature": "CreateParagraph(): ApiParagraph",
+  "since": "9.4.0"
+}

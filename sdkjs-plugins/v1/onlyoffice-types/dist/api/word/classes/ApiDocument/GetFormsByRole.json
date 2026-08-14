@@ -1,0 +1,15 @@
+{
+  "description": "Returns a list of all forms in the document with the specified role name.",
+  "params": [
+    {
+      "description": "The form role.",
+      "name": "role",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiForm[]"
+  },
+  "signature": "GetFormsByRole(role: string): ApiForm[]",
+  "since": "9.0.0"
+}

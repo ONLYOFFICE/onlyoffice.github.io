@@ -1,0 +1,28 @@
+{
+  "description": "Returns the inverse of the gamma cumulative distribution: if p = GAMMA.DIST(x,...), then GAMMA.INV(p,...) = x.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GAMMA_INV/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.GAMMA_INV(0.4, 9, 2);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The probability associated with the gamma distribution, a number between 0 and 1, inclusive.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The alpha parameter of the distribution, a positive number.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The beta parameter of the distribution, a positive number. If this parameter is equal to 1, the function returns the standard gamma distribution.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GAMMA_INV(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

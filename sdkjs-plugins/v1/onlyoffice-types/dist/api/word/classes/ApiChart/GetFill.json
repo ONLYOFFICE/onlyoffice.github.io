@@ -1,0 +1,9 @@
+{
+  "description": "Gets the fill formatting properties from the current graphic object.",
+  "params": [],
+  "returns": {
+    "type": "ApiFill | null"
+  },
+  "signature": "GetFill(): ApiFill | null",
+  "since": "9.5.0"
+}

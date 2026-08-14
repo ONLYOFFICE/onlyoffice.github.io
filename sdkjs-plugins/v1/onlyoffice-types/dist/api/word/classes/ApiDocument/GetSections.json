@@ -1,0 +1,12 @@
+{
+  "description": "Returns a collection of section objects in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetSections/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a new paragraph.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Scroll down to see the new section.\");\nlet section1 = doc.CreateSection(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph in a new section\");\ndoc.Push(paragraph);\nlet sections = doc.GetSections();\nparagraph = Api.CreateParagraph();\nlet classType = sections[1].GetClassType();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiSection[]"
+  },
+  "signature": "GetSections(): ApiSection[]"
+}

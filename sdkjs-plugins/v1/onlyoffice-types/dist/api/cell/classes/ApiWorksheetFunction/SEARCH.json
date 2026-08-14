@@ -1,0 +1,29 @@
+{
+  "description": "Returns the number of the character at which a specific character or text string is first found, reading left to right (not case-sensitive).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SEARCH/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SEARCH(\"line\", \"Online Office\"));"
+  ],
+  "params": [
+    {
+      "description": "The text to find. The ? and * wildcard characters can be used. Use ~? and ~* to find the ? and * characters.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "The text where to search for the specified text.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "The character number in the search text, counting from the left, at which to start searching. If omitted, 1 is used.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SEARCH(arg1: ApiRange | ApiName | string, arg2: ApiRange | ApiName | string, arg3?: ApiRange | ApiName | number): number"
+}

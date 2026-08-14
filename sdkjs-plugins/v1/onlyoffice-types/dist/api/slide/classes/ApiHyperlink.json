@@ -1,0 +1,86 @@
+{
+  "description": "Class representing a Paragraph hyperlink.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiHyperlink class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiHyperlink/Methods/GetClassType/",
+      "params": [],
+      "returns": {
+        "type": "\"hyperlink\""
+      },
+      "signature": "GetClassType(): \"hyperlink\""
+    },
+    "GetElement": {
+      "description": "Returns the hyperlink element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiHyperlink/Methods/GetElement/",
+      "params": [
+        {
+          "description": "The position where the element which content we want to get must be located.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ParagraphContent"
+      },
+      "signature": "GetElement(nPos: number): ParagraphContent"
+    },
+    "GetElementsCount": {
+      "description": "Returns a number of elements in the current hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiHyperlink/Methods/GetElementsCount/",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetElementsCount(): number"
+    },
+    "GetLinkedText": {
+      "description": "Returns the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiHyperlink/Methods/GetLinkedText/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetLinkedText(): string"
+    },
+    "GetScreenTipText": {
+      "description": "Returns the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiHyperlink/Methods/GetScreenTipText/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetScreenTipText(): string"
+    },
+    "SetLink": {
+      "description": "Sets the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiHyperlink/Methods/SetLink/",
+      "params": [
+        {
+          "description": "The hyperlink address.",
+          "name": "sLink",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLink(sLink: string): boolean"
+    },
+    "SetScreenTipText": {
+      "description": "Sets the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiHyperlink/Methods/SetScreenTipText/",
+      "params": [
+        {
+          "description": "The screen tip text of the hyperlink.",
+          "name": "sScreenTipText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScreenTipText(sScreenTipText: string): boolean"
+    }
+  }
+}

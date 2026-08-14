@@ -1,0 +1,12 @@
+{
+  "description": "Returns a collection of content control objects in the paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetAllContentControls/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.AddElement(run);\nlet contentControls = paragraph.GetAllContentControls();\ncontentControls[0].GetElement(0).SetBold(true);\nlet classType = contentControls[0].GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiInlineLvlSdt[]"
+  },
+  "signature": "GetAllContentControls(): ApiInlineLvlSdt[]"
+}

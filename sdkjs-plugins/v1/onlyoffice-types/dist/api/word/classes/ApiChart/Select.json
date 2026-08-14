@@ -1,0 +1,16 @@
+{
+  "description": "Selects the current graphic object.",
+  "params": [
+    {
+      "description": "Specifies whether the selection should replace the current selection (true) or be added to it (false).",
+      "name": "isReplace",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "Select(isReplace?: boolean): boolean",
+  "since": "9.3.0"
+}

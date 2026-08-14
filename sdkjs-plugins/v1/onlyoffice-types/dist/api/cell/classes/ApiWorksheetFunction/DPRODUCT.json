@@ -1,0 +1,28 @@
+{
+  "description": "Multiplies the values in the field (column) of records in the database that match the conditions you specify.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DPRODUCT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(\"Product\");\nworksheet.GetRange(\"B1\").SetValue(\"Identifier\");\nworksheet.GetRange(\"C1\").SetValue(\"Value\");\nworksheet.GetRange(\"A2\").SetValue(\"Apple\");\nworksheet.GetRange(\"B2\").SetValue(\"Price\");\nworksheet.GetRange(\"C2\").SetValue(25);\nworksheet.GetRange(\"A3\").SetValue(\"Apple\");\nworksheet.GetRange(\"B3\").SetValue(\"Quantity\");\nworksheet.GetRange(\"C3\").SetValue(100);\nworksheet.GetRange(\"E1\").SetValue(\"Product\");\nworksheet.GetRange(\"E2\").SetValue(\"Apple\");\nlet range1 = worksheet.GetRange(\"A1:C3\");\nlet range2 = worksheet.GetRange(\"E1:F2\");\nworksheet.GetRange(\"E4\").SetValue(func.DPRODUCT(range1, \"Value\", range2));"
+  ],
+  "params": [
+    {
+      "description": "The range of cells that makes up the list or database. A database is a list of related data.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "The column which is used in the function. Either the label of the column in double quotation marks or a number that represents the column's position in the list.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number | string"
+    },
+    {
+      "description": "The range of cells that contains the conditions you specify. The range includes at least one column label and at least one cell below the column label for a condition.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DPRODUCT(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg3: ApiRange | ApiName): number"
+}

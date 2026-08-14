@@ -1,0 +1,23 @@
+{
+  "description": "Returns the serial number of the last day of the month before or after the specified number of months.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/EOMONTH/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.EOMONTH(\"3/16/2018\", 10); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A serial date number that represents the start date.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of months before or after the start date.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "EOMONTH(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

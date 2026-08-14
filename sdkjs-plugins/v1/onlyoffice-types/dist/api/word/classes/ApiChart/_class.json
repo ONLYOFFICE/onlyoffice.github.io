@@ -1,0 +1,8 @@
+{
+  "description": "Class representing a chart.",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methodCount": 106,
+  "sharded": true
+}

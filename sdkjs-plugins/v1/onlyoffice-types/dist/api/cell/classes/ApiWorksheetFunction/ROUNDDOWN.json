@@ -1,0 +1,23 @@
+{
+  "description": "Rounds a number down, toward zero.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ROUNDDOWN/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ROUNDDOWN(3.456, 0));"
+  ],
+  "params": [
+    {
+      "description": "Any real number that will be rounded down.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of digits to round to. If this argument is negative, the number will be rounded to the left of the decimal point.\rIf it is equal to zero, the number will be rounded to the nearest integer.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ROUNDDOWN(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

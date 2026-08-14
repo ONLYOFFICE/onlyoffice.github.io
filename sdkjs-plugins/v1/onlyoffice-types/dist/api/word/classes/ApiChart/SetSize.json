@@ -1,0 +1,19 @@
+{
+  "description": "Sets the size of the object (image, shape, chart) bounding box.",
+  "params": [
+    {
+      "description": "The object width measured in English measure units.",
+      "name": "nWidth",
+      "type": "EMU"
+    },
+    {
+      "description": "The object height measured in English measure units.",
+      "name": "nHeight",
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetSize(nWidth: EMU, nHeight: EMU): boolean"
+}

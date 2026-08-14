@@ -1,0 +1,18 @@
+{
+  "description": "Returns the square root of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SQRT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SQRT(100));"
+  ],
+  "params": [
+    {
+      "description": "The number for which the square root will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SQRT(arg1: ApiRange | ApiName | number): number"
+}

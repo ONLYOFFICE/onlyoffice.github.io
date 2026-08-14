@@ -1,0 +1,18 @@
+{
+  "description": "Checks whether a value is not text (blank cells are not text), and returns **true** or **false**.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ISNONTEXT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ISNONTEXT(\"#N/A\"));\nworksheet.GetRange(\"A2\").SetValue(func.ISNONTEXT(255));\nworksheet.GetRange(\"A3\").SetValue(func.ISNONTEXT(\"Online Office\"));"
+  ],
+  "params": [
+    {
+      "description": "The value to test.\rThe value can be an empty cell, error, logical value, text, number, range, or range name.",
+      "name": "arg1",
+      "type": "ApiRange | string | number | boolean | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ISNONTEXT(arg1: ApiRange | string | number | boolean | ApiName): boolean"
+}

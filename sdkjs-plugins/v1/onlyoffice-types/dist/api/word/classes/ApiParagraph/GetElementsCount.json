@@ -1,0 +1,12 @@
+{
+  "description": "Returns a number of elements in the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetElementsCount/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.RemoveAllElements();\nlet run = Api.CreateRun();\nrun.AddText(\"Number of paragraph elements at this point: \");\nrun.AddTabStop();\nrun.AddText(\"\" + paragraph.GetElementsCount());\nrun.AddLineBreak();\nparagraph.AddElement(run);\nrun.AddText(\"Number of paragraph elements after we added a text run: \");\nrun.AddTabStop();\nrun.AddText(\"\" + paragraph.GetElementsCount());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetElementsCount(): number"
+}

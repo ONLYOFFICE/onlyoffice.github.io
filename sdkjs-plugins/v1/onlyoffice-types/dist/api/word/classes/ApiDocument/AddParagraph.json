@@ -1,0 +1,9 @@
+{
+  "description": "Creates a new paragraph and appends it to the end of the document content.",
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph"
+  },
+  "signature": "AddParagraph(): ApiParagraph",
+  "since": "9.4.0"
+}

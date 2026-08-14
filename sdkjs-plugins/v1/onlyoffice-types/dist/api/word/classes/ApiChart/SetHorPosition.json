@@ -1,0 +1,26 @@
+{
+  "description": "Sets the absolute measurement for the horizontal positioning of the floating object.",
+  "params": [
+    {
+      "description": "The document element which will be taken as a countdown point for the object horizontal alignment.",
+      "name": "sRelativeFrom",
+      "type": "RelFromH"
+    },
+    {
+      "description": "The distance from the right side of the document element to the floating object. Use EMU for absolute distance or a number for percent (1 = 1%) when bPercent=true.",
+      "name": "nDistance",
+      "type": "EMU | number"
+    },
+    {
+      "description": "The option defining whether the horizontal alignment offset is specified in percent.",
+      "name": "bPercent",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean",
+  "since": "9.3.0"
+}

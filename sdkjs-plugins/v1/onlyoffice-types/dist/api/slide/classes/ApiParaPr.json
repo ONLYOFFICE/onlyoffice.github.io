@@ -1,0 +1,339 @@
+{
+  "description": "Class representing the paragraph properties.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiParaPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\nvar sClassType = oParaPr.GetClassType();\noParaPr.SetIndFirstLine(1440);\noParagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\noParagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Class Type = \" + sClassType);\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"paraPr\""
+      },
+      "signature": "GetClassType(): \"paraPr\""
+    },
+    "GetIndFirstLine": {
+      "description": "Returns the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndFirstLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetIndFirstLine(1440);\noParagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\noParagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nvar nIndFirstLine = oParaPr.GetIndFirstLine();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"First line indent: \" + nIndFirstLine);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndFirstLine(): twips | undefined"
+    },
+    "GetIndLeft": {
+      "description": "Returns the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndLeft/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetIndLeft(2880);\noParagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\noParagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nvar nIndLeft = oParaPr.GetIndLeft();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Left indent: \" + nIndLeft);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndLeft(): twips | undefined"
+    },
+    "GetIndRight": {
+      "description": "Returns the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndRight/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetIndRight(2880);\noParaPr.SetJc(\"right\");\noParagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\noParagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nvar nIndRight = oParaPr.GetIndRight();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Right indent: \" + nIndRight);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips | undefined"
+      },
+      "signature": "GetIndRight(): twips | undefined"
+    },
+    "GetJc": {
+      "description": "Returns the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetJc/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetJc(\"center\");\noParagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\noParagraph.AddText(\"The justification is specified in the paragraph style. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nvar sJc = oParaPr.GetJc();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Justification: \" + sJc);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"left\" | \"right\" | \"both\" | \"center\" | undefined"
+      },
+      "signature": "GetJc(): \"left\" | \"right\" | \"both\" | \"center\" | undefined"
+    },
+    "GetOutlineLvl": {
+      "description": "Returns the outline level of the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetOutlineLvl/",
+      "params": [],
+      "returns": {
+        "type": "number | undefined"
+      },
+      "signature": "GetOutlineLvl(): number | undefined",
+      "since": "8.2.0"
+    },
+    "GetSpacingAfter": {
+      "description": "Returns the spacing after value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingAfter/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetSpacingAfter(1440);\noParagraph.AddText(\"This is an example of setting a space after a paragraph. \");\noParagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nvar nSpacingAfter = oParaPr.GetSpacingAfter();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Spacing after : \" + nSpacingAfter);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips"
+      },
+      "signature": "GetSpacingAfter(): twips"
+    },
+    "GetSpacingBefore": {
+      "description": "Returns the spacing before value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingBefore/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"This is an example of setting a space before a paragraph. \");\noParagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\noParagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\nvar oParagraph2 = Api.CreateParagraph();\noParagraph2.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\nvar oParaPr = oParagraph2.GetParaPr();\noParaPr.SetSpacingBefore(1440);\noDocContent.Push(oParagraph2);\nvar nSpacingBefore = oParaPr.GetSpacingBefore();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Spacing before: \" + nSpacingBefore);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips"
+      },
+      "signature": "GetSpacingBefore(): twips"
+    },
+    "GetSpacingLineRule": {
+      "description": "Returns the paragraph line spacing rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineRule/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetSpacingLine(3 * 240, \"auto\");\noParagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\noParagraph.AddLineBreak();\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nvar sSpacingLineRule = oParaPr.GetSpacingLineRule();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Spacing line rule : \" + sSpacingLineRule);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"auto\" | \"atLeast\" | \"exact\" | undefined"
+      },
+      "signature": "GetSpacingLineRule(): \"auto\" | \"atLeast\" | \"exact\" | undefined"
+    },
+    "GetSpacingLineValue": {
+      "description": "Returns the paragraph line spacing value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineValue/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetSpacingLine(3 * 240, \"auto\");\noParagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\noParagraph.AddLineBreak();\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nvar nSpacingLineValue = oParaPr.GetSpacingLineValue();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"Spacing line value : \" + nSpacingLineValue);\noDocContent.Push(oParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
+        "type": "twips | line240 | undefined"
+      },
+      "signature": "GetSpacingLineValue(): twips | line240 | undefined"
+    },
+    "GetTabs": {
+      "description": "Returns the custom tab stops of the current paragraph.",
+      "params": [],
+      "returns": {
+        "type": "TabStop[]"
+      },
+      "signature": "GetTabs(): TabStop[]",
+      "since": "9.4.0"
+    },
+    "SetBullet": {
+      "description": "Sets the bullet or numbering to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetBullet/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\nvar oBullet = Api.CreateBullet(\"-\");\noParaPr.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the bulleted paragraph.\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The bullet object created with the {@link Api#CreateBullet} or {@link Api#CreateNumbering} method.",
+          "name": "oBullet",
+          "type": "ApiBullet"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetBullet(oBullet: ApiBullet): void"
+    },
+    "SetIndFirstLine": {
+      "description": "Sets the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndFirstLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetIndFirstLine(1440);\noParagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\noParagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndFirstLine(nValue: twips): boolean"
+    },
+    "SetIndLeft": {
+      "description": "Sets the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndLeft/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetIndLeft(2880);\noParagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\noParagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndLeft(nValue: twips): boolean"
+    },
+    "SetIndRight": {
+      "description": "Sets the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndRight/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetIndRight(2880);\noParagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\noParagraph.AddText(\"This offset is set by the paragraph style. No paragraph inline style is applied. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nValue",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndRight(nValue: twips): boolean"
+    },
+    "SetJc": {
+      "description": "Sets the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetJc/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetJc(\"center\");\noParagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\noParagraph.AddText(\"The justification is specified in the paragraph style. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The justification type that\rwill be applied to the paragraph contents.",
+          "name": "sJc",
+          "type": "\"left\" | \"right\" | \"both\" | \"center\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetJc(sJc: \"left\" | \"right\" | \"both\" | \"center\"): boolean"
+    },
+    "SetOutlineLvl": {
+      "description": "Sets the outline level for the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetOutlineLvl/",
+      "params": [
+        {
+          "description": "The outline level. Possible values: 1-9. The 1The desired functionality is as follows: When inserting document A into document B using the merge document API during editing, the source of document A should be visible within document B. By clicking or hovering over the inserted content of document A in document B, information about the insertion of document A should be displayed in a pop-up/floating window, preserving the boundaries of document A. Document A should be able to be inserted between any two characters in document B.\rTo set no outline level, use this method without a parameter.",
+          "name": "lvl",
+          "optional": true,
+          "type": "number | null"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetOutlineLvl(lvl?: number | null): boolean",
+      "since": "8.2.0"
+    },
+    "SetSpacingAfter": {
+      "description": "Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true, then \nany value of the nAfter is ignored. If isAfterAuto parameter is not specified, then it \nwill be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingAfter/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetSpacingAfter(1440);\noParagraph.AddText(\"This is an example of setting a space after a paragraph. \");\noParagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\noParagraph.AddText(\"This is due to the fact that the first paragraph has this offset enabled.\");\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nAfter",
+          "type": "twips"
+        },
+        {
+          "description": "The true value disables the spacing after the current paragraph.",
+          "name": "isAfterAuto",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean"
+    },
+    "SetSpacingBefore": {
+      "description": "Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true, then \nany value of the nBefore is ignored. If isBeforeAuto parameter is not specified, then \nit will be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingBefore/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParagraph.AddText(\"This is an example of setting a space before a paragraph. \");\noParagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\noParagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\noParagraph = Api.CreateParagraph();\noParaPr = oParagraph.GetParaPr();\noParaPr.SetSpacingBefore(1440);\noParagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nBefore",
+          "type": "twips"
+        },
+        {
+          "description": "The true value disables the spacing before the current paragraph.",
+          "name": "isBeforeAuto",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean"
+    },
+    "SetSpacingLine": {
+      "description": "Sets the paragraph line spacing. If the value of the sLineRule parameter is either \n\"atLeast\" or \"exact\", then the value of nLine will be interpreted as twentieths of a point. If \nthe value of the sLineRule parameter is \"auto\", then the value of the \nnLine parameter will be interpreted as 240ths of a line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetSpacingLine(3 * 240, \"auto\");\noParagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\noParagraph.AddLineBreak();\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noParagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The line spacing value measured either in twentieths of a point (1/1440 of an inch) or in 240ths of a line.",
+          "name": "nLine",
+          "type": "twips | line240"
+        },
+        {
+          "description": "The rule that determines the measuring units of the line spacing.",
+          "name": "sLineRule",
+          "type": "\"auto\" | \"atLeast\" | \"exact\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpacingLine(nLine: twips | line240, sLineRule: \"auto\" | \"atLeast\" | \"exact\"): boolean"
+    },
+    "SetTabs": {
+      "description": "Specifies a sequence of custom tab stops which will be used for any tab characters in the current paragraph.\n**Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetTabs/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oParaPr = oParagraph.GetParaPr();\noParaPr.SetTabs([1440, 4320, 7200], [\"left\", \"center\", \"right\"]);\noParagraph.AddTabStop();\noParagraph.AddText(\"Custom tab - 1 inch left\");\noParagraph.AddLineBreak();\noParagraph.AddTabStop();\noParagraph.AddTabStop();\noParagraph.AddText(\"Custom tab - 3 inches center\");\noParagraph.AddLineBreak();\noParagraph.AddTabStop();\noParagraph.AddTabStop();\noParagraph.AddTabStop();\noParagraph.AddText(\"Custom tab - 5 inches right\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "An array of the positions of custom tab stops with respect to the current page margins\rmeasured in twentieths of a point (1/1440 of an inch).",
+          "name": "aPos",
+          "type": "twips[]"
+        },
+        {
+          "description": "An array of the styles of custom tab stops, which determines the behavior of the tab\rstop and the alignment which will be applied to text entered at the current custom tab stop.",
+          "name": "aVal",
+          "type": "TabJc[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTabs(aPos: twips[], aVal: TabJc[]): boolean"
+    }
+  }
+}

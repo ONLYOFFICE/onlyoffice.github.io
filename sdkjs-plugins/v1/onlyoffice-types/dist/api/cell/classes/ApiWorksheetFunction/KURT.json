@@ -1,0 +1,18 @@
+{
+  "description": "Returns the kurtosis of a data set.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/KURT/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet kurtosis = func.KURT(3, 89, 34, 2, 45, 4, 45, 13);\nworksheet.GetRange(\"C1\").SetValue(kurtosis);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the kurtosis will be calculated.\rArguments can be numbers, names, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "ApiRange | number[] | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "KURT(args: ApiRange | number[] | ApiName): number"
+}

@@ -1,0 +1,92 @@
+{
+  "description": "Class representing a name.",
+  "methods": {
+    "Delete": {
+      "description": "Deletes the DefName object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/Delete/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\ndefName.Delete();\nworksheet.GetRange(\"A3\").SetValue(\"The name 'numbers' of the range A1:B1 was deleted.\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns true if the name was deleted successfully.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetName": {
+      "description": "Returns a type of the ApiName class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/GetName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\nworksheet.GetRange(\"A3\").SetValue(\"Name: \" + defName.GetName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string"
+    },
+    "GetRefersTo": {
+      "description": "Returns a formula that the name is defined to refer to.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/GetRefersTo/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"=SUM(A1:B1)\");\nApi.AddDefName(\"summa\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"summa\");\ndefName.SetRefersTo(\"=SUM(A1:B1)\");\nworksheet.GetRange(\"A3\").SetValue(\"The name 'summa' refers to the formula from the cell C1.\");\nworksheet.GetRange(\"A4\").SetValue(\"Formula: \" + defName.GetRefersTo());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetRefersTo(): string"
+    },
+    "GetRefersToRange": {
+      "description": "Returns the ApiRange object by its name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/GetRefersToRange/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\nlet range = defName.GetRefersToRange();\nrange.SetBold(true);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRefersToRange(): ApiRange"
+    },
+    "SetName": {
+      "description": "Sets a string value representing the object name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/SetName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"name\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"name\");\ndefName.SetName(\"new_name\");\nlet newDefName = Api.GetDefName(\"new_name\");\nworksheet.GetRange(\"A3\").SetValue(\"The new name of the range: \" + newDefName.GetName());"
+      ],
+      "params": [
+        {
+          "description": "New name for the range.",
+          "name": "sName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns false if sName is invalid.",
+        "type": "boolean"
+      },
+      "signature": "SetName(sName: string): boolean"
+    },
+    "SetRefersTo": {
+      "description": "Sets a formula that the name is defined to refer to.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/SetRefersTo/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"=SUM(A1:B1)\");\nApi.AddDefName(\"summa\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"summa\");\ndefName.SetRefersTo(\"=SUM(A1:B1)\");\nworksheet.GetRange(\"A3\").SetValue(\"The name 'summa' refers to the formula from the cell C1.\");"
+      ],
+      "params": [
+        {
+          "description": "The range reference which must contain the sheet name, followed by sign ! and a range of cells.\rExample: \"Sheet1!$A$1:$B$2\".",
+          "name": "sRef",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the reference was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetRefersTo(sRef: string): boolean"
+    }
+  }
+}

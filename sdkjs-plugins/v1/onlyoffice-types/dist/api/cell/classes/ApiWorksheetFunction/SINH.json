@@ -1,0 +1,18 @@
+{
+  "description": "Returns the hyperbolic sine of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SINH/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SINH(4));"
+  ],
+  "params": [
+    {
+      "description": "Any real number for which the hyperbolic sine will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SINH(arg1: ApiRange | ApiName | number): number"
+}

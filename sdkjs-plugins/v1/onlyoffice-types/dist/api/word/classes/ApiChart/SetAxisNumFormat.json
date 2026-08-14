@@ -1,0 +1,19 @@
+{
+  "description": "Sets the specified numeric format to the axis values.",
+  "params": [
+    {
+      "description": "Numeric format (can be custom format).",
+      "name": "sFormat",
+      "type": "NumFormat | string"
+    },
+    {
+      "description": "Axis position in the chart.",
+      "name": "sAxisPos",
+      "type": "AxisPos"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetAxisNumFormat(sFormat: NumFormat | string, sAxisPos: AxisPos): boolean"
+}

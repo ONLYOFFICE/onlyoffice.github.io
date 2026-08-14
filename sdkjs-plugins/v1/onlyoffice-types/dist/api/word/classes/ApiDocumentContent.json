@@ -1,0 +1,464 @@
+{
+  "description": "Class representing a container for paragraphs and tables.",
+  "methods": {
+    "AddElement": {
+      "description": "Adds a paragraph or a table or a blockLvl content control using its position in the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/AddElement/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.AddElement(0, paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The position where the current element will be added.",
+          "name": "nPos",
+          "type": "number"
+        },
+        {
+          "description": "The document element which will be added at the current position.",
+          "name": "oElement",
+          "type": "DocumentElement"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddElement(nPos: number, oElement: DocumentElement): boolean"
+    },
+    "AddParagraph": {
+      "description": "Creates a new paragraph and appends it to the end of the document content.",
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph"
+      },
+      "signature": "AddParagraph(): ApiParagraph",
+      "since": "9.4.0"
+    },
+    "AddText": {
+      "description": "Appends the specified text to the end of the document content.",
+      "params": [
+        {
+          "description": "The text to add.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "AddText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "GetAllCharts": {
+      "description": "Returns a collection of chart objects from the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllCharts/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 95 * 36000, 70 * 36000, 24);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph = Api.CreateParagraph();\nparagraph.AddDrawing(chart);\nlet docContent = shape.GetDocContent();\ndocContent.AddElement(0, paragraph);\nlet charts = docContent.GetAllCharts();\nstroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\ncharts[0].SetMinorHorizontalGridlines(stroke);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiChart[]"
+      },
+      "signature": "GetAllCharts(): ApiChart[]"
+    },
+    "GetAllDrawingObjects": {
+      "description": "Returns a collection of drawing objects from the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllDrawingObjects/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 95 * 36000, 70 * 36000, 24);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nparagraph = Api.CreateParagraph();\nparagraph.AddDrawing(chart);\nlet docContent = shape.GetDocContent();\ndocContent.AddElement(0, paragraph);\nlet drawings = docContent.GetAllDrawingObjects();\nfill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));\ndrawings[0].Fill(fill);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Drawing[]"
+      },
+      "signature": "GetAllDrawingObjects(): Drawing[]"
+    },
+    "GetAllImages": {
+      "description": "Returns a collection of image objects from the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllImages/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nparagraph = Api.CreateParagraph();\nlet image = Api.CreateImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", 95 * 36000, 45 * 36000);\nparagraph.AddDrawing(image);\nlet docContent = shape.GetDocContent();\ndocContent.AddElement(0, paragraph);\nlet images = docContent.GetAllImages();\nlet classType = images[0].GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiImage[]"
+      },
+      "signature": "GetAllImages(): ApiImage[]"
+    },
+    "GetAllOleObjects": {
+      "description": "Returns a collection of OLE objects from the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllOleObjects/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet oleObject = Api.CreateOleObject(\"https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp\", 95 * 36000, 70 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nparagraph = Api.CreateParagraph();\nparagraph.AddDrawing(oleObject);\nlet docContent = shape.GetDocContent();\ndocContent.AddElement(0, paragraph);\nlet oleObjects = docContent.GetAllOleObjects();\nlet appId = oleObjects[0].GetApplicationId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The application ID for the current OLE object: \" + appId);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiOleObject[]"
+      },
+      "signature": "GetAllOleObjects(): ApiOleObject[]"
+    },
+    "GetAllParagraphs": {
+      "description": "Returns an array of all paragraphs from the current document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllParagraphs/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet docContent = shape.GetDocContent();\nparagraph = docContent.GetElement(0);\nparagraph.AddText(\"Paragraph 1\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Paragraph 2\");\ndocContent.Push(paragraph);\nlet paragraphs = docContent.GetAllParagraphs();\nparagraphs[0].SetBold(true);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph[]"
+      },
+      "signature": "GetAllParagraphs(): ApiParagraph[]"
+    },
+    "GetAllShapes": {
+      "description": "Returns a collection of shape objects from the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllShapes/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape1 = Api.CreateShape(\"rect\", 95 * 36000, 85 * 36000, fill, stroke);\nparagraph.AddDrawing(shape1);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape2 = Api.CreateShape(\"ellipse\", 90 * 36000, 80 * 36000, fill, stroke);\nparagraph = Api.CreateParagraph();\nparagraph.AddDrawing(shape2);\nlet docContent = shape1.GetDocContent();\ndocContent.AddElement(0, paragraph);\nlet shapes = docContent.GetAllShapes();\ndocContent = shapes[0].GetDocContent();\nlet classType = shapes[0].GetClassType();\nparagraph = docContent.GetElement(0);\nparagraph.AddText(\"Class Type = \" + classType);\nparagraph.SetColor(51, 51, 51);\nshapes[0].SetVerticalTextAlign(\"bottom\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiShape[]"
+      },
+      "signature": "GetAllShapes(): ApiShape[]"
+    },
+    "GetAllTables": {
+      "description": "Returns an array of all tables from the current document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllTables/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet docContent = shape.GetDocContent();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndocContent.Push(table);\nlet tables = docContent.GetAllTables();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text in the first cell.\");\nlet cell = tables[0].GetCell(0, 0);\ntables[0].AddElement(cell, 0, paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTable[]"
+      },
+      "signature": "GetAllTables(): ApiTable[]"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiDocumentContent class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.AddElement(0, paragraph);\nlet classType = docContent.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"documentContent\""
+      },
+      "signature": "GetClassType(): \"documentContent\""
+    },
+    "GetContent": {
+      "description": "Returns an array of document elements from the current ApiDocumentContent object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetContent/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet docContent = shape.GetDocContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This paragraph is the first document element.\");\ndocContent.AddElement(0, paragraph);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndocContent.AddElement(1, table);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This table is the second document element.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nblockLvlSdt.GetContent().GetElement(0).AddText(\"This block text content control is the third document element.\");\ndocContent.AddElement(2, blockLvlSdt);\nlet docElements = docContent.GetContent(false);\ndocElements[0].SetBold(true);\ndocElements[1].SetBackgroundColor(235, 235, 235, false);\ndocElements[2].Search(\"block text content control\")[0].SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the copies of the document elements will be returned or not.",
+          "name": "bGetCopies",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "DocumentElement[]"
+      },
+      "signature": "GetContent(bGetCopies: boolean): DocumentElement[]"
+    },
+    "GetCurrentContentControl": {
+      "description": "Returns the currently selected content control.",
+      "params": [],
+      "returns": {
+        "type": "ApiBlockLvlSdt | ApiInlineLvlSdt | null"
+      },
+      "signature": "GetCurrentContentControl(): ApiBlockLvlSdt | ApiInlineLvlSdt | null",
+      "since": "9.0.0"
+    },
+    "GetCurrentParagraph": {
+      "description": "Returns the current paragraph where the cursor is located.",
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph"
+      },
+      "signature": "GetCurrentParagraph(): ApiParagraph",
+      "since": "9.0.0"
+    },
+    "GetCurrentRun": {
+      "description": "Returns the current run where the cursor is located.",
+      "params": [],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "GetCurrentRun(): ApiRun",
+      "since": "9.0.0"
+    },
+    "GetElement": {
+      "description": "Returns an element by its position in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetElement/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet section = doc.GetFinalSection();\nlet docContent = section.GetHeader(\"default\", true);\nlet paragraph = docContent.GetElement(0);\nparagraph.AddText(\"This is the text in the default header\");"
+      ],
+      "params": [
+        {
+          "description": "The element position that will be taken from the document.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "DocumentElement"
+      },
+      "signature": "GetElement(nPos: number): DocumentElement"
+    },
+    "GetElementIndex": {
+      "description": "Returns the position (index) of the specified element within the current document content.",
+      "params": [
+        {
+          "description": "The document element (paragraph, table or block content control) whose index will be returned.",
+          "name": "element",
+          "type": "DocumentElement"
+        }
+      ],
+      "returns": {
+        "description": "returns -1 if the element is not a direct child of the current document content.",
+        "type": "number"
+      },
+      "signature": "GetElementIndex(element: DocumentElement): number",
+      "since": "9.5.0"
+    },
+    "GetElementsCount": {
+      "description": "Returns a number of elements in the current document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetElementsCount/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = docContent.GetElement(0);\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of elements inside the shape: \" + docContent.GetElementsCount());\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetElementsCount(): number"
+    },
+    "GetInternalId": {
+      "description": "Returns an internal ID of the current document content.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInternalId(): string",
+      "since": "9.0.4"
+    },
+    "GetRange": {
+      "description": "Returns a Range object that represents the part of the document contained in the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetRange/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample paragraph.\");\ndocContent.AddElement(0, paragraph);\nlet range = docContent.GetRange(8, 11);\nrange.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "Start position index in the current element.",
+          "name": "Start",
+          "type": "number"
+        },
+        {
+          "description": "End position index in the current element.",
+          "name": "End",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRange(Start: number, End: number): ApiRange"
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current document content object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetText/",
+      "examples": [
+        "let oDocument = Api.GetDocument();\nlet oBlockLvlSdt = Api.CreateBlockLvlSdt();\noDocument.Push(oBlockLvlSdt);\nlet oContent = oBlockLvlSdt.GetContent();\noContent.GetElement(0).AddText(\"This is a block text content control.\");\nlet oPara = Api.CreateParagraph();\noPara.AddText(\"This text from DocContent element: \" + oContent.GetText());\noDocument.Push(oPara);"
+      ],
+      "params": [
+        {
+          "description": "Options for formatting the returned text.",
+          "name": "options",
+          "optional": true,
+          "type": "object"
+        },
+        {
+          "description": "Defines if the resulting string will include numbering or not.",
+          "name": "options_Numbering",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the resulting string will include mathematical expressions or not.",
+          "name": "options_Math",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines how the table cell separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\t\".",
+          "name": "options_TableCellSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table row separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\\n\".",
+          "name": "options_TableRowSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the paragraph separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\\n\".",
+          "name": "options_ParaSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the tab will be specified in the resulting string. Any symbol can be used. The default symbol is \"\\t\".",
+          "name": "options_TabSymbol",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the line separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\".",
+          "name": "options_NewLineSeparator",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string",
+      "since": "8.3.0"
+    },
+    "IsEndnote": {
+      "description": "Check if the current document content is an endnote.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsEndnote(): boolean",
+      "since": "9.3.0"
+    },
+    "IsFootnote": {
+      "description": "Check if the current document content is a footnote.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsFootnote(): boolean",
+      "since": "9.3.0"
+    },
+    "MoveCursorToNoteReference": {
+      "description": "Moves the cursor to the reference of this footnote/endnote in the main document. If this document content is not a footnote/endnote, does nothing.",
+      "params": [
+        {
+          "description": "Specifies whether to place the cursor before (_true_) or after (_false_) the note reference.",
+          "name": "isBefore",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns _true_ if the cursor was moved to the reference successfully.",
+        "type": "boolean"
+      },
+      "signature": "MoveCursorToNoteReference(isBefore: boolean): boolean",
+      "since": "9.4.0"
+    },
+    "Push": {
+      "description": "Pushes a paragraph or a table to actually add it to the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/Push/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The element type which will be pushed to the document.",
+          "name": "oElement",
+          "type": "DocumentElement"
+        }
+      ],
+      "returns": {
+        "description": "returns false if oElement is unsupported.",
+        "type": "boolean"
+      },
+      "signature": "Push(oElement: DocumentElement): boolean"
+    },
+    "RemoveAllElements": {
+      "description": "Removes all the elements from the current document or from the current document element.\n<note>When all elements are removed, a new empty paragraph is automatically created. If you want to add\ncontent to this paragraph, use the {@link ApiDocumentContent#GetElement} method.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/RemoveAllElements/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.AddElement(0, paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveAllElements(): boolean"
+    },
+    "RemoveElement": {
+      "description": "Removes an element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/RemoveElement/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 1926590, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = docContent.GetElement(0);\nparagraph.AddText(\"This is paragraph #1.\");\nfor (let i = 1; i < 5; ++i) {\n\tparagraph = Api.CreateParagraph();\n\tparagraph.AddText(\"This is paragraph #\" + (i + 1) + \".\");\n\tdocContent.Push(paragraph);\n}\ndocContent.RemoveElement(2);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed paragraph #3, check that out above.\");\ndocContent.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The element number (position) in the document or inside other element.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveElement(nPos: number): boolean"
+    },
+    "SelectNoteReference": {
+      "description": "Select the reference to this footnote/endnote. If this document content is not a footnote/endnote, do nothing.",
+      "params": [],
+      "returns": {
+        "description": "Returns true if the reference was selected successfully.",
+        "type": "boolean"
+      },
+      "signature": "SelectNoteReference(): boolean",
+      "since": "9.3.0"
+    },
+    "SetText": {
+      "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
+      "params": [
+        {
+          "description": "The text to set.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "SetText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiDocumentContent object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = docContent.GetElement(0);\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\nlet json = docContent.ToJSON(false, true);\nlet docContentFromJSON = Api.FromJSON(json);\nlet type = docContentFromJSON.GetClassType();\ndocContentFromJSON.RemoveAllElements();\nparagraph = docContentFromJSON.GetElement(0);\nparagraph.AddText(\"Class type = \" + type);\nApi.ReplaceDocumentContent(docContentFromJSON);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the used numberings will be written to the JSON object or not.",
+          "name": "isWriteNumberings",
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies if the used styles will be written to the JSON object or not.",
+          "name": "isWriteStyles",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(isWriteNumberings: boolean, isWriteStyles: boolean): object"
+    }
+  }
+}

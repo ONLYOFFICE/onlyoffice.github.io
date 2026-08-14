@@ -1,0 +1,9 @@
+{
+  "description": "Moves a cursor to the start of the document.",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "MoveCursorToStart(): boolean",
+  "since": "9.0.4"
+}

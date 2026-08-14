@@ -1,0 +1,33 @@
+{
+  "description": "Counts a number of cells specified by a given set of conditions or criteria.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUNTIFS/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet buyer = [\"Buyer\", \"Tom\", \"Bob\", \"Ann\", \"Kate\", \"John\"];\nlet product = [\"Product\", \"Apples\", \"Red apples\", \"ranges\", \"Green apples\", \"ranges\"];\nlet quantity = [\"Quantity\", 12, 45, 18, 26, 10];\n\nfor (let i = 0; i < buyer.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(buyer[i]);\n}\nfor (let j = 0; j < product.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(product[j]);\n}\nfor (let n = 0; n < quantity.length; n++) {\n    worksheet.GetRange(\"C\" + (n + 1)).SetValue(quantity[n]);\n}\n\nlet range1 = worksheet.GetRange(\"B2:B6\");\nlet range2 = worksheet.GetRange(\"C2:C6\");\nworksheet.GetRange(\"E6\").SetValue(func.COUNTIFS(range1, \"*apples\", range2, \"45\"));"
+  ],
+  "params": [
+    {
+      "description": "The first range of cells to count nonblank cells.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "The first condition in the form of a number, expression, or text that defines which cells will be counted.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number | string"
+    },
+    {
+      "description": "Up to 127 additional ranges of cells to count nonblank cells. This argument is optional.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "Up to 127 additional conditions in the form of a number, expression, or text that define which cells will be counted.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | number | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "COUNTIFS(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg3: ApiRange | ApiName, arg4: ApiRange | ApiName | number | string): number"
+}

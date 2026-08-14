@@ -1,0 +1,10 @@
+{
+  "description": "Returns the drop cap related to the current paragraph, if any.",
+  "params": [],
+  "returns": {
+    "description": "The drop cap, or null if the paragraph has no drop cap.",
+    "type": "ApiDropCap"
+  },
+  "signature": "GetDropCap(): ApiDropCap",
+  "since": "9.5.0"
+}

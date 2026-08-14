@@ -1,0 +1,9 @@
+{
+  "description": "Add paragraph to the document on the cursor position.",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "InsertParagraphBreak(): boolean",
+  "since": "9.2.0"
+}

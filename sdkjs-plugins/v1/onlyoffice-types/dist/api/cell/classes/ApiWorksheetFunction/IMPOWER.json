@@ -1,0 +1,23 @@
+{
+  "description": "Returns a complex number raised to an integer power.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMPOWER/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMPOWER(\"-2+2.5i\", -3));"
+  ],
+  "params": [
+    {
+      "description": "A complex number expressed in the *x + yi* or *x + yj* form.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The power to which the complex number will be raised.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMPOWER(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

@@ -153,8 +153,7 @@ export namespace Slide {
   }
 
   /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their comments.
    *
    * @example
    * ```js
@@ -167,7 +166,7 @@ export namespace Slide {
   }
 
   /**
-   * Record of one comment.
+   * Represents a single comment record.
    *
    * @example
    * ```js
@@ -175,19 +174,19 @@ export namespace Slide {
    * ```
    */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -468,8 +467,7 @@ export namespace Slide {
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
   /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their review changes.
    *
    * @example
    * ```js
@@ -487,7 +485,7 @@ export namespace Slide {
   }
 
   /**
-   * Record of one review change.
+   * Represents a single review change record.
    *
    * @example
    * ```js
@@ -502,16 +500,16 @@ export namespace Slide {
    * ```
    */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
@@ -830,7 +828,7 @@ export namespace Slide {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -1300,6 +1298,12 @@ export namespace Slide {
 
     /**
      * Creates a chart with the parameters specified.
+     * :::note
+     * Values of _nStyleIndex_ outside **1 - 48** are interpreted as a chart style id from the
+     * _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs
+     * Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs
+     * Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).
+     * :::
      *
      * @param sType - The chart type used for the chart display.
      * @param aSeries - The array of the data used to build the chart from.
@@ -1310,8 +1314,8 @@ export namespace Slide {
      * @param nWidth - The chart width in English measure units.
      * @param nHeight - The chart height in English measure units.
      * @param nStyleIndex - The chart color style index (can be **1 - 48**, as described in OOXML specification).
-     * @param aNumFormats - Numeric formats which will be applied to the series (can be custom formats).
-     *   The default numeric format is "General".
+     * @param aNumFormats - Numeric formats which will be applied to the series (can be custom formats). The default numeric
+     *   format is "General".
      * @default sType = "bar"
      *
      * @example
@@ -1372,6 +1376,10 @@ export namespace Slide {
 
     /**
      * Creates a group of drawings.
+     * :::note
+     * The drawings must not be added to the presentation. To group the drawings which are already in the
+     * presentation, use the {@link ApiSlide#GroupDrawings} method.
+     * :::
      *
      * @param drawings - An array of drawings to group.
      * @since 8.3.0
@@ -1412,8 +1420,8 @@ export namespace Slide {
     /**
      * Creates an image with the parameters specified.
      *
-     * @param sImageSrc - The image source where the image to be inserted should be taken from (currently,
-     *   only internet URL or Base64 encoded images are supported).
+     * @param sImageSrc - The image source where the image to be inserted should be taken from (currently, only internet
+     *   URL or Base64 encoded images are supported).
      * @param nWidth - The image width in English measure units.
      * @param nHeight - The image height in English measure units.
      *
@@ -1810,8 +1818,10 @@ export namespace Slide {
      * @param sType - The shape type which specifies the preset shape geometry.
      * @param nWidth - The shape width in English measure units.
      * @param nHeight - The shape height in English measure units.
-     * @param oFill - The color or pattern used to fill the shape.
-     * @param oStroke - The stroke used to create the element shadow.
+     * @param oFill - The color or pattern used to fill the shape. If not specified, the default shape style fill
+     *   (theme accent) is used.
+     * @param oStroke - The stroke used to draw the shape outline. If not specified, the default shape style outline
+     *   (theme accent) is used.
      * @default sType = "rect"
      * @default nWidth = 914400
      * @default nHeight = 914400
@@ -1922,6 +1932,10 @@ export namespace Slide {
 
     /**
      * Creates a table.
+     * :::danger[Breaking Change]
+     * Starting from version 9.4.0, the parameter order has been changed from `Api.CreateTable(cols, rows)`
+     * to `Api.CreateTable(rows, cols)`.
+     * :::
      *
      * @param rows - Number of rows.
      * @param cols - Number of columns.
@@ -2017,10 +2031,9 @@ export namespace Slide {
     /**
      * Creates a new theme color scheme.
      *
-     * @param arrColors - Set of colors which are referred to as a color scheme.
-     *   The color scheme is responsible for defining a list of twelve colors.
-     *   The array should contain a sequence of colors: 2 dark, 2 light, 6 primary, a color for a
-     *   hyperlink and a color for the followed hyperlink.
+     * @param arrColors - Set of colors which are referred to as a color scheme. The color scheme is responsible for
+     *   defining a list of twelve colors. The array should contain a sequence of colors: 2 dark, 2
+     *   light, 6 primary, a color for a hyperlink and a color for the followed hyperlink.
      * @param sName - Theme color scheme name.
      *
      * @example
@@ -4498,10 +4511,10 @@ export namespace Slide {
     /**
      * Adds a reply to a comment.
      *
-     * @param sText - The comment reply text (required).
-     * @param sAuthorName - The name of the comment reply author (optional).
-     * @param sUserId - The user ID of the comment reply author (optional).
-     * @param nPos - The comment reply position.
+     * @param sText - The comment reply text.
+     * @param sAuthorName - The name of the comment reply author.
+     * @param sUserId - The user ID of the comment reply author.
+     * @param nPos - The comment reply position. If nPos=-1 add to the end.
      * @default nPos = -1
      * @returns this
      *
@@ -6252,7 +6265,7 @@ export namespace Slide {
     Fill(oFill: ApiFill): boolean;
 
     /**
-     * Returns a type of the ApiDrawing class.
+     * Returns the type of the ApiDrawing class.
      *
      * @example
      * ```js
@@ -7340,7 +7353,7 @@ export namespace Slide {
     CreateTextRange(): ApiTextRange | null;
 
     /**
-     * Returns a type of the ApiImage class.
+     * Returns the type of the ApiImage class.
      *
      * @example
      * ```js
@@ -8030,7 +8043,7 @@ export namespace Slide {
     /**
      * Sets the background to the current slide layout.
      *
-     * @param oApiFill - The color or pattern used to fill the presentation slide layout background.\
+     * @param oApiFill - The color or pattern used to fill the presentation slide layout background.
      *
      * @example
      * ```js
@@ -8237,6 +8250,7 @@ export namespace Slide {
 
     /**
      * Deletes the specified object from the parent if it exists.
+     * Note: Master can't be deleted if it's the last one in the presentation.
      *
      * @returns return false if master doesn't exist or is not in the presentation or couldn't be deleted (e.g.
      *   the last master).
@@ -9615,8 +9629,7 @@ export namespace Slide {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -9781,10 +9794,10 @@ export namespace Slide {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -9825,10 +9838,10 @@ export namespace Slide {
     /**
      * Adds an element to the current paragraph.
      *
-     * @param oElement - The document element which will be added at the current position. Returns false if the
-     *   oElement type is not supported by a paragraph.
-     * @param nPos - The position where the current element will be added. If this value is not
-     *   specified, then the element will be added at the end of the current paragraph.
+     * @param oElement - The document element which will be added at the current position. Returns false if the oElement
+     *   type is not supported by a paragraph.
+     * @param nPos - The position where the current element will be added. If this value is not specified, then the
+     *   element will be added at the end of the current paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
      * @example
@@ -10861,8 +10874,7 @@ export namespace Slide {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -11056,10 +11068,10 @@ export namespace Slide {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -11404,7 +11416,7 @@ export namespace Slide {
     GetClassType(): "placeholder";
 
     /**
-     * Retuns the placeholder index.
+     * Returns the placeholder index.
      *
      * @returns Returns the placeholder index.
      * @since 8.2.0
@@ -11826,7 +11838,7 @@ export namespace Slide {
      * **LastModifiedRaw** - the date and time when the file was last modified.
      * **LastModified** - the parsed date and time when the file was last modified.
      * **LastModifiedBy** - the name of the user who has made the latest change to the document.
-     * **Autrors** - the persons who has created the file.
+     * **Authors** - the persons who has created the file.
      * **Title** - this property allows you to simplify your documents classification.
      * **Tags** - this property allows you to simplify your documents classification.
      * **Subject** - this property allows you to simplify your documents classification.
@@ -12169,8 +12181,8 @@ export namespace Slide {
     /**
      * Specifies the languages which will be used to check spelling and grammar (if requested).
      *
-     * @param sLangId - The possible value for this parameter is a language identifier as defined by
-     *   RFC 4646/BCP 47. Example: "en-CA".
+     * @param sLangId - The possible value for this parameter is a language identifier as defined by RFC 4646/BCP 47.
+     *   Example: "en-CA".
      *
      * @example
      * ```js
@@ -12230,7 +12242,7 @@ export namespace Slide {
     /**
      * Converts the slides from the current ApiPresentation object into the JSON objects.
      *
-     * @param nStart - The index to the end slide.
+     * @param nStart - The index to the start slide.
      * @param nEnd - The index to the end slide.
      * @param bWriteLayout - Specifies if the slide layout will be written to the JSON object or not.
      * @param bWriteMaster - Specifies if the slide master will be written to the JSON object or not (bWriteMaster is false
@@ -12818,7 +12830,7 @@ export namespace Slide {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -12948,7 +12960,8 @@ export namespace Slide {
     GetFill(): ApiFill;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -13160,7 +13173,7 @@ export namespace Slide {
     GetOutLine(): ApiStroke;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -13388,7 +13401,7 @@ export namespace Slide {
     /**
      * Sets the bold property to the text character.
      *
-     * @param isBold - Specifies that the contents of the current run are displayed bold.
+     * @param isBold - Specifies that the contents of the run are displayed bold.
      * @returns this text properties.
      *
      * @example
@@ -13417,8 +13430,8 @@ export namespace Slide {
     SetBold(isBold: boolean): ApiTextPr;
 
     /**
-     * Specifies that any lowercase characters in the current text run are formatted for display only as
-     * their capital letter character equivalents.
+     * Specifies that any lowercase characters in the text run are formatted for display only as their
+     * capital letter character equivalents.
      *
      * @param isCaps - Specifies that the contents of the current run are displayed capitalized.
      * @returns this text properties.
@@ -13449,7 +13462,7 @@ export namespace Slide {
     SetCaps(isCaps: boolean): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with two horizontal lines through each
+     * Specifies that the contents of the run are displayed with two horizontal lines through each
      * character displayed on the line.
      *
      * @param isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
@@ -13575,7 +13588,8 @@ export namespace Slide {
     SetFontSize(nSize: hps): ApiTextPr;
 
     /**
-     * Specifies a highlighting color which is applied as a background to the contents of the current run.
+     * Specifies a highlighting color which is added to the text properties and applied as a background to
+     * the contents of the current run/range/paragraph.
      *
      * @param sColor - Available highlight color.
      *
@@ -13665,7 +13679,7 @@ export namespace Slide {
     SetOutLine(oStroke: ApiStroke): ApiTextPr;
 
     /**
-     * Specifies that all the small letter characters in this text run are formatted for display only as
+     * Specifies that all the small letter characters in the text run are formatted for display only as
      * their capital
      * letter character equivalents which are two points smaller than the actual font size specified for
      * this text.
@@ -13731,8 +13745,8 @@ export namespace Slide {
     SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with a single horizontal line through
-     * the center of the line.
+     * Specifies that the contents of the run are displayed with a single horizontal line through the
+     * center of the line.
      *
      * @param isStrikeout - Specifies that the contents of the current run are displayed struck through.
      * @returns this text properties.
@@ -13825,8 +13839,8 @@ export namespace Slide {
     SetTextPr(oTextPr: ApiTextPr): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed along with a line appearing directly
-     * below the character
+     * Specifies that the contents of the run are displayed along with a line appearing directly below the
+     * character
      * (less than all the spacing above and below the characters on the line).
      *
      * @param isUnderline - Specifies that the contents of the current run are displayed underlined.
@@ -13858,8 +13872,8 @@ export namespace Slide {
     SetUnderline(isUnderline: boolean): ApiTextPr;
 
     /**
-     * Specifies the alignment which will be applied to the contents of the current run in relation to the
-     * default appearance of the text run:
+     * Specifies the alignment which will be applied to the contents of the run in relation to the default
+     * appearance of the run text:
      * **"baseline"** - the characters in the current text run will be aligned by the default text
      * baseline.
      * **"subscript"** - the characters in the current text run will be aligned below the default text
@@ -15476,8 +15490,8 @@ export namespace Slide {
      * Adds a new column to the end of the current table.
      *
      * @param oCell - If not specified, a new column will be added to the end of the table.
-     * @param isBefore - Add a new column before or after the specified cell. If no cell is specified,
-     *   then this parameter will be ignored.
+     * @param isBefore - Add a new column before or after the specified cell. If no cell is specified, then this
+     *   parameter will be ignored.
      * @default isBefore = false
      *
      * @example
@@ -15516,7 +15530,7 @@ export namespace Slide {
     AddColumns(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable | null;
 
     /**
-     * Adds a paragraph or a table or a blockLvl content control using its position in the cell.
+     * Adds a paragraph using its position in the cell.
      *
      * @param oCell - The cell where the specified element will be added.
      * @param nPos - The position in the cell where the specified element will be added.
@@ -15531,8 +15545,8 @@ export namespace Slide {
      * Adds a new row to the current table.
      *
      * @param oCell - If not specified, a new row will be added to the end of the table.
-     * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified,
-     *   then this parameter will be ignored.
+     * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified, then this parameter
+     *   will be ignored.
      * @default isBefore = false
      *
      * @example
@@ -16167,16 +16181,12 @@ export namespace Slide {
      * row, first
      * column, or last column formatting.
      *
-     * @param isFirstColumn - Specifies that the first column conditional formatting shall be applied to the
-     *   table.
+     * @param isFirstColumn - Specifies that the first column conditional formatting shall be applied to the table.
      * @param isFirstRow - Specifies that the first row conditional formatting shall be applied to the table.
-     * @param isLastColumn - Specifies that the last column conditional formatting shall be applied to the
-     *   table.
+     * @param isLastColumn - Specifies that the last column conditional formatting shall be applied to the table.
      * @param isLastRow - Specifies that the last row conditional formatting shall be applied to the table.
-     * @param isHorBand - Specifies that the horizontal banding conditional formatting shall not be applied
-     *   to the table.
-     * @param isVerBand - Specifies that the vertical banding conditional formatting shall not be applied to
-     *   the table.
+     * @param isHorBand - Specifies that the horizontal banding conditional formatting shall not be applied to the table.
+     * @param isVerBand - Specifies that the vertical banding conditional formatting shall not be applied to the table.
      *
      * @example
      * ```js
@@ -16505,8 +16515,8 @@ export namespace Slide {
      * the border
      * of a specific individual table cell within a table.
      *
-     * @param nValue - If this value is `null`, then default table cell bottom margin shall be used,
-     *   otherwise override the table cell bottom margin with specified value for the current cell.
+     * @param nValue - If this value is `null`, then default table cell bottom margin shall be used, otherwise override
+     *   the table cell bottom margin with specified value for the current cell.
      *
      * @example
      * ```js
@@ -16533,8 +16543,8 @@ export namespace Slide {
      * contents and the
      * left edge border of a specific individual table cell within a table.
      *
-     * @param nValue - If this value is `null`, then default table cell left margin shall be used,
-     *   otherwise override the table cell left margin with specified value for the current cell.
+     * @param nValue - If this value is `null`, then default table cell left margin shall be used, otherwise override
+     *   the table cell left margin with specified value for the current cell.
      *
      * @example
      * ```js
@@ -16561,8 +16571,8 @@ export namespace Slide {
      * contents and the
      * right edge border of a specific individual table cell within a table.
      *
-     * @param nValue - If this value is `null`, then default table cell right margin shall be used,
-     *   otherwise override the table cell right margin with specified value for the current cell.
+     * @param nValue - If this value is `null`, then default table cell right margin shall be used, otherwise override
+     *   the table cell right margin with specified value for the current cell.
      *
      * @example
      * ```js
@@ -16589,8 +16599,8 @@ export namespace Slide {
      * and the
      * top edge border of a specific individual table cell within a table.
      *
-     * @param nValue - If this value is `null`, then default table cell top margin shall be used,
-     *   otherwise override the table cell top margin with specified value for the current cell.
+     * @param nValue - If this value is `null`, then default table cell top margin shall be used, otherwise override
+     *   the table cell top margin with specified value for the current cell.
      *
      * @example
      * ```js
@@ -17133,7 +17143,7 @@ export namespace Slide {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -17265,7 +17275,8 @@ export namespace Slide {
     GetFill(): ApiFill;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -17437,7 +17448,7 @@ export namespace Slide {
     GetOutLine(): ApiStroke;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -19046,9 +19057,8 @@ export namespace Slide {
     /**
      * Sets the background fill styles to the current theme format scheme.
      *
-     * @param arrBgFill - The array of background fill styles must contains 3 elements - subtle, moderate and intense
-     *   fills.
-     *   If an array is empty or NoFill elements are in the array, it will be filled with the
+     * @param arrBgFill - The array of background fill styles must contain 3 elements - subtle, moderate and intense
+     *   fills. If an array is empty or NoFill elements are in the array, it will be filled with the
      *   Api.CreateNoFill() elements.
      *
      * @example
@@ -19091,8 +19101,8 @@ export namespace Slide {
     /**
      * Sets the fill styles to the current theme format scheme.
      *
-     * @param arrFill - The array of fill styles must contain 3 elements - subtle, moderate and intense fills.
-     *   If an array is empty or NoFill elements are in the array, it will be filled with the
+     * @param arrFill - The array of fill styles must contain 3 elements - subtle, moderate and intense fills. If an
+     *   array is empty or NoFill elements are in the array, it will be filled with the
      *   Api.CreateNoFill() elements.
      *
      * @example
@@ -19135,8 +19145,8 @@ export namespace Slide {
     /**
      * Sets the line styles to the current theme format scheme.
      *
-     * @param arrLine - The array of line styles must contain 3 elements - subtle, moderate and intense fills.
-     *   If an array is empty or ApiStroke elements are with no fill, it will be filled with the
+     * @param arrLine - The array of line styles must contain 3 elements - subtle, moderate and intense fills. If an
+     *   array is empty or ApiStroke elements are with no fill, it will be filled with the
      *   Api.CreateStroke(0, Api.CreateNoFill()) elements.
      *
      * @example

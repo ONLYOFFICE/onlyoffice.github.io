@@ -1,0 +1,1054 @@
+{
+  "description": "Class representing a small text block called 'run'.",
+  "extends": [
+    "ApiTextPr"
+  ],
+  "methods": {
+    "AddColumnBreak": {
+      "description": "Adds a column break to the current run position and starts the next element from a new column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/AddColumnBreak/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection(paragraph);\nsection.SetEqualColumns(2, 720);\nlet run = Api.CreateRun();\nrun.AddText(\"This is the text for the first column. It is written all in one text run. Nothing special.\");\nrun.AddColumnBreak();\nrun.AddText(\"This is the text which starts from the beginning of the second column. \");\nrun.AddText(\"It is written in two text runs, you need a space at the end of the first run sentence to separate them.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddColumnBreak(): boolean"
+    },
+    "AddComment": {
+      "description": "Adds a comment to the current run.\n<note>Please note that this run must be in the document.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/AddComment/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. Nothing special.\");\nparagraph.AddElement(run);\nrun.AddComment(\"comment\", \"John Smith\");"
+      ],
+      "params": [
+        {
+          "description": "The comment text.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The author's name.",
+          "name": "sAuthor",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment author.",
+          "name": "sUserId",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns null if the comment was not added.",
+        "type": "ApiComment"
+      },
+      "signature": "AddComment(sText: string, sAuthor?: string, sUserId?: string): ApiComment"
+    },
+    "AddDrawing": {
+      "description": "Adds a drawing object (image, shape or chart) to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/AddDrawing/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nlet drawing = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ndrawing.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\ndrawing.SetSeriesFill(fill, 1, false);\ndrawing.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\ndrawing.SetHorAxisTitle(\"Year\", 11);\ndrawing.SetLegendPos(\"bottom\");\ndrawing.SetShowDataLabels(false, false, true, false);\ndrawing.SetTitle(\"Financial Overview\", 13);\nrun.AddDrawing(drawing);\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The object which will be added to the current run.",
+          "name": "oDrawing",
+          "type": "ApiDrawing"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid.",
+        "type": "boolean"
+      },
+      "signature": "AddDrawing(oDrawing: ApiDrawing): boolean"
+    },
+    "AddHyperlink": {
+      "description": "Adds a hyperlink to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/AddHyperlink/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nrun.AddHyperlink(\"https://www.onlyoffice.com\", \"main page\");"
+      ],
+      "params": [
+        {
+          "description": "The link address.",
+          "name": "sLink",
+          "type": "string"
+        },
+        {
+          "description": "The screen tip text.",
+          "name": "sScreenTipText",
+          "type": "string"
+        },
+        {
+          "description": "name of a bookmark",
+          "name": "sBookmarkName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns false if params are invalid.",
+        "type": "ApiHyperlink"
+      },
+      "signature": "AddHyperlink(sLink: string, sScreenTipText: string, sBookmarkName: string): ApiHyperlink"
+    },
+    "AddLineBreak": {
+      "description": "Adds a line break to the current run position and starts the next element from a new line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/AddLineBreak/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is the text for the first line. Nothing special.\");\nrun.AddLineBreak();\nrun.AddText(\"This is the text which starts from the beginning of the second line. \");\nrun.AddText(\"It is written in two text runs, you need a space at the end of the first run sentence to separate them.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddLineBreak(): boolean"
+    },
+    "AddPageBreak": {
+      "description": "Adds a page break and starts the next element from a new page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/AddPageBreak/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is the text for the first page. After it a page break will be added. Scroll down to the second page to see the text there.\");\nrun.AddPageBreak();\nrun.AddText(\"This is the text which starts from the beginning of the second page. \");\nrun.AddText(\"It is written in two text runs, you need a space at the end of the first run sentence to separate them.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddPageBreak(): boolean"
+    },
+    "AddTabStop": {
+      "description": "Adds a tab stop to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/AddTabStop/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. After it three tab stops will be added.\");\nrun.AddTabStop();\nrun.AddTabStop();\nrun.AddTabStop();\nrun.AddText(\"This is the text which starts after the tab stops.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddTabStop(): boolean"
+    },
+    "AddText": {
+      "description": "Adds some text to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/AddText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. Nothing special.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The text which will be added to the current run. It can be a string or an array of Unicode code points.",
+          "name": "text",
+          "type": "string | number[]"
+        },
+        {
+          "description": "An array of character widths (in millimeters). It should be the same length as the array of code points passed in the \"text\" parameter. When the widths are specified, the characters are added preserving these exact widths.",
+          "name": "widths",
+          "optional": true,
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddText(text: string | number[], widths?: number[]): boolean"
+    },
+    "ClearContent": {
+      "description": "Clears the content from the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/ClearContent/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"But you will not see it in the resulting document, as it will be cleared.\");\nparagraph.AddElement(run);\nrun.ClearContent();\nparagraph = Api.CreateParagraph();\nrun = Api.CreateRun();\nrun.AddText(\"The text in the previous paragraph cannot be seen, as it has been cleared.\");\nparagraph.AddElement(run);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ClearContent(): boolean"
+    },
+    "Copy": {
+      "description": "Creates a copy of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/Copy/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"This is just a sample text that was copied. \");\nparagraph.AddElement(run1);\nlet run2 = run1.Copy();\nparagraph.AddElement(run2);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "Copy(): ApiRun"
+    },
+    "Delete": {
+      "description": "Deletes the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/Delete/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"This is run №1.\");\nparagraph.AddElement(run1);\nlet run2 = Api.CreateRun();\nrun2.AddText(\"This is run №2.\");\nparagraph.AddElement(run2);\nrun1.RemoveAllElements();\nparagraph.AddLineBreak();\nparagraph.AddText(\"The first run was removed from the document.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetBold": {
+      "description": "Gets the bold property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetBold/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetBold(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet bold = textPr.GetBold();\nparagraph.AddText(\"Bold property: \" + bold);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetBold(): boolean",
+      "since": "8.1.0"
+    },
+    "GetCaps": {
+      "description": "Returns whether the text with the current text properties are capitalized.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetCaps/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetCaps(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet caps = textPr.GetCaps();\nparagraph.AddText(\"Property of the capitalized letters: \" + caps);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetCaps(): boolean",
+      "since": "8.1.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRun class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. Nothing special.\");\nparagraph.AddElement(run);\nlet classType = run.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"run\""
+      },
+      "signature": "GetClassType(): \"run\""
+    },
+    "GetColor": {
+      "description": "Gets the RGB color from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetColor/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetColor(255, 111, 61, false);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet color = textPr.GetColor();\nlet type = color.GetClassType();\nparagraph.AddText(\"Color type: \" + type);\nparagraph.SetColor(color);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetColor(): ApiColor",
+      "since": "8.1.0"
+    },
+    "GetDoubleStrikeout": {
+      "description": "Gets the double strikeout property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetDoubleStrikeout/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetDoubleStrikeout(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet doubleStrikeout = textPr.GetDoubleStrikeout();\nparagraph.AddText(\"Double strikeout property: \" + doubleStrikeout);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetDoubleStrikeout(): boolean",
+      "since": "8.1.0"
+    },
+    "GetFontFamily": {
+      "description": "Returns the font family from the current text properties.\nThe method automatically calculates the font from the theme if the font was set via the theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetFontFamily/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetFontFamily(\"Arial\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet fontFamily = textPr.GetFontFamily();\nparagraph.AddText(\"Font family: \" + fontFamily);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFontFamily(): string",
+      "since": "8.1.0"
+    },
+    "GetFontNames": {
+      "description": "Returns all font names from all elements inside the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetFontNames/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.SetFontFamily(\"Calibri Light\");\nrun.AddText(\"This is just a sample text.\");\nparagraph.AddElement(run);\nlet fontNames = run.GetFontNames();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Run font names: \");\nparagraph.AddLineBreak();\nfor (let i = 0; i < fontNames.length; i++) {\n\tparagraph.AddText(fontNames[i]);\n\tparagraph.AddLineBreak();\n}\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The font names used for the current run.",
+        "type": "string[]"
+      },
+      "signature": "GetFontNames(): string[]"
+    },
+    "GetFontSize": {
+      "description": "Gets the font size from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetFontSize/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetFontSize(30);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet fontSize = textPr.GetFontSize();\nparagraph.AddText(\"Font size: \" + fontSize);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "hps"
+      },
+      "signature": "GetFontSize(): hps",
+      "since": "8.1.0"
+    },
+    "GetHighlight": {
+      "description": "Gets the highlight property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetHighlight/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetHighlight(\"lightGray\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet highlight = textPr.GetHighlight();\nparagraph.AddText(\"Highlight property: \" + highlight);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetHighlight(): string",
+      "since": "8.1.0"
+    },
+    "GetItalic": {
+      "description": "Gets the italic property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetItalic/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetItalic(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet italic = textPr.GetItalic();\nparagraph.AddText(\"Italic property: \" + italic);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetItalic(): boolean",
+      "since": "8.1.0"
+    },
+    "GetLanguage": {
+      "description": "Gets the language from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetLanguage/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetLanguage(\"en-CA\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet language = textPr.GetLanguage();\nparagraph.AddText(\"Language: \" + language);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetLanguage(): string",
+      "since": "8.1.0"
+    },
+    "GetOutLine": {
+      "description": "Gets the text outline from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetOutLine/",
+      "params": [],
+      "returns": {
+        "type": "ApiStroke"
+      },
+      "signature": "GetOutLine(): ApiStroke",
+      "since": "8.1.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current run.",
+      "params": [],
+      "returns": {
+        "description": "returns null if the run has no parent.",
+        "type": "ParagraphLikeContainer"
+      },
+      "signature": "GetParent(): ParagraphLikeContainer",
+      "since": "9.5.0"
+    },
+    "GetParentContentControl": {
+      "description": "Returns a content control that contains the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetParentContentControl/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nlet paragraph = Api.CreateParagraph();\nlet run = Api.CreateRun();\nrun.AddText(\"This is a block text content control.\");\nparagraph.Push(run);\nblockLvlSdt.AddElement(paragraph, 0);\ndoc.AddElement(0, blockLvlSdt);\nlet contentControl = run.GetParentContentControl();\nlet classType = contentControl.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if parent content control doesn't exist.",
+        "type": "ApiBlockLvlSdt | ApiInlineLvlSdt | null"
+      },
+      "signature": "GetParentContentControl(): ApiBlockLvlSdt | ApiInlineLvlSdt | null"
+    },
+    "GetParentParagraph": {
+      "description": "Returns a parent paragraph of the current run.",
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph"
+      },
+      "signature": "GetParentParagraph(): ApiParagraph"
+    },
+    "GetParentTable": {
+      "description": "Returns a table that contains the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetParentTable/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text.\");\nparagraph.AddElement(run);\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\nlet parentTable = run.GetParentTable();\ncell = parentTable.GetRow(2).GetCell(0);\nparentTable.RemoveRow(cell);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null"
+    },
+    "GetParentTableCell": {
+      "description": "Returns a table cell that contains the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetParentTableCell/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text.\");\nparagraph.AddElement(run);\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\nlet parentTableCell = run.GetParentTableCell();\nparentTableCell.SetShd(\"clear\", 255, 111, 61, false);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null is parent cell doesn't exist.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetParentTableCell(): ApiTableCell | null"
+    },
+    "GetPosInParent": {
+      "description": "Returns the position (index) of the current run within its parent element.",
+      "params": [],
+      "returns": {
+        "description": "returns -1 if the run has no parent.",
+        "type": "number"
+      },
+      "signature": "GetPosInParent(): number",
+      "since": "9.5.0"
+    },
+    "GetPosition": {
+      "description": "Gets the text position from the current text properties measured in half-points (1/144 of an inch).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetPosition/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetPosition(10);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet position = textPr.GetPosition();\nparagraph.AddText(\"Text position: \" + position);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "hps"
+      },
+      "signature": "GetPosition(): hps",
+      "since": "8.1.0"
+    },
+    "GetRange": {
+      "description": "Returns a Range object that represents the part of the document contained in the specified run.\nThe run must be attached to the document before calling this method.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetRange/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text.\");\nparagraph.AddElement(run);\nlet range = run.GetRange(0, 3);\nrange.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "Start position index in the current element.",
+          "name": "Start",
+          "type": "number"
+        },
+        {
+          "description": "End position index in the current element.",
+          "name": "End",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRange(Start: number, End: number): ApiRange"
+    },
+    "GetShd": {
+      "description": "Gets the text shading from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetShd/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetShd(\"clear\", 255, 111, 61);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet color = textPr.GetShd();\nlet type = color.GetClassType();\nparagraph.AddText(\"Shading type: \" + type);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Shd | undefined"
+      },
+      "signature": "GetShd(): Shd | undefined",
+      "since": "8.1.0"
+    },
+    "GetSmallCaps": {
+      "description": "Returns whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetSmallCaps/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetSmallCaps(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet smallCaps = textPr.GetSmallCaps();\nparagraph.AddText(\"Property of the small capitalized letters: \" + smallCaps);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetSmallCaps(): boolean",
+      "since": "8.1.0"
+    },
+    "GetSpacing": {
+      "description": "Gets the text spacing from the current text properties measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetSpacing/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetSpacing(80);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet spacing = textPr.GetSpacing();\nparagraph.AddText(\"Text spacing: \" + spacing);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "twips"
+      },
+      "signature": "GetSpacing(): twips",
+      "since": "8.1.0"
+    },
+    "GetStrikeout": {
+      "description": "Gets the strikeout property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetStrikeout/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetStrikeout(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet strikeout = textPr.GetStrikeout();\nparagraph.AddText(\"Strikeout property: \" + strikeout);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetStrikeout(): boolean",
+      "since": "8.1.0"
+    },
+    "GetStyle": {
+      "description": "Gets the style of the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetStyle/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet style = textPr.GetStyle();\nparagraph.AddText(\"Style: \" + style.GetName());\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The used style.",
+        "type": "ApiStyle"
+      },
+      "signature": "GetStyle(): ApiStyle",
+      "since": "8.1.0"
+    },
+    "GetText": {
+      "description": "Returns a text from the text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"\\tThis is a text run\");\nparagraph.AddElement(run);\nlet text = run.GetText({\"NewLineSeparator\": \"\\r\", \"TabSymbol\": \"\\t\"});\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The text of the specified run: \" + text);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "Options for formatting the returned text.",
+          "name": "options",
+          "optional": true,
+          "type": "object"
+        },
+        {
+          "description": "Defines how the line separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\".",
+          "name": "options_NewLineSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the tab will be specified in the resulting string. Any symbol can be used. The default symbol is \"\\t\".",
+          "name": "options_TabSymbol",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(options?: object, options_NewLineSeparator?: string, options_TabSymbol?: string): string"
+    },
+    "GetTextFill": {
+      "description": "Gets the text fill from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetTextFill/",
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "GetTextFill(): ApiFill",
+      "since": "8.1.0"
+    },
+    "GetTextPr": {
+      "description": "Returns the text properties of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetTextPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "GetTextPr(): ApiTextPr"
+    },
+    "GetUnderline": {
+      "description": "Gets the underline property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetUnderline/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetUnderline(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet underline = textPr.GetUnderline();\nparagraph.AddText(\"Underline property: \" + underline);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetUnderline(): boolean",
+      "since": "8.1.0"
+    },
+    "GetVertAlign": {
+      "description": "Gets the vertical alignment type from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetVertAlign/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetVertAlign(\"subscript\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet vertAlign = textPr.GetVertAlign();\nparagraph.AddText(\"Vertical alignment type: \" + vertAlign);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetVertAlign(): string",
+      "since": "8.1.0"
+    },
+    "MoveCursorToPos": {
+      "description": "Moves a cursor to a specified position of the current text run.\nIf the current run is not assigned to any document part, then **false** is returned. Otherwise, this method returns **true**.\nIf there is any selection in the document, it will be removed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/MoveCursorToPos/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet para = doc.GetElement(0);\nlet run = para.AddText(\"The quick brown fox jumps over the lazy dog\");\nrun.MoveCursorToPos(16);"
+      ],
+      "params": [
+        {
+          "description": "Desired cursor position.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveCursorToPos(nPos?: number): boolean",
+      "since": "8.2.0"
+    },
+    "RemoveAllElements": {
+      "description": "Removes all the elements from the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/RemoveAllElements/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"This is sample text №1.\");\nparagraph.AddElement(run1);\nlet run2 = Api.CreateRun();\nrun2.AddText(\"This is sample text №2.\");\nparagraph.AddElement(run2);\nrun1.RemoveAllElements();\nparagraph.AddLineBreak();\nparagraph.AddText(\"The sample text №1 was removed from the document.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveAllElements(): boolean"
+    },
+    "Select": {
+      "description": "Selects the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/Select/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text.\");\nparagraph.AddElement(run);\nrun.Select();\nparagraph.AddLineBreak();\nparagraph.AddText(\"The text from the first run was selected.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(): boolean"
+    },
+    "SetBold": {
+      "description": "Sets the bold property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetBold/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetBold(true);\nrun.AddText(\"This is a text run with the font set to bold.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the run are displayed bold.",
+          "name": "isBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetBold(isBold: boolean): ApiTextPr"
+    },
+    "SetCaps": {
+      "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetCaps/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetCaps(true);\nrun.AddText(\"This is a text run with the font set to capitalized letters.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed capitalized.",
+          "name": "isCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetCaps(isCaps: boolean): ApiTextPr"
+    },
+    "SetColor": {
+      "description": "Sets the text color to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetColor/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetColor(255, 111, 61);\nrun.AddText(\"This is a text run with the font color set to orange.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The text color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetColor(color: ApiColor): ApiTextPr",
+      "since": "9.1.0"
+    },
+    "SetDoubleStrikeout": {
+      "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetDoubleStrikeout/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetDoubleStrikeout(true);\nrun.AddText(\"This is a text run with the text struck out with two lines.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed double struck through.",
+          "name": "isDoubleStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiTextPr"
+    },
+    "SetFontFamily": {
+      "description": "Sets all 4 font slots with the specified font family.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetFontFamily/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetFontFamily(\"Calibri Light\");\nrun.AddText(\"This is a text run with the font family set to 'Calibri Light'.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The font family or families used for the current text run.",
+          "name": "sFontFamily",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFontFamily(sFontFamily: string): ApiTextPr"
+    },
+    "SetFontSize": {
+      "description": "Sets the font size to the characters of the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetFontSize/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetFontSize(30);\nrun.AddText(\"This is a text run with the font size set to 15 points (30 half-points).\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The text size value measured in half-points (1/144 of an inch).",
+          "name": "nSize",
+          "type": "hps"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFontSize(nSize: hps): ApiTextPr"
+    },
+    "SetHighlight": {
+      "description": "Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetHighlight/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetHighlight(\"lightGray\");\nrun.AddText(\"This is a text run with the text highlighted with light gray color.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Available highlight color.",
+          "name": "sColor",
+          "type": "highlightColor"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "SetHighlight(sColor: highlightColor): ApiTextPr"
+    },
+    "SetItalic": {
+      "description": "Sets the italic property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetItalic/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetItalic(true);\nrun.AddText(\"This is a text run with the font set to italicized letters.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed italicized.",
+          "name": "isItalic",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetItalic(isItalic: boolean): ApiTextPr"
+    },
+    "SetLanguage": {
+      "description": "Specifies the languages which will be used to check spelling and grammar (if requested) when processing\nthe contents of the text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetLanguage/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetLanguage(\"en-CA\");\nrun.AddText(\"This is a text run with the text language set to English (Canada).\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The possible value for this parameter is a language identifier as defined by\rRFC 4646/BCP 47. Example: \"en-CA\".",
+          "name": "sLangId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetLanguage(sLangId: string): ApiTextPr"
+    },
+    "SetOutLine": {
+      "description": "Sets the text outline to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetOutLine/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetOutLine(Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51))));\ntextPr.SetTextFill(Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", null, null, 0, 150 * 36000, 50 * 36000);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the text outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetOutLine(oStroke: ApiStroke): ApiTextPr"
+    },
+    "SetPosition": {
+      "description": "Specifies an amount by which text is raised or lowered for this run in relation to the default\nbaseline of the surrounding non-positioned text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetPosition/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetPosition(10);\nrun.AddText(\"This is a text run with the text raised 5 points (10 half-points).\");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetPosition(-16);\nrun.AddText(\"This is a text run with the text lowered 8 points (16 half-points).\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Specifies a positive (raised text) or negative (lowered text)\rmeasurement in half-points (1/144 of an inch).",
+          "name": "nPosition",
+          "type": "hps"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetPosition(nPosition: hps): ApiTextPr"
+    },
+    "SetShd": {
+      "description": "Specifies the shading applied to the contents of the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetShd/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetShd(\"clear\", 255, 111, 61);\nrun.AddText(\"This is a text run with the text shading set to orange.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The shading type applied to the contents of the current text run.",
+          "name": "type",
+          "type": "ShdType"
+        },
+        {
+          "description": "The color or pattern used to fill the shading.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetShd(type: ShdType, color: ApiColor): ApiTextPr",
+      "since": "9.1.0"
+    },
+    "SetSmallCaps": {
+      "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetSmallCaps/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetSmallCaps(true);\nrun.AddText(\"This is a text run with the font set to small capitalized letters.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current run are displayed capitalized two points smaller or not.",
+          "name": "isSmallCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetSmallCaps(isSmallCaps: boolean): ApiTextPr"
+    },
+    "SetSpacing": {
+      "description": "Sets the text spacing measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetSpacing/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetSpacing(80);\nrun.AddText(\"This is a text run with the text spacing set to 4 points (20 twentieths of a point).\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nSpacing",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetSpacing(nSpacing: twips): ApiTextPr"
+    },
+    "SetStrikeout": {
+      "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetStrikeout/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStrikeout(true);\nrun.AddText(\"This is a text run with the text struck out with a single line.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed struck through.",
+          "name": "isStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetStrikeout(isStrikeout: boolean): ApiTextPr"
+    },
+    "SetStyle": {
+      "description": "The text style base method.\n<note>This method is not used by itself, as it only forms the basis for the {@link ApiRun#SetStyle} method which sets\nthe selected or created style to the text.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetStyle/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The style which must be applied to the text character.",
+          "name": "oStyle",
+          "type": "ApiStyle"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetStyle(oStyle: ApiStyle): ApiTextPr"
+    },
+    "SetTextFill": {
+      "description": "Sets the text fill to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetTextFill/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetOutLine(Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51))));\ntextPr.SetTextFill(Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", null, null, 0, 150 * 36000, 50 * 36000);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);"
+      ],
+      "params": [
+        {
+          "description": "The color or pattern used to fill the text color.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetTextFill(oApiFill: ApiFill): ApiTextPr"
+    },
+    "SetTextPr": {
+      "description": "Sets the text properties to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetTextPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text with the font size set to 30 and the font weight set to bold.\");\nparagraph.AddElement(run);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\nrun.SetTextPr(textPr);"
+      ],
+      "params": [
+        {
+          "description": "The text properties that will be set to the current run.",
+          "name": "oTextPr",
+          "type": "ApiTextPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "SetTextPr(oTextPr: ApiTextPr): ApiTextPr"
+    },
+    "SetUnderline": {
+      "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetUnderline/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetUnderline(true);\nrun.AddText(\"This is a text run with the text underlined with a single line.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed underlined.",
+          "name": "isUnderline",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetUnderline(isUnderline: boolean): ApiTextPr"
+    },
+    "SetVertAlign": {
+      "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetVertAlign/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"subscript\");\nrun.AddText(\"This is a text run with the text aligned below the baseline vertically. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"baseline\");\nrun.AddText(\"This is a text run with the text aligned by the baseline vertically. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"superscript\");\nrun.AddText(\"This is a text run with the text aligned above the baseline vertically.\");\nparagraph.AddElement(run);"
+      ],
+      "params": [
+        {
+          "description": "The vertical alignment type applied to the text contents.",
+          "name": "sType",
+          "type": "\"baseline\" | \"subscript\" | \"superscript\""
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetVertAlign(sType: \"baseline\" | \"subscript\" | \"superscript\"): ApiTextPr"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiRun object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is a text run\");\nlet json = run.ToJSON(true);\nlet runFromJSON = Api.FromJSON(json);\nrunFromJSON.SetBold(true);\nparagraph.AddElement(runFromJSON);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the used styles will be written to the JSON object or not.",
+          "name": "bWriteStyles",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteStyles: boolean): object"
+    },
+    "WrapInMailMergeField": {
+      "description": "Wraps a run in a mail merge field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/WrapInMailMergeField/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"Name\");\nparagraph.AddElement(run);\nrun.WrapInMailMergeField();\nparagraph.AddLineBreak();\nrun = Api.CreateRun();\nrun.AddText(\"Surname\");\nparagraph.AddElement(run);\nrun.WrapInMailMergeField();"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "WrapInMailMergeField(): boolean"
+    }
+  }
+}

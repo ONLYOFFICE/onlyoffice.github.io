@@ -1,0 +1,6 @@
+{
+  "description": "Class representing a smart art.",
+  "extends": [
+    "ApiDrawing"
+  ]
+}

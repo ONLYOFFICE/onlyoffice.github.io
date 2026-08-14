@@ -1,0 +1,10 @@
+{
+  "description": "Returns the highlight color of the forms in the document.",
+  "params": [],
+  "returns": {
+    "description": "Returns the highlight color, or _null_ if the highlight is disabled.",
+    "type": "ApiColor | null"
+  },
+  "signature": "GetFormsHighlight(): ApiColor | null",
+  "since": "9.4.0"
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Returns the left border of the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "Returns the border properties object, or _undefined_ if the left border is not set.",
+    "type": "Border | undefined"
+  },
+  "signature": "GetLeftBorder(): Border | undefined",
+  "since": "9.4.0"
+}

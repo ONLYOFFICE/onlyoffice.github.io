@@ -1,0 +1,19 @@
+{
+  "description": "Specifies an amount by which text is raised or lowered for this paragraph in relation to the default\nbaseline of the surrounding non-positioned text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetPosition/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. \");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is a paragraph with the text lowered 15 points (30 half-points).\");\ndoc.Push(paragraph2);\nparagraph2.SetPosition(-30);"
+  ],
+  "params": [
+    {
+      "description": "Specifies a positive (raised text) or negative (lowered text)\rmeasurement in half-points (1/144 of an inch).",
+      "name": "nPosition",
+      "type": "hps"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetPosition(nPosition: hps): ApiParagraph"
+}

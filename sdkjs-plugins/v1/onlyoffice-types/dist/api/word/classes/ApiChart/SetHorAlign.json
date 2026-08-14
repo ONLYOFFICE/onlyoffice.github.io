@@ -1,0 +1,21 @@
+{
+  "description": "Specifies how the floating object will be horizontally aligned.",
+  "params": [
+    {
+      "description": "The document element which will be taken as a countdown point for the object horizontal alignment.",
+      "name": "sRelativeFrom",
+      "optional": true,
+      "type": "RelFromH"
+    },
+    {
+      "description": "The alignment type which will be used for the object horizontal alignment.",
+      "name": "sAlign",
+      "optional": true,
+      "type": "\"left\" | \"right\" | \"center\""
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetHorAlign(sRelativeFrom?: RelFromH, sAlign?: \"left\" | \"right\" | \"center\"): boolean"
+}

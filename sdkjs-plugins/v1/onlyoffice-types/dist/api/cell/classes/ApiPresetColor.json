@@ -1,0 +1,20 @@
+{
+  "description": "Class representing a Preset Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiPresetColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPresetColor/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet presetColor = Api.CreatePresetColor(\"peachPuff\");\nlet gradientStop1 = Api.CreateGradientStop(presetColor, 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);\nlet classType = presetColor.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \");\nworksheet.GetRange(\"B1\").SetValue(classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"presetColor\""
+      },
+      "signature": "GetClassType(): \"presetColor\""
+    }
+  }
+}

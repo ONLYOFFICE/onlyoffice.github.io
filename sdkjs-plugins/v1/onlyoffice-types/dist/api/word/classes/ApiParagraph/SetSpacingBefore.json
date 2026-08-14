@@ -1,0 +1,24 @@
+{
+  "description": "Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true, then \nany value of the nBefore is ignored. If isBeforeAuto parameter is not specified, then \nit will be interpreted as false.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingBefore/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetSpacingBefore(1440);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of setting a space before a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\nparagraph.SetStyle(myStyle);\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
+      "name": "nBefore",
+      "type": "twips"
+    },
+    {
+      "description": "The true value disables the spacing before the current paragraph.",
+      "name": "isBeforeAuto",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean"
+}

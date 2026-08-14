@@ -1,0 +1,18 @@
+{
+  "description": "Counts a number of cells in a range that are not empty.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUNTA/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet numbersArr = [45, 6, 8];\nlet stringsArr = [\"Apples\", \"ranges\", \"Bananas\"]\n\n// Place the numbers in cells\nfor (let i = 0; i < numbersArr.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(numbersArr[i]);\n}\n\n// Place the strings in cells\nfor (let n = 0; n < stringsArr.length; n++) {\n    worksheet.GetRange(\"B\" + (n + 1)).SetValue(stringsArr[n]);\n}\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.COUNTA(worksheet.GetRange(\"A1:C3\"));\nworksheet.GetRange(\"D3\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 items, or ranges to count values.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, logical values, text strings, ranges, names, or arrays.",
+      "name": "args",
+      "type": "string | number | boolean | (string | number | boolean)[] | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "COUNTA(args: string | number | boolean | (string | number | boolean)[] | ApiRange | ApiName): number"
+}

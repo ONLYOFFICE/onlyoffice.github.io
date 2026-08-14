@@ -1,0 +1,24 @@
+{
+  "description": "Returns the week number in the year.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/WEEKNUM/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.WEEKNUM(\"11/5/2018\", 2); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The date-time code used for date and time calculation.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A number (1 or 2) that determines the type of the return value: Sunday (1) or Monday (2).",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "WEEKNUM(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number"
+}

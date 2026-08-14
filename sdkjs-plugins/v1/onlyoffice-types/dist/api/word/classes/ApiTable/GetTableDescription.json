@@ -1,0 +1,12 @@
+{
+  "description": "Returns the table description.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/GetTableDescription/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableDescription(\"Empty table\");\ntable.SetStyle(tableStyle);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Table description: \" + tablePr.GetTableDescription());\ndoc.Push(table);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetTableDescription(): string"
+}

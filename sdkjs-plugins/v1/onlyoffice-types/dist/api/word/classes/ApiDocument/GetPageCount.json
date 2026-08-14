@@ -1,0 +1,12 @@
+{
+  "description": "Returns a number of pages in the current document.\n<note>This method can be slow for large documents because it runs the document calculation\nprocess before the full recalculation.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetPageCount/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet pageCount = doc.GetPageCount();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Number of pages: \" + pageCount);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetPageCount(): number"
+}

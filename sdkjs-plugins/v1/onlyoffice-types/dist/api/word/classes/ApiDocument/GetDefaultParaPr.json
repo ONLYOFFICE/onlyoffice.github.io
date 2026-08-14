@@ -1,0 +1,12 @@
+{
+  "description": "Returns a set of default paragraph properties in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetDefaultParaPr/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = doc.GetDefaultParaPr();\nparaPr.SetSpacingLine(276, \"auto\");\nparaPr.SetSpacingAfter(200);\nlet normalStyle = doc.GetDefaultStyle(\"paragraph\");\nparaPr = normalStyle.GetParaPr();\nparaPr.SetSpacingLine(240, \"auto\");\nparaPr.SetJc(\"both\");\nparagraph.AddText(\"This is just a text.\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParaPr"
+  },
+  "signature": "GetDefaultParaPr(): ApiParaPr"
+}

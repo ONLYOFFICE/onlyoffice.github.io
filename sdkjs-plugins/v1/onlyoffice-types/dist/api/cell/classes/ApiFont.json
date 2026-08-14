@@ -1,0 +1,307 @@
+{
+  "description": "Class that contains the font attributes (font name, font size, color, and so on).",
+  "methods": {
+    "GetBold": {
+      "description": "Returns the bold property of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetBold/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);\nlet isBold = font.GetBold();\nworksheet.GetRange(\"B3\").SetValue(\"Bold property: \" + isBold);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean | null"
+      },
+      "signature": "GetBold(): boolean | null",
+      "since": "7.4.0"
+    },
+    "GetColor": {
+      "description": "Returns the font color property of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetColor/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nlet color = Api.CreateColorFromRGB(255, 111, 61);\nfont.SetColor(color);\ncolor = font.GetColor();\ncharacters = range.GetCharacters(16, 6);\nfont = characters.GetFont();\nfont.SetColor(color);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiColor | null"
+      },
+      "signature": "GetColor(): ApiColor | null",
+      "since": "7.4.0"
+    },
+    "GetItalic": {
+      "description": "Returns the italic property of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetItalic/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetItalic(true);\nlet isItalic = font.GetItalic();\nworksheet.GetRange(\"B3\").SetValue(\"Italic property: \" + isItalic);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean | null"
+      },
+      "signature": "GetItalic(): boolean | null",
+      "since": "7.4.0"
+    },
+    "GetName": {
+      "description": "Returns the font name property of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetName(\"Font 1\");\nlet fontName = font.GetName();\nworksheet.GetRange(\"B3\").SetValue(\"Font name: \" + fontName);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetName(): string | null",
+      "since": "7.4.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent ApiCharacters object of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetParent/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet font = characters.GetFont();\nlet parent = font.GetParent();\nparent.SetText(\"string\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The parent ApiCharacters object.",
+        "type": "ApiCharacters"
+      },
+      "signature": "GetParent(): ApiCharacters",
+      "since": "7.4.0"
+    },
+    "GetSize": {
+      "description": "Returns the font size property of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetSize/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSize(18);\nlet size = font.GetSize();\nworksheet.GetRange(\"B3\").SetValue(\"Size property: \" + size);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number | null"
+      },
+      "signature": "GetSize(): number | null",
+      "since": "7.4.0"
+    },
+    "GetStrikethrough": {
+      "description": "Returns the strikethrough property of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetStrikethrough/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetStrikethrough(true);\nlet isStrikethrough = font.GetStrikethrough();\nworksheet.GetRange(\"B3\").SetValue(\"Strikethrough property: \" + isStrikethrough);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean | null"
+      },
+      "signature": "GetStrikethrough(): boolean | null",
+      "since": "7.4.0"
+    },
+    "GetSubscript": {
+      "description": "Returns the subscript property of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetSubscript/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSubscript(true);\nlet isSubscript = font.GetSubscript();\nworksheet.GetRange(\"B3\").SetValue(\"Subscript property: \" + isSubscript);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean | null"
+      },
+      "signature": "GetSubscript(): boolean | null",
+      "since": "7.4.0"
+    },
+    "GetSuperscript": {
+      "description": "Returns the superscript property of the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetSuperscript/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSuperscript(true);\nlet isSuperscript = font.GetSuperscript();\nworksheet.GetRange(\"B3\").SetValue(\"Superscript property: \" + isSuperscript);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean | null"
+      },
+      "signature": "GetSuperscript(): boolean | null",
+      "since": "7.4.0"
+    },
+    "GetUnderline": {
+      "description": "Returns the type of underline applied to the specified font.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetUnderline/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetUnderline(\"xlUnderlineStyleSingle\");\nlet underlineType = font.GetUnderline();\nworksheet.GetRange(\"B3\").SetValue(\"Underline property: \" + underlineType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "XlUnderlineStyle | null"
+      },
+      "signature": "GetUnderline(): XlUnderlineStyle | null",
+      "since": "7.4.0"
+    },
+    "SetBold": {
+      "description": "Sets the bold property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetBold/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the text characters are displayed bold.",
+          "name": "isBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetBold(isBold: boolean): void",
+      "since": "7.4.0"
+    },
+    "SetColor": {
+      "description": "Sets the font color property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetColor/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nlet color = Api.CreateColorFromRGB(255, 111, 61);\nfont.SetColor(color);"
+      ],
+      "params": [
+        {
+          "description": "Font color.",
+          "name": "Color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetColor(Color: ApiColor): void",
+      "since": "7.4.0"
+    },
+    "SetItalic": {
+      "description": "Sets the italic property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetItalic/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetItalic(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the text characters are displayed italic.",
+          "name": "isItalic",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetItalic(isItalic: boolean): void",
+      "since": "7.4.0"
+    },
+    "SetName": {
+      "description": "Sets the font name property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetName(\"Font 1\");\nlet fontName = font.GetName();\nworksheet.GetRange(\"B3\").SetValue(\"Font name: \" + fontName);"
+      ],
+      "params": [
+        {
+          "description": "Font name.",
+          "name": "FontName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetName(FontName: string): void",
+      "since": "7.4.0"
+    },
+    "SetSize": {
+      "description": "Sets the font size property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetSize/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSize(18);"
+      ],
+      "params": [
+        {
+          "description": "Font size.",
+          "name": "Size",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSize(Size: number): void",
+      "since": "7.4.0"
+    },
+    "SetStrikethrough": {
+      "description": "Sets the strikethrough property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetStrikethrough/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetStrikethrough(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the text characters are displayed strikethrough.",
+          "name": "isStrikethrough",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetStrikethrough(isStrikethrough: boolean): void",
+      "since": "7.4.0"
+    },
+    "SetSubscript": {
+      "description": "Sets the subscript property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetSubscript/",
+      "examples": [
+        "var oWorksheet = Api.GetActiveSheet();\nvar oRange = oWorksheet.GetRange(\"B1\");\noRange.SetValue(\"This is just a sample text.\");\nvar oCharacters = oRange.GetCharacters(9, 4);\nvar oFont = oCharacters.GetFont();\noFont.SetSubscript(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the text characters are displayed subscript.",
+          "name": "isSubscript",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSubscript(isSubscript: boolean): void",
+      "since": "7.4.0"
+    },
+    "SetSuperscript": {
+      "description": "Sets the superscript property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetSuperscript/",
+      "examples": [
+        "var oWorksheet = Api.GetActiveSheet();\nvar oRange = oWorksheet.GetRange(\"B1\");\noRange.SetValue(\"This is just a sample text.\");\nvar oCharacters = oRange.GetCharacters(9, 4);\nvar oFont = oCharacters.GetFont();\noFont.SetSuperscript(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the text characters are displayed superscript.",
+          "name": "isSuperscript",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSuperscript(isSuperscript: boolean): void",
+      "since": "7.4.0"
+    },
+    "SetUnderline": {
+      "description": "Sets an underline of the type specified in the request to the current font.\n<note>This method will work only with the text format of the cell.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetUnderline/",
+      "examples": [
+        "var oWorksheet = Api.GetActiveSheet();\nvar oRange = oWorksheet.GetRange(\"B1\");\noRange.SetValue(\"This is just a sample text.\");\nvar oCharacters = oRange.GetCharacters(9, 4);\nvar oFont = oCharacters.GetFont();\noFont.SetUnderline(\"xlUnderlineStyleSingle\");"
+      ],
+      "params": [
+        {
+          "description": "Underline type.",
+          "name": "Underline",
+          "type": "XlUnderlineStyle"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetUnderline(Underline: XlUnderlineStyle): void",
+      "since": "7.4.0"
+    }
+  }
+}

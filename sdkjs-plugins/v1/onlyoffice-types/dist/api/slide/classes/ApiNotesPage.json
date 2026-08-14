@@ -1,0 +1,59 @@
+{
+  "description": "Class representing a notes page.",
+  "methods": {
+    "AddBodyShapeText": {
+      "description": "Adds a text to the body shape of the current notes page.",
+      "params": [
+        {
+          "description": "The text to be added to the body shape.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if text was added successfully, otherwise false.",
+        "type": "boolean"
+      },
+      "signature": "AddBodyShapeText(sText: string): boolean",
+      "since": "9.0.0"
+    },
+    "GetBodyShape": {
+      "description": "Returns a shape with the type=\"body\" attribute from the current notes page.",
+      "params": [],
+      "returns": {
+        "type": "ApiShape | null"
+      },
+      "signature": "GetBodyShape(): ApiShape | null",
+      "since": "9.0.0"
+    },
+    "GetBodyShapeText": {
+      "description": "Returns the text from the body shape of the current notes page.",
+      "params": [],
+      "returns": {
+        "description": "The text from the body shape.",
+        "type": "string"
+      },
+      "signature": "GetBodyShapeText(): string",
+      "since": "9.1.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiNotesPage class.",
+      "params": [],
+      "returns": {
+        "type": "\"notesPage\""
+      },
+      "signature": "GetClassType(): \"notesPage\"",
+      "since": "9.0.0"
+    },
+    "GetTheme": {
+      "description": "Returns a theme of the current notes page.",
+      "params": [],
+      "returns": {
+        "description": "Returns null if the notes page master or theme doesn't exist.",
+        "type": "ApiTheme | null"
+      },
+      "signature": "GetTheme(): ApiTheme | null",
+      "since": "9.3.0"
+    }
+  }
+}

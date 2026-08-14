@@ -109,9 +109,21 @@ snapshot is missing or invalid. To update the snapshots, download the four JSON 
 pinned commit, review the diff, regenerate the types, and commit the snapshots together with the
 updated manifest.
 
-sdkjs is the structural source of truth (classes, methods, params - it can't drift from the actual
-runtime), while the local `office-js-api-declarations` snapshots provide richer descriptions and
-runnable examples wherever a class/method name matches.
+sdkjs is the source of truth for both structure (classes, methods, params - it can't drift from the
+actual runtime) **and prose**. The pinned `office-js-api-declarations` snapshots contribute the
+runnable examples, and fill in a description only where sdkjs has none.
+
+That precedence is deliberate and was measured, not assumed. The snapshots are pinned to one commit
+and age; sdkjs does not. Across Word, 789 of the 845 methods documented in both have byte-identical
+prose once the example is removed - and of the 56 that differ, sdkjs is the longer, fresher text in
+42, including three carrying `Breaking Change` / version notes the snapshot predates. Preferring the
+snapshot, as this used to, therefore lost real information (`Api.CreateTable`'s 9.4.0
+parameter-order warning) to gain nothing measurable.
+
+The examples are the one thing that genuinely cannot be regenerated from sdkjs: its JSDoc carries
+only a `@see office-js-api/Examples/<Editor>/<Class>/Methods/<Method>.js` *path*, and the code lives
+in a separate repository which ONLYOFFICE's own docs pipeline splices in as a "## Try it" block.
+PDF is the visible control case - it has no snapshot, and therefore no `@example` blocks at all.
 
 ### Documentation carried by the types
 
@@ -268,10 +280,10 @@ installing, only loading as text.
 
 ## Machine-readable index (AI agents, search, RAG)
 
-`dist/api-index.json` is the same API surface as the `.d.ts` files - every class, method, typedef,
-editor event and `executeMethod` - but as plain JSON for tools that don't parse TypeScript. Each
-entry carries its signature, markdown description, parameter list, return type, runnable `examples`,
-`since` version and the verified `docsUrl` (derived from the sources, never guessed):
+`dist/api/` is the same API surface as the `.d.ts` files - every class, method, typedef, editor event
+and `executeMethod` - but as JSON for tools that don't parse TypeScript. Each entry carries its
+signature, markdown description, parameter list, return type, runnable `examples`, `since` version
+and the verified `docsUrl` (derived from the sources, never guessed):
 
 ```json
 "AddComment": {
@@ -284,10 +296,10 @@ entry carries its signature, markdown description, parameter list, return type, 
 }
 ```
 
-Alongside `editors` there is a `runtime` section covering the other half of the API - how you write
-a plugin at all, rather than what you do inside a `callCommand` body. It is grouped as
-`runtime.plugin` (`AscPlugin`, `Asc`, events, buttons), `runtime.config` (the `config.json` types)
-and `runtime.services`, and carries each member's real declared signature plus its JSDoc:
+Alongside the per-editor directories there is `runtime.json`, covering the other half of the API -
+how you write a plugin at all, rather than what you do inside a `callCommand` body. It is grouped as
+`plugin` (`AscPlugin`, `Asc`, events, buttons), `config` (the `config.json` types) and `services`,
+and carries each member's real declared signature plus its JSDoc:
 
 ```json
 "callCommand": {
@@ -296,20 +308,40 @@ and `runtime.services`, and carries each member's real declared signature plus i
 }
 ```
 
-Three ways to get the file: read it from an installed copy of the package
-(`require.resolve("@onlyoffice/plugins-types/api-index.json")` - it's in the published `files`),
-fetch the git-tracked file from raw.githubusercontent.com, or regenerate it locally with
-`npm run generate`. Written by `generate-types.js` (object model + events),
-`generate-plugin-methods.js` (executeMethod surface) and `generate-runtime-index.js` (the `runtime`
-section); each replaces its own section wholesale, so removed members disappear instead of going
-stale.
+### Why it is a tree and not one file
+
+It used to be a single `dist/api-index.json`. That file reached **6.3 MB / ~1.6M tokens** - about
+eight times a typical model context - so the one consumer it was built for could not read it at all,
+only grep fragments out of pretty-printed JSON. The layout is now sized for how an agent actually
+works: load a small index, then read exactly one detail file.
+
+```text
+dist/api/index.json                     manifest: editors, counts, navigation (~1 KB)
+dist/api/<editor>/index.json            every member name -> signature (7k-41k tokens)
+dist/api/<editor>/classes/<Class>.json  full detail for one class
+dist/api/<editor>/classes/<Class>/      ...sharded per method when a class exceeds 80 KB,
+                                        with the class's own prose in _class.json
+dist/api/<editor>/{typedefs,events,executeMethods}.json
+dist/api/runtime.json                   AscPlugin/config/services
+```
+
+Sharding is a threshold rule rather than a special case: most classes are tiny (median 1.6 KB), but a
+few - `ApiWorksheetFunction` is the Excel formula library with 416 members - would otherwise be a
+single 100k-token read and reintroduce exactly the problem the split exists to solve.
+
+Three ways to get it: read it from an installed copy of the package
+(`@onlyoffice/plugins-types/api/<path>` - `dist/api` is in the published `files`), fetch the
+git-tracked files from raw.githubusercontent.com, or regenerate locally with `npm run generate`.
+Written by `generate-types.js` (object model + events), `generate-plugin-methods.js` (executeMethod
+surface) and `generate-runtime-index.js` (`runtime.json`); each replaces its own section wholesale,
+so removed members disappear instead of going stale.
 
 `generate-runtime-index.js` is the one generator that reads *this package's* declarations rather
 than sdkjs - via the TypeScript compiler API, so the published signature is the one we actually
 authored (`callCommand`'s serializability constraint, `executeMethod`'s overload chain) rather than
 a re-transcription of sdkjs's looser `@param {Function}` JSDoc. Because its inputs are hand-written
 files that change without a regeneration, it needs no `SDKJS_PATH` and has its own drift guard:
-`npm run check-runtime-index` regenerates and fails if the checked-in `dist/api-index.json` differs.
+`npm run check-runtime-index` regenerates and fails if the checked-in `dist/api/` differs.
 Run it after editing anything under `src/plugin/`, `src/config/` or `src/services/`. `AGENTS.md` in this directory condenses the
 plugin-authoring contract (`callCommand` serialization, `Asc.scope`, the three channels) plus these
 lookup pointers for coding agents.
@@ -359,12 +391,12 @@ onlyoffice-types/
 ├── schemas/
 │   └── config.schema.json
 ├── dist/                  # tracked in git: directly linkable build artifacts
-│   ├── api-index.json      # machine-readable API index (signatures, docs, examples) for agents/RAG
+│   ├── api/                # machine-readable API tree (compact indexes + per-class detail) for agents/RAG
 │   └── ambient/            # flattened no-import .d.ts bundle + per-editor Api addons (Monaco etc.)
 ├── scripts/
 │   ├── generate-types.js          # Api object model generator (src/generated/{word,cell,slide,pdf,forms}.ts)
 │   ├── generate-plugin-methods.js # executeMethod surface generator (src/generated/*-methods.ts)
-│   ├── api-index.js               # shared section-merging writer for dist/api-index.json
+│   ├── api-index.js               # writer for the dist/api tree (splitting + sharding)
 │   ├── generate-ambient-bundle.js
 │   ├── generate-config-schema.js
 │   ├── check-runtime-contract.js

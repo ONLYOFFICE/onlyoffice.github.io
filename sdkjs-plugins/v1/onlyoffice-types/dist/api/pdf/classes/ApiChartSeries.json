@@ -1,0 +1,43 @@
+{
+  "description": "Class representing a chart series.",
+  "methods": {
+    "ChangeChartType": {
+      "description": "Tries to change the series type. Returns true if successful.",
+      "params": [
+        {
+          "description": "Chart type.",
+          "name": "sType",
+          "type": "ChartType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ChangeChartType(sType: ChartType): boolean"
+    },
+    "GetChartType": {
+      "description": "Returns a chart type of the current series.",
+      "params": [],
+      "returns": {
+        "type": "ChartTypeLegacy"
+      },
+      "signature": "GetChartType(): ChartTypeLegacy"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiChartSeries class.",
+      "params": [],
+      "returns": {
+        "type": "\"chartSeries\""
+      },
+      "signature": "GetClassType(): \"chartSeries\""
+    },
+    "GetType": {
+      "description": "Returns a chart type of the current series using the chart type names from the {@link ChartType} enumeration.",
+      "params": [],
+      "returns": {
+        "type": "ChartType"
+      },
+      "signature": "GetType(): ChartType"
+    }
+  }
+}

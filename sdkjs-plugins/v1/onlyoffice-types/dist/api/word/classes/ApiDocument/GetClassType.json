@@ -1,0 +1,12 @@
+{
+  "description": "Returns a type of the ApiDocument class.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetClassType/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nlet classType = doc.GetClassType();\nparagraph = doc.GetElement(0);\nparagraph.AddText(\"Class Type = \" + classType);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "\"document\""
+  },
+  "signature": "GetClassType(): \"document\""
+}

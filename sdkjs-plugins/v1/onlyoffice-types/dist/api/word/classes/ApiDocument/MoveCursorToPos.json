@@ -1,0 +1,16 @@
+{
+  "description": "Moves a cursor to a specified position of the current document.\nIf there is any selection in the document, it will be removed.",
+  "params": [
+    {
+      "description": "The desired cursor position.",
+      "name": "nPos",
+      "optional": true,
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "MoveCursorToPos(nPos?: number): boolean",
+  "since": "9.0.0"
+}

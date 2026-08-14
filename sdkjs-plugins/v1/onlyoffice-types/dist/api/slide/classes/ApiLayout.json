@@ -1,0 +1,390 @@
+{
+  "description": "Class representing a slide layout.",
+  "methods": {
+    "AddObject": {
+      "description": "Adds an object (image, shape or chart) to the current slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/AddObject/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\noLayout.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"This shape was added to the current layout.\");"
+      ],
+      "params": [
+        {
+          "description": "The object which will be added to the current slide layout.",
+          "name": "oDrawing",
+          "type": "ApiDrawing"
+        }
+      ],
+      "returns": {
+        "description": "returns false if slide layout doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "AddObject(oDrawing: ApiDrawing): boolean"
+    },
+    "ClearBackground": {
+      "description": "Clears the slide layout background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/ClearBackground/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noLayout.SetBackground(oFill);\noSlide.FollowLayoutBackground();\noSlide = Api.CreateSlide();\noPresentation.AddSlide(oSlide);\noLayout.ClearBackground();\noSlide.FollowLayoutBackground();"
+      ],
+      "params": [],
+      "returns": {
+        "description": "return false if slide layout doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "ClearBackground(): boolean"
+    },
+    "Copy": {
+      "description": "Creates a copy of the specified slide layout object.\nCopies without master slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/Copy/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\noLayout.AddObject(oShape);\noSlide = Api.CreateSlide();\noPresentation.AddSlide(oSlide);\nvar oCopyLayout = oLayout.Copy();\noMaster.AddLayout(1, oCopyLayout);\noSlide.ApplyLayout(oCopyLayout);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns new ApiLayout object that represents the copy of slide layout. \rReturns null if slide layout doesn't exist.",
+        "type": "ApiLayout | null"
+      },
+      "signature": "Copy(): ApiLayout | null"
+    },
+    "Delete": {
+      "description": "Deletes the specified object from the parent slide master if it exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/Delete/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar nCountBefore = oMaster.GetLayoutsCount();\nvar oLayout = oMaster.GetLayout(0);\noLayout.Delete();\nvar nCountAfter = oMaster.GetLayoutsCount();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Number of layouts before deletion: \" + nCountBefore);\noParagraph.AddLineBreak();\noParagraph.AddText(\"Number of layouts after deletion: \" + nCountAfter);\noSlide.RemoveAllObjects();\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "return false if parent slide master doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "Duplicate": {
+      "description": "Creates a duplicate of the specified slide layout object, adds the new slide layout to the slide layout collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/Duplicate/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\noLayout.AddObject(oShape);\noSlide = Api.CreateSlide();\noPresentation.AddSlide(oSlide);\nvar oDuplicateLayout = oLayout.Duplicate(1);\noSlide.ApplyLayout(oDuplicateLayout);"
+      ],
+      "params": [
+        {
+          "description": "Position where the new slide layout will be added.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "returns new ApiLayout object that represents the copy of slide layout. \rReturns null if slide layout doesn't exist or is not in the slide master.",
+        "type": "ApiLayout | null"
+      },
+      "signature": "Duplicate(nPos?: number): ApiLayout | null"
+    },
+    "FollowMasterBackground": {
+      "description": "Sets the master background as the background of the layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/FollowMasterBackground/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noMaster.SetBackground(oFill);\nvar oLayout = oMaster.GetLayout(0);\noLayout.FollowMasterBackground();\noSlide.FollowLayoutBackground();"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns false if master is null or master hasn't background.",
+        "type": "boolean"
+      },
+      "signature": "FollowMasterBackground(): boolean"
+    },
+    "GetAllCharts": {
+      "description": "Returns an array with all the chart objects from the slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllCharts/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noLayout.AddObject(oChart);\nvar aCharts = oLayout.GetAllCharts();\nvar oStroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\naCharts[0].SetMinorHorizontalGridlines(oStroke);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiChart[]"
+      },
+      "signature": "GetAllCharts(): ApiChart[]"
+    },
+    "GetAllDrawings": {
+      "description": "Returns an array with all the drawing objects from the slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllDrawings/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noDrawing.SetPosition(608400, 1267200);\noDrawing.SetSize(300 * 36000, 130 * 36000);\noSlide.RemoveAllObjects();\noLayout.AddObject(oDrawing);\nvar aDrawings = oLayout.GetAllDrawings();\nvar oPlaceholder = Api.CreatePlaceholder(\"picture\");\naDrawings[0].SetPlaceholder(oPlaceholder);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Drawing[]"
+      },
+      "signature": "GetAllDrawings(): Drawing[]"
+    },
+    "GetAllImages": {
+      "description": "Returns an array with all the image objects from the slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllImages/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oImage = Api.CreateImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png\", 60 * 36000, 35 * 36000);\noLayout.AddObject(oImage);\nvar aImages = oLayout.GetAllImages();\nvar sType = aImages[0].GetClassType();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(61, 74, 107));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiImage[]"
+      },
+      "signature": "GetAllImages(): ApiImage[]"
+    },
+    "GetAllOleObjects": {
+      "description": "Returns an array with all the OLE objects from the slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllOleObjects/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oOleObject = Api.CreateOleObject(\"https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\noOleObject.SetSize(200 * 36000, 130 * 36000);\noOleObject.SetPosition(70 * 36000, 30 * 36000);\noLayout.AddObject(oOleObject);\nvar aOleObjects = oLayout.GetAllOleObjects();\nvar sAppId = aOleObjects[0].GetApplicationId();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 224, 204), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"rect\", 300 * 36000, 15 * 36000, oFill, oStroke);\noDrawing.SetPosition(20 * 36000, 170 * 36000);\nvar oDocContent = oDrawing.GetContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"The application ID for the current OLE object: \" + sAppId);\noLayout.AddObject(oDrawing);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiOleObject[]"
+      },
+      "signature": "GetAllOleObjects(): ApiOleObject[]"
+    },
+    "GetAllShapes": {
+      "description": "Returns an array with all the shape objects from the slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllShapes/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\noSlide.RemoveAllObjects();\noLayout.AddObject(oShape);\nvar aShapes = oLayout.GetAllShapes();\nvar oDocContent = aShapes[0].GetContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"This is a sample shape which was added to the current layout.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiShape[]"
+      },
+      "signature": "GetAllShapes(): ApiShape[]"
+    },
+    "GetAllTables": {
+      "description": "Returns an array with all tables from the current slide layout.",
+      "params": [],
+      "returns": {
+        "description": "An array with all tables from the current slide layout.",
+        "type": "ApiTable[]"
+      },
+      "signature": "GetAllTables(): ApiTable[]",
+      "since": "9.1.0"
+    },
+    "GetBackground": {
+      "description": "Returns the background fill of the current slide layout.",
+      "params": [],
+      "returns": {
+        "description": "returns null if the slide layout doesn't exist or has no background fill.",
+        "type": "ApiFill | null"
+      },
+      "signature": "GetBackground(): ApiFill | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiLayout class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar sType = oLayout.GetClassType();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"layout\""
+      },
+      "signature": "GetClassType(): \"layout\""
+    },
+    "GetDrawingsByPlaceholderType": {
+      "description": "Returns an array of drawings by the specified placeholder type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetDrawingsByPlaceholderType/",
+      "examples": [
+        "let oPresentation = Api.GetPresentation();\nlet oSlide = oPresentation.GetSlideByIndex(0);\nlet oMaster = oPresentation.GetMaster(0);\nlet oLayout = oMaster.GetLayout(0);\nlet aDrawingsWithPh = oLayout.GetDrawingsByPlaceholderType(\"ctrTitle\");\nfor (let i = 0; i < aDrawingsWithPh.length; i++) {\n    aDrawingsWithPh[i].Delete();\n}"
+      ],
+      "params": [
+        {
+          "description": "The placeholder type.",
+          "name": "sType",
+          "type": "PlaceholderType"
+        }
+      ],
+      "returns": {
+        "type": "Drawing[]"
+      },
+      "signature": "GetDrawingsByPlaceholderType(sType: PlaceholderType): Drawing[]",
+      "since": "8.2.0"
+    },
+    "GetLayoutType": {
+      "description": "Returns the type of the current layout.",
+      "params": [],
+      "returns": {
+        "description": "The layout type.",
+        "type": "LayoutType"
+      },
+      "signature": "GetLayoutType(): LayoutType"
+    },
+    "GetMaster": {
+      "description": "Returns the parent slide master of the current layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetMaster/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oLayout = oSlide.GetLayout();\nvar oMaster = oLayout.GetMaster();\nvar sType = oMaster.GetClassType();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if parent slide master doesn't exist.",
+        "type": "ApiMaster"
+      },
+      "signature": "GetMaster(): ApiMaster"
+    },
+    "GetName": {
+      "description": "Returns a name of the current layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetName/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string",
+      "since": "8.3.0"
+    },
+    "GroupDrawings": {
+      "description": "Groups an array of drawings in the current layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GroupDrawings/",
+      "examples": [
+        "let oPresentation = Api.GetPresentation();\nlet oSlide = oPresentation.GetSlideByIndex(0);\nlet oLayout = oSlide.GetLayout();\nlet oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(111, 255, 61));\nlet oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet oShape1 = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 60 * 36000, oFill1, oStroke);\nlet oShape2 = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 60 * 36000, oFill2, oStroke);\noShape1.SetPosition(608400, 1267200);\noShape2.SetPosition(608400, 1400000);\noLayout.AddObject(oShape1);\noLayout.AddObject(oShape2);\noLayout.GroupDrawings([oShape1, oShape2]);"
+      ],
+      "params": [
+        {
+          "description": "An array of drawings to group.",
+          "name": "aDrawings",
+          "type": "DrawingForGroup[]"
+        }
+      ],
+      "returns": {
+        "type": "ApiGroup"
+      },
+      "signature": "GroupDrawings(aDrawings: DrawingForGroup[]): ApiGroup",
+      "since": "8.3.0"
+    },
+    "MoveTo": {
+      "description": "Moves the specified layout to a specific location within the same collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/MoveTo/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout1 = oMaster.GetLayout(3);\noSlide1.ApplyLayout(oLayout1);\noLayout1.MoveTo(7);\nvar oLayout2 = oMaster.GetLayout(7);\nvar oSlide2 = Api.CreateSlide();\noPresentation.AddSlide(oSlide2);\noSlide2.ApplyLayout(oLayout2);\nvar oSlide3 = Api.CreateSlide();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\noSlide3.AddObject(oShape);\nvar oDocContent = oShape.GetContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"The third layout was moved to the seventh position within the same collection.\");\noPresentation.AddSlide(oSlide3);"
+      ],
+      "params": [
+        {
+          "description": "Position where the specified slide layout will be moved to.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "returns false if layout or parent slide master doesn't exist or position is invalid.",
+        "type": "boolean"
+      },
+      "signature": "MoveTo(nPos: number): boolean"
+    },
+    "RemoveObject": {
+      "description": "Removes objects (image, shape or chart) from the current slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/RemoveObject/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"cube\", 3212465, 963295, oFill, oStroke);\noDrawing.SetPosition(30 * 36000, 1267200);\noDrawing.SetSize(150 * 36000, 130 * 36000);\nvar oCopyDrawing = oDrawing.Copy();\noCopyDrawing.SetPosition(160 * 36000, 1267200);\noCopyDrawing.SetSize(150 * 36000, 130 * 36000);\noLayout.AddObject(oDrawing);\noLayout.AddObject(oCopyDrawing);\noLayout.RemoveObject(1, 1);\nvar oDocContent = oDrawing.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"The second cube was removed from this layout.\");"
+      ],
+      "params": [
+        {
+          "description": "Position from which the object will be deleted.",
+          "name": "nPos",
+          "type": "number"
+        },
+        {
+          "description": "The number of elements to delete.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "returns false if layout doesn't exist or position is invalid or layout hasn't objects.",
+        "type": "boolean"
+      },
+      "signature": "RemoveObject(nPos: number, nCount?: number): boolean"
+    },
+    "Search": {
+      "description": "Searches for the specified text within the current slide layout and returns all found occurrences as text ranges.",
+      "params": [
+        {
+          "description": "The text to search for.",
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "description": "Case sensitive or not.",
+          "name": "isMatchCase",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to search for whole words only.",
+          "name": "isWholeWords",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextRange[]"
+      },
+      "signature": "Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[]",
+      "since": "9.5.0"
+    },
+    "SetBackground": {
+      "description": "Sets the background to the current slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/SetBackground/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noLayout.SetBackground(oFill);\noSlide.FollowLayoutBackground();"
+      ],
+      "params": [
+        {
+          "description": "The color or pattern used to fill the presentation slide layout background.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBackground(oApiFill: ApiFill): boolean"
+    },
+    "SetName": {
+      "description": "Sets a name to the current layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/SetName/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\noLayout.SetName(\"New layout\");\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"A new name was set to the current layout.\");\noLayout.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Layout name to be set.",
+          "name": "sName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetName(sName: string): boolean"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiLayout object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/ToJSON/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar json = oLayout.ToJSON(true, false);\nvar oLayoutFromJSON = Api.FromJSON(json);\noMaster.AddLayout(0, oLayoutFromJSON);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar sType = oLayoutFromJSON.GetClassType();\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"Class type = \" + sType);\noLayoutFromJSON.AddObject(oShape);\noSlide.ApplyLayout(oLayoutFromJSON);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the slide master will be written to the JSON object or not.",
+          "name": "bWriteMaster",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies whether to write used table styles to the JSON object (true) or not (false).",
+          "name": "bWriteTableStyles",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteMaster?: boolean, bWriteTableStyles?: boolean): object"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Class representing the rich text properties.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiRichTextPr class.",
+      "params": [],
+      "returns": {
+        "type": "\"richTextPr\""
+      },
+      "signature": "GetClassType(): \"richTextPr\""
+    }
+  }
+}

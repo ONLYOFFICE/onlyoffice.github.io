@@ -1,0 +1,12 @@
+{
+  "description": "Returns the **false** logical value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FALSE/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.FALSE(); //returns false, doesnt require arguments\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "FALSE(): boolean"
+}

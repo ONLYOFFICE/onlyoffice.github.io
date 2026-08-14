@@ -1,0 +1,18 @@
+{
+  "description": "Adds an inline container.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddInlineLvlSdt/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+  ],
+  "params": [
+    {
+      "description": "An inline container. If undefined or null, then new class ApiInlineLvlSdt will be created and added to the paragraph.",
+      "name": "oSdt",
+      "type": "ApiInlineLvlSdt"
+    }
+  ],
+  "returns": {
+    "type": "ApiInlineLvlSdt"
+  },
+  "signature": "AddInlineLvlSdt(oSdt: ApiInlineLvlSdt): ApiInlineLvlSdt"
+}

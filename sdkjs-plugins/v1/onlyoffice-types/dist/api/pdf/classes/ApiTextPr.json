@@ -1,0 +1,363 @@
+{
+  "description": "Class representing the text properties.",
+  "methods": {
+    "GetBold": {
+      "description": "Gets the bold property from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetBold(): boolean",
+      "since": "8.1.0"
+    },
+    "GetCaps": {
+      "description": "Returns whether the text with the current text properties are capitalized.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetCaps(): boolean",
+      "since": "8.1.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiTextPr class.",
+      "params": [],
+      "returns": {
+        "type": "\"textPr\""
+      },
+      "signature": "GetClassType(): \"textPr\""
+    },
+    "GetDoubleStrikeout": {
+      "description": "Gets the double strikeout property from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetDoubleStrikeout(): boolean",
+      "since": "8.1.0"
+    },
+    "GetFill": {
+      "description": "Gets the text color from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "GetFill(): ApiFill",
+      "since": "8.1.0"
+    },
+    "GetFontFamily": {
+      "description": "Returns the font family from the current text properties.\nThe method automatically calculates the font from the theme if the font was set via the theme.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFontFamily(): string",
+      "since": "8.1.0"
+    },
+    "GetFontSize": {
+      "description": "Gets the font size from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "hps"
+      },
+      "signature": "GetFontSize(): hps",
+      "since": "8.1.0"
+    },
+    "GetHighlight": {
+      "description": "Gets the highlight property from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetHighlight(): string",
+      "since": "8.1.0"
+    },
+    "GetItalic": {
+      "description": "Gets the italic property from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetItalic(): boolean",
+      "since": "8.1.0"
+    },
+    "GetOutLine": {
+      "description": "Gets the text outline from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiStroke"
+      },
+      "signature": "GetOutLine(): ApiStroke",
+      "since": "8.1.0"
+    },
+    "GetSmallCaps": {
+      "description": "Returns whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetSmallCaps(): boolean",
+      "since": "8.1.0"
+    },
+    "GetSpacing": {
+      "description": "Gets the text spacing from the current text properties measured in twentieths of a point.",
+      "params": [],
+      "returns": {
+        "type": "twips"
+      },
+      "signature": "GetSpacing(): twips",
+      "since": "8.1.0"
+    },
+    "GetStrikeout": {
+      "description": "Gets the strikeout property from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetStrikeout(): boolean",
+      "since": "8.1.0"
+    },
+    "GetTextFill": {
+      "description": "Gets the text fill from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "GetTextFill(): ApiFill",
+      "since": "8.1.0"
+    },
+    "GetUnderline": {
+      "description": "Gets the underline property from the current text properties.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetUnderline(): boolean",
+      "since": "8.1.0"
+    },
+    "SetBold": {
+      "description": "Sets the bold property to the text character.",
+      "params": [
+        {
+          "description": "Specifies that the contents of the run are displayed bold.",
+          "name": "isBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetBold(isBold: boolean): ApiTextPr"
+    },
+    "SetCaps": {
+      "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed capitalized.",
+          "name": "isCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetCaps(isCaps: boolean): ApiTextPr"
+    },
+    "SetDoubleStrikeout": {
+      "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed double struck through.",
+          "name": "isDoubleStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiTextPr"
+    },
+    "SetFill": {
+      "description": "Sets the text color to the current text run.",
+      "params": [
+        {
+          "description": "The color or pattern used to fill the text color.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFill(oApiFill: ApiFill): ApiTextPr"
+    },
+    "SetFontFamily": {
+      "description": "Sets all 4 font slots with the specified font family.",
+      "params": [
+        {
+          "description": "The font family or families used for the current text run.",
+          "name": "sFontFamily",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFontFamily(sFontFamily: string): ApiTextPr"
+    },
+    "SetFontSize": {
+      "description": "Sets the font size to the characters of the current text run.",
+      "params": [
+        {
+          "description": "The text size value measured in half-points (1/144 of an inch).",
+          "name": "nSize",
+          "type": "hps"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetFontSize(nSize: hps): ApiTextPr"
+    },
+    "SetHighlight": {
+      "description": "Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.",
+      "params": [
+        {
+          "description": "Available highlight color.",
+          "name": "sColor",
+          "type": "highlightColor"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "SetHighlight(sColor: highlightColor): ApiTextPr"
+    },
+    "SetItalic": {
+      "description": "Sets the italic property to the text character.",
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed italicized.",
+          "name": "isItalic",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetItalic(isItalic: boolean): ApiTextPr"
+    },
+    "SetOutLine": {
+      "description": "Sets the text outline to the current text run.",
+      "params": [
+        {
+          "description": "The stroke used to create the text outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetOutLine(oStroke: ApiStroke): ApiTextPr"
+    },
+    "SetSmallCaps": {
+      "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "params": [
+        {
+          "description": "Specifies if the contents of the current run are displayed capitalized two points smaller or not.",
+          "name": "isSmallCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetSmallCaps(isSmallCaps: boolean): ApiTextPr"
+    },
+    "SetSpacing": {
+      "description": "Sets the text spacing measured in twentieths of a point.",
+      "params": [
+        {
+          "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nSpacing",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetSpacing(nSpacing: twips): ApiTextPr"
+    },
+    "SetStrikeout": {
+      "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed struck through.",
+          "name": "isStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetStrikeout(isStrikeout: boolean): ApiTextPr"
+    },
+    "SetTextFill": {
+      "description": "Sets the text fill to the current text run.",
+      "params": [
+        {
+          "description": "The color or pattern used to fill the text color.",
+          "name": "oApiFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetTextFill(oApiFill: ApiFill): ApiTextPr"
+    },
+    "SetUnderline": {
+      "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "params": [
+        {
+          "description": "Specifies that the contents of the current run are displayed underlined.",
+          "name": "isUnderline",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetUnderline(isUnderline: boolean): ApiTextPr"
+    },
+    "SetVertAlign": {
+      "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
+      "params": [
+        {
+          "description": "The vertical alignment type applied to the text contents.",
+          "name": "sType",
+          "type": "\"baseline\" | \"subscript\" | \"superscript\""
+        }
+      ],
+      "returns": {
+        "description": "this text properties.",
+        "type": "ApiTextPr"
+      },
+      "signature": "SetVertAlign(sType: \"baseline\" | \"subscript\" | \"superscript\"): ApiTextPr"
+    }
+  }
+}

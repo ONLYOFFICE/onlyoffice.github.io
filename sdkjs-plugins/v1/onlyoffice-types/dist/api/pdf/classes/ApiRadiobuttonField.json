@@ -1,0 +1,85 @@
+{
+  "description": "Class representing a radiobutton field.",
+  "extends": [
+    "ApiCheckboxField"
+  ],
+  "methods": {
+    "AddOption": {
+      "description": "Adds options to checkbox group.",
+      "params": [
+        {
+          "description": "The page where the option will be added.",
+          "name": "pageIndex",
+          "type": "number"
+        },
+        {
+          "description": "The option rectangle.",
+          "name": "rect",
+          "type": "Rect"
+        },
+        {
+          "description": "The option checked value.",
+          "name": "exportValue",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiCheckboxWidget"
+      },
+      "signature": "AddOption(pageIndex: number, rect: Rect, exportValue?: string): ApiCheckboxWidget"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRadiobuttonField class.",
+      "params": [],
+      "returns": {
+        "type": "\"radiobuttonField\""
+      },
+      "signature": "GetClassType(): \"radiobuttonField\""
+    },
+    "IsCheckInUnison": {
+      "description": "Checks if field will check in unison.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsCheckInUnison(): boolean"
+    },
+    "IsToggleToOff": {
+      "description": "Checks if the field can be toggled off.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsToggleToOff(): boolean"
+    },
+    "SetCheckInUnison": {
+      "description": "Sets field in unison prop.",
+      "params": [
+        {
+          "description": "Specifies whether fields with the same export value are checked together.",
+          "name": "checkInUnison",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCheckInUnison(checkInUnison: boolean): boolean"
+    },
+    "SetToggleToOff": {
+      "description": "Sets whether the checked state can be toggled off.",
+      "params": [
+        {
+          "description": "Specifies whether the checked state can be toggled off.",
+          "name": "allowToggleOff",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetToggleToOff(allowToggleOff: boolean): boolean"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "description": "Appends the specified text to the end of the document content.",
+  "params": [
+    {
+      "description": "The text to add.",
+      "name": "text",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "AddText(text: string): ApiRun",
+  "since": "9.4.0"
+}

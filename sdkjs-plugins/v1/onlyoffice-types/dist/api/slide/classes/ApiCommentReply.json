@@ -1,0 +1,98 @@
+{
+  "description": "Class representing a comment reply.",
+  "methods": {
+    "GetAuthorName": {
+      "description": "Returns the comment reply author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/GetAuthorName/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nvar oReply = arrComments[0].GetReply(0);\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment's reply author: \" + oReply.GetAuthorName());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCommentReply class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nvar oReply = arrComments[0].GetReply(0);\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Type: \" + oReply.GetClassType());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"commentReply\""
+      },
+      "signature": "GetClassType(): \"commentReply\""
+    },
+    "GetText": {
+      "description": "Returns the comment reply text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/GetText/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nvar oReply = arrComments[0].GetReply(0);\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment's reply text: \" + oReply.GetText());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(): string"
+    },
+    "SetAuthorName": {
+      "description": "Sets the comment reply author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/SetAuthorName/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nvar oReply = arrComments[0].GetReply(0);\noReply.SetAuthorName(\"Mark Potato\");\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment's reply author: \" + oReply.GetAuthorName());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The comment reply author's name.",
+          "name": "sAuthorName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiCommentReply"
+      },
+      "signature": "SetAuthorName(sAuthorName: string): ApiCommentReply"
+    },
+    "SetText": {
+      "description": "Sets the comment reply text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/SetText/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nvar oReply = arrComments[0].GetReply(0);\noReply.SetText(\"New reply text.\");\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment's reply text: \" + oReply.GetText());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The comment reply text.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiCommentReply"
+      },
+      "signature": "SetText(sText: string): ApiCommentReply"
+    },
+    "SetUserId": {
+      "description": "Sets the user ID to the comment reply author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/SetUserId/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\narrComments[0].AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nvar oReply = arrComments[0].GetReply(0);\noReply.SetUserId(\"uid-2\");\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"The comment's reply user Id is uid-2.\");\noSlide1.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The user ID of the comment reply author.",
+          "name": "sUserId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiCommentReply"
+      },
+      "signature": "SetUserId(sUserId: string): ApiCommentReply"
+    }
+  }
+}

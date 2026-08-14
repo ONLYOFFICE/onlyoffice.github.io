@@ -1,0 +1,112 @@
+{
+  "description": "Class representing a list of values of the combo box / drop-down list content control.",
+  "methods": {
+    "Add": {
+      "description": "Adds a new value to the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/Add/",
+      "examples": [
+        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\ncontentControlList.Add(\"Item3_D\", \"Item3_V\", 2);\ndoc.AddElement(0, contentControlList);"
+      ],
+      "params": [
+        {
+          "description": "The display text for the list item.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The list item value. By default is equal to sText parameter",
+          "name": "sValue",
+          "type": "string"
+        },
+        {
+          "description": "A position where a new value will be added. If nIndex=-1 add to the end.",
+          "name": "nIndex",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Add(sText: string, sValue: string, nIndex?: number): boolean"
+    },
+    "Clear": {
+      "description": "Clears a list of values of the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/Clear/",
+      "examples": [
+        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\ncontentControlList.Clear();\ndoc.AddElement(0, Api.CreateParagraph().AddText(\"All items cleared from the list.\"));"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Clear(): boolean"
+    },
+    "GetAllItems": {
+      "description": "Returns a collection of items (the ApiContentControlListEntry objects) of the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetAllItems/",
+      "examples": [
+        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\nlet allItems = contentControlList.GetAllItems();\nlet paragraph = Api.CreateParagraph();\nfor (let i = 0; i < allItems.length; i++) {\n    paragraph.AddText(\"Item \" + (i + 1) + \": \" + allItems[i].GetValue() + \"\\n\");\n}\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiContentControlListEntry[]"
+      },
+      "signature": "GetAllItems(): ApiContentControlListEntry[]"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiContentControlList class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet dropDownList = contentControls[0].GetDropdownList();\nlet classType = dropDownList.GetClassType();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type of the content control list: \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"contentControlList\""
+      },
+      "signature": "GetClassType(): \"contentControlList\""
+    },
+    "GetElementsCount": {
+      "description": "Returns a number of items of the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetElementsCount/",
+      "examples": [
+        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\nlet count = contentControlList.GetElementsCount();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of items in the list: \" + count);\ndoc.AddElement(0, paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetElementsCount(): number"
+    },
+    "GetItem": {
+      "description": "Returns an item of the combo box / drop-down list content control by the position specified in the request.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetItem/",
+      "examples": [
+        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\nlet listItem = contentControlList.GetItem(0);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"First item value: \" + listItem.GetValue());\ndoc.AddElement(0, paragraph);"
+      ],
+      "params": [
+        {
+          "description": "Item position.",
+          "name": "nIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiContentControlListEntry"
+      },
+      "signature": "GetItem(nIndex: number): ApiContentControlListEntry"
+    },
+    "GetParent": {
+      "description": "Returns a parent of the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetParent/",
+      "examples": [
+        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\nlet parentControl = contentControlList.GetParent();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Parent content control tag: \" + parentControl.GetTag());\ndoc.AddElement(0, paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiInlineLvlSdt | ApiBlockLvlSdt"
+      },
+      "signature": "GetParent(): ApiInlineLvlSdt | ApiBlockLvlSdt"
+    }
+  }
+}

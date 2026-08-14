@@ -1,0 +1,22 @@
+{
+  "description": "Moves the cursor up.",
+  "params": [
+    {
+      "description": "Number of movements.",
+      "name": "count",
+      "optional": true,
+      "type": "number"
+    },
+    {
+      "description": "Specifies whether to select text during the move.",
+      "name": "addToSelect",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "MoveCursorUp(count?: number, addToSelect?: boolean): boolean",
+  "since": "9.2.0"
+}

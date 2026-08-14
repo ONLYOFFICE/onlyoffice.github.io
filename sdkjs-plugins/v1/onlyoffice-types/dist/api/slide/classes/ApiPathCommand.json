@@ -1,0 +1,122 @@
+{
+  "description": "Class representing a path command.",
+  "methods": {
+    "GetHR": {
+      "description": "Returns the height radius of the arc.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetHR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetStartAngle": {
+      "description": "Returns the start angle of the arc.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetStartAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetSweepAngle": {
+      "description": "Returns the sweep angle of the arc.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetSweepAngle(): string | null",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the type of the current path command.",
+      "params": [],
+      "returns": {
+        "type": "PathCommandType"
+      },
+      "signature": "GetType(): PathCommandType",
+      "since": "9.1.0"
+    },
+    "GetWR": {
+      "description": "Returns the width radius of the arc.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetWR(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX": {
+      "description": "Returns the X coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX0": {
+      "description": "Returns the X coordinate of the first control point for the Bezier curves.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX1": {
+      "description": "Returns the X coordinate of the second control point for the cubic Bezier curves.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetX2": {
+      "description": "Returns the X coordinate of the end point for the cubic Bezier curves.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetX2(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY": {
+      "description": "Returns the Y coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY0": {
+      "description": "Returns the Y coordinate of the first control point for the Bezier curves.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY0(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY1": {
+      "description": "Returns the Y coordinate of the second control point for the cubic Bezier curves.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY1(): string | null",
+      "since": "9.1.0"
+    },
+    "GetY2": {
+      "description": "Returns the Y coordinate of the end point for the cubic Bezier curves.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetY2(): string | null",
+      "since": "9.1.0"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Class representing an unsupported element.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiUnsupported class.",
+      "params": [],
+      "returns": {
+        "type": "\"unsupported\""
+      },
+      "signature": "GetClassType(): \"unsupported\""
+    }
+  }
+}

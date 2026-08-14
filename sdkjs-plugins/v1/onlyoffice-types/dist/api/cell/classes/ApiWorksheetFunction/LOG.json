@@ -1,0 +1,24 @@
+{
+  "description": "Returns the logarithm of a number to the specified base.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOG/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LOG(56, 5));"
+  ],
+  "params": [
+    {
+      "description": "The positive real number for which the logarithm will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The logarithm base. If omitted, it is equal to 10.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LOG(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number"
+}

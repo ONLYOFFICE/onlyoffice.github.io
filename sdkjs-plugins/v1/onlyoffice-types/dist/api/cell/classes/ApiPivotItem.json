@@ -1,0 +1,82 @@
+{
+  "description": "Class representing a pivot table field item.",
+  "methods": {
+    "GetCaption": {
+      "description": "Returns a caption of the pivot item.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotItem/Methods/GetCaption/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n    columns: ['Style'],\n    rows: 'Region',\n});\n\npivotTable.AddDataField('Style');\n\nlet pivotWorksheet = Api.GetActiveSheet();\nlet pivotField = pivotTable.GetPivotFields('Style');\nlet pivotItems = pivotField.GetPivotItems();\npivotWorksheet.GetRangeByNumber(15, 0).SetValue('Style item captions');\n\nfor (let i = 0; i < pivotItems.length; i += 1) {\n    pivotWorksheet.GetRangeByNumber(15 + i, 1).SetValue(pivotItems[i].GetCaption());\n}"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetCaption(): string",
+      "since": "8.2.0"
+    },
+    "GetName": {
+      "description": "Returns a name of the pivot item.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotItem/Methods/GetName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n    columns: ['Style'],\n    rows: 'Region',\n});\n\npivotTable.AddDataField('Style');\n\nlet pivotWorksheet = Api.GetActiveSheet();\nlet pivotField = pivotTable.GetPivotFields('Style');\nlet pivotItems = pivotField.GetPivotItems();\npivotWorksheet.GetRangeByNumber(15, 0).SetValue('Style item names');\n\nfor (let i = 0; i < pivotItems.length; i += 1) {\n    pivotWorksheet.GetRangeByNumber(15 + i, 1).SetValue(pivotItems[i].GetName());\n}"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string",
+      "since": "8.2.0"
+    },
+    "GetParent": {
+      "description": "Returns a parent of the pivot item.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotItem/Methods/GetParent/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n    pages: ['Style'],\n    rows: 'Region',\n});\n\npivotTable.AddDataField('Style');\n\nlet pivotWorksheet = Api.GetActiveSheet();\nlet pivotField = pivotTable.GetPivotFields('Style');\nlet pivotItem = pivotField.GetPivotItems()[0];\n\npivotWorksheet.GetRange('A15').SetValue(pivotItem.GetName() + ' parent:');\npivotWorksheet.GetRange('B15').SetValue(pivotItem.GetParent().GetName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiPivotField"
+      },
+      "signature": "GetParent(): ApiPivotField",
+      "since": "8.2.0"
+    },
+    "GetValue": {
+      "description": "Returns a name of the specified item in the pivot table field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotItem/Methods/GetValue/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n    columns: ['Style'],\n    rows: 'Region',\n});\n\npivotTable.AddDataField('Style');\n\nlet pivotWorksheet = Api.GetActiveSheet();\nlet pivotField = pivotTable.GetPivotFields('Style');\nlet pivotItems = pivotField.GetPivotItems();\npivotWorksheet.GetRangeByNumber(15, 0).SetValue('Style item values');\n\nfor (let i = 0; i < pivotItems.length; i += 1) {\n    pivotWorksheet.GetRangeByNumber(15 + i, 1).SetValue(pivotItems[i].GetValue());\n}"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetValue(): string",
+      "since": "8.2.0"
+    },
+    "GetVisible": {
+      "description": "Returns the visibility of the pivot item.",
+      "params": [],
+      "returns": {
+        "description": "True if the pivot item is visible, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "GetVisible(): boolean",
+      "since": "9.1.0"
+    },
+    "SetVisible": {
+      "description": "Sets the visibility of the pivot item.\n<note> At least one item must remain visible when hiding others. </note>",
+      "params": [
+        {
+          "description": "Specifies whether the pivot item is visible.",
+          "name": "visible",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetVisible(visible: boolean): void",
+      "since": "9.1.0"
+    }
+  }
+}

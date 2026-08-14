@@ -1,0 +1,114 @@
+{
+  "description": "Class representing a stroke.",
+  "methods": {
+    "GetBeginArrow": {
+      "description": "Returns the beginning arrow properties of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetBeginArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiStroke class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiStroke/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);\nlet classType = stroke.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \");\nworksheet.GetRange(\"B1\").SetValue(classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"stroke\""
+      },
+      "signature": "GetClassType(): \"stroke\""
+    },
+    "GetDashType": {
+      "description": "Gets the dash type of the stroke.",
+      "params": [],
+      "returns": {
+        "description": "returns dash type (\"solid\", \"dash\", etc.) or null.",
+        "type": "DashType | null"
+      },
+      "signature": "GetDashType(): DashType | null"
+    },
+    "GetEndArrow": {
+      "description": "Returns the ending arrow properties of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetEndArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetFill": {
+      "description": "Gets the fill (color) of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null"
+    },
+    "GetWidth": {
+      "description": "Gets the width of the stroke in English Metric Units.",
+      "params": [],
+      "returns": {
+        "type": "EMU | null"
+      },
+      "signature": "GetWidth(): EMU | null"
+    },
+    "SetBeginArrow": {
+      "description": "Sets the beginning arrow of the stroke.",
+      "params": [
+        {
+          "description": "The type of the beginning arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the beginning arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the beginning arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    },
+    "SetEndArrow": {
+      "description": "Sets the ending arrow of the stroke.",
+      "params": [
+        {
+          "description": "The type of the ending arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the ending arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the ending arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

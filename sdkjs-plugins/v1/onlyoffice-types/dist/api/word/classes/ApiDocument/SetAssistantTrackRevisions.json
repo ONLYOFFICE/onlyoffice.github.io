@@ -1,0 +1,19 @@
+{
+  "description": "Enables or disables AI-assisted change tracking in the document.",
+  "params": [
+    {
+      "description": "Specifies whether the change tracking mode is set or not.",
+      "name": "isTrack",
+      "type": "boolean"
+    },
+    {
+      "description": "The AI assistant name.",
+      "name": "assistantName",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetAssistantTrackRevisions(isTrack: boolean, assistantName: string): boolean"
+}

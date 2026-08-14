@@ -1,0 +1,18 @@
+{
+  "description": "Returns the harmonic mean of a data set of positive numbers: the reciprocal of the arithmetic mean of reciprocals.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/HARMEAN/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.HARMEAN(28, 16, 878, 800, 1650, 2000);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the harmonic mean will be calculated.\rArguments can be numbers, names, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "ApiRange | number[] | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "HARMEAN(args: ApiRange | number[] | ApiName): number"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Removes all the nonprintable characters from the text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CLEAN/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CLEAN(\"\\ntext\"));"
+  ],
+  "params": [
+    {
+      "description": "A string from which nonprintable characters will be removed.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "CLEAN(arg1: ApiRange | ApiName | string): string"
+}

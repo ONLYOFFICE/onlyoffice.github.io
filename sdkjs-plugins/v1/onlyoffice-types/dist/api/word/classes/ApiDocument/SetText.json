@@ -1,0 +1,15 @@
+{
+  "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
+  "params": [
+    {
+      "description": "The text to set.",
+      "name": "text",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "SetText(text: string): ApiRun",
+  "since": "9.4.0"
+}

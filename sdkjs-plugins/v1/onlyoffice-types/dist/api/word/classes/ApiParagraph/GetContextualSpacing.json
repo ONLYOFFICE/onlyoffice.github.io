@@ -1,0 +1,10 @@
+{
+  "description": "Returns the contextual spacing value of the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "Returns _true_ if the contextual spacing is enabled, _false_ if it is disabled,\ror _undefined_ if the value is not set.",
+    "type": "boolean | undefined"
+  },
+  "signature": "GetContextualSpacing(): boolean | undefined",
+  "since": "9.4.0"
+}

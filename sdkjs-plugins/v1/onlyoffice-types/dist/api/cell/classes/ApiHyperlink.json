@@ -1,0 +1,206 @@
+{
+  "description": "Class representing a hyperlink.",
+  "methods": {
+    "Delete": {
+      "description": "Deletes the hyperlink.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Delete(): void"
+    },
+    "GetAddress": {
+      "description": "Returns the address of the target document.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAddress(): string"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiHyperlink class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetClassType/",
+      "params": [],
+      "returns": {
+        "type": "\"hyperlink\""
+      },
+      "signature": "GetClassType(): \"hyperlink\""
+    },
+    "GetElement": {
+      "description": "Returns the hyperlink element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetElement/",
+      "params": [
+        {
+          "description": "The position where the element which content we want to get must be located.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ParagraphContent"
+      },
+      "signature": "GetElement(nPos: number): ParagraphContent"
+    },
+    "GetElementsCount": {
+      "description": "Returns a number of elements in the current hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetElementsCount/",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetElementsCount(): number"
+    },
+    "GetLinkedText": {
+      "description": "Returns the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetLinkedText/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetLinkedText(): string"
+    },
+    "GetName": {
+      "description": "Returns the name of the hyperlink.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string"
+    },
+    "GetRange": {
+      "description": "Returns the range the hyperlink is attached to.",
+      "params": [],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRange(): ApiRange"
+    },
+    "GetScreenTip": {
+      "description": "Returns the screen tip text for the hyperlink.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetScreenTip(): string"
+    },
+    "GetScreenTipText": {
+      "description": "Returns the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/GetScreenTipText/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetScreenTipText(): string"
+    },
+    "GetSubAddress": {
+      "description": "Returns the subaddress of the target document.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetSubAddress(): string"
+    },
+    "GetTextToDisplay": {
+      "description": "Returns the text displayed for the hyperlink.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetTextToDisplay(): string"
+    },
+    "GetType": {
+      "description": "Returns the type of the hyperlink.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetType(): number"
+    },
+    "SetAddress": {
+      "description": "Sets the address of the target document.",
+      "params": [
+        {
+          "description": "The hyperlink address.",
+          "name": "sAddress",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAddress(sAddress: string): void"
+    },
+    "SetLink": {
+      "description": "Sets the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/SetLink/",
+      "params": [
+        {
+          "description": "The hyperlink address.",
+          "name": "sLink",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLink(sLink: string): boolean"
+    },
+    "SetScreenTip": {
+      "description": "Sets the screen tip text for the hyperlink.",
+      "params": [
+        {
+          "description": "The screen tip text.",
+          "name": "sScreenTip",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetScreenTip(sScreenTip: string): void"
+    },
+    "SetScreenTipText": {
+      "description": "Sets the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHyperlink/Methods/SetScreenTipText/",
+      "params": [
+        {
+          "description": "The screen tip text of the hyperlink.",
+          "name": "sScreenTipText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScreenTipText(sScreenTipText: string): boolean"
+    },
+    "SetSubAddress": {
+      "description": "Sets the subaddress of the target document.",
+      "params": [
+        {
+          "description": "The subaddress in \"Sheet1!A1\" format.",
+          "name": "sSubAddress",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSubAddress(sSubAddress: string): void"
+    },
+    "SetTextToDisplay": {
+      "description": "Sets the text to be displayed for the hyperlink.",
+      "params": [
+        {
+          "description": "The text to display.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTextToDisplay(sText: string): void"
+    }
+  }
+}

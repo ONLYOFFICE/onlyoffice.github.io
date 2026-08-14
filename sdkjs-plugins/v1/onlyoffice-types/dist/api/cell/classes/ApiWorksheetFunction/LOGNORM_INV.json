@@ -1,0 +1,28 @@
+{
+  "description": "Returns the inverse of the lognormal cumulative distribution function of x, where ln(x) is normally distributed with the specified parameters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOGNORM_INV/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LOGNORM_INV(0.3, 2, 0.2));"
+  ],
+  "params": [
+    {
+      "description": "A probability associated with the lognormal distribution, a number between 0 and 1, inclusive.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The mean of ln(x).",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The standard deviation of ln(x), a positive number.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LOGNORM_INV(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,347 @@
+{
+  "description": "Class representing a comment.",
+  "methods": {
+    "AddReply": {
+      "description": "Adds a reply to a comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/AddReply/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply text: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetText());"
+      ],
+      "params": [
+        {
+          "description": "The comment reply text (required).",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The name of the comment reply author (optional).",
+          "name": "sAuthorName",
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment reply author (optional).",
+          "name": "sUserId",
+          "type": "string"
+        },
+        {
+          "description": "The comment reply position.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "AddReply(sText: string, sAuthorName: string, sUserId: string, nPos?: number): void",
+      "since": "7.5.0"
+    },
+    "Delete": {
+      "description": "Deletes the ApiComment object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/Delete/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nlet comment = range.GetComment();\ncomment.Delete();\nworksheet.GetRange(\"A3\").SetValue(\"The comment was just deleted from A1.\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns true if the comment was deleted successfully.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAuthorName": {
+      "description": "Returns the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetAuthorName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's author: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetAuthorName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string",
+      "since": "7.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiComment class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nlet comment = range.GetComment();\nlet type = comment.GetClassType();\nworksheet.GetRange(\"A3\").SetValue(\"Type: \" + type);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"comment\""
+      },
+      "signature": "GetClassType(): \"comment\""
+    },
+    "GetId": {
+      "description": "Returns the current comment ID.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetId/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment: \");\nworksheet.GetRange(\"B3\").SetValue(range.GetComment().GetId());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetId(): string",
+      "since": "7.5.0"
+    },
+    "GetQuoteText": {
+      "description": "Returns the quote text of the current comment.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetQuoteText/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's quote text: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetQuoteText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetQuoteText(): string | null",
+      "since": "7.5.0"
+    },
+    "GetRepliesCount": {
+      "description": "Returns a number of the comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetRepliesCount/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment replies count: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetRepliesCount());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRepliesCount(): number",
+      "since": "7.5.0"
+    },
+    "GetReply": {
+      "description": "Returns the specified comment reply.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetReply/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\nlet reply = comment.GetReply();\nworksheet.GetRange(\"A3\").SetValue(\"Comment's reply text: \");\nworksheet.GetRange(\"B3\").SetValue(reply.GetText());"
+      ],
+      "params": [
+        {
+          "description": "The comment reply index.",
+          "name": "nIndex",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiCommentReply"
+      },
+      "signature": "GetReply(nIndex?: number): ApiCommentReply",
+      "since": "7.5.0"
+    },
+    "GetText": {
+      "description": "Returns the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetText/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment: \");\nworksheet.GetRange(\"B3\").SetValue(range.GetComment().GetText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(): string"
+    },
+    "GetTime": {
+      "description": "Returns the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetTime/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Timestamp: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetTime());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTime(): number",
+      "since": "7.5.0"
+    },
+    "GetTimeUTC": {
+      "description": "Returns the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetTimeUTC/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Timestamp UTC: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetTimeUTC());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetTimeUTC(): number",
+      "since": "7.5.0"
+    },
+    "GetUserId": {
+      "description": "Returns the user ID of the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/GetUserId/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's user Id: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetUserId());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUserId(): string",
+      "since": "7.5.0"
+    },
+    "IsSolved": {
+      "description": "Checks if a comment is solved or not.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/IsSolved/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment is solved: \");\nworksheet.GetRange(\"B3\").SetValue(comment.IsSolved());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsSolved(): boolean",
+      "since": "7.5.0"
+    },
+    "RemoveReplies": {
+      "description": "Removes the specified comment replies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/RemoveReplies/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.AddReply(\"Reply 1\", \"John Smith\", \"uid-1\");\ncomment.AddReply(\"Reply 2\", \"John Smith\", \"uid-1\");\ncomment.RemoveReplies(0, 1, false);\nworksheet.GetRange(\"A3\").SetValue(\"Comment replies count: \");\nworksheet.GetRange(\"B3\").SetValue(comment.GetRepliesCount());"
+      ],
+      "params": [
+        {
+          "description": "The position of the first comment reply to remove.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "A number of comment replies to remove.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to remove all comment replies or not.",
+          "name": "bRemoveAll",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "RemoveReplies(nPos?: number, nCount?: number, bRemoveAll?: boolean): void",
+      "since": "7.5.0"
+    },
+    "SetAuthorName": {
+      "description": "Sets the comment author's name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetAuthorName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's author: \");\ncomment.SetAuthorName(\"Mark Potato\");\nworksheet.GetRange(\"B3\").SetValue(comment.GetAuthorName());"
+      ],
+      "params": [
+        {
+          "description": "The comment author's name.",
+          "name": "sAuthorName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAuthorName(sAuthorName: string): void",
+      "since": "7.5.0"
+    },
+    "SetSolved": {
+      "description": "Marks a comment as solved.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetSolved/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment is solved: \");\ncomment.SetSolved(true);\nworksheet.GetRange(\"B3\").SetValue(comment.IsSolved());"
+      ],
+      "params": [
+        {
+          "description": "Specifies if a comment is solved or not.",
+          "name": "bSolved",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSolved(bSolved: boolean): void",
+      "since": "7.5.0"
+    },
+    "SetText": {
+      "description": "Sets the comment text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetText/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\");\ncomment.SetText(\"New comment text\");"
+      ],
+      "params": [
+        {
+          "description": "New text for comment.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetText(text: string): void",
+      "since": "7.5.0"
+    },
+    "SetTime": {
+      "description": "Sets the timestamp of the comment creation in the current time zone format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetTime/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Timestamp: \");\ncomment.SetTime(Date.now());\nworksheet.GetRange(\"B3\").SetValue(comment.GetTime());"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in the current time zone format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTime(nTimeStamp: number | string): void",
+      "since": "7.5.0"
+    },
+    "SetTimeUTC": {
+      "description": "Sets the timestamp of the comment creation in UTC format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetTimeUTC/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Timestamp UTC: \");\ncomment.SetTimeUTC(Date.now());\nworksheet.GetRange(\"B3\").SetValue(comment.GetTimeUTC());"
+      ],
+      "params": [
+        {
+          "description": "The timestamp of the comment creation in UTC format.",
+          "name": "nTimeStamp",
+          "type": "number | string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTimeUTC(nTimeStamp: number | string): void",
+      "since": "7.5.0"
+    },
+    "SetUserId": {
+      "description": "Sets the user ID to the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/Methods/SetUserId/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nlet comment = range.AddComment(\"This is just a number.\", \"John Smith\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment's user Id: \");\ncomment.SetUserId(\"uid-2\");\nworksheet.GetRange(\"B3\").SetValue(comment.GetUserId());"
+      ],
+      "params": [
+        {
+          "description": "The user ID of the comment author.",
+          "name": "sUserId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetUserId(sUserId: string): void",
+      "since": "7.5.0"
+    }
+  }
+}

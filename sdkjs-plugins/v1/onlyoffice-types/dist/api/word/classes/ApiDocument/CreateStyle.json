@@ -1,0 +1,24 @@
+{
+  "description": "Creates a new style with the specified type and name. If a style with the specified name already exists, it will be returned without creating a new one.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/CreateStyle/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet heading1Style = doc.CreateStyle(\"Heading 1\", \"paragraph\");\nlet paraPr = heading1Style.GetParaPr();\nparaPr.SetKeepNext(true);\nparaPr.SetKeepLines(true);\nparaPr.SetSpacingAfter(240);\nlet textPr = heading1Style.GetTextPr();\ntextPr.SetColor(0xff, 0x68, 0x00, false);\ntextPr.SetFontSize(40);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(heading1Style);\nparagraph.AddText(\"This is a heading with a style created above\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a text.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The name of the style which will be created.",
+      "name": "styleName",
+      "type": "string"
+    },
+    {
+      "description": "The document element which the style will be applied to.",
+      "name": "type",
+      "optional": true,
+      "type": "StyleType"
+    }
+  ],
+  "returns": {
+    "type": "ApiStyle"
+  },
+  "signature": "CreateStyle(styleName: string, type?: StyleType): ApiStyle"
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Returns a unique ID for the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "0 if no identifier is specified for the current paragraph.",
+    "type": "number"
+  },
+  "signature": "GetParaId(): number",
+  "since": "9.2.0"
+}

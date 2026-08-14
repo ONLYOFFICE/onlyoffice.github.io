@@ -1,0 +1,9 @@
+{
+  "description": "Moves a cursor to the end of the document.",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "MoveCursorToEnd(): boolean",
+  "since": "9.0.4"
+}

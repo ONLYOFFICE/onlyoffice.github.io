@@ -1,0 +1,50 @@
+{
+  "description": "Returns the depreciation of an asset for any specified period, including partial periods, using the double-declining balance method or some other method specified.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/VDB/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.VDB(3500, 500, 5, 1, 3, 2, false));"
+  ],
+  "params": [
+    {
+      "description": "The initial cost of the asset.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The salvage value of the asset at the end of its lifetime.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of periods over which the asset is being depreciated (sometimes called the useful life of the asset).",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The starting period for which the depreciation will be calculated, in the same units as the useful life of the asset.",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The ending period for which the depreciation will be calculated, in the same units as the useful life of the asset.",
+      "name": "arg5",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The rate at which the balance declines. If it is omitted, the function will assume it to be 2",
+      "name": "arg6",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "Specifies whether to use straight-line depreciation when depreciation is greater than the declining balance calculation (**false** or omitted).\rIf it is set to **true**, the function uses the declining balance method.",
+      "name": "arg7",
+      "optional": true,
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "VDB(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | number, arg5: ApiRange | ApiName | number, arg6?: ApiRange | ApiName | number, arg7?: ApiRange | ApiName | boolean): number"
+}

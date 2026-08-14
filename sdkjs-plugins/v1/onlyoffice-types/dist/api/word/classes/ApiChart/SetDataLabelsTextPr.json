@@ -1,0 +1,16 @@
+{
+  "description": "Sets the text properties to the chart data labels.",
+  "params": [
+    {
+      "description": "The text properties to apply to the data labels.",
+      "name": "textPr",
+      "type": "ApiTextPr"
+    }
+  ],
+  "returns": {
+    "description": "Returns true if the text properties were applied successfully, false otherwise.",
+    "type": "boolean"
+  },
+  "signature": "SetDataLabelsTextPr(textPr: ApiTextPr): boolean",
+  "since": "9.5.0"
+}

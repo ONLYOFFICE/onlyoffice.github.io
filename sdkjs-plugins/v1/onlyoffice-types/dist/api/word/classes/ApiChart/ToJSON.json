@@ -1,0 +1,19 @@
+{
+  "description": "Converts the ApiDrawing object into the JSON object.",
+  "params": [
+    {
+      "description": "Specifies if the used numberings will be written to the JSON object or not.",
+      "name": "bWriteNumberings",
+      "type": "boolean"
+    },
+    {
+      "description": "Specifies if the used styles will be written to the JSON object or not.",
+      "name": "bWriteStyles",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "object"
+  },
+  "signature": "ToJSON(bWriteNumberings: boolean, bWriteStyles: boolean): object"
+}

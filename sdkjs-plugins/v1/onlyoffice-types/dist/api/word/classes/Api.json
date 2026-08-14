@@ -1,0 +1,1606 @@
+{
+  "description": "Base class",
+  "methods": {
+    "AddComment": {
+      "description": "Adds a comment to the specifed document element or array of Runs.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/AddComment/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nApi.AddComment(paragraph, \"ONLYOFFICE for developers\", \"Jane\");"
+      ],
+      "params": [
+        {
+          "description": "The element where the comment will be added. It may be applied to any element which has the *AddComment* method.",
+          "name": "element",
+          "type": "ApiRun[] | DocumentElement"
+        },
+        {
+          "description": "The comment text.",
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "description": "The author's name.",
+          "name": "author",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment author.",
+          "name": "userId",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns null if the comment was not added.",
+        "type": "ApiComment"
+      },
+      "signature": "AddComment(element: ApiRun[] | DocumentElement, text: string, author?: string, userId?: string): ApiComment"
+    },
+    "AutoColor": {
+      "description": "Creates an auto-color.",
+      "params": [],
+      "returns": {
+        "description": "Instance of ApiColor with 'auto' type.",
+        "type": "ApiColor"
+      },
+      "signature": "AutoColor(): ApiColor"
+    },
+    "CentimetersToPoints": {
+      "description": "Converts centimeters to points.",
+      "params": [
+        {
+          "description": "The number of centimeters to convert to points.",
+          "name": "cm",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "CentimetersToPoints(cm: number): number"
+    },
+    "Color": {
+      "description": "Creates an ApiColor from a universal input. The method recognizes several call signatures and either delegates to a narrower factory or constructs an ApiColor directly.\n**Numeric components**: \"Api.Color(r, g, b)\" or \"Api.Color(r, g, b, a)\" creates an RGB or RGBA color from byte components (0-255).\n**Packed integer**: \"Api.Color(0xRRGGBB)\" creates an RGB color from a 24-bit integer.\n**Full HEX string**: \"Api.Color('#RRGGBB')\" or \"Api.Color('RRGGBB')\" creates a HEX color; the leading \"#\" is optional.\n**Short HEX string**: \"Api.Color('#RGB')\" expands each digit by duplication, so \"#F0A\" becomes \"#FF00AA\".\n**Theme color name**: \"Api.Color('accent1')\" creates a theme color; any value of SchemeColorId is accepted.\n**Preset color name**: \"Api.Color('aliceBlue')\" resolves any value of PresetColor to its RGB equivalent.\n**Auto color**: \"Api.Color('auto')\" creates an auto color.\nFor a single string argument, the resolution priority is: \"auto\", a string starting with \"#\", a theme name, a preset name, a bare 6-digit HEX. Theme and preset palettes do not overlap. A 3-digit shorthand is accepted only with the leading \"#\".\nUnsupported inputs (objects, arrays, an existing ApiColor, unknown strings, no arguments) return a black color (#000000).",
+      "params": [
+        {
+          "description": "The universal color input. With three or four arguments, the red component (0-255).",
+          "name": "r",
+          "type": "number | string | number | SchemeColorId | PresetColor"
+        },
+        {
+          "description": "The green component (0-255). Used only with the (r, g, b) and (r, g, b, a) forms.",
+          "name": "g",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The blue component (0-255). Used only with the (r, g, b) and (r, g, b, a) forms.",
+          "name": "b",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The alpha component (0-255). Used only with the (r, g, b, a) form.",
+          "name": "a",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "Color(r: number | string | number | SchemeColorId | PresetColor, g?: number, b?: number, a?: number): ApiColor"
+    },
+    "CompareDocuments": {
+      "description": "Compares the current document with another document opened via builderJS.OpenTmpFile. Tracked changes between the two documents are produced in the current document.",
+      "params": [
+        {
+          "description": "The second document, returned by builderJS.OpenTmpFile.",
+          "name": "file",
+          "type": "object"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "CompareDocuments(file: object): void"
+    },
+    "ConvertDocument": {
+      "description": "Converts a document to Markdown or HTML text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/ConvertDocument/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Heading 1\");\nparagraph.SetStyle(doc.GetStyle(\"Heading 1\"));\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This document will be converted to Markdown.\");\ndoc.Push(paragraph);\nparagraph.Search(\"Markdown\")[0].SetBold(true);\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Heading 2\");\ndoc.Push(paragraph);\nparagraph.SetStyle(doc.GetStyle(\"Heading 2\"));\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"There is an example of two heading levels.\");\ndoc.Push(paragraph);\n\nlet md = Api.ConvertDocument(\"markdown\", false, false, true, false);\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Markdown\").SetBold(true);\nparagraph.AddLineBreak();\nparagraph.AddText(md);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "Conversion type.",
+          "name": "convertType",
+          "optional": true,
+          "type": "\"markdown\" | \"html\""
+        },
+        {
+          "description": "Defines if the HTML headings and IDs will be generated when the Markdown renderer of your target platform does not handle Markdown-style IDs.",
+          "name": "htmlHeadings",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the images will be created in the base64 format.",
+          "name": "base64img",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if all heading levels in your document will be demoted to conform with the following standard: single H1 as title, H2 as top-level heading in the text body.",
+          "name": "demoteHeadings",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional HTML tag, you can avoid using the opening angle bracket\rin the following way: \\<tag>text\\</tag>. By default, the opening angle brackets will be replaced with the special characters.",
+          "name": "renderHTMLTags",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "ConvertDocument(convertType?: \"markdown\" | \"html\", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string"
+    },
+    "CreateBlipFill": {
+      "description": "Creates a blip fill to apply to the object using the selected image as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateBlipFill/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateBlipFill(\"https://static.onlyoffice.com/assets/docs/samples/img/presentation_sky.png\", \"tile\");\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"star10\", 5930900, 595605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The path to the image used for the blip fill (currently only internet URL or Base64 encoded images are supported).",
+          "name": "imageUrl",
+          "type": "string"
+        },
+        {
+          "description": "The type of the fill used for the blip fill (tile or stretch).",
+          "name": "blipFillType",
+          "type": "BlipFillType"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateBlipFill(imageUrl: string, blipFillType: BlipFillType): ApiFill"
+    },
+    "CreateBlockLvlSdt": {
+      "description": "Creates a new block level container.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateBlockLvlSdt/",
+      "examples": [
+        "let doc = Api.GetDocument();\nvar blockLvlSdt = Api.CreateBlockLvlSdt();\nblockLvlSdt.GetContent().GetElement(0).AddText(\"This is a block text content control.\");\ndoc.AddElement(0, blockLvlSdt);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiBlockLvlSdt"
+      },
+      "signature": "CreateBlockLvlSdt(): ApiBlockLvlSdt"
+    },
+    "CreateChart": {
+      "description": "Creates a chart with the parameters specified.\n:::note\nValues of _styleIndex_ outside **1 - 48** are interpreted as a chart style id from the _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).\n:::",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateChart/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nparagraph.AddDrawing(chart);\nlet solidFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(solidFill, 0, false);\nsolidFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(solidFill, 1, false);"
+      ],
+      "params": [
+        {
+          "description": "The chart type used for the chart display.",
+          "name": "chartType",
+          "optional": true,
+          "type": "ChartType"
+        },
+        {
+          "description": "The array of the data used to build the chart from.",
+          "name": "series",
+          "optional": true,
+          "type": "number[][]"
+        },
+        {
+          "description": "The array of the names (the source table column names) used for the data which the chart will be build from.",
+          "name": "seriesNames",
+          "optional": true,
+          "type": "number[] | string[]"
+        },
+        {
+          "description": "The array of the names (the source table row names) used for the data which the chart will be build from.",
+          "name": "catNames",
+          "optional": true,
+          "type": "number[] | string[]"
+        },
+        {
+          "description": "The chart width in English measure units.",
+          "name": "width",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The chart height in English measure units.",
+          "name": "height",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The chart color style index (can be 1 - 48, as described in OOXML specification).",
+          "name": "styleIndex",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Numeric formats which will be applied to the series (can be custom formats).\rThe default numeric format is \"General\".",
+          "name": "numFormats",
+          "optional": true,
+          "type": "NumFormat[] | string[]"
+        }
+      ],
+      "returns": {
+        "type": "ApiChart"
+      },
+      "signature": "CreateChart(chartType?: ChartType, series?: number[][], seriesNames?: number[] | string[], catNames?: number[] | string[], width?: EMU, height?: EMU, styleIndex?: number, numFormats?: NumFormat[] | string[]): ApiChart"
+    },
+    "CreateCheckBoxContentControl": {
+      "description": "Creates a checkbox content control.",
+      "params": [
+        {
+          "description": "The configuration object with the checkbox properties.",
+          "name": "checkBoxPr",
+          "type": "ContentControlCheckBoxPr"
+        }
+      ],
+      "returns": {
+        "description": "An inline-level content control that represents a checkbox.",
+        "type": "ApiInlineLvlSdt"
+      },
+      "signature": "CreateCheckBoxContentControl(checkBoxPr: ContentControlCheckBoxPr): ApiInlineLvlSdt",
+      "since": "9.0.0"
+    },
+    "CreateComboBoxContentControl": {
+      "description": "Creates a new combo box container with the given list of options.",
+      "params": [
+        {
+          "description": "An array of objects representing the items in the combo box.",
+          "name": "list",
+          "optional": true,
+          "type": "ContentControlListItem[]"
+        },
+        {
+          "description": "The selected item index.",
+          "name": "selected",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "An inline-level content control that represents a combo box.",
+        "type": "ApiInlineLvlSdt"
+      },
+      "signature": "CreateComboBoxContentControl(list?: ContentControlListItem[], selected?: number): ApiInlineLvlSdt",
+      "since": "9.0.0"
+    },
+    "CreateCustomGeometry": {
+      "description": "Creates a new custom geometry.",
+      "params": [],
+      "returns": {
+        "type": "ApiGeometry"
+      },
+      "signature": "CreateCustomGeometry(): ApiGeometry",
+      "since": "9.1.0"
+    },
+    "CreateDatePickerContentControl": {
+      "description": "Creates a new date picker content control.",
+      "params": [
+        {
+          "description": "The optional date picker properties.",
+          "name": "datePickerPr",
+          "optional": true,
+          "type": "ContentControlDatePr"
+        }
+      ],
+      "returns": {
+        "description": "An inline-level content control that represents a date-time picker.",
+        "type": "ApiInlineLvlSdt"
+      },
+      "signature": "CreateDatePickerContentControl(datePickerPr?: ContentControlDatePr): ApiInlineLvlSdt",
+      "since": "9.0.0"
+    },
+    "CreateDropDownListContentControl": {
+      "description": "Creates a new drop-down list container with the given list of options.",
+      "params": [
+        {
+          "description": "An array of objects representing the items in the drop-down list.",
+          "name": "list",
+          "optional": true,
+          "type": "ContentControlListItem[]"
+        },
+        {
+          "description": "The selected item index.",
+          "name": "selected",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "An inline-level content control that represents a drop-down list.",
+        "type": "ApiInlineLvlSdt"
+      },
+      "signature": "CreateDropDownListContentControl(list?: ContentControlListItem[], selected?: number): ApiInlineLvlSdt",
+      "since": "9.0.0"
+    },
+    "CreateGradientStop": {
+      "description": "Creates a gradient stop used for different types of gradients.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateGradientStop/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The color used for the gradient stop.",
+          "name": "color",
+          "type": "ApiColor"
+        },
+        {
+          "description": "The position of the gradient stop measured in 1000th of percent.",
+          "name": "pos",
+          "type": "PositivePercentage"
+        }
+      ],
+      "returns": {
+        "type": "ApiGradientStop"
+      },
+      "signature": "CreateGradientStop(color: ApiColor, pos: PositivePercentage): ApiGradientStop",
+      "since": "9.1.0"
+    },
+    "CreateGroup": {
+      "description": "Groups an array of drawings.\n:::note\nThe drawings must not be added to the document. To group the drawings which are already in the document, use the {@link ApiDocument#GroupDrawings} method.\n:::",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateGroup/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet fill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet fill2 = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape1 = Api.CreateShape(\"rect\", 150 * 36000, 65 * 36000, fill1, stroke);\nlet shape2 = Api.CreateShape(\"rect\", 75 * 36000, 40 * 36000, fill2, stroke);\nshape1.SetWrappingStyle(\"inFront\");\nshape2.SetWrappingStyle(\"inFront\");\nlet group = Api.CreateGroup([shape1, shape2]);\nlet para = Api.CreateParagraph();\npara.AddDrawing(group);\ndoc.Push(para);"
+      ],
+      "params": [
+        {
+          "description": "An array of drawings to group.",
+          "name": "drawings",
+          "type": "DrawingForGroup[]"
+        }
+      ],
+      "returns": {
+        "type": "ApiGroup"
+      },
+      "signature": "CreateGroup(drawings: DrawingForGroup[]): ApiGroup",
+      "since": "8.3.0"
+    },
+    "CreateHyperlink": {
+      "description": "Creates a new hyperlink text block to be inserted to the current paragraph or table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateHyperlink/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet hyperlink = Api.CreateHyperlink(\"https://api.onlyoffice.com/\", \"ONLYOFFICE Document Builder\", \"ONLYOFFICE for developers\");\nparagraph.AddElement(hyperlink, 0);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Class type of the created object: \" + hyperlink.GetClassType());"
+      ],
+      "params": [
+        {
+          "description": "The hyperlink address.",
+          "name": "link",
+          "type": "string"
+        },
+        {
+          "description": "The text to display the hyperlink.",
+          "name": "display",
+          "type": "string"
+        },
+        {
+          "description": "The screen tip text.",
+          "name": "screenTipText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiHyperlink"
+      },
+      "signature": "CreateHyperlink(link: string, display: string, screenTipText: string): ApiHyperlink"
+    },
+    "CreateImage": {
+      "description": "Creates an image with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateImage/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet image = Api.CreateImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", 60 * 36000, 35 * 36000);\nparagraph.AddDrawing(image);"
+      ],
+      "params": [
+        {
+          "description": "The image source where the image to be inserted should be taken from (currently only internet URL or Base64 encoded images are supported).",
+          "name": "imageSrc",
+          "type": "string"
+        },
+        {
+          "description": "The image width in English measure units.",
+          "name": "width",
+          "type": "EMU"
+        },
+        {
+          "description": "The image height in English measure units.",
+          "name": "height",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "ApiImage"
+      },
+      "signature": "CreateImage(imageSrc: string, width: EMU, height: EMU): ApiImage"
+    },
+    "CreateInlineLvlSdt": {
+      "description": "Creates a new inline container.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateInlineLvlSdt/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.AddElement(run, 0);\nparagraph.Push(inlineLvlSdt);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiInlineLvlSdt"
+      },
+      "signature": "CreateInlineLvlSdt(): ApiInlineLvlSdt"
+    },
+    "CreateLinearGradientFill": {
+      "description": "Creates a linear gradient fill to apply to the object using the selected linear gradient as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateLinearGradientFill/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The array of gradient color stops measured in 1000th of percent.",
+          "name": "gradientStops",
+          "type": "number[]"
+        },
+        {
+          "description": "The angle measured in 60000th of a degree that will define the gradient direction.",
+          "name": "angle",
+          "type": "PositiveFixedAngle"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateLinearGradientFill(gradientStops: number[], angle: PositiveFixedAngle): ApiFill"
+    },
+    "CreateMath": {
+      "description": "Creates a math equation from a linear text string. The resulting object can be inserted into\na paragraph the same way as a run (e.g. via {@link ApiParagraph#AddElement} or {@link ApiParagraph#Push}).",
+      "params": [
+        {
+          "description": "An equation written as a linear text string.",
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "description": "The format of the specified linear representation.",
+          "name": "format",
+          "optional": true,
+          "type": "\"unicode\" | \"latex\" | \"mathml\""
+        }
+      ],
+      "returns": {
+        "type": "ApiMath"
+      },
+      "signature": "CreateMath(text: string, format?: \"unicode\" | \"latex\" | \"mathml\"): ApiMath",
+      "since": "9.5.0"
+    },
+    "CreateNoFill": {
+      "description": "Creates no fill and removes the fill from the element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateNoFill/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateNoFill(): ApiFill"
+    },
+    "CreateNumbering": {
+      "description": "Creates an abstract multilevel numbering with a specified type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateNumbering/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet numbering = doc.CreateNumbering(\"bullet\");\nfor (let lvl = 0; lvl < 2; ++lvl) \n{\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.AddText(\"This is an example of the bulleted paragraph № \" + (lvl + 1));\n\tparagraph.SetNumbering(numbering.GetLevel(lvl));\n\tdoc.Push(paragraph);\n}"
+      ],
+      "params": [
+        {
+          "description": "The type of the numbering which will be created.",
+          "name": "sType",
+          "optional": true,
+          "type": "\"bullet\" | \"numbered\""
+        }
+      ],
+      "returns": {
+        "type": "ApiNumbering"
+      },
+      "signature": "CreateNumbering(sType?: \"bullet\" | \"numbered\"): ApiNumbering",
+      "since": "9.4.0"
+    },
+    "CreateOleObject": {
+      "description": "Creates an OLE object with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateOleObject/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);"
+      ],
+      "params": [
+        {
+          "description": "The image source where the image to be inserted should be taken from (currently, only internet URL or Base64 encoded images are supported).",
+          "name": "imageSrc",
+          "type": "string"
+        },
+        {
+          "description": "The OLE object width in English measure units.",
+          "name": "width",
+          "type": "EMU"
+        },
+        {
+          "description": "The OLE object height in English measure units.",
+          "name": "height",
+          "type": "EMU"
+        },
+        {
+          "description": "The OLE object string data.",
+          "name": "data",
+          "type": "string"
+        },
+        {
+          "description": "The application ID associated with the current OLE object.",
+          "name": "appId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiOleObject"
+      },
+      "signature": "CreateOleObject(imageSrc: string, width: EMU, height: EMU, data: string, appId: string): ApiOleObject"
+    },
+    "CreateParaPr": {
+      "description": "Creates the empty paragraph properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiParaPr"
+      },
+      "signature": "CreateParaPr(): ApiParaPr"
+    },
+    "CreateParagraph": {
+      "description": "Creates a new paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateParagraph/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph\");\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph"
+      },
+      "signature": "CreateParagraph(): ApiParagraph"
+    },
+    "CreatePatternFill": {
+      "description": "Creates a pattern fill to apply to the object using the selected pattern as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreatePatternFill/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The pattern type used for the fill selected from one of the available pattern types.",
+          "name": "patternType",
+          "type": "PatternType"
+        },
+        {
+          "description": "The background color used for the pattern creation.",
+          "name": "bgColor",
+          "type": "ApiColor"
+        },
+        {
+          "description": "The foreground color used for the pattern creation.",
+          "name": "fgColor",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreatePatternFill(patternType: PatternType, bgColor: ApiColor, fgColor: ApiColor): ApiFill",
+      "since": "9.1.0"
+    },
+    "CreatePictureContentControl": {
+      "description": "Creates a new picture container.",
+      "params": [
+        {
+          "description": "The optional image width.",
+          "name": "width",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The optional image height.",
+          "name": "height",
+          "optional": true,
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "description": "An inline-level content control that represents a picture container.",
+        "type": "ApiInlineLvlSdt"
+      },
+      "signature": "CreatePictureContentControl(width?: EMU, height?: EMU): ApiInlineLvlSdt",
+      "since": "9.0.0"
+    },
+    "CreatePresetColor": {
+      "description": "Creates a color selecting it from one of the available color presets.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreatePresetColor/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreatePresetColor(\"peachPuff\"), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "A preset selected from the list of the available color preset names.",
+          "name": "presetColor",
+          "type": "PresetColor"
+        }
+      ],
+      "returns": {
+        "description": ";",
+        "type": "ApiPresetColor"
+      },
+      "signature": "CreatePresetColor(presetColor: PresetColor): ApiPresetColor"
+    },
+    "CreatePresetGeometry": {
+      "description": "Creates a geometry using one of the available preset shapes.",
+      "params": [
+        {
+          "description": "The preset name.",
+          "name": "preset",
+          "optional": true,
+          "type": "ShapeType"
+        }
+      ],
+      "returns": {
+        "type": "ApiGeometry"
+      },
+      "signature": "CreatePresetGeometry(preset?: ShapeType): ApiGeometry",
+      "since": "9.1.0"
+    },
+    "CreateRGBColor": {
+      "description": "Creates an RGB color setting the appropriate values for the red, green and blue color components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateRGBColor/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRGBColor"
+      },
+      "signature": "CreateRGBColor(r: number, g: number, b: number): ApiRGBColor"
+    },
+    "CreateRadialGradientFill": {
+      "description": "Creates a radial gradient fill to apply to the object using the selected radial gradient as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateRadialGradientFill/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The array of gradient color stops measured in 1000th of percent.",
+          "name": "gradientStops",
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateRadialGradientFill(gradientStops: number[]): ApiFill"
+    },
+    "CreateRange": {
+      "description": "Creates an element range.\nIf you do not specify the start and end positions, the range will be taken from the entire element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateRange/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nApi.CreateRange(paragraph, 0, 11).SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "The element from which the range will be taken.",
+          "name": "element",
+          "type": "unknown"
+        },
+        {
+          "description": "Start range position.",
+          "name": "start",
+          "type": "unknown"
+        },
+        {
+          "description": "End range position.",
+          "name": "end",
+          "type": "unknown"
+        }
+      ],
+      "returns": {
+        "description": "returns null if element isn't supported.",
+        "type": "ApiRange | null"
+      },
+      "signature": "CreateRange(element: unknown, start: unknown, end: unknown): ApiRange | null"
+    },
+    "CreateRun": {
+      "description": "Creates a new smaller text block to be inserted to the current paragraph or table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateRun/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is a text run\");\nparagraph.AddElement(run);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "CreateRun(): ApiRun"
+    },
+    "CreateSchemeColor": {
+      "description": "Creates a complex color scheme selecting from one of the available schemes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateSchemeColor/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateSchemeColor(\"dk1\"));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"curvedUpArrow\", 5930900, 595605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The color scheme identifier.",
+          "name": "schemeColorId",
+          "type": "SchemeColorId"
+        }
+      ],
+      "returns": {
+        "type": "ApiSchemeColor"
+      },
+      "signature": "CreateSchemeColor(schemeColorId: SchemeColorId): ApiSchemeColor"
+    },
+    "CreateShadow": {
+      "description": "Creates a shadow which can be applied to a graphic object.",
+      "params": [
+        {
+          "description": "The shadow properties.",
+          "name": "settings",
+          "type": "ShadowSettings"
+        }
+      ],
+      "returns": {
+        "type": "ApiShadow"
+      },
+      "signature": "CreateShadow(settings: ShadowSettings): ApiShadow",
+      "since": "9.5.0"
+    },
+    "CreateShape": {
+      "description": "Creates a shape with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateShape/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The shape type which specifies the preset shape geometry.",
+          "name": "shapeType",
+          "optional": true,
+          "type": "ShapeType"
+        },
+        {
+          "description": "The shape width in English measure units.",
+          "name": "width",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The shape height in English measure units.",
+          "name": "height",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The color or pattern used to fill the shape. If not specified, the default shape style fill (theme accent) is used.",
+          "name": "fill",
+          "optional": true,
+          "type": "ApiFill"
+        },
+        {
+          "description": "The stroke used to draw the shape outline. If not specified, the default shape style outline (theme accent) is used.",
+          "name": "stroke",
+          "optional": true,
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "ApiShape"
+      },
+      "signature": "CreateShape(shapeType?: ShapeType, width?: EMU, height?: EMU, fill?: ApiFill, stroke?: ApiStroke): ApiShape"
+    },
+    "CreateSolidFill": {
+      "description": "Creates a solid fill to apply to the object using a selected solid color as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateSolidFill/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"roundRect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The color used for the element fill.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "ApiFill"
+      },
+      "signature": "CreateSolidFill(color: ApiColor): ApiFill",
+      "since": "9.1.0"
+    },
+    "CreateStroke": {
+      "description": "Creates a stroke adding shadows to the element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateStroke/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nlet stroke = Api.CreateStroke(5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\nlet shape = Api.CreateShape(\"roundRect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(shape);"
+      ],
+      "params": [
+        {
+          "description": "The width of the shadow measured in English measure units.",
+          "name": "width",
+          "type": "EMU"
+        },
+        {
+          "description": "The fill type used to create the shadow.",
+          "name": "fill",
+          "type": "ApiFill"
+        },
+        {
+          "description": "The type of line dash.",
+          "name": "sDash",
+          "optional": true,
+          "type": "DashType"
+        }
+      ],
+      "returns": {
+        "type": "ApiStroke"
+      },
+      "signature": "CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke",
+      "since": "9.3.0"
+    },
+    "CreateTable": {
+      "description": "Creates a new table with a specified number of rows and columns.\n\n:::danger[Breaking Change]\nStarting from version 9.4.0, the parameter order has been changed from `Api.CreateTable(cols, rows)` to `Api.CreateTable(rows, cols)`.\n:::",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTable/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet table = Api.CreateTable(3, 3);\ndoc.Push(table);\ntable.SetWidth(\"percent\", 100);"
+      ],
+      "params": [
+        {
+          "description": "Number of rows. Must be a positive integer.",
+          "name": "rows",
+          "type": "number"
+        },
+        {
+          "description": "Number of columns. Must be a positive integer.",
+          "name": "cols",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiTable"
+      },
+      "signature": "CreateTable(rows: number, cols: number): ApiTable"
+    },
+    "CreateTableCellPr": {
+      "description": "Creates the empty table cell properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiTableCellPr"
+      },
+      "signature": "CreateTableCellPr(): ApiTableCellPr"
+    },
+    "CreateTablePr": {
+      "description": "Creates the empty table properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiTablePr"
+      },
+      "signature": "CreateTablePr(): ApiTablePr"
+    },
+    "CreateTableRowPr": {
+      "description": "Creates the empty table row properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiTableRowPr"
+      },
+      "signature": "CreateTableRowPr(): ApiTableRowPr"
+    },
+    "CreateTableStylePr": {
+      "description": "Creates the empty table style properties.",
+      "params": [
+        {
+          "description": "The table part which the formatting properties must be applied to.",
+          "name": "sType",
+          "type": "TableStyleOverrideType"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableStylePr"
+      },
+      "signature": "CreateTableStylePr(sType: TableStyleOverrideType): ApiTableStylePr"
+    },
+    "CreateTextPr": {
+      "description": "Creates the empty text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTextPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetColor(51, 51, 51, false);\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\nlet textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", fill, stroke, 0, 150 * 36000, 50 * 36000);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "CreateTextPr(): ApiTextPr"
+    },
+    "CreateWordArt": {
+      "description": "Creates a Text Art object with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateWordArt/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetColor(51, 51, 51, false);\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\nlet textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", fill, stroke, 0, 150 * 36000, 50 * 36000);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);"
+      ],
+      "params": [
+        {
+          "description": "The text properties.",
+          "name": "textPr",
+          "optional": true,
+          "type": "ApiTextPr"
+        },
+        {
+          "description": "The text for the Text Art object.",
+          "name": "text",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Text transform type.",
+          "name": "transform",
+          "optional": true,
+          "type": "TextTransform"
+        },
+        {
+          "description": "The color or pattern used to fill the Text Art object.",
+          "name": "fill",
+          "optional": true,
+          "type": "ApiFill"
+        },
+        {
+          "description": "The stroke used to create the Text Art object shadow.",
+          "name": "stroke",
+          "optional": true,
+          "type": "ApiStroke"
+        },
+        {
+          "description": "Rotation angle.",
+          "name": "rotAngle",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The Text Art width measured in English measure units.",
+          "name": "width",
+          "optional": true,
+          "type": "EMU"
+        },
+        {
+          "description": "The Text Art heigth measured in English measure units.",
+          "name": "height",
+          "optional": true,
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "ApiDrawing"
+      },
+      "signature": "CreateWordArt(textPr?: ApiTextPr, text?: string, transform?: TextTransform, fill?: ApiFill, stroke?: ApiStroke, rotAngle?: number, width?: EMU, height?: EMU): ApiDrawing"
+    },
+    "EmusToMillimeters": {
+      "description": "Converts English Metric Units (EMUs) to millimeters.",
+      "params": [
+        {
+          "description": "The value in English Metric Units (EMUs).",
+          "name": "emu",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "description": "The value in millimeters.",
+        "type": "mm"
+      },
+      "signature": "EmusToMillimeters(emu: EMU): mm"
+    },
+    "EmusToPoints": {
+      "description": "Converts EMUs (English Metric Units) to points.",
+      "params": [
+        {
+          "description": "The number of EMUs to convert to points.",
+          "name": "emu",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "EmusToPoints(emu: number): number"
+    },
+    "FromJSON": {
+      "description": "Converts the specified JSON object into the Document Builder object of the corresponding type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/FromJSON/",
+      "examples": [
+        "let paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph\");\nlet json = paragraph.ToJSON(false, true);\nlet paragraphFromJSON = Api.FromJSON(json);\nparagraphFromJSON.SetBold(true);\nApi.GetDocument().AddElement(0, paragraphFromJSON);"
+      ],
+      "params": [
+        {
+          "description": "The JSON object to convert.",
+          "name": "message",
+          "type": "object"
+        }
+      ],
+      "returns": {
+        "description": "readed api class element",
+        "type": "object"
+      },
+      "signature": "FromJSON(message: object): object"
+    },
+    "GetByInternalId": {
+      "description": "Returns the object by it's internal ID.",
+      "params": [
+        {
+          "description": "The object internal ID.",
+          "name": "id",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "GetByInternalId(id: string): object",
+      "since": "9.0.4"
+    },
+    "GetDocument": {
+      "description": "Returns the main document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/GetDocument/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph\");\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiDocument"
+      },
+      "signature": "GetDocument(): ApiDocument"
+    },
+    "GetFullName": {
+      "description": "Returns the full name of the currently opened file.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/GetFullName/",
+      "examples": [
+        "let paragraph = Api.GetDocument().GetElement(0);\nparagraph.AddText(\"File name: \" + Api.GetFullName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFullName(): string"
+    },
+    "GetMailMergeReceptionsCount": {
+      "description": "Returns the mail merge receptions count.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/GetMailMergeReceptionsCount/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fields = [\"Greeting line\", \"First name\", \"Last name\"];\nfor (let i = 0; i < fields.length; ++i) \n{\n\tlet run = Api.CreateRun();\n\trun.AddText(fields[i]);\n\tparagraph.AddElement(run);\n\trun.WrapInMailMergeField();\n\tparagraph.AddText(\" \");\n}\nparagraph.AddText(\"!\");\nApi.LoadMailMergeData([fields, [\"Dear\", \"John\", \"Smith\"], [\"Hello\", \"Lara\", \"Davis\"]]);\n\nlet template = Api.GetMailMergeTemplateDocContent();\nlet receptionsCount = Api.GetMailMergeReceptionsCount();\nlet receptions = [];\nfor (let i = 0; i < receptionsCount; ++i) \n{\n\tApi.MailMerge(i, i);\n\treceptions.push(doc.GetElement(0));\n\tApi.ReplaceDocumentContent(template);\n}\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Receptions\");\nparagraph.SetBold(true);\ndoc.Push(paragraph);\ndoc.Push(receptions[0]);\ndoc.Push(receptions[1]);\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"The mail merge process was run twice for each mail merge reception. But the results were replaced with the mail merge template document content. This template allows you to save each mail merge reception to the separate file.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetMailMergeReceptionsCount(): number"
+    },
+    "GetMailMergeTemplateDocContent": {
+      "description": "Returns the mail merge template document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/GetMailMergeTemplateDocContent/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fields = [\"Greeting line\", \"First name\", \"Last name\"];\nfor (let i = 0; i < fields.length; ++i) \n{\n\tlet run = Api.CreateRun();\n\trun.AddText(fields[i]);\n\tparagraph.AddElement(run);\n\trun.WrapInMailMergeField();\n\tparagraph.AddText(\" \");\n}\nparagraph.AddText(\"!\");\nApi.LoadMailMergeData([fields, [\"Dear\", \"John\", \"Smith\"], [\"Hello\", \"Lara\", \"Davis\"]]);\n\nlet template = Api.GetMailMergeTemplateDocContent();\nlet receptionsCount = Api.GetMailMergeReceptionsCount();\nlet receptions = [];\nfor (let i = 0; i < receptionsCount; ++i) \n{\n\tApi.MailMerge(i, i);\n\treceptions.push(doc.GetElement(0));\n\tApi.ReplaceDocumentContent(template);\n}\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Receptions\");\nparagraph.SetBold(true);\ndoc.Push(paragraph);\ndoc.Push(receptions[0]);\ndoc.Push(receptions[1]);\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"The mail merge process was run twice for each mail merge reception. But the results were replaced with the mail merge template document content. This template allows you to save each mail merge reception to the separate file.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiDocumentContent"
+      },
+      "signature": "GetMailMergeTemplateDocContent(): ApiDocumentContent"
+    },
+    "HexColor": {
+      "description": "Creates a color from a HEX string.",
+      "params": [
+        {
+          "description": "The HEX string representing a color.",
+          "name": "hexString",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "HexColor(hexString: string): ApiColor"
+    },
+    "InchesToPoints": {
+      "description": "Converts inches to points.",
+      "params": [
+        {
+          "description": "The number of inches to convert to points.",
+          "name": "inches",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "InchesToPoints(inches: number): number"
+    },
+    "LinesToPoints": {
+      "description": "Converts lines to points (1 line = 12 points).",
+      "params": [
+        {
+          "description": "The number of lines to convert to points.",
+          "name": "lines",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "LinesToPoints(lines: number): number"
+    },
+    "LoadMailMergeData": {
+      "description": "Loads data for the mail merge.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/LoadMailMergeData/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fields = [\"Greeting line\", \"First name\", \"Last name\"];\nfor (let i = 0; i < fields.length; ++i) \n{\n\tlet run = Api.CreateRun();\n\trun.AddText(fields[i]);\n\tparagraph.AddElement(run);\n\trun.WrapInMailMergeField();\n\tparagraph.AddText(\" \");\n}\nparagraph.AddText(\"!\");\nApi.LoadMailMergeData([fields, [\"Dear\", \"John\", \"Smith\"], [\"Hello\", \"Lara\", \"Davis\"]]);\nApi.MailMerge();"
+      ],
+      "params": [
+        {
+          "description": "Mail merge data. The first element of the array is the array with names of the merge fields.\rThe rest of the array elements are arrays with values for the merge fields.",
+          "name": "data",
+          "type": "string[][]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "LoadMailMergeData(data: string[][]): boolean"
+    },
+    "MailMerge": {
+      "description": "Starts the mail merge process.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/MailMerge/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fields = [\"Greeting line\", \"First name\", \"Last name\"];\nfor (let i = 0; i < fields.length; ++i) \n{\n\tlet run = Api.CreateRun();\n\trun.AddText(fields[i]);\n\tparagraph.AddElement(run);\n\trun.WrapInMailMergeField();\n\tparagraph.AddText(\" \");\n}\nparagraph.AddText(\"!\");\nApi.LoadMailMergeData([fields, [\"Dear\", \"John\", \"Smith\"], [\"Hello\", \"Lara\", \"Davis\"]]);\nApi.MailMerge(1);"
+      ],
+      "params": [
+        {
+          "description": "The start index of the document for mail merge process.",
+          "name": "startIndex",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The end index of the document for mail merge process.",
+          "name": "endIndex",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MailMerge(startIndex?: number, endIndex?: number): boolean"
+    },
+    "MergeDocuments": {
+      "description": "Merges the current document with another document opened via builderJS.OpenTmpFile. Its contents are merged into the current document.",
+      "params": [
+        {
+          "description": "The second document, returned by builderJS.OpenTmpFile.",
+          "name": "file",
+          "type": "object"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "MergeDocuments(file: object): void"
+    },
+    "MillimetersToEmus": {
+      "description": "Converts millimeters to English Metric Units (EMUs).\nThe result is an integer value.",
+      "params": [
+        {
+          "description": "The value in millimeters.",
+          "name": "mm",
+          "type": "mm"
+        }
+      ],
+      "returns": {
+        "description": "The value in English Metric Units (EMUs), as an integer.",
+        "type": "EMU"
+      },
+      "signature": "MillimetersToEmus(mm: mm): EMU"
+    },
+    "MillimetersToPixels": {
+      "description": "Converts millimeters to pixels.",
+      "params": [
+        {
+          "description": "The number of millimeters to convert to pixels.",
+          "name": "mm",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "MillimetersToPixels(mm: number): number"
+    },
+    "MillimetersToPoints": {
+      "description": "Converts millimeters to points.",
+      "params": [
+        {
+          "description": "The number of millimeters to convert to points.",
+          "name": "mm",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "MillimetersToPoints(mm: number): number"
+    },
+    "PicasToPoints": {
+      "description": "Converts picas to points.",
+      "params": [
+        {
+          "description": "The number of picas to convert to points.",
+          "name": "pc",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PicasToPoints(pc: number): number"
+    },
+    "PixelsToEmus": {
+      "description": "Converts pixels to EMUs (English Metric Units).",
+      "params": [
+        {
+          "description": "The number of pixels to convert to EMUs.",
+          "name": "px",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PixelsToEmus(px: number): number"
+    },
+    "PixelsToPoints": {
+      "description": "Converts pixels to points.",
+      "params": [
+        {
+          "description": "The number of pixels to convert to points.",
+          "name": "px",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PixelsToPoints(px: number): number"
+    },
+    "PointsToCentimeters": {
+      "description": "Converts points to centimeters.",
+      "params": [
+        {
+          "description": "The number of points to convert to centimeters.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToCentimeters(pt: number): number"
+    },
+    "PointsToEmus": {
+      "description": "Converts points to EMUs (English Metric Units).",
+      "params": [
+        {
+          "description": "The number of points to convert to EMUs.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToEmus(pt: number): number"
+    },
+    "PointsToInches": {
+      "description": "Converts points to inches.",
+      "params": [
+        {
+          "description": "The number of points to convert to inches.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToInches(pt: number): number"
+    },
+    "PointsToLines": {
+      "description": "Converts points to lines (1 line = 12 points).",
+      "params": [
+        {
+          "description": "The number of points to convert to lines.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToLines(pt: number): number"
+    },
+    "PointsToMillimeters": {
+      "description": "Converts points to millimeters.",
+      "params": [
+        {
+          "description": "The number of points to convert to millimeters.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToMillimeters(pt: number): number"
+    },
+    "PointsToPicas": {
+      "description": "Converts points to picas (1 pica = 12 points).",
+      "params": [
+        {
+          "description": "The number of points to convert to picas.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToPicas(pt: number): number"
+    },
+    "PointsToPixels": {
+      "description": "Converts points to pixels.",
+      "params": [
+        {
+          "description": "The number of points to convert to pixels.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToPixels(pt: number): number"
+    },
+    "PointsToTwips": {
+      "description": "Converts points to twips.",
+      "params": [
+        {
+          "description": "The number of points to convert to twips.",
+          "name": "pt",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "PointsToTwips(pt: number): number"
+    },
+    "RGB": {
+      "description": "Creates an RGB color from red, green and blue components.",
+      "params": [
+        {
+          "description": "Red component (0-255).",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green component (0-255).",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue component (0-255).",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "RGB(r: number, g: number, b: number): ApiColor"
+    },
+    "RGBA": {
+      "description": "Creates an RGBA color from red, green, blue and alpha components.",
+      "params": [
+        {
+          "description": "Red component (0-255).",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green component (0-255).",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue component (0-255).",
+          "name": "b",
+          "type": "number"
+        },
+        {
+          "description": "Alpha component (0-255).",
+          "name": "a",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "RGBA(r: number, g: number, b: number, a: number): ApiColor"
+    },
+    "ReplaceDocumentContent": {
+      "description": "Replaces the main document content with another document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/ReplaceDocumentContent/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fields = [\"Greeting line\", \"First name\", \"Last name\"];\nfor (let i = 0; i < fields.length; ++i) \n{\n\tlet run = Api.CreateRun();\n\trun.AddText(fields[i]);\n\tparagraph.AddElement(run);\n\trun.WrapInMailMergeField();\n\tparagraph.AddText(\" \");\n}\nparagraph.AddText(\"!\");\nApi.LoadMailMergeData([fields, [\"Dear\", \"John\", \"Smith\"], [\"Hello\", \"Lara\", \"Davis\"]]);\n\nlet template = Api.GetMailMergeTemplateDocContent();\nlet receptionsCount = Api.GetMailMergeReceptionsCount();\nlet receptions = [];\nfor (let i = 0; i < receptionsCount; ++i) \n{\n\tApi.MailMerge(i, i);\n\treceptions.push(doc.GetElement(0));\n\tApi.ReplaceDocumentContent(template);\n}\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Receptions\");\nparagraph.SetBold(true);\ndoc.Push(paragraph);\ndoc.Push(receptions[0]);\ndoc.Push(receptions[1]);\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"The mail merge process was run twice for each mail merge reception. But the results were replaced with the mail merge template document content. This template allows you to save each mail merge reception to the separate file.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The document content which the main document content will be replaced with.",
+          "name": "documentContent",
+          "type": "ApiDocumentContent"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ReplaceDocumentContent(documentContent: ApiDocumentContent): boolean"
+    },
+    "ReplaceTextSmart": {
+      "description": "Replaces each paragraph (or text in cell) in the select with the corresponding text from an array of strings.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/ReplaceTextSmart/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the normal text. \");\nparagraph.AddText(\"The is bold text. \").SetBold(true);\nparagraph.AddText(\"This is italic text.\").SetItalic(true);\n\nparagraph.GetRange().Select();\nApi.ReplaceTextSmart([\"This is the normal text. This bold text was smart replaced. This is italic text.\"]);"
+      ],
+      "params": [
+        {
+          "description": "An array of replacement strings.",
+          "name": "textStrings",
+          "type": "string[]"
+        },
+        {
+          "description": "A character which is used to specify the tab in the source text.",
+          "name": "tab",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "A character which is used to specify the line break character in the source text.",
+          "name": "newLine",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean"
+    },
+    "Save": {
+      "description": "Saves changes to the specified document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/Save/",
+      "examples": [
+        "let paragraph = Api.GetDocument().GetElement(0);\nparagraph.AddText(\"This sample text is saved to the document.\");\nApi.Save();"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Save(): boolean"
+    },
+    "ThemeColor": {
+      "description": "Creates a theme color.",
+      "params": [
+        {
+          "description": "The theme color name. If the provided name is not supported, the 'tx1' color will be used.",
+          "name": "name",
+          "optional": true,
+          "type": "SchemeColorId"
+        }
+      ],
+      "returns": {
+        "description": "Instance of ApiColor with 'theme' type.",
+        "type": "ApiColor"
+      },
+      "signature": "ThemeColor(name?: SchemeColorId): ApiColor"
+    },
+    "TwipsToPoints": {
+      "description": "Converts twips to points.",
+      "params": [
+        {
+          "description": "The number of twips to convert to points.",
+          "name": "twips",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "TwipsToPoints(twips: number): number"
+    },
+    "attachEvent": {
+      "description": "Subscribes to the specified event and calls the callback function when the event fires.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/attachEvent/",
+      "examples": [
+        "Api.attachEvent(\"asc_onHyperlinkClick\", function() {\n\tconsole.log(\"HYPERLINK!!!\");\n});"
+      ],
+      "params": [
+        {
+          "description": "The event name.",
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "description": "Function to be called when the event fires.",
+          "name": "callback",
+          "type": "(...args: unknown[]) => unknown"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "attachEvent(eventName: string, callback: (...args: unknown[]) => unknown): boolean"
+    },
+    "detachEvent": {
+      "description": "Unsubscribes from the specified event.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/detachEvent/",
+      "examples": [
+        "Api.detachEvent(\"asc_onHyperlinkClick\");"
+      ],
+      "params": [
+        {
+          "description": "The event name.",
+          "name": "eventName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "detachEvent(eventName: string): boolean"
+    }
+  }
+}

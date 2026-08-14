@@ -1,0 +1,9 @@
+{
+  "description": "Returns the custom tab stops of the current paragraph.",
+  "params": [],
+  "returns": {
+    "type": "TabStop[]"
+  },
+  "signature": "GetTabs(): TabStop[]",
+  "since": "9.4.0"
+}

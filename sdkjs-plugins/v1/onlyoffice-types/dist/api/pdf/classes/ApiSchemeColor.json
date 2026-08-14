@@ -1,0 +1,16 @@
+{
+  "description": "Class representing a Scheme Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiSchemeColor class.",
+      "params": [],
+      "returns": {
+        "type": "\"schemeColor\""
+      },
+      "signature": "GetClassType(): \"schemeColor\""
+    }
+  }
+}

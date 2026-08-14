@@ -1,0 +1,56 @@
+{
+  "description": "Class representing a hide-show action.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiHideShowFormsAction class.",
+      "params": [],
+      "returns": {
+        "type": "\"hideShowAction\""
+      },
+      "signature": "GetClassType(): \"hideShowAction\""
+    },
+    "GetNames": {
+      "description": "Gets names of fields to hide",
+      "params": [],
+      "returns": {
+        "type": "string[]"
+      },
+      "signature": "GetNames(): string[]"
+    },
+    "IsHide": {
+      "description": "Checks if action hide fields",
+      "params": [],
+      "returns": {
+        "description": "if false then show fields",
+        "type": "boolean"
+      },
+      "signature": "IsHide(): boolean"
+    },
+    "SetHide": {
+      "description": "Sets action hide fields",
+      "params": [
+        {
+          "name": "isHide",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHide(isHide: boolean): boolean"
+    },
+    "SetNames": {
+      "description": "Sets names of fields to hide",
+      "params": [
+        {
+          "name": "names",
+          "type": "string[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetNames(names: string[]): boolean"
+    }
+  }
+}

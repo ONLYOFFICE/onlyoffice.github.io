@@ -1,0 +1,19 @@
+{
+  "description": "Returns the number of sheets in a reference.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SHEETS/",
+  "examples": [
+    "// Add more sheets\nApi.AddSheet(\"Sheet2\")\nApi.AddSheet(\"Sheet3\")\n\n// Get the number of sheets\nlet func = Api.GetWorksheetFunction();\nlet result = func.SHEETS();\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"C3\").SetValue(result);"
+  ],
+  "params": [
+    {
+      "description": "A reference for which the number of sheets will be returned. If omitted the number of sheets in the workbook containing the function is returned.",
+      "name": "arg1",
+      "optional": true,
+      "type": "ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SHEETS(arg1?: ApiRange | ApiName): number"
+}

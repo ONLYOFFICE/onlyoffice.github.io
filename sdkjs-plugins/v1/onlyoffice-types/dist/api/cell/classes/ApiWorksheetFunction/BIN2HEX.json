@@ -1,0 +1,24 @@
+{
+  "description": "Converts a binary number to hexadecimal.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BIN2HEX/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BIN2HEX(1110011100, 4));"
+  ],
+  "params": [
+    {
+      "description": "The binary number which will be convertrd.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of characters to use.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BIN2HEX(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number"
+}

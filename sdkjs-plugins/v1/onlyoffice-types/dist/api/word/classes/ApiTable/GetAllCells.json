@@ -1,0 +1,9 @@
+{
+  "description": "Returns a collection of all cells in the table.",
+  "params": [],
+  "returns": {
+    "type": "ApiTableCell[]"
+  },
+  "signature": "GetAllCells(): ApiTableCell[]",
+  "since": "9.4.0"
+}

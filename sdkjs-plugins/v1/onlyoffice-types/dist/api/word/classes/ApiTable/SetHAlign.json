@@ -1,0 +1,19 @@
+{
+  "description": "Sets the horizontal alignment to the table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetHAlign/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\ntable.GetCell(0, 0).GetContent().GetElement(0).AddText(\"This is just a sample text.\");\ntable.SetHAlign(\"center\");"
+  ],
+  "params": [
+    {
+      "description": "Horizontal alignment type: may be \"left\" or \"center\" or \"right\".",
+      "name": "sType",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetHAlign(sType: string): boolean"
+}

@@ -1,0 +1,55 @@
+{
+  "description": "Class representing a reset form action.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiResetFormsAction class.",
+      "params": [],
+      "returns": {
+        "type": "\"resetFormsAction\""
+      },
+      "signature": "GetClassType(): \"resetFormsAction\""
+    },
+    "GetNames": {
+      "description": "Gets names of fields to reset",
+      "params": [],
+      "returns": {
+        "type": "string[]"
+      },
+      "signature": "GetNames(): string[]"
+    },
+    "IsAllExcept": {
+      "description": "Will all fields be reset except the fields whose names are specified",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsAllExcept(): boolean"
+    },
+    "SetAllExcept": {
+      "description": "Sets all fields be reset except the fields whose names are specified",
+      "params": [
+        {
+          "name": "isAllExcept",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetAllExcept(isAllExcept: boolean): boolean"
+    },
+    "SetNames": {
+      "description": "Sets names of fields to reset",
+      "params": [
+        {
+          "name": "names",
+          "type": "string[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetNames(names: string[]): boolean"
+    }
+  }
+}

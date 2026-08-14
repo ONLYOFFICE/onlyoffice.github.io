@@ -1,0 +1,10 @@
+{
+  "description": "Forces a page break before the paragraph.",
+  "params": [],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "AddPageBreakBefore(): ApiParagraph",
+  "since": "9.4.0"
+}

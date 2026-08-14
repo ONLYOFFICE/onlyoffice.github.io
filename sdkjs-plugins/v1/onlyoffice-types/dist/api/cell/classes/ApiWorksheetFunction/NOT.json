@@ -1,0 +1,18 @@
+{
+  "description": "Checks if the specified logical value is **true** or **false**. The function returns **true** if the argument is **false** and **false** if the argument is **true**.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NOT/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet condition = 12 < 100;\nlet func = Api.GetWorksheetFunction();\nlet ans = func.NOT(condition);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A value or expression that can be evaluated to **true** or **false**.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number | string | boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "NOT(arg1: ApiRange | ApiName | number | string | boolean): boolean"
+}

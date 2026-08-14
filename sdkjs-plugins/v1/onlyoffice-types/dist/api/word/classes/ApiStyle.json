@@ -1,0 +1,266 @@
+{
+  "description": "Class representing a style.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiStyle class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.GetStyle(\"Bordered\");\ntableStyle.SetName(\"My Custom Style\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet classType = tableStyle.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class Type = \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"style\""
+      },
+      "signature": "GetClassType(): \"style\""
+    },
+    "GetConditionalTableStyle": {
+      "description": "Returns a set of formatting properties which will be conditionally applied to the parts of a table that match the \nrequirement specified in the sType parameter.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetConditionalTableStyle/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ndoc.Push(table);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntable.SetStyle(tableStyle);\ntable.SetTableLook(true, true, true, true, true, true);\ntableStyle.GetTablePr().SetTableBorderTop(\"single\", 4, 0, 51, 51, 51);\ntableStyle.GetTablePr().SetTableBorderBottom(\"single\", 4, 0, 51, 51, 51);\ntableStyle.GetTablePr().SetTableBorderLeft(\"single\", 4, 0, 51, 51, 51);\ntableStyle.GetTablePr().SetTableBorderRight(\"single\", 4, 0, 51, 51, 51);\ntableStyle.GetTablePr().SetTableBorderInsideV(\"single\", 4, 0, 255, 111, 61);\ntableStyle.GetTablePr().SetTableBorderInsideH(\"single\", 4, 0, 255, 111, 61);\ntableStyle.GetConditionalTableStyle(\"bandedColumn\").GetTextPr().SetItalic(true);\nlet cellContent = table.GetRow(0).GetCell(0).GetContent();\nlet paragraph = cellContent.GetElement(0);\nparagraph.AddText(\"This cell font is set to italic\");\ncellContent = table.GetRow(1).GetCell(0).GetContent();\nparagraph = cellContent.GetElement(0);\nparagraph.AddText(\"This cell font is also set to italic\");\ncellContent = table.GetRow(0).GetCell(1).GetContent();\nparagraph = cellContent.GetElement(0);\nparagraph.AddText(\"This cell font remains default\");\ncellContent = table.GetRow(1).GetCell(1).GetContent();\nparagraph = cellContent.GetElement(0);\nparagraph.AddText(\"This cell font also remains default\");"
+      ],
+      "params": [
+        {
+          "description": "The table part which the formatting properties must be applied to.",
+          "name": "sType",
+          "optional": true,
+          "type": "TableStyleOverrideType"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableStylePr"
+      },
+      "signature": "GetConditionalTableStyle(sType?: TableStyleOverrideType): ApiTableStylePr"
+    },
+    "GetName": {
+      "description": "Returns a name of the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetName/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.GetStyle(\"Bordered\");\ntableStyle.SetName(\"My Custom Style\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet tableStyleName = tableStyle.GetName();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Table style name = \" + tableStyleName);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string"
+    },
+    "GetParaPr": {
+      "description": "Returns the paragraph properties of the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetParaPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet normalStyle = doc.GetDefaultStyle(\"paragraph\");\nlet paraPr = normalStyle.GetParaPr();\nparaPr.SetSpacingLine(480, \"auto\");\nparaPr.SetJc(\"both\");\nparaPr.SetIndFirstLine(720);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the line spacing, text justification and indent set using the paragraph style. \");\nparagraph.AddText(\"We do not change the style of the paragraph itself. \");\nparagraph.AddText(\"Only document-wide paragraph styles are applied.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiParaPr"
+      },
+      "signature": "GetParaPr(): ApiParaPr"
+    },
+    "GetTableCellPr": {
+      "description": "Returns the table cell properties of the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetTableCellPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\nlet table = Api.CreateTable(2, 3);\ntable.SetWidth(\"percent\", 100);\ndoc.Push(table);\ntable.SetStyle(tableStyle);\ntable.SetTableLook(true, true, true, true, true, true);\ntableStyle.GetConditionalTableStyle(\"topLeftCell\").GetTableCellPr().SetShd(\"clear\", 255, 111, 61);\ntableStyle.GetConditionalTableStyle(\"topRightCell\").GetTableCellPr().SetShd(\"clear\", 51, 51, 51);\ntableStyle.GetConditionalTableStyle(\"bottomLeftCell\").GetTableCellPr().SetShd(\"clear\", 128, 128, 128);\ntableStyle.GetConditionalTableStyle(\"bottomRightCell\").GetTableCellPr().SetShd(\"clear\", 255, 213, 191);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTableCellPr"
+      },
+      "signature": "GetTableCellPr(): ApiTableCellPr"
+    },
+    "GetTablePr": {
+      "description": "Returns the table properties of the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetTablePr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\nlet tablePr = tableStyle.GetTablePr();\ntablePr.SetTableInd(0);\ntablePr.SetTableCellMarginTop(720);\ntablePr.SetTableCellMarginLeft(120);\ntablePr.SetTableCellMarginRight(120);\ntablePr.SetTableCellMarginBottom(0);\ndoc.Push(table);\ntable.SetStyle(tableStyle);\ntable.SetTableLook(true, true, true, true, true, true);\ntableStyle.GetConditionalTableStyle(\"topLeftCell\").GetTableCellPr().SetShd(\"clear\", 255, 111, 61);\ntableStyle.GetConditionalTableStyle(\"topRightCell\").GetTableCellPr().SetShd(\"clear\", 51, 51, 51);\ntableStyle.GetConditionalTableStyle(\"bottomLeftCell\").GetTableCellPr().SetShd(\"clear\", 128, 128, 128);\ntableStyle.GetConditionalTableStyle(\"bottomRightCell\").GetTableCellPr().SetShd(\"clear\", 255, 213, 191);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "If the type of this style is not a `\"table\"` then it will return\r    `null`.",
+        "type": "ApiTablePr"
+      },
+      "signature": "GetTablePr(): ApiTablePr"
+    },
+    "GetTableRowPr": {
+      "description": "Returns the table row properties of the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetTableRowPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ndoc.Push(table);\ntable.SetStyle(tableStyle);\ntable.SetTableLook(true, true, true, true, false, false);\ntableStyle.GetTableRowPr().SetHeight(\"atLeast\", 1440);\ntableStyle.GetConditionalTableStyle(\"topLeftCell\").GetTableCellPr().SetShd(\"clear\", 255, 111, 61);\ntableStyle.GetConditionalTableStyle(\"topRightCell\").GetTableCellPr().SetShd(\"clear\", 51, 51, 51);\ntableStyle.GetConditionalTableStyle(\"bottomLeftCell\").GetTableCellPr().SetShd(\"clear\", 128, 128, 128);\ntableStyle.GetConditionalTableStyle(\"bottomRightCell\").GetTableCellPr().SetShd(\"clear\", 255, 213, 191);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "If the type of this style is not a `\"table\"` then it will return\r    `null`.",
+        "type": "ApiTableRowPr"
+      },
+      "signature": "GetTableRowPr(): ApiTableRowPr"
+    },
+    "GetTextPr": {
+      "description": "Returns the text properties of the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetTextPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet normalStyle = doc.GetDefaultStyle(\"paragraph\");\nlet textPr = normalStyle.GetTextPr();\ntextPr.SetColor(0x26, 0x26, 0x26, false);\ntextPr.SetFontFamily(\"Calibri Light\");\ntextPr.SetFontSize(32);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text color, font family and font size set using the text style. \");\nparagraph.AddText(\"We do not change the style of the paragraph itself. \");\nparagraph.AddText(\"Only document-wide text styles are applied.\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "GetTextPr(): ApiTextPr"
+    },
+    "GetType": {
+      "description": "Returns a type of the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/GetType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.GetStyle(\"Bordered\");\ntableStyle.SetName(\"My Custom Style\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet tableStyleType = tableStyle.GetType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Style type = \" + tableStyleType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "StyleType"
+      },
+      "signature": "GetType(): StyleType"
+    },
+    "SetBasedOn": {
+      "description": "Specifies the reference to the parent style which this style inherits from in the style hierarchy.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/SetBasedOn/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "The parent style which the style inherits properties from.",
+          "name": "oStyle",
+          "type": "ApiStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBasedOn(oStyle: ApiStyle): boolean"
+    },
+    "SetConditionalTableStyle": {
+      "description": "Sets conditional formatting properties that are applied to table parts matching the specified table style type.",
+      "params": [
+        {
+          "description": "The conditional table style properties.",
+          "name": "oTableStylePr",
+          "type": "ApiTableStylePr"
+        }
+      ],
+      "returns": {
+        "description": "The current style.",
+        "type": "ApiStyle"
+      },
+      "signature": "SetConditionalTableStyle(oTableStylePr: ApiTableStylePr): ApiStyle"
+    },
+    "SetName": {
+      "description": "Sets a name of the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/SetName/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.GetStyle(\"Bordered\");\ntableStyle.SetName(\"My Custom Style\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet tableStyleName = tableStyle.GetName();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Table style name = \" + tableStyleName);"
+      ],
+      "params": [
+        {
+          "description": "The name which will be used for the current style.",
+          "name": "sStyleName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetName(sStyleName: string): boolean"
+    },
+    "SetParaPr": {
+      "description": "Sets the paragraph properties to the current style.",
+      "params": [
+        {
+          "description": "The paragraph properties that will be set.",
+          "name": "paraPr",
+          "type": "ApiParaPr"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiStyle"
+      },
+      "signature": "SetParaPr(paraPr: ApiParaPr): ApiStyle"
+    },
+    "SetTableCellPr": {
+      "description": "Sets the table cell properties to the current style.",
+      "params": [
+        {
+          "description": "The table cell properties that will be set.",
+          "name": "tableCellPr",
+          "type": "ApiTableCellPr"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiStyle"
+      },
+      "signature": "SetTableCellPr(tableCellPr: ApiTableCellPr): ApiStyle"
+    },
+    "SetTablePr": {
+      "description": "Sets the table properties to the current style.",
+      "params": [
+        {
+          "description": "The table properties that will be set.",
+          "name": "tablePr",
+          "type": "ApiTablePr"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiStyle"
+      },
+      "signature": "SetTablePr(tablePr: ApiTablePr): ApiStyle"
+    },
+    "SetTableRowPr": {
+      "description": "Sets the table row properties to the current style.",
+      "params": [
+        {
+          "description": "The table row properties that will be set.",
+          "name": "tableRowPr",
+          "type": "ApiTableRowPr"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiStyle"
+      },
+      "signature": "SetTableRowPr(tableRowPr: ApiTableRowPr): ApiStyle"
+    },
+    "SetTextPr": {
+      "description": "Sets the text properties to the current style.",
+      "params": [
+        {
+          "description": "The text properties that will be set.",
+          "name": "textPr",
+          "type": "ApiTextPr"
+        }
+      ],
+      "returns": {
+        "description": "this",
+        "type": "ApiStyle"
+      },
+      "signature": "SetTextPr(textPr: ApiTextPr): ApiStyle"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiStyle object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet tableStyle = doc.GetStyle(\"Bordered\");\nlet json = tableStyle.ToJSON(false);\nlet styleFromJSON = Api.FromJSON(json);\nstyleFromJSON.SetName(\"My Custom Style\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(styleFromJSON);\ndoc.Push(table);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the used numberings will be written to the JSON object or not.",
+          "name": "bWriteNumberings",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteNumberings: boolean): object"
+    }
+  }
+}

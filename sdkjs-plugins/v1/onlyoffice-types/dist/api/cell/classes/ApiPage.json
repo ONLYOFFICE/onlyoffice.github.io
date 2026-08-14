@@ -1,0 +1,59 @@
+{
+  "description": "Class representing the header and footer of a specific page type (even or first) of a worksheet.",
+  "methods": {
+    "GetCenterFooter": {
+      "description": "Returns the center footer section of this page type.",
+      "params": [],
+      "returns": {
+        "type": "ApiHeaderFooter"
+      },
+      "signature": "GetCenterFooter(): ApiHeaderFooter",
+      "since": "9.5.0"
+    },
+    "GetCenterHeader": {
+      "description": "Returns the center header section of this page type.",
+      "params": [],
+      "returns": {
+        "type": "ApiHeaderFooter"
+      },
+      "signature": "GetCenterHeader(): ApiHeaderFooter",
+      "since": "9.5.0"
+    },
+    "GetLeftFooter": {
+      "description": "Returns the left footer section of this page type.",
+      "params": [],
+      "returns": {
+        "type": "ApiHeaderFooter"
+      },
+      "signature": "GetLeftFooter(): ApiHeaderFooter",
+      "since": "9.5.0"
+    },
+    "GetLeftHeader": {
+      "description": "Returns the left header section of this page type.",
+      "params": [],
+      "returns": {
+        "type": "ApiHeaderFooter"
+      },
+      "signature": "GetLeftHeader(): ApiHeaderFooter",
+      "since": "9.5.0"
+    },
+    "GetRightFooter": {
+      "description": "Returns the right footer section of this page type.",
+      "params": [],
+      "returns": {
+        "type": "ApiHeaderFooter"
+      },
+      "signature": "GetRightFooter(): ApiHeaderFooter",
+      "since": "9.5.0"
+    },
+    "GetRightHeader": {
+      "description": "Returns the right header section of this page type.",
+      "params": [],
+      "returns": {
+        "type": "ApiHeaderFooter"
+      },
+      "signature": "GetRightHeader(): ApiHeaderFooter",
+      "since": "9.5.0"
+    }
+  }
+}

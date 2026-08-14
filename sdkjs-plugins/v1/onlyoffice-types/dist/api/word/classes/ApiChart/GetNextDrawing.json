@@ -1,0 +1,9 @@
+{
+  "description": "Returns the next inline drawing object if exists.",
+  "params": [],
+  "returns": {
+    "description": "returns null if drawing object is last.",
+    "type": "ApiDrawing | null"
+  },
+  "signature": "GetNextDrawing(): ApiDrawing | null"
+}

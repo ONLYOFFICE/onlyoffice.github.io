@@ -1,0 +1,18 @@
+{
+  "description": "Returns the square root of a complex number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMSQRT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMSQRT(\"-2+2.5i\"));"
+  ],
+  "params": [
+    {
+      "description": "A complex number expressed in the *x + yi* or *x + yj* form.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMSQRT(arg1: ApiRange | ApiName | number): number"
+}

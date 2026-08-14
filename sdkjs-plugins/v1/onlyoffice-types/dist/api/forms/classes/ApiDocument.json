@@ -1,0 +1,183 @@
+{
+  "description": "Class representing a document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/",
+  "extends": [
+    "ApiDocumentContent"
+  ],
+  "methods": {
+    "ClearAllFields": {
+      "description": "Clears all forms in the document.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ClearAllFields(): boolean"
+    },
+    "GetAllForms": {
+      "description": "Returns all existing forms in the document.",
+      "params": [],
+      "returns": {
+        "type": "ApiForm[]"
+      },
+      "signature": "GetAllForms(): ApiForm[]"
+    },
+    "GetFormKeysByRole": {
+      "description": "Returns a list of all form keys attached to the specified role.",
+      "params": [
+        {
+          "description": "The form role.",
+          "name": "role",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "A list of all form keys attached to the specified role.",
+        "type": "string[]"
+      },
+      "signature": "GetFormKeysByRole(role: string): string[]",
+      "since": "9.0.0"
+    },
+    "GetFormRoles": {
+      "description": "Returns a collection of form roles.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormRoles/",
+      "params": [],
+      "returns": {
+        "type": "ApiFormRoles"
+      },
+      "signature": "GetFormRoles(): ApiFormRoles",
+      "since": "9.0.0"
+    },
+    "GetFormValueByKey": {
+      "description": "Returns the form value for the specified key. For a group of radio buttons returns Choice, i.e. the name of the selected item.",
+      "params": [
+        {
+          "description": "The form key.",
+          "name": "key",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true/false for checkboxes and string for other form types. Returns null if\rthere is no form with the specified key.",
+        "type": "null | boolean | string"
+      },
+      "signature": "GetFormValueByKey(key: string): null | boolean | string",
+      "since": "9.0.0"
+    },
+    "GetFormsByKey": {
+      "description": "Returns a list of all forms in the document with the specified key.",
+      "params": [
+        {
+          "description": "The form key.",
+          "name": "key",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiForm[]"
+      },
+      "signature": "GetFormsByKey(key: string): ApiForm[]",
+      "since": "9.0.0"
+    },
+    "GetFormsByRole": {
+      "description": "Returns a list of all forms in the document with the specified role name.",
+      "params": [
+        {
+          "description": "The form role.",
+          "name": "role",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiForm[]"
+      },
+      "signature": "GetFormsByRole(role: string): ApiForm[]",
+      "since": "9.0.0"
+    },
+    "GetFormsByTag": {
+      "description": "Returns a list of all forms in the document with the specified tag name.",
+      "params": [
+        {
+          "description": "Form tag.",
+          "name": "sTag",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiForm[]"
+      },
+      "signature": "GetFormsByTag(sTag: string): ApiForm[]"
+    },
+    "GetFormsData": {
+      "description": "Returns the data from all forms present in the current document.\nIf a form was created and not assigned to any part of the document, it won't appear in this list.",
+      "params": [],
+      "returns": {
+        "type": "FormData[]"
+      },
+      "signature": "GetFormsData(): FormData[]",
+      "since": "8.0.0"
+    },
+    "GetFormsHighlight": {
+      "description": "Returns the highlight color of the forms in the document.",
+      "params": [],
+      "returns": {
+        "description": "Returns the highlight color, or _null_ if the highlight is disabled.",
+        "type": "ApiColor | null"
+      },
+      "signature": "GetFormsHighlight(): ApiColor | null",
+      "since": "9.4.0"
+    },
+    "GetTagsOfAllForms": {
+      "description": "Returns a list of all tags that are used for all forms in the document.",
+      "params": [],
+      "returns": {
+        "type": "string[]"
+      },
+      "signature": "GetTagsOfAllForms(): string[]"
+    },
+    "InsertTextForm": {
+      "description": "Inserts a text box with the specified text box properties over the selected text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/InsertTextForm/",
+      "params": [
+        {
+          "description": "Properties for inserting a text field.",
+          "name": "formPr",
+          "type": "TextFormInsertPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextForm"
+      },
+      "signature": "InsertTextForm(formPr: TextFormInsertPr): ApiTextForm"
+    },
+    "SetFormsData": {
+      "description": "Sets the data to the specified forms.",
+      "params": [
+        {
+          "description": "An array of form data to set to the specified forms.",
+          "name": "arrData",
+          "type": "FormData[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFormsData(arrData: FormData[]): boolean",
+      "since": "8.0.0"
+    },
+    "SetFormsHighlight": {
+      "description": "Sets the highlight to the forms in the document.",
+      "params": [
+        {
+          "description": "The highlight color for the forms.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFormsHighlight(color: ApiColor): boolean",
+      "since": "9.1.0"
+    }
+  }
+}

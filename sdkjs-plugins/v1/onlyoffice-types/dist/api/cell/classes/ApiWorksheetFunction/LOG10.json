@@ -1,0 +1,18 @@
+{
+  "description": "Returns the base-10 logarithm of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOG10/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LOG10(56));"
+  ],
+  "params": [
+    {
+      "description": "The positive real number for which the base-10 logarithm will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LOG10(arg1: ApiRange | ApiName | number): number"
+}

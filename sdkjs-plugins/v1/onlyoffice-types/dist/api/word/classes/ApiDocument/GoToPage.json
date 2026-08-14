@@ -1,0 +1,15 @@
+{
+  "description": "Moves a cursor to the start of the specified page in the document.",
+  "params": [
+    {
+      "description": "The page index.",
+      "name": "index",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "GoToPage(index: number): boolean",
+  "since": "9.1.0"
+}

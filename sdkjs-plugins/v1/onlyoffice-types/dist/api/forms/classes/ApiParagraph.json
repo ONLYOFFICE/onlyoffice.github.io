@@ -1,0 +1,6 @@
+{
+  "description": "Class representing a paragraph.",
+  "extends": [
+    "ApiParaPr"
+  ]
+}

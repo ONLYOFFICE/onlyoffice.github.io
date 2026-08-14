@@ -1,0 +1,18 @@
+{
+  "description": "Returns the number of characters in a text string.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LEN/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LEN(\"Online Office\"));"
+  ],
+  "params": [
+    {
+      "description": "The text whose length will be returned. Spaces are considered as characters.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LEN(arg1: ApiRange | ApiName | string): number"
+}

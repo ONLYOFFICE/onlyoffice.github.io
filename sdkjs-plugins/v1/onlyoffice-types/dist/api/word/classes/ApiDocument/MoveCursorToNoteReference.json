@@ -1,0 +1,16 @@
+{
+  "description": "Moves the cursor to the reference of this footnote/endnote in the main document. If this document content is not a footnote/endnote, does nothing.",
+  "params": [
+    {
+      "description": "Specifies whether to place the cursor before (_true_) or after (_false_) the note reference.",
+      "name": "isBefore",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "Returns _true_ if the cursor was moved to the reference successfully.",
+    "type": "boolean"
+  },
+  "signature": "MoveCursorToNoteReference(isBefore: boolean): boolean",
+  "since": "9.4.0"
+}

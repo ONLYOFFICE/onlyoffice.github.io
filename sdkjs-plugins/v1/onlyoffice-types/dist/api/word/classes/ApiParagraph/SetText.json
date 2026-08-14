@@ -1,0 +1,14 @@
+{
+  "description": "Replaces the paragraph content with the specified text.",
+  "params": [
+    {
+      "description": "The text to set.",
+      "name": "text",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "SetText(text: string): ApiRun"
+}

@@ -1,0 +1,209 @@
+{
+  "description": "Class representing a checkbox field.",
+  "extends": [
+    "ApiBaseField"
+  ],
+  "methods": {
+    "AddOption": {
+      "description": "Adds options to checkbox group.",
+      "params": [
+        {
+          "description": "The page where the option will be added.",
+          "name": "pageIndex",
+          "type": "number"
+        },
+        {
+          "description": "The option rectangle.",
+          "name": "rect",
+          "type": "Rect"
+        },
+        {
+          "description": "The option checked value.",
+          "name": "exportValue",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiCheckboxWidget"
+      },
+      "signature": "AddOption(pageIndex: number, rect: Rect, exportValue?: string): ApiCheckboxWidget"
+    },
+    "AddWidget": {
+      "description": "Adds new widget - visual representation for field",
+      "params": [
+        {
+          "description": "page index to add widget",
+          "name": "pageIndex",
+          "type": "number"
+        },
+        {
+          "description": "field rect",
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "ApiWidget"
+      },
+      "signature": "AddWidget(pageIndex: number, rect: Rect): ApiWidget"
+    },
+    "Delete": {
+      "description": "Removes field from document.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAllWidgets": {
+      "description": "Gets array with widgets of the current field.",
+      "params": [],
+      "returns": {
+        "description": "returns emptry array if the field is not added to the document.",
+        "type": "ApiWidget[]"
+      },
+      "signature": "GetAllWidgets(): ApiWidget[]"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCheckboxField class.",
+      "params": [],
+      "returns": {
+        "type": "\"checkboxField\""
+      },
+      "signature": "GetClassType(): \"checkboxField\""
+    },
+    "GetFullName": {
+      "description": "Gets field full name.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFullName(): string"
+    },
+    "GetPartialName": {
+      "description": "Gets field partial name.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetPartialName(): string"
+    },
+    "GetValue": {
+      "description": "Gets field value",
+      "params": [],
+      "returns": {
+        "type": "string | string[]"
+      },
+      "signature": "GetValue(): string | string[]"
+    },
+    "IsReadOnly": {
+      "description": "Checks if field is read only",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsReadOnly(): boolean"
+    },
+    "IsRequired": {
+      "description": "Checks if field is required",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsRequired(): boolean"
+    },
+    "IsToggleToOff": {
+      "description": "Checks if the field can be toggled off.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsToggleToOff(): boolean"
+    },
+    "SetFullName": {
+      "description": "Sets new field name if possible.",
+      "params": [
+        {
+          "description": "The new full name for the field.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFullName(name: string): boolean"
+    },
+    "SetPartialName": {
+      "description": "Sets new field partial name.",
+      "params": [
+        {
+          "description": "The new partial name for the field.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPartialName(name: string): boolean"
+    },
+    "SetReadOnly": {
+      "description": "Sets field read only",
+      "params": [
+        {
+          "description": "Specifies whether the field is read-only.",
+          "name": "readOnly",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetReadOnly(readOnly: boolean): boolean"
+    },
+    "SetRequired": {
+      "description": "Sets field required",
+      "params": [
+        {
+          "description": "Specifies whether the field is required.",
+          "name": "required",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRequired(required: boolean): boolean"
+    },
+    "SetToggleToOff": {
+      "description": "Sets whether the checked state can be toggled off.",
+      "params": [
+        {
+          "description": "Specifies whether the checked state can be toggled off.",
+          "name": "allowToggleOff",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetToggleToOff(allowToggleOff: boolean): boolean"
+    },
+    "SetValue": {
+      "description": "Sets field value",
+      "params": [
+        {
+          "description": "The new value for the field.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValue(value: string): boolean"
+    }
+  }
+}

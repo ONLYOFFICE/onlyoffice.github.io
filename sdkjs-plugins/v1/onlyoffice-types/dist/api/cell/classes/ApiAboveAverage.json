@@ -1,0 +1,439 @@
+{
+  "description": "Class representing an above average conditional formatting rule.",
+  "extends": [
+    "ApiFormatCondition"
+  ],
+  "methods": {
+    "Delete": {
+      "description": "Deletes the current format condition.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Delete(): void",
+      "since": "9.1.0"
+    },
+    "GetAboveBelow": {
+      "description": "Returns whether the rule is configured to detect values above or below the average.",
+      "params": [],
+      "returns": {
+        "description": "True if the rule targets above-average values; false if it targets below-average values.",
+        "type": "boolean"
+      },
+      "signature": "GetAboveBelow(): boolean",
+      "since": "9.1.0"
+    },
+    "GetAppliesTo": {
+      "description": "Returns the range of cells to which the current conditional formatting rule applies.",
+      "params": [],
+      "returns": {
+        "description": "The range of cells affected by the current condition, or null if no range is set.",
+        "type": "ApiRange | null"
+      },
+      "signature": "GetAppliesTo(): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "GetDateOperator": {
+      "description": "Returns the date operator for time period conditions.",
+      "params": [],
+      "returns": {
+        "description": "The time period operator that defines how the date condition is evaluated,\ror null if the rule is not date-based.",
+        "type": "XlTimePeriods | null"
+      },
+      "signature": "GetDateOperator(): XlTimePeriods | null",
+      "since": "9.1.0"
+    },
+    "GetFillColor": {
+      "description": "Returns the background color for the format condition. Returns 'No Fill' when the background color of the format condition is null.",
+      "params": [],
+      "returns": {
+        "description": "The background color applied by the format condition, or 'No Fill' if none is set.",
+        "type": "ApiColor | 'No Fill'"
+      },
+      "signature": "GetFillColor(): ApiColor | 'No Fill'",
+      "since": "9.1.0"
+    },
+    "GetFont": {
+      "description": "Returns the font applied by the current format condition.",
+      "params": [],
+      "returns": {
+        "description": "An ApiFont object representing the font applied by the format condition, or null if no font is defined.",
+        "type": "ApiFont | null"
+      },
+      "signature": "GetFont(): ApiFont | null",
+      "since": "9.1.0"
+    },
+    "GetFormula1": {
+      "description": "Returns the first formula used by the current conditional formatting rule.",
+      "params": [],
+      "returns": {
+        "description": "The first formula.",
+        "type": "string"
+      },
+      "signature": "GetFormula1(): string",
+      "since": "9.1.0"
+    },
+    "GetFormula2": {
+      "description": "Returns the second formula used by the current conditional formatting rule.",
+      "params": [],
+      "returns": {
+        "description": "The second formula.",
+        "type": "string"
+      },
+      "signature": "GetFormula2(): string",
+      "since": "9.1.0"
+    },
+    "GetNumStdDev": {
+      "description": "Returns the number of standard deviations from the average.",
+      "params": [],
+      "returns": {
+        "description": "The number of standard deviations from the average.",
+        "type": "number"
+      },
+      "signature": "GetNumStdDev(): number",
+      "since": "9.1.0"
+    },
+    "GetNumberFormat": {
+      "description": "Returns the number format applied to a cell when the conditional formatting rule evaluates to true.",
+      "params": [],
+      "returns": {
+        "description": "The number format.",
+        "type": "string"
+      },
+      "signature": "GetNumberFormat(): string",
+      "since": "9.1.0"
+    },
+    "GetOperator": {
+      "description": "Returns the format condition operator.",
+      "params": [],
+      "returns": {
+        "description": "The format condition operator.",
+        "type": "XlFormatConditionOperator"
+      },
+      "signature": "GetOperator(): XlFormatConditionOperator",
+      "since": "9.1.0"
+    },
+    "GetPTCondition": {
+      "description": "Returns the pivot table condition object.",
+      "params": [],
+      "returns": {
+        "description": "The pivot table condition object.",
+        "type": "PTCondition | null"
+      },
+      "signature": "GetPTCondition(): PTCondition | null",
+      "since": "9.1.0"
+    },
+    "GetParent": {
+      "description": "Returns the parent range object of the current format condition.",
+      "params": [],
+      "returns": {
+        "description": "The parent range object.",
+        "type": "ApiRange"
+      },
+      "signature": "GetParent(): ApiRange",
+      "since": "9.1.0"
+    },
+    "GetPriority": {
+      "description": "Returns the priority value of the conditional formatting rule.",
+      "params": [],
+      "returns": {
+        "description": "The priority value of the conditional formatting rule.",
+        "type": "number"
+      },
+      "signature": "GetPriority(): number",
+      "since": "9.1.0"
+    },
+    "GetScopeType": {
+      "description": "Returns the scope type of the conditional formatting rule.",
+      "params": [],
+      "returns": {
+        "description": "Returns \"xlSelectionScope\" for normal ranges, \"xlDataFieldScope\" for entire worksheet, \"xlFieldsScope\" for pivot tables.",
+        "type": "XlPivotConditionScope"
+      },
+      "signature": "GetScopeType(): XlPivotConditionScope",
+      "since": "9.1.0"
+    },
+    "GetStopIfTrue": {
+      "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetStopIfTrue(): boolean",
+      "since": "9.5.0"
+    },
+    "GetText": {
+      "description": "Returns the text value used in text-based conditional formatting rules.",
+      "params": [],
+      "returns": {
+        "description": "The text value used in text-based conditional formatting rules.",
+        "type": "string"
+      },
+      "signature": "GetText(): string",
+      "since": "9.1.0"
+    },
+    "GetTextOperator": {
+      "description": "Returns the text operator for text-based conditional formatting rules.",
+      "params": [],
+      "returns": {
+        "description": "The operator defining how the text comparison is performed,\ror null if the rule is not text-based.",
+        "type": "XlContainsOperator | null"
+      },
+      "signature": "GetTextOperator(): XlContainsOperator | null",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the type of the above average conditional formatting rule.",
+      "params": [],
+      "returns": {
+        "description": "The type of the above average conditional formatting rule.",
+        "type": "XlFormatConditionType"
+      },
+      "signature": "GetType(): XlFormatConditionType",
+      "since": "9.1.0"
+    },
+    "Modify": {
+      "description": "Modifies the current format condition with the specified parameters.",
+      "params": [
+        {
+          "description": "The format condition type.",
+          "name": "Type",
+          "optional": true,
+          "type": "XlFormatConditionType"
+        },
+        {
+          "description": "The format condition operator.",
+          "name": "Operator",
+          "optional": true,
+          "type": "XlFormatConditionOperator"
+        },
+        {
+          "description": "The first formula.",
+          "name": "Formula1",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        },
+        {
+          "description": "The second formula.",
+          "name": "Formula2",
+          "optional": true,
+          "type": "string | number | ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "The modified format condition, or null if the rule does not exist.",
+        "type": "ApiFormatCondition | null"
+      },
+      "signature": "Modify(Type?: XlFormatConditionType, Operator?: XlFormatConditionOperator, Formula1?: string | number | ApiRange, Formula2?: string | number | ApiRange): ApiFormatCondition | null",
+      "since": "9.1.0"
+    },
+    "ModifyAppliesToRange": {
+      "description": "Sets the cell range to which the current conditional formatting rule applies.",
+      "params": [
+        {
+          "description": "The range to which the current conditional formatting rule will be applied.",
+          "name": "Range",
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "ModifyAppliesToRange(Range: ApiRange): void",
+      "since": "9.1.0"
+    },
+    "SetAboveBelow": {
+      "description": "Sets whether the rule targets values above or below the average.",
+      "params": [
+        {
+          "description": "True if the rule targets above-average values; false if it targets below-average values.",
+          "name": "aboveBelow",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAboveBelow(aboveBelow: boolean): void",
+      "since": "9.1.0"
+    },
+    "SetBorders": {
+      "description": "Sets the border style for the conditional formatting rule.",
+      "params": [
+        {
+          "description": "Specifies the cell border position.",
+          "name": "bordersIndex",
+          "type": "BordersIndex"
+        },
+        {
+          "description": "Specifies the line style used to form the cell border.",
+          "name": "lineStyle",
+          "type": "LineStyle"
+        },
+        {
+          "description": "The color object which specifies the color to be set to the cell border.",
+          "name": "oColor",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetBorders(bordersIndex: BordersIndex, lineStyle: LineStyle, oColor: ApiColor): void",
+      "since": "9.1.0"
+    },
+    "SetDateOperator": {
+      "description": "Sets the date operator for time period conditions.",
+      "params": [
+        {
+          "description": "The date operator for time period conditions.",
+          "name": "DateOperator",
+          "type": "XlTimePeriods"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetDateOperator(DateOperator: XlTimePeriods): void",
+      "since": "9.1.0"
+    },
+    "SetFillColor": {
+      "description": "Sets the background color to the format condition with the previously created color object.\nSets 'No Fill' when previously created color object is null.",
+      "params": [
+        {
+          "description": "The color object that specifies the background color for the format condition.",
+          "name": "oColor",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetFillColor(oColor: ApiColor): void",
+      "since": "9.1.0"
+    },
+    "SetFirstPriority": {
+      "description": "Sets the priority value for the current conditional formatting rule to \"1\" so that it will be evaluated before all other rules on the worksheet.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetFirstPriority(): void",
+      "since": "9.1.0"
+    },
+    "SetLastPriority": {
+      "description": "Sets the evaluation order for the current conditional formatting rule so it is evaluated after all other rules on the worksheet.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetLastPriority(): void",
+      "since": "9.1.0"
+    },
+    "SetNumStdDev": {
+      "description": "Sets the number of standard deviations from the average.",
+      "params": [
+        {
+          "description": "The number of standard deviations (0 for simple average, positive numbers for deviations).",
+          "name": "numStdDev",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetNumStdDev(numStdDev: number): void",
+      "since": "9.1.0"
+    },
+    "SetNumberFormat": {
+      "description": "Sets the number format applied to a cell when the conditional formatting rule evaluates to true.",
+      "params": [
+        {
+          "description": "The number format code (e.g., \"General\", \"#,##0.00\", etc.)",
+          "name": "NumberFormat",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetNumberFormat(NumberFormat: string): void",
+      "since": "9.1.0"
+    },
+    "SetPriority": {
+      "description": "Sets the priority value of the conditional formatting rule.",
+      "params": [
+        {
+          "description": "The priority value (1-based).",
+          "name": "Priority",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetPriority(Priority: number): void",
+      "since": "9.1.0"
+    },
+    "SetScopeType": {
+      "description": "Sets the scope type for the conditional formatting rule.",
+      "params": [
+        {
+          "description": "The scope type: \"xlSelectionScope\", \"xlDataFieldScope\", or \"xlFieldsScope\".",
+          "name": "ScopeType",
+          "type": "XlPivotConditionScope"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetScopeType(ScopeType: XlPivotConditionScope): void",
+      "since": "9.1.0"
+    },
+    "SetStopIfTrue": {
+      "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+      "params": [
+        {
+          "description": "True to stop evaluating additional rules.",
+          "name": "StopIfTrue",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetStopIfTrue(StopIfTrue: boolean): void",
+      "since": "9.5.0"
+    },
+    "SetText": {
+      "description": "Sets the text value used in text-based conditional formatting rules.",
+      "params": [
+        {
+          "description": "The text value to compare against.",
+          "name": "Text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetText(Text: string): void",
+      "since": "9.1.0"
+    },
+    "SetTextOperator": {
+      "description": "Sets the text operator for text-based conditional formatting rules.",
+      "params": [
+        {
+          "description": "The text operator: \"xlContains\", \"xlDoesNotContain\", \"xlBeginsWith\", \"xlEndsWith\".",
+          "name": "TextOperator",
+          "type": "XlContainsOperator"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetTextOperator(TextOperator: XlContainsOperator): void",
+      "since": "9.1.0"
+    }
+  }
+}

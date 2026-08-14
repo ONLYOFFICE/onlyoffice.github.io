@@ -1,0 +1,20 @@
+{
+  "description": "Inserts a break at the specified location in the main document.",
+  "params": [
+    {
+      "description": "The break type: page break (0) or line break (1).",
+      "name": "breakType",
+      "type": "number"
+    },
+    {
+      "description": "The position where the page or line break will be inserted (\"before\" or \"after\" the current drawing).",
+      "name": "position",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "returns false if drawing object haven't parent run or params are invalid.",
+    "type": "boolean"
+  },
+  "signature": "AddBreak(breakType: number, position: string): boolean"
+}

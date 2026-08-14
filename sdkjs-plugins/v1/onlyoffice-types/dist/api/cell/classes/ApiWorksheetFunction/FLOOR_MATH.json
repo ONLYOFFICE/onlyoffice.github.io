@@ -1,0 +1,30 @@
+{
+  "description": "Rounds a number down, to the nearest integer or to the nearest multiple of significance.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FLOOR_MATH/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FLOOR_MATH(-5.5, 2, 1));"
+  ],
+  "params": [
+    {
+      "description": "The numeric value to round down.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The multiple of significance to round down to. If it is omitted, the default value of 1 is used.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "Specifies if negative numbers are rounded towards or away from zero. If it is omitted or set to 0, negative numbers are rounded away from zero.\rIf any other numeric value is specified, negative numbers are rounded towards zero.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "FLOOR_MATH(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number, arg3?: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Applies the text settings to the entire contents of the table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetTextPr/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ntable.GetCell(0, 0).GetContent().GetElement(0).AddText(\"Cell 1\");\ntable.GetCell(0, 1).GetContent().GetElement(0).AddText(\"Cell 2\");\ntable.GetCell(0, 2).GetContent().GetElement(0).AddText(\"Cell 3\");\ndoc.Push(table);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntable.SetTextPr(textPr);"
+  ],
+  "params": [
+    {
+      "description": "The text properties that will be set to the current table.",
+      "name": "oTextPr",
+      "type": "ApiTextPr"
+    }
+  ],
+  "returns": {
+    "description": "returns true.",
+    "type": "boolean"
+  },
+  "signature": "SetTextPr(oTextPr: ApiTextPr): boolean"
+}

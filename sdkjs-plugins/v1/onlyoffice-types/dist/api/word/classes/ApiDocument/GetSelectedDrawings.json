@@ -1,0 +1,13 @@
+{
+  "description": "Returns all the selected drawings in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetSelectedDrawings/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.Select();\nlet drawings = doc.GetSelectedDrawings();\ndrawings[0].SetSize(2 * 914400, 2 * 914400);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "Drawing[]"
+  },
+  "signature": "GetSelectedDrawings(): Drawing[]",
+  "since": "7.2.0"
+}

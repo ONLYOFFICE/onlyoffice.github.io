@@ -1,0 +1,18 @@
+{
+  "description": "Returns the gamma function value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GAMMA/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.GAMMA(2.7);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value for which the gamma function will be calculated.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GAMMA(arg1: ApiRange | ApiName | number): number"
+}

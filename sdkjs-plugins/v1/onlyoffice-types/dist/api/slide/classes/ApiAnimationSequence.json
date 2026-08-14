@@ -1,0 +1,77 @@
+{
+  "description": "Class representing an animation sequence (main sequence or interactive sequence).",
+  "methods": {
+    "AddEffect": {
+      "description": "Adds an animation effect to the sequence.",
+      "params": [
+        {
+          "description": "The drawing object to animate.",
+          "name": "drawing",
+          "type": "ApiDrawing"
+        },
+        {
+          "description": "The type of animation effect (e.g., \"entranceFade\", \"entranceFlyIn\", \"emphasisPulse\").",
+          "name": "effectType",
+          "type": "AnimationEffectType"
+        },
+        {
+          "description": "The trigger type: \"onclick\", \"withprevious\", or \"afterprevious\".",
+          "name": "trigger",
+          "optional": true,
+          "type": "AnimationTriggerType"
+        }
+      ],
+      "returns": {
+        "description": "The created animation effect, or null if creation failed.",
+        "type": "ApiAnimationEffect | null"
+      },
+      "signature": "AddEffect(drawing: ApiDrawing, effectType: AnimationEffectType, trigger?: AnimationTriggerType): ApiAnimationEffect | null",
+      "since": "9.3.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiAnimationSequence class.",
+      "params": [],
+      "returns": {
+        "type": "\"animationSequence\""
+      },
+      "signature": "GetClassType(): \"animationSequence\"",
+      "since": "9.3.0"
+    },
+    "GetCount": {
+      "description": "Returns the number of effects in the sequence.",
+      "params": [],
+      "returns": {
+        "description": "The number of effects.",
+        "type": "number"
+      },
+      "signature": "GetCount(): number",
+      "since": "9.3.0"
+    },
+    "GetEffect": {
+      "description": "Returns the effect at the specified index.",
+      "params": [
+        {
+          "description": "The zero-based index of the effect.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "The effect at the specified index, or null if not found.",
+        "type": "ApiAnimationEffect | null"
+      },
+      "signature": "GetEffect(index: number): ApiAnimationEffect | null",
+      "since": "9.3.0"
+    },
+    "RemoveAllEffects": {
+      "description": "Removes all effects from the sequence.",
+      "params": [],
+      "returns": {
+        "description": "True if effects were removed successfully.",
+        "type": "boolean"
+      },
+      "signature": "RemoveAllEffects(): boolean",
+      "since": "9.3.0"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "description": "Flips the current drawing vertically.",
+  "params": [
+    {
+      "description": "Specifies if the figure will be flipped vertically or not.",
+      "name": "bFlip",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetVertFlip(bFlip: boolean): boolean"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Returns the product of the specified complex numbers.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMPRODUCT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMPRODUCT(\"-2+2.5i\", \"0.1+1.5j\", \"1+3i\"));"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 complex numbers expressed in the *x + yi* or *x + yj* form.",
+      "name": "args",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMPRODUCT(args: ApiRange | ApiName | string): number"
+}

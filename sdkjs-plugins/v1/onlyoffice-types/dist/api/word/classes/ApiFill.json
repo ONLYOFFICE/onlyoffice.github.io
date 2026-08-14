@@ -1,0 +1,38 @@
+{
+  "description": "Class representing a base class for fill.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiFill class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFill/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(914400, 0, 914400, 0);\ndrawing.SetWrappingStyle(\"square\");\nparagraph.AddDrawing(drawing);\nlet classType = fill.GetClassType();\nparagraph.AddText(\"Class Type = \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"fill\""
+      },
+      "signature": "GetClassType(): \"fill\""
+    },
+    "GetType": {
+      "description": "Gets the fill type.",
+      "params": [],
+      "returns": {
+        "description": "returns \"solid\", \"gradient\", \"pattern\", \"blip\", \"nofill\" or null.",
+        "type": "FillType"
+      },
+      "signature": "GetType(): FillType"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiFill object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFill/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet json = fill.ToJSON();\nlet fillFromJSON = Api.FromJSON(json);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fillFromJSON, stroke);\nparagraph.AddDrawing(drawing);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

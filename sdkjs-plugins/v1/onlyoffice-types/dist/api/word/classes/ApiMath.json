@@ -1,0 +1,48 @@
+{
+  "description": "Class representing a mathematical equation.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiMath class.",
+      "params": [],
+      "returns": {
+        "type": "\"math\""
+      },
+      "signature": "GetClassType(): \"math\""
+    },
+    "GetParent": {
+      "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current math element.",
+      "params": [],
+      "returns": {
+        "description": "returns null if the math element has no parent.",
+        "type": "ParagraphLikeContainer"
+      },
+      "signature": "GetParent(): ParagraphLikeContainer",
+      "since": "9.5.0"
+    },
+    "GetPosInParent": {
+      "description": "Returns the position (index) of the current math element within its parent element.",
+      "params": [],
+      "returns": {
+        "description": "returns -1 if the math element has no parent.",
+        "type": "number"
+      },
+      "signature": "GetPosInParent(): number",
+      "since": "9.5.0"
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current math element.",
+      "params": [
+        {
+          "description": "The format the text should be returned in.",
+          "name": "format",
+          "optional": true,
+          "type": "\"unicode\" | \"latex\""
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(format?: \"unicode\" | \"latex\"): string"
+    }
+  }
+}

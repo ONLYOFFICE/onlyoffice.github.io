@@ -1,0 +1,18 @@
+{
+  "description": "Combines multiple text strings into one text string.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CONCATENATE/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CONCATENATE(\"John\", \" \", \"Adams\"));"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 data values that will be combined.",
+      "name": "arg_n",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "CONCATENATE(arg_n: ApiRange | ApiName | string): string"
+}

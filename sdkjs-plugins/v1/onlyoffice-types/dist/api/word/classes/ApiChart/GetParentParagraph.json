@@ -1,0 +1,9 @@
+{
+  "description": "Returns a parent paragraph that contains the graphic object.",
+  "params": [],
+  "returns": {
+    "description": "returns null if parent paragraph doesn't exist.",
+    "type": "ApiParagraph | null"
+  },
+  "signature": "GetParentParagraph(): ApiParagraph | null"
+}

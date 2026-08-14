@@ -1,0 +1,40 @@
+{
+  "description": "Calculates the payment for a loan based on constant payments and a constant interest rate.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PMT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.PMT(0.08/12, 2*12, 10000, 0));"
+  ],
+  "params": [
+    {
+      "description": "The interest rate per period for the loan. For example, use 6%/4 for quarterly payments at 6% APR.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The total number of payments for the loan.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The present value: the total amount that a series of future payments is worth now.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The future value, or a cash balance which will be attained after the last payment is made. If omitted, it is equal to 0.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A logical value: payment at the beginning of the period = 1; payment at the end of the period = 0 or omitted.",
+      "name": "arg5",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PMT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4?: ApiRange | ApiName | number, arg5?: ApiRange | ApiName | number): number"
+}

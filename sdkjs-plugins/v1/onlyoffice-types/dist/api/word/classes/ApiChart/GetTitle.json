@@ -1,0 +1,9 @@
+{
+  "description": "Returns the chart title text.",
+  "params": [],
+  "returns": {
+    "description": "The chart title text or null if the chart has no title.",
+    "type": "string | null"
+  },
+  "signature": "GetTitle(): string | null"
+}

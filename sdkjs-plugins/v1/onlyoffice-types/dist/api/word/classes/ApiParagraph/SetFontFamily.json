@@ -1,0 +1,19 @@
+{
+  "description": "Sets all 4 font slots with the specified font family.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetFontFamily/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the font family set to 'Consolas'.\");\nparagraph.SetFontFamily(\"Consolas\");"
+  ],
+  "params": [
+    {
+      "description": "The font family or families used for the current paragraph.",
+      "name": "sFontFamily",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetFontFamily(sFontFamily: string): ApiParagraph"
+}

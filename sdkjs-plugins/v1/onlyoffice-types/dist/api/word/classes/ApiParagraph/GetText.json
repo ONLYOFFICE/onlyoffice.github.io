@@ -1,0 +1,43 @@
+{
+  "description": "Returns the paragraph text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetText/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"\\tThis is just a sample text.\");\nlet text = paragraph.GetText({\"Numbering\": true, \"Math\": true, \"NewLineSeparator\": \"\\r\", \"TabSymbol\": \"\\t\"});\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The text of the first paragraph: \" + text);\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "Options for formatting the returned text.",
+      "name": "options",
+      "optional": true,
+      "type": "object"
+    },
+    {
+      "description": "Defines if the resulting string will include numbering or not.",
+      "name": "options_Numbering",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines if the resulting string will include mathematical expressions or not.",
+      "name": "options_Math",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines how the line separator will be specified in the resulting string. Any string can be used. The default separator is \"\\r\".",
+      "name": "options_NewLineSeparator",
+      "optional": true,
+      "type": "string"
+    },
+    {
+      "description": "Defines how the tab will be specified in the resulting string (does not apply to numbering). Any string can be used. The default symbol is \"\\t\".",
+      "name": "options_TabSymbol",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string"
+}

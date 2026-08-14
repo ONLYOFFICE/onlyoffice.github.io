@@ -1,0 +1,6 @@
+{
+  "description": "Class representing a document picture form.",
+  "extends": [
+    "ApiFormBase"
+  ]
+}

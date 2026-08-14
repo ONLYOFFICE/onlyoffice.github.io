@@ -1,0 +1,10 @@
+{
+  "description": "Returns the bottom border of the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "Returns the border properties object, or _undefined_ if the bottom border is not set.",
+    "type": "Border | undefined"
+  },
+  "signature": "GetBottomBorder(): Border | undefined",
+  "since": "9.4.0"
+}

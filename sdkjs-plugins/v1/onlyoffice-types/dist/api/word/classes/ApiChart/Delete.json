@@ -1,0 +1,9 @@
+{
+  "description": "Deletes the current graphic object.",
+  "params": [],
+  "returns": {
+    "description": "returns false if drawing object haven't parent.",
+    "type": "boolean"
+  },
+  "signature": "Delete(): boolean"
+}

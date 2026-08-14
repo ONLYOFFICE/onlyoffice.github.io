@@ -1,0 +1,22 @@
+{
+  "description": "Sets the relative height of the object (image, shape, chart) bounding box.",
+  "params": [
+    {
+      "description": "The document element which will be taken as a countdown point for the object height.",
+      "name": "relativeFrom",
+      "optional": true,
+      "type": "SizeRelFromV"
+    },
+    {
+      "description": "The height of the object as a percentage of the specified element.",
+      "name": "percent",
+      "optional": true,
+      "type": "percentage"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean",
+  "since": "9.3.0"
+}

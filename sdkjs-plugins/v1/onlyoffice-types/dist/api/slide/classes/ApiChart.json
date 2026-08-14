@@ -1,0 +1,1273 @@
+{
+  "description": "Class representing a chart.",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methods": {
+    "ApplyChartStyle": {
+      "description": "Sets a style to the current chart by style ID.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/ApplyChartStyle/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.ApplyChartStyle(2);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetSeriesFill(oFill, 0, false);\noChart.SetSeriesOutLine(oStroke, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetSeriesFill(oFill, 1, false);\noChart.SetSeriesOutLine(oStroke, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "One of the styles available in the editor.",
+          "name": "nStyleId",
+          "type": "unknown"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ApplyChartStyle(nStyleId: unknown): boolean"
+    },
+    "CreateTextRange": {
+      "description": "Creates a text body for the drawing if it does not already exist and returns its full text range.",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "CreateTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "GetAllSeries": {
+      "description": "Returns all series from the chart space.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetAllSeries/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"comboBarLine\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\nvar aAllSeries = oChart.GetAllSeries();\nvar oSeries, sSeriesType, sTitle = \"\";\nfor(var nSeries = 0; nSeries < aAllSeries.length; ++nSeries) {\n\toSeries = aAllSeries[nSeries];\n\tsSeriesType = oSeries.GetChartType();\n\tsTitle += ((nSeries + 1) + \" Series Type = \" + sSeriesType + \"\\n\");\n}\noChart.SetTitle(sTitle, 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiChartSeries[]"
+      },
+      "signature": "GetAllSeries(): ApiChartSeries[]"
+    },
+    "GetChartType": {
+      "description": "Returns a type of the chart object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetChartType/",
+      "params": [],
+      "returns": {
+        "type": "ChartTypeLegacy"
+      },
+      "signature": "GetChartType(): ChartTypeLegacy"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiChart class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nvar sClassType = oChart.GetClassType();\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview: Class Type = \" + sClassType, 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"chart\""
+      },
+      "signature": "GetClassType(): \"chart\""
+    },
+    "GetHyperlink": {
+      "description": "Returns the hyperlink from the current drawing object (shape or image).",
+      "params": [],
+      "returns": {
+        "description": "Returns the hyperlink object or null if no hyperlink is set.",
+        "type": "ApiHyperlink | null"
+      },
+      "signature": "GetHyperlink(): ApiHyperlink | null"
+    },
+    "GetInternalId": {
+      "description": "Returns an internal ID of the current drawing object.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInternalId(): string"
+    },
+    "GetParent": {
+      "description": "Returns the drawing parent object.",
+      "params": [],
+      "returns": {
+        "type": "ApiSlide | ApiLayout | ApiMaster | null"
+      },
+      "signature": "GetParent(): ApiSlide | ApiLayout | ApiMaster | null"
+    },
+    "GetParentLayout": {
+      "description": "Returns the drawing parent slide layout.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide layout.",
+        "type": "ApiLayout | null"
+      },
+      "signature": "GetParentLayout(): ApiLayout | null"
+    },
+    "GetParentMaster": {
+      "description": "Returns the drawing parent slide master.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide master.",
+        "type": "ApiMaster | null"
+      },
+      "signature": "GetParentMaster(): ApiMaster | null"
+    },
+    "GetParentSlide": {
+      "description": "Returns the drawing parent slide.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide.",
+        "type": "ApiSlide | null"
+      },
+      "signature": "GetParentSlide(): ApiSlide | null"
+    },
+    "GetPlaceholder": {
+      "description": "Returns a placeholder from the current drawing object.",
+      "params": [],
+      "returns": {
+        "description": "returns null if placeholder doesn't exist.",
+        "type": "ApiPlaceholder | null"
+      },
+      "signature": "GetPlaceholder(): ApiPlaceholder | null"
+    },
+    "GetPosX": {
+      "description": "Gets the x position of the drawing on the slide.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosX(): EMU"
+    },
+    "GetPosY": {
+      "description": "Gets the y position of the drawing on the slide.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosY(): EMU"
+    },
+    "GetSeries": {
+      "description": "Returns the series with a specific index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetSeries/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"comboBarLine\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\nvar aAllSeries = oChart.GetAllSeries();\nvar oSeries, sSeriesType, sTitle = \"\";\noSeries = oChart.GetSeries(0);\nsSeriesType = oSeries.GetChartType();\nsTitle += (\"Series Type = \" + sSeriesType + \"\\n\");\noChart.SetTitle(sTitle, 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "Series index.",
+          "name": "nIdx",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiChartSeries"
+      },
+      "signature": "GetSeries(nIdx: number): ApiChartSeries"
+    },
+    "GetTextRange": {
+      "description": "Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no text body (use CreateTextRange to create one).",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "GetTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "GetTitle": {
+      "description": "Returns the chart title text.",
+      "params": [],
+      "returns": {
+        "description": "The chart title text or null if the chart has no title.",
+        "type": "string | null"
+      },
+      "signature": "GetTitle(): string | null"
+    },
+    "GetType": {
+      "description": "Returns a type of the chart object using the chart type names from the {@link ChartType} enumeration.",
+      "params": [],
+      "returns": {
+        "type": "ChartType"
+      },
+      "signature": "GetType(): ChartType"
+    },
+    "IsTextRange": {
+      "description": "Checks whether the drawing has an associated text body.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsTextRange(): boolean",
+      "since": "9.5.0"
+    },
+    "RemoveSeria": {
+      "description": "Removes the specified series from the current chart.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/RemoveSeria/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.RemoveSeria(1);\noChart.SetTitle(\"The Estimated Costs series was removed from the current chart.\");\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 0, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeria",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveSeria(nSeria: number): boolean"
+    },
+    "ReplacePlaceholder": {
+      "description": "Replaces the placeholder by a drawing on the slide.",
+      "params": [
+        {
+          "description": "The drawing object that will replace the placeholder.",
+          "name": "drawing",
+          "type": "Drawing"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ReplacePlaceholder(drawing: Drawing): boolean"
+    },
+    "SetAxisNumFormat": {
+      "description": "Sets the specified numeric format to the axis values.",
+      "params": [
+        {
+          "description": "Numeric format (can be custom format).",
+          "name": "sFormat",
+          "type": "NumFormat | string"
+        },
+        {
+          "description": "Axis position in the chart.",
+          "name": "sAxisPos",
+          "type": "AxisPos"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetAxisNumFormat(sFormat: NumFormat | string, sAxisPos: AxisPos): boolean"
+    },
+    "SetCategoryName": {
+      "description": "Sets a name to the specified chart category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetCategoryName/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetCategoryName(\"2013\", 0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The name which will be set to the specified chart category.",
+          "name": "sName",
+          "type": "string"
+        },
+        {
+          "description": "The index of the chart category.",
+          "name": "nCategory",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCategoryName(sName: string, nCategory: number): boolean"
+    },
+    "SetDataLabelsTextPr": {
+      "description": "Sets the text properties to the chart data labels.",
+      "params": [
+        {
+          "description": "The text properties to apply to the data labels.",
+          "name": "textPr",
+          "type": "ApiTextPr"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the text properties were applied successfully, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetDataLabelsTextPr(textPr: ApiTextPr): boolean",
+      "since": "9.5.0"
+    },
+    "SetDataPointFill": {
+      "description": "Sets the fill to the data point in the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetDataPointFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));\noChart.SetDataPointFill(oFill, 0, 0, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The fill type used to fill the data point.",
+          "name": "oFill",
+          "type": "ApiFill"
+        },
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeries",
+          "type": "number"
+        },
+        {
+          "description": "The index of the data point in the specified chart series.",
+          "name": "nDataPoint",
+          "type": "number"
+        },
+        {
+          "description": "Specifies if the fill will be applied to the specified data point in all series.",
+          "name": "bAllSeries",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDataPointFill(oFill: ApiFill, nSeries: number, nDataPoint: number, bAllSeries?: boolean): boolean"
+    },
+    "SetDataPointNumFormat": {
+      "description": "Sets the specified numeric format to the chart data point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetDataPointNumFormat/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24, [\"0\", \"0.00\"]);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetShowPointDataLabel(1, 0, false, false, true, false);\noChart.SetDataPointNumFormat(\"0.00\", 0, 0, true);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "Numeric format (can be custom format).",
+          "name": "sFormat",
+          "type": "NumFormat | string"
+        },
+        {
+          "description": "Series index.",
+          "name": "nSeria",
+          "type": "number"
+        },
+        {
+          "description": "The index of the data point in the specified chart series.",
+          "name": "nDataPoint",
+          "type": "number"
+        },
+        {
+          "description": "Specifies if the numeric format will be applied to the specified data point in all series.",
+          "name": "bAllSeries",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDataPointNumFormat(sFormat: NumFormat | string, nSeria: number, nDataPoint: number, bAllSeries: boolean): boolean"
+    },
+    "SetDataPointOutLine": {
+      "description": "Sets the outline to the data point in the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetDataPointOutLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetDataPointOutLine(oStroke, 0, 0, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the data point outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        },
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeries",
+          "type": "number"
+        },
+        {
+          "description": "The index of the data point in the specified chart series.",
+          "name": "nDataPoint",
+          "type": "number"
+        },
+        {
+          "description": "Specifies if the outline will be applied to the specified data point in all series.",
+          "name": "bAllSeries",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDataPointOutLine(oStroke: ApiStroke, nSeries: number, nDataPoint: number, bAllSeries: boolean): boolean"
+    },
+    "SetHorAxisLabelsFontSize": {
+      "description": "Specifies font size for labels of the horizontal axis.",
+      "params": [
+        {
+          "description": "The text size value measured in points.",
+          "name": "nFontSize",
+          "type": "pt"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorAxisLabelsFontSize(nFontSize: pt): boolean"
+    },
+    "SetHorAxisMajorTickMark": {
+      "description": "Specifies major tick mark for the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisMajorTickMark/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetHorAxisMajorTickMark(\"cross\");\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetMarkerFill(oFill, 0, 0, true);\noChart.SetMarkerOutLine(oStroke, 0, 0, true);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMarkerFill(oFill, 1, 0, true);\noChart.SetMarkerOutLine(oStroke, 1, 0, true);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The type of tick mark appearance.",
+          "name": "sTickMark",
+          "type": "TickMark"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorAxisMajorTickMark(sTickMark: TickMark): boolean"
+    },
+    "SetHorAxisMinorTickMark": {
+      "description": "Specifies minor tick mark for the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisMinorTickMark/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetHorAxisMinorTickMark(\"in\");\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetMarkerFill(oFill, 0, 0, true);\noChart.SetMarkerOutLine(oStroke, 0, 0, true);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMarkerFill(oFill, 1, 0, true);\noChart.SetMarkerOutLine(oStroke, 1, 0, true);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The type of tick mark appearance.",
+          "name": "sTickMark",
+          "type": "TickMark"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorAxisMinorTickMark(sTickMark: TickMark): boolean"
+    },
+    "SetHorAxisOrientation": {
+      "description": "Specifies the horizontal axis orientation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisOrientation/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetHorAxisOrientation(false);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The `true` value will set the normal data direction for the horizontal axis (from minimum to maximum).",
+          "name": "bIsMinMax",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorAxisOrientation(bIsMinMax: boolean): boolean"
+    },
+    "SetHorAxisTickLabelPosition": {
+      "description": "Spicifies tick labels position for the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisTickLabelPosition/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetHorAxisTickLabelPosition(\"high\");\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The type for the position of chart horizontal tick labels.",
+          "name": "sTickLabelPosition",
+          "type": "TickLabelPosition"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorAxisTickLabelPosition(sTickLabelPosition: TickLabelPosition): boolean"
+    },
+    "SetHorAxisTitle": {
+      "description": "Specifies the chart horizontal axis title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisTitle/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The title which will be displayed for the horizontal axis of the current chart.",
+          "name": "sTitle",
+          "type": "string"
+        },
+        {
+          "description": "The text size value measured in points.",
+          "name": "nFontSize",
+          "type": "pt"
+        },
+        {
+          "description": "Specifies if the horizontal axis title is written in bold font or not.",
+          "name": "bIsBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean"
+    },
+    "SetHyperlink": {
+      "description": "Sets a hyperlink to the current drawing object (shape or image).\nPass null to remove the hyperlink.",
+      "params": [
+        {
+          "description": "The hyperlink object to be set to the drawing, or null to remove the hyperlink.",
+          "name": "hyperlink",
+          "type": "ApiHyperlink | null"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the hyperlink was set or removed successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetHyperlink(hyperlink: ApiHyperlink | null): boolean"
+    },
+    "SetLegendFill": {
+      "description": "Sets the fill to the chart legend.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));\noChart.SetLegendFill(oFill);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The fill type used to fill the legend.",
+          "name": "oFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLegendFill(oFill: ApiFill): boolean"
+    },
+    "SetLegendFontSize": {
+      "description": "Specifies the legend font size.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendFontSize/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetLegendFontSize(16);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The text size value measured in points.",
+          "name": "nFontSize",
+          "type": "pt"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLegendFontSize(nFontSize: pt): boolean"
+    },
+    "SetLegendOutLine": {
+      "description": "Sets the outline to the chart legend.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendOutLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetLegendOutLine(oStroke);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the legend outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLegendOutLine(oStroke: ApiStroke): boolean"
+    },
+    "SetLegendPos": {
+      "description": "Specifies the chart legend position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendPos/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The position of the chart legend inside the chart window.",
+          "name": "sLegendPos",
+          "type": "\"left\" | \"top\" | \"right\" | \"bottom\" | \"none\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLegendPos(sLegendPos: \"left\" | \"top\" | \"right\" | \"bottom\" | \"none\"): boolean"
+    },
+    "SetMajorHorizontalGridlines": {
+      "description": "Specifies major horizontal gridline visual properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMajorHorizontalGridlines/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(1 * 15000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMajorHorizontalGridlines(oStroke);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the element shadow.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMajorHorizontalGridlines(oStroke: ApiStroke): boolean"
+    },
+    "SetMajorVerticalGridlines": {
+      "description": "Specifies major vertical gridline visual properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMajorVerticalGridlines/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(1 * 15000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMajorVerticalGridlines(oStroke);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the element shadow.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMajorVerticalGridlines(oStroke: ApiStroke): boolean"
+    },
+    "SetMarkerFill": {
+      "description": "Sets the fill to the marker in the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMarkerFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetMarkerFill(oFill, 0, 0, true);\noChart.SetMarkerOutLine(oStroke, 0, 0, true);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMarkerFill(oFill, 1, 0, true);\noChart.SetMarkerOutLine(oStroke, 1, 0, true);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The fill type used to fill the marker.",
+          "name": "oFill",
+          "type": "ApiFill"
+        },
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeries",
+          "type": "number"
+        },
+        {
+          "description": "The index of the marker in the specified chart series.",
+          "name": "nMarker",
+          "type": "number"
+        },
+        {
+          "description": "Specifies if the fill will be applied to all markers in the specified chart series.",
+          "name": "bAllMarkers",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMarkerFill(oFill: ApiFill, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean"
+    },
+    "SetMarkerOutLine": {
+      "description": "Sets the outline to the marker in the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMarkerOutLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetMarkerFill(oFill, 0, 0, true);\noChart.SetMarkerOutLine(oStroke, 0, 0, true);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetMarkerFill(oFill, 1, 0, true);\noChart.SetMarkerOutLine(oStroke, 1, 0, true);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the marker outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        },
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeries",
+          "type": "number"
+        },
+        {
+          "description": "The index of the marker in the specified chart series.",
+          "name": "nMarker",
+          "type": "number"
+        },
+        {
+          "description": "Specifies if the outline will be applied to all markers in the specified chart series.",
+          "name": "bAllMarkers",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMarkerOutLine(oStroke: ApiStroke, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean"
+    },
+    "SetMinorHorizontalGridlines": {
+      "description": "Specifies minor horizontal gridline visual properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMinorHorizontalGridlines/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(1 * 10000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMinorHorizontalGridlines(oStroke);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the element shadow.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMinorHorizontalGridlines(oStroke: ApiStroke): boolean"
+    },
+    "SetMinorVerticalGridlines": {
+      "description": "Specifies minor vertical gridline visual properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMinorVerticalGridlines/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(1 * 10000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMinorVerticalGridlines(oStroke);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the element shadow.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMinorVerticalGridlines(oStroke: ApiStroke): boolean"
+    },
+    "SetPlaceholder": {
+      "description": "Sets the specified placeholder to the current drawing object.",
+      "params": [
+        {
+          "description": "Placeholder object.",
+          "name": "oPlaceholder",
+          "type": "ApiPlaceholder"
+        }
+      ],
+      "returns": {
+        "description": "returns false if parameter isn't a placeholder.",
+        "type": "boolean"
+      },
+      "signature": "SetPlaceholder(oPlaceholder: ApiPlaceholder): boolean"
+    },
+    "SetPlotAreaFill": {
+      "description": "Sets the fill to the chart plot area.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetPlotAreaFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));\noChart.SetPlotAreaFill(oFill);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The fill type used to fill the plot area.",
+          "name": "oFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPlotAreaFill(oFill: ApiFill): boolean"
+    },
+    "SetPlotAreaOutLine": {
+      "description": "Sets the outline to the chart plot area.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetPlotAreaOutLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetPlotAreaOutLine(oStroke);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the plot area outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPlotAreaOutLine(oStroke: ApiStroke): boolean"
+    },
+    "SetPointDataLabelTextPr": {
+      "description": "Sets the text properties to the chart point data label.",
+      "params": [
+        {
+          "description": "The series index from the array of the data used to build the chart from.",
+          "name": "seriesIndex",
+          "type": "number"
+        },
+        {
+          "description": "The point index from this series.",
+          "name": "pointIndex",
+          "type": "number"
+        },
+        {
+          "description": "The text properties to apply to the data label.",
+          "name": "textPr",
+          "type": "ApiTextPr"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the text properties were applied successfully, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetPointDataLabelTextPr(seriesIndex: number, pointIndex: number, textPr: ApiTextPr): boolean",
+      "since": "9.5.0"
+    },
+    "SetPosX": {
+      "description": "Sets the x position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosX(posX: EMU): boolean"
+    },
+    "SetPosY": {
+      "description": "Sets the y position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosY(posY: EMU): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
+          "name": "nPosX",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
+          "name": "nPosY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetPosition(nPosX: EMU, nPosY: EMU): void"
+    },
+    "SetSeriaName": {
+      "description": "Sets a name to the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriaName/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetSeriaName(\"Projected Sales\", 0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The name which will be set to the specified chart series.",
+          "name": "sName",
+          "type": "string"
+        },
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeria",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSeriaName(sName: string, nSeria: number): boolean"
+    },
+    "SetSeriaNumFormat": {
+      "description": "Sets the specified numeric format to the chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriaNumFormat/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24, [\"0\", \"0.00\"]);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetSeriaNumFormat(\"0.00\", 0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "Numeric format (can be custom format).",
+          "name": "sFormat",
+          "type": "NumFormat | string"
+        },
+        {
+          "description": "Series index.",
+          "name": "nSeria",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSeriaNumFormat(sFormat: NumFormat | string, nSeria: number): boolean"
+    },
+    "SetSeriaValues": {
+      "description": "Sets values to the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriaValues/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetSeriaValues([260, 270, 300], 1);\noChart.SetShowPointDataLabel(1, 0, false, false, true, false);\noChart.SetShowPointDataLabel(1, 1, false, false, true, false);\noChart.SetShowPointDataLabel(1, 2, false, false, true, false);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The array of the data which will be set to the specified chart series.",
+          "name": "aValues",
+          "type": "number[]"
+        },
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeria",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSeriaValues(aValues: number[], nSeria: number): boolean"
+    },
+    "SetSeriesFill": {
+      "description": "Sets the fill to the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriesFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The fill type used to fill the series.",
+          "name": "oFill",
+          "type": "ApiFill"
+        },
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeries",
+          "type": "number"
+        },
+        {
+          "description": "Specifies if the fill will be applied to all series.",
+          "name": "bAll",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSeriesFill(oFill: ApiFill, nSeries: number, bAll?: boolean): boolean"
+    },
+    "SetSeriesOutLine": {
+      "description": "Sets the outline to the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriesOutLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetSeriesFill(oFill, 0, false);\noChart.SetSeriesOutLine(oStroke, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noChart.SetSeriesOutLine(oStroke, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the series outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        },
+        {
+          "description": "The index of the chart series.",
+          "name": "nSeries",
+          "type": "number"
+        },
+        {
+          "description": "Specifies if the outline will be applied to all series.",
+          "name": "bAll",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSeriesOutLine(oStroke: ApiStroke, nSeries: number, bAll?: boolean): boolean"
+    },
+    "SetShowDataLabels": {
+      "description": "Specifies which chart data labels are shown for the chart.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetShowDataLabels/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "Whether to show or hide the source table column names used for the data which the chart will be build from.",
+          "name": "bShowSerName",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to show or hide the source table row names used for the data which the chart will be build from.",
+          "name": "bShowCatName",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to show or hide the chart data values.",
+          "name": "bShowVal",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to show or hide the percent for the data values (works with stacked chart types).",
+          "name": "bShowPercent",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetShowDataLabels(bShowSerName: boolean, bShowCatName: boolean, bShowVal: boolean, bShowPercent: boolean): boolean"
+    },
+    "SetShowDataTable": {
+      "description": "Specifies whether the data table is displayed below the chart, optionally with the legend keys.",
+      "params": [
+        {
+          "description": "Whether to show or hide the data table below the chart.",
+          "name": "bShow",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to show the legend keys in the data table.",
+          "name": "bShowKeys",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "SetShowPointDataLabel": {
+      "description": "Spicifies the show options for data labels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetShowPointDataLabel/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetShowPointDataLabel(1, 0, false, false, true, false);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The series index from the array of the data used to build the chart from.",
+          "name": "nSeriesIndex",
+          "type": "number"
+        },
+        {
+          "description": "The point index from this series.",
+          "name": "nPointIndex",
+          "type": "number"
+        },
+        {
+          "description": "Whether to show or hide the source table column names used for the data which the chart will be build from.",
+          "name": "bShowSerName",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to show or hide the source table row names used for the data which the chart will be build from.",
+          "name": "bShowCatName",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to show or hide the chart data values.",
+          "name": "bShowVal",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to show or hide the percent for the data values (works with stacked chart types).",
+          "name": "bShowPercent",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetShowPointDataLabel(nSeriesIndex: number, nPointIndex: number, bShowSerName: boolean, bShowCatName: boolean, bShowVal: boolean, bShowPercent: boolean): boolean"
+    },
+    "SetTitle": {
+      "description": "Specifies the chart title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitle/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The title which will be displayed for the current chart.",
+          "name": "sTitle",
+          "type": "string"
+        },
+        {
+          "description": "The text size value measured in points.",
+          "name": "nFontSize",
+          "type": "pt"
+        },
+        {
+          "description": "Specifies if the chart title is written in bold font or not.",
+          "name": "bIsBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean"
+    },
+    "SetTitleFill": {
+      "description": "Sets the fill to the chart title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitleFill/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetTitleFill(oFill);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The fill type used to fill the title.",
+          "name": "oFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTitleFill(oFill: ApiFill): boolean"
+    },
+    "SetTitleOutLine": {
+      "description": "Sets the outline to the chart title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitleOutLine/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetTitle(\"Financial Overview\", 13);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetTitleOutLine(oStroke);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The stroke used to create the title outline.",
+          "name": "oStroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTitleOutLine(oStroke: ApiStroke): boolean"
+    },
+    "SetVerAxisOrientation": {
+      "description": "Specifies the vertical axis orientation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVerAxisOrientation/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetTitle(\"Financial Overview\", 13);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetTitleOutLine(oStroke);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The `true` value will set the normal data direction for the vertical axis (from minimum to maximum).",
+          "name": "bIsMinMax",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVerAxisOrientation(bIsMinMax: boolean): boolean"
+    },
+    "SetVerAxisTitle": {
+      "description": "Specifies the chart vertical axis title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVerAxisTitle/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The title which will be displayed for the vertical axis of the current chart.",
+          "name": "sTitle",
+          "type": "string"
+        },
+        {
+          "description": "The text size value measured in points.",
+          "name": "nFontSize",
+          "type": "pt"
+        },
+        {
+          "description": "Specifies if the vertical axis title is written in bold font or not.",
+          "name": "bIsBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVerAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean"
+    },
+    "SetVertAxisLabelsFontSize": {
+      "description": "Specifies font size for labels of the vertical axis.",
+      "params": [
+        {
+          "description": "The text size value measured in points.",
+          "name": "nFontSize",
+          "type": "pt"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVertAxisLabelsFontSize(nFontSize: pt): boolean"
+    },
+    "SetVertAxisMajorTickMark": {
+      "description": "Specifies major tick mark for the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVertAxisMajorTickMark/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetVertAxisMajorTickMark(\"cross\");\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetMarkerFill(oFill, 0, 0, true);\noChart.SetMarkerOutLine(oStroke, 0, 0, true);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMarkerFill(oFill, 1, 0, true);\noChart.SetMarkerOutLine(oStroke, 1, 0, true);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The type of tick mark appearance.",
+          "name": "sTickMark",
+          "type": "TickMark"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVertAxisMajorTickMark(sTickMark: TickMark): boolean"
+    },
+    "SetVertAxisMinorTickMark": {
+      "description": "Specifies minor tick mark for the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVertAxisMinorTickMark/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetVertAxisMinorTickMark(\"out\");\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetMarkerFill(oFill, 0, 0, true);\noChart.SetMarkerOutLine(oStroke, 0, 0, true);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetMarkerFill(oFill, 1, 0, true);\noChart.SetMarkerOutLine(oStroke, 1, 0, true);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The type of tick mark appearance.",
+          "name": "sTickMark",
+          "type": "TickMark"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVertAxisMinorTickMark(sTickMark: TickMark): boolean"
+    },
+    "SetVertAxisTickLabelPosition": {
+      "description": "Spicifies tick labels position for the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVertAxisTickLabelPosition/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetVertAxisTickLabelPosition(\"high\");\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The type for the position of chart vertical tick labels.",
+          "name": "sTickLabelPosition",
+          "type": "TickLabelPosition"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVertAxisTickLabelPosition(sTickLabelPosition: TickLabelPosition): boolean"
+    },
+    "SetXValues": {
+      "description": "Sets the x-axis values to all chart series. It is used with the scatter charts only.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetXValues/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"scatter\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noChart.SetXValues([\"2020\", \"2021\", \"2022\"]);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\noChart.SetMarkerFill(oFill, 0, 0, true);\noChart.SetMarkerOutLine(oStroke, 0, 0, true);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\noChart.SetMarkerFill(oFill, 1, 0, true);\noChart.SetMarkerOutLine(oStroke, 1, 0, true);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "The array of the data which will be set to the x-axis data points.",
+          "name": "aValues",
+          "type": "string[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetXValues(aValues: string[]): boolean"
+    }
+  }
+}

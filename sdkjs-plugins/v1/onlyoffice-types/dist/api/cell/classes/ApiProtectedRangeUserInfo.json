@@ -1,0 +1,44 @@
+{
+  "description": "Class representing a user from the current protected range.",
+  "methods": {
+    "GetId": {
+      "description": "Returns the ID property of the current user's information.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRangeUserInfo/Methods/GetId/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\").AddUser(\"userId\", \"name\", \"CanView\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nlet userInfo = protectedRange.GetUser(\"userId\");\nlet userId = userInfo.GetId();\nworksheet.GetRange(\"A3\").SetValue(\"Id: \" + userId);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetId(): string | null",
+      "since": "8.1.0"
+    },
+    "GetName": {
+      "description": "Returns the name property of the current user's information.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRangeUserInfo/Methods/GetName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\").AddUser(\"userId\", \"name\", \"CanView\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nlet userInfo = protectedRange.GetUser(\"userId\");\nlet userName = userInfo.GetName();\nworksheet.GetRange(\"A3\").SetValue(\"Name: \" + userName);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetName(): string | null",
+      "since": "8.1.0"
+    },
+    "GetType": {
+      "description": "Returns the type property of the current user's information.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRangeUserInfo/Methods/GetType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\").AddUser(\"userId\", \"name\", \"CanView\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nlet userInfo = protectedRange.GetUser(\"userId\");\nlet userType = userInfo.GetType();\nworksheet.GetRange(\"A3\").SetValue(\"Type: \" + userType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ProtectedRangeUserType"
+      },
+      "signature": "GetType(): ProtectedRangeUserType",
+      "since": "8.1.0"
+    }
+  }
+}

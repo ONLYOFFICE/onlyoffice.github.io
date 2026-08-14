@@ -1,0 +1,18 @@
+{
+  "description": "Returns the sum of the specified complex numbers.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMSUM/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMSUM(\"1+3i\", \"0.1+1.5j\", \"-2+2.5i\"));"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 complex numbers expressed in the *x + yi* or *x + yj* form.",
+      "name": "args",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMSUM(args: ApiRange | ApiName | string): number"
+}

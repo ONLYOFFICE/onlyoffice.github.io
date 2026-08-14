@@ -1,0 +1,6 @@
+{
+  "description": "Class representing a Scheme Color.",
+  "extends": [
+    "ApiUniColor"
+  ]
+}

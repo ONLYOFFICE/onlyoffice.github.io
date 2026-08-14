@@ -1,0 +1,24 @@
+{
+  "description": "Truncates a number to an integer by removing the decimal, or fractional, part of the number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TRUNC/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TRUNC(3.14159265, 5));"
+  ],
+  "params": [
+    {
+      "description": "The number which will be truncated.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "A number specifying the precision of the truncation. If this argument is omitted, it is equal to 0 (zero).",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "TRUNC(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,16 @@
+{
+  "description": "Returns the form value for the specified key. For a group of radio buttons returns Choice, i.e. the name of the selected item.",
+  "params": [
+    {
+      "description": "The form key.",
+      "name": "key",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "Returns true/false for checkboxes and string for other form types. Returns null if\rthere is no form with the specified key.",
+    "type": "null | boolean | string"
+  },
+  "signature": "GetFormValueByKey(key: string): null | boolean | string",
+  "since": "9.0.0"
+}

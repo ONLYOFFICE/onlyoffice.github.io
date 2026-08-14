@@ -1,0 +1,18 @@
+{
+  "description": "Returns the Unicode character referenced by the given numeric value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/UNICHAR/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.UNICHAR(378));"
+  ],
+  "params": [
+    {
+      "description": "The Unicode number representing a character.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "UNICHAR(arg1: ApiRange | ApiName | number): string"
+}

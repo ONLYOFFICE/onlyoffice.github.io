@@ -1,0 +1,157 @@
+{
+  "description": "Class representing a listbox field.",
+  "extends": [
+    "ApiBaseListField"
+  ],
+  "methods": {
+    "AddOption": {
+      "description": "Adds new option to list options.",
+      "params": [
+        {
+          "description": "list option to add",
+          "name": "option",
+          "type": "ListOption"
+        },
+        {
+          "description": "index to add option.",
+          "name": "index",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddOption(option: ListOption, index?: number): boolean"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiListboxField class.",
+      "params": [],
+      "returns": {
+        "type": "\"listboxField\""
+      },
+      "signature": "GetClassType(): \"listboxField\""
+    },
+    "GetOption": {
+      "description": "Gets option from list options.",
+      "params": [
+        {
+          "description": "The option index.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ListOption"
+      },
+      "signature": "GetOption(index: number): ListOption"
+    },
+    "GetOptions": {
+      "description": "Gets all options from list options.",
+      "params": [],
+      "returns": {
+        "type": "ListOption[]"
+      },
+      "signature": "GetOptions(): ListOption[]"
+    },
+    "GetValueIndexes": {
+      "description": "Gets selected value indexes.",
+      "params": [],
+      "returns": {
+        "type": "number[]"
+      },
+      "signature": "GetValueIndexes(): number[]"
+    },
+    "IsCommitOnSelChange": {
+      "description": "Checks if field can commit on selection change.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsCommitOnSelChange(): boolean"
+    },
+    "IsMultipleSelection": {
+      "description": "Checks if the field supports multiple selection.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsMultipleSelection(): boolean"
+    },
+    "MoveOption": {
+      "description": "Moves option to specified position in list options.",
+      "params": [
+        {
+          "description": "The current index of the option to move.",
+          "name": "currentIndex",
+          "type": "number"
+        },
+        {
+          "description": "The target index for the option.",
+          "name": "newIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveOption(currentIndex: number, newIndex: number): boolean"
+    },
+    "RemoveOption": {
+      "description": "Removes option from list options.",
+      "params": [
+        {
+          "description": "The option index.",
+          "name": "index",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveOption(index: number): boolean"
+    },
+    "SetCommitOnSelChange": {
+      "description": "Sets whether the field commits changes immediately after selection changes.",
+      "params": [
+        {
+          "description": "Specifies whether selection changes are committed immediately.",
+          "name": "commitOnSelectionChange",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCommitOnSelChange(commitOnSelectionChange: boolean): boolean"
+    },
+    "SetMultipleSelection": {
+      "description": "Sets whether multiple values can be selected.",
+      "params": [
+        {
+          "description": "Specifies whether multiple values can be selected.",
+          "name": "allowMultipleSelection",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMultipleSelection(allowMultipleSelection: boolean): boolean"
+    },
+    "SetValueIndexes": {
+      "description": "Sets selected value indexes.",
+      "params": [
+        {
+          "description": "The indexes of the selected values.",
+          "name": "valueIndexes",
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValueIndexes(valueIndexes: number[]): boolean"
+    }
+  }
+}

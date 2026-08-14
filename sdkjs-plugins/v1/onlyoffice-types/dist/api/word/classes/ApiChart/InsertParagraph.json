@@ -1,0 +1,25 @@
+{
+  "description": "Inserts a paragraph at the specified position.",
+  "params": [
+    {
+      "description": "Text or paragraph.",
+      "name": "paragraph",
+      "type": "string | ApiParagraph"
+    },
+    {
+      "description": "The position where the text or paragraph will be inserted (\"before\" or \"after\" the drawing specified).",
+      "name": "sPosition",
+      "type": "string"
+    },
+    {
+      "description": "Defines if this method returns a new paragraph (true) or the current ApiDrawing (false).",
+      "name": "beRNewPara",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "returns null if parent paragraph doesn't exist.",
+    "type": "ApiParagraph | ApiDrawing"
+  },
+  "signature": "InsertParagraph(paragraph: string | ApiParagraph, sPosition: string, beRNewPara: boolean): ApiParagraph | ApiDrawing"
+}

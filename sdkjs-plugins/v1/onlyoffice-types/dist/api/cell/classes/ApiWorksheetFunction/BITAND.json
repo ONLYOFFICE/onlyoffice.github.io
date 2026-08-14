@@ -1,0 +1,23 @@
+{
+  "description": "Returns a bitwise \"AND\" of two numbers.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BITAND/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BITAND(13, 25));"
+  ],
+  "params": [
+    {
+      "description": "The first decimal representation of the binary number to evaluate.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The second decimal representation of the binary number to evaluate.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BITAND(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

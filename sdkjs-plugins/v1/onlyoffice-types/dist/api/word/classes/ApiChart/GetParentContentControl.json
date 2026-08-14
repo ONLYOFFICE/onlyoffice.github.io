@@ -1,0 +1,9 @@
+{
+  "description": "Returns a parent content control that contains the graphic object.",
+  "params": [],
+  "returns": {
+    "description": "returns null if parent content control doesn't exist.",
+    "type": "ApiBlockLvlSdt | null"
+  },
+  "signature": "GetParentContentControl(): ApiBlockLvlSdt | null"
+}

@@ -1,0 +1,14 @@
+{
+  "description": "Sets the properties from another drawing to the current drawing.\nThe following properties will be copied: horizontal and vertical alignment, distance between the edges of the current drawing object and any subsequent text, wrapping style, drawing name, title and description.",
+  "params": [
+    {
+      "description": "The drawing which properties will be set to the current drawing.",
+      "name": "oAnotherDrawing",
+      "type": "ApiDrawing"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetDrawingPrFromDrawing(oAnotherDrawing: ApiDrawing): boolean"
+}

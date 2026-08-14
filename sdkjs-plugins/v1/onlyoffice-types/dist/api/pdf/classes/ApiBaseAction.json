@@ -1,0 +1,27 @@
+{
+  "description": "Class representing a base pdf action.",
+  "methods": {
+    "GetNext": {
+      "description": "Returns next action.",
+      "params": [],
+      "returns": {
+        "type": "ApiBaseAction"
+      },
+      "signature": "GetNext(): ApiBaseAction"
+    },
+    "SetNext": {
+      "description": "Sets next action.",
+      "params": [
+        {
+          "name": "action",
+          "type": "ApiBaseAction"
+        }
+      ],
+      "returns": {
+        "description": "returns next action",
+        "type": "ApiBaseAction"
+      },
+      "signature": "SetNext(action: ApiBaseAction): ApiBaseAction"
+    }
+  }
+}

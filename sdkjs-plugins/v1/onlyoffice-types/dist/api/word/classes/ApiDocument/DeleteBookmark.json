@@ -1,0 +1,19 @@
+{
+  "description": "Removes a bookmark from the document, if one exists.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/DeleteBookmark/",
+  "examples": [
+    "let doc = Api.GetDocument(); \nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"ONLYOFFICE Document Builder \"); \nlet range = doc.GetRange(0, 9); \nrange.AddBookmark(\"Bookmark\"); \ndoc.DeleteBookmark(\"Bookmark\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The bookmark was removed from this document.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The bookmark name.",
+      "name": "sName",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "DeleteBookmark(sName: string): boolean"
+}

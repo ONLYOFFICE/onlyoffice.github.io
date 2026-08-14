@@ -1,0 +1,9 @@
+{
+  "description": "Returns a parent table that contains the graphic object.",
+  "params": [],
+  "returns": {
+    "description": "returns null if parent table doesn't exist.",
+    "type": "ApiTable | null"
+  },
+  "signature": "GetParentTable(): ApiTable | null"
+}

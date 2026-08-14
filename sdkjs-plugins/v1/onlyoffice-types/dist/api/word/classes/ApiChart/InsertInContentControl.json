@@ -1,0 +1,14 @@
+{
+  "description": "Wraps the graphic object with a rich text content control.",
+  "params": [
+    {
+      "description": "Defines if this method returns the ApiBlockLvlSdt (nType === 1) or ApiDrawing (any value except 1) object.",
+      "name": "nType",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiDrawing | ApiBlockLvlSdt"
+  },
+  "signature": "InsertInContentControl(nType: number): ApiDrawing | ApiBlockLvlSdt"
+}

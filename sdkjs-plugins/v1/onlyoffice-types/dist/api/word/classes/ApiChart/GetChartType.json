@@ -1,0 +1,9 @@
+{
+  "description": "Returns a type of the chart object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/GetChartType/",
+  "params": [],
+  "returns": {
+    "type": "ChartTypeLegacy"
+  },
+  "signature": "GetChartType(): ChartTypeLegacy"
+}

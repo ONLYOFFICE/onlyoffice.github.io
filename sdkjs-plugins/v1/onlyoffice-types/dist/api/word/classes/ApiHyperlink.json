@@ -1,0 +1,210 @@
+{
+  "description": "Class representing a Paragraph hyperlink.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiHyperlink class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet classType = hyperlink.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"hyperlink\""
+      },
+      "signature": "GetClassType(): \"hyperlink\""
+    },
+    "GetDisplayedText": {
+      "description": "Returns the hyperlink display text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetDisplayedText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet displayedText = hyperlink.GetDisplayedText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Displayed text: \" + displayedText);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetDisplayedText(): string"
+    },
+    "GetElement": {
+      "description": "Returns the hyperlink element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetElement/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"Api Document Builder.\");\nparagraph.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\" ONLYOFFICE for developers\");\nparagraph.AddElement(run2, 1);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet element = hyperlink.GetElement(1);\nparagraph = Api.CreateParagraph();\nparagraph.AddElement(element);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The position where the element which content we want to get must be located.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ParagraphContent"
+      },
+      "signature": "GetElement(nPos: number): ParagraphContent"
+    },
+    "GetElementsCount": {
+      "description": "Returns a number of elements in the current hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetElementsCount/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"Api Document Builder.\");\nparagraph.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\" ONLYOFFICE for developers\");\nparagraph.AddElement(run2, 1);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet elementsCount = hyperlink.GetElementsCount();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of elements in hyperlink: \" + elementsCount);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Elements: paragraph, run1, run2, hyperlink\");\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetElementsCount(): number"
+    },
+    "GetLinkedText": {
+      "description": "Returns the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetLinkedText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetLink(\"https://api.onlyoffice.com/\");\nlet linkedText = hyperlink.GetLinkedText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Linked text: \" + linkedText);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetLinkedText(): string"
+    },
+    "GetParent": {
+      "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current hyperlink.",
+      "params": [],
+      "returns": {
+        "description": "returns null if the hyperlink has no parent.",
+        "type": "ParagraphLikeContainer"
+      },
+      "signature": "GetParent(): ParagraphLikeContainer",
+      "since": "9.5.0"
+    },
+    "GetPosInParent": {
+      "description": "Returns the position (index) of the current hyperlink within its parent element.",
+      "params": [],
+      "returns": {
+        "description": "returns -1 if the hyperlink has no parent.",
+        "type": "number"
+      },
+      "signature": "GetPosInParent(): number",
+      "since": "9.5.0"
+    },
+    "GetRange": {
+      "description": "Returns a Range object that represents the document part contained in the specified hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetRange/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Api Document Builder\");\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet range = hyperlink.GetRange(0, 2);\nrange.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "Start position index in the current element.",
+          "name": "Start",
+          "type": "number"
+        },
+        {
+          "description": "End position index in the current element.",
+          "name": "End",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRange(Start: number, End: number): ApiRange"
+    },
+    "GetScreenTipText": {
+      "description": "Returns the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetScreenTipText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetScreenTipText(\"ONLYOFFICE for developers\");\nlet screenTipText = hyperlink.GetScreenTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Screen tip text: \" + screenTipText);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetScreenTipText(): string"
+    },
+    "SetDefaultStyle": {
+      "description": "Sets the default hyperlink style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/SetDefaultStyle/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Api Document Builder\");\nparagraph.SetColor(255, 111, 61);\nlet copyParagraph = paragraph.Copy();\ndoc.Push(copyParagraph);\nlet hyperlink = paragraph.AddHyperlink(\"http://api.teamlab.info/docbuilder/basic\");\nlet copyHyperlink = copyParagraph.AddHyperlink(\"http://api.teamlab.info/docbuilder/basic\");\ncopyHyperlink.SetDefaultStyle();"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDefaultStyle(): boolean"
+    },
+    "SetDisplayedText": {
+      "description": "Sets the hyperlink display text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/SetDisplayedText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetDisplayedText(\"Api ONLYOFFICE DocBuilder\");"
+      ],
+      "params": [
+        {
+          "description": "The text to display the hyperlink.",
+          "name": "sDisplay",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDisplayedText(sDisplay: string): boolean"
+    },
+    "SetLink": {
+      "description": "Sets the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/SetLink/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetLink(\"https://api.onlyoffice.com/\");"
+      ],
+      "params": [
+        {
+          "description": "The hyperlink address.",
+          "name": "sLink",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLink(sLink: string): boolean"
+    },
+    "SetScreenTipText": {
+      "description": "Sets the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/SetScreenTipText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetScreenTipText(\"ONLYOFFICE for developers\");\nlet screenTipText = hyperlink.GetScreenTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Screen tip text: \" + screenTipText);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "The screen tip text of the hyperlink.",
+          "name": "sScreenTipText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScreenTipText(sScreenTipText: string): boolean"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiHyperlink object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet hyperlink = Api.CreateHyperlink(\"https://api.onlyoffice.com/\", \"ONLYOFFICE Document Builder\", \"ONLYOFFICE for developers\");\nlet json = hyperlink.ToJSON(true);\nlet hyperlinkFromJSON = Api.FromJSON(json);\nhyperlinkFromJSON.SetDefaultStyle();\nparagraph.AddElement(hyperlinkFromJSON);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the used styles will be written to the JSON object or not.",
+          "name": "bWriteStyles",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteStyles: boolean): object"
+    }
+  }
+}

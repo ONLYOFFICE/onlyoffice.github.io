@@ -1,0 +1,24 @@
+{
+  "description": "Sets the preferred width to the current table.\n<note>Tables are created with the {@link ApiTable#SetWidth} method properties set by default, which always override the {@link ApiTablePr#SetWidth} method properties. That is why there is no use to try and apply {@link ApiTablePr#SetWidth}. We recommend you to use the  {@link ApiTablePr#SetWidth} method instead.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetWidth/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We set the table cells to preserve their size:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntablePr.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "Type of the width value from one of the available width values types.",
+      "name": "sType",
+      "type": "TableWidth"
+    },
+    {
+      "description": "The table width value measured in positive integers.",
+      "name": "nValue",
+      "optional": true,
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetWidth(sType: TableWidth, nValue?: number): boolean"
+}

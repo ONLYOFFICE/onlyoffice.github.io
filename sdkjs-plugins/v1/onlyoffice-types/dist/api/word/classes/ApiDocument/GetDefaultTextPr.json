@@ -1,0 +1,12 @@
+{
+  "description": "Returns a set of default properties for the text run in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetDefaultTextPr/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetLanguage(\"en-US\");\ntextPr.SetFontFamily(\"Comic Sans MS\");\nparagraph.AddText(\"This is just a text.\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiTextPr"
+  },
+  "signature": "GetDefaultTextPr(): ApiTextPr"
+}

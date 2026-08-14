@@ -1,0 +1,12 @@
+{
+  "description": "Returns an array of all paragraphs from the current document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetAllParagraphs/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(shape);\nlet docContent = shape.GetDocContent();\nparagraph = docContent.GetElement(0);\nparagraph.AddText(\"Paragraph 1\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Paragraph 2\");\ndocContent.Push(paragraph);\nlet paragraphs = docContent.GetAllParagraphs();\nparagraphs[0].SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph[]"
+  },
+  "signature": "GetAllParagraphs(): ApiParagraph[]"
+}

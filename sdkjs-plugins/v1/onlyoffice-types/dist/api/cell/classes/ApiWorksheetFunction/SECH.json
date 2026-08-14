@@ -1,0 +1,18 @@
+{
+  "description": "Returns the hyperbolic secant of an angle.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SECH/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SECH(0.785398));"
+  ],
+  "params": [
+    {
+      "description": "The angle in radians for which the hyperbolic secant will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SECH(arg1: ApiRange | ApiName | number): number"
+}

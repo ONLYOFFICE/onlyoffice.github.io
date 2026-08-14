@@ -1,0 +1,1414 @@
+{
+  "description": "Class representing a range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/",
+  "methods": {
+    "AddComment": {
+      "description": "Adds a comment to the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/AddComment/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"1\");\nrange.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"The comment was added to the cell A1.\");\nworksheet.GetRange(\"A4\").SetValue(\"Comment: \" + range.GetComment().GetText());"
+      ],
+      "params": [
+        {
+          "description": "The comment text.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The author's name (optional).",
+          "name": "sAuthor",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns false if comment can't be added.",
+        "type": "ApiComment | null"
+      },
+      "signature": "AddComment(sText: string, sAuthor: string): ApiComment | null"
+    },
+    "AutoFit": {
+      "description": "Changes the width of the columns or the height of the rows in the range to achieve the best fit.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/AutoFit/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"This is an example of the column width autofit.\");\nrange.AutoFit(false, true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the width of the columns will be autofit.",
+          "name": "bRows",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies if the height of the rows will be autofit.",
+          "name": "bCols",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "AutoFit(bRows?: boolean, bCols?: boolean): void"
+    },
+    "Clear": {
+      "description": "Clears the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Clear/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:B1\");\nrange.SetValue(\"1\");\nrange.Clear();\nworksheet.GetRange(\"A2\").SetValue(\"The range A1:B1 was just cleared.\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns true if the range was cleared successfully.",
+        "type": "boolean"
+      },
+      "signature": "Clear(): boolean"
+    },
+    "ClearContents": {
+      "description": "Clears all contents from the current range.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "ClearContents(): void",
+      "since": "9.1.0"
+    },
+    "ClearFormats": {
+      "description": "Clears all formatting from the current range.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "ClearFormats(): void",
+      "since": "9.1.0"
+    },
+    "ClearHyperlinks": {
+      "description": "Clears all hyperlinks from the current range.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "ClearHyperlinks(): void",
+      "since": "9.1.0"
+    },
+    "Copy": {
+      "description": "Copies the range to the specified range or to the clipboard.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Copy/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"This is a sample text which is copied to the range A3.\");\nrange.Copy(worksheet.GetRange(\"A3\"));"
+      ],
+      "params": [
+        {
+          "description": "Specifies the new range to which the specified range will be copied. If this argument is omitted, the range will be copied to the clipboard.",
+          "name": "destination",
+          "optional": true,
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Copy(destination?: ApiRange): void"
+    },
+    "Cut": {
+      "description": "Cuts the range and save it to the clipboard or paste it to the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Cut/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"This is a sample text which is move to the range A3.\");\nrange.Cut(worksheet.GetRange(\"A3\"));"
+      ],
+      "params": [
+        {
+          "description": "Specifies the new range to which the cut range will be pasted. If this argument is omitted, the range will be copied to the clipboard.",
+          "name": "destination",
+          "optional": true,
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Cut(destination?: ApiRange): void",
+      "since": "8.1.0"
+    },
+    "Delete": {
+      "description": "Deletes the Range object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Delete/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B4\").SetValue(\"1\");\nworksheet.GetRange(\"C4\").SetValue(\"2\");\nworksheet.GetRange(\"D4\").SetValue(\"3\");\nworksheet.GetRange(\"C5\").SetValue(\"5\");\nlet range = worksheet.GetRange(\"C4\");\nrange.Delete(\"up\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies how to shift cells to replace the deleted cells. If omitted, the direction is determined automatically: _\"up\"_ if the range has more columns than rows, otherwise _\"left\"_.",
+          "name": "shift",
+          "optional": true,
+          "type": "DeleteShiftDirection"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Delete(shift?: DeleteShiftDirection): void"
+    },
+    "End": {
+      "description": "Returns a Range object that represents the end in the specified direction in the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/End/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"C4:D5\");\nrange.End(\"xlToLeft\").SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+      ],
+      "params": [
+        {
+          "description": "The direction of end in the specified range. *",
+          "name": "direction",
+          "type": "Direction"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "End(direction: Direction): ApiRange"
+    },
+    "Find": {
+      "description": "Finds specific information in the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Find/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"A4\").SetValue(\"Cost price\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"B4\").SetValue(50);\nworksheet.GetRange(\"C2\").SetValue(200);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"C4\").SetValue(120);\nworksheet.GetRange(\"D2\").SetValue(200);\nworksheet.GetRange(\"D3\").SetValue(200);\nworksheet.GetRange(\"D4\").SetValue(160);\nlet range = worksheet.GetRange(\"A2:D4\");\nlet searchData = {\n\tWhat: \"200\",\n\tAfter: worksheet.GetRange(\"B1\"),\n\tLookIn: \"xlValues\",\n\tLookAt: \"xlWhole\",\n\tSearchOrder: \"xlByColumns\",\n\tSearchDirection: \"xlNext\",\n\tMatchCase: true\n};\nlet oSearchRange = range.Find(searchData);\noSearchRange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+      ],
+      "params": [
+        {
+          "description": "The search data used to make search.",
+          "name": "oSearchData",
+          "type": "SearchData"
+        }
+      ],
+      "returns": {
+        "description": "Returns null if the current range does not contain such text.",
+        "type": "ApiRange | null"
+      },
+      "signature": "Find(oSearchData: SearchData): ApiRange | null"
+    },
+    "FindNext": {
+      "description": "Continues a search that was begun with the {@link ApiRange#Find} method. Finds the next cell that matches those same conditions and returns the ApiRange object that represents that cell. This does not affect the selection or the active cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/FindNext/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"A4\").SetValue(\"Cost price\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"B4\").SetValue(50);\nworksheet.GetRange(\"C2\").SetValue(200);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"C4\").SetValue(120);\nworksheet.GetRange(\"D2\").SetValue(200);\nworksheet.GetRange(\"D3\").SetValue(200);\nworksheet.GetRange(\"D4\").SetValue(160);\nlet range = worksheet.GetRange(\"A2:D4\");\nlet oSearchRange = range.Find(\"200\", \"B1\", \"xlValues\", \"xlWhole\", \"xlByColumns\", \"xlNext\", true);\noSearchRange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));\nlet nextSearchRange = range.FindNext(oSearchRange);\nnextSearchRange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+      ],
+      "params": [
+        {
+          "description": "The cell after which the search will start. If this argument is not specified, the search starts from the last cell found.",
+          "name": "After",
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "Returns null if the range does not contain such text.",
+        "type": "ApiRange | null"
+      },
+      "signature": "FindNext(After: ApiRange): ApiRange | null"
+    },
+    "FindPrevious": {
+      "description": "Continues a search that was begun with the {@link ApiRange#Find} method. Finds the previous cell that matches those same conditions and returns the ApiRange object that represents that cell. This does not affect the selection or the active cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/FindPrevious/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"A4\").SetValue(\"Cost price\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"B4\").SetValue(50);\nworksheet.GetRange(\"C2\").SetValue(200);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"C4\").SetValue(120);\nworksheet.GetRange(\"D2\").SetValue(200);\nworksheet.GetRange(\"D3\").SetValue(200);\nworksheet.GetRange(\"D4\").SetValue(160);\nlet range = worksheet.GetRange(\"A2:D4\");\nlet oSearchRange = range.Find(\"200\", \"B1\", \"xlValues\", \"xlWhole\", \"xlByColumns\", \"xlNext\", true);\noSearchRange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));\nlet nextSearchRange = range.FindNext(oSearchRange);\nnextSearchRange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));\nlet prevSearchRange = range.FindPrevious(nextSearchRange);\nprevSearchRange.SetValue(0);"
+      ],
+      "params": [
+        {
+          "description": "The cell before which the search will start. If this argument is not specified, the search starts from the last cell found.",
+          "name": "Before",
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "Returns null if the range does not contain such text.",
+        "type": "ApiRange | null"
+      },
+      "signature": "FindPrevious(Before: ApiRange): ApiRange | null"
+    },
+    "ForEach": {
+      "description": "Executes a provided function once for each cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/ForEach/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"3\");\nlet range = worksheet.GetRange(\"A1:C1\");\nrange.ForEach(function (range) {\n\tlet value = range.GetValue();\n\tif (value != \"1\") {\n\t\trange.SetBold(true);\n\t}\n});"
+      ],
+      "params": [
+        {
+          "description": "A function which will be executed for each cell.",
+          "name": "fCallback",
+          "type": "(...args: unknown[]) => unknown"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the callback was executed, false if the callback is not a function.",
+        "type": "boolean"
+      },
+      "signature": "ForEach(fCallback: (...args: unknown[]) => unknown): boolean"
+    },
+    "GetAddress": {
+      "description": "Returns the range address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetAddress/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nlet address = worksheet.GetRange(\"A1\").GetAddress(true, true, \"xlA1\", false);\nworksheet.GetRange(\"A3\").SetValue(\"Address: \");\nworksheet.GetRange(\"B3\").SetValue(address);"
+      ],
+      "params": [
+        {
+          "description": "Defines if the link to the row is absolute or not.",
+          "name": "RowAbs",
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the link to the column is absolute or not.",
+          "name": "ColAbs",
+          "type": "boolean"
+        },
+        {
+          "description": "The reference style.",
+          "name": "RefStyle",
+          "type": "string"
+        },
+        {
+          "description": "Defines if the range is in the current file or not.",
+          "name": "External",
+          "type": "boolean"
+        },
+        {
+          "description": "The range which the current range is relative to.",
+          "name": "RelativeTo",
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "returns address of range as string.",
+        "type": "string | null"
+      },
+      "signature": "GetAddress(RowAbs: boolean, ColAbs: boolean, RefStyle: string, External: boolean, RelativeTo: ApiRange): string | null"
+    },
+    "GetAreas": {
+      "description": "Returns a collection of the ranges.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetAreas/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1:D1\");\nrange.SetValue(\"1\");\nrange.Select();\nlet areas = range.GetAreas();\nlet count = areas.GetCount();\nrange = worksheet.GetRange(\"A5\");\nrange.SetValue(\"The number of ranges in the areas: \");\nrange.AutoFit(false, true);\nworksheet.GetRange(\"B5\").SetValue(count);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiAreas"
+      },
+      "signature": "GetAreas(): ApiAreas"
+    },
+    "GetCells": {
+      "description": "Returns a Range object that represents all the cells in the specified range or a specified cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCells/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:C3\");\nrange.GetCells(2, 1).SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+      ],
+      "params": [
+        {
+          "description": "The row number or the cell number (if only row is defined).",
+          "name": "row",
+          "type": "number"
+        },
+        {
+          "description": "The column number.",
+          "name": "col",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetCells(row: number, col: number): ApiRange"
+    },
+    "GetCellsCount": {
+      "description": "Returns a number of cells in the current range.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCellsCount(): number",
+      "since": "9.1.0"
+    },
+    "GetCharacters": {
+      "description": "Returns the ApiCharacters object that represents a range of characters within the object text. Use the ApiCharacters object to format characters within a text string.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCharacters/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "The first character to be returned. If this argument is either 1 or omitted, this property returns a range of characters starting with the first character.",
+          "name": "Start",
+          "type": "number"
+        },
+        {
+          "description": "The number of characters to be returned. If this argument is omitted, this property returns the remainder of the string (everything after the Start character).",
+          "name": "Length",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiCharacters"
+      },
+      "signature": "GetCharacters(Start: number, Length: number): ApiCharacters",
+      "since": "7.4.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRange class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"This is just a sample text in the cell A1.\");\nlet classType = range.GetClassType();\nworksheet.GetRange('A3').SetValue(\"Class type: \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"range\""
+      },
+      "signature": "GetClassType(): \"range\""
+    },
+    "GetCol": {
+      "description": "Returns a column number for the selected cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCol/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"D9\").GetCol();\nworksheet.GetRange(\"A2\").SetValue(range.toString());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCol(): number"
+    },
+    "GetCols": {
+      "description": "Returns a Range object that represents the columns in the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCols/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:C3\");\nrange.GetCols(2).SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+      ],
+      "params": [
+        {
+          "description": "The column number. *",
+          "name": "nCol",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange | null"
+      },
+      "signature": "GetCols(nCol: number): ApiRange | null"
+    },
+    "GetColumnWidth": {
+      "description": "Returns the column width value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetColumnWidth/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet width = worksheet.GetRange(\"A1\").GetColumnWidth();\nworksheet.GetRange(\"A1\").SetValue(\"Width: \");\nworksheet.GetRange(\"B1\").SetValue(width);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetColumnWidth(): number"
+    },
+    "GetColumnsCount": {
+      "description": "Returns a number of columns in the current range.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetColumnsCount(): number",
+      "since": "9.1.0"
+    },
+    "GetComment": {
+      "description": "Returns the ApiComment object of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetComment/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"1\");\nrange.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment: \" + range.GetComment().GetText());"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if range does not consist of one cell.",
+        "type": "ApiComment | null"
+      },
+      "signature": "GetComment(): ApiComment | null"
+    },
+    "GetCount": {
+      "description": "Returns the rows or columns count.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCount/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"3\");\nlet count = worksheet.GetRange(\"A1:C1\").GetCount();\nworksheet.GetRange(\"A4\").SetValue(\"Count: \");\nworksheet.GetRange(\"B4\").SetValue(count);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCount(): number"
+    },
+    "GetCurrentRegion": {
+      "description": "Returns a range that represents the expanded range around the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCurrentRegion/",
+      "params": [],
+      "returns": {
+        "description": "Returns the expanded range or null if the range cannot be expanded.",
+        "type": "ApiRange | null"
+      },
+      "signature": "GetCurrentRegion(): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "GetDefName": {
+      "description": "Returns the ApiName object of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetDefName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet range = worksheet.GetRange(\"A1:B1\");\nlet defName = range.GetDefName();\nworksheet.GetRange(\"A3\").SetValue(\"DefName: \" + defName.GetName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiName"
+      },
+      "signature": "GetDefName(): ApiName"
+    },
+    "GetEntireColumn": {
+      "description": "Returns a Range object that represents the entire column(s) containing the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetEntireColumn/",
+      "params": [],
+      "returns": {
+        "description": "Returns the entire column range, or null if invalid.",
+        "type": "ApiRange | null"
+      },
+      "signature": "GetEntireColumn(): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "GetEntireRow": {
+      "description": "Returns a Range object that represents the entire row(s) containing the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetEntireRow/",
+      "params": [],
+      "returns": {
+        "description": "Returns the entire row range, or null if invalid.",
+        "type": "ApiRange | null"
+      },
+      "signature": "GetEntireRow(): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "GetFillColor": {
+      "description": "Returns the background color for the current cell range. Returns 'No Fill' when the color of the background in the cell / cell range is null.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetFillColor/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.SetColumnWidth(0, 60);\nlet range = worksheet.GetRange(\"A1\");\nrange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));\nrange.SetValue(\"This is the cell with a color set to its background.\");\nlet fillColor = range.GetFillColor();\nworksheet.GetRange(\"A3\").SetValue(\"This is another cell with the same color set to its background\");\nworksheet.GetRange(\"A3\").SetFillColor(fillColor);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "return 'No Fill' when the color to the background in the cell / cell range is null.",
+        "type": "ApiColor | 'No Fill'"
+      },
+      "signature": "GetFillColor(): ApiColor | 'No Fill'"
+    },
+    "GetFormatConditions": {
+      "description": "Returns the collection of conditional formatting rules for the current range.",
+      "params": [],
+      "returns": {
+        "type": "ApiFormatConditions"
+      },
+      "signature": "GetFormatConditions(): ApiFormatConditions",
+      "since": "9.1.0"
+    },
+    "GetFormula": {
+      "description": "Returns a formula of the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetFormula/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(1);\nworksheet.GetRange(\"C1\").SetValue(2);\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"=SUM(B1:C1)\");\nlet formula = range.GetFormula();\nworksheet.GetRange(\"A3\").SetValue(\"Formula from cell A1: \" + formula);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "return Value2 property (value without format) if formula doesn't exist.",
+        "type": "string | string[][]"
+      },
+      "signature": "GetFormula(): string | string[][]"
+    },
+    "GetFormulaArray": {
+      "description": "Returns an array formula from the current range.",
+      "params": [],
+      "returns": {
+        "type": "string | null"
+      },
+      "signature": "GetFormulaArray(): string | null",
+      "since": "9.0.0"
+    },
+    "GetHidden": {
+      "description": "Returns the value hiding property. The specified range must span an entire column or row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetHidden/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRows(\"1:3\");\nrange.SetHidden(true);\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"3\");\nlet hidden = range.GetHidden();\nworksheet.GetRange(\"A4\").SetValue(\"The values from A1:C1 are hidden: \" + hidden);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns true if the values in the range specified are hidden.",
+        "type": "boolean"
+      },
+      "signature": "GetHidden(): boolean"
+    },
+    "GetHyperlinks": {
+      "description": "Returns a collection of all the hyperlinks in the range.",
+      "params": [],
+      "returns": {
+        "type": "ApiHyperlinks"
+      },
+      "signature": "GetHyperlinks(): ApiHyperlinks"
+    },
+    "GetNumberFormat": {
+      "description": "Returns a value that represents the format code for the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetNumberFormat/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B2\");\nrange.SetValue(3);\nlet format = range.GetNumberFormat();\nworksheet.GetRange(\"B3\").SetValue(\"Number format: \" + format);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "This property returns null if all cells in the specified range don't have the same number format.",
+        "type": "string | null"
+      },
+      "signature": "GetNumberFormat(): string | null"
+    },
+    "GetOrientation": {
+      "description": "Returns the current range angle.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetOrientation/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:B1\");\nrange.SetOrientation(\"xlUpward\");\nlet orientation = range.GetOrientation();\nworksheet.GetRange(\"A3\").SetValue(\"Orientation: \" + orientation);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "Angle"
+      },
+      "signature": "GetOrientation(): Angle"
+    },
+    "GetPivotTable": {
+      "description": "Returns the ApiPivotTable object that represents the pivot table report containing the upper-left corner of the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetPivotTable/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\nlet samePivotTable = Api.GetActiveSheet().GetRange('B3').GetPivotTable();\n\nsamePivotTable.AddFields({\n    rows: 'Region',\n    columns: 'Style'\n});\n\nsamePivotTable.AddDataField('Price');"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiPivotTable | null"
+      },
+      "signature": "GetPivotTable(): ApiPivotTable | null",
+      "since": "8.2.0"
+    },
+    "GetRange": {
+      "description": "Returns a Range object that represents a cell or a range of cells.\nWhen applied to a Range object, the property is relative to that Range object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRange/",
+      "params": [
+        {
+          "description": "The first cell address (e.g., \"A1\" or \"A1:B2\").",
+          "name": "cell1",
+          "type": "string | ApiRange"
+        },
+        {
+          "description": "The second cell address (optional, defines the corner with \"cell1\").",
+          "name": "cell2",
+          "optional": true,
+          "type": "string | ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "Returns the range relative to this range, or null if invalid.",
+        "type": "ApiRange | null"
+      },
+      "signature": "GetRange(cell1: string | ApiRange, cell2?: string | ApiRange): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "GetRow": {
+      "description": "Returns a row number for the selected cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRow/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A9\").GetRow();\nworksheet.GetRange(\"A2\").SetValue(range.toString());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRow(): number"
+    },
+    "GetRowHeight": {
+      "description": "Returns the row height value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRowHeight/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet height = worksheet.GetRange(\"A1\").GetRowHeight();\nworksheet.GetRange(\"A1\").SetValue(\"Height: \");\nworksheet.GetRange(\"B1\").SetValue(height);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "The row height in the range specified, measured in points.",
+        "type": "pt"
+      },
+      "signature": "GetRowHeight(): pt"
+    },
+    "GetRows": {
+      "description": "Returns a Range object that represents the rows in the specified range. If the specified row is outside the Range object, a new Range will be returned that represents the cells between the columns of the original range in the specified row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRows/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"1:3\");\nfor (let i=1; i <= 3; i++) {\n\tlet rows = range.GetRows(i);    \n\trows.SetValue(i);\n}"
+      ],
+      "params": [
+        {
+          "description": "The row number (starts counting from 1, the 0 value returns an error).",
+          "name": "nRow",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange | null"
+      },
+      "signature": "GetRows(nRow: number): ApiRange | null"
+    },
+    "GetRowsCount": {
+      "description": "Returns a number of rows in the current range.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRowsCount(): number",
+      "since": "9.1.0"
+    },
+    "GetText": {
+      "description": "Returns the text of the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetText/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"text1\");\nworksheet.GetRange(\"B1\").SetValue(\"text2\");\nworksheet.GetRange(\"C1\").SetValue(\"text3\");\nlet range = worksheet.GetRange(\"A1:C1\");\nlet text = range.GetText();\nworksheet.GetRange(\"A3\").SetValue(\"Text from the cell A1: \" + text);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | string[][]"
+      },
+      "signature": "GetText(): string | string[][]"
+    },
+    "GetValidation": {
+      "description": "Returns the data validation object associated with this range. If no validation object exists yet, it will be created.",
+      "params": [],
+      "returns": {
+        "type": "ApiValidation"
+      },
+      "signature": "GetValidation(): ApiValidation"
+    },
+    "GetValue": {
+      "description": "Returns a value of the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetValue/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet value = worksheet.GetRange(\"A1\").GetValue();\nworksheet.GetRange(\"A3\").SetValue(\"Value of the cell A1: \");\nworksheet.GetRange(\"B3\").SetValue(value);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | number | boolean | (string | number | boolean)[][]"
+      },
+      "signature": "GetValue(): string | number | boolean | (string | number | boolean)[][]"
+    },
+    "GetValue2": {
+      "description": "Returns the Value2 property (value without format) of the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetValue2/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet format = Api.Format(\"123456\", \"$#,##0\");\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(format);\nlet value2 = range.GetValue2();\nworksheet.GetRange(\"A3\").SetValue(\"Value of the cell A1 without format: \" + value2);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string | string[][]"
+      },
+      "signature": "GetValue2(): string | string[][]"
+    },
+    "GetWorksheet": {
+      "description": "Returns the Worksheet object that represents the worksheet containing the specified range. It will be available in the read-only mode.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetWorksheet/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:C1\");\nrange.SetValue(\"1\");\nlet oSheet = range.GetWorksheet();\nworksheet.GetRange(\"A3\").SetValue(\"Worksheet name: \" + oSheet.GetName());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiWorksheet"
+      },
+      "signature": "GetWorksheet(): ApiWorksheet"
+    },
+    "GetWrapText": {
+      "description": "Returns the information about the wrapping cell style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetWrapText/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"This is the text wrapped to fit the cell size.\");\nrange.SetWrap(true);\nworksheet.GetRange(\"A3\").SetValue(\"The text in the cell A1 is wrapped: \" + range.GetWrapText());"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetWrapText(): boolean"
+    },
+    "Insert": {
+      "description": "Inserts a cell or a range of cells into the worksheet or macro sheet and shifts other cells away to make space.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Insert/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B4\").SetValue(\"1\");\nworksheet.GetRange(\"C4\").SetValue(\"2\");\nworksheet.GetRange(\"D4\").SetValue(\"3\");\nworksheet.GetRange(\"C5\").SetValue(\"5\");\nlet range = worksheet.GetRange(\"C4\");\nrange.Insert(\"down\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies which way to shift the cells (\"right\", \"down\").",
+          "name": "shift",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Insert(shift?: string): void"
+    },
+    "Merge": {
+      "description": "Merges the selected cell range into a single cell or a cell row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Merge/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A3:E8\").Merge(true);\nworksheet.GetRange(\"A9:E14\").Merge(false);"
+      ],
+      "params": [
+        {
+          "description": "When set to **true**, the cells within the selected range will be merged along the rows,\rbut remain split in the columns. When set to **false**, the whole selected range of cells will be merged into a single cell.",
+          "name": "isAcross",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the range was merged successfully.",
+        "type": "boolean"
+      },
+      "signature": "Merge(isAcross: boolean): boolean"
+    },
+    "Offset": {
+      "description": "Returns a Range object offset from the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Offset/",
+      "params": [
+        {
+          "description": "The number of rows to offset the range.",
+          "name": "rowOffset",
+          "type": "number"
+        },
+        {
+          "description": "The number of columns to offset the range.",
+          "name": "columnOffset",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "Returns the offset range, or null if invalid.",
+        "type": "ApiRange | null"
+      },
+      "signature": "Offset(rowOffset: number, columnOffset: number): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "Paste": {
+      "description": "Pastes the Range object to the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Paste/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B4\").SetValue(\"1\");\nworksheet.GetRange(\"C4\").SetValue(\"2\");\nworksheet.GetRange(\"D4\").SetValue(\"3\");\nlet rangeFrom = worksheet.GetRange(\"B4:D4\");\nlet range = worksheet.GetRange(\"A1:C1\");\nrange.Paste(rangeFrom);"
+      ],
+      "params": [
+        {
+          "description": "Specifies the range to be pasted to the current range",
+          "name": "rangeFrom",
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Paste(rangeFrom: ApiRange): void"
+    },
+    "PasteSpecial": {
+      "description": "Pastes the Range object to the specified range using the special paste options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/PasteSpecial/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"test\");\nworksheet.GetRange(\"A1\").Copy();\nworksheet.GetRange(\"B1\").PasteSpecial(\"xlPasteAll\", \"xlPasteSpecialOperationNone\", false, false);"
+      ],
+      "params": [
+        {
+          "description": "Paste option.",
+          "name": "sPasteType",
+          "optional": true,
+          "type": "PasteType"
+        },
+        {
+          "description": "The mathematical operation which will be applied to the copied data.",
+          "name": "sPasteSpecialOperation",
+          "optional": true,
+          "type": "PasteSpecialOperation"
+        },
+        {
+          "description": "Specifies whether to avoid replacing values in the paste area when blank cells occur in the copy area.",
+          "name": "bSkipBlanks",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies whether the pasted data will be transposed from rows to columns.",
+          "name": "bTranspose",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "PasteSpecial(sPasteType?: PasteType, sPasteSpecialOperation?: PasteSpecialOperation, bSkipBlanks?: boolean, bTranspose?: boolean): void",
+      "since": "8.1.0"
+    },
+    "Replace": {
+      "description": "Replaces specific information to another one in a range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Replace/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"A4\").SetValue(\"Cost price\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"B4\").SetValue(50);\nworksheet.GetRange(\"C2\").SetValue(200);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"C4\").SetValue(120);\nworksheet.GetRange(\"D2\").SetValue(200);\nworksheet.GetRange(\"D3\").SetValue(200);\nworksheet.GetRange(\"D4\").SetValue(160);\nlet range = worksheet.GetRange(\"A2:D4\");\nlet replaceData = {\n\tWhat: \"200\", \n\tReplacement: \"0\",\n\tLookAt: \"xlWhole\",\n\tSearchOrder: \"xlByColumns\",\n\tSearchDirection: \"xlNext\",\n\tMatchCase: true,\n\tReplaceAll: true\n};\nrange.Replace(replaceData);"
+      ],
+      "params": [
+        {
+          "description": "The data used to make search and replace.",
+          "name": "oReplaceData",
+          "type": "ReplaceData"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if at least one match was found and replacement was initiated, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "Replace(oReplaceData: ReplaceData): boolean"
+    },
+    "Resize": {
+      "description": "Resizes the current range by changing the number of rows and columns.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Resize/",
+      "params": [
+        {
+          "description": "The number of rows for the new range.",
+          "name": "rowSize",
+          "type": "number"
+        },
+        {
+          "description": "The number of columns for the new range.",
+          "name": "columnSize",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "Returns the resized range, or null if invalid.",
+        "type": "ApiRange | null"
+      },
+      "signature": "Resize(rowSize: number, columnSize: number): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "Select": {
+      "description": "Selects the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Select/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:C1\");\nrange.SetValue(\"1\");\nrange.Select();\nApi.GetSelection().SetValue(\"selected\");"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns true if the range was selected successfully.",
+        "type": "boolean"
+      },
+      "signature": "Select(): boolean"
+    },
+    "SetAlignHorizontal": {
+      "description": "Sets the horizontal alignment of the text in the current cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetAlignHorizontal/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:D5\");\nrange.SetAlignHorizontal(\"center\");"
+      ],
+      "params": [
+        {
+          "description": "The horizontal alignment that will be applied to the cell contents.",
+          "name": "sAlignment",
+          "type": "'left' | 'right' | 'center' | 'justify'"
+        }
+      ],
+      "returns": {
+        "description": "return false if sAlignment doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetAlignHorizontal(sAlignment: 'left' | 'right' | 'center' | 'justify'): boolean"
+    },
+    "SetAlignVertical": {
+      "description": "Sets the vertical alignment of the text in the current cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetAlignVertical/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:D5\");\nworksheet.GetRange(\"A2\").SetValue(\"This is just a sample text distributed in the A2 cell.\");\nrange.SetAlignVertical(\"distributed\");"
+      ],
+      "params": [
+        {
+          "description": "The vertical alignment that will be applied to the cell contents.",
+          "name": "sAlignment",
+          "type": "'center' | 'bottom' | 'top' | 'distributed' | 'justify'"
+        }
+      ],
+      "returns": {
+        "description": "return false if sAlignment doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetAlignVertical(sAlignment: 'center' | 'bottom' | 'top' | 'distributed' | 'justify'): boolean"
+    },
+    "SetAutoFilter": {
+      "description": "Adds an AutoFilter to the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetAutoFilter/",
+      "params": [
+        {
+          "description": "The integer offset of the field on which you want to base the filter (from the left of the list; the leftmost field is field one). If {null} provided, clears the AutoFilter for the range.",
+          "name": "Field",
+          "optional": true,
+          "type": "number | null"
+        },
+        {
+          "description": "The criteria (a string; for example, \"101\"). Use \"=\" to find blank fields, \"<>\" to find non-blank fields, and \"><\" to select (No Data) fields in data types.\rIf this argument is omitted, the criteria is All. If Operator is xlTop10Items, Criteria1 specifies the number of items (for example, \"10\").",
+          "name": "Criteria1",
+          "optional": true,
+          "type": "string | string[] | ApiColor | XlDynamicFilterCriteria"
+        },
+        {
+          "description": "An XlAutoFilterOperator constant specifying the type of filter.",
+          "name": "Operator",
+          "optional": true,
+          "type": "XlAutoFilterOperator"
+        },
+        {
+          "description": "The second criteria (a string). Used with Criteria1 and Operator to construct compound criteria.",
+          "name": "Criteria2",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "True to display the AutoFilter drop-down arrow for the filtered field. False to hide the AutoFilter drop-down arrow for the filtered field. True by default.",
+          "name": "VisibleDropDown",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAutoFilter(Field?: number | null, Criteria1?: string | string[] | ApiColor | XlDynamicFilterCriteria, Operator?: XlAutoFilterOperator, Criteria2?: string, VisibleDropDown?: boolean): void",
+      "since": "8.3.0"
+    },
+    "SetBold": {
+      "description": "Sets the bold property to the text characters in the current cell or cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetBold/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"Bold text\");\nworksheet.GetRange(\"A2\").SetBold(true);\nworksheet.GetRange(\"A3\").SetValue(\"Normal text\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current cell / cell range are displayed bold.",
+          "name": "isBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the bold property was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetBold(isBold: boolean): boolean"
+    },
+    "SetBorders": {
+      "description": "Sets the border to the cell / cell range with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetBorders/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.SetColumnWidth(0, 50);\nworksheet.GetRange(\"A2\").SetBorders(\"Bottom\", \"Thick\", Api.CreateColorFromRGB(255, 111, 61));\nworksheet.GetRange(\"A2\").SetValue(\"This is a cell with a bottom border\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies the cell border position.",
+          "name": "bordersIndex",
+          "type": "BordersIndex"
+        },
+        {
+          "description": "Specifies the line style used to form the cell border.",
+          "name": "lineStyle",
+          "type": "LineStyle"
+        },
+        {
+          "description": "The color object which specifies the color to be set to the cell border.",
+          "name": "oColor",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the borders were set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetBorders(bordersIndex: BordersIndex, lineStyle: LineStyle, oColor: ApiColor): boolean"
+    },
+    "SetColumnWidth": {
+      "description": "Sets the width of all the columns in the current range.\nOne unit of column width is equal to the width of one character in the Normal style.\nFor proportional fonts, the width of the character 0 (zero) is used.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetColumnWidth/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetColumnWidth(20);"
+      ],
+      "params": [
+        {
+          "description": "The width of the column divided by 7 pixels.",
+          "name": "nWidth",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetColumnWidth(nWidth: number): void"
+    },
+    "SetFillColor": {
+      "description": "Sets the background color to the current cell range with the previously created color object.\nSets 'No Fill' when the previously created color object is 'No Fill' or null.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetFillColor/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.SetColumnWidth(0, 50);\nworksheet.GetRange(\"A2\").SetFillColor(Api.CreateColorFromRGB(255, 213, 191));\nworksheet.GetRange(\"A2\").SetValue(\"This is the cell with a color set to its background\");\nworksheet.GetRange(\"A4\").SetValue(\"This is the cell with a default background color\");"
+      ],
+      "params": [
+        {
+          "description": "The color object which specifies the color to be set to the background in the cell / cell range. Pass 'No Fill' or null to clear the background color.",
+          "name": "color",
+          "type": "ApiColor | 'No Fill' | null"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the fill color was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetFillColor(color: ApiColor | 'No Fill' | null): boolean"
+    },
+    "SetFontColor": {
+      "description": "Sets the text color to the current cell range with the previously created color object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetFontColor/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetFontColor(Api.CreateColorFromRGB(255, 111, 61));\nworksheet.GetRange(\"A2\").SetValue(\"This is the text with a color set to it\");\nworksheet.GetRange(\"A4\").SetValue(\"This is the text with a default color\");"
+      ],
+      "params": [
+        {
+          "description": "The color object which specifies the color to be set to the text in the cell / cell range.",
+          "name": "oColor",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the font color was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetFontColor(oColor: ApiColor): boolean"
+    },
+    "SetFontName": {
+      "description": "Sets the specified font family as the font name for the current cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetFontName/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:D5\");\nrange.SetFontName(\"Arial\");"
+      ],
+      "params": [
+        {
+          "description": "The font family name used for the current cell range.",
+          "name": "sName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the font name was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetFontName(sName: string): boolean"
+    },
+    "SetFontSize": {
+      "description": "Sets the font size to the characters of the current cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetFontSize/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:D5\");\nrange.SetFontSize(20);"
+      ],
+      "params": [
+        {
+          "description": "The font size value measured in points.",
+          "name": "nSize",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the font size was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetFontSize(nSize: number): boolean"
+    },
+    "SetFormulaArray": {
+      "description": "Sets an array formula to the current range.",
+      "params": [
+        {
+          "description": "The general value for the cell or cell range.",
+          "name": "data",
+          "type": "string | boolean | number"
+        }
+      ],
+      "returns": {
+        "description": "Returns false if such a range does not exist.",
+        "type": "boolean"
+      },
+      "signature": "SetFormulaArray(data: string | boolean | number): boolean",
+      "since": "9.0.0"
+    },
+    "SetHidden": {
+      "description": "Sets the value hiding property. The specified range must span an entire column or row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetHidden/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRows(\"1:3\");\nrange.SetHidden(true);\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"3\");\nlet hidden = range.GetHidden();\nworksheet.GetRange(\"A4\").SetValue(\"The values from A1:C1 are hidden: \" + hidden);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the values in the current range are hidden or not.",
+          "name": "isHidden",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the hidden property was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetHidden(isHidden: boolean): boolean"
+    },
+    "SetItalic": {
+      "description": "Sets the italic property to the text characters in the current cell or cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetItalic/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"Italicized text\");\nworksheet.GetRange(\"A2\").SetItalic(true);\nworksheet.GetRange(\"A3\").SetValue(\"Normal text\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies that the contents of the current cell / cell range are displayed italicized.",
+          "name": "isItalic",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the italic property was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetItalic(isItalic: boolean): boolean"
+    },
+    "SetNumberFormat": {
+      "description": "Specifies whether a number in the cell should be treated like number, currency, date, time, etc. or just like text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetNumberFormat/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.SetColumnWidth(0, 30);\nworksheet.SetColumnWidth(1, 30);\nworksheet.GetRange(\"A2\").SetNumberFormat(\"General\");\nworksheet.GetRange(\"A2\").SetValue(\"123456\");\nworksheet.GetRange(\"B2\").SetValue(\"General\");\nworksheet.GetRange(\"A3\").SetNumberFormat(\"0.00\");\nworksheet.GetRange(\"A3\").SetValue(\"123456\");\nworksheet.GetRange(\"B3\").SetValue(\"Number\");\nworksheet.GetRange(\"A4\").SetNumberFormat(\"$#,##0.00\");\nworksheet.GetRange(\"A4\").SetValue(\"123456\");\nworksheet.GetRange(\"B4\").SetValue(\"Currency\");\nworksheet.GetRange(\"A5\").SetNumberFormat(\"_($* #,##0.00_)\");\nworksheet.GetRange(\"A5\").SetValue(\"123456\");\nworksheet.GetRange(\"B5\").SetValue(\"Accounting\");\nworksheet.GetRange(\"A6\").SetNumberFormat(\"m/d/yyyy\");\nworksheet.GetRange(\"A6\").SetValue(\"123456\");\nworksheet.GetRange(\"B6\").SetValue(\"DateShort\");\nworksheet.GetRange(\"A7\").SetNumberFormat(\"[$-F800]dddd, mmmm dd, yyyy\");\nworksheet.GetRange(\"A7\").SetValue(\"123456\");\nworksheet.GetRange(\"B7\").SetValue(\"DateLong\");\nworksheet.GetRange(\"A8\").SetNumberFormat(\"[$-F400]h:mm:ss AM/PM\");\nworksheet.GetRange(\"A8\").SetValue(\"123456\");\nworksheet.GetRange(\"B8\").SetValue(\"Time\");\nworksheet.GetRange(\"A9\").SetNumberFormat(\"0.00%\");\nworksheet.GetRange(\"A9\").SetValue(\"123456\");\nworksheet.GetRange(\"B9\").SetValue(\"Percentage\");\nworksheet.GetRange(\"A10\").SetNumberFormat(\"0%\");\nworksheet.GetRange(\"A10\").SetValue(\"123456\");\nworksheet.GetRange(\"B10\").SetValue(\"Percent\");\nworksheet.GetRange(\"A11\").SetNumberFormat(\"# ?/?\");\nworksheet.GetRange(\"A11\").SetValue(\"123456\");\nworksheet.GetRange(\"B11\").SetValue(\"Fraction\");\nworksheet.GetRange(\"A12\").SetNumberFormat(\"0.00E+00\");\nworksheet.GetRange(\"A12\").SetValue(\"123456\");\nworksheet.GetRange(\"B12\").SetValue(\"Scientific\");\nworksheet.GetRange(\"A13\").SetNumberFormat(\"@\");\nworksheet.GetRange(\"A13\").SetValue(\"123456\");\nworksheet.GetRange(\"B13\").SetValue(\"Text\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies the mask applied to the number in the cell.",
+          "name": "sFormat",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the number format was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetNumberFormat(sFormat: string): boolean"
+    },
+    "SetOffset": {
+      "description": "Sets the cell offset.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetOffset/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B3\").SetValue(\"Old Range\");\nlet range = worksheet.GetRange(\"B3\");\nrange.SetOffset(2, 2);\nrange.SetValue(\"New Range\");"
+      ],
+      "params": [
+        {
+          "description": "The row number.",
+          "name": "nRow",
+          "type": "number"
+        },
+        {
+          "description": "The column number.",
+          "name": "nCol",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the offset was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetOffset(nRow: number, nCol: number): boolean"
+    },
+    "SetOrientation": {
+      "description": "Sets an angle to the current cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetOrientation/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:B1\");\nrange.SetOrientation(\"xlUpward\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies the range angle.",
+          "name": "angle",
+          "type": "Angle"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetOrientation(angle: Angle): void"
+    },
+    "SetReadingOrder": {
+      "description": "Sets the direction (reading order) of the text in the current cell range.",
+      "params": [
+        {
+          "description": "The direction (reading order) that will be applied to the cell contents.",
+          "name": "direction",
+          "type": "'context' | 'ltr' | 'rtl'"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetReadingOrder(direction: 'context' | 'ltr' | 'rtl'): void"
+    },
+    "SetRowHeight": {
+      "description": "Sets the row height value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetRowHeight/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetRowHeight(32);"
+      ],
+      "params": [
+        {
+          "description": "The row height in the current range measured in points.",
+          "name": "nHeight",
+          "type": "pt"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the row height was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetRowHeight(nHeight: pt): boolean"
+    },
+    "SetSort": {
+      "description": "Sorts the cells in the given range by the parameters specified in the request.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetSort/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(2015);\nworksheet.GetRange(\"A3\").SetValue(2018);\nworksheet.GetRange(\"A4\").SetValue(2014);\nworksheet.GetRange(\"A5\").SetValue(2010);\nworksheet.GetRange(\"B1\").SetValue(150);\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(260);\nworksheet.GetRange(\"B4\").SetValue(120);\nworksheet.GetRange(\"B5\").SetValue(100);\nworksheet.GetRange(\"C1\").SetValue(\"C\");\nworksheet.GetRange(\"C2\").SetValue(\"B\");\nworksheet.GetRange(\"C3\").SetValue(\"A\");\nworksheet.GetRange(\"C4\").SetValue(\"G\");\nworksheet.GetRange(\"C5\").SetValue(\"E\");\nworksheet.GetRange(\"A1:C5\").SetSort(\"A1:A5\", \"xlAscending\", \"B1:B5\", \"xlDescending\", \"C1:C5\", \"xlAscending\", \"xlYes\", \"xlSortColumns\");"
+      ],
+      "params": [
+        {
+          "description": "First sort field.",
+          "name": "key1",
+          "type": "ApiRange | string"
+        },
+        {
+          "description": "The sort order for the values specified in Key1.",
+          "name": "sSortOrder1",
+          "type": "SortOrder"
+        },
+        {
+          "description": "Second sort field.",
+          "name": "key2",
+          "type": "ApiRange | string"
+        },
+        {
+          "description": "The sort order for the values specified in Key2.",
+          "name": "sSortOrder2",
+          "type": "SortOrder"
+        },
+        {
+          "description": "Third sort field.",
+          "name": "key3",
+          "type": "ApiRange | string"
+        },
+        {
+          "description": "The sort order for the values specified in Key3.",
+          "name": "sSortOrder3",
+          "type": "SortOrder"
+        },
+        {
+          "description": "Specifies whether the first row contains header information.",
+          "name": "sHeader",
+          "type": "SortHeader"
+        },
+        {
+          "description": "Specifies if the sort should be by row (default) or column.",
+          "name": "sOrientation",
+          "type": "SortOrientation"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSort(key1: ApiRange | string, sSortOrder1: SortOrder, key2: ApiRange | string, sSortOrder2: SortOrder, key3: ApiRange | string, sSortOrder3: SortOrder, sHeader: SortHeader, sOrientation: SortOrientation): void"
+    },
+    "SetStrikeout": {
+      "description": "Specifies that the contents of the cell / cell range are displayed with a single horizontal line through the center of the contents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetStrikeout/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"Struckout text\");\nworksheet.GetRange(\"A2\").SetStrikeout(true);\nworksheet.GetRange(\"A3\").SetValue(\"Normal text\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current cell / cell range are displayed struck through.",
+          "name": "isStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the strikeout property was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetStrikeout(isStrikeout: boolean): boolean"
+    },
+    "SetUnderline": {
+      "description": "Specifies that the contents of the current cell / cell range are displayed along with a line appearing directly below the character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetUnderline/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"The text underlined with a single line\");\nworksheet.GetRange(\"A2\").SetUnderline(\"single\");\nworksheet.GetRange(\"A4\").SetValue(\"Normal text\");"
+      ],
+      "params": [
+        {
+          "description": "Specifies the type of the\rline displayed under the characters. The following values are available:\r**\"none\"** - for no underlining;\r**\"single\"** - for a single line underlining the cell contents;\r**\"singleAccounting\"** - for a single line underlining the cell contents but not protruding beyond the cell borders;\r**\"double\"** - for a double line underlining the cell contents;\r**\"doubleAccounting\"** - for a double line underlining the cell contents but not protruding beyond the cell borders.",
+          "name": "undelineType",
+          "type": "'none' | 'single' | 'singleAccounting' | 'double' | 'doubleAccounting'"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the underline property was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetUnderline(undelineType: 'none' | 'single' | 'singleAccounting' | 'double' | 'doubleAccounting'): boolean"
+    },
+    "SetValue": {
+      "description": "Sets a value to the current cell or cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetValue/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"B2\").SetValue(\"2\");\nworksheet.GetRange(\"A3\").SetValue(\"2x2=\");\nworksheet.GetRange(\"B3\").SetValue(\"=B1*B2\");"
+      ],
+      "params": [
+        {
+          "description": "The general value for the cell or cell range.",
+          "name": "data",
+          "type": "string | boolean | number | (string | boolean | number)[] | (string | boolean | number)[][]"
+        }
+      ],
+      "returns": {
+        "description": "returns false if such a range does not exist.",
+        "type": "boolean"
+      },
+      "signature": "SetValue(data: string | boolean | number | (string | boolean | number)[] | (string | boolean | number)[][]): boolean"
+    },
+    "SetWrap": {
+      "description": "Specifies whether the words in the cell must be wrapped to fit the cell size or not.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetWrap/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"This is the text wrapped to fit the cell size.\");\nrange.SetWrap(true);\nworksheet.GetRange(\"A3\").SetValue(\"The text in the cell A1 is wrapped: \" + range.GetWrapText());"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the words in the cell will be wrapped to fit the cell size.",
+          "name": "isWrap",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns true if the wrap property was set successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetWrap(isWrap: boolean): boolean"
+    },
+    "UnMerge": {
+      "description": "Splits the selected merged cell range into the single cells.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/UnMerge/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A3:E8\").Merge(true);\nworksheet.GetRange(\"A5:E5\").UnMerge();"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns true if the range was unmerged successfully.",
+        "type": "boolean"
+      },
+      "signature": "UnMerge(): boolean"
+    }
+  }
+}

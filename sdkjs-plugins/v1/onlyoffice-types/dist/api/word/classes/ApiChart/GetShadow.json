@@ -1,0 +1,9 @@
+{
+  "description": "Returns the shadow of the current graphic object.",
+  "params": [],
+  "returns": {
+    "type": "ApiShadow | null"
+  },
+  "signature": "GetShadow(): ApiShadow | null",
+  "since": "9.5.0"
+}

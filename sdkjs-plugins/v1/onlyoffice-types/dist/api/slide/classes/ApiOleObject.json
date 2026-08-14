@@ -1,0 +1,275 @@
+{
+  "description": "Class representing an OLE object.",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methods": {
+    "CreateTextRange": {
+      "description": "Creates a text body for the drawing if it does not already exist and returns its full text range.",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "CreateTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "GetApplicationId": {
+      "description": "Returns the application ID from the current OLE object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/GetApplicationId/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oOleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\noOleObject.SetSize(200 * 36000, 130 * 36000);\noOleObject.SetPosition(70 * 36000, 30 * 36000);\noSlide.AddObject(oOleObject);\nvar sAppId = oOleObject.GetApplicationId();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"rect\", 300 * 36000, 15 * 36000, oFill, oStroke);\noDrawing.SetPosition(20 * 36000, 170 * 36000);\nvar oDocContent = oDrawing.GetContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"The application ID for the current OLE object: \" + sAppId);\noSlide.AddObject(oDrawing);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetApplicationId(): string"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiOleObject class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oOleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\noOleObject.SetSize(200 * 36000, 130 * 36000);\noOleObject.SetPosition(70 * 36000, 30 * 36000);\noSlide.AddObject(oOleObject);\nvar sType = oOleObject.GetClassType();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"rect\", 300 * 36000, 15 * 36000, oFill, oStroke);\noDrawing.SetPosition(20 * 36000, 170 * 36000);\nvar oDocContent = oDrawing.GetContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"Class type: \" + sType);\noSlide.AddObject(oDrawing);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"oleObject\""
+      },
+      "signature": "GetClassType(): \"oleObject\""
+    },
+    "GetData": {
+      "description": "Returns the string data from the current OLE object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/GetData/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oOleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\noOleObject.SetSize(200 * 36000, 130 * 36000);\noOleObject.SetPosition(70 * 36000, 30 * 36000);\noSlide.AddObject(oOleObject);\nvar sData = oOleObject.GetData();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"rect\", 300 * 36000, 15 * 36000, oFill, oStroke);\noDrawing.SetPosition(20 * 36000, 170 * 36000);\nvar oDocContent = oDrawing.GetContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"The OLE object data: \" + sData);\noSlide.AddObject(oDrawing);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetData(): string"
+    },
+    "GetHyperlink": {
+      "description": "Returns the hyperlink from the current drawing object (shape or image).",
+      "params": [],
+      "returns": {
+        "description": "Returns the hyperlink object or null if no hyperlink is set.",
+        "type": "ApiHyperlink | null"
+      },
+      "signature": "GetHyperlink(): ApiHyperlink | null"
+    },
+    "GetInternalId": {
+      "description": "Returns an internal ID of the current drawing object.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInternalId(): string"
+    },
+    "GetParent": {
+      "description": "Returns the drawing parent object.",
+      "params": [],
+      "returns": {
+        "type": "ApiSlide | ApiLayout | ApiMaster | null"
+      },
+      "signature": "GetParent(): ApiSlide | ApiLayout | ApiMaster | null"
+    },
+    "GetParentLayout": {
+      "description": "Returns the drawing parent slide layout.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide layout.",
+        "type": "ApiLayout | null"
+      },
+      "signature": "GetParentLayout(): ApiLayout | null"
+    },
+    "GetParentMaster": {
+      "description": "Returns the drawing parent slide master.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide master.",
+        "type": "ApiMaster | null"
+      },
+      "signature": "GetParentMaster(): ApiMaster | null"
+    },
+    "GetParentSlide": {
+      "description": "Returns the drawing parent slide.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide.",
+        "type": "ApiSlide | null"
+      },
+      "signature": "GetParentSlide(): ApiSlide | null"
+    },
+    "GetPlaceholder": {
+      "description": "Returns a placeholder from the current drawing object.",
+      "params": [],
+      "returns": {
+        "description": "returns null if placeholder doesn't exist.",
+        "type": "ApiPlaceholder | null"
+      },
+      "signature": "GetPlaceholder(): ApiPlaceholder | null"
+    },
+    "GetPosX": {
+      "description": "Gets the x position of the drawing on the slide.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosX(): EMU"
+    },
+    "GetPosY": {
+      "description": "Gets the y position of the drawing on the slide.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosY(): EMU"
+    },
+    "GetTextRange": {
+      "description": "Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no text body (use CreateTextRange to create one).",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "GetTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "IsTextRange": {
+      "description": "Checks whether the drawing has an associated text body.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsTextRange(): boolean",
+      "since": "9.5.0"
+    },
+    "ReplacePlaceholder": {
+      "description": "Replaces the placeholder by a drawing on the slide.",
+      "params": [
+        {
+          "description": "The drawing object that will replace the placeholder.",
+          "name": "drawing",
+          "type": "Drawing"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ReplacePlaceholder(drawing: Drawing): boolean"
+    },
+    "SetApplicationId": {
+      "description": "Sets the application ID to the current OLE object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/SetApplicationId/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oOleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\noOleObject.SetSize(200 * 36000, 130 * 36000);\noOleObject.SetPosition(70 * 36000, 30 * 36000);\noSlide.AddObject(oOleObject);\noOleObject.SetApplicationId(\"asc.{E5773A43-F9B3-4E81-81D9-CE0A132470E7}\");"
+      ],
+      "params": [
+        {
+          "description": "The application ID associated with the current OLE object.",
+          "name": "sAppId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetApplicationId(sAppId: string): boolean"
+    },
+    "SetData": {
+      "description": "Sets the data to the current OLE object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/SetData/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oOleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\noOleObject.SetSize(200 * 36000, 130 * 36000);\noOleObject.SetPosition(70 * 36000, 30 * 36000);\noSlide.AddObject(oOleObject);\noOleObject.SetData(\"https://youtu.be/eJxpkjQG6Ew\");"
+      ],
+      "params": [
+        {
+          "description": "The OLE object string data.",
+          "name": "sData",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetData(sData: string): boolean"
+    },
+    "SetHyperlink": {
+      "description": "Sets a hyperlink to the current drawing object (shape or image).\nPass null to remove the hyperlink.",
+      "params": [
+        {
+          "description": "The hyperlink object to be set to the drawing, or null to remove the hyperlink.",
+          "name": "hyperlink",
+          "type": "ApiHyperlink | null"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the hyperlink was set or removed successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetHyperlink(hyperlink: ApiHyperlink | null): boolean"
+    },
+    "SetPlaceholder": {
+      "description": "Sets the specified placeholder to the current drawing object.",
+      "params": [
+        {
+          "description": "Placeholder object.",
+          "name": "oPlaceholder",
+          "type": "ApiPlaceholder"
+        }
+      ],
+      "returns": {
+        "description": "returns false if parameter isn't a placeholder.",
+        "type": "boolean"
+      },
+      "signature": "SetPlaceholder(oPlaceholder: ApiPlaceholder): boolean"
+    },
+    "SetPosX": {
+      "description": "Sets the x position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosX(posX: EMU): boolean"
+    },
+    "SetPosY": {
+      "description": "Sets the y position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosY(posY: EMU): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
+          "name": "nPosX",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
+          "name": "nPosY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetPosition(nPosX: EMU, nPosY: EMU): void"
+    }
+  }
+}

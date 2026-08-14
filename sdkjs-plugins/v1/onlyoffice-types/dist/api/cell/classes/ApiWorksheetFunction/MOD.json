@@ -1,0 +1,23 @@
+{
+  "description": "Returns the remainder after a number is divided by a divisor.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MOD/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.MOD(65, 7));"
+  ],
+  "params": [
+    {
+      "description": "The number to divide and find the remainder.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number to divide by.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MOD(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

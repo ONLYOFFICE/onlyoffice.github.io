@@ -1,0 +1,25 @@
+{
+  "description": "Shows details of the pivot table cell.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotTable/Methods/ShowDetails/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n\trows: 'Region',\n\tcolumns: 'Style',\n});\n\npivotTable.AddDataField('Price');\n\npivotTable.ShowDetails(1, 3);\n\nlet showDetailsSheet = Api.GetActiveSheet();\nshowDetailsSheet.GetRange('A5').SetValue('East details');"
+  ],
+  "params": [
+    {
+      "description": "The position of the pivot line (a line of rows in the pivot table) on the row area.",
+      "name": "rowLine",
+      "type": "number"
+    },
+    {
+      "description": "The position of the pivot line (a line of columns in the pivot table) on the column area.",
+      "name": "colLine",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "description": "Returns true if the operation is successful.",
+    "type": "boolean"
+  },
+  "signature": "ShowDetails(rowLine: number, colLine: number): boolean",
+  "since": "8.2.0"
+}

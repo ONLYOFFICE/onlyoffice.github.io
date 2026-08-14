@@ -1,0 +1,12 @@
+{
+  "description": "Returns the document statistics represented as an object with the following parameters:\n**PageCount** - number of pages;\n**WordsCount** - number of words;\n**ParagraphCount** - number of paragraphs;\n**SymbolsCount** - number of symbols;\n**SymbolsWSCount** - number of symbols with spaces.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetStatistics/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\nlet statistics = doc.GetStatistics();\nparagraph.AddLineBreak();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Document statistics\");\nparagraph.SetBold(true);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Pages: \" + statistics.PageCount);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Words: \" + statistics.WordsCount);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Paragraphs: \" + statistics.ParagraphCount);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Symbols: \" + statistics.SymbolsCount);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Symbols with spaces: \" + statistics.SymbolsWSCount);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "object"
+  },
+  "signature": "GetStatistics(): object"
+}

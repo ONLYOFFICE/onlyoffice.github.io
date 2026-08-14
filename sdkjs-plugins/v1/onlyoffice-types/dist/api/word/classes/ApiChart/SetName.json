@@ -1,0 +1,16 @@
+{
+  "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
+  "params": [
+    {
+      "description": "The name which will be set to the current drawing.",
+      "name": "name",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "Returns true if the name was successfully set, otherwise returns false.",
+    "type": "boolean"
+  },
+  "signature": "SetName(name: string): boolean",
+  "since": "9.3.0"
+}

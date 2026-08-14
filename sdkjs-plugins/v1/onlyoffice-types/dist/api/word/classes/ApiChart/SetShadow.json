@@ -1,0 +1,16 @@
+{
+  "description": "Sets the shadow to the current graphic object.",
+  "params": [
+    {
+      "description": "The shadow to apply, or null to remove the current shadow.",
+      "name": "shadow",
+      "type": "ApiShadow"
+    }
+  ],
+  "returns": {
+    "description": "returns false if the graphic object does not support shadow.",
+    "type": "boolean"
+  },
+  "signature": "SetShadow(shadow: ApiShadow): boolean",
+  "since": "9.5.0"
+}

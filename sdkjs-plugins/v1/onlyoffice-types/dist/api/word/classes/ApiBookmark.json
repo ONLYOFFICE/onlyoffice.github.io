@@ -1,0 +1,146 @@
+{
+  "description": "Class representing a bookmark in the document.",
+  "methods": {
+    "Delete": {
+      "description": "Deletes the current bookmark from the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/Delete/",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean",
+      "since": "8.3.0"
+    },
+    "GetName": {
+      "description": "Returns the bookmark name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GetName/",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string",
+      "since": "8.3.0"
+    },
+    "GetRange": {
+      "description": "Returns the bookmark range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GetRange/",
+      "params": [],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRange(): ApiRange",
+      "since": "8.3.0"
+    },
+    "GetText": {
+      "description": "Returns the bookmark text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GetText/",
+      "params": [
+        {
+          "description": "Options for formatting the returned text.",
+          "name": "options",
+          "optional": true,
+          "type": "object"
+        },
+        {
+          "description": "Defines if the resulting string will include numbering or not.",
+          "name": "options_Numbering",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the resulting string will include mathematical expressions or not.",
+          "name": "options_Math",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines how the line separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\".",
+          "name": "options_NewLineSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table cell separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\t\".",
+          "name": "options_TableCellSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table row separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\\n\".",
+          "name": "options_TableRowSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the paragraph separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\\n\".",
+          "name": "options_ParaSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the tab will be specified in the resulting string (does not apply to numbering). Any symbol can be used. The default symbol is \"\\t\".",
+          "name": "options_TabSymbol",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string): string",
+      "since": "8.3.0"
+    },
+    "GoTo": {
+      "description": "Moves a cursor to the current bookmark.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GoTo/",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GoTo(): boolean",
+      "since": "8.3.0"
+    },
+    "Select": {
+      "description": "Selects the current bookmark.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/Select/",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(): boolean",
+      "since": "8.3.0"
+    },
+    "SetName": {
+      "description": "Changes the bookmark name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/SetName/",
+      "params": [
+        {
+          "description": "A new bookmark name.",
+          "name": "sNewName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetName(sNewName: string): boolean",
+      "since": "8.3.0"
+    },
+    "SetText": {
+      "description": "Sets the bookmark text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/SetText/",
+      "params": [
+        {
+          "description": "The bookmark text.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetText(sText: string): boolean",
+      "since": "8.3.0"
+    }
+  }
+}

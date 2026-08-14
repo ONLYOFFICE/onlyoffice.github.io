@@ -1,0 +1,18 @@
+{
+  "description": "Returns the smallest value in a set of values. Does not ignore logical values and text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MINA/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet minA = func.MINA(23, 45, true, \"text\", 0.89);\nworksheet.GetRange(\"C1\").SetValue(minA);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 values (number, text, logical value) for which the smallest value will be returned.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, logical values and text representations of numbers, names, ranges, or arrays.",
+      "name": "args",
+      "type": "number | string | boolean | (number | string | boolean)[] | ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MINA(args: number | string | boolean | (number | string | boolean)[] | ApiRange | ApiName): number"
+}

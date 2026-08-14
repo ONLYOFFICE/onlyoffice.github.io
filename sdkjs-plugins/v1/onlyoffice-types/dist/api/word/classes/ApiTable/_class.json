@@ -1,0 +1,8 @@
+{
+  "description": "Class representing a table.",
+  "extends": [
+    "ApiTablePr"
+  ],
+  "methodCount": 71,
+  "sharded": true
+}

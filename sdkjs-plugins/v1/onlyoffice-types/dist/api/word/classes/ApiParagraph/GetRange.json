@@ -1,0 +1,23 @@
+{
+  "description": "Returns a Range object that represents the part of the document contained in the specified paragraph.\nThe paragraph must be attached to the document before calling this method.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetRange/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\nlet range = paragraph.GetRange(8, 11);\nrange.SetBold(true);"
+  ],
+  "params": [
+    {
+      "description": "Start position index in the current element.",
+      "name": "Start",
+      "type": "number"
+    },
+    {
+      "description": "End position index in the current element.",
+      "name": "End",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange | null"
+  },
+  "signature": "GetRange(Start: number, End: number): ApiRange | null"
+}

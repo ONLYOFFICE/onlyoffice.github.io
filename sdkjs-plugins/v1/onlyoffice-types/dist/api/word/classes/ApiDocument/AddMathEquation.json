@@ -1,0 +1,25 @@
+{
+  "description": "Adds a math equation to the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddMathEquation/",
+  "examples": [
+    "let doc = Api.GetDocument();\ndoc.AddMathEquation(\"e^x = 1 + x + \\\\frac{x^2}{2} + \\\\frac{x^3}{6} + \\\\cdots = \\\\sum_{n\\\\geq 0} \\\\frac{x^n}{n!}\", \"latex\");"
+  ],
+  "params": [
+    {
+      "description": "An equation written as a linear text string.",
+      "name": "sText",
+      "type": "string"
+    },
+    {
+      "description": "The format of the specified linear representation.",
+      "name": "sFormat",
+      "optional": true,
+      "type": "\"unicode\" | \"latex\" | \"mathml\""
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "AddMathEquation(sText: string, sFormat?: \"unicode\" | \"latex\" | \"mathml\"): boolean",
+  "since": "8.2.0"
+}

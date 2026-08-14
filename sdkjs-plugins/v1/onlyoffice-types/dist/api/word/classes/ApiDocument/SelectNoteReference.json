@@ -1,0 +1,10 @@
+{
+  "description": "Select the reference to this footnote/endnote. If this document content is not a footnote/endnote, do nothing.",
+  "params": [],
+  "returns": {
+    "description": "Returns true if the reference was selected successfully.",
+    "type": "boolean"
+  },
+  "signature": "SelectNoteReference(): boolean",
+  "since": "9.3.0"
+}

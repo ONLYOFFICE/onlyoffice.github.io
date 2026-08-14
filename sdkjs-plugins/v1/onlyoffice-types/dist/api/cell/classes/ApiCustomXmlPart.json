@@ -1,0 +1,216 @@
+{
+  "description": "Class representing a custom XML part.",
+  "methods": {
+    "Delete": {
+      "description": "Deletes the XML from the custom XML manager.",
+      "params": [],
+      "returns": {
+        "description": "True if the XML was successfully deleted.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean",
+      "since": "9.0.0"
+    },
+    "DeleteAttribute": {
+      "description": "Deletes an attribute from the XML node at the specified XPath.",
+      "params": [
+        {
+          "description": "The XPath of the node from which to delete the attribute.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The name of the attribute to delete.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the attribute was successfully deleted.",
+        "type": "boolean"
+      },
+      "signature": "DeleteAttribute(xPath: string, name: string): boolean",
+      "since": "9.0.0"
+    },
+    "DeleteElement": {
+      "description": "Deletes an XML element at the specified XPath.",
+      "params": [
+        {
+          "description": "The XPath of the node to delete.",
+          "name": "xPath",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the element was successfully deleted.",
+        "type": "boolean"
+      },
+      "signature": "DeleteElement(xPath: string): boolean",
+      "since": "9.0.0"
+    },
+    "GetAttribute": {
+      "description": "Returns an attribute from the XML node at the specified XPath.",
+      "params": [
+        {
+          "description": "The XPath of the node from which to get the attribute.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The name of the attribute to find.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The attribute value or null if no matching attributes are found.",
+        "type": "string | null"
+      },
+      "signature": "GetAttribute(xPath: string, name: string): string | null",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCustomXmlPart class.",
+      "params": [],
+      "returns": {
+        "type": "\"customXmlPart\""
+      },
+      "signature": "GetClassType(): \"customXmlPart\""
+    },
+    "GetId": {
+      "description": "Returns the ID of the custom XML part.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetId(): string"
+    },
+    "GetNodes": {
+      "description": "Retrieves nodes from custom XML based on the provided XPath.",
+      "params": [
+        {
+          "description": "The XPath expression to search for nodes.",
+          "name": "xPath",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "An array of ApiCustomXmlNode objects corresponding to the found nodes.",
+        "type": "ApiCustomXmlNode[]"
+      },
+      "signature": "GetNodes(xPath: string): ApiCustomXmlNode[]",
+      "since": "9.0.0"
+    },
+    "GetXml": {
+      "description": "Retrieves the XML string from the custom XML part.",
+      "params": [],
+      "returns": {
+        "description": "The XML string.",
+        "type": "string"
+      },
+      "signature": "GetXml(): string",
+      "since": "9.0.0"
+    },
+    "InsertAttribute": {
+      "description": "Inserts an attribute into the XML node at the specified XPath.",
+      "params": [
+        {
+          "description": "The XPath of the node to insert the attribute into.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The name of the attribute to insert.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The value of the attribute to insert.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the attribute was successfully inserted.",
+        "type": "boolean"
+      },
+      "signature": "InsertAttribute(xPath: string, name: string, value: string): boolean",
+      "since": "9.0.0"
+    },
+    "InsertElement": {
+      "description": "Inserts an XML element at the specified XPath.",
+      "params": [
+        {
+          "description": "The XPath of the parent node where the new element will be inserted.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The XML string to insert.",
+          "name": "xmlStr",
+          "type": "string"
+        },
+        {
+          "description": "The position at which to insert the new XML element. If omitted, the element will be appended as the last child.",
+          "name": "index",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "True if the insertion was successful.",
+        "type": "boolean"
+      },
+      "signature": "InsertElement(xPath: string, xmlStr: string, index?: number): boolean",
+      "since": "9.0.0"
+    },
+    "UpdateAttribute": {
+      "description": "Updates an attribute of the XML node at the specified XPath.",
+      "params": [
+        {
+          "description": "The XPath of the node whose attribute should be updated.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The name of the attribute to update.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The new value for the attribute.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the attribute was successfully updated.",
+        "type": "boolean"
+      },
+      "signature": "UpdateAttribute(xPath: string, name: string, value: string): boolean",
+      "since": "9.0.0"
+    },
+    "UpdateElement": {
+      "description": "Updates an XML element at the specified XPath.",
+      "params": [
+        {
+          "description": "The XPath of the node to update.",
+          "name": "xPath",
+          "type": "string"
+        },
+        {
+          "description": "The XML string to replace the node content with.",
+          "name": "xmlStr",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "True if the update was successful.",
+        "type": "boolean"
+      },
+      "signature": "UpdateElement(xPath: string, xmlStr: string): boolean",
+      "since": "9.0.0"
+    }
+  },
+  "since": "9.0.0"
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Gets the description of the current drawing.",
+  "params": [],
+  "returns": {
+    "description": "The description of the current drawing, or null if not set.",
+    "type": "string | null"
+  },
+  "signature": "GetDescription(): string | null",
+  "since": "9.5.0"
+}

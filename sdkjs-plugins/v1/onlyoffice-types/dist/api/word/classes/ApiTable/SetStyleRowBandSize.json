@@ -1,0 +1,18 @@
+{
+  "description": "Specifies a number of rows which will comprise each table row band for this table style.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetStyleRowBandSize/",
+  "examples": [
+    "let doc = Api.GetDocument();\ndoc.RemoveAllElements();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(2, 4);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\nlet tablePr = tableStyle.GetTablePr();\ntable.SetTableLook(true, true, true, true, true, true);\ntablePr.SetStyleRowBandSize(2);\ntableStyle.GetConditionalTableStyle(\"bandedRow\").GetTextPr().SetBold(true);\ntable.GetRow(0).GetCell(0).GetContent().GetElement(0).AddText(\"Normal\");\ntable.GetRow(0).GetCell(1).GetContent().GetElement(0).AddText(\"Normal\");\ntable.GetRow(1).GetCell(0).GetContent().GetElement(0).AddText(\"Bold\");\ntable.GetRow(1).GetCell(1).GetContent().GetElement(0).AddText(\"Bold\");\ntable.GetRow(2).GetCell(0).GetContent().GetElement(0).AddText(\"Bold\");\ntable.GetRow(2).GetCell(1).GetContent().GetElement(0).AddText(\"Bold\");\ntable.GetRow(3).GetCell(0).GetContent().GetElement(0).AddText(\"Normal\");\ntable.GetRow(3).GetCell(1).GetContent().GetElement(0).AddText(\"Normal\");\ndoc.Push(table);"
+  ],
+  "params": [
+    {
+      "description": "The number of rows measured in positive integers.",
+      "name": "nCount",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetStyleRowBandSize(nCount: number): boolean"
+}

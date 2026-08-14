@@ -1,0 +1,18 @@
+{
+  "description": "Rounds a positive number up and negative number down to the nearest odd integer.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ODD/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ODD(7.675));"
+  ],
+  "params": [
+    {
+      "description": "The value to round.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ODD(arg1: ApiRange | ApiName | number): number"
+}

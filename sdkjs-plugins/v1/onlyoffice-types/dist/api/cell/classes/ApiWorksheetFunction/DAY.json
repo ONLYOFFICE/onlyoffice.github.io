@@ -1,0 +1,18 @@
+{
+  "description": "Returns the day of the date given in the numerical format, a number from 1 to 31.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DAY/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.DAY(\"2018/3/16\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A number in the date-time code.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DAY(arg1: ApiRange | ApiName | number): number"
+}

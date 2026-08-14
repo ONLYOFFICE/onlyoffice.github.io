@@ -1,0 +1,113 @@
+{
+  "description": "Class representing the currently active workbook",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/",
+  "methods": {
+    "Calculate": {
+      "description": "Recalculates the cells that need recalculation (changed, added or volatile) across the workbook. Forces the recalc that is otherwise deferred until a macro finishes, so up-to-date formula results can be read within the same macro.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Calculate(): boolean",
+      "since": "9.5.0"
+    },
+    "GetActiveChart": {
+      "description": "Returns the active chart of the workbook.",
+      "params": [],
+      "returns": {
+        "type": "ApiChart | null"
+      },
+      "signature": "GetActiveChart(): ApiChart | null",
+      "since": "9.1.0"
+    },
+    "GetActiveSheet": {
+      "description": "Returns the active sheet of the workbook.",
+      "params": [],
+      "returns": {
+        "type": "ApiWorksheet"
+      },
+      "signature": "GetActiveSheet(): ApiWorksheet",
+      "since": "9.1.0"
+    },
+    "GetAllPivotTables": {
+      "description": "Returns all pivot tables in the workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetAllPivotTables/",
+      "params": [],
+      "returns": {
+        "type": "ApiPivotTable[]"
+      },
+      "signature": "GetAllPivotTables(): ApiPivotTable[]",
+      "since": "9.1.0"
+    },
+    "GetCustomProperties": {
+      "description": "Returns the custom properties of the workbook.",
+      "params": [],
+      "returns": {
+        "type": "ApiCustomProperties"
+      },
+      "signature": "GetCustomProperties(): ApiCustomProperties",
+      "since": "9.1.0"
+    },
+    "GetDrawingsByName": {
+      "description": "Returns drawings with the specified names from the workbook.",
+      "params": [
+        {
+          "description": "An array of drawing names.",
+          "name": "ids",
+          "type": "string[]"
+        }
+      ],
+      "returns": {
+        "description": "Returns an array of drawing obkects filtered by the specified names.",
+        "type": "Drawing[]"
+      },
+      "signature": "GetDrawingsByName(ids: string[]): Drawing[]",
+      "since": "9.3.0"
+    },
+    "GetName": {
+      "description": "Returns the name of the workbook.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetName(): string",
+      "since": "9.1.0"
+    },
+    "GetSheets": {
+      "description": "Returns a sheet collection that represents all the sheets in the workbook.",
+      "params": [],
+      "returns": {
+        "type": "ApiWorksheet[]"
+      },
+      "signature": "GetSheets(): ApiWorksheet[]",
+      "since": "9.1.0"
+    },
+    "GetTheme": {
+      "description": "Returns the theme of the workbook.",
+      "params": [],
+      "returns": {
+        "type": "ApiTheme"
+      },
+      "signature": "GetTheme(): ApiTheme",
+      "since": "9.1.0"
+    },
+    "Redraw": {
+      "description": "Redraws the editor screen, making the changes already made by a macro visible without waiting for it to finish. Observable from asynchronous code only. Repaints without recalculating: call {@link ApiWorkbook#Calculate} first if formula results must be up to date.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Redraw(): boolean",
+      "since": "9.5.0"
+    },
+    "Save": {
+      "description": "Saves changes to the specified document.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Save(): void",
+      "since": "9.1.0"
+    }
+  }
+}

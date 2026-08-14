@@ -1,0 +1,789 @@
+{
+  "description": "Class representing a presentation.",
+  "methods": {
+    "AddMaster": {
+      "description": "Adds the slide master to the presentation slide masters collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/AddMaster/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = Api.CreateMaster();\nvar nCountBefore = oPresentation.GetMastersCount();\noPresentation.AddMaster(nCountBefore, oMaster);\nvar nCountAfter = oPresentation.GetMastersCount();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Number of masters before adding new master: \" + nCountBefore);\noParagraph.AddLineBreak();\noParagraph.AddText(\"Number of masters after adding new master: \" + nCountAfter);\noSlide.RemoveAllObjects();\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The position where the slide master will be added.",
+          "name": "pos",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The slide master to be added.",
+          "name": "apiMaster",
+          "optional": true,
+          "type": "ApiMaster"
+        }
+      ],
+      "returns": {
+        "description": "return false if position is invalid or apiMaster doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "AddMaster(pos?: number, apiMaster?: ApiMaster): boolean"
+    },
+    "AddMathEquation": {
+      "description": "Adds a math equation to the current presentation.",
+      "params": [
+        {
+          "description": "The math equation text.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The math equation format. Possible values are \"unicode\", \"latex\", and \"mathml\".",
+          "name": "sFormat",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddMathEquation(sText: string, sFormat: string): boolean",
+      "since": "9.0.0"
+    },
+    "AddSlide": {
+      "description": "Appends a new slide to the end of the presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/AddSlide/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = Api.CreateSlide();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\noPresentation.AddSlide(oSlide);"
+      ],
+      "params": [
+        {
+          "description": "The slide created using the {@link Api#CreateSlide} method.",
+          "name": "oSlide",
+          "type": "ApiSlide"
+        },
+        {
+          "description": "Index of the slide to be added. If not specified, the slide will be added to the end of the presentation.",
+          "name": "nIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "AddSlide(oSlide: ApiSlide, nIndex: number): void"
+    },
+    "ApplyTheme": {
+      "description": "Applies a theme to all the slides in the presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/ApplyTheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), \n\tApi.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], \"New color scheme\");\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke1 = Api.CreateStroke(1 * 36000, oFill1);\nvar oFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oBgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oStroke2 = Api.CreateStroke(1 * 36000, oFill2);\nvar oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke3 = Api.CreateStroke(1 * 36000, oFill3);\nvar oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], \"New format scheme\");\nvar oFontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nvar oTheme = Api.CreateTheme(\"New theme\", oMaster, oClrScheme, oFormatScheme, oFontScheme);\noPresentation.ApplyTheme(oTheme);"
+      ],
+      "params": [
+        {
+          "description": "The presentation theme.",
+          "name": "oApiTheme",
+          "type": "ApiTheme"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param isn't theme or presentation doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "ApplyTheme(oApiTheme: ApiTheme): boolean"
+    },
+    "CreateNewHistoryPoint": {
+      "description": "Creates a new history point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/CreateNewHistoryPoint/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"This is just a sample text.\");\noPresentation.CreateNewHistoryPoint();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"New history point was just created.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "CreateNewHistoryPoint(): void"
+    },
+    "EnterText": {
+      "description": "Add text to the document on the cursor position.",
+      "params": [
+        {
+          "description": "The text to add to document.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "EnterText(sText: string): boolean",
+      "since": "9.5.0"
+    },
+    "GetActiveShape": {
+      "description": "Returns the shape that is currently selected or being edited in the presentation.",
+      "params": [],
+      "returns": {
+        "description": "The active shape object, or null if no shape is currently active.",
+        "type": "ApiShape | null"
+      },
+      "signature": "GetActiveShape(): ApiShape | null",
+      "since": "9.5.0"
+    },
+    "GetActiveTable": {
+      "description": "Returns the table that is currently selected or being edited in the presentation.",
+      "params": [],
+      "returns": {
+        "description": "The active table object, or null if no table is currently active.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetActiveTable(): ApiTable | null",
+      "since": "9.5.0"
+    },
+    "GetAllCharts": {
+      "description": "Returns an array with all the chart objects from the current presentation.",
+      "params": [],
+      "returns": {
+        "type": "ApiChart[]"
+      },
+      "signature": "GetAllCharts(): ApiChart[]",
+      "since": "9.0.0"
+    },
+    "GetAllComments": {
+      "description": "Returns all comments from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllComments/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nApi.pluginMethod_AddComment({\"UserName\": \"John Smith\", \"Text\": \"Comment 1\"});\nvar arrComments = oPresentation.GetAllComments();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Comment text: \" + arrComments[0].GetText());\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiComment[]"
+      },
+      "signature": "GetAllComments(): ApiComment[]"
+    },
+    "GetAllDrawings": {
+      "description": "Returns an array with all the drawing objects from the current presentation.",
+      "params": [],
+      "returns": {
+        "type": "Drawing[]"
+      },
+      "signature": "GetAllDrawings(): Drawing[]",
+      "since": "9.0.0"
+    },
+    "GetAllImages": {
+      "description": "Returns an array with all the image objects from the current presentation.",
+      "params": [],
+      "returns": {
+        "type": "ApiImage[]"
+      },
+      "signature": "GetAllImages(): ApiImage[]",
+      "since": "9.0.0"
+    },
+    "GetAllOleObjects": {
+      "description": "Returns an array with all the OLE objects from the current presentation.",
+      "params": [],
+      "returns": {
+        "type": "ApiOleObject[]"
+      },
+      "signature": "GetAllOleObjects(): ApiOleObject[]",
+      "since": "9.0.0"
+    },
+    "GetAllShapes": {
+      "description": "Returns an array with all the shape objects from the current presentation.",
+      "params": [],
+      "returns": {
+        "type": "ApiShape[]"
+      },
+      "signature": "GetAllShapes(): ApiShape[]",
+      "since": "9.0.0"
+    },
+    "GetAllSlideMasters": {
+      "description": "Returns an array of all slide masters from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllSlideMasters/",
+      "params": [],
+      "returns": {
+        "type": "ApiMaster[]"
+      },
+      "signature": "GetAllSlideMasters(): ApiMaster[]",
+      "since": "8.3.0"
+    },
+    "GetAllSlides": {
+      "description": "Returns an array of all slides from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllSlides/",
+      "params": [],
+      "returns": {
+        "type": "ApiSlide[]"
+      },
+      "signature": "GetAllSlides(): ApiSlide[]",
+      "since": "8.3.0"
+    },
+    "GetAllTables": {
+      "description": "Returns an array with all tables from the current presentation (including slide masters and slide layouts).",
+      "params": [],
+      "returns": {
+        "description": "An array with all tables from the current presentation.",
+        "type": "ApiTable[]"
+      },
+      "signature": "GetAllTables(): ApiTable[]",
+      "since": "9.1.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiPresentation class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar sClassType = oPresentation.GetClassType();\noParagraph.AddText(\"Class Type = \" + sClassType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"presentation\""
+      },
+      "signature": "GetClassType(): \"presentation\""
+    },
+    "GetCore": {
+      "description": "Returns the core properties interface for the current presentation.\nThis method is used to view or modify standard metadata such as title, author, and keywords.",
+      "params": [],
+      "returns": {
+        "type": "ApiCore"
+      },
+      "signature": "GetCore(): ApiCore",
+      "since": "9.0.0"
+    },
+    "GetCurSlideIndex": {
+      "description": "Returns the index for the current slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetCurSlideIndex/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar nCurrentSlideIndex = oPresentation.GetCurSlideIndex();\noParagraph.AddText(\"Current Slide Index = \" + nCurrentSlideIndex);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCurSlideIndex(): number"
+    },
+    "GetCurrentSlide": {
+      "description": "Returns the current slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetCurrentSlide/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetCurrentSlide();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiSlide"
+      },
+      "signature": "GetCurrentSlide(): ApiSlide"
+    },
+    "GetCurrentVisibleSlide": {
+      "description": "Returns the current visible slide.",
+      "params": [],
+      "returns": {
+        "description": "Returns null if the current slide is not found or not visible.",
+        "type": "ApiSlide | null"
+      },
+      "signature": "GetCurrentVisibleSlide(): ApiSlide | null",
+      "since": "9.0.0"
+    },
+    "GetCustomProperties": {
+      "description": "Returns the custom properties from the current presentation.",
+      "params": [],
+      "returns": {
+        "type": "ApiCustomProperties"
+      },
+      "signature": "GetCustomProperties(): ApiCustomProperties",
+      "since": "9.0.0"
+    },
+    "GetCustomXmlParts": {
+      "description": "Retrieves the custom XML manager associated with the presentation.\nThis manager allows manipulation and access to custom XML parts within the presentation.",
+      "params": [],
+      "returns": {
+        "description": "Returns an instance of ApiCustomXmlParts if the custom XML manager exists, otherwise returns null.",
+        "type": "ApiCustomXmlParts | null"
+      },
+      "signature": "GetCustomXmlParts(): ApiCustomXmlParts | null",
+      "since": "9.1.0"
+    },
+    "GetDocumentInfo": {
+      "description": "Returns the document information:\n**Application** - the application the document has been created with.\n**CreatedRaw** - the date and time when the file was created.\n**Created** - the parsed date and time when the file was created.\n**LastModifiedRaw** - the date and time when the file was last modified.\n**LastModified** - the parsed date and time when the file was last modified.\n**LastModifiedBy** - the name of the user who has made the latest change to the document.\n**Authors** - the persons who has created the file.\n**Title** - this property allows you to simplify your documents classification.\n**Tags** - this property allows you to simplify your documents classification.\n**Subject** - this property allows you to simplify your documents classification.\n**Comment** - this property allows you to simplify your documents classification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetDocumentInfo/",
+      "examples": [
+        "const oPresentation = Api.GetPresentation();\nconst oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nconst oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nconst oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nconst oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nconst oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nconst oDocContent = oShape.GetDocContent();\nconst oParagraph = oDocContent.GetElement(0);\nconst oDocInfo = oPresentation.GetDocumentInfo();\noParagraph.AddText('This document has been created with: ' + oDocInfo.Application);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "GetDocumentInfo(): object"
+    },
+    "GetDrawingsByName": {
+      "description": "Returns a collection of drawing objects from the document content filtered by their names.",
+      "params": [
+        {
+          "description": "An array of drawing names to filter by.",
+          "name": "ids",
+          "type": "string[]"
+        }
+      ],
+      "returns": {
+        "type": "Drawing[]"
+      },
+      "signature": "GetDrawingsByName(ids: string[]): Drawing[]",
+      "since": "9.3.0"
+    },
+    "GetHeight": {
+      "description": "Returns the presentation height in English measure units.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetHeight/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar nHeight = oPresentation.GetHeight();\noParagraph.AddText(\"Height = \" + nHeight);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetHeight(): EMU"
+    },
+    "GetLoopUntilStopped": {
+      "description": "Returns whether the presentation loops continuously until the user stops it.",
+      "params": [],
+      "returns": {
+        "description": "True if the presentation is set to loop until stopped; otherwise, false.",
+        "type": "boolean"
+      },
+      "signature": "GetLoopUntilStopped(): boolean",
+      "since": "9.3.0"
+    },
+    "GetMaster": {
+      "description": "Returns a slide master by its position in the presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetMaster/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar sType = oMaster.GetClassType();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Slide master position in the presentation",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "returns null if position is invalid.",
+        "type": "ApiMaster | null"
+      },
+      "signature": "GetMaster(nPos: number): ApiMaster | null"
+    },
+    "GetMastersCount": {
+      "description": "Returns a number of slide masters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetMastersCount/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar nMasters = oPresentation.GetMastersCount();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Number of masters = \" + nMasters);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetMastersCount(): number"
+    },
+    "GetSlideByIndex": {
+      "description": "Returns a slide by its position in the presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetSlideByIndex/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The slide number (position) in the presentation.",
+          "name": "nIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiSlide"
+      },
+      "signature": "GetSlideByIndex(nIndex: number): ApiSlide"
+    },
+    "GetSlidesCount": {
+      "description": "Returns a number of slides.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetSlidesCount/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide1 = oPresentation.GetSlideByIndex(0);\nvar oSlide2 = Api.CreateSlide();\noPresentation.AddSlide(oSlide2);\nvar nSlides = oPresentation.GetSlidesCount();\noSlide1.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Number of slides = \" + nSlides);\noSlide1.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetSlidesCount(): number"
+    },
+    "GetStyle": {
+      "description": "Returns the presentation style by its name.",
+      "params": [
+        {
+          "description": "The name of the table style to look up.",
+          "name": "sStyleName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiStyle | null"
+      },
+      "signature": "GetStyle(sStyleName: string): ApiStyle | null",
+      "since": "9.5.0"
+    },
+    "GetWidth": {
+      "description": "Returns the presentation width in English measure units.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetWidth/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar nHeight = oPresentation.GetWidth();\noParagraph.AddText(\"Height = \" + nHeight);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetWidth(): EMU"
+    },
+    "InsertParagraphBreak": {
+      "description": "Add paragraph to the document on the cursor position.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "InsertParagraphBreak(): boolean",
+      "since": "9.5.0"
+    },
+    "MoveCursorDown": {
+      "description": "Moves the cursor down.",
+      "params": [
+        {
+          "description": "Number of movements.",
+          "name": "count",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to select text during the move.",
+          "name": "addToSelect",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveCursorDown(count?: number, addToSelect?: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "MoveCursorLeft": {
+      "description": "Moves the cursor to the left.",
+      "params": [
+        {
+          "description": "Number of movements.",
+          "name": "count",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to select text during the move.",
+          "name": "addToSelect",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies whether to move by words instead of by character.",
+          "name": "byWords",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveCursorLeft(count?: number, addToSelect?: boolean, byWords?: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "MoveCursorRight": {
+      "description": "Moves the cursor to the right.",
+      "params": [
+        {
+          "description": "Number of movements.",
+          "name": "count",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to select text during the move.",
+          "name": "addToSelect",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies whether to move by words instead of by character.",
+          "name": "byWords",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveCursorRight(count?: number, addToSelect?: boolean, byWords?: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "MoveCursorUp": {
+      "description": "Moves the cursor up.",
+      "params": [
+        {
+          "description": "Number of movements.",
+          "name": "count",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies whether to select text during the move.",
+          "name": "addToSelect",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveCursorUp(count?: number, addToSelect?: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "RemoveSlides": {
+      "description": "Removes a range of slides from the presentation.\nDeletes all the slides from the presentation if no parameters are specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/RemoveSlides/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = Api.CreateSlide();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\noPresentation.AddSlide(oSlide);\noPresentation.RemoveSlides(0, 1);\noSlide.RemoveAllObjects();\noFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar sClassType = oPresentation.GetClassType();\noParagraph.AddText(\"A slide with no background was removed from this presentation.\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The starting position for the deletion range.",
+          "name": "nStart",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The number of slides to delete.",
+          "name": "nCount",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "RemoveSlides(nStart?: number, nCount?: number): boolean"
+    },
+    "ReplaceCurrentImage": {
+      "description": "Replaces the current image with an image specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/ReplaceCurrentImage/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oDrawing = Api.CreateImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png\", 300 * 36000, 150 * 36000);\noSlide.AddObject(oDrawing);\noDrawing.Select();\noPresentation.ReplaceCurrentImage(\"https://helpcenter.onlyoffice.com/images/Help/GettingStarted/Documents/big/EditDocument.png\", 60 * 36000, 35 * 36000);"
+      ],
+      "params": [
+        {
+          "description": "The image source where the image to be inserted should be taken from (currently, only internet URL or Base64 encoded images are supported).",
+          "name": "sImageUrl",
+          "type": "string"
+        },
+        {
+          "description": "The image width in English measure units.",
+          "name": "Width",
+          "type": "EMU"
+        },
+        {
+          "description": "The image height in English measure units.",
+          "name": "Height",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "ReplaceCurrentImage(sImageUrl: string, Width: EMU, Height: EMU): void"
+    },
+    "Search": {
+      "description": "Searches for the specified text in the presentation and returns all found occurrences as text ranges.",
+      "params": [
+        {
+          "description": "The text to search for.",
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "description": "Case sensitive or not.",
+          "name": "isMatchCase",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to search for whole words only.",
+          "name": "isWholeWords",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "ApiTextRange[]"
+      },
+      "signature": "Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[]",
+      "since": "9.5.0"
+    },
+    "SearchAndReplace": {
+      "description": "Finds and replaces the text in the presentation.",
+      "params": [
+        {
+          "description": "The properties to find and replace.",
+          "name": "properties",
+          "type": "object"
+        },
+        {
+          "description": "Search string.",
+          "name": "properties_searchString",
+          "type": "string"
+        },
+        {
+          "description": "Replacement string.",
+          "name": "properties_replaceString",
+          "type": "string"
+        },
+        {
+          "description": "Case sensitive or not.",
+          "name": "properties_matchCase",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Whether to search for whole words only.",
+          "name": "properties_wholeWords",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SearchAndReplace(properties: object, properties_searchString: string, properties_replaceString: string, properties_matchCase?: boolean, properties_wholeWords?: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "SetLanguage": {
+      "description": "Specifies the languages which will be used to check spelling and grammar (if requested).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SetLanguage/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\noPresentation.SetLanguage(\"en-CA\");\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"English (Canada) will be used to check spelling and grammar in this presentation (if requested).\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The possible value for this parameter is a language identifier as defined by\rRFC 4646/BCP 47. Example: \"en-CA\".",
+          "name": "sLangId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLanguage(sLangId: string): boolean"
+    },
+    "SetLoopUntilStopped": {
+      "description": "Sets whether the presentation loops continuously until the user stops it.",
+      "params": [
+        {
+          "description": "True to set the presentation to loop until stopped; false otherwise.",
+          "name": "loopUntilStopped",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "True if the new setting was applied successfully; otherwise, false.",
+        "type": "boolean"
+      },
+      "signature": "SetLoopUntilStopped(loopUntilStopped: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetSizes": {
+      "description": "Sets the size to the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SetSizes/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\noPresentation.SetSizes(254 * 36000, 190 * 36000);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"The size of this presentation was changed: width - 254 mm, height - 190 mm.\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "The presentation width in English measure units.",
+          "name": "nWidth",
+          "type": "EMU"
+        },
+        {
+          "description": "The presentation height in English measure units.",
+          "name": "nHeight",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetSizes(nWidth: EMU, nHeight: EMU): void"
+    },
+    "SlidesToJSON": {
+      "description": "Converts the slides from the current ApiPresentation object into the JSON objects.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SlidesToJSON/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar json = oPresentation.SlidesToJSON(0, 0, true, true, true, true);\nvar aSlidesFromJSON = Api.FromJSON(json);\nvar oSlideFromJSON = aSlidesFromJSON[0];\noPresentation.AddSlide(oSlideFromJSON);\nvar sType = oSlideFromJSON.GetClassType();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noDrawing.SetPosition(608400, 1267200);\noDrawing.SetSize(300 * 36000, 130 * 36000);\noSlide.AddObject(oDrawing);\nvar oDocContent = oDrawing.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"Class type = \" + sType);"
+      ],
+      "params": [
+        {
+          "description": "The index to the start slide.",
+          "name": "nStart",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "The index to the end slide.",
+          "name": "nEnd",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "Specifies if the slide layout will be written to the JSON object or not.",
+          "name": "bWriteLayout",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies if the slide master will be written to the JSON object or not (bWriteMaster is false if bWriteLayout === false).",
+          "name": "bWriteMaster",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies if all child layouts from the slide master will be written to the JSON object or not.",
+          "name": "bWriteAllMasLayouts",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies whether to write used table styles to the JSON object (true) or not (false).",
+          "name": "bWriteTableStyles",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object[]"
+      },
+      "signature": "SlidesToJSON(nStart?: number, nEnd?: number, bWriteLayout?: boolean, bWriteMaster?: boolean, bWriteAllMasLayouts?: boolean, bWriteTableStyles?: boolean): object[]"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiPresentation object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/ToJSON/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar json = oPresentation.ToJSON(true);\nvar oPresentationFromJSON = Api.FromJSON(json);\nvar oSlide = oPresentationFromJSON.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar sType = oPresentationFromJSON.GetClassType();\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Specifies whether to write used table styles to the JSON object (true) or not (false).",
+          "name": "bWriteTableStyles",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteTableStyles?: boolean): object"
+    }
+  }
+}

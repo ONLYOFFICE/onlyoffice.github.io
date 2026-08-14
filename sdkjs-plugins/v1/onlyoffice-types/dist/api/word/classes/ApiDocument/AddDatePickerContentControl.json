@@ -1,0 +1,16 @@
+{
+  "description": "Adds a new date picker content control to the document.",
+  "params": [
+    {
+      "description": "The optional date picker properties.",
+      "name": "datePickerPr",
+      "optional": true,
+      "type": "ContentControlDatePr"
+    }
+  ],
+  "returns": {
+    "type": "ApiInlineLvlSdt"
+  },
+  "signature": "AddDatePickerContentControl(datePickerPr?: ContentControlDatePr): ApiInlineLvlSdt",
+  "since": "9.0.0"
+}

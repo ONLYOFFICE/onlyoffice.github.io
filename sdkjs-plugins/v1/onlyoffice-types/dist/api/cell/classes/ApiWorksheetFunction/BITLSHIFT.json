@@ -1,0 +1,23 @@
+{
+  "description": "Returns a number shifted left by the specified number of bits.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BITLSHIFT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BITLSHIFT(4, 2));"
+  ],
+  "params": [
+    {
+      "description": "The decimal representation of the binary number to evaluate.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of bits by which the number will be shifted left.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BITLSHIFT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

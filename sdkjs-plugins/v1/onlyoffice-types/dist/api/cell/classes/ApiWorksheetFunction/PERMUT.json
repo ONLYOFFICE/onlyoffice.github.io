@@ -1,0 +1,23 @@
+{
+  "description": "Returns the number of permutations for a given number of objects that can be selected from the total objects.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PERMUT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.PERMUT(32, 2));"
+  ],
+  "params": [
+    {
+      "description": "The total number of objects.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of objects in each permutation.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PERMUT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

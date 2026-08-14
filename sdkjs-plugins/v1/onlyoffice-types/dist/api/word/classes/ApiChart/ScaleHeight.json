@@ -1,0 +1,15 @@
+{
+  "description": "Scales the height of the figure using the specified coefficient.",
+  "params": [
+    {
+      "description": "The coefficient by which the figure height will be scaled.",
+      "name": "coefficient",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "description": "return false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "ScaleHeight(coefficient: number): boolean"
+}

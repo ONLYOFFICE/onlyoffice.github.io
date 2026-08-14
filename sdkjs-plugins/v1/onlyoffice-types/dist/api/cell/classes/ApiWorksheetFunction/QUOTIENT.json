@@ -1,0 +1,23 @@
+{
+  "description": "Returns the integer portion of a division.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/QUOTIENT/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.QUOTIENT(1698, 30));"
+  ],
+  "params": [
+    {
+      "description": "The dividend, a numeric value.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The divisor, a numeric value.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "QUOTIENT(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

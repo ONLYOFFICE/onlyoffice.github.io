@@ -1,0 +1,30 @@
+{
+  "description": "Moves the specified field from one category to another.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotTable/Methods/MoveField/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\npivotTable.AddFields({\n\trows: ['Region', 'Style'],\n});\n\npivotTable.AddDataField('Price');\n\nApi.GetActiveSheet().GetRange('F4').SetValue('Style field will be moved in columns soon');\n\nsetTimeout(function () {\n\tpivotTable.MoveField('Style', 'Columns');\n}, 5000);"
+  ],
+  "params": [
+    {
+      "description": "The index number or name of the field.",
+      "name": "identifier",
+      "type": "number | string"
+    },
+    {
+      "description": "The direction to move the pivot table field,\ror the pivot field orientation type.",
+      "name": "type",
+      "type": "PivotMoveFieldType | PivotFieldOrientationType"
+    },
+    {
+      "description": "The field index in a new category.",
+      "name": "index",
+      "optional": true,
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "MoveField(identifier: number | string, type: PivotMoveFieldType | PivotFieldOrientationType, index?: number): void",
+  "since": "8.2.0"
+}

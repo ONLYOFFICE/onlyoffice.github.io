@@ -1,0 +1,13 @@
+{
+  "description": "Class representing a base class for color types.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiUniColor class.",
+      "params": [],
+      "returns": {
+        "type": "\"uniColor\""
+      },
+      "signature": "GetClassType(): \"uniColor\""
+    }
+  }
+}

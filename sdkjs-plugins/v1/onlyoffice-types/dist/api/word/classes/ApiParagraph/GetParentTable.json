@@ -1,0 +1,13 @@
+{
+  "description": "Returns a table that contains the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetParentTable/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\nlet parentTable = paragraph.GetParentTable();\ncell = parentTable.GetRow(2).GetCell(0);\nparentTable.RemoveRow(cell);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if parent table doesn't exist.",
+    "type": "ApiTable | null"
+  },
+  "signature": "GetParentTable(): ApiTable | null"
+}

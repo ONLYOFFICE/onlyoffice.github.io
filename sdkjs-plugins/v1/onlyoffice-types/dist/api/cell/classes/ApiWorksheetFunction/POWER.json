@@ -1,0 +1,23 @@
+{
+  "description": "Returns the result of a number raised to a power.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/POWER/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.POWER(23, 4));"
+  ],
+  "params": [
+    {
+      "description": "The base number. It can be any real number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The exponent to which the base number is raised.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "POWER(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

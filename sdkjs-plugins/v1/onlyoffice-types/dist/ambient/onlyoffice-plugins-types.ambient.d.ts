@@ -163,8 +163,7 @@ declare namespace Word {
   }
 
   /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their comments.
    *
    * @example
    * ```js
@@ -177,7 +176,7 @@ declare namespace Word {
   }
 
   /**
-   * Record of one comment.
+   * Represents a single comment record.
    *
    * @example
    * ```js
@@ -185,19 +184,19 @@ declare namespace Word {
    * ```
    */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -527,8 +526,7 @@ declare namespace Word {
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
   /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their review changes.
    *
    * @example
    * ```js
@@ -546,7 +544,7 @@ declare namespace Word {
   }
 
   /**
-   * Record of one review change.
+   * Represents a single review change record.
    *
    * @example
    * ```js
@@ -561,16 +559,16 @@ declare namespace Word {
    * ```
    */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
@@ -884,7 +882,7 @@ declare namespace Word {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -1375,9 +1373,9 @@ declare namespace Word {
      *
      * @param element - The element where the comment will be added. It may be applied to any element which has the
      *   *AddComment* method.
-     * @param text - The comment text (required).
-     * @param author - The author's name (optional).
-     * @param userId - The user ID of the comment author (optional).
+     * @param text - The comment text.
+     * @param author - The author's name.
+     * @param userId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -1452,9 +1450,8 @@ declare namespace Word {
      * @param demoteHeadings - Defines if all heading levels in your document will be demoted to conform with the following
      *   standard: single H1 as title, H2 as top-level heading in the text body.
      * @param renderHTMLTags - Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional
-     *   HTML tag, you can avoid using the opening angle bracket
-     *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
-     *   with the special characters.
+     *   HTML tag, you can avoid using the opening angle bracket in the following way: \<tag>text\</tag>.
+     *   By default, the opening angle brackets will be replaced with the special characters.
      * @default convertType = "markdown"
      * @default htmlHeadings = false
      * @default base64img = false
@@ -1533,6 +1530,12 @@ declare namespace Word {
 
     /**
      * Creates a chart with the parameters specified.
+     * :::note
+     * Values of _styleIndex_ outside **1 - 48** are interpreted as a chart style id from the
+     * _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs
+     * Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs
+     * Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).
+     * :::
      *
      * @param chartType - The chart type used for the chart display.
      * @param series - The array of the data used to build the chart from.
@@ -1543,8 +1546,8 @@ declare namespace Word {
      * @param width - The chart width in English measure units.
      * @param height - The chart height in English measure units.
      * @param styleIndex - The chart color style index (can be 1 - 48, as described in OOXML specification).
-     * @param numFormats - Numeric formats which will be applied to the series (can be custom formats).
-     *   The default numeric format is "General".
+     * @param numFormats - Numeric formats which will be applied to the series (can be custom formats). The default numeric
+     *   format is "General".
      * @default chartType = "bar"
      *
      * @example
@@ -1639,6 +1642,10 @@ declare namespace Word {
 
     /**
      * Groups an array of drawings.
+     * :::note
+     * The drawings must not be added to the document. To group the drawings which are already in the
+     * document, use the {@link ApiDocument#GroupDrawings} method.
+     * :::
      *
      * @param drawings - An array of drawings to group.
      * @since 8.3.0
@@ -1778,8 +1785,7 @@ declare namespace Word {
     CreateNoFill(): ApiFill;
 
     /**
-     * Creates a bullet for a paragraph with the numbering character or symbol specified with the numType
-     * parameter.
+     * Creates an abstract multilevel numbering with a specified type.
      *
      * @param sType - The type of the numbering which will be created.
      * @default sType = "bullet"
@@ -2020,8 +2026,10 @@ declare namespace Word {
      * @param shapeType - The shape type which specifies the preset shape geometry.
      * @param width - The shape width in English measure units.
      * @param height - The shape height in English measure units.
-     * @param fill - The color or pattern used to fill the shape.
-     * @param stroke - The stroke used to create the element shadow.
+     * @param fill - The color or pattern used to fill the shape. If not specified, the default shape style fill
+     *   (theme accent) is used.
+     * @param stroke - The stroke used to draw the shape outline. If not specified, the default shape style outline
+     *   (theme accent) is used.
      * @default shapeType = "rect"
      * @default width = 914400
      * @default height = 914400
@@ -2088,8 +2096,13 @@ declare namespace Word {
     /**
      * Creates a new table with a specified number of rows and columns.
      *
-     * @param rows - Number of rows.
-     * @param cols - Number of columns.
+     * :::danger[Breaking Change]
+     * Starting from version 9.4.0, the parameter order has been changed from `Api.CreateTable(cols, rows)`
+     * to `Api.CreateTable(rows, cols)`.
+     * :::
+     *
+     * @param rows - Number of rows. Must be a positive integer.
+     * @param cols - Number of columns. Must be a positive integer.
      *
      * @example
      * ```js
@@ -2367,8 +2380,8 @@ declare namespace Word {
     /**
      * Loads data for the mail merge.
      *
-     * @param data - Mail merge data. The first element of the array is the array with names of the merge fields.
-     *   The rest of the array elements are arrays with values for the merge fields.
+     * @param data - Mail merge data. The first element of the array is the array with names of the merge fields. The
+     *   rest of the array elements are arrays with values for the merge fields.
      *
      * @example
      * ```js
@@ -2699,8 +2712,8 @@ declare namespace Word {
      * @param numFormat - The possible caption numbering format.
      * @param isBefore - Specifies whether to insert the caption before the current content control (true) or after
      *   (false) (after/before the shape if it is placed in the shape).
-     * @param headingLvl - The heading level (used if you want to specify the chapter number).
-     *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
+     * @param headingLvl - The heading level (used if you want to specify the chapter number). <note>If you want to specify
+     *   "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param captionSep - The caption separator (used if you want to specify the chapter number).
      * @default label = "Table"
      * @default excludeLabel = false
@@ -2728,9 +2741,9 @@ declare namespace Word {
      * Adds a comment to the current block content control.
      * <note>Please note that the current block content control must be in the document.</note>
      *
-     * @param text - The comment text (required).
-     * @param author - The author's name (optional).
-     * @param userId - The user ID of the comment author (optional).
+     * @param text - The comment text.
+     * @param author - The author's name.
+     * @param userId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -2786,7 +2799,7 @@ declare namespace Word {
     AddText(text: string): boolean;
 
     /**
-     * Creates a copy of an block content control. Ignores comments, footnote references, complex fields.
+     * Creates a copy of a block content control. Ignores comments, footnote references, complex fields.
      *
      * @since 8.3.0
      *
@@ -3022,7 +3035,7 @@ declare namespace Word {
     GetDataForXmlMapping(): string;
 
     /**
-     * Returns a list of values of the combo box / dropdown list content control.
+     * Returns a list of values of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -3346,7 +3359,8 @@ declare namespace Word {
      * Searches for a scope of a content control object. The search results are a collection of ApiRange
      * objects.
      *
-     * @param text - Search string.
+     * @param text - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -3468,6 +3482,7 @@ declare namespace Word {
 
     /**
      * Sets the lock to the current block text content control:
+     * **"unlocked"** - content can be edited and the container can be deleted.
      * **"contentLocked"** - content cannot be edited.
      * **"sdtContentLocked"** - content cannot be edited and the container cannot be deleted.
      * **"sdtLocked"** - the container cannot be deleted.
@@ -5698,7 +5713,7 @@ declare namespace Word {
     GetChoiceName(): string;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiCheckBoxForm class.
      *
      * @since 9.0.4
      *
@@ -5851,7 +5866,6 @@ declare namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -5871,7 +5885,7 @@ declare namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -6175,7 +6189,7 @@ declare namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -6260,7 +6274,7 @@ declare namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -6337,7 +6351,7 @@ declare namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -6436,7 +6450,7 @@ declare namespace Word {
     ToJSON(): string;
   }
 
-  /** Class representing a document combo box / dropdown list. */
+  /** Class representing a document combo box / drop-down list. */
   export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
@@ -6500,7 +6514,7 @@ declare namespace Word {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComboBoxForm class.
      *
      * @since 9.0.4
      *
@@ -6637,7 +6651,6 @@ declare namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -6657,7 +6670,7 @@ declare namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -6728,7 +6741,7 @@ declare namespace Word {
     GetWrapperShape(): ApiShape;
 
     /**
-     * Checks if the combo box text can be edited. If it is not editable, then this form is a dropdown
+     * Checks if the combo box text can be edited. If it is not editable, then this form is a drop-down
      * list.
      *
      * @example
@@ -6921,7 +6934,7 @@ declare namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -6978,7 +6991,7 @@ declare namespace Word {
 
     /**
      * Sets the text to the current combo box.
-     * Available only for editable combo box forms.*
+     * *Available only for editable combo box forms.*
      *
      * @param sText - The combo box text.
      *
@@ -6997,7 +7010,7 @@ declare namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -7075,7 +7088,7 @@ declare namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -7108,10 +7121,10 @@ declare namespace Word {
     /**
      * Adds a reply to a comment.
      *
-     * @param sText - The comment reply text (required).
-     * @param sAuthorName - The name of the comment reply author (optional).
-     * @param sUserId - The user ID of the comment reply author (optional).
-     * @param nPos - The comment reply position.
+     * @param sText - The comment reply text.
+     * @param sAuthorName - The name of the comment reply author.
+     * @param sUserId - The user ID of the comment reply author.
+     * @param nPos - The comment reply position. If nPos=-1 add to the end.
      * @default nPos = -1
      * @returns this
      *
@@ -7792,7 +7805,7 @@ declare namespace Word {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComplexForm class.
      *
      * @since 9.0.4
      *
@@ -7911,7 +7924,6 @@ declare namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -7931,7 +7943,7 @@ declare namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -8139,7 +8151,7 @@ declare namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -8196,7 +8208,7 @@ declare namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -8273,7 +8285,7 @@ declare namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -8301,14 +8313,14 @@ declare namespace Word {
     ToInline(): boolean;
   }
 
-  /** Class representing a list of values of the combo box / dropdown list content control. */
+  /** Class representing a list of values of the combo box / drop-down list content control. */
   export interface ApiContentControlList {
     /**
-     * Adds a new value to the combo box / dropdown list content control.
+     * Adds a new value to the combo box / drop-down list content control.
      *
      * @param sText - The display text for the list item.
-     * @param sValue - The list item value.
-     * @param nIndex - A position where a new value will be added.
+     * @param sValue - The list item value. By default is equal to sText parameter
+     * @param nIndex - A position where a new value will be added. If nIndex=-1 add to the end.
      * @default nIndex = -1
      *
      * @example
@@ -8326,7 +8338,7 @@ declare namespace Word {
     Add(sText: string, sValue: string, nIndex?: number): boolean;
 
     /**
-     * Clears a list of values of the combo box / dropdown list content control.
+     * Clears a list of values of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8343,7 +8355,7 @@ declare namespace Word {
     Clear(): boolean;
 
     /**
-     * Returns a collection of items (the ApiContentControlListEntry objects) of the combo box / dropdown
+     * Returns a collection of items (the ApiContentControlListEntry objects) of the combo box / drop-down
      * list content control.
      *
      * @example
@@ -8384,7 +8396,7 @@ declare namespace Word {
     GetClassType(): "contentControlList";
 
     /**
-     * Returns a number of items of the combo box / dropdown list content control.
+     * Returns a number of items of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8403,7 +8415,7 @@ declare namespace Word {
     GetElementsCount(): number;
 
     /**
-     * Returns an item of the combo box / dropdown list content control by the position specified in the
+     * Returns an item of the combo box / drop-down list content control by the position specified in the
      * request.
      *
      * @param nIndex - Item position.
@@ -8425,7 +8437,7 @@ declare namespace Word {
     GetItem(nIndex: number): ApiContentControlListEntry;
 
     /**
-     * Returns a parent of the combo box / dropdown list content control.
+     * Returns a parent of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8444,10 +8456,10 @@ declare namespace Word {
     GetParent(): ApiInlineLvlSdt | ApiBlockLvlSdt;
   }
 
-  /** Class representing an entry of the combo box / dropdown list content control. */
+  /** Class representing an entry of the combo box / drop-down list content control. */
   export interface ApiContentControlListEntry {
     /**
-     * Deletes the specified item in the combo box / dropdown list content control.
+     * Deletes the specified item in the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8471,7 +8483,7 @@ declare namespace Word {
     GetClassType(): "contentControlList";
 
     /**
-     * Returns an index of the content control list item in the combo box / dropdown list content control.
+     * Returns an index of the content control list item in the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8483,7 +8495,7 @@ declare namespace Word {
     GetIndex(): number;
 
     /**
-     * Returns a parent of the content control list item in the combo box / dropdown list content control.
+     * Returns a parent of the content control list item in the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -8495,7 +8507,7 @@ declare namespace Word {
     GetParent(): ApiContentControlList;
 
     /**
-     * Returns a String that represents the display text of a list item for the combo box / dropdown list
+     * Returns a String that represents the display text of a list item for the combo box / drop-down list
      * content control.
      *
      * @example
@@ -8508,7 +8520,7 @@ declare namespace Word {
     GetText(): string;
 
     /**
-     * Returns a String that represents the value of a list item for the combo box / dropdown list content
+     * Returns a String that represents the value of a list item for the combo box / drop-down list content
      * control.
      *
      * @example
@@ -8521,7 +8533,7 @@ declare namespace Word {
     GetValue(): string;
 
     /**
-     * Moves the current item in the parent combo box / dropdown list content control down one element, so
+     * Moves the current item in the parent combo box / drop-down list content control down one element, so
      * that it is after the item that originally followed it.
      *
      * @example
@@ -8534,7 +8546,7 @@ declare namespace Word {
     MoveDown(): boolean;
 
     /**
-     * Moves the current item in the parent combo box / dropdown list content control up one element.
+     * Moves the current item in the parent combo box / drop-down list content control up one element.
      *
      * @example
      * ```js
@@ -8546,7 +8558,7 @@ declare namespace Word {
     MoveUp(): boolean;
 
     /**
-     * Selects the list entry in the combo box / dropdown list content control and sets the text of the
+     * Selects the list entry in the combo box / drop-down list content control and sets the text of the
      * content control to the selected item value.
      *
      * @example
@@ -8559,7 +8571,7 @@ declare namespace Word {
     Select(): boolean;
 
     /**
-     * Sets an index to the content control list item in the combo box / dropdown list content control.
+     * Sets an index to the content control list item in the combo box / drop-down list content control.
      *
      * @param nIndex - An index of the content control list item.
      *
@@ -8573,7 +8585,7 @@ declare namespace Word {
     SetIndex(nIndex: number): boolean;
 
     /**
-     * Sets a String that represents the display text of a list item for the combo box / dropdown list
+     * Sets a String that represents the display text of a list item for the combo box / drop-down list
      * content control.
      *
      * @param sText - The display text of a list item.
@@ -8588,7 +8600,7 @@ declare namespace Word {
     SetText(sText: string): boolean;
 
     /**
-     * Sets a String that represents the value of a list item for the combo box / dropdown list content
+     * Sets a String that represents the value of a list item for the combo box / drop-down list content
      * control.
      *
      * @param sValue - The value of a list item.
@@ -9272,7 +9284,7 @@ declare namespace Word {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiDateForm class.
      *
      * @since 9.0.4
      *
@@ -9436,7 +9448,6 @@ declare namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -9456,7 +9467,7 @@ declare namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -9742,7 +9753,7 @@ declare namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -9799,7 +9810,7 @@ declare namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -9899,7 +9910,7 @@ declare namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -9977,9 +9988,9 @@ declare namespace Word {
     /**
      * Adds a comment to the current document selection, or to the current word if no text is selected.
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -10005,12 +10016,12 @@ declare namespace Word {
     AddDatePickerContentControl(datePickerPr?: ContentControlDatePr): ApiInlineLvlSdt;
 
     /**
-     * Adds a shape to the specified page.
+     * Adds a drawing to the specified page.
      * <note>This method can be a little bit slow, because it runs the document calculation
      * process to arrange tables on the specified page.</note>
      *
-     * @param oDrawing - A shape to add to the page.
-     * @param nPage - The page number.
+     * @param oDrawing - A drawing to add to the page.
+     * @param nPage - The page index.
      * @param x - The X coordinate in English measure units.
      * @param y - The Y coordinate in English measure units.
      *
@@ -10137,7 +10148,6 @@ declare namespace Word {
 
     /**
      * Adds a table of content to the current document.
-     * <note>Please note that the new table of contents replaces the existing table of contents.</note>
      *
      * @param oTocPr - Table of contents properties.
      * @param oRange - The range that the table of contents replaces. If omitted, the table of contents is inserted at
@@ -10168,9 +10178,8 @@ declare namespace Word {
     /**
      * Adds a table of figures to the current document.
      *
-     * @param oTofPr - Table of figures properties.
-     *   <note>Please note that the table of figures properties will be filled with the default
-     *   properties if they are undefined.</note>
+     * @param oTofPr - Table of figures properties. <note>Please note that the table of figures properties will be
+     *   filled with the default properties if they are undefined.</note>
      * @param oRange - The range that the table of figures replaces. If omitted, the table of figures is inserted at
      *   the current position.
      * @default oTofPr = {}
@@ -10290,8 +10299,8 @@ declare namespace Word {
      * to the current
      * section - page size, footer, header, columns, etc.
      *
-     * @param oParagraph - The paragraph after which a new document section will be inserted.
-     *   Paragraph must be in a document.
+     * @param oParagraph - The paragraph after which a new document section will be inserted. Paragraph must be in a
+     *   document.
      * @returns Returns null if parametr is invalid.
      *
      * @example
@@ -10319,8 +10328,8 @@ declare namespace Word {
     CreateSection(oParagraph: ApiParagraph): ApiSection | null;
 
     /**
-     * Creates a new style with the specified type and name. If there is a style with the same name it will
-     * be replaced with a new one.
+     * Creates a new style with the specified type and name. If a style with the specified name already
+     * exists, it will be returned without creating a new one.
      *
      * @param styleName - The name of the style which will be created.
      * @param type - The document element which the style will be applied to.
@@ -10793,7 +10802,7 @@ declare namespace Word {
      * <note>This method can be a little bit slow, because it runs the document calculation
      * process to arrange tables on the specified page.</note>
      *
-     * @param nPage - The page number.
+     * @param nPage - The page index.
      *
      * @example
      * ```js
@@ -11937,6 +11946,15 @@ declare namespace Word {
 
     /**
      * Inserts an array of elements into the current position of the document.
+     * The array may contain a mix of element types:
+     * - {@link DocumentElement} elements are inserted as-is.
+     * - {@link ParagraphContent} elements are automatically grouped into paragraphs: consecutive
+     * paragraph-level elements
+     * share one new paragraph.
+     * - Plain strings and numbers are wrapped in a new run and added to the current paragraph (same
+     * grouping rules as {@link ParagraphContent}).
+     * - {@link ApiDrawing} elements are wrapped in a new run and added to the current paragraph.
+     * Elements that are already in use in a document are skipped.
      *
      * @param content - An array of elements to insert.
      * @param isInline - Inline insert or not (works only for the last and the first element and only if it's a
@@ -12419,7 +12437,8 @@ declare namespace Word {
     /**
      * Searches for a scope of a document object. The search results are a collection of ApiRange objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -12689,9 +12708,8 @@ declare namespace Word {
      * @param bDemoteHeadings - Defines if all heading levels in your document will be demoted to conform with the following
      *   standard: single H1 as title, H2 as top-level heading in the text body.
      * @param bRenderHTMLTags - Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional
-     *   HTML tag, you can avoid using the opening angle bracket
-     *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
-     *   with the special characters.
+     *   HTML tag, you can avoid using the opening angle bracket in the following way: \<tag>text\</tag>.
+     *   By default, the opening angle brackets will be replaced with the special characters.
      * @default bHtmlHeadings = false
      * @default bBase64img = false
      * @default bDemoteHeadings = false
@@ -12774,9 +12792,8 @@ declare namespace Word {
      * @param bDemoteHeadings - Defines if all heading levels in your document will be demoted to conform with the following
      *   standard: single H1 as title, H2 as top-level heading in the text body.
      * @param bRenderHTMLTags - Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional
-     *   HTML tag, you can avoid using the opening angle bracket
-     *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
-     *   with the special characters.
+     *   HTML tag, you can avoid using the opening angle bracket in the following way: \<tag>text\</tag>.
+     *   By default, the opening angle brackets will be replaced with the special characters.
      * @default bHtmlHeadings = false
      * @default bBase64img = false
      * @default bDemoteHeadings = false
@@ -14279,8 +14296,8 @@ declare namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
-     * @param nDistance - The distance from the right side of the document element to the floating object measured in
-     *   English measure units.
+     * @param nDistance - The distance from the right side of the document element to the floating object. Use EMU for
+     *   absolute distance or a number for percent (1 = 1%) when bPercent=true.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
      * @default bPercent = false
      * @since 9.3.0
@@ -14502,8 +14519,8 @@ declare namespace Word {
      * Sets the absolute measurement for the vertical positioning of the floating object.
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
-     * @param nDistance - The distance from the bottom part of the document element to the floating object measured in
-     *   English measure units.
+     * @param nDistance - The distance from the bottom part of the document element to the floating object. Use EMU for
+     *   absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
      * @default bPercent = false
      * @since 9.3.0
@@ -14939,7 +14956,6 @@ declare namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -14959,7 +14975,7 @@ declare namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -15167,7 +15183,7 @@ declare namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -15224,7 +15240,7 @@ declare namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -15301,7 +15317,7 @@ declare namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -16843,9 +16859,9 @@ declare namespace Word {
      * Adds a comment to the current inline content control.
      * <note>Please note that this inline content control must be in the document.</note>
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -17060,7 +17076,7 @@ declare namespace Word {
     GetDate(): undefined | Date;
 
     /**
-     * Returns a list of values of the combo box / dropdown list content control.
+     * Returns a list of values of the combo box / drop-down list content control.
      *
      * @example
      * ```js
@@ -17148,7 +17164,7 @@ declare namespace Word {
     GetId(): string;
 
     /**
-     * Returns an internal id of the current content control.
+     * Returns an internal ID of the current content control.
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetInternalId/
      */
@@ -17703,6 +17719,7 @@ declare namespace Word {
 
     /**
      * Sets the lock to the current inline text content control:
+     * **"unlocked"** - content can be edited and the container can be deleted.
      * **"contentLocked"** - content cannot be edited.
      * **"sdtContentLocked"** - content cannot be edited and the container cannot be deleted.
      * **"sdtLocked"** - the container cannot be deleted.
@@ -17755,7 +17772,7 @@ declare namespace Word {
 
     /**
      * Sets the placeholder text to the current inline content control.
-     * Can't be set to checkbox or radio button*
+     * *Can't be set to checkbox or radio button*
      *
      * @param sText - The text that will be set to the current inline content control.
      *
@@ -18085,8 +18102,8 @@ declare namespace Word {
     GetParaPr(): ApiParaPr;
 
     /**
-     * Specifies the text properties which will be applied to the text in the current numbering level
-     * itself, not to the text in the subsequent paragraph.
+     * Returns the text properties which will be applied to the text in the current numbering level itself,
+     * not to the text in the subsequent paragraph.
      * <note>To change the text style of the paragraph, a style must be applied to it using the
      * {@link ApiRun#SetStyle} method.</note>
      *
@@ -19459,8 +19476,7 @@ declare namespace Word {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -19550,8 +19566,8 @@ declare namespace Word {
      * paragraph are at least
      * partly rendered on the same page as the following paragraph whenever possible.
      *
-     * @param isKeepNext - The true value enables the option to keep lines of the paragraph on the same
-     *   page as the following paragraph.
+     * @param isKeepNext - The true value enables the option to keep lines of the paragraph on the same page as the
+     *   following paragraph.
      *
      * @example
      * ```js
@@ -19616,8 +19632,8 @@ declare namespace Word {
      * @param oNumPr - Specifies a numbering definition.
      * @param nLvl - Specifies a numbering level reference. If the current instance of the ApiParaPr class is direct
      *   formatting of a paragraph, then this parameter MUST BE specified. Otherwise, if the current
-     *   instance of the ApiParaPr class
-     *   is the part of ApiStyle properties, this parameter will be ignored.
+     *   instance of the ApiParaPr class is the part of ApiStyle properties, this parameter will be
+     *   ignored.
      * @default nLvl = 0
      *
      * @example
@@ -19666,8 +19682,8 @@ declare namespace Word {
      * paragraph are rendered at
      * the beginning of a new page in the document.
      *
-     * @param isPageBreakBefore - The true value enables the option to render the contents of the paragraph
-     *   at the beginning of a new page in the document.
+     * @param isPageBreakBefore - The true value enables the option to render the contents of the paragraph at the beginning of a
+     *   new page in the document.
      *
      * @example
      * ```js
@@ -19882,10 +19898,10 @@ declare namespace Word {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -20045,8 +20061,8 @@ declare namespace Word {
      * @param sNumberingFormat - The possible caption numbering format.
      * @param bBefore - Specifies whether to insert the caption before the current paragraph (true) or after (false)
      *   (after/before the shape if it is placed in the shape).
-     * @param nHeadingLvl - The heading level (used if you want to specify the chapter number).
-     *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
+     * @param nHeadingLvl - The heading level (used if you want to specify the chapter number). <note>If you want to specify
+     *   "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param sCaptionSep - The caption separator (used if you want to specify the chapter number).
      * @default sLabel = "Table"
      * @default bExludeLabel = false
@@ -20125,9 +20141,9 @@ declare namespace Word {
      * Adds a comment to the current paragraph.
      * <note>Please note that this paragraph must be in the document.</note>
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -20176,10 +20192,10 @@ declare namespace Word {
     /**
      * Adds an element to the current paragraph.
      *
-     * @param oElement - The document element which will be added at the current position. Returns false if the
-     *   oElement type is not supported by a paragraph.
-     * @param nPos - The position where the current element will be added. If this value is not
-     *   specified, then the element will be added at the end of the current paragraph.
+     * @param oElement - The document element which will be added at the current position. Returns false if the oElement
+     *   type is not supported by a paragraph.
+     * @param nPos - The position where the current element will be added. If this value is not specified, then the
+     *   element will be added at the end of the current paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
      * @example
@@ -21252,6 +21268,7 @@ declare namespace Word {
     /**
      * Returns a Range object that represents the part of the document contained in the specified
      * paragraph.
+     * The paragraph must be attached to the document before calling this method.
      *
      * @param Start - Start position index in the current element.
      * @param End - End position index in the current element.
@@ -21478,7 +21495,7 @@ declare namespace Word {
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string;
 
     /**
-     * Returns the paragraph text properties.
+     * Returns the text properties for a paragraph end mark.
      *
      * @example
      * ```js
@@ -21565,7 +21582,7 @@ declare namespace Word {
     IsEmpty(): boolean;
 
     /**
-     * Returns the last element of the paragraph which is not empty.
+     * Returns the last element of the paragraph.
      *
      * @example
      * ```js
@@ -21588,8 +21605,8 @@ declare namespace Word {
     /**
      * Adds an element to the current paragraph.
      *
-     * @param oElement - The document element which will be added at the current position. Returns false if the
-     *   oElement type is not supported by a paragraph.
+     * @param oElement - The document element which will be added at the current position. Returns false if the oElement
+     *   type is not supported by a paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
      * @example
@@ -21696,7 +21713,8 @@ declare namespace Word {
     /**
      * Searches for a scope of a paragraph object. The search results are a collection of ApiRange objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -21837,7 +21855,7 @@ declare namespace Word {
     SetCaps(isCaps: boolean): ApiParagraph;
 
     /**
-     * Sets the text color to the current paragraph in the RGB format.
+     * Sets the text color to the current paragraph.
      *
      * @param color - The text color.
      * @returns this
@@ -22094,8 +22112,7 @@ declare namespace Word {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -22185,8 +22202,8 @@ declare namespace Word {
      * paragraph are at least
      * partly rendered on the same page as the following paragraph whenever possible.
      *
-     * @param isKeepNext - The true value enables the option to keep lines of the paragraph on the same
-     *   page as the following paragraph.
+     * @param isKeepNext - The true value enables the option to keep lines of the paragraph on the same page as the
+     *   following paragraph.
      *
      * @example
      * ```js
@@ -22251,8 +22268,8 @@ declare namespace Word {
      * @param oNumPr - Specifies a numbering definition.
      * @param nLvl - Specifies a numbering level reference. If the current instance of the ApiParaPr class is direct
      *   formatting of a paragraph, then this parameter MUST BE specified. Otherwise, if the current
-     *   instance of the ApiParaPr class
-     *   is the part of ApiStyle properties, this parameter will be ignored.
+     *   instance of the ApiParaPr class is the part of ApiStyle properties, this parameter will be
+     *   ignored.
      * @default nLvl = 0
      *
      * @example
@@ -22309,8 +22326,8 @@ declare namespace Word {
      * paragraph are rendered at
      * the beginning of a new page in the document.
      *
-     * @param isPageBreakBefore - The true value enables the option to render the contents of the paragraph
-     *   at the beginning of a new page in the document.
+     * @param isPageBreakBefore - The true value enables the option to render the contents of the paragraph at the beginning of a
+     *   new page in the document.
      *
      * @example
      * ```js
@@ -22345,8 +22362,8 @@ declare namespace Word {
      * Specifies an amount by which text is raised or lowered for this paragraph in relation to the default
      * baseline of the surrounding non-positioned text.
      *
-     * @param nPosition - Specifies a positive (raised text) or negative (lowered text)
-     *   measurement in half-points (1/144 of an inch).
+     * @param nPosition - Specifies a positive (raised text) or negative (lowered text) measurement in half-points (1/144
+     *   of an inch).
      * @returns this
      *
      * @example
@@ -22659,10 +22676,10 @@ declare namespace Word {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -23173,7 +23190,7 @@ declare namespace Word {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiPictureForm class.
      *
      * @since 9.0.4
      *
@@ -23353,7 +23370,6 @@ declare namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -23373,7 +23389,7 @@ declare namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -23699,7 +23715,7 @@ declare namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -23803,7 +23819,7 @@ declare namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -23880,7 +23896,7 @@ declare namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -24042,9 +24058,9 @@ declare namespace Word {
     /**
      * Adds a comment to the current range.
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -24465,7 +24481,7 @@ declare namespace Word {
     SetCaps(isCaps: boolean): ApiRange | null;
 
     /**
-     * Sets the text color to the current text Range in the RGB format.
+     * Sets the text color to the current text Range.
      *
      * @param color - The text color.
      * @returns returns null if can't apply color.
@@ -24607,8 +24623,8 @@ declare namespace Word {
      * default
      * baseline of the surrounding non-positioned text.
      *
-     * @param nPosition - Specifies a positive (raised text) or negative (lowered text)
-     *   measurement in half-points (1/144 of an inch).
+     * @param nPosition - Specifies a positive (raised text) or negative (lowered text) measurement in half-points (1/144
+     *   of an inch).
      * @returns returns null if can't set position.
      *
      * @example
@@ -25193,9 +25209,9 @@ declare namespace Word {
      * Adds a comment to the current run.
      * <note>Please note that this run must be in the document.</note>
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -25443,7 +25459,7 @@ declare namespace Word {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -25564,7 +25580,8 @@ declare namespace Word {
     GetDoubleStrikeout(): boolean;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -25903,6 +25920,7 @@ declare namespace Word {
 
     /**
      * Returns a Range object that represents the part of the document contained in the specified run.
+     * The run must be attached to the document before calling this method.
      *
      * @param Start - Start position index in the current element.
      * @param End - End position index in the current element.
@@ -25957,7 +25975,7 @@ declare namespace Word {
     GetShd(): Shd | undefined;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -26283,7 +26301,7 @@ declare namespace Word {
     /**
      * Sets the bold property to the text character.
      *
-     * @param isBold - Specifies that the contents of the current run are displayed bold.
+     * @param isBold - Specifies that the contents of the run are displayed bold.
      * @returns this text properties.
      *
      * @example
@@ -26304,8 +26322,8 @@ declare namespace Word {
     SetBold(isBold: boolean): ApiTextPr;
 
     /**
-     * Specifies that any lowercase characters in the current text run are formatted for display only as
-     * their capital letter character equivalents.
+     * Specifies that any lowercase characters in the text run are formatted for display only as their
+     * capital letter character equivalents.
      *
      * @param isCaps - Specifies that the contents of the current run are displayed capitalized.
      * @returns this text properties.
@@ -26328,7 +26346,7 @@ declare namespace Word {
     SetCaps(isCaps: boolean): ApiTextPr;
 
     /**
-     * Sets the text color for the current text run in the RGB format.
+     * Sets the text color to the current text run.
      *
      * @param color - The text color.
      * @returns this text properties.
@@ -26352,7 +26370,7 @@ declare namespace Word {
     SetColor(color: ApiColor): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with two horizontal lines through each
+     * Specifies that the contents of the run are displayed with two horizontal lines through each
      * character displayed on the line.
      *
      * @param isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
@@ -26422,7 +26440,8 @@ declare namespace Word {
     SetFontSize(nSize: hps): ApiTextPr;
 
     /**
-     * Specifies a highlighting color which is applied as a background to the contents of the current run.
+     * Specifies a highlighting color which is added to the text properties and applied as a background to
+     * the contents of the current run/range/paragraph.
      *
      * @param sColor - Available highlight color.
      *
@@ -26469,10 +26488,10 @@ declare namespace Word {
     /**
      * Specifies the languages which will be used to check spelling and grammar (if requested) when
      * processing
-     * the contents of this text run.
+     * the contents of the text run.
      *
-     * @param sLangId - The possible value for this parameter is a language identifier as defined by
-     *   RFC 4646/BCP 47. Example: "en-CA".
+     * @param sLangId - The possible value for this parameter is a language identifier as defined by RFC 4646/BCP 47.
+     *   Example: "en-CA".
      * @returns this text properties.
      *
      * @example
@@ -26521,8 +26540,8 @@ declare namespace Word {
      * Specifies an amount by which text is raised or lowered for this run in relation to the default
      * baseline of the surrounding non-positioned text.
      *
-     * @param nPosition - Specifies a positive (raised text) or negative (lowered text)
-     *   measurement in half-points (1/144 of an inch).
+     * @param nPosition - Specifies a positive (raised text) or negative (lowered text) measurement in half-points (1/144
+     *   of an inch).
      * @returns this text properties.
      *
      * @example
@@ -26572,7 +26591,7 @@ declare namespace Word {
     SetShd(type: ShdType, color: ApiColor): ApiTextPr;
 
     /**
-     * Specifies that all the small letter characters in this text run are formatted for display only as
+     * Specifies that all the small letter characters in the text run are formatted for display only as
      * their capital
      * letter character equivalents which are two points smaller than the actual font size specified for
      * this text.
@@ -26622,8 +26641,8 @@ declare namespace Word {
     SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with a single horizontal line through
-     * the center of the line.
+     * Specifies that the contents of the run are displayed with a single horizontal line through the
+     * center of the line.
      *
      * @param isStrikeout - Specifies that the contents of the current run are displayed struck through.
      * @returns this text properties.
@@ -26646,9 +26665,12 @@ declare namespace Word {
     SetStrikeout(isStrikeout: boolean): ApiTextPr;
 
     /**
-     * Sets a style to the current run.
+     * The text style base method.
+     * <note>This method is not used by itself, as it only forms the basis for the {@link ApiRun#SetStyle}
+     * method which sets
+     * the selected or created style to the text.</note>
      *
-     * @param oStyle - The style which must be applied to the text run.
+     * @param oStyle - The style which must be applied to the text character.
      * @returns this text properties.
      *
      * @example
@@ -26721,8 +26743,8 @@ declare namespace Word {
     SetTextPr(oTextPr: ApiTextPr): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed along with a line appearing directly
-     * below the character
+     * Specifies that the contents of the run are displayed along with a line appearing directly below the
+     * character
      * (less than all the spacing above and below the characters on the line).
      *
      * @param isUnderline - Specifies that the contents of the current run are displayed underlined.
@@ -26746,8 +26768,8 @@ declare namespace Word {
     SetUnderline(isUnderline: boolean): ApiTextPr;
 
     /**
-     * Specifies the alignment which will be applied to the contents of the current run in relation to the
-     * default appearance of the text run:
+     * Specifies the alignment which will be applied to the contents of the run in relation to the default
+     * appearance of the run text:
      * **"baseline"** - the characters in the current text run will be aligned by the default text
      * baseline.
      * **"subscript"** - the characters in the current text run will be aligned below the default text
@@ -26911,8 +26933,8 @@ declare namespace Word {
      * Returns the content for the specified footer type.
      *
      * @param sType - Footer type to get the content from.
-     * @param isCreate - Specifies whether to create a new footer or not with the specified footer type in case
-     *   no footer with such a type could be found in the current section.
+     * @param isCreate - Specifies whether to create a new footer or not with the specified footer type in case no footer
+     *   with such a type could be found in the current section.
      * @default isCreate = false
      *
      * @example
@@ -26938,8 +26960,8 @@ declare namespace Word {
      * Returns the content for the specified header type.
      *
      * @param sType - Header type to get the content from.
-     * @param isCreate - Specifies whether to create a new header or not with the specified header type in case
-     *   no header with such a type could be found in the current section.
+     * @param isCreate - Specifies whether to create a new header or not with the specified header type in case no header
+     *   with such a type could be found in the current section.
      * @default isCreate = false
      *
      * @example
@@ -27191,8 +27213,8 @@ declare namespace Word {
     /**
      * Specifies the distance from the bottom edge of the page to the bottom edge of the footer.
      *
-     * @param nDistance - The distance from the bottom edge of the page to the bottom edge of the footer measured
-     *   in twentieths of a point (1/1440 of an inch).
+     * @param nDistance - The distance from the bottom edge of the page to the bottom edge of the footer measured in
+     *   twentieths of a point (1/1440 of an inch).
      *
      * @example
      * ```js
@@ -29266,8 +29288,8 @@ declare namespace Word {
      * @param sNumberingFormat - The possible caption numbering format.
      * @param bBefore - Specifies whether to insert the caption before the current table (true) or after (false)
      *   (after/before the shape if it is placed in the shape).
-     * @param nHeadingLvl - The heading level (used if you want to specify the chapter number).
-     *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
+     * @param nHeadingLvl - The heading level (used if you want to specify the chapter number). <note>If you want to specify
+     *   "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param sCaptionSep - The caption separator (used if you want to specify the chapter number).
      * @default sLabel = "Table"
      * @default bExludeLabel = false
@@ -29354,9 +29376,9 @@ declare namespace Word {
      * Adds a comment to all contents of the current table.
      * <note>Please note that this table must be in the document.</note>
      *
-     * @param sText - The comment text (required).
-     * @param sAuthor - The author's name (optional).
-     * @param sUserId - The user ID of the comment author (optional).
+     * @param sText - The comment text.
+     * @param sAuthor - The author's name.
+     * @param sUserId - The user ID of the comment author.
      * @returns Returns null if the comment was not added.
      *
      * @example
@@ -29408,8 +29430,8 @@ declare namespace Word {
     /**
      * Adds a new row to the current table.
      *
-     * @param oCell - The cell after which a new row will be added. If not specified, a new row will
-     *   be added at the end of the table.
+     * @param oCell - The cell after which a new row will be added. If not specified, a new row will be added at the
+     *   end of the table.
      * @param isBefore - Adds a new row before (false) or after (true) the specified cell. If no cell is specified, then
      *   this parameter will be ignored.
      * @default isBefore = false
@@ -29435,12 +29457,11 @@ declare namespace Word {
     /**
      * Adds the new rows to the current table.
      *
-     * @param oCell - The cell after which the new rows will be added. If not specified, the new rows will
-     *   be added at the end of the table.
+     * @param oCell - The cell after which the new rows will be added. If not specified, the new rows will be added at
+     *   the end of the table.
      * @param nCount - Count of rows to be added.
      * @param isBefore - Adds the new rows before (false) or after (true) the specified cell. If no cell is specified,
-     *   then
-     *   this parameter will be ignored.
+     *   then this parameter will be ignored.
      * @default isBefore = false
      *
      * @example
@@ -30009,7 +30030,8 @@ declare namespace Word {
     /**
      * Searches for a scope of a table object. The search results are a collection of ApiRange objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -30526,8 +30548,8 @@ declare namespace Word {
      * the border
      * of all table cells within the parent table (or table row).
      *
-     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in
-     *   twentieths of a point (1/1440 of an inch).
+     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
+     *   a point (1/1440 of an inch).
      *
      * @example
      * ```js
@@ -31319,7 +31341,8 @@ declare namespace Word {
      * Searches for a scope of a table cell object. The search results are a collection of ApiRange
      * objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -31488,10 +31511,10 @@ declare namespace Word {
      * the border
      * of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin
-     *   will be used, otherwise
-     *   the table cell bottom margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
+     *   a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin will
+     *   be used, otherwise the table cell bottom margin will be overridden with the specified value for
+     *   the current cell.
      *
      * @example
      * ```js
@@ -31517,10 +31540,10 @@ declare namespace Word {
      * Specifies an amount of space which will be left between the left extent of the cell contents and
      * the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell left margin
-     *   will be used, otherwise
-     *   the table cell left margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell left margin will be
+     *   used, otherwise the table cell left margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -31546,10 +31569,10 @@ declare namespace Word {
      * Specifies an amount of space which will be left between the right extent of the cell contents and
      * the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell right margin
-     *   will be used, otherwise
-     *   the table cell right margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell right margin will be
+     *   used, otherwise the table cell right margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -31575,10 +31598,10 @@ declare namespace Word {
      * Specifies an amount of space which will be left between the upper extent of the cell contents
      * and the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space above the upper extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell top margin will
-     *   be used, otherwise
-     *   the table cell top margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space above the upper extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell top margin will be
+     *   used, otherwise the table cell top margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -31738,10 +31761,9 @@ declare namespace Word {
     /**
      * Specifies the direction of the text flow for this table cell.
      *
-     * @param sType - The available types of the text direction in the table cell: `"lrtb"`
-     *   - text direction left-to-right moving from top to bottom, `"tbrl"` - text direction
-     *   top-to-bottom moving from right
-     *   to left, `"btlr"` - text direction bottom-to-top moving from left to right.
+     * @param sType - The available types of the text direction in the table cell: `"lrtb"` - text direction
+     *   left-to-right moving from top to bottom, `"tbrl"` - text direction top-to-bottom moving from
+     *   right to left, `"btlr"` - text direction bottom-to-top moving from left to right.
      *
      * @example
      * ```js
@@ -32043,10 +32065,10 @@ declare namespace Word {
      * the border
      * of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin
-     *   will be used, otherwise
-     *   the table cell bottom margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
+     *   a point (1/1440 of an inch). If this value is `null`, then default table cell bottom margin will
+     *   be used, otherwise the table cell bottom margin will be overridden with the specified value for
+     *   the current cell.
      *
      * @example
      * ```js
@@ -32072,10 +32094,10 @@ declare namespace Word {
      * Specifies an amount of space which will be left between the left extent of the cell contents and
      * the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell left margin
-     *   will be used, otherwise
-     *   the table cell left margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell left margin will be
+     *   used, otherwise the table cell left margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -32101,10 +32123,10 @@ declare namespace Word {
      * Specifies an amount of space which will be left between the right extent of the cell contents and
      * the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell right margin
-     *   will be used, otherwise
-     *   the table cell right margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell right margin will be
+     *   used, otherwise the table cell right margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -32130,10 +32152,10 @@ declare namespace Word {
      * Specifies an amount of space which will be left between the upper extent of the cell contents
      * and the border of a specific table cell within a table.
      *
-     * @param nValue - The value for the amount of space above the upper extent of the cell measured in twentieths
-     *   of a point (1/1440 of an inch). If this value is `null`, then default table cell top margin will
-     *   be used, otherwise
-     *   the table cell top margin will be overridden with the specified value for the current cell.
+     * @param nValue - The value for the amount of space above the upper extent of the cell measured in twentieths of a
+     *   point (1/1440 of an inch). If this value is `null`, then default table cell top margin will be
+     *   used, otherwise the table cell top margin will be overridden with the specified value for the
+     *   current cell.
      *
      * @example
      * ```js
@@ -32231,10 +32253,9 @@ declare namespace Word {
     /**
      * Specifies the direction of the text flow for this table cell.
      *
-     * @param sType - The available types of the text direction in the table cell: `"lrtb"`
-     *   - text direction left-to-right moving from top to bottom, `"tbrl"` - text direction
-     *   top-to-bottom moving from right
-     *   to left, `"btlr"` - text direction bottom-to-top moving from left to right.
+     * @param sType - The available types of the text direction in the table cell: `"lrtb"` - text direction
+     *   left-to-right moving from top to bottom, `"tbrl"` - text direction top-to-bottom moving from
+     *   right to left, `"btlr"` - text direction bottom-to-top moving from left to right.
      *
      * @example
      * ```js
@@ -32753,8 +32774,8 @@ declare namespace Word {
      * the border
      * of all table cells within the parent table (or table row).
      *
-     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in
-     *   twentieths of a point (1/1440 of an inch).
+     * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
+     *   a point (1/1440 of an inch).
      *
      * @example
      * ```js
@@ -33281,7 +33302,8 @@ declare namespace Word {
     /**
      * Searches for a scope of a table row object. The search results are a collection of ApiRange objects.
      *
-     * @param sText - Search string.
+     * @param sText - Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase
+     *   parameter is ignored (control case sensitivity with the "i" flag instead).
      * @param isMatchCase - Case sensitive or not.
      *
      * @example
@@ -33881,7 +33903,7 @@ declare namespace Word {
     GetCharactersLimit(): number;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiTextForm class.
      *
      * @since 9.0.4
      *
@@ -33996,7 +34018,6 @@ declare namespace Word {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -34016,7 +34037,7 @@ declare namespace Word {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -34285,9 +34306,8 @@ declare namespace Word {
     /**
      * Sets the cell width to the applied comb of characters.
      *
-     * @param nCellWidth - The cell width measured in millimeters.
-     *   If this parameter is not specified or equal to 0 or less, then the width will be set
-     *   automatically. Must be >= 1 and <= 558.8.
+     * @param nCellWidth - The cell width measured in millimeters. If this parameter is not specified or equal to 0 or
+     *   less, then the width will be set automatically. Must be >= 1 and <= 558.8.
      * @default nCellWidth = 0
      *
      * @example
@@ -34308,9 +34328,8 @@ declare namespace Word {
      * Sets a limit to the text field characters.
      *
      * @param nChars - The maximum number of characters in the text field. If this parameter is equal to -1, no limit
-     *   will be set.
-     *   A limit is required to be set if a comb of characters is applied.
-     *   Maximum value for this parameter is 1000000.
+     *   will be set. A limit is required to be set if a comb of characters is applied. Maximum value for
+     *   this parameter is 1000000.
      *
      * @example
      * ```js
@@ -34417,7 +34436,7 @@ declare namespace Word {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -34492,7 +34511,7 @@ declare namespace Word {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -34569,7 +34588,7 @@ declare namespace Word {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -34633,7 +34652,7 @@ declare namespace Word {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -34757,7 +34776,8 @@ declare namespace Word {
     GetDoubleStrikeout(): boolean;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -34998,7 +35018,7 @@ declare namespace Word {
     GetShd(): Shd | undefined;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -35245,7 +35265,7 @@ declare namespace Word {
     SetCaps(isCaps: boolean): ApiTextPr;
 
     /**
-     * Sets the text color to the current text run in the RGB format.
+     * Sets the text color to the current text run.
      *
      * @param color - The text color.
      * @returns this text properties.
@@ -35365,8 +35385,8 @@ declare namespace Word {
      * processing
      * the contents of the text run.
      *
-     * @param sLangId - The possible value for this parameter is a language identifier as defined by
-     *   RFC 4646/BCP 47. Example: "en-CA".
+     * @param sLangId - The possible value for this parameter is a language identifier as defined by RFC 4646/BCP 47.
+     *   Example: "en-CA".
      * @returns this text properties.
      *
      * @example
@@ -35417,8 +35437,8 @@ declare namespace Word {
      * Specifies an amount by which text is raised or lowered for this run in relation to the default
      * baseline of the surrounding non-positioned text.
      *
-     * @param nPosition - Specifies a positive (raised text) or negative (lowered text)
-     *   measurement in half-points (1/144 of an inch).
+     * @param nPosition - Specifies a positive (raised text) or negative (lowered text) measurement in half-points (1/144
+     *   of an inch).
      * @returns this text properties.
      *
      * @example
@@ -36413,8 +36433,7 @@ declare namespace Cell {
   }
 
   /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their comments.
    *
    * @example
    * ```js
@@ -36427,7 +36446,7 @@ declare namespace Cell {
   }
 
   /**
-   * Record of one comment.
+   * Represents a single comment record.
    *
    * @example
    * ```js
@@ -36435,19 +36454,19 @@ declare namespace Cell {
    * ```
    */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -36696,7 +36715,7 @@ declare namespace Cell {
    * * **-1** - The values must be sorted in descending order. If the exact match is not found, the
    * function will return the smallest value that is greater than the searched value.
    * * **0** - The values can be sorted in any order. If the exact match is not found, the function will
-   * return the _#N/A_ error.
+   * return the *#N/A* error.
    * * **1** (or omitted) - The values must be sorted in ascending order. If the exact match is not
    * found, the function will return the largest value that is less than the searched value.
    */
@@ -36960,8 +36979,7 @@ declare namespace Cell {
   }
 
   /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their review changes.
    *
    * @example
    * ```js
@@ -36979,7 +36997,7 @@ declare namespace Cell {
   }
 
   /**
-   * Record of one review change.
+   * Represents a single review change record.
    *
    * @example
    * ```js
@@ -36994,16 +37012,16 @@ declare namespace Cell {
    * ```
    */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
@@ -37395,7 +37413,7 @@ declare namespace Cell {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -38031,21 +38049,27 @@ declare namespace Cell {
     /**
      * Creates a new custom function.
      * The description of the function parameters and result is specified using JSDoc. The
-     * _@customfunction_ tag is required in JSDoc.
-     * Parameters and results can be specified as the _number / string / bool / any / number[][] /
-     * string[][] / bool[][] / any[][]_ types.
+     * *@customfunction* tag is required in JSDoc.
+     * Parameters and results can be specified as the *number / string / boolean / any / number[][] /
+     * string[][] / boolean[][] / any[][]* types.
      * Parameters can be required or optional. A user can also set a default value.
+     * The passed function can be asynchronous (async function or function returning a Promise).
+     * Inside the passed function, you can access the current cell address where the calculation is
+     * performed using *this.address*.
+     * You can also access the addresses of function arguments using *this.args[0].address*,
+     * *this.args[1].address*, etc.
+     * This method is not used in ONLYOFFICE Document Builder. Use AddCustomFunctionLibrary instead.
      *
-     * @param fCustom - A new function for calculating.
+     * @param fCustom - A new function for calculating. Can be synchronous or asynchronous.
      */
     AddCustomFunction(fCustom: (...args: unknown[]) => unknown): void;
 
     /**
      * Registers a new custom functions library (see the **SetCustomFunctions** plugin method).
      * The description of the function parameters and result is specified using JSDoc. The
-     * _@customfunction_ tag is required in JSDoc.
-     * Parameters and results can be specified as the _number / string / bool / any / number[][] /
-     * string[][] / bool[][] / any[][]_ types.
+     * *@customfunction* tag is required in JSDoc.
+     * Parameters and results can be specified as the *number / string / boolean / any / number[][] /
+     * string[][] / boolean[][] / any[][]* types.
      * Parameters can be required or optional. A user can also set a default value.
      *
      * @param sName - The library name.
@@ -38079,8 +38103,7 @@ declare namespace Cell {
      *
      * @param sName - The range name.
      * @param sRef - The reference to the specified range. It must contain the sheet name, followed by sign ! and a
-     *   range of cells.
-     *   Example: "Sheet1!$A$1:$B$2".
+     *   range of cells. Example: "Sheet1!$A$1:$B$2".
      * @param isHidden - Defines if the range name is hidden or not.
      * @returns returns false if sName or sRef are invalid.
      *
@@ -38771,7 +38794,7 @@ declare namespace Cell {
      * **LastModifiedRaw** - the date and time when the file was last modified.
      * **LastModified** - the parsed date and time when the file was last modified.
      * **LastModifiedBy** - the name of the user who has made the latest change to the document.
-     * **Autrors** - the persons who has created the file.
+     * **Authors** - the persons who has created the file.
      * **Title** - this property allows you to simplify your documents classification.
      * **Tags** - this property allows you to simplify your documents classification.
      * **Subject** - this property allows you to simplify your documents classification.
@@ -40123,17 +40146,14 @@ declare namespace Cell {
     /**
      * Adds a new series to the current chart.
      *
-     * @param sNameRange - The series name. Can be a range of cells or usual text. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column,
-     *   "Example series".
-     * @param sValuesRange - A range of cells from the sheet with series values. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column.
+     * @param sNameRange - The series name. Can be a range of cells or usual text. For example: "'sheet 1'!$A$2:$A$5" -
+     *   must be a single cell, row or column, "A1:A5" - must be a single cell, row or column, "Example
+     *   series".
+     * @param sValuesRange - A range of cells from the sheet with series values. For example: "'sheet 1'!$A$2:$A$5" - must be
+     *   a single cell, row or column, "A1:A5" - must be a single cell, row or column.
      * @param sXValuesRange - A range of cells from the sheet with series x-axis values. It is used with the scatter charts
-     *   only. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column.
+     *   only. For example: "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column, "A1:A5" - must
+     *   be a single cell, row or column.
      *
      * @example
      * ```js
@@ -40372,9 +40392,8 @@ declare namespace Cell {
     /**
      * Sets a range with the category values to the current chart.
      *
-     * @param sRange - A range of cells from the sheet with the category names. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column.
+     * @param sRange - A range of cells from the sheet with the category names. For example: "'sheet 1'!$A$2:$A$5" -
+     *   must be a single cell, row or column, "A1:A5" - must be a single cell, row or column.
      *
      * @example
      * ```js
@@ -41085,10 +41104,9 @@ declare namespace Cell {
     /**
      * Sets a name to the specified series.
      *
-     * @param sNameRange - The series name. Can be a range of cells or usual text. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column,
-     *   "Example series".
+     * @param sNameRange - The series name. Can be a range of cells or usual text. For example: "'sheet 1'!$A$2:$A$5" -
+     *   must be a single cell, row or column, "A1:A5" - must be a single cell, row or column, "Example
+     *   series".
      * @param nSeria - The index of the chart series.
      *
      * @example
@@ -41121,10 +41139,8 @@ declare namespace Cell {
     /**
      * Sets values from the specified range to the specified series.
      *
-     * @param sRange - A range of cells from the sheet with series values. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column,
-     *   "Example series".
+     * @param sRange - A range of cells from the sheet with series values. For example: "'sheet 1'!$A$2:$A$5" - must be
+     *   a single cell, row or column, "A1:A5" - must be a single cell, row or column, "Example series".
      * @param nSeria - The index of the chart series.
      *
      * @example
@@ -41164,10 +41180,9 @@ declare namespace Cell {
      * Sets the x-axis values from the specified range to the specified series. It is used with the scatter
      * charts only.
      *
-     * @param sRange - A range of cells from the sheet with series x-axis values. For example:
-     *   "'sheet 1'!$A$2:$A$5" - must be a single cell, row or column,
-     *   "A1:A5" - must be a single cell, row or column,
-     *   "Example series".
+     * @param sRange - A range of cells from the sheet with series x-axis values. For example: "'sheet 1'!$A$2:$A$5" -
+     *   must be a single cell, row or column, "A1:A5" - must be a single cell, row or column, "Example
+     *   series".
      * @param nSeria - The index of the chart series.
      *
      * @example
@@ -41791,7 +41806,7 @@ declare namespace Cell {
     GetHex(): string;
 
     /**
-     * Returns a color value in RGB format.
+     * Gets the RGB components of the color.
      *
      * @since 9.1.0
      *
@@ -45787,6 +45802,7 @@ declare namespace Cell {
 
     /**
      * Ungroups the current group of drawings.
+     * <note>This method is not supported in the document builder and works only in the editor.</note>
      *
      * @returns The array of the ungrouped objects, or null if the group is not in the document, cannot be
      *   ungrouped, or when called in the document builder.
@@ -45838,7 +45854,7 @@ declare namespace Cell {
     SetText(sText: string): boolean;
   }
 
-  /** Class representing a Paragraph hyperlink. */
+  /** Class representing a hyperlink. */
   export interface ApiHyperlink {
     /** Deletes the hyperlink. */
     Delete(): void;
@@ -47580,8 +47596,7 @@ declare namespace Cell {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -47720,10 +47735,10 @@ declare namespace Cell {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -47758,10 +47773,10 @@ declare namespace Cell {
     /**
      * Adds an element to the current paragraph.
      *
-     * @param oElement - The document element which will be added at the current position. Returns false if the
-     *   oElement type is not supported by a paragraph.
-     * @param nPos - The position where the current element will be added. If this value is not
-     *   specified, then the element will be added at the end of the current paragraph.
+     * @param oElement - The document element which will be added at the current position. Returns false if the oElement
+     *   type is not supported by a paragraph.
+     * @param nPos - The position where the current element will be added. If this value is not specified, then the
+     *   element will be added at the end of the current paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
      * @example
@@ -48598,8 +48613,7 @@ declare namespace Cell {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -48767,10 +48781,10 @@ declare namespace Cell {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -50721,11 +50735,10 @@ declare namespace Cell {
     GetValue(): string;
 
     /**
-     * Moves the current data field inside the category.
+     * Moves the current pivot field inside the category.
      *
-     * @param type - The direction to move the pivot table field,
-     *   or the pivot field orientation type.
-     * @param index - The index of the data field in a new category.
+     * @param type - The direction to move the pivot table field, or the pivot field orientation type.
+     * @param index - The field index in a new category.
      * @since 8.2.0
      *
      * @example
@@ -50776,7 +50789,7 @@ declare namespace Cell {
     Move(type: PivotMoveFieldType | PivotFieldOrientationType, index?: number): void;
 
     /**
-     * Removes the current data field from the category.
+     * Removes the current pivot field from the pivot table.
      *
      * @since 8.2.0
      *
@@ -50827,9 +50840,9 @@ declare namespace Cell {
     Remove(): void;
 
     /**
-     * Sets a value that represents the label text for the data field.
+     * Sets a value that represents the label text for the pivot field.
      *
-     * @param caption - The label text for the data field.
+     * @param caption - The label text for the pivot field.
      * @since 8.2.0
      *
      * @example
@@ -51599,9 +51612,10 @@ declare namespace Cell {
     SetOrientation(type: PivotFieldOrientationType): void;
 
     /**
-     * Sets a value that represents the data field position within a category.
+     * Sets a value that represents the position of the field (first, second, third, and so on)
+     * among all the fields in its orientation (Rows, Columns, Pages, Data).
      *
-     * @param position - The data field position.
+     * @param position - The field position.
      * @since 8.2.0
      *
      * @example
@@ -51863,7 +51877,7 @@ declare namespace Cell {
     SetSubtotals(subtotals: PivotFieldSubtotals): void;
 
     /**
-     * Sets a value representing the name of the specified data field in the pivot table report.
+     * Sets a value representing the name of the specified field in the pivot table report.
      *
      * @param name - The name of the specified field in the pivot table report.
      * @since 8.2.0
@@ -53406,8 +53420,7 @@ declare namespace Cell {
     /**
      * Moves the current pivot field inside the category.
      *
-     * @param type - The direction to move the pivot table field,
-     *   or the pivot field orientation type.
+     * @param type - The direction to move the pivot table field, or the pivot field orientation type.
      * @param index - The field index in a new category.
      * @since 8.2.0
      *
@@ -55066,9 +55079,9 @@ declare namespace Cell {
     /**
      * Returns the value for the data field in a pivot table.
      *
-     * @param items - Describes a single cell in the pivot table report.
-     *   For example, "'Estimated Costs' Tables May", which shows the estimated costs for tables in May
-     *   (Data field = Costs, Product = Tables, Month = May).
+     * @param items - Describes a single cell in the pivot table report. For example, "'Estimated Costs' Tables May",
+     *   which shows the estimated costs for tables in May (Data field = Costs, Product = Tables, Month =
+     *   May).
      * @since 8.2.0
      *
      * @example
@@ -56336,8 +56349,7 @@ declare namespace Cell {
      * Moves the specified field from one category to another.
      *
      * @param identifier - The index number or name of the field.
-     * @param type - The direction to move the pivot table field,
-     *   or the pivot field orientation type.
+     * @param type - The direction to move the pivot table field, or the pivot field orientation type.
      * @param index - The field index in a new category.
      * @since 8.2.0
      *
@@ -56678,7 +56690,7 @@ declare namespace Cell {
     SetDescription(description: string): void;
 
     /**
-     * Returns the setting which specifies whether to display field headers for rows and columns.
+     * Sets whether to display field headers for rows and columns.
      *
      * @param show - Specifies whether to display field headers for rows and columns.
      * @since 8.2.0
@@ -58007,7 +58019,8 @@ declare namespace Cell {
     /**
      * Deletes the Range object.
      *
-     * @param shift - Specifies how to shift cells to replace the deleted cells.
+     * @param shift - Specifies how to shift cells to replace the deleted cells. If omitted, the direction is
+     *   determined automatically: _"up"_ if the range has more columns than rows, otherwise _"left"_.
      *
      * @example
      * ```js
@@ -58779,9 +58792,9 @@ declare namespace Cell {
     /**
      * Merges the selected cell range into a single cell or a cell row.
      *
-     * @param isAcross - When set to **true**, the cells within the selected range will be merged along the rows,
-     *   but remain split in the columns. When set to **false**, the whole selected range of cells will
-     *   be merged into a single cell.
+     * @param isAcross - When set to **true**, the cells within the selected range will be merged along the rows, but
+     *   remain split in the columns. When set to **false**, the whole selected range of cells will be
+     *   merged into a single cell.
      * @returns returns true if the range was merged successfully.
      *
      * @example
@@ -58832,9 +58845,9 @@ declare namespace Cell {
      *
      * @param sPasteType - Paste option.
      * @param sPasteSpecialOperation - The mathematical operation which will be applied to the copied data.
-     * @param bSkipBlanks - [bSkipBlanks=false] - Specifies whether to avoid replacing values in the paste area when blank
-     *   cells occur in the copy area.
-     * @param bTranspose - [bTranspose=false] - Specifies whether the pasted data will be transposed from rows to columns.
+     * @param bSkipBlanks - Specifies whether to avoid replacing values in the paste area when blank cells occur in the copy
+     *   area.
+     * @param bTranspose - Specifies whether the pasted data will be transposed from rows to columns.
      * @default sPasteType = "xlPasteAll"
      * @default sPasteSpecialOperation = "xlPasteSpecialOperationNone"
      * @default bSkipBlanks = false
@@ -58965,11 +58978,11 @@ declare namespace Cell {
      * Adds an AutoFilter to the current range.
      *
      * @param Field - The integer offset of the field on which you want to base the filter (from the left of the list;
-     *   the leftmost field is field one).
+     *   the leftmost field is field one). If {null} provided, clears the AutoFilter for the range.
      * @param Criteria1 - The criteria (a string; for example, "101"). Use "=" to find blank fields, "<>" to find
-     *   non-blank fields, and "><" to select (No Data) fields in data types.
-     *   If this argument is omitted, the criteria is All. If Operator is xlTop10Items, Criteria1
-     *   specifies the number of items (for example, "10").
+     *   non-blank fields, and "><" to select (No Data) fields in data types. If this argument is
+     *   omitted, the criteria is All. If Operator is xlTop10Items, Criteria1 specifies the number of
+     *   items (for example, "10").
      * @param Operator - An XlAutoFilterOperator constant specifying the type of filter.
      * @param Criteria2 - The second criteria (a string). Used with Criteria1 and Operator to construct compound criteria.
      * @param VisibleDropDown - True to display the AutoFilter drop-down arrow for the filtered field. False to hide the
@@ -59037,7 +59050,7 @@ declare namespace Cell {
 
     /**
      * Sets the background color to the current cell range with the previously created color object.
-     * Sets 'No Fill' when previously created color object is null.
+     * Sets 'No Fill' when the previously created color object is 'No Fill' or null.
      *
      * @param color - The color object which specifies the color to be set to the background in the cell / cell range.
      *   Pass 'No Fill' or null to clear the background color.
@@ -59334,15 +59347,12 @@ declare namespace Cell {
      * Specifies that the contents of the current cell / cell range are displayed along with a line
      * appearing directly below the character.
      *
-     * @param undelineType - Specifies the type of the
-     *   line displayed under the characters. The following values are available:
-     *   **"none"** - for no underlining;
-     *   **"single"** - for a single line underlining the cell contents;
-     *   **"singleAccounting"** - for a single line underlining the cell contents but not protruding
-     *   beyond the cell borders;
-     *   **"double"** - for a double line underlining the cell contents;
-     *   **"doubleAccounting"** - for a double line underlining the cell contents but not protruding
-     *   beyond the cell borders.
+     * @param undelineType - Specifies the type of the line displayed under the characters. The following values are
+     *   available: **"none"** - for no underlining; **"single"** - for a single line underlining the
+     *   cell contents; **"singleAccounting"** - for a single line underlining the cell contents but not
+     *   protruding beyond the cell borders; **"double"** - for a double line underlining the cell
+     *   contents; **"doubleAccounting"** - for a double line underlining the cell contents but not
+     *   protruding beyond the cell borders.
      * @returns returns true if the underline property was set successfully.
      *
      * @example
@@ -59818,7 +59828,7 @@ declare namespace Cell {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -59932,7 +59942,8 @@ declare namespace Cell {
     GetFill(): ApiFill;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -60090,7 +60101,7 @@ declare namespace Cell {
     GetOutLine(): ApiStroke;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -60290,7 +60301,7 @@ declare namespace Cell {
     /**
      * Sets the bold property to the text character.
      *
-     * @param isBold - Specifies that the contents of the current run are displayed bold.
+     * @param isBold - Specifies that the contents of the run are displayed bold.
      * @returns this text properties.
      *
      * @example
@@ -60315,8 +60326,8 @@ declare namespace Cell {
     SetBold(isBold: boolean): ApiTextPr;
 
     /**
-     * Specifies that any lowercase characters in the current text run are formatted for display only as
-     * their capital letter character equivalents.
+     * Specifies that any lowercase characters in the text run are formatted for display only as their
+     * capital letter character equivalents.
      *
      * @param isCaps - Specifies that the contents of the current run are displayed capitalized.
      * @returns this text properties.
@@ -60343,7 +60354,7 @@ declare namespace Cell {
     SetCaps(isCaps: boolean): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with two horizontal lines through each
+     * Specifies that the contents of the run are displayed with two horizontal lines through each
      * character displayed on the line.
      *
      * @param isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
@@ -60508,7 +60519,7 @@ declare namespace Cell {
     SetOutLine(oStroke: ApiStroke): ApiTextPr;
 
     /**
-     * Specifies that all the small letter characters in this text run are formatted for display only as
+     * Specifies that all the small letter characters in the text run are formatted for display only as
      * their capital
      * letter character equivalents which are two points smaller than the actual font size specified for
      * this text.
@@ -60566,8 +60577,8 @@ declare namespace Cell {
     SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with a single horizontal line through
-     * the center of the line.
+     * Specifies that the contents of the run are displayed with a single horizontal line through the
+     * center of the line.
      *
      * @param isStrikeout - Specifies that the contents of the current run are displayed struck through.
      * @returns this text properties.
@@ -60648,8 +60659,8 @@ declare namespace Cell {
     SetTextPr(oTextPr: ApiTextPr): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed along with a line appearing directly
-     * below the character
+     * Specifies that the contents of the run are displayed along with a line appearing directly below the
+     * character
      * (less than all the spacing above and below the characters on the line).
      *
      * @param isUnderline - Specifies that the contents of the current run are displayed underlined.
@@ -60677,8 +60688,8 @@ declare namespace Cell {
     SetUnderline(isUnderline: boolean): ApiTextPr;
 
     /**
-     * Specifies the alignment which will be applied to the contents of the current run in relation to the
-     * default appearance of the text run:
+     * Specifies the alignment which will be applied to the contents of the run in relation to the default
+     * appearance of the run text:
      * **"baseline"** - the characters in the current text run will be aligned by the default text
      * baseline.
      * **"subscript"** - the characters in the current text run will be aligned below the default text
@@ -61083,7 +61094,7 @@ declare namespace Cell {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -61199,7 +61210,8 @@ declare namespace Cell {
     GetFill(): ApiFill;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -61321,7 +61333,7 @@ declare namespace Cell {
     GetOutLine(): ApiStroke;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -62752,6 +62764,12 @@ declare namespace Cell {
      * specified column and
      * row cells only. If this value exceeds the cell width or height, another vertical/horizontal position
      * will be set.</note>
+     * :::note
+     * Values of _nStyleIndex_ outside **1 - 48** are interpreted as a chart style id from the
+     * _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs
+     * Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs
+     * Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).
+     * :::
      *
      * @param sDataRange - The selected cell range which will be used to get the data for the chart, formed specifically
      *   and including the sheet name.
@@ -62798,8 +62816,8 @@ declare namespace Cell {
      * Adds a new name to the current worksheet.
      *
      * @param sName - The range name.
-     * @param sRef - Must contain the sheet name, followed by sign ! and a range of cells.
-     *   Example: "Sheet1!$A$1:$B$2".
+     * @param sRef - Must contain the sheet name, followed by sign ! and a range of cells. Example:
+     *   "Sheet1!$A$1:$B$2".
      * @param isHidden - Defines if the range name is hidden or not.
      * @returns returns false if sName or sRef are invalid.
      *
@@ -62895,8 +62913,10 @@ declare namespace Cell {
      * @param sType - The shape type which specifies the preset shape geometry.
      * @param nWidth - The shape width in English measure units.
      * @param nHeight - The shape height in English measure units.
-     * @param oFill - The color or pattern used to fill the shape.
-     * @param oStroke - The stroke used to create the element shadow.
+     * @param oFill - The color or pattern used to fill the shape. If not specified, the default shape style fill
+     *   (theme accent) is used.
+     * @param oStroke - The stroke used to draw the shape outline. If not specified, the default shape style outline
+     *   (theme accent) is used.
      * @param nFromCol - The number of the column where the beginning of the shape will be placed.
      * @param nColOffset - The offset from the nFromCol column to the left part of the shape measured in English measure
      *   units.
@@ -63638,7 +63658,8 @@ declare namespace Cell {
     GetVisible(): boolean;
 
     /**
-     * Groups an array of drawings in the current worksheet.
+     * Groups an array of drawings in the current sheet.
+     * <note>This method is not supported in the document builder and works only in the editor.</note>
      *
      * @param aDrawings - An array of drawings to group.
      * @returns Returns null if the drawings cannot be grouped or when called in the document builder.
@@ -64057,8 +64078,8 @@ declare namespace Cell {
      * @param arg7 - The day count basis to use: **0** or omitted - US (NASD) 30/360; **1** - Actual/actual; **2** -
      *   Actual/360; **3** - Actual/365; **4** - European 30/360.
      * @param arg8 - A logical value: **true** (1) or omitted returns the accrued interest from the issue date to the
+     *   settlement date. **false** (0) returns the accrued interest from the first interest date to the
      *   settlement date.
-     *   **false** (0) returns the accrued interest from the first interest date to the settlement date.
      *
      * @example
      * ```js
@@ -64161,21 +64182,18 @@ declare namespace Cell {
      * Returns an aggregate in a list or database.
      *
      * @param arg1 - A numeric value that specifies which function to use: **1** - AVERAGE, **2** - COUNT, **3** -
-     *   COUNTA, **4** - MAX, **5** - MIN,
-     *   **6** - PRODUCT, **7** - STDEV.S, **8** - STDEV.P, **9** - SUM, **10** - VAR.S, **11** - VAR.P,
-     *   **12** - MEDIAN, **13** - MODE.SNGL, **14** - LARGE,
-     *   **15** - SMALL, **16** - PERCENTILE.INC, **17** - QUARTILE.INC, **18** - PERCENTILE.EXC, **19**
-     *   - QUARTILE.EXC.
+     *   COUNTA, **4** - MAX, **5** - MIN, **6** - PRODUCT, **7** - STDEV.S, **8** - STDEV.P, **9** -
+     *   SUM, **10** - VAR.S, **11** - VAR.P, **12** - MEDIAN, **13** - MODE.SNGL, **14** - LARGE, **15**
+     *   - SMALL, **16** - PERCENTILE.INC, **17** - QUARTILE.INC, **18** - PERCENTILE.EXC, **19** -
+     *   QUARTILE.EXC.
      * @param arg2 - A numeric value that specifies which values should be ignored: **0** or omitted - nested
-     *   SUBTOTAL and AGGREGATE functions,
-     *   **1** - hidden rows, nested SUBTOTAL and AGGREGATE functions, **2** - error values, nested
-     *   SUBTOTAL and AGGREGATE functions,
-     *   **3** - hidden rows, error values, nested SUBTOTAL and AGGREGATE functions, **4** - nothing,
-     *   **5** - hidden rows, **6** - error values, **7** - hidden rows and error values.
+     *   SUBTOTAL and AGGREGATE functions, **1** - hidden rows, nested SUBTOTAL and AGGREGATE functions,
+     *   **2** - error values, nested SUBTOTAL and AGGREGATE functions, **3** - hidden rows, error
+     *   values, nested SUBTOTAL and AGGREGATE functions, **4** - nothing, **5** - hidden rows, **6** -
+     *   error values, **7** - hidden rows and error values.
      * @param arg3 - The first numeric value for which the aggregate value will be returned.
      * @param args - Up to 253 numeric values or a range of cells containing the values for which the aggregate value
-     *   will be returned.
-     *   Arguments can be numbers, ranges, or arrays of numbers.
+     *   will be returned. Arguments can be numbers, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -64287,7 +64305,7 @@ declare namespace Cell {
     ASC(arg1: ApiRange | ApiName | string): string;
 
     /**
-     * Returns the arcsine of a number in radians, in the range from _-Pi/2_ to _Pi/2_.
+     * Returns the arcsine of a number in radians, in the range from *-Pi/2* to *Pi/2*.
      *
      * @param arg1 - The angle sine. It must be from -1 to 1.
      *
@@ -64319,7 +64337,7 @@ declare namespace Cell {
     ASINH(arg1: ApiRange | ApiName | number): number;
 
     /**
-     * Returns the arctangent of a number in radians, in the range from _-Pi/2_ to _Pi/2_.
+     * Returns the arctangent of a number in radians, in the range from *-Pi/2* to *Pi/2*.
      *
      * @param arg1 - The angle tangent.
      *
@@ -64372,8 +64390,8 @@ declare namespace Cell {
      * Returns the average of the absolute deviations of data points from their mean.
      *
      * @param args - Up to 255 numeric values for which the average of the absolute deviations will be returned. The
-     *   first argument is required,
-     *   subsequent arguments are optional. Arguments can be numbers, names, or arrays of numbers.
+     *   first argument is required, subsequent arguments are optional. Arguments can be numbers, names,
+     *   or arrays of numbers.
      *
      * @example
      * ```js
@@ -64390,8 +64408,8 @@ declare namespace Cell {
      * Returns the average (arithmetic mean) of the specified arguments.
      *
      * @param args - Up to 255 numeric values for which the average value will be returned. The first argument is
-     *   required,
-     *   subsequent arguments are optional. Arguments can be numbers, names, or arrays of numbers.
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, or arrays of
+     *   numbers.
      *
      * @example
      * ```js
@@ -64410,9 +64428,8 @@ declare namespace Cell {
      * arguments as 0; **true** evaluates as 1.
      *
      * @param args - Up to 255 numeric values for which the average value will be returned. The first argument is
-     *   required,
-     *   subsequent arguments are optional. Arguments can be numbers, text, or logical values, such as
-     *   **true** and **false**, names, or arrays of numbers.
+     *   required, subsequent arguments are optional. Arguments can be numbers, text, or logical values,
+     *   such as **true** and **false**, names, or arrays of numbers.
      *
      * @example
      * ```js
@@ -64461,8 +64478,7 @@ declare namespace Cell {
      *   cells will be used to find the average.
      * @param arg3 - The actual cells to be used to find the average. If omitted, the cells in the range are used.
      * @param arg4 - Up to 127 additional conditions or criteria in the form of a number, expression, or text that
-     *   defines which cells will be used to find the average.
-     *   These arguments are optional.
+     *   defines which cells will be used to find the average. These arguments are optional.
      * @param arg5 - Up to 127 actual ranges to be used to find the average. If omitted, the cells in the range are
      *   used. These arguments are optional.
      *
@@ -64765,8 +64781,8 @@ declare namespace Cell {
      * @param arg2 - The probability of success on each trial.
      * @param arg3 - The minimum number of successes in the trials to calculate probability for, a numeric value
      *   greater than or equal to 0.
-     * @param arg4 - The maximum number of successes in the trials to calculate probability for,
-     *   a numeric value greater than the minimum number of successes and less than or equal to trials.
+     * @param arg4 - The maximum number of successes in the trials to calculate probability for, a numeric value
+     *   greater than the minimum number of successes and less than or equal to trials.
      *
      * @example
      * ```js
@@ -64907,8 +64923,8 @@ declare namespace Cell {
      * @param arg1 - The value to round up.
      * @param arg2 - The multiple of significance to round up to. If it is omitted, the default value of 1 is used.
      * @param arg3 - Specifies if negative numbers are rounded towards or away from zero. If it is omitted or set to
-     *   0, negative numbers are rounded towards zero.
-     *   If any other numeric value is specified, negative numbers are rounded away from zero.
+     *   0, negative numbers are rounded towards zero. If any other numeric value is specified, negative
+     *   numbers are rounded away from zero.
      *
      * @example
      * ```js
@@ -65109,9 +65125,8 @@ declare namespace Cell {
      *
      * @param arg1 - The position of the value in the list of values, a numeric value greater than or equal to 1 but
      *   less than the number of values in the list of values.
-     * @param args - Up to 254 values or the selected range of cells to analyze.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   ranges, names, or text strings.
+     * @param args - Up to 254 values or the selected range of cells to analyze. The first argument is required,
+     *   subsequent arguments are optional. Arguments can be numbers, ranges, names, or text strings.
      *
      * @example
      * ```js
@@ -65226,8 +65241,7 @@ declare namespace Cell {
      * @param arg1 - The real coefficient of the complex number.
      * @param arg2 - The imaginary coefficient of the complex number.
      * @param arg3 - The suffix for the imaginary component of the complex number. It can be either "i" or "j" in
-     *   lowercase.
-     *   If it is omitted, the function will assume suffix to be "i".
+     *   lowercase. If it is omitted, the function will assume suffix to be "i".
      *
      * @example
      * ```js
@@ -65389,7 +65403,7 @@ declare namespace Cell {
      * Returns the hyperbolic cotangent of a number.
      *
      * @param arg1 - The angle in radians for which the hyperbolic cotangent will be calculated. Its absolute value
-     *   must be less than _2^27_.
+     *   must be less than *2^27*.
      *
      * @example
      * ```js
@@ -65406,9 +65420,9 @@ declare namespace Cell {
      * Counts a number of cells in a range that contains numbers ignoring empty cells or those contaning
      * text.
      *
-     * @param args - Up to 255 items, or ranges to count numbers.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values and text representations of numbers, ranges, names, or arrays.
+     * @param args - Up to 255 items, or ranges to count numbers. The first argument is required, subsequent
+     *   arguments are optional. Arguments can be numbers, logical values and text representations of
+     *   numbers, ranges, names, or arrays.
      *
      * @example
      * ```js
@@ -65438,9 +65452,8 @@ declare namespace Cell {
     /**
      * Counts a number of cells in a range that are not empty.
      *
-     * @param args - Up to 255 items, or ranges to count values.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values, text strings, ranges, names, or arrays.
+     * @param args - Up to 255 items, or ranges to count values. The first argument is required, subsequent arguments
+     *   are optional. Arguments can be numbers, logical values, text strings, ranges, names, or arrays.
      *
      * @example
      * ```js
@@ -65729,7 +65742,7 @@ declare namespace Cell {
      * Returns the hyperbolic cosecant of an angle.
      *
      * @param arg1 - The angle in radians for which the hyperbolic cosecant will be calculated. Its absolute value
-     *   must be less than _2^27_.
+     *   must be less than *2^27*.
      *
      * @example
      * ```js
@@ -65901,14 +65914,12 @@ declare namespace Cell {
      * @param arg1 - Start date from which days will be counted.
      * @param arg2 - End date until which days will be counted.
      * @param arg3 - A logical value that specifies whether to use the U.S. (NASD) (false or omitted) or European
-     *   (true) method in the calculation.
-     *   According to the European method, the start and end dates that occur on the 31st of a month
-     *   become equal to the 30th of the same month.
-     *   According to the U.S. method, the start date is the last day of a month, it becomes equal to the
-     *   30th of the same month.
-     *   If the end date is the last day of a month and the start date is earlier than the 30th of a
-     *   month, the end date becomes equal to the 1st of the next month.
-     *   Otherwise the end date becomes equal to the 30th of the same month.
+     *   (true) method in the calculation. According to the European method, the start and end dates that
+     *   occur on the 31st of a month become equal to the 30th of the same month. According to the U.S.
+     *   method, the start date is the last day of a month, it becomes equal to the 30th of the same
+     *   month. If the end date is the last day of a month and the start date is earlier than the 30th of
+     *   a month, the end date becomes equal to the 1st of the next month. Otherwise the end date becomes
+     *   equal to the 30th of the same month.
      *
      * @example
      * ```js
@@ -66145,9 +66156,9 @@ declare namespace Cell {
     /**
      * Returns the sum of squares of deviations of data points from their sample mean.
      *
-     * @param args - Up to 255 numerical values for which to find the sum of squares of deviations.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, or arrays of numbers.
+     * @param args - Up to 255 numerical values for which to find the sum of squares of deviations. The first
+     *   argument is required, subsequent arguments are optional. Arguments can be numbers, names, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -66323,8 +66334,8 @@ declare namespace Cell {
      * Converts a number to text, using a currency format $#.##.
      *
      * @param arg1 - A number, a reference to a cell containing a number, or a formula that returns a number.
-     * @param arg2 - A number of digits to the right of the decimal point. The number is rounded as necessary.
-     *   If it is omitted, the function will assume it to be 2.
+     * @param arg2 - A number of digits to the right of the decimal point. The number is rounded as necessary. If it
+     *   is omitted, the function will assume it to be 2.
      *
      * @example
      * ```js
@@ -66839,9 +66850,9 @@ declare namespace Cell {
      *
      * @param arg1 - The value of the x function, a nonnegative number.
      * @param arg2 - The lambda parameter value, a positive number.
-     * @param arg3 - A logical value that determines the function form. If this parameter is **true**,
-     *   the function will return the cumulative distribution function, if it is **false**, it will
-     *   return the probability density function.
+     * @param arg3 - A logical value that determines the function form. If this parameter is **true**, the function
+     *   will return the cumulative distribution function, if it is **false**, it will return the
+     *   probability density function.
      *
      * @example
      * ```js
@@ -66860,9 +66871,9 @@ declare namespace Cell {
      *
      * @param arg1 - The value of the x function, a nonnegative number.
      * @param arg2 - The lambda parameter value, a positive number.
-     * @param arg3 - A logical value that determines the function form. If this parameter is **true**,
-     *   the function will return the cumulative distribution function, if it is **false**, it will
-     *   return the probability density function.
+     * @param arg3 - A logical value that determines the function form. If this parameter is **true**, the function
+     *   will return the cumulative distribution function, if it is **false**, it will return the
+     *   probability density function.
      *
      * @example
      * ```js
@@ -66877,7 +66888,7 @@ declare namespace Cell {
     EXPON_DIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | boolean): number;
 
     /**
-     * Returns the factorial of a number, which is equal to _1*2*3*...*_ number.
+     * Returns the factorial of a number, which is equal to *1*2*3*...** number.
      *
      * @param arg1 - The nonnegative number for which the factorial will be calculated.
      *
@@ -66947,12 +66958,10 @@ declare namespace Cell {
      * case-sensitive.
      *
      * @param arg1 - The text to find. Use double quotes (empty text) to match the first character in the search
-     *   string.
-     *   Wildcard characters are not allowed.
+     *   string. Wildcard characters are not allowed.
      * @param arg2 - The text containing the text to find.
      * @param arg3 - Specifies the character at which to start the search. The first character in the search string
-     *   is character number 1.
-     *   If omitted, this parameter is equal to 1.
+     *   is character number 1. If omitted, this parameter is equal to 1.
      *
      * @example
      * ```js
@@ -66970,12 +66979,10 @@ declare namespace Cell {
      * double-byte character set (DBCS) like Japanese, Chinese, Korean etc.
      *
      * @param arg1 - The text to find. Use double quotes (empty text) to match the first character in the search
-     *   string.
-     *   Wildcard characters are not allowed.
+     *   string. Wildcard characters are not allowed.
      * @param arg2 - The text containing the text to find.
      * @param arg3 - Specifies the character at which to start the search. The first character in the search string
-     *   is character number 1.
-     *   If omitted, this parameter is equal to 1.
+     *   is character number 1. If omitted, this parameter is equal to 1.
      *
      * @example
      * ```js
@@ -67087,8 +67094,8 @@ declare namespace Cell {
      * @param arg1 - The numeric value to round down.
      * @param arg2 - The multiple of significance to round down to. If it is omitted, the default value of 1 is used.
      * @param arg3 - Specifies if negative numbers are rounded towards or away from zero. If it is omitted or set to
-     *   0, negative numbers are rounded away from zero.
-     *   If any other numeric value is specified, negative numbers are rounded towards zero.
+     *   0, negative numbers are rounded away from zero. If any other numeric value is specified,
+     *   negative numbers are rounded towards zero.
      *
      * @example
      * ```js
@@ -67121,18 +67128,17 @@ declare namespace Cell {
     FLOOR_PRECISE(arg1: ApiRange | ApiName | number, arg2?: ApiRange | ApiName | number): number;
 
     /**
-     * Сalculates or predicts a future value based on existing (historical) values by using the AAA version
+     * Calculates or predicts a future value based on existing (historical) values by using the AAA version
      * of the Exponential Smoothing (ETS) algorithm.
      *
      * @param arg1 - A date for which a new value will be predicted. Must be after the last date in the timeline.
      * @param arg2 - A range or an array of numeric data that determines the historical values for which a new point
      *   will be predicted.
-     * @param arg3 - A range of date/time values that correspond to the historical values.
-     *   The timeline range must be of the same size as the second argument. Date/time values must have a
-     *   constant step between them and can't be zero.
+     * @param arg3 - A range of date/time values that correspond to the historical values. The timeline range must be
+     *   of the same size as the second argument. Date/time values must have a constant step between them
+     *   and can't be zero.
      * @param arg4 - An optional numeric value that specifies the length of the seasonal pattern. The default value
-     *   of 1 indicates seasonality is detected automatically.
-     *   The 0 value means no seasonality.
+     *   of 1 indicates seasonality is detected automatically. The 0 value means no seasonality.
      * @param arg5 - An optional numeric value to handle missing values. The default value of 1 replaces missing
      *   values by interpolation, and 0 replaces them with zeros.
      * @param arg6 - An optional numeric value to aggregate multiple values with the same time stamp.
@@ -67167,14 +67173,13 @@ declare namespace Cell {
      * @param arg1 - A date for which a new value will be predicted. Must be after the last date in the timeline.
      * @param arg2 - A range or an array of numeric data that determines the historical values for which a new point
      *   will be predicted.
-     * @param arg3 - A range of date/time values that correspond to the historical values.
-     *   The timeline range must be of the same size as the second argument. Date/time values must have a
-     *   constant step between them and can't be zero.
+     * @param arg3 - A range of date/time values that correspond to the historical values. The timeline range must be
+     *   of the same size as the second argument. Date/time values must have a constant step between them
+     *   and can't be zero.
      * @param arg4 - A number between 0 and 1 that shows the confidence level for the calculated confidence interval.
      *   The default value is .95.
      * @param arg5 - An optional numeric value that specifies the length of the seasonal pattern. The default value
-     *   of 1 indicates seasonality is detected automatically.
-     *   The 0 value means no seasonality.
+     *   of 1 indicates seasonality is detected automatically. The 0 value means no seasonality.
      * @param arg6 - An optional numeric value to handle missing values. The default value of 1 replaces missing
      *   values by interpolation, and 0 replaces them with zeros.
      * @param arg7 - An optional numeric value to aggregate multiple values with the same time stamp.
@@ -67207,9 +67212,9 @@ declare namespace Cell {
      *
      * @param arg1 - A range or an array of numeric data that determines the historical values for which a new point
      *   will be predicted.
-     * @param arg2 - A range of date/time values that correspond to the historical values.
-     *   The timeline range must be of the same size as the second argument. Date/time values must have a
-     *   constant step between them and can't be zero.
+     * @param arg2 - A range of date/time values that correspond to the historical values. The timeline range must be
+     *   of the same size as the second argument. Date/time values must have a constant step between them
+     *   and can't be zero.
      * @param arg3 - An optional numeric value to handle missing values. The default value of 1 replaces missing
      *   values by interpolation, and 0 replaces them with zeros.
      * @param arg4 - An optional numeric value to aggregate multiple values with the same time stamp.
@@ -67242,14 +67247,13 @@ declare namespace Cell {
      *
      * @param arg1 - A range or an array of numeric data that determines the historical values for which a new point
      *   will be predicted.
-     * @param arg2 - A range of date/time values that correspond to the historical values.
-     *   The timeline range must be of the same size as the second argument. Date/time values must have a
-     *   constant step between them and can't be zero.
+     * @param arg2 - A range of date/time values that correspond to the historical values. The timeline range must be
+     *   of the same size as the second argument. Date/time values must have a constant step between them
+     *   and can't be zero.
      * @param arg3 - A number between 1 and 8, indicating which statistic will be returned for the calculated
      *   forecast.
      * @param arg4 - An optional numeric value that specifies the length of the seasonal pattern. The default value
-     *   of 1 indicates seasonality is detected automatically.
-     *   The 0 value means no seasonality.
+     *   of 1 indicates seasonality is detected automatically. The 0 value means no seasonality.
      * @param arg5 - An optional numeric value to handle missing values. The default value of 1 replaces missing
      *   values by interpolation, and 0 replaces them with zeros.
      * @param arg6 - An optional numeric value to aggregate multiple values with the same time stamp.
@@ -67374,9 +67378,9 @@ declare namespace Cell {
      * @param arg1 - The value at which to evaluate the function, a nonnegative number.
      * @param arg2 - The numerator degrees of freedom, a number between 1 and 10^10, excluding 10^10.
      * @param arg3 - The denominator degrees of freedom, a number between 1 and 10^10, excluding 10^10.
-     * @param arg4 - A logical value that determines the function form. If this parameter is **true**,
-     *   the function will return the cumulative distribution function, if it is **false**, it will
-     *   return the probability density function.
+     * @param arg4 - A logical value that determines the function form. If this parameter is **true**, the function
+     *   will return the cumulative distribution function, if it is **false**, it will return the
+     *   probability density function.
      *
      * @example
      * ```js
@@ -67472,9 +67476,9 @@ declare namespace Cell {
      * @param arg2 - The alpha parameter of the distribution, a positive number.
      * @param arg3 - The beta parameter of the distribution, a positive number. If this parameter is equal to 1, the
      *   function returns the standard gamma distribution.
-     * @param arg4 - A logical value (**true**> or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function. If it is
-     *   **false**, the function returns the probability density function.
+     * @param arg4 - A logical value (**true**> or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -67552,9 +67556,9 @@ declare namespace Cell {
      * @param arg2 - The alpha parameter of the distribution, a positive number.
      * @param arg3 - The beta parameter of the distribution, a positive number. If this parameter is equal to 1, the
      *   function returns the standard gamma distribution.
-     * @param arg4 - A logical value (**true**> or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function. If it is
-     *   **false**, the function returns the probability density function.
+     * @param arg4 - A logical value (**true**> or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -67627,8 +67631,8 @@ declare namespace Cell {
     /**
      * Returns the geometric mean of positive numeric data.
      *
-     * @param args - Up to 255 numeric values for which the geometric mean will be calculated.
-     *   Arguments can be numbers, names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the geometric mean will be calculated. Arguments can be
+     *   numbers, names, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -67663,12 +67667,12 @@ declare namespace Cell {
     /**
      * Calculates predicted exponential growth by using existing data.
      *
-     * @param arg1 - The set of y-values from the _y = b*m^x_ equation, an array or range of positive numbers.
-     * @param arg2 - An optional set of x-values from the _y = b*m^x_ equation, an array or range of positive numbers
+     * @param arg1 - The set of y-values from the *y = b*m^x* equation, an array or range of positive numbers.
+     * @param arg2 - An optional set of x-values from the *y = b*m^x* equation, an array or range of positive numbers
      *   that has the same size as the set of y-values.
      * @param arg3 - New x-values for which the function will return the corresponding y-values.
-     * @param arg4 - A logical value: the constant _b_ is calculated normally if this parameter is set to **true**,
-     *   and _b_ is set equal to 1 if the parameter is **false** or omitted.
+     * @param arg4 - A logical value: the constant *b* is calculated normally if this parameter is set to **true**,
+     *   and *b* is set equal to 1 if the parameter is **false** or omitted.
      *
      * @example
      * ```js
@@ -67709,8 +67713,8 @@ declare namespace Cell {
      * Returns the harmonic mean of a data set of positive numbers: the reciprocal of the arithmetic mean
      * of reciprocals.
      *
-     * @param args - Up to 255 numeric values for which the harmonic mean will be calculated.
-     *   Arguments can be numbers, names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the harmonic mean will be calculated. Arguments can be
+     *   numbers, names, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -67781,13 +67785,11 @@ declare namespace Cell {
      * @param arg1 - The value to be found in the first row of the table and can be a value, a reference, or a text
      *   string.
      * @param arg2 - A table of text, numbers, or logical values in which data is looked up. The data is sorted in
-     *   ascending order.
-     *   This argument can be a range of cells or a range name.
+     *   ascending order. This argument can be a range of cells or a range name.
      * @param arg3 - The row number in data table from which the matching value should be returned. The first row of
      *   values in the table is row 1.
      * @param arg4 - A logical value which specifies whether to find the closest match in the top row (sorted in
-     *   ascending order) (**true** or omitted)
-     *   or find an exact match (**false**).
+     *   ascending order) (**true** or omitted) or find an exact match (**false**).
      *
      * @example
      * ```js
@@ -67884,9 +67886,9 @@ declare namespace Cell {
      * @param arg2 - The size of the sample.
      * @param arg3 - The number of successes in the population.
      * @param arg4 - The population size.
-     * @param arg5 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function. If it is
-     *   **false**, the function returns the probability mass function.
+     * @param arg5 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -67954,10 +67956,10 @@ declare namespace Cell {
 
     /**
      * Checks if there is an error in the formula in the first argument. The function returns the specified
-     * value if the formula returns the _#N/A_ error value, otherwise returns the result of the formula.
+     * value if the formula returns the *#N/A* error value, otherwise returns the result of the formula.
      *
      * @param arg1 - The value, expression, or reference that is checked for an error.
-     * @param arg2 - The value to return if the formula evaluates to the _#N/A_ error value.
+     * @param arg2 - The value to return if the formula evaluates to the *#N/A* error value.
      *
      * @example
      * ```js
@@ -67988,7 +67990,7 @@ declare namespace Cell {
     /**
      * Returns the absolute value (modulus) of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68004,7 +68006,7 @@ declare namespace Cell {
     /**
      * Returns the imaginary coefficient of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68020,7 +68022,7 @@ declare namespace Cell {
     /**
      * Returns the argument Theta, an angle expressed in radians.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68036,7 +68038,7 @@ declare namespace Cell {
     /**
      * Returns the complex conjugate of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68052,7 +68054,7 @@ declare namespace Cell {
     /**
      * Returns the cosine of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68068,7 +68070,7 @@ declare namespace Cell {
     /**
      * Returns the hyperbolic cosine of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68084,7 +68086,7 @@ declare namespace Cell {
     /**
      * Returns the cotangent of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68100,7 +68102,7 @@ declare namespace Cell {
     /**
      * Returns the cosecant of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68116,7 +68118,7 @@ declare namespace Cell {
     /**
      * Returns the hyperbolic cosecant of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68132,8 +68134,8 @@ declare namespace Cell {
     /**
      * Returns the quotient of two complex numbers.
      *
-     * @param arg1 - The complex numerator or dividend in the _x + yi_ or _x + yj_ form.
-     * @param arg2 - The complex denominator or divisor in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - The complex numerator or dividend in the *x + yi* or *x + yj* form.
+     * @param arg2 - The complex denominator or divisor in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68149,7 +68151,7 @@ declare namespace Cell {
     /**
      * Returns the exponential of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68165,7 +68167,7 @@ declare namespace Cell {
     /**
      * Returns the natural logarithm of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68181,7 +68183,7 @@ declare namespace Cell {
     /**
      * Returns the base-10 logarithm of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68197,7 +68199,7 @@ declare namespace Cell {
     /**
      * Returns the base-2 logarithm of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68213,7 +68215,7 @@ declare namespace Cell {
     /**
      * Returns a complex number raised to an integer power.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      * @param arg2 - The power to which the complex number will be raised.
      *
      * @example
@@ -68230,7 +68232,7 @@ declare namespace Cell {
     /**
      * Returns the product of the specified complex numbers.
      *
-     * @param args - Up to 255 complex numbers expressed in the _x + yi_ or _x + yj_ form.
+     * @param args - Up to 255 complex numbers expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68246,7 +68248,7 @@ declare namespace Cell {
     /**
      * Returns the real coefficient of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68262,7 +68264,7 @@ declare namespace Cell {
     /**
      * Returns the secant of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68278,7 +68280,7 @@ declare namespace Cell {
     /**
      * Returns the hyperbolic secant of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68294,7 +68296,7 @@ declare namespace Cell {
     /**
      * Returns the sine of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68310,7 +68312,7 @@ declare namespace Cell {
     /**
      * Returns the hyperbolic sine of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68326,7 +68328,7 @@ declare namespace Cell {
     /**
      * Returns the square root of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68340,7 +68342,7 @@ declare namespace Cell {
     IMSQRT(arg1: ApiRange | ApiName | number): number;
 
     /**
-     * Returns the difference of two complex numbers expressed in the _x + yi_ or _x + yj_ form.
+     * Returns the difference of two complex numbers expressed in the *x + yi* or *x + yj* form.
      *
      * @param arg1 - The complex number from which to subtract the second number.
      * @param arg2 - The complex number to subtract from the first number.
@@ -68359,7 +68361,7 @@ declare namespace Cell {
     /**
      * Returns the sum of the specified complex numbers.
      *
-     * @param args - Up to 255 complex numbers expressed in the _x + yi_ or _x + yj_ form.
+     * @param args - Up to 255 complex numbers expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68375,7 +68377,7 @@ declare namespace Cell {
     /**
      * Returns the tangent of a complex number.
      *
-     * @param arg1 - A complex number expressed in the _x + yi_ or _x + yj_ form.
+     * @param arg1 - A complex number expressed in the *x + yi* or *x + yj* form.
      *
      * @example
      * ```js
@@ -68513,10 +68515,10 @@ declare namespace Cell {
     IRR(arg1: number[] | ApiRange, arg2?: ApiRange | ApiName | number): number;
 
     /**
-     * Checks whether a value is an error other than _#N/A_, and returns **true** or **false**.
+     * Checks whether a value is an error other than *#N/A*, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -68534,8 +68536,8 @@ declare namespace Cell {
     /**
      * Checks whether a value is an error, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -68593,8 +68595,8 @@ declare namespace Cell {
      * Checks whether a value is a logical value (**true** or **false**), and returns **true** or
      * **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -68611,10 +68613,10 @@ declare namespace Cell {
     ISLOGICAL(arg1: ApiRange | string | number | boolean | ApiName): boolean;
 
     /**
-     * Checks whether a value is _#N/A_, and returns **true** or **false**.
+     * Checks whether a value is *#N/A*, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -68632,8 +68634,8 @@ declare namespace Cell {
     /**
      * Checks whether a value is not text (blank cells are not text), and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -68651,8 +68653,8 @@ declare namespace Cell {
     /**
      * Checks whether a value is a number, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -68747,8 +68749,8 @@ declare namespace Cell {
     /**
      * Checks whether a value is a reference, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -68765,8 +68767,8 @@ declare namespace Cell {
     /**
      * Checks whether a value is text, and returns **true** or **false**.
      *
-     * @param arg1 - The value to test.
-     *   The value can be an empty cell, error, logical value, text, number, range, or range name.
+     * @param arg1 - The value to test. The value can be an empty cell, error, logical value, text, number, range, or
+     *   range name.
      *
      * @example
      * ```js
@@ -68784,8 +68786,8 @@ declare namespace Cell {
     /**
      * Returns the kurtosis of a data set.
      *
-     * @param args - Up to 255 numeric values for which the kurtosis will be calculated.
-     *   Arguments can be numbers, names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the kurtosis will be calculated. Arguments can be numbers,
+     *   names, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -68916,13 +68918,12 @@ declare namespace Cell {
      * Returns statistics that describe a linear trend matching known data points, by fitting a straight
      * line using the least squares method.
      *
-     * @param arg1 - The set of y-values from the _y = mx + b_ equation.
-     * @param arg2 - An optional set of x-values from the _y = mx + b_ equation.
-     * @param arg3 - A logical value: the constant _b_ is calculated normally if this parameter is set to **true** or
-     *   omitted,
-     *   and _b_ is set equal to 0 if the parameter is **false**.
+     * @param arg1 - The set of y-values from the *y = mx + b* equation.
+     * @param arg2 - An optional set of x-values from the *y = mx + b* equation.
+     * @param arg3 - A logical value: the constant *b* is calculated normally if this parameter is set to **true** or
+     *   omitted, and *b* is set equal to 0 if the parameter is **false**.
      * @param arg4 - A logical value: return additional regression statistics if this parameter is set to **true**,
-     *   and return m-coefficients and the constant _b_ if the parameter is **false** or omitted.
+     *   and return m-coefficients and the constant *b* if the parameter is **false** or omitted.
      *
      * @example
      * ```js
@@ -69010,13 +69011,12 @@ declare namespace Cell {
     /**
      * Returns statistics that describe an exponential curve matching known data points.
      *
-     * @param arg1 - The set of y-values from the _y = b*m^x_ equation.
-     * @param arg2 - An optional set of x-values from the _y = b*m^x_ equation.
-     * @param arg3 - A logical value: the constant _b_ is calculated normally if this parameter is set to **true** or
-     *   omitted,
-     *   and _b_ is set equal to 1 if the parameter is **false**.
+     * @param arg1 - The set of y-values from the *y = b*m^x* equation.
+     * @param arg2 - An optional set of x-values from the *y = b*m^x* equation.
+     * @param arg3 - A logical value: the constant *b* is calculated normally if this parameter is set to **true** or
+     *   omitted, and *b* is set equal to 1 if the parameter is **false**.
      * @param arg4 - A logical value: return additional regression statistics if this parameter is set to **true**,
-     *   and return m-coefficients and the constant _b_ if the parameter is **false** or omitted.
+     *   and return m-coefficients and the constant *b* if the parameter is **false** or omitted.
      *
      * @example
      * ```js
@@ -69133,9 +69133,9 @@ declare namespace Cell {
      * @param arg1 - The value at which to evaluate the function, a positive number.
      * @param arg2 - The mean of ln(x).
      * @param arg3 - The standard deviation of ln(x), a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability density function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -69279,9 +69279,9 @@ declare namespace Cell {
     /**
      * Returns the largest value in a set of values. Ignores logical values and text.
      *
-     * @param args - Up to 255 numeric values for which the largest number will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the largest number will be returned. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -69298,9 +69298,9 @@ declare namespace Cell {
     /**
      * Returns the largest value in a set of values. Does not ignore logical values and text.
      *
-     * @param args - Up to 255 values (number, text, logical value) for which the largest value will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values and text representations of numbers, names, ranges, or arrays.
+     * @param args - Up to 255 values (number, text, logical value) for which the largest value will be returned. The
+     *   first argument is required, subsequent arguments are optional. Arguments can be numbers, logical
+     *   values and text representations of numbers, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -69341,9 +69341,9 @@ declare namespace Cell {
     /**
      * Returns the median, or the number in the middle of the set of given numbers.
      *
-     * @param args - Up to 255 numeric values for which the median will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the median will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -69397,9 +69397,9 @@ declare namespace Cell {
     /**
      * Returns the smallest number in a set of values. Ignores logical values and text.
      *
-     * @param args - Up to 255 numeric values for which the smallest number will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the smallest number will be returned. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -69588,7 +69588,7 @@ declare namespace Cell {
     N(arg1: ApiRange | ApiName | number | string | boolean): number;
 
     /**
-     * Returns the _#N/A_ error value which means "no value is available".
+     * Returns the *#N/A* error value which means "no value is available".
      *
      * @example
      * ```js
@@ -69643,9 +69643,9 @@ declare namespace Cell {
      * @param arg1 - The number of failures.
      * @param arg2 - The threshold number of successes.
      * @param arg3 - The probability of a success; a number between 0 and 1.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability density function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -69723,9 +69723,9 @@ declare namespace Cell {
      * @param arg1 - The value for which the distribution will be returned.
      * @param arg2 - The arithmetic mean of the distribution.
      * @param arg3 - The standard deviation of the distribution, a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -69830,9 +69830,9 @@ declare namespace Cell {
      * @param arg1 - The value for which the distribution will be returned.
      * @param arg2 - The arithmetic mean of the distribution.
      * @param arg3 - The standard deviation of the distribution, a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -69889,9 +69889,9 @@ declare namespace Cell {
      * Returns the standard normal distribution (has a mean of zero and a standard deviation of one).
      *
      * @param arg1 - The value for which the distribution will be returned.
-     * @param arg2 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg2 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -69943,7 +69943,7 @@ declare namespace Cell {
     NOT(arg1: ApiRange | ApiName | number | string | boolean): boolean;
 
     /**
-     * Returns the current date and time in the _MM/dd/yy hh:mm_ format.
+     * Returns the current date and time in the *MM/dd/yy hh:mm* format.
      *
      * @example
      * ```js
@@ -70152,7 +70152,7 @@ declare namespace Cell {
      * @param arg1 - The security settlement date, expressed as a serial date number.
      * @param arg2 - The maturity date of the security, expressed as a serial date number.
      * @param arg3 - The last coupon date of the security, expressed as a serial date number.
-     * @param arg5 - The annual yield of the security.
+     * @param arg5 - The interest rate of the security.
      * @param arg5_2 - The annual yield of the security.
      * @param arg6 - The redemption value of the security, per $100 par value.
      * @param arg8 - The number of interest payments per year. The possible values are: 1 for annual payments, 2 for
@@ -70178,7 +70178,7 @@ declare namespace Cell {
      * @param arg2 - The maturity date of the security, expressed as a serial date number.
      * @param arg3 - The last coupon date of the security, expressed as a serial date number.
      * @param arg5 - The interest rate of the security.
-     * @param arg6 - The redemption value of the security, per $100 par value.
+     * @param arg6 - The purchase price of the security, per $100 par value.
      * @param arg6_2 - The redemption value of the security, per $100 par value.
      * @param arg8 - The number of interest payments per year. The possible values are: 1 for annual payments, 2 for
      *   semiannual payments, 4 for quarterly payments.
@@ -70573,9 +70573,9 @@ declare namespace Cell {
      *
      * @param arg1 - The number of events.
      * @param arg2 - The expected numeric value, a positive number.
-     * @param arg3 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative Poisson probability.
-     *   If it is **false**, the function returns the Poisson probability mass function.
+     * @param arg3 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative Poisson probability. If it is **false**, the function
+     *   returns the Poisson probability mass function.
      *
      * @example
      * ```js
@@ -70601,9 +70601,9 @@ declare namespace Cell {
      *
      * @param arg1 - The number of events.
      * @param arg2 - The expected numeric value, a positive number.
-     * @param arg3 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative Poisson probability.
-     *   If it is **false**, the function returns the Poisson probability mass function.
+     * @param arg3 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative Poisson probability. If it is **false**, the function
+     *   returns the Poisson probability mass function.
      *
      * @example
      * ```js
@@ -70736,8 +70736,7 @@ declare namespace Cell {
      * Multiplies all the numbers given as arguments.
      *
      * @param args - Up to 255 numeric values that will be multiplied. The first argument is required, subsequent
-     *   arguments are optional.
-     *   Arguments can be numbers, ranges, or arrays of numbers.
+     *   arguments are optional. Arguments can be numbers, ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -70957,8 +70956,8 @@ declare namespace Cell {
      * @param arg1 - The number for which the rank will be returned.
      * @param arg2 - An array or range of numbers. Nonnumeric values are ignored.
      * @param arg3 - The numeric value that specifyes how to order the numbers. If it is 0 or omitted, the rank in
-     *   the list will be sorted in descending order.
-     *   Any other numeric value means that the rank in the list will be sorted in ascending order.
+     *   the list will be sorted in descending order. Any other numeric value means that the rank in the
+     *   list will be sorted in ascending order.
      *
      * @example
      * ```js
@@ -70993,8 +70992,8 @@ declare namespace Cell {
      * @param arg1 - The number for which the rank will be returned.
      * @param arg2 - An array or range of numbers. Nonnumeric values are ignored.
      * @param arg3 - The numeric value that specifyes how to order the numbers. If it is 0 or omitted, the rank in
-     *   the list will be sorted in descending order.
-     *   Any other numeric value means that the rank in the list will be sorted in ascending order.
+     *   the list will be sorted in descending order. Any other numeric value means that the rank in the
+     *   list will be sorted in ascending order.
      *
      * @example
      * ```js
@@ -71029,8 +71028,8 @@ declare namespace Cell {
      * @param arg1 - The number for which the rank will be returned.
      * @param arg2 - An array or range of numbers. Nonnumeric values are ignored.
      * @param arg3 - The numeric value that specifyes how to order the numbers. If it is 0 or omitted, the rank in
-     *   the list will be sorted in descending order.
-     *   Any other numeric value means that the rank in the list will be sorted in ascending order.
+     *   the list will be sorted in descending order. Any other numeric value means that the rank in the
+     *   list will be sorted in ascending order.
      *
      * @example
      * ```js
@@ -71221,8 +71220,8 @@ declare namespace Cell {
      *
      * @param arg1 - The number to round.
      * @param arg2 - The number of digits to round to. If this argument is negative, the number will be rounded to
-     *   the left of the decimal point.
-     *   If it is equal to zero, the number will be rounded to the nearest integer.
+     *   the left of the decimal point. If it is equal to zero, the number will be rounded to the nearest
+     *   integer.
      *
      * @example
      * ```js
@@ -71240,8 +71239,8 @@ declare namespace Cell {
      *
      * @param arg1 - Any real number that will be rounded down.
      * @param arg2 - The number of digits to round to. If this argument is negative, the number will be rounded to
-     *   the left of the decimal point.
-     *   If it is equal to zero, the number will be rounded to the nearest integer.
+     *   the left of the decimal point. If it is equal to zero, the number will be rounded to the nearest
+     *   integer.
      *
      * @example
      * ```js
@@ -71259,8 +71258,8 @@ declare namespace Cell {
      *
      * @param arg1 - Any real number that will be rounded up.
      * @param arg2 - The number of digits to round to. If this argument is negative, the number will be rounded to
-     *   the left of the decimal point.
-     *   If it is equal to zero, the number will be rounded to the nearest integer.
+     *   the left of the decimal point. If it is equal to zero, the number will be rounded to the nearest
+     *   integer.
      *
      * @example
      * ```js
@@ -71493,7 +71492,7 @@ declare namespace Cell {
      * Returns the sine of an angle.
      *
      * @param arg1 - The angle in radians for which the sine will be returned. If your argument is in degrees,
-     *   multiply it by _PI()/180_.
+     *   multiply it by *PI()/180*.
      *
      * @example
      * ```js
@@ -71526,9 +71525,9 @@ declare namespace Cell {
      * Returns the skewness of a distribution: a characterization of the degree of asymmetry of a
      * distribution around its mean.
      *
-     * @param args - Up to 255 numeric values for which the skewness of a distribution will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the skewness of a distribution will be returned. The first
+     *   argument is required, subsequent arguments are optional. Arguments can be numbers, names,
+     *   ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -71555,9 +71554,9 @@ declare namespace Cell {
      * Returns the skewness of a distribution based on a population: a characterization of the degree of
      * asymmetry of a distribution around its mean.
      *
-     * @param args - Up to 255 numeric values for which the skewness of a distribution will be returned.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the skewness of a distribution will be returned. The first
+     *   argument is required, subsequent arguments are optional. Arguments can be numbers, names,
+     *   ranges, or arrays of numbers.
      *
      * @example
      * ```js
@@ -71698,9 +71697,9 @@ declare namespace Cell {
     /**
      * Estimates standard deviation based on a sample (ignores logical values and text in the sample).
      *
-     * @param args - Up to 255 numeric values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the standard deviation will be calculated. The first argument
+     *   is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -71727,9 +71726,9 @@ declare namespace Cell {
      * Estimates standard deviation based on a sample, including logical values and text. Text and the
      * **false** logical value have the value 0; the **true** logical value has the value 1.
      *
-     * @param args - Up to 255 values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values, text strings, names, ranges, or arrays.
+     * @param args - Up to 255 values for which the standard deviation will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, logical values, text
+     *   strings, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -71773,9 +71772,9 @@ declare namespace Cell {
      * Calculates standard deviation based on the entire population given as arguments (ignores logical
      * values and text).
      *
-     * @param args - Up to 255 numeric values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the standard deviation will be calculated. The first argument
+     *   is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -71802,9 +71801,9 @@ declare namespace Cell {
      * Calculates standard deviation based on the entire population, including logical values and text.
      * Text and the **false** logical value have the value 0; the **true** logical value has the value 1.
      *
-     * @param args - Up to 255 values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values, text strings, names, ranges, or arrays.
+     * @param args - Up to 255 values for which the standard deviation will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, logical values, text
+     *   strings, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -71831,9 +71830,9 @@ declare namespace Cell {
      * Calculates standard deviation based on the entire population given as arguments (ignores logical
      * values and text).
      *
-     * @param args - Up to 255 numeric values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the standard deviation will be calculated. The first argument
+     *   is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -71861,9 +71860,9 @@ declare namespace Cell {
     /**
      * Estimates standard deviation based on a sample (ignores logical values and text in the sample).
      *
-     * @param args - Up to 255 numeric values for which the standard deviation will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the standard deviation will be calculated. The first argument
+     *   is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or
+     *   arrays of numbers.
      *
      * @example
      * ```js
@@ -71911,12 +71910,10 @@ declare namespace Cell {
      * Returns a subtotal in a list or database.
      *
      * @param arg1 - A numeric value that specifies which function to use for the subtotal: **1 (101)** - AVERAGE,
-     *   **2 (102)** - COUNT,
-     *   **3 (103)** - COUNTA, **4 (104)** - MAX, **5 (105)** - MIN,
-     *   **6 (106)** - PRODUCT, **7 (107)** - STDEV, **8 (108)** - STDEVP, **9 (109)** - SUM, **10
-     *   (110)** - VAR, **11 (111)** - VARP.
-     *   1-11 includes manually-hidden rows, while 101-111 excludes them;
-     *   filtered-out cells are always excluded.
+     *   **2 (102)** - COUNT, **3 (103)** - COUNTA, **4 (104)** - MAX, **5 (105)** - MIN, **6 (106)** -
+     *   PRODUCT, **7 (107)** - STDEV, **8 (108)** - STDEVP, **9 (109)** - SUM, **10 (110)** - VAR, **11
+     *   (111)** - VARP. 1-11 includes manually-hidden rows, while 101-111 excludes them; filtered-out
+     *   cells are always excluded.
      * @param args - Up to 255 ranges containing the values for which the subtotal will be returned. The first
      *   argument is required, subsequent arguments are optional.
      *
@@ -71935,8 +71932,8 @@ declare namespace Cell {
      * Adds all the numbers in a range of cells.
      *
      * @param args - Up to 255 numeric values to add. The first argument is required, subsequent arguments are
-     *   optional.
-     *   Arguments can be numbers, logical values, text representations of numbers, ranges, or arrays.
+     *   optional. Arguments can be numbers, logical values, text representations of numbers, ranges, or
+     *   arrays.
      *
      * @example
      * ```js
@@ -71987,8 +71984,7 @@ declare namespace Cell {
      *   cells will be added.
      * @param arg3 - The first range to sum. If omitted, the cells in range are used.
      * @param arg4 - Up to 127 additional conditions or criteria in the form of a number, expression, or text that
-     *   defines which cells will be added.
-     *   These arguments are optional.
+     *   defines which cells will be added. These arguments are optional.
      * @param arg5 - Up to 127 actual ranges to be used to be added. If omitted, the cells in the range are used.
      *   These arguments are optional.
      *
@@ -72024,10 +72020,9 @@ declare namespace Cell {
     /**
      * Returns the sum of the squares of the arguments.
      *
-     * @param args - Up to 255 numeric values for which the sum of the squares will be calculated.
-     *   The first argument is required, subsequent arguments are optional.
-     *   The arguments can be numbers, names, logical values or text representations of numbers, ranges
-     *   of cells that contain numbers, or arrays.
+     * @param args - Up to 255 numeric values for which the sum of the squares will be calculated. The first argument
+     *   is required, subsequent arguments are optional. The arguments can be numbers, names, logical
+     *   values or text representations of numbers, ranges of cells that contain numbers, or arrays.
      *
      * @example
      * ```js
@@ -72082,7 +72077,7 @@ declare namespace Cell {
      * Returns the tangent of an angle.
      *
      * @param arg1 - The angle in radians for which the tangent will be returned. If the argument is in degrees,
-     *   multiply it by _PI()/180_.
+     *   multiply it by *PI()/180*.
      *
      * @example
      * ```js
@@ -72263,7 +72258,7 @@ declare namespace Cell {
     TINV(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number;
 
     /**
-     * Returns the current date in the _MM/dd/yy_ format.
+     * Returns the current date in the *MM/dd/yy* format.
      *
      * @example
      * ```js
@@ -72300,13 +72295,12 @@ declare namespace Cell {
     /**
      * Returns numbers in a linear trend matching known data points, using the least squares method.
      *
-     * @param arg1 - A range or array of y-values from the _y = mx + b_ equation.
-     * @param arg2 - An optional range or array of x-values from the _y = mx + b_ equation, an array of the same size
+     * @param arg1 - A range or array of y-values from the *y = mx + b* equation.
+     * @param arg2 - An optional range or array of x-values from the *y = mx + b* equation, an array of the same size
      *   as an array of y-values.
      * @param arg3 - A range or array of new x-values for which this function will return corresponding y-values.
-     * @param arg4 - A logical value: the constant _b_ is calculated normally if this parameter is set to **true** or
-     *   omitted,
-     *   and _b_ is set equal to 0 if the parameter is **false**.
+     * @param arg4 - A logical value: the constant *b* is calculated normally if this parameter is set to **true** or
+     *   omitted, and *b* is set equal to 0 if the parameter is **false**.
      *
      * @example
      * ```js
@@ -72439,9 +72433,9 @@ declare namespace Cell {
      *
      * @param arg1 - The numeric value at which to evaluate the distribution.
      * @param arg2 - An integer indicating the number of degrees of freedom that characterize the distribution.
-     * @param arg3 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability density function.
+     * @param arg3 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability density function.
      *
      * @example
      * ```js
@@ -72594,9 +72588,9 @@ declare namespace Cell {
     /**
      * Estimates variance based on a sample (ignores logical values and text in the sample).
      *
-     * @param args - Up to 255 numeric values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the variance will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -72614,9 +72608,9 @@ declare namespace Cell {
      * Estimates variance based on a sample, including logical values and text. Text and the **false**
      * logical value have the value 0; the **true** logical value has the value 1.
      *
-     * @param args - Up to 255 values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values or text representations of numbers, names, ranges, or arrays.
+     * @param args - Up to 255 values for which the variance will be calculated. The first argument is required,
+     *   subsequent arguments are optional. Arguments can be numbers, logical values or text
+     *   representations of numbers, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -72651,9 +72645,9 @@ declare namespace Cell {
      * Calculates variance based on the entire population (ignores logical values and text in the
      * population).
      *
-     * @param args - Up to 255 numeric values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the variance will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -72671,9 +72665,9 @@ declare namespace Cell {
      * Calculates variance based on the entire population, including logical values and text. Text and the
      * **false** logical value have the value 0; the **true** logical value has the value 1.
      *
-     * @param args - Up to 255 values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   logical values or text representations of numbers, names, ranges, or arrays.
+     * @param args - Up to 255 values for which the variance will be calculated. The first argument is required,
+     *   subsequent arguments are optional. Arguments can be numbers, logical values or text
+     *   representations of numbers, names, ranges, or arrays.
      *
      * @example
      * ```js
@@ -72708,9 +72702,9 @@ declare namespace Cell {
      * Calculates variance based on the entire population (ignores logical values and text in the
      * population).
      *
-     * @param args - Up to 255 numeric values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the variance will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -72727,9 +72721,9 @@ declare namespace Cell {
     /**
      * Estimates variance based on a sample (ignores logical values and text in the sample).
      *
-     * @param args - Up to 255 numeric values for which the variance will be calculated.
-     *   The first argument is required, subsequent arguments are optional. Arguments can be numbers,
-     *   names, ranges, or arrays of numbers.
+     * @param args - Up to 255 numeric values for which the variance will be calculated. The first argument is
+     *   required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays
+     *   of numbers.
      *
      * @example
      * ```js
@@ -72757,8 +72751,8 @@ declare namespace Cell {
      *   life of the asset.
      * @param arg6 - The rate at which the balance declines. If it is omitted, the function will assume it to be 2
      * @param arg7 - Specifies whether to use straight-line depreciation when depreciation is greater than the
-     *   declining balance calculation (**false** or omitted).
-     *   If it is set to **true**, the function uses the declining balance method.
+     *   declining balance calculation (**false** or omitted). If it is set to **true**, the function
+     *   uses the declining balance method.
      *
      * @example
      * ```js
@@ -72782,8 +72776,7 @@ declare namespace Cell {
      * @param arg3 - The column number in the data table from which the matching value should be returned. The first
      *   column of values in the table is column 1.
      * @param arg4 - A logical value that specifies whether to find the closest match in the first column (sorted in
-     *   ascending order) (**true** or omitted)
-     *   or find an exact match (**false**).
+     *   ascending order) (**true** or omitted) or find an exact match (**false**).
      *
      * @example
      * ```js
@@ -72816,9 +72809,8 @@ declare namespace Cell {
      *
      * @param arg1 - A number that represents a date, or a result of other formulas or functions.
      * @param arg2 - A number that determines the type of return value: **1** - returns a number from 1 (Sunday) to 7
-     *   (Saturday);
-     *   **2** - returns a number from 1 (Monday) to 7 (Sunday); **3** - returns a number from 0 (Monday)
-     *   to 6 (Sunday).
+     *   (Saturday); **2** - returns a number from 1 (Monday) to 7 (Sunday); **3** - returns a number
+     *   from 0 (Monday) to 6 (Sunday).
      *
      * @example
      * ```js
@@ -72860,9 +72852,9 @@ declare namespace Cell {
      * @param arg1 - The value at which to evaluate the function, a nonnegative number.
      * @param arg2 - The alpha parameter of the distribution, a positive number.
      * @param arg3 - The beta parameter of the distribution, a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -72882,9 +72874,9 @@ declare namespace Cell {
      * @param arg1 - The value at which to evaluate the function, a nonnegative number.
      * @param arg2 - The alpha parameter of the distribution, a positive number.
      * @param arg3 - The beta parameter of the distribution, a positive number.
-     * @param arg4 - A logical value (**true** or **false**) that determines the function form.
-     *   If it is **true**, the function returns the cumulative distribution function.
-     *   If it is **false**, the function returns the probability mass function.
+     * @param arg4 - A logical value (**true** or **false**) that determines the function form. If it is **true**,
+     *   the function returns the cumulative distribution function. If it is **false**, the function
+     *   returns the probability mass function.
      *
      * @example
      * ```js
@@ -73372,8 +73364,7 @@ declare namespace Slide {
   }
 
   /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their comments.
    *
    * @example
    * ```js
@@ -73386,7 +73377,7 @@ declare namespace Slide {
   }
 
   /**
-   * Record of one comment.
+   * Represents a single comment record.
    *
    * @example
    * ```js
@@ -73394,19 +73385,19 @@ declare namespace Slide {
    * ```
    */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -73687,8 +73678,7 @@ declare namespace Slide {
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
   /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their review changes.
    *
    * @example
    * ```js
@@ -73706,7 +73696,7 @@ declare namespace Slide {
   }
 
   /**
-   * Record of one review change.
+   * Represents a single review change record.
    *
    * @example
    * ```js
@@ -73721,16 +73711,16 @@ declare namespace Slide {
    * ```
    */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
@@ -74049,7 +74039,7 @@ declare namespace Slide {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -74519,6 +74509,12 @@ declare namespace Slide {
 
     /**
      * Creates a chart with the parameters specified.
+     * :::note
+     * Values of _nStyleIndex_ outside **1 - 48** are interpreted as a chart style id from the
+     * _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs
+     * Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs
+     * Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).
+     * :::
      *
      * @param sType - The chart type used for the chart display.
      * @param aSeries - The array of the data used to build the chart from.
@@ -74529,8 +74525,8 @@ declare namespace Slide {
      * @param nWidth - The chart width in English measure units.
      * @param nHeight - The chart height in English measure units.
      * @param nStyleIndex - The chart color style index (can be **1 - 48**, as described in OOXML specification).
-     * @param aNumFormats - Numeric formats which will be applied to the series (can be custom formats).
-     *   The default numeric format is "General".
+     * @param aNumFormats - Numeric formats which will be applied to the series (can be custom formats). The default numeric
+     *   format is "General".
      * @default sType = "bar"
      *
      * @example
@@ -74591,6 +74587,10 @@ declare namespace Slide {
 
     /**
      * Creates a group of drawings.
+     * :::note
+     * The drawings must not be added to the presentation. To group the drawings which are already in the
+     * presentation, use the {@link ApiSlide#GroupDrawings} method.
+     * :::
      *
      * @param drawings - An array of drawings to group.
      * @since 8.3.0
@@ -74631,8 +74631,8 @@ declare namespace Slide {
     /**
      * Creates an image with the parameters specified.
      *
-     * @param sImageSrc - The image source where the image to be inserted should be taken from (currently,
-     *   only internet URL or Base64 encoded images are supported).
+     * @param sImageSrc - The image source where the image to be inserted should be taken from (currently, only internet
+     *   URL or Base64 encoded images are supported).
      * @param nWidth - The image width in English measure units.
      * @param nHeight - The image height in English measure units.
      *
@@ -75029,8 +75029,10 @@ declare namespace Slide {
      * @param sType - The shape type which specifies the preset shape geometry.
      * @param nWidth - The shape width in English measure units.
      * @param nHeight - The shape height in English measure units.
-     * @param oFill - The color or pattern used to fill the shape.
-     * @param oStroke - The stroke used to create the element shadow.
+     * @param oFill - The color or pattern used to fill the shape. If not specified, the default shape style fill
+     *   (theme accent) is used.
+     * @param oStroke - The stroke used to draw the shape outline. If not specified, the default shape style outline
+     *   (theme accent) is used.
      * @default sType = "rect"
      * @default nWidth = 914400
      * @default nHeight = 914400
@@ -75141,6 +75143,10 @@ declare namespace Slide {
 
     /**
      * Creates a table.
+     * :::danger[Breaking Change]
+     * Starting from version 9.4.0, the parameter order has been changed from `Api.CreateTable(cols, rows)`
+     * to `Api.CreateTable(rows, cols)`.
+     * :::
      *
      * @param rows - Number of rows.
      * @param cols - Number of columns.
@@ -75236,10 +75242,9 @@ declare namespace Slide {
     /**
      * Creates a new theme color scheme.
      *
-     * @param arrColors - Set of colors which are referred to as a color scheme.
-     *   The color scheme is responsible for defining a list of twelve colors.
-     *   The array should contain a sequence of colors: 2 dark, 2 light, 6 primary, a color for a
-     *   hyperlink and a color for the followed hyperlink.
+     * @param arrColors - Set of colors which are referred to as a color scheme. The color scheme is responsible for
+     *   defining a list of twelve colors. The array should contain a sequence of colors: 2 dark, 2
+     *   light, 6 primary, a color for a hyperlink and a color for the followed hyperlink.
      * @param sName - Theme color scheme name.
      *
      * @example
@@ -77717,10 +77722,10 @@ declare namespace Slide {
     /**
      * Adds a reply to a comment.
      *
-     * @param sText - The comment reply text (required).
-     * @param sAuthorName - The name of the comment reply author (optional).
-     * @param sUserId - The user ID of the comment reply author (optional).
-     * @param nPos - The comment reply position.
+     * @param sText - The comment reply text.
+     * @param sAuthorName - The name of the comment reply author.
+     * @param sUserId - The user ID of the comment reply author.
+     * @param nPos - The comment reply position. If nPos=-1 add to the end.
      * @default nPos = -1
      * @returns this
      *
@@ -79471,7 +79476,7 @@ declare namespace Slide {
     Fill(oFill: ApiFill): boolean;
 
     /**
-     * Returns a type of the ApiDrawing class.
+     * Returns the type of the ApiDrawing class.
      *
      * @example
      * ```js
@@ -80559,7 +80564,7 @@ declare namespace Slide {
     CreateTextRange(): ApiTextRange | null;
 
     /**
-     * Returns a type of the ApiImage class.
+     * Returns the type of the ApiImage class.
      *
      * @example
      * ```js
@@ -81249,7 +81254,7 @@ declare namespace Slide {
     /**
      * Sets the background to the current slide layout.
      *
-     * @param oApiFill - The color or pattern used to fill the presentation slide layout background.\
+     * @param oApiFill - The color or pattern used to fill the presentation slide layout background.
      *
      * @example
      * ```js
@@ -81456,6 +81461,7 @@ declare namespace Slide {
 
     /**
      * Deletes the specified object from the parent if it exists.
+     * Note: Master can't be deleted if it's the last one in the presentation.
      *
      * @returns return false if master doesn't exist or is not in the presentation or couldn't be deleted (e.g.
      *   the last master).
@@ -82834,8 +82840,7 @@ declare namespace Slide {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -83000,10 +83005,10 @@ declare namespace Slide {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -83044,10 +83049,10 @@ declare namespace Slide {
     /**
      * Adds an element to the current paragraph.
      *
-     * @param oElement - The document element which will be added at the current position. Returns false if the
-     *   oElement type is not supported by a paragraph.
-     * @param nPos - The position where the current element will be added. If this value is not
-     *   specified, then the element will be added at the end of the current paragraph.
+     * @param oElement - The document element which will be added at the current position. Returns false if the oElement
+     *   type is not supported by a paragraph.
+     * @param nPos - The position where the current element will be added. If this value is not specified, then the
+     *   element will be added at the end of the current paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
      * @example
@@ -84080,8 +84085,7 @@ declare namespace Slide {
     /**
      * Sets the paragraph contents justification.
      *
-     * @param sJc - The justification type that
-     *   will be applied to the paragraph contents.
+     * @param sJc - The justification type that will be applied to the paragraph contents.
      *
      * @example
      * ```js
@@ -84275,10 +84279,10 @@ declare namespace Slide {
      * paragraph.
      * **Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.
      *
-     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins
-     *   measured in twentieths of a point (1/1440 of an inch).
-     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab
-     *   stop and the alignment which will be applied to text entered at the current custom tab stop.
+     * @param aPos - An array of the positions of custom tab stops with respect to the current page margins measured
+     *   in twentieths of a point (1/1440 of an inch).
+     * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
+     *   the alignment which will be applied to text entered at the current custom tab stop.
      *
      * @example
      * ```js
@@ -84623,7 +84627,7 @@ declare namespace Slide {
     GetClassType(): "placeholder";
 
     /**
-     * Retuns the placeholder index.
+     * Returns the placeholder index.
      *
      * @returns Returns the placeholder index.
      * @since 8.2.0
@@ -85045,7 +85049,7 @@ declare namespace Slide {
      * **LastModifiedRaw** - the date and time when the file was last modified.
      * **LastModified** - the parsed date and time when the file was last modified.
      * **LastModifiedBy** - the name of the user who has made the latest change to the document.
-     * **Autrors** - the persons who has created the file.
+     * **Authors** - the persons who has created the file.
      * **Title** - this property allows you to simplify your documents classification.
      * **Tags** - this property allows you to simplify your documents classification.
      * **Subject** - this property allows you to simplify your documents classification.
@@ -85388,8 +85392,8 @@ declare namespace Slide {
     /**
      * Specifies the languages which will be used to check spelling and grammar (if requested).
      *
-     * @param sLangId - The possible value for this parameter is a language identifier as defined by
-     *   RFC 4646/BCP 47. Example: "en-CA".
+     * @param sLangId - The possible value for this parameter is a language identifier as defined by RFC 4646/BCP 47.
+     *   Example: "en-CA".
      *
      * @example
      * ```js
@@ -85449,7 +85453,7 @@ declare namespace Slide {
     /**
      * Converts the slides from the current ApiPresentation object into the JSON objects.
      *
-     * @param nStart - The index to the end slide.
+     * @param nStart - The index to the start slide.
      * @param nEnd - The index to the end slide.
      * @param bWriteLayout - Specifies if the slide layout will be written to the JSON object or not.
      * @param bWriteMaster - Specifies if the slide master will be written to the JSON object or not (bWriteMaster is false
@@ -86037,7 +86041,7 @@ declare namespace Slide {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -86167,7 +86171,8 @@ declare namespace Slide {
     GetFill(): ApiFill;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -86379,7 +86384,7 @@ declare namespace Slide {
     GetOutLine(): ApiStroke;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -86607,7 +86612,7 @@ declare namespace Slide {
     /**
      * Sets the bold property to the text character.
      *
-     * @param isBold - Specifies that the contents of the current run are displayed bold.
+     * @param isBold - Specifies that the contents of the run are displayed bold.
      * @returns this text properties.
      *
      * @example
@@ -86636,8 +86641,8 @@ declare namespace Slide {
     SetBold(isBold: boolean): ApiTextPr;
 
     /**
-     * Specifies that any lowercase characters in the current text run are formatted for display only as
-     * their capital letter character equivalents.
+     * Specifies that any lowercase characters in the text run are formatted for display only as their
+     * capital letter character equivalents.
      *
      * @param isCaps - Specifies that the contents of the current run are displayed capitalized.
      * @returns this text properties.
@@ -86668,7 +86673,7 @@ declare namespace Slide {
     SetCaps(isCaps: boolean): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with two horizontal lines through each
+     * Specifies that the contents of the run are displayed with two horizontal lines through each
      * character displayed on the line.
      *
      * @param isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
@@ -86794,7 +86799,8 @@ declare namespace Slide {
     SetFontSize(nSize: hps): ApiTextPr;
 
     /**
-     * Specifies a highlighting color which is applied as a background to the contents of the current run.
+     * Specifies a highlighting color which is added to the text properties and applied as a background to
+     * the contents of the current run/range/paragraph.
      *
      * @param sColor - Available highlight color.
      *
@@ -86884,7 +86890,7 @@ declare namespace Slide {
     SetOutLine(oStroke: ApiStroke): ApiTextPr;
 
     /**
-     * Specifies that all the small letter characters in this text run are formatted for display only as
+     * Specifies that all the small letter characters in the text run are formatted for display only as
      * their capital
      * letter character equivalents which are two points smaller than the actual font size specified for
      * this text.
@@ -86950,8 +86956,8 @@ declare namespace Slide {
     SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed with a single horizontal line through
-     * the center of the line.
+     * Specifies that the contents of the run are displayed with a single horizontal line through the
+     * center of the line.
      *
      * @param isStrikeout - Specifies that the contents of the current run are displayed struck through.
      * @returns this text properties.
@@ -87044,8 +87050,8 @@ declare namespace Slide {
     SetTextPr(oTextPr: ApiTextPr): ApiTextPr;
 
     /**
-     * Specifies that the contents of the current run are displayed along with a line appearing directly
-     * below the character
+     * Specifies that the contents of the run are displayed along with a line appearing directly below the
+     * character
      * (less than all the spacing above and below the characters on the line).
      *
      * @param isUnderline - Specifies that the contents of the current run are displayed underlined.
@@ -87077,8 +87083,8 @@ declare namespace Slide {
     SetUnderline(isUnderline: boolean): ApiTextPr;
 
     /**
-     * Specifies the alignment which will be applied to the contents of the current run in relation to the
-     * default appearance of the text run:
+     * Specifies the alignment which will be applied to the contents of the run in relation to the default
+     * appearance of the run text:
      * **"baseline"** - the characters in the current text run will be aligned by the default text
      * baseline.
      * **"subscript"** - the characters in the current text run will be aligned below the default text
@@ -88695,8 +88701,8 @@ declare namespace Slide {
      * Adds a new column to the end of the current table.
      *
      * @param oCell - If not specified, a new column will be added to the end of the table.
-     * @param isBefore - Add a new column before or after the specified cell. If no cell is specified,
-     *   then this parameter will be ignored.
+     * @param isBefore - Add a new column before or after the specified cell. If no cell is specified, then this
+     *   parameter will be ignored.
      * @default isBefore = false
      *
      * @example
@@ -88735,7 +88741,7 @@ declare namespace Slide {
     AddColumns(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable | null;
 
     /**
-     * Adds a paragraph or a table or a blockLvl content control using its position in the cell.
+     * Adds a paragraph using its position in the cell.
      *
      * @param oCell - The cell where the specified element will be added.
      * @param nPos - The position in the cell where the specified element will be added.
@@ -88750,8 +88756,8 @@ declare namespace Slide {
      * Adds a new row to the current table.
      *
      * @param oCell - If not specified, a new row will be added to the end of the table.
-     * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified,
-     *   then this parameter will be ignored.
+     * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified, then this parameter
+     *   will be ignored.
      * @default isBefore = false
      *
      * @example
@@ -89386,16 +89392,12 @@ declare namespace Slide {
      * row, first
      * column, or last column formatting.
      *
-     * @param isFirstColumn - Specifies that the first column conditional formatting shall be applied to the
-     *   table.
+     * @param isFirstColumn - Specifies that the first column conditional formatting shall be applied to the table.
      * @param isFirstRow - Specifies that the first row conditional formatting shall be applied to the table.
-     * @param isLastColumn - Specifies that the last column conditional formatting shall be applied to the
-     *   table.
+     * @param isLastColumn - Specifies that the last column conditional formatting shall be applied to the table.
      * @param isLastRow - Specifies that the last row conditional formatting shall be applied to the table.
-     * @param isHorBand - Specifies that the horizontal banding conditional formatting shall not be applied
-     *   to the table.
-     * @param isVerBand - Specifies that the vertical banding conditional formatting shall not be applied to
-     *   the table.
+     * @param isHorBand - Specifies that the horizontal banding conditional formatting shall not be applied to the table.
+     * @param isVerBand - Specifies that the vertical banding conditional formatting shall not be applied to the table.
      *
      * @example
      * ```js
@@ -89724,8 +89726,8 @@ declare namespace Slide {
      * the border
      * of a specific individual table cell within a table.
      *
-     * @param nValue - If this value is `null`, then default table cell bottom margin shall be used,
-     *   otherwise override the table cell bottom margin with specified value for the current cell.
+     * @param nValue - If this value is `null`, then default table cell bottom margin shall be used, otherwise override
+     *   the table cell bottom margin with specified value for the current cell.
      *
      * @example
      * ```js
@@ -89752,8 +89754,8 @@ declare namespace Slide {
      * contents and the
      * left edge border of a specific individual table cell within a table.
      *
-     * @param nValue - If this value is `null`, then default table cell left margin shall be used,
-     *   otherwise override the table cell left margin with specified value for the current cell.
+     * @param nValue - If this value is `null`, then default table cell left margin shall be used, otherwise override
+     *   the table cell left margin with specified value for the current cell.
      *
      * @example
      * ```js
@@ -89780,8 +89782,8 @@ declare namespace Slide {
      * contents and the
      * right edge border of a specific individual table cell within a table.
      *
-     * @param nValue - If this value is `null`, then default table cell right margin shall be used,
-     *   otherwise override the table cell right margin with specified value for the current cell.
+     * @param nValue - If this value is `null`, then default table cell right margin shall be used, otherwise override
+     *   the table cell right margin with specified value for the current cell.
      *
      * @example
      * ```js
@@ -89808,8 +89810,8 @@ declare namespace Slide {
      * and the
      * top edge border of a specific individual table cell within a table.
      *
-     * @param nValue - If this value is `null`, then default table cell top margin shall be used,
-     *   otherwise override the table cell top margin with specified value for the current cell.
+     * @param nValue - If this value is `null`, then default table cell top margin shall be used, otherwise override
+     *   the table cell top margin with specified value for the current cell.
      *
      * @example
      * ```js
@@ -90352,7 +90354,7 @@ declare namespace Slide {
     GetBold(): boolean;
 
     /**
-     * Specifies whether the text with the current text properties are capitalized.
+     * Returns whether the text with the current text properties are capitalized.
      *
      * @since 8.1.0
      *
@@ -90484,7 +90486,8 @@ declare namespace Slide {
     GetFill(): ApiFill;
 
     /**
-     * Gets the font family from the current text properties.
+     * Returns the font family from the current text properties.
+     * The method automatically calculates the font from the theme if the font was set via the theme.
      *
      * @since 8.1.0
      *
@@ -90656,7 +90659,7 @@ declare namespace Slide {
     GetOutLine(): ApiStroke;
 
     /**
-     * Specifies whether the text with the current text properties are displayed capitalized two points
+     * Returns whether the text with the current text properties are displayed capitalized two points
      * smaller than the actual font size.
      *
      * @since 8.1.0
@@ -92265,9 +92268,8 @@ declare namespace Slide {
     /**
      * Sets the background fill styles to the current theme format scheme.
      *
-     * @param arrBgFill - The array of background fill styles must contains 3 elements - subtle, moderate and intense
-     *   fills.
-     *   If an array is empty or NoFill elements are in the array, it will be filled with the
+     * @param arrBgFill - The array of background fill styles must contain 3 elements - subtle, moderate and intense
+     *   fills. If an array is empty or NoFill elements are in the array, it will be filled with the
      *   Api.CreateNoFill() elements.
      *
      * @example
@@ -92310,8 +92312,8 @@ declare namespace Slide {
     /**
      * Sets the fill styles to the current theme format scheme.
      *
-     * @param arrFill - The array of fill styles must contain 3 elements - subtle, moderate and intense fills.
-     *   If an array is empty or NoFill elements are in the array, it will be filled with the
+     * @param arrFill - The array of fill styles must contain 3 elements - subtle, moderate and intense fills. If an
+     *   array is empty or NoFill elements are in the array, it will be filled with the
      *   Api.CreateNoFill() elements.
      *
      * @example
@@ -92354,8 +92356,8 @@ declare namespace Slide {
     /**
      * Sets the line styles to the current theme format scheme.
      *
-     * @param arrLine - The array of line styles must contain 3 elements - subtle, moderate and intense fills.
-     *   If an array is empty or ApiStroke elements are with no fill, it will be filled with the
+     * @param arrLine - The array of line styles must contain 3 elements - subtle, moderate and intense fills. If an
+     *   array is empty or ApiStroke elements are with no fill, it will be filled with the
      *   Api.CreateStroke(0, Api.CreateNoFill()) elements.
      *
      * @example
@@ -92864,8 +92866,7 @@ declare namespace Forms {
   }
 
   /**
-   * Report on all comments.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their comments.
    *
    * @example
    * ```js
@@ -92878,7 +92879,7 @@ declare namespace Forms {
   }
 
   /**
-   * Record of one comment.
+   * Represents a single comment record.
    *
    * @example
    * ```js
@@ -92886,19 +92887,19 @@ declare namespace Forms {
    * ```
    */
   export interface CommentReportRecord {
-    /** Specifies whether this is an initial comment or a reply to another comment. */
+    /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
 
-    /** The text of the current comment. */
+    /** The comment text. */
     CommentMessage: string;
 
-    /** The time when this change was made in local time. */
+    /** The comment local timestamp. */
     Date: number;
 
-    /** The time when this change was made in UTC. */
+    /** The comment UTC timestamp. */
     DateUTC: number;
 
-    /** The text to which this comment is related. */
+    /** The quoted text (if available). */
     QuoteText?: string;
   }
 
@@ -92948,7 +92949,7 @@ declare namespace Forms {
   export type DashType = "dash" | "dashDot" | "dot" | "lgDash" | "lgDashDot" | "lgDashDotDot" | "solid" | "sysDash" | "sysDashDot" | "sysDashDotDot" | "sysDot";
 
   /**
-   * Date form properties.
+   * The date form properties.
    *
    * @example
    * ```js
@@ -93080,13 +93081,13 @@ declare namespace Forms {
    * ```
    */
   export interface FormPrBase {
-    /** Form key. */
+    /** The form key. */
     key: string;
 
-    /** Form tip text. */
+    /** The form tip text. */
     tip: string;
 
-    /** Form tag. */
+    /** The form tag. */
     tag: string;
 
     /** The role to fill out form. */
@@ -93095,7 +93096,7 @@ declare namespace Forms {
     /** Specifies if the form is required or not. */
     required: boolean;
 
-    /** Form placeholder text. */
+    /** The form placeholder text. */
     placeholder: string;
   }
 
@@ -93294,8 +93295,7 @@ declare namespace Forms {
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
   /**
-   * Report on all review changes.
-   * This is a dictionary where the keys are usernames.
+   * A dictionary of users and their review changes.
    *
    * @example
    * ```js
@@ -93313,7 +93313,7 @@ declare namespace Forms {
   }
 
   /**
-   * Record of one review change.
+   * Represents a single review change record.
    *
    * @example
    * ```js
@@ -93328,16 +93328,16 @@ declare namespace Forms {
    * ```
    */
   export interface ReviewReportRecord {
-    /** Review record type. */
+    /** The review record type. */
     Type: ReviewReportRecordType;
 
-    /** Review change value that is set for the "TextAdd" and "TextRem" types only. */
+    /** The review change value (only for "TextAdd" and "TextRem" types). */
     Value?: string;
 
-    /** The time when this change was made. */
+    /** The timestamp of the change. */
     Date: number;
 
-    /** Element that has been reviewed. */
+    /** The element that was reviewed. */
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
@@ -93714,7 +93714,7 @@ declare namespace Forms {
     /** The highest heading level included in the table of contents (the start of the outline range). */
     OutlineLvlStart?: number;
 
-    /** Maximum number of levels in the table of contents. */
+    /** The lowest heading level included in the table of contents (the end of the outline range). */
     OutlineLvls?: number;
 
     /**
@@ -94334,7 +94334,7 @@ declare namespace Forms {
     GetChoiceName(): string;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiCheckBoxForm class.
      *
      * @since 9.0.4
      *
@@ -94487,7 +94487,6 @@ declare namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -94507,7 +94506,7 @@ declare namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -94811,7 +94810,7 @@ declare namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -94896,7 +94895,7 @@ declare namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -94973,7 +94972,7 @@ declare namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -95005,7 +95004,7 @@ declare namespace Forms {
   export interface ApiColor {
   }
 
-  /** Class representing a document combo box / dropdown list. */
+  /** Class representing a document combo box / drop-down list. */
   export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
@@ -95069,7 +95068,7 @@ declare namespace Forms {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComboBoxForm class.
      *
      * @since 9.0.4
      *
@@ -95206,7 +95205,6 @@ declare namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -95226,7 +95224,7 @@ declare namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -95297,7 +95295,7 @@ declare namespace Forms {
     GetWrapperShape(): ApiShape;
 
     /**
-     * Checks if the combo box text can be edited. If it is not editable, then this form is a dropdown
+     * Checks if the combo box text can be edited. If it is not editable, then this form is a drop-down
      * list.
      *
      * @example
@@ -95490,7 +95488,7 @@ declare namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -95547,7 +95545,7 @@ declare namespace Forms {
 
     /**
      * Sets the text to the current combo box.
-     * Available only for editable combo box forms.*
+     * *Available only for editable combo box forms.*
      *
      * @param sText - The combo box text.
      *
@@ -95566,7 +95564,7 @@ declare namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -95644,7 +95642,7 @@ declare namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -95759,7 +95757,7 @@ declare namespace Forms {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiComplexForm class.
      *
      * @since 9.0.4
      *
@@ -95878,7 +95876,6 @@ declare namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -95898,7 +95895,7 @@ declare namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -96106,7 +96103,7 @@ declare namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -96163,7 +96160,7 @@ declare namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -96240,7 +96237,7 @@ declare namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -96371,7 +96368,7 @@ declare namespace Forms {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiDateForm class.
      *
      * @since 9.0.4
      *
@@ -96535,7 +96532,6 @@ declare namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -96555,7 +96551,7 @@ declare namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -96841,7 +96837,7 @@ declare namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -96898,7 +96894,7 @@ declare namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -96998,7 +96994,7 @@ declare namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -97329,7 +97325,6 @@ declare namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -97349,7 +97344,7 @@ declare namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -97557,7 +97552,7 @@ declare namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -97614,7 +97609,7 @@ declare namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -97691,7 +97686,7 @@ declare namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -97939,7 +97934,7 @@ declare namespace Forms {
     GetBorderColor(): ApiColor;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiPictureForm class.
      *
      * @since 9.0.4
      *
@@ -98119,7 +98114,6 @@ declare namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -98139,7 +98133,7 @@ declare namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -98465,7 +98459,7 @@ declare namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -98569,7 +98563,7 @@ declare namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -98646,7 +98640,7 @@ declare namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js
@@ -99095,7 +99089,7 @@ declare namespace Forms {
     GetCharactersLimit(): number;
 
     /**
-     * Returns a type of the ApiFormBase class.
+     * Returns a type of the ApiTextForm class.
      *
      * @since 9.0.4
      *
@@ -99210,7 +99204,6 @@ declare namespace Forms {
 
     /**
      * Returns the text from the current form.
-     * Returns the value as a string if possible for the given form type*
      *
      * @example
      * ```js
@@ -99230,7 +99223,7 @@ declare namespace Forms {
 
     /**
      * Returns the text properties from the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @example
      * ```js
@@ -99499,9 +99492,8 @@ declare namespace Forms {
     /**
      * Sets the cell width to the applied comb of characters.
      *
-     * @param nCellWidth - The cell width measured in millimeters.
-     *   If this parameter is not specified or equal to 0 or less, then the width will be set
-     *   automatically. Must be >= 1 and <= 558.8.
+     * @param nCellWidth - The cell width measured in millimeters. If this parameter is not specified or equal to 0 or
+     *   less, then the width will be set automatically. Must be >= 1 and <= 558.8.
      * @default nCellWidth = 0
      *
      * @example
@@ -99522,9 +99514,8 @@ declare namespace Forms {
      * Sets a limit to the text field characters.
      *
      * @param nChars - The maximum number of characters in the text field. If this parameter is equal to -1, no limit
-     *   will be set.
-     *   A limit is required to be set if a comb of characters is applied.
-     *   Maximum value for this parameter is 1000000.
+     *   will be set. A limit is required to be set if a comb of characters is applied. Maximum value for
+     *   this parameter is 1000000.
      *
      * @example
      * ```js
@@ -99631,7 +99622,7 @@ declare namespace Forms {
 
     /**
      * Sets the placeholder text to the current form.
-     * Can't be set to checkbox or radio button.*
+     * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
      *
@@ -99706,7 +99697,7 @@ declare namespace Forms {
 
     /**
      * Sets the text properties to the current form.
-     * Used if possible for this type of form*
+     * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
      *
@@ -99783,7 +99774,7 @@ declare namespace Forms {
 
     /**
      * Converts the current form to an inline form.
-     * Picture form can't be converted to an inline form, it's always a fixed size object.*
+     * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
      * @example
      * ```js

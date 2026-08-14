@@ -1,0 +1,18 @@
+{
+  "description": "Returns all caption paragraphs of the specified type from the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetAllCaptionParagraphs/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png\", 60 * 36000, 35 * 36000);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddCaption(\"\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");\nlet captionParagraphs = doc.GetAllCaptionParagraphs(\"Figure\");\ncaptionParagraphs[0].SetCaps(true);"
+  ],
+  "params": [
+    {
+      "description": "The caption label (\"Equation\", \"Figure\", \"Table\", or another caption label).",
+      "name": "sCaption",
+      "type": "CaptionLabel | string"
+    }
+  ],
+  "returns": {
+    "type": "ApiParagraph[]"
+  },
+  "signature": "GetAllCaptionParagraphs(sCaption: CaptionLabel | string): ApiParagraph[]"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Replaces the current paragraph with a new element.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/ReplaceByElement/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nblockLvlSdt.GetContent().GetElement(0).AddText(\"The paragraph was replaced with the current content control.\");\nparagraph.ReplaceByElement(blockLvlSdt);"
+  ],
+  "params": [
+    {
+      "description": "The element to replace the current paragraph with.",
+      "name": "oElement",
+      "type": "DocumentElement"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ReplaceByElement(oElement: DocumentElement): boolean"
+}

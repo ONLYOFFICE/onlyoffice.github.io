@@ -1,0 +1,43 @@
+{
+  "description": "Specifies the border which will be displayed between each paragraph in a set of paragraphs which have the same set of paragraph border settings.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetBetweenBorder/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetBetweenBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border between paragraphs.\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the second paragraph. \");\nparagraph.AddText(\"No need to add anything additionally to it. \");\nparagraph.AddText(\"The borders between the paragraphs have already been set.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the third paragraph. \");\nparagraph.AddText(\"No need to add anything additionally to it. \");\nparagraph.AddText(\"The borders between the paragraphs have already been set.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The border style.",
+      "name": "sType",
+      "type": "BorderType"
+    },
+    {
+      "description": "The width of the current border measured in eighths of a point.",
+      "name": "nSize",
+      "type": "pt_8"
+    },
+    {
+      "description": "The spacing offset between the paragraphs measured in points used to place this border.",
+      "name": "nSpace",
+      "type": "pt"
+    },
+    {
+      "description": "Red color component value.",
+      "name": "r",
+      "type": "number"
+    },
+    {
+      "description": "Green color component value.",
+      "name": "g",
+      "type": "number"
+    },
+    {
+      "description": "Blue color component value.",
+      "name": "b",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetBetweenBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean"
+}

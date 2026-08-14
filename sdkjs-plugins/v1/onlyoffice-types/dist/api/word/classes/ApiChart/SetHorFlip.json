@@ -1,0 +1,14 @@
+{
+  "description": "Flips the current drawing horizontally.",
+  "params": [
+    {
+      "description": "Specifies if the figure will be flipped horizontally or not.",
+      "name": "bFlip",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetHorFlip(bFlip: boolean): boolean"
+}

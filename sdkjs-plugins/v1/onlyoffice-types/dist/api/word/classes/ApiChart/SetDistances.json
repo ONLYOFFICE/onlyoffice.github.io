@@ -1,0 +1,29 @@
+{
+  "description": "Specifies the minimum distance which will be maintained between the edges of the current drawing object and any\nsubsequent text.",
+  "params": [
+    {
+      "description": "The distance from the left side of the current object and the subsequent text run measured in English measure units.",
+      "name": "nLeft",
+      "type": "EMU"
+    },
+    {
+      "description": "The distance from the top side of the current object and the preceding text run measured in English measure units.",
+      "name": "nTop",
+      "type": "EMU"
+    },
+    {
+      "description": "The distance from the right side of the current object and the subsequent text run measured in English measure units.",
+      "name": "nRight",
+      "type": "EMU"
+    },
+    {
+      "description": "The distance from the bottom side of the current object and the subsequent text run measured in English measure units.",
+      "name": "nBottom",
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean"
+}

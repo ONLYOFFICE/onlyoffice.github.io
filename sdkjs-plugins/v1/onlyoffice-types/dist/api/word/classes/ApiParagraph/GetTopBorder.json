@@ -1,0 +1,10 @@
+{
+  "description": "Returns the top border of the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "Returns the border properties object, or _undefined_ if the top border is not set.",
+    "type": "Border | undefined"
+  },
+  "signature": "GetTopBorder(): Border | undefined",
+  "since": "9.4.0"
+}

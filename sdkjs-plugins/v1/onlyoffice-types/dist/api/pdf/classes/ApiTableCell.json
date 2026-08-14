@@ -1,0 +1,418 @@
+{
+  "description": "Class representing a table cell.",
+  "methods": {
+    "AddText": {
+      "description": "Appends text to the end of the cell content.",
+      "params": [
+        {
+          "description": "The text to append.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "AddText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "GetBackgroundColor": {
+      "description": "Returns the background color of the current table cell.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor | null"
+      },
+      "signature": "GetBackgroundColor(): ApiColor | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiTableCell class.",
+      "params": [],
+      "returns": {
+        "type": "\"tableCell\""
+      },
+      "signature": "GetClassType(): \"tableCell\""
+    },
+    "GetContent": {
+      "description": "Returns the current cell content.",
+      "params": [],
+      "returns": {
+        "type": "ApiDocumentContent"
+      },
+      "signature": "GetContent(): ApiDocumentContent"
+    },
+    "GetNext": {
+      "description": "Returns the next cell if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null if cell is last.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetNext(): ApiTableCell | null",
+      "since": "9.5.0"
+    },
+    "GetParentRow": {
+      "description": "Returns a parent row of the current cell.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent row doesn't exist.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetParentRow(): ApiTableRow | null",
+      "since": "9.5.0"
+    },
+    "GetParentTable": {
+      "description": "Returns a parent table of the current cell.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null",
+      "since": "9.5.0"
+    },
+    "GetPrevious": {
+      "description": "Returns the previous cell if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null is cell is first.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetPrevious(): ApiTableCell | null",
+      "since": "9.5.0"
+    },
+    "GetRowIndex": {
+      "description": "Returns an index of the parent row.",
+      "params": [],
+      "returns": {
+        "type": "number | null"
+      },
+      "signature": "GetRowIndex(): number | null",
+      "since": "9.5.0"
+    },
+    "GetText": {
+      "description": "Returns the inner text of the current table cell.",
+      "params": [
+        {
+          "description": "Options for formatting the returned text.",
+          "name": "pr",
+          "optional": true,
+          "type": "object"
+        },
+        {
+          "description": "Defines if the resulting string will include numbering or not.",
+          "name": "pr_Numbering",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the resulting string will include mathematical expressions or not.",
+          "name": "pr_Math",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines how the table cell separator will be specified in the resulting string.",
+          "name": "pr_TableCellSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table row separator will be specified in the resulting string.",
+          "name": "pr_TableRowSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the paragraph separator will be specified in the resulting string.",
+          "name": "pr_ParaSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the tab will be specified in the resulting string.",
+          "name": "pr_TabSymbol",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the line separator will be specified in the resulting string.",
+          "name": "pr_NewLineSeparator",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string",
+      "since": "9.4.0"
+    },
+    "Select": {
+      "description": "Selects the current table cell.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(): boolean",
+      "since": "9.5.0"
+    },
+    "SetBackgroundColor": {
+      "description": "Sets the background color of the current cell.",
+      "params": [
+        {
+          "description": "If not passed, the background color will be cleared (see arguments below for RGB triplet form).",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBackgroundColor(color?: ApiColor): boolean",
+      "since": "9.5.0"
+    },
+    "SetCellBorderBottom": {
+      "description": "Sets the border which shall be displayed at the bottom of the current table cell.",
+      "params": [
+        {
+          "description": "The width of the current border.",
+          "name": "borderWidth",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderBottom(borderWidth: mm, fill: ApiFill): boolean"
+    },
+    "SetCellBorderLeft": {
+      "description": "Sets the border which shall be displayed at the left of the current table cell.",
+      "params": [
+        {
+          "description": "The width of the current border.",
+          "name": "borderWidth",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderLeft(borderWidth: mm, fill: ApiFill): boolean"
+    },
+    "SetCellBorderRight": {
+      "description": "Sets the border which shall be displayed at the right of the current table cell.",
+      "params": [
+        {
+          "description": "The width of the current border.",
+          "name": "borderWidth",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderRight(borderWidth: mm, fill: ApiFill): boolean"
+    },
+    "SetCellBorderTop": {
+      "description": "Sets the border which shall be displayed at the top of the current table cell.",
+      "params": [
+        {
+          "description": "The width of the current border.",
+          "name": "borderWidth",
+          "type": "mm"
+        },
+        {
+          "description": "The color or pattern used to fill the current border.",
+          "name": "fill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellBorderTop(borderWidth: mm, fill: ApiFill): boolean"
+    },
+    "SetCellMarginBottom": {
+      "description": "Specifies an amount of space which shall be left between the bottom extent of the cell contents and the border\nof a specific individual table cell within a table.",
+      "params": [
+        {
+          "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell bottom margin with specified value for the current cell.",
+          "name": "margin",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginBottom(margin: twips): boolean"
+    },
+    "SetCellMarginLeft": {
+      "description": "Specifies an amount of space which shall be left between the left extent of the current cell contents and the\nleft edge border of a specific individual table cell within a table.",
+      "params": [
+        {
+          "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell left margin with specified value for the current cell.",
+          "name": "margin",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginLeft(margin: twips): boolean"
+    },
+    "SetCellMarginRight": {
+      "description": "Specifies an amount of space which shall be left between the right extent of the current cell contents and the\nright edge border of a specific individual table cell within a table.",
+      "params": [
+        {
+          "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell right margin with specified value for the current cell.",
+          "name": "margin",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginRight(margin: twips): boolean"
+    },
+    "SetCellMarginTop": {
+      "description": "Specifies an amount of space which shall be left between the top extent of the current cell contents and the\ntop edge border of a specific individual table cell within a table.",
+      "params": [
+        {
+          "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell top margin with specified value for the current cell.",
+          "name": "margin",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCellMarginTop(margin: twips): boolean"
+    },
+    "SetColumnBackgroundColor": {
+      "description": "Sets the background color to all cells in the column containing the current cell.",
+      "params": [
+        {
+          "description": "If not passed, the background color will be cleared.",
+          "name": "color",
+          "optional": true,
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetColumnBackgroundColor(color?: ApiColor): boolean",
+      "since": "9.5.0"
+    },
+    "SetShd": {
+      "description": "Specifies the shading which shall be applied to the extents of the current table cell.",
+      "params": [
+        {
+          "description": "The shading type or fill to apply.",
+          "name": "shadingType",
+          "type": "ShdType | ApiFill"
+        },
+        {
+          "description": "Red color component value.",
+          "name": "r",
+          "type": "number"
+        },
+        {
+          "description": "Green color component value.",
+          "name": "g",
+          "type": "number"
+        },
+        {
+          "description": "Blue color component value.",
+          "name": "b",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetShd(shadingType: ShdType | ApiFill, r: number, g: number, b: number): boolean"
+    },
+    "SetText": {
+      "description": "Replaces all content of the current table cell with the specified text,\npreserving the formatting of the first paragraph.",
+      "params": [
+        {
+          "description": "The text to set.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRun"
+      },
+      "signature": "SetText(text: string): ApiRun",
+      "since": "9.4.0"
+    },
+    "SetTextDirection": {
+      "description": "Specifies the direction of the text flow for the current table cell.",
+      "params": [
+        {
+          "description": "The text flow direction.",
+          "name": "textDirection",
+          "type": "TextFlowDirection"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTextDirection(textDirection: TextFlowDirection): boolean"
+    },
+    "SetVerticalAlign": {
+      "description": "Specifies the vertical alignment for text within the current table cell.",
+      "params": [
+        {
+          "description": "The vertical alignment type.",
+          "name": "verticalAlign",
+          "type": "VerticalTextAlign"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVerticalAlign(verticalAlign: VerticalTextAlign): boolean"
+    },
+    "SetWidth": {
+      "description": "Specifies the preferred width for this cell.",
+      "params": [
+        {
+          "description": "The type of the width value.",
+          "name": "sType",
+          "type": "TableWidth"
+        },
+        {
+          "description": "The table width value measured in positive integers.",
+          "name": "nValue",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetWidth(sType: TableWidth, nValue?: number): boolean",
+      "since": "9.5.0"
+    }
+  }
+}

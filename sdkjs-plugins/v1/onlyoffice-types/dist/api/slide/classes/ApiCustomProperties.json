@@ -1,0 +1,51 @@
+{
+  "description": "Class representing custom properties of the document.",
+  "methods": {
+    "Add": {
+      "description": "Adds a custom property to the document with automatic type detection.",
+      "params": [
+        {
+          "description": "The custom property name.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The custom property value.",
+          "name": "value",
+          "type": "string | number | boolean | Date"
+        }
+      ],
+      "returns": {
+        "description": "Returns false if the type is unsupported.",
+        "type": "boolean"
+      },
+      "signature": "Add(name: string, value: string | number | boolean | Date): boolean",
+      "since": "9.0.0"
+    },
+    "Get": {
+      "description": "Returns the value of a custom property by its name.",
+      "params": [
+        {
+          "description": "The custom property name.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "The value of the custom property or null if the property does not exist.",
+        "type": "string | number | Date | boolean | null"
+      },
+      "signature": "Get(name: string): string | number | Date | boolean | null",
+      "since": "9.0.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCustomProperties class.",
+      "params": [],
+      "returns": {
+        "type": "\"customProperties\""
+      },
+      "signature": "GetClassType(): \"customProperties\"",
+      "since": "9.0.0"
+    }
+  }
+}

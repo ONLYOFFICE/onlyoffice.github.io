@@ -1,0 +1,9 @@
+{
+  "description": "Returns the previous inline drawing object if exists.",
+  "params": [],
+  "returns": {
+    "description": "returns null if drawing object is first.",
+    "type": "ApiDrawing | null"
+  },
+  "signature": "GetPrevDrawing(): ApiDrawing | null"
+}

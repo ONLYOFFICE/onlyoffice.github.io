@@ -1,0 +1,13 @@
+{
+  "description": "Returns the next paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetNext/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\nparagraph1.AddText(\"This is just a sample paragraph №1.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is just a sample paragraph №2.\");\ndoc.Push(paragraph2);\nlet nextParagraph = paragraph1.GetNext();\nnextParagraph.SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if paragraph is last.",
+    "type": "ApiParagraph | null"
+  },
+  "signature": "GetNext(): ApiParagraph | null"
+}

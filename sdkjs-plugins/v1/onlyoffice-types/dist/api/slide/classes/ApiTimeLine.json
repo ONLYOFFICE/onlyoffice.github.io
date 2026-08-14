@@ -1,0 +1,60 @@
+{
+  "description": "Class representing animation timeline for a slide.",
+  "methods": {
+    "AddInteractiveSequence": {
+      "description": "Creates an interactive animation sequence triggered by clicking on a specified object.",
+      "params": [
+        {
+          "description": "The drawing object that triggers the sequence when clicked.",
+          "name": "drawing",
+          "type": "ApiDrawing"
+        }
+      ],
+      "returns": {
+        "description": "The interactive animation sequence or null if creation failed.",
+        "type": "ApiAnimationSequence | null"
+      },
+      "signature": "AddInteractiveSequence(drawing: ApiDrawing): ApiAnimationSequence | null",
+      "since": "9.3.0"
+    },
+    "GetAllEffects": {
+      "description": "Returns all animation effects for the slide.",
+      "params": [],
+      "returns": {
+        "description": "Array of all animation effects.",
+        "type": "ApiAnimationEffect[]"
+      },
+      "signature": "GetAllEffects(): ApiAnimationEffect[]",
+      "since": "9.3.0"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiTimeLine class.",
+      "params": [],
+      "returns": {
+        "type": "\"timeLine\""
+      },
+      "signature": "GetClassType(): \"timeLine\"",
+      "since": "9.3.0"
+    },
+    "GetInteractiveSequences": {
+      "description": "Returns all interactive animation sequences for the slide.",
+      "params": [],
+      "returns": {
+        "description": "Array of interactive animation sequences.",
+        "type": "ApiAnimationSequence[]"
+      },
+      "signature": "GetInteractiveSequences(): ApiAnimationSequence[]",
+      "since": "9.3.0"
+    },
+    "GetMainSequence": {
+      "description": "Returns the main animation sequence for the slide.",
+      "params": [],
+      "returns": {
+        "description": "The main animation sequence.",
+        "type": "ApiAnimationSequence"
+      },
+      "signature": "GetMainSequence(): ApiAnimationSequence",
+      "since": "9.3.0"
+    }
+  }
+}

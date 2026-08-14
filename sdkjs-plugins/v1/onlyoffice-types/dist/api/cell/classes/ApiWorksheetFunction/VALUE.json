@@ -1,0 +1,18 @@
+{
+  "description": "Converts a text string that represents a number to a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/VALUE/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.VALUE(\"$3.50\"));"
+  ],
+  "params": [
+    {
+      "description": "The text enclosed in quotation marks or a reference to a cell containing the text which will be converted to a number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "VALUE(arg1: ApiRange | ApiName | string): number"
+}

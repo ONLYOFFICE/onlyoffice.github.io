@@ -1,0 +1,23 @@
+{
+  "description": "Converts a text representation of a number in a given base into a decimal number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DECIMAL/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DECIMAL(101, 2));"
+  ],
+  "params": [
+    {
+      "description": "The number to convert. The string lenght must be less than or equal to 255 characters.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    },
+    {
+      "description": "The base Radix of the number that is converting. An integer greater than or equal to 2 and less than or equal to 36.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DECIMAL(arg1: ApiRange | ApiName | string, arg2: ApiRange | ApiName | number): number"
+}

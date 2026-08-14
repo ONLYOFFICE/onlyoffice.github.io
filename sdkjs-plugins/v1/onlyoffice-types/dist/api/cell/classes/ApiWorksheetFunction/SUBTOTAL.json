@@ -1,0 +1,23 @@
+{
+  "description": "Returns a subtotal in a list or database.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SUBTOTAL/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SUBTOTAL(9, 10, 30, 50, 5));"
+  ],
+  "params": [
+    {
+      "description": "A numeric value that specifies which function to use for the subtotal: **1 (101)** - AVERAGE, **2 (102)** - COUNT,\r**3 (103)** - COUNTA, **4 (104)** - MAX, **5 (105)** - MIN,\r**6 (106)** - PRODUCT, **7 (107)** - STDEV, **8 (108)** - STDEVP, **9 (109)** - SUM, **10 (110)** - VAR, **11 (111)** - VARP.\r1-11 includes manually-hidden rows, while 101-111 excludes them;\rfiltered-out cells are always excluded.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "Up to 255 ranges containing the values for which the subtotal will be returned. The first argument is required, subsequent arguments are optional.",
+      "name": "args",
+      "type": "ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "SUBTOTAL(arg1: ApiRange | ApiName | number, args: ApiRange | ApiName): number"
+}

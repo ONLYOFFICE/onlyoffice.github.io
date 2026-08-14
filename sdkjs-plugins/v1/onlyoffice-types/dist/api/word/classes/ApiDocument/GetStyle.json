@@ -1,0 +1,19 @@
+{
+  "description": "Returns a style by its name.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetStyle/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet noSpacingStyle = doc.GetStyle(\"Heading 6\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(noSpacingStyle);\nparagraph.AddText(\"This is a text in a paragraph styled with the 'Heading 6' style.\");"
+  ],
+  "params": [
+    {
+      "description": "The style name.",
+      "name": "styleName",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "description": "Returns the style, or _null_ if no style with the specified name was found.",
+    "type": "ApiStyle | null"
+  },
+  "signature": "GetStyle(styleName: string): ApiStyle | null"
+}

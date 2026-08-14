@@ -1,0 +1,21 @@
+{
+  "description": "Class representing a paragraph bullet.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiBullet class.",
+      "params": [],
+      "returns": {
+        "type": "\"bullet\""
+      },
+      "signature": "GetClassType(): \"bullet\""
+    },
+    "ToJSON": {
+      "description": "Converts the ApiBullet object into the JSON object.",
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

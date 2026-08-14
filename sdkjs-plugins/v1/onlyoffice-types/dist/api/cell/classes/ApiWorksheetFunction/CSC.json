@@ -1,0 +1,18 @@
+{
+  "description": "Returns the cosecant of an angle.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CSC/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CSC(0.785398));"
+  ],
+  "params": [
+    {
+      "description": "The angle in radians for which the cosecant will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CSC(arg1: ApiRange | ApiName | number): number"
+}

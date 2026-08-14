@@ -1,0 +1,8 @@
+{
+  "description": "Class representing a document.",
+  "extends": [
+    "ApiDocumentContent"
+  ],
+  "methodCount": 142,
+  "sharded": true
+}

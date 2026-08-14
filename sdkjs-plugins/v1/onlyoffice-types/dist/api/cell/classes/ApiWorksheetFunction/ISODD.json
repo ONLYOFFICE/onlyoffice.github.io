@@ -1,0 +1,18 @@
+{
+  "description": "Returns **true** if a number is odd.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ISODD/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet result = func.ISODD(\"94\");\nworksheet.GetRange(\"C3\").SetValue(result);"
+  ],
+  "params": [
+    {
+      "description": "The value to test.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ISODD(arg1: ApiRange | ApiName | number): boolean"
+}

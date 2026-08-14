@@ -1,0 +1,10 @@
+{
+  "description": "Retrieves the core properties interface for the current document.\nThis method is used to view or modify standard metadata such as title, author, and keywords.",
+  "params": [],
+  "returns": {
+    "description": "The core document properties object.",
+    "type": "ApiCore"
+  },
+  "signature": "GetCore(): ApiCore",
+  "since": "9.0.0"
+}

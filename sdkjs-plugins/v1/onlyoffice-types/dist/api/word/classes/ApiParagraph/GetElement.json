@@ -1,0 +1,18 @@
+{
+  "description": "Returns a paragraph element using the position specified.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetElement/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.RemoveAllElements();\nlet run = Api.CreateRun();\nrun.AddText(\"This is the text for the first text run. Do not forget a space at its end to separate from the second one. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the text for the second run. We will set it bold afterwards. It also needs space at its end. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the text for the third run. It ends the paragraph.\");\nparagraph.AddElement(run);\nrun = paragraph.GetElement(1);\nrun.SetBold(true);\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The position where the element which content we want to get must be located.",
+      "name": "nPos",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ParagraphContent"
+  },
+  "signature": "GetElement(nPos: number): ParagraphContent"
+}

@@ -1,0 +1,150 @@
+{
+  "description": "Class representing a rich paragraph.",
+  "extends": [
+    "ApiRichParaPr"
+  ],
+  "methods": {
+    "AddElement": {
+      "description": "Adds an element to the current paragraph.",
+      "params": [
+        {
+          "description": "The element which will be added at the current position.",
+          "name": "richRun",
+          "type": "ApiRichRun"
+        },
+        {
+          "description": "The position where the current element will be added. If this value is not\rspecified, then the element will be added at the end of the current paragraph.",
+          "name": "pos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddElement(richRun: ApiRichRun, pos?: number): boolean"
+    },
+    "AddText": {
+      "description": "Adds some text to the current paragraph.",
+      "params": [
+        {
+          "description": "The text that we want to insert into the current paragraph.",
+          "name": "text",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "ApiRichRun"
+      },
+      "signature": "AddText(text: string): ApiRichRun"
+    },
+    "Copy": {
+      "description": "Creates a paragraph copy.",
+      "params": [],
+      "returns": {
+        "type": "ApiRichParagraph"
+      },
+      "signature": "Copy(): ApiRichParagraph"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRichParagraph class.",
+      "params": [],
+      "returns": {
+        "type": "\"richParagraph\""
+      },
+      "signature": "GetClassType(): \"richParagraph\""
+    },
+    "GetElement": {
+      "description": "Returns a paragraph element using the position specified.",
+      "params": [
+        {
+          "description": "The position where the element which content we want to get must be located.",
+          "name": "pos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRichRun"
+      },
+      "signature": "GetElement(pos: number): ApiRichRun"
+    },
+    "GetNext": {
+      "description": "Returns the next paragraph.",
+      "params": [],
+      "returns": {
+        "description": "returns null if paragraph is last.",
+        "type": "ApiRichParagraph"
+      },
+      "signature": "GetNext(): ApiRichParagraph"
+    },
+    "GetParaPr": {
+      "description": "Returns the paragraph properties.",
+      "params": [],
+      "returns": {
+        "type": "ApiRichParaPr"
+      },
+      "signature": "GetParaPr(): ApiRichParaPr"
+    },
+    "GetPrevious": {
+      "description": "Returns the previous paragraph.",
+      "params": [],
+      "returns": {
+        "description": "returns null if paragraph is first.",
+        "type": "ApiRichParagraph"
+      },
+      "signature": "GetPrevious(): ApiRichParagraph"
+    },
+    "Last": {
+      "description": "Returns the last element of the paragraph.",
+      "params": [],
+      "returns": {
+        "type": "ApiRichRun"
+      },
+      "signature": "Last(): ApiRichRun"
+    },
+    "Push": {
+      "description": "Adds an element to the current paragraph.",
+      "params": [
+        {
+          "description": "The element to add at the end of the paragraph.",
+          "name": "richRun",
+          "type": "ParagraphContent"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Push(richRun: ParagraphContent): boolean"
+    },
+    "SetParaPr": {
+      "description": "Sets the paragraph properties.",
+      "params": [
+        {
+          "description": "The paragraph properties to apply.",
+          "name": "paraPr",
+          "type": "ApiRichParaPr"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetParaPr(paraPr: ApiRichParaPr): boolean"
+    },
+    "SetReadingOrder": {
+      "description": "Specifies the reading order for the current paragraph.\nPossible values are:\n**null** - use the standart direction parameter;\n**\"ltr\"** - left-to-right text direction;\n**\"rtl\"** - right-to-left text direction.",
+      "params": [
+        {
+          "description": "The reading order.",
+          "name": "readingOrder",
+          "optional": true,
+          "type": "ReadingOrder"
+        }
+      ],
+      "returns": {
+        "description": "Returns the current paragraph itself (ApiRichParagraph).",
+        "type": "ApiRichParagraph"
+      },
+      "signature": "SetReadingOrder(readingOrder?: ReadingOrder): ApiRichParagraph"
+    }
+  }
+}

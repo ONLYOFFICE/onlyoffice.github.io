@@ -1,0 +1,28 @@
+{
+  "description": "Replaces the current image with an image specified.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ReplaceCurrentImage/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", 60 * 36000, 35 * 36000);\nparagraph.AddDrawing(drawing);\ndrawing.Select();\ndoc.ReplaceCurrentImage(\"https://helpcenter.onlyoffice.com/images/Help/GettingStarted/Documents/big/EditDocument.png\", 60 * 36000, 35 * 36000);"
+  ],
+  "params": [
+    {
+      "description": "The image source where the image to be inserted should be taken from (currently, only internet URL or Base64 encoded images are supported).",
+      "name": "sImageUrl",
+      "type": "string"
+    },
+    {
+      "description": "The image width in English measure units.",
+      "name": "Width",
+      "type": "EMU"
+    },
+    {
+      "description": "The image height in English measure units.",
+      "name": "Height",
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ReplaceCurrentImage(sImageUrl: string, Width: EMU, Height: EMU): boolean"
+}

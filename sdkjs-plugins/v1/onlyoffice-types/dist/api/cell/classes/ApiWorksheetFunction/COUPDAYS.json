@@ -1,0 +1,34 @@
+{
+  "description": "Returns the number of days in the coupon period that contains the settlement date.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUPDAYS/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.COUPDAYS(\"1/10/2018\", \"6/15/2019\", 4, 1));"
+  ],
+  "params": [
+    {
+      "description": "The security settlement date, expressed as a serial date number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The maturity date of the security, expressed as a serial date number.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of interest payments per year. The possible values are: 1 for annual payments, 2 for semiannual payments, 4 for quarterly payments.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The day count basis to use: **0** or omitted - US (NASD) 30/360; **1** - Actual/actual; **2** - Actual/360; **3** - Actual/365; **4** - European 30/360.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "COUPDAYS(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4?: ApiRange | ApiName | number): number"
+}

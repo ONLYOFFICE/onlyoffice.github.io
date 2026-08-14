@@ -1,0 +1,14 @@
+{
+  "description": "Specifies font size for labels of the horizontal axis.",
+  "params": [
+    {
+      "description": "The text size value measured in points.",
+      "name": "nFontSize",
+      "type": "pt"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetHorAxisLabelsFontSize(nFontSize: pt): boolean"
+}

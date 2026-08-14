@@ -1,0 +1,23 @@
+{
+  "description": "Returns the number of days between the two dates.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DAYS/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.DAYS(\"3/31/2018\", \"3/16/2018\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "Start date from which days will be counted.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "End date until which days will be counted.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DAYS(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

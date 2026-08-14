@@ -1,0 +1,9 @@
+{
+  "description": "Inserts a blank page to the current location.",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "InsertBlankPage(): boolean",
+  "since": "9.0.4"
+}

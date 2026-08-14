@@ -1,0 +1,54 @@
+{
+  "description": "Class representing a small text block called 'run'.",
+  "extends": [
+    "ApiRichTextPr"
+  ],
+  "methods": {
+    "Copy": {
+      "description": "Creates a copy of the current run.",
+      "params": [],
+      "returns": {
+        "type": "ApiRichRun"
+      },
+      "signature": "Copy(): ApiRichRun"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRichRun class.",
+      "params": [],
+      "returns": {
+        "type": "\"richRun\""
+      },
+      "signature": "GetClassType(): \"richRun\""
+    },
+    "GetParentParagraph": {
+      "description": "Returns a parent paragraph of the current run.",
+      "params": [],
+      "returns": {
+        "type": "ApiRichParagraph"
+      },
+      "signature": "GetParentParagraph(): ApiRichParagraph"
+    },
+    "GetTextPr": {
+      "description": "Returns the text properties of the current run.",
+      "params": [],
+      "returns": {
+        "type": "ApiRichTextPr"
+      },
+      "signature": "GetTextPr(): ApiRichTextPr"
+    },
+    "SetTextPr": {
+      "description": "Sets the text properties to the current run.",
+      "params": [
+        {
+          "description": "The text properties that will be set to the current run.",
+          "name": "textPr",
+          "type": "ApiRichTextPr"
+        }
+      ],
+      "returns": {
+        "type": "ApiRichTextPr"
+      },
+      "signature": "SetTextPr(textPr: ApiRichTextPr): ApiRichTextPr"
+    }
+  }
+}

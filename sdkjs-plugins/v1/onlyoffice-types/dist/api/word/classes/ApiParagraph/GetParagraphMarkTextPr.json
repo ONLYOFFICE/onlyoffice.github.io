@@ -1,0 +1,12 @@
+{
+  "description": "Returns the text properties of the paragraph mark which is used to mark the paragraph end. The mark can also acquire\ncommon text properties like bold, italic, underline, etc.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetParagraphMarkTextPr/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We set the font size, font color and spacing for the paragraph mark. \");\nparagraph.AddText(\"You can see it if you download the document, open it and enable the invisible symbols display.\");\nlet paragraphMarkTextPr = paragraph.GetParagraphMarkTextPr();\nparagraphMarkTextPr.SetFontSize(52);\nparagraphMarkTextPr.SetColor(255, 255, 0, false);\nparagraphMarkTextPr.SetSpacing(5);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiTextPr"
+  },
+  "signature": "GetParagraphMarkTextPr(): ApiTextPr"
+}

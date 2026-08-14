@@ -1,0 +1,106 @@
+{
+  "description": "Class representing a table row.",
+  "extends": [
+    "ApiTableRowPr"
+  ],
+  "methods": {
+    "GetCell": {
+      "description": "Returns a cell by its position in the current row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetCell/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is a sample text in the cell of the first row.\");\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The cell position in the table row.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiTableCell"
+      },
+      "signature": "GetCell(nPos: number): ApiTableCell"
+    },
+    "GetCellsCount": {
+      "description": "Returns a number of cells in the current row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetCellsCount/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar nCellsCount = oRow.GetCellsCount();\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"The number of cells in the row: \" + nCellsCount);\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCellsCount(): number"
+    },
+    "GetClassType": {
+      "description": "Returns the type of the ApiTableRow class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\nvar sClassType = oRow.GetClassType();\noParagraph.AddText(\"Class type: \" + sClassType);\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"tableRow\""
+      },
+      "signature": "GetClassType(): \"tableRow\""
+    },
+    "GetHeight": {
+      "description": "Returns the height of the current table row.",
+      "params": [],
+      "returns": {
+        "type": "EMU | null"
+      },
+      "signature": "GetHeight(): EMU | null",
+      "since": "9.4.0"
+    },
+    "GetNext": {
+      "description": "Returns the next row if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null if row is last.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetNext(): ApiTableRow | null"
+    },
+    "GetParentTable": {
+      "description": "Returns the parent table of the current row.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null"
+    },
+    "GetPrevious": {
+      "description": "Returns the previous row if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null if row is first.",
+        "type": "ApiTableRow | null"
+      },
+      "signature": "GetPrevious(): ApiTableRow | null"
+    },
+    "SetHeight": {
+      "description": "Sets the height to the current table row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/SetHeight/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\noRow.SetHeight(30 * 36000);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+      ],
+      "params": [
+        {
+          "description": "The row height in English measure units.",
+          "name": "nValue",
+          "optional": true,
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "EMU | null"
+      },
+      "signature": "SetHeight(nValue?: EMU): EMU | null",
+      "since": "5.1.0"
+    }
+  }
+}

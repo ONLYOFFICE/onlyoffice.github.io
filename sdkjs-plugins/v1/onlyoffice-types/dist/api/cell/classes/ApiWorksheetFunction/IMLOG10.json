@@ -1,0 +1,18 @@
+{
+  "description": "Returns the base-10 logarithm of a complex number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMLOG10/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMLOG10(\"-2+2.5i\"));"
+  ],
+  "params": [
+    {
+      "description": "A complex number expressed in the *x + yi* or *x + yj* form.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "IMLOG10(arg1: ApiRange | ApiName | number): number"
+}

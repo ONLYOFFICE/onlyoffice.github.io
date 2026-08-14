@@ -1,0 +1,19 @@
+{
+  "description": "Sets the highlight to the forms in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SetFormsHighlight/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ndoc.SetFormsHighlight(255, 111, 61);"
+  ],
+  "params": [
+    {
+      "description": "The highlight color for the forms.",
+      "name": "color",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetFormsHighlight(color: ApiColor): boolean",
+  "since": "9.1.0"
+}

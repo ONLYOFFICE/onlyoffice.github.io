@@ -1,0 +1,15 @@
+{
+  "description": "Sets the rotation angle to the current drawing object.",
+  "params": [
+    {
+      "description": "New drawing rotation angle.",
+      "name": "nRotAngle",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetRotation(nRotAngle: number): boolean",
+  "since": "9.0.0"
+}

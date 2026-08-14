@@ -1,0 +1,283 @@
+{
+  "description": "Class representing a path in geometry.",
+  "methods": {
+    "ArcTo": {
+      "description": "Draws an arc from the current point using the specified width and height radii, start angle, and sweep angle.",
+      "params": [
+        {
+          "description": "The width radius.",
+          "name": "wR",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The height radius.",
+          "name": "hR",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The start angle.",
+          "name": "stAng",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The sweep angle.",
+          "name": "swAng",
+          "type": "GeometryCoordinate"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "ArcTo(wR: GeometryCoordinate, hR: GeometryCoordinate, stAng: GeometryCoordinate, swAng: GeometryCoordinate): void",
+      "since": "9.1.0"
+    },
+    "Close": {
+      "description": "Closes the current path.",
+      "params": [],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "Close(): void",
+      "since": "9.1.0"
+    },
+    "CubicBezTo": {
+      "description": "Draws a cubic Bezier curve from the current point to the specified end point using two control points.",
+      "params": [
+        {
+          "description": "The X coordinate of the first control point.",
+          "name": "x1",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The Y coordinate of the first control point.",
+          "name": "y1",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The X coordinate of the second control point.",
+          "name": "x2",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The Y coordinate of the second control point.",
+          "name": "y2",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The X coordinate of the end point.",
+          "name": "x3",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The Y coordinate of the end point.",
+          "name": "y3",
+          "type": "GeometryCoordinate"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "CubicBezTo(x1: GeometryCoordinate, y1: GeometryCoordinate, x2: GeometryCoordinate, y2: GeometryCoordinate, x3: GeometryCoordinate, y3: GeometryCoordinate): void",
+      "since": "9.1.0"
+    },
+    "GetCommand": {
+      "description": "Returns a specific path command by its index.",
+      "params": [
+        {
+          "description": "The path command index.",
+          "name": "nIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiPathCommand | null"
+      },
+      "signature": "GetCommand(nIndex: number): ApiPathCommand | null",
+      "since": "9.1.0"
+    },
+    "GetCommandCount": {
+      "description": "Returns the number of commands for the current path.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCommandCount(): number",
+      "since": "9.1.0"
+    },
+    "GetCommands": {
+      "description": "Returns all commands of the current path.",
+      "params": [],
+      "returns": {
+        "type": "ApiPathCommand[]"
+      },
+      "signature": "GetCommands(): ApiPathCommand[]",
+      "since": "9.1.0"
+    },
+    "GetFill": {
+      "description": "Returns the fill type of the current path.",
+      "params": [],
+      "returns": {
+        "type": "PathFillType"
+      },
+      "signature": "GetFill(): PathFillType",
+      "since": "9.1.0"
+    },
+    "GetHeight": {
+      "description": "Returns the height of the current path.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetHeight(): number",
+      "since": "9.1.0"
+    },
+    "GetStroke": {
+      "description": "Returns true if the current path is stroked, otherwise false.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetStroke(): boolean",
+      "since": "9.1.0"
+    },
+    "GetWidth": {
+      "description": "Returns the width of the current path.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetWidth(): number",
+      "since": "9.1.0"
+    },
+    "LineTo": {
+      "description": "Draws a line from the current point to the specified coordinates.",
+      "params": [
+        {
+          "description": "The X coordinate.",
+          "name": "x",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The Y coordinate.",
+          "name": "y",
+          "type": "GeometryCoordinate"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "LineTo(x: GeometryCoordinate, y: GeometryCoordinate): void",
+      "since": "9.1.0"
+    },
+    "MoveTo": {
+      "description": "Moves the current path to the specified coordinates.",
+      "params": [
+        {
+          "description": "The X coordinate.",
+          "name": "x",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The Y coordinate.",
+          "name": "y",
+          "type": "GeometryCoordinate"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "MoveTo(x: GeometryCoordinate, y: GeometryCoordinate): void",
+      "since": "9.1.0"
+    },
+    "QuadBezTo": {
+      "description": "Draws a quadratic Bezier curve from the current point to the specified end point using a control point.",
+      "params": [
+        {
+          "description": "The X coordinate of the control point.",
+          "name": "x1",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The Y coordinate of the control point.",
+          "name": "y1",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The X coordinate of the end point.",
+          "name": "x2",
+          "type": "GeometryCoordinate"
+        },
+        {
+          "description": "The Y coordinate of the end point.",
+          "name": "y2",
+          "type": "GeometryCoordinate"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "QuadBezTo(x1: GeometryCoordinate, y1: GeometryCoordinate, x2: GeometryCoordinate, y2: GeometryCoordinate): void",
+      "since": "9.1.0"
+    },
+    "SetFill": {
+      "description": "Sets the fill type to the current path.",
+      "params": [
+        {
+          "description": "The path fill type.",
+          "name": "sFill",
+          "type": "PathFillType"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetFill(sFill: PathFillType): void",
+      "since": "9.1.0"
+    },
+    "SetHeight": {
+      "description": "Sets the height to the current path.",
+      "params": [
+        {
+          "description": "The path height in EMU.",
+          "name": "nHeight",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetHeight(nHeight: number): void",
+      "since": "9.1.0"
+    },
+    "SetStroke": {
+      "description": "Sets whether the current path is stroked.",
+      "params": [
+        {
+          "description": "Specifies if the path is stroked (true) or not (false).",
+          "name": "bStroke",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetStroke(bStroke: boolean): void",
+      "since": "9.1.0"
+    },
+    "SetWidth": {
+      "description": "Sets the width to the current path.",
+      "params": [
+        {
+          "description": "The path width in EMU.",
+          "name": "nWidth",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetWidth(nWidth: number): void",
+      "since": "9.1.0"
+    }
+  }
+}

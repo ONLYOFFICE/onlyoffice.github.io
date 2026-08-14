@@ -1,0 +1,23 @@
+{
+  "description": "Returns a number rounded to the desired multiple.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MROUND/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.MROUND(14.35, 0.4));"
+  ],
+  "params": [
+    {
+      "description": "The value to round.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The multiple to round the number to.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MROUND(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

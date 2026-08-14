@@ -1,0 +1,860 @@
+{
+  "description": "Class representing an Ole object.",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methods": {
+    "AddBreak": {
+      "description": "Inserts a break at the specified location in the main document.",
+      "params": [
+        {
+          "description": "The break type: page break (0) or line break (1).",
+          "name": "breakType",
+          "type": "number"
+        },
+        {
+          "description": "The position where the page or line break will be inserted (\"before\" or \"after\" the current drawing).",
+          "name": "position",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns false if drawing object haven't parent run or params are invalid.",
+        "type": "boolean"
+      },
+      "signature": "AddBreak(breakType: number, position: string): boolean"
+    },
+    "Copy": {
+      "description": "Copies the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiDrawing | null"
+      },
+      "signature": "Copy(): ApiDrawing | null"
+    },
+    "Delete": {
+      "description": "Deletes the current graphic object.",
+      "params": [],
+      "returns": {
+        "description": "returns false if drawing object haven't parent.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "Fill": {
+      "description": "Sets the fill formatting properties to the current graphic object.",
+      "params": [
+        {
+          "description": "The fill type used to fill the graphic object.",
+          "name": "oFill",
+          "type": "ApiFill"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid.",
+        "type": "boolean"
+      },
+      "signature": "Fill(oFill: ApiFill): boolean"
+    },
+    "GetAllowOverlap": {
+      "description": "Returns whether the drawing object is allowed to overlap other drawing objects.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetAllowOverlap(): boolean",
+      "since": "9.5.0"
+    },
+    "GetApplicationId": {
+      "description": "Returns the application ID from the current OLE object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiOleObject/Methods/GetApplicationId/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);\nlet appId = oleObject.GetApplicationId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The OLE object application ID: \" + appId);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetApplicationId(): string"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiOleObject class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiOleObject/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);\nlet type = oleObject.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + type);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"oleObject\""
+      },
+      "signature": "GetClassType(): \"oleObject\""
+    },
+    "GetContent": {
+      "description": "Returns the drawing inner contents where a paragraph or text runs can be inserted if it exists.",
+      "params": [],
+      "returns": {
+        "type": "ApiDocumentContent"
+      },
+      "signature": "GetContent(): ApiDocumentContent"
+    },
+    "GetData": {
+      "description": "Returns the string data from the current OLE object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiOleObject/Methods/GetData/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);\nlet data = oleObject.GetData();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The OLE object data: \" + data);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetData(): string"
+    },
+    "GetDescription": {
+      "description": "Gets the description of the current drawing.",
+      "params": [],
+      "returns": {
+        "description": "The description of the current drawing, or null if not set.",
+        "type": "string | null"
+      },
+      "signature": "GetDescription(): string | null",
+      "since": "9.5.0"
+    },
+    "GetFill": {
+      "description": "Gets the fill formatting properties from the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null",
+      "since": "9.5.0"
+    },
+    "GetFlipH": {
+      "description": "Get horizontal flip of current drawing.",
+      "params": [],
+      "returns": {
+        "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",
+        "type": "boolean | null"
+      },
+      "signature": "GetFlipH(): boolean | null",
+      "since": "9.3.0"
+    },
+    "GetFlipV": {
+      "description": "Get vertical flip of current drawing.",
+      "params": [],
+      "returns": {
+        "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
+        "type": "boolean | null"
+      },
+      "signature": "GetFlipV(): boolean | null",
+      "since": "9.3.0"
+    },
+    "GetHeight": {
+      "description": "Returns the height of the current drawing.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetHeight(): EMU"
+    },
+    "GetLine": {
+      "description": "Gets the outline properties from the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiStroke | null"
+      },
+      "signature": "GetLine(): ApiStroke | null",
+      "since": "9.5.0"
+    },
+    "GetLockAspect": {
+      "description": "Returns whether the aspect ratio of the drawing is locked.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetLockAspect(): boolean",
+      "since": "9.5.0"
+    },
+    "GetLockValue": {
+      "description": "Returns the lock value for the specified lock type of the current drawing.",
+      "params": [
+        {
+          "description": "Lock type in the string format.",
+          "name": "sType",
+          "type": "DrawingLockType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetLockValue(sType: DrawingLockType): boolean"
+    },
+    "GetName": {
+      "description": "Returns the name of the current drawing.",
+      "params": [],
+      "returns": {
+        "description": "Name of drawing.",
+        "type": "string"
+      },
+      "signature": "GetName(): string",
+      "since": "9.3.0"
+    },
+    "GetNextDrawing": {
+      "description": "Returns the next inline drawing object if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null if drawing object is last.",
+        "type": "ApiDrawing | null"
+      },
+      "signature": "GetNextDrawing(): ApiDrawing | null"
+    },
+    "GetParentContentControl": {
+      "description": "Returns a parent content control that contains the graphic object.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent content control doesn't exist.",
+        "type": "ApiBlockLvlSdt | null"
+      },
+      "signature": "GetParentContentControl(): ApiBlockLvlSdt | null"
+    },
+    "GetParentParagraph": {
+      "description": "Returns a parent paragraph that contains the graphic object.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent paragraph doesn't exist.",
+        "type": "ApiParagraph | null"
+      },
+      "signature": "GetParentParagraph(): ApiParagraph | null"
+    },
+    "GetParentTable": {
+      "description": "Returns a parent table that contains the graphic object.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent table doesn't exist.",
+        "type": "ApiTable | null"
+      },
+      "signature": "GetParentTable(): ApiTable | null"
+    },
+    "GetParentTableCell": {
+      "description": "Returns a parent table cell that contains the graphic object.",
+      "params": [],
+      "returns": {
+        "description": "returns null if parent cell doesn't exist.",
+        "type": "ApiTableCell | null"
+      },
+      "signature": "GetParentTableCell(): ApiTableCell | null"
+    },
+    "GetPrevDrawing": {
+      "description": "Returns the previous inline drawing object if exists.",
+      "params": [],
+      "returns": {
+        "description": "returns null if drawing object is first.",
+        "type": "ApiDrawing | null"
+      },
+      "signature": "GetPrevDrawing(): ApiDrawing | null"
+    },
+    "GetRotation": {
+      "description": "Returns the rotation angle of the current drawing object.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRotation(): number",
+      "since": "9.0.0"
+    },
+    "GetShadow": {
+      "description": "Returns the shadow of the current graphic object.",
+      "params": [],
+      "returns": {
+        "type": "ApiShadow | null"
+      },
+      "signature": "GetShadow(): ApiShadow | null",
+      "since": "9.5.0"
+    },
+    "GetTitle": {
+      "description": "Gets the title of the current drawing.",
+      "params": [],
+      "returns": {
+        "description": "The title of the current drawing, or null if not set.",
+        "type": "string | null"
+      },
+      "signature": "GetTitle(): string | null",
+      "since": "9.5.0"
+    },
+    "GetWidth": {
+      "description": "Returns the width of the current drawing.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetWidth(): EMU"
+    },
+    "InsertInContentControl": {
+      "description": "Wraps the graphic object with a rich text content control.",
+      "params": [
+        {
+          "description": "Defines if this method returns the ApiBlockLvlSdt (nType === 1) or ApiDrawing (any value except 1) object.",
+          "name": "nType",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiDrawing | ApiBlockLvlSdt"
+      },
+      "signature": "InsertInContentControl(nType: number): ApiDrawing | ApiBlockLvlSdt"
+    },
+    "InsertParagraph": {
+      "description": "Inserts a paragraph at the specified position.",
+      "params": [
+        {
+          "description": "Text or paragraph.",
+          "name": "paragraph",
+          "type": "string | ApiParagraph"
+        },
+        {
+          "description": "The position where the text or paragraph will be inserted (\"before\" or \"after\" the drawing specified).",
+          "name": "sPosition",
+          "type": "string"
+        },
+        {
+          "description": "Defines if this method returns a new paragraph (true) or the current ApiDrawing (false).",
+          "name": "beRNewPara",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns null if parent paragraph doesn't exist.",
+        "type": "ApiParagraph | ApiDrawing"
+      },
+      "signature": "InsertParagraph(paragraph: string | ApiParagraph, sPosition: string, beRNewPara: boolean): ApiParagraph | ApiDrawing"
+    },
+    "ScaleHeight": {
+      "description": "Scales the height of the figure using the specified coefficient.",
+      "params": [
+        {
+          "description": "The coefficient by which the figure height will be scaled.",
+          "name": "coefficient",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "return false if param is invalid.",
+        "type": "boolean"
+      },
+      "signature": "ScaleHeight(coefficient: number): boolean"
+    },
+    "ScaleWidth": {
+      "description": "Scales the width of the figure using the specified coefficient.",
+      "params": [
+        {
+          "description": "The coefficient by which the figure width will be scaled.",
+          "name": "coefficient",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "return false if param is invali.",
+        "type": "boolean"
+      },
+      "signature": "ScaleWidth(coefficient: number): boolean"
+    },
+    "Select": {
+      "description": "Selects the current graphic object.",
+      "params": [
+        {
+          "description": "Specifies whether the selection should replace the current selection (true) or be added to it (false).",
+          "name": "isReplace",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(isReplace?: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetAllowOverlap": {
+      "description": "Sets whether the drawing object is allowed to overlap other drawing objects.",
+      "params": [
+        {
+          "description": "Specifies whether this drawing object can overlap other drawing objects.",
+          "name": "bOverlap",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetAllowOverlap(bOverlap: boolean): void",
+      "since": "9.5.0"
+    },
+    "SetApplicationId": {
+      "description": "Sets the application ID to the current OLE object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiOleObject/Methods/SetApplicationId/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);\noleObject.SetApplicationId(\"asc.{E5773A43-F9B3-4E81-81D9-CE0A132470E7}\");"
+      ],
+      "params": [
+        {
+          "description": "The application ID associated with the curent OLE object.",
+          "name": "sAppId",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetApplicationId(sAppId: string): boolean"
+    },
+    "SetData": {
+      "description": "Sets the data to the current OLE object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiOleObject/Methods/SetData/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);\noleObject.SetData(\"https://youtu.be/eJxpkjQG6Ew\");"
+      ],
+      "params": [
+        {
+          "description": "The OLE object string data.",
+          "name": "sData",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetData(sData: string): boolean"
+    },
+    "SetDescription": {
+      "description": "Sets the description of the current drawing.",
+      "params": [
+        {
+          "description": "The description to set for the current drawing.",
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetDescription(description: string): boolean",
+      "since": "9.5.0"
+    },
+    "SetDistances": {
+      "description": "Specifies the minimum distance which will be maintained between the edges of the current drawing object and any\nsubsequent text.",
+      "params": [
+        {
+          "description": "The distance from the left side of the current object and the subsequent text run measured in English measure units.",
+          "name": "nLeft",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the top side of the current object and the preceding text run measured in English measure units.",
+          "name": "nTop",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the right side of the current object and the subsequent text run measured in English measure units.",
+          "name": "nRight",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the bottom side of the current object and the subsequent text run measured in English measure units.",
+          "name": "nBottom",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean"
+    },
+    "SetDrawingPrFromDrawing": {
+      "description": "Sets the properties from another drawing to the current drawing.\nThe following properties will be copied: horizontal and vertical alignment, distance between the edges of the current drawing object and any subsequent text, wrapping style, drawing name, title and description.",
+      "params": [
+        {
+          "description": "The drawing which properties will be set to the current drawing.",
+          "name": "oAnotherDrawing",
+          "type": "ApiDrawing"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDrawingPrFromDrawing(oAnotherDrawing: ApiDrawing): boolean"
+    },
+    "SetFlipH": {
+      "description": "Sets the horizontal flip of the current drawing.",
+      "params": [
+        {
+          "description": "Specifies if the figure will be flipped horizontally or not.",
+          "name": "bFlip",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetFlipH(bFlip: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetFlipV": {
+      "description": "Sets the vertical flip of the current drawing.",
+      "params": [
+        {
+          "description": "Specifies if the figure will be flipped vertically or not.",
+          "name": "bFlip",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetFlipV(bFlip: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetHorAlign": {
+      "description": "Specifies how the floating object will be horizontally aligned.",
+      "params": [
+        {
+          "description": "The document element which will be taken as a countdown point for the object horizontal alignment.",
+          "name": "sRelativeFrom",
+          "optional": true,
+          "type": "RelFromH"
+        },
+        {
+          "description": "The alignment type which will be used for the object horizontal alignment.",
+          "name": "sAlign",
+          "optional": true,
+          "type": "\"left\" | \"right\" | \"center\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorAlign(sRelativeFrom?: RelFromH, sAlign?: \"left\" | \"right\" | \"center\"): boolean"
+    },
+    "SetHorFlip": {
+      "description": "Flips the current drawing horizontally.",
+      "params": [
+        {
+          "description": "Specifies if the figure will be flipped horizontally or not.",
+          "name": "bFlip",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorFlip(bFlip: boolean): boolean"
+    },
+    "SetHorPosition": {
+      "description": "Sets the absolute measurement for the horizontal positioning of the floating object.",
+      "params": [
+        {
+          "description": "The document element which will be taken as a countdown point for the object horizontal alignment.",
+          "name": "sRelativeFrom",
+          "type": "RelFromH"
+        },
+        {
+          "description": "The distance from the right side of the document element to the floating object. Use EMU for absolute distance or a number for percent (1 = 1%) when bPercent=true.",
+          "name": "nDistance",
+          "type": "EMU | number"
+        },
+        {
+          "description": "The option defining whether the horizontal alignment offset is specified in percent.",
+          "name": "bPercent",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetLockAspect": {
+      "description": "Sets whether the aspect ratio of the drawing is locked.",
+      "params": [
+        {
+          "description": "Specifies whether the aspect ratio of this drawing is locked.",
+          "name": "bAspect",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "Returns `true` if the lock aspect was successfully set, otherwise returns `false`.",
+        "type": "boolean"
+      },
+      "signature": "SetLockAspect(bAspect: boolean): boolean",
+      "since": "9.5.0"
+    },
+    "SetLockValue": {
+      "description": "Sets the lock value to the specified lock type of the current drawing.",
+      "params": [
+        {
+          "description": "Lock type in the string format.",
+          "name": "sType",
+          "type": "DrawingLockType"
+        },
+        {
+          "description": "Specifies if the specified lock is applied to the current drawing.",
+          "name": "bValue",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLockValue(sType: DrawingLockType, bValue: boolean): boolean"
+    },
+    "SetName": {
+      "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
+      "params": [
+        {
+          "description": "The name which will be set to the current drawing.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the name was successfully set, otherwise returns false.",
+        "type": "boolean"
+      },
+      "signature": "SetName(name: string): boolean",
+      "since": "9.3.0"
+    },
+    "SetOutLine": {
+      "description": "Sets the outline properties to the specified graphic object.",
+      "params": [
+        {
+          "description": "The stroke used to create the graphic object outline.",
+          "name": "stroke",
+          "type": "ApiStroke"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid.",
+        "type": "boolean"
+      },
+      "signature": "SetOutLine(stroke: ApiStroke): boolean"
+    },
+    "SetRelativeHeight": {
+      "description": "Sets the relative height of the object (image, shape, chart) bounding box.",
+      "params": [
+        {
+          "description": "The document element which will be taken as a countdown point for the object height.",
+          "name": "relativeFrom",
+          "optional": true,
+          "type": "SizeRelFromV"
+        },
+        {
+          "description": "The height of the object as a percentage of the specified element.",
+          "name": "percent",
+          "optional": true,
+          "type": "percentage"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean",
+      "since": "9.3.0"
+    },
+    "SetRelativeWidth": {
+      "description": "Sets the relative width of the object (image, shape, chart) bounding box.",
+      "params": [
+        {
+          "description": "The document element which will be taken as a countdown point for the object width.",
+          "name": "relativeFrom",
+          "optional": true,
+          "type": "SizeRelFromH"
+        },
+        {
+          "description": "The width of the object as a percentage of the specified element.",
+          "name": "percent",
+          "optional": true,
+          "type": "percentage"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean",
+      "since": "9.3.0"
+    },
+    "SetRotation": {
+      "description": "Sets the rotation angle to the current drawing object.",
+      "params": [
+        {
+          "description": "New drawing rotation angle.",
+          "name": "nRotAngle",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRotation(nRotAngle: number): boolean",
+      "since": "9.0.0"
+    },
+    "SetShadow": {
+      "description": "Sets the shadow to the current graphic object.",
+      "params": [
+        {
+          "description": "The shadow to apply, or null to remove the current shadow.",
+          "name": "shadow",
+          "type": "ApiShadow"
+        }
+      ],
+      "returns": {
+        "description": "returns false if the graphic object does not support shadow.",
+        "type": "boolean"
+      },
+      "signature": "SetShadow(shadow: ApiShadow): boolean",
+      "since": "9.5.0"
+    },
+    "SetSize": {
+      "description": "Sets the size of the object (image, shape, chart) bounding box.",
+      "params": [
+        {
+          "description": "The object width measured in English measure units.",
+          "name": "nWidth",
+          "type": "EMU"
+        },
+        {
+          "description": "The object height measured in English measure units.",
+          "name": "nHeight",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSize(nWidth: EMU, nHeight: EMU): boolean"
+    },
+    "SetTitle": {
+      "description": "Sets the title of the current drawing.",
+      "params": [
+        {
+          "description": "The title to set for the current drawing.",
+          "name": "title",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the operation is successful, false otherwise.",
+        "type": "boolean"
+      },
+      "signature": "SetTitle(title: string): boolean",
+      "since": "9.5.0"
+    },
+    "SetVerAlign": {
+      "description": "Specifies how the floating object will be vertically aligned.",
+      "params": [
+        {
+          "description": "The document element which will be taken as a countdown point for the object vertical alignment.",
+          "name": "sRelativeFrom",
+          "optional": true,
+          "type": "RelFromV"
+        },
+        {
+          "description": "The alingment type which will be used for the object vertical alignment.",
+          "name": "sAlign",
+          "optional": true,
+          "type": "\"top\" | \"bottom\" | \"center\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: \"top\" | \"bottom\" | \"center\"): boolean"
+    },
+    "SetVerPosition": {
+      "description": "Sets the absolute measurement for the vertical positioning of the floating object.",
+      "params": [
+        {
+          "description": "The document element which will be taken as a countdown point for the object vertical alignment.",
+          "name": "sRelativeFrom",
+          "type": "RelFromV"
+        },
+        {
+          "description": "The distance from the bottom part of the document element to the floating object. Use EMU for absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.",
+          "name": "nDistance",
+          "type": "EMU | number"
+        },
+        {
+          "description": "The option defining whether the vertical alignment offset is specified in percent.",
+          "name": "bPercent",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetVerPosition(sRelativeFrom: RelFromV, nDistance: EMU | number, bPercent?: boolean): boolean",
+      "since": "9.3.0"
+    },
+    "SetVertFlip": {
+      "description": "Flips the current drawing vertically.",
+      "params": [
+        {
+          "description": "Specifies if the figure will be flipped vertically or not.",
+          "name": "bFlip",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns false if param is invalid.",
+        "type": "boolean"
+      },
+      "signature": "SetVertFlip(bFlip: boolean): boolean"
+    },
+    "SetWrappingStyle": {
+      "description": "Sets the wrapping type of the current object (image, shape, chart). One of the following wrapping style types can be set:\n**\"inline\"** - the object is considered to be a part of the text, like a character, so when the text moves, the object moves as well. In this case the positioning options are inaccessible.\nIf one of the following styles is selected, the object can be moved independently of the text and positioned on the page exactly:\n**\"square\"** - the text wraps the rectangular box that bounds the object.\n**\"tight\"** - the text wraps the actual object edges.\n**\"through\"** - the text wraps around the object edges and fills in the open white space within the object.\n**\"topAndBottom\"** - the text is only above and below the object.\n**\"behind\"** - the text overlaps the object.\n**\"inFront\"** - the object overlaps the text.",
+      "params": [
+        {
+          "description": "The wrapping style type available for the object.",
+          "name": "sType",
+          "type": "\"inline\" | \"square\" | \"tight\" | \"through\" | \"topAndBottom\" | \"behind\" | \"inFront\""
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetWrappingStyle(sType: \"inline\" | \"square\" | \"tight\" | \"through\" | \"topAndBottom\" | \"behind\" | \"inFront\"): boolean"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiDrawing object into the JSON object.",
+      "params": [
+        {
+          "description": "Specifies if the used numberings will be written to the JSON object or not.",
+          "name": "bWriteNumberings",
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies if the used styles will be written to the JSON object or not.",
+          "name": "bWriteStyles",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteNumberings: boolean, bWriteStyles: boolean): object"
+    },
+    "Unselect": {
+      "description": "Removes the current graphic object from the selection.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Unselect(): boolean",
+      "since": "9.3.0"
+    }
+  }
+}

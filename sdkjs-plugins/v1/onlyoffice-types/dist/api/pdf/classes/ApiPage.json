@@ -1,0 +1,142 @@
+{
+  "description": "Class representing a document page.",
+  "methods": {
+    "AddObject": {
+      "description": "Adds an available object to a page.",
+      "params": [
+        {
+          "description": "The annotation, field, or drawing to add to the page.",
+          "name": "object",
+          "type": "FloatObject"
+        }
+      ],
+      "returns": {
+        "type": "FloatObject"
+      },
+      "signature": "AddObject(object: FloatObject): FloatObject"
+    },
+    "GetAllAnnots": {
+      "description": "Gets all annots on page",
+      "params": [],
+      "returns": {
+        "type": "ApiBaseAnnotation[]"
+      },
+      "signature": "GetAllAnnots(): ApiBaseAnnotation[]"
+    },
+    "GetAllDrawings": {
+      "description": "Gets all drawing objects from the page.",
+      "params": [],
+      "returns": {
+        "type": "Drawing[]"
+      },
+      "signature": "GetAllDrawings(): Drawing[]"
+    },
+    "GetAllWidgets": {
+      "description": "Gets page widgets",
+      "params": [],
+      "returns": {
+        "type": "ApiWidget[]"
+      },
+      "signature": "GetAllWidgets(): ApiWidget[]"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiPage class.",
+      "params": [],
+      "returns": {
+        "type": "\"page\""
+      },
+      "signature": "GetClassType(): \"page\""
+    },
+    "GetIndex": {
+      "description": "Gets page index",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetIndex(): number"
+    },
+    "GetRotation": {
+      "description": "Gets page rotation angle",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRotation(): number"
+    },
+    "GetSelectedText": {
+      "description": "Gets selected text on page",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetSelectedText(): string"
+    },
+    "GetSelection": {
+      "description": "Gets page selection.",
+      "params": [],
+      "returns": {
+        "type": "PageSelection"
+      },
+      "signature": "GetSelection(): PageSelection"
+    },
+    "GetSelectionQuads": {
+      "description": "Gets page selection quads",
+      "params": [],
+      "returns": {
+        "type": "Quad[]"
+      },
+      "signature": "GetSelectionQuads(): Quad[]"
+    },
+    "RecognizeContent": {
+      "description": "Recognizes content on the page and returns an array of recognized objects.",
+      "params": [],
+      "returns": {
+        "type": "Drawing[]"
+      },
+      "signature": "RecognizeContent(): Drawing[]"
+    },
+    "Search": {
+      "description": "Search words and returns their quads.",
+      "params": [
+        {
+          "description": "The search options.",
+          "name": "props",
+          "type": "SearchProps"
+        }
+      ],
+      "returns": {
+        "description": "for each result there is an array with its coordinates",
+        "type": "SearchResults"
+      },
+      "signature": "Search(props: SearchProps): SearchResults"
+    },
+    "SetRotation": {
+      "description": "Sets page rotation angle",
+      "params": [
+        {
+          "description": "The rotation angle in degrees. Must be a multiple of 90.",
+          "name": "angle",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRotation(angle: number): boolean"
+    },
+    "SetSelection": {
+      "description": "Sets page selection.",
+      "params": [
+        {
+          "description": "The selection to apply.",
+          "name": "selection",
+          "type": "PageSelection | Rect | Quad | Quad[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSelection(selection: PageSelection | Rect | Quad | Quad[]): boolean"
+    }
+  }
+}

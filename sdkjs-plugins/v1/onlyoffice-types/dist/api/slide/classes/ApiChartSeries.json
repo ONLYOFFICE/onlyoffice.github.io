@@ -1,0 +1,55 @@
+{
+  "description": "Class representing a chart series.",
+  "methods": {
+    "ChangeChartType": {
+      "description": "Tries to change the series type. Returns true if successful.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChartSeries/Methods/ChangeChartType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"comboBarLine\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\nvar aAllSeries = oChart.GetAllSeries();\nvar oSeries, sSeriesType, sTitle = \"\";\noSeries = oChart.GetSeries(0);\nsSeriesType = oSeries.GetChartType();\nsTitle += \"Old Series Type = \" + sSeriesType + \"\\n\";\noSeries.ChangeChartType(\"area\");\nsSeriesType = oSeries.GetChartType();\nsTitle += \"New Series Type = \" + sSeriesType;\noChart.SetTitle(sTitle, 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "Chart type.",
+          "name": "sType",
+          "type": "ChartType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ChangeChartType(sType: ChartType): boolean"
+    },
+    "GetChartType": {
+      "description": "Returns a chart type of the current series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChartSeries/Methods/GetChartType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"comboBarLine\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\nvar aAllSeries = oChart.GetAllSeries();\nvar oSeries, sSeriesType, sTitle = \"\";\noSeries = oChart.GetSeries(0);\nsSeriesType = oSeries.GetChartType();\nsTitle += \"Series Type = \" + sSeriesType + \"\\n\";\noChart.SetTitle(sTitle, 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ChartTypeLegacy"
+      },
+      "signature": "GetChartType(): ChartTypeLegacy"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiChartSeries class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChartSeries/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"comboBarLine\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\nvar aAllSeries = oChart.GetAllSeries();\nvar oSeries, sClassType, sTitle = \"\";\noSeries = oChart.GetSeries(0);\nsClassType = oSeries.GetClassType();\nsTitle += \"Class Type = \" + sClassType + \"\\n\";\noChart.SetTitle(sTitle, 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"chartSeries\""
+      },
+      "signature": "GetClassType(): \"chartSeries\""
+    },
+    "GetType": {
+      "description": "Returns a chart type of the current series using the chart type names from the {@link ChartType} enumeration.",
+      "params": [],
+      "returns": {
+        "type": "ChartType"
+      },
+      "signature": "GetType(): ChartType"
+    }
+  }
+}

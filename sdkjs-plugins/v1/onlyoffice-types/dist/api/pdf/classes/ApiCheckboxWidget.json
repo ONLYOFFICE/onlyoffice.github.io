@@ -1,0 +1,310 @@
+{
+  "description": "Class representing a checkbox field widget.",
+  "extends": [
+    "ApiBaseWidget"
+  ],
+  "methods": {
+    "Delete": {
+      "description": "Removes widget from parent field.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetBackgroundColor": {
+      "description": "Gets widget background color.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetBackgroundColor(): ApiColor"
+    },
+    "GetBorderColor": {
+      "description": "Gets widget border color.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetBorderColor(): ApiColor"
+    },
+    "GetBorderStyle": {
+      "description": "Gets widget border style.",
+      "params": [],
+      "returns": {
+        "type": "WidgetBorderStyle"
+      },
+      "signature": "GetBorderStyle(): WidgetBorderStyle"
+    },
+    "GetBorderWidth": {
+      "description": "Gets widget border width.",
+      "params": [],
+      "returns": {
+        "type": "WidgetBorderWidth"
+      },
+      "signature": "GetBorderWidth(): WidgetBorderWidth"
+    },
+    "GetCheckStyle": {
+      "description": "Gets widget checkbox style.",
+      "params": [],
+      "returns": {
+        "type": "CheckStyle"
+      },
+      "signature": "GetCheckStyle(): CheckStyle"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiCheckboxWidget class.",
+      "params": [],
+      "returns": {
+        "type": "\"checkboxWidget\""
+      },
+      "signature": "GetClassType(): \"checkboxWidget\""
+    },
+    "GetExportValue": {
+      "description": "Gets widget export value.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetExportValue(): string"
+    },
+    "GetPosition": {
+      "description": "Gets widget position.",
+      "params": [],
+      "returns": {
+        "type": "Point"
+      },
+      "signature": "GetPosition(): Point"
+    },
+    "GetRect": {
+      "description": "Sets field rect.",
+      "params": [],
+      "returns": {
+        "type": "Rect"
+      },
+      "signature": "GetRect(): Rect"
+    },
+    "GetTextColor": {
+      "description": "Gets widget text color.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetTextColor(): ApiColor"
+    },
+    "GetTextSize": {
+      "description": "Gets widget text size.\n<note> Text size === 0 means autofit </note>",
+      "params": [],
+      "returns": {
+        "type": "pt"
+      },
+      "signature": "GetTextSize(): pt"
+    },
+    "IsAutoFit": {
+      "description": "Checks if text is autofit.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsAutoFit(): boolean"
+    },
+    "IsChecked": {
+      "description": "Checks if checkbox widget is checked.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsChecked(): boolean"
+    },
+    "IsCheckedByDefault": {
+      "description": "Checks if widget is checked by default.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsCheckedByDefault(): boolean"
+    },
+    "SetAutoFit": {
+      "description": "Sets text autofit.",
+      "params": [
+        {
+          "description": "Specifies whether text autofit is enabled.",
+          "name": "auto",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetAutoFit(auto: boolean): boolean"
+    },
+    "SetBackgroundColor": {
+      "description": "Sets widget background color.",
+      "params": [
+        {
+          "description": "The background color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBackgroundColor(color: ApiColor): boolean"
+    },
+    "SetBorderColor": {
+      "description": "Sets widget border color.",
+      "params": [
+        {
+          "description": "The border color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderColor(color: ApiColor): boolean"
+    },
+    "SetBorderStyle": {
+      "description": "Sets widget border style.",
+      "params": [
+        {
+          "description": "The border style.",
+          "name": "borderStyle",
+          "type": "WidgetBorderStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderStyle(borderStyle: WidgetBorderStyle): boolean"
+    },
+    "SetBorderWidth": {
+      "description": "Sets widget border width.",
+      "params": [
+        {
+          "description": "the width to set to the border.",
+          "name": "borderWidth",
+          "type": "WidgetBorderWidth"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderWidth(borderWidth: WidgetBorderWidth): boolean"
+    },
+    "SetCheckStyle": {
+      "description": "Sets widget checkbox style.",
+      "params": [
+        {
+          "description": "The checkbox style.",
+          "name": "style",
+          "type": "CheckStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCheckStyle(style: CheckStyle): boolean"
+    },
+    "SetChecked": {
+      "description": "Sets checkbox widget checked.",
+      "params": [
+        {
+          "description": "Specifies whether the checkbox is checked.",
+          "name": "checked",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetChecked(checked: boolean): boolean"
+    },
+    "SetCheckedByDefault": {
+      "description": "Sets widget checked by default.",
+      "params": [
+        {
+          "description": "Specifies whether the checkbox is checked by default.",
+          "name": "checked",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCheckedByDefault(checked: boolean): boolean"
+    },
+    "SetExportValue": {
+      "description": "Sets widget export value.",
+      "params": [
+        {
+          "description": "The value to be exported when the checkbox is checked.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetExportValue(value: string): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets widget position.",
+      "params": [
+        {
+          "description": "The new position of the widget.",
+          "name": "position",
+          "type": "Point"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosition(position: Point): boolean"
+    },
+    "SetRect": {
+      "description": "Sets field rect.",
+      "params": [
+        {
+          "description": "The new bounding rectangle for the widget.",
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRect(rect: Rect): boolean"
+    },
+    "SetTextColor": {
+      "description": "Sets widget text color.",
+      "params": [
+        {
+          "description": "The text color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTextColor(color: ApiColor): boolean"
+    },
+    "SetTextSize": {
+      "description": "Sets widget text size.\n<note> Text size === 0 means autofit </note>",
+      "params": [
+        {
+          "description": "The font size in points.",
+          "name": "size",
+          "type": "pt"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTextSize(size: pt): boolean"
+    }
+  }
+}

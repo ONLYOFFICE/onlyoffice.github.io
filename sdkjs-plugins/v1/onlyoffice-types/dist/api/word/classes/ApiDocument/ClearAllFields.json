@@ -1,0 +1,12 @@
+{
+  "description": "Clears all forms in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ClearAllFields/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.AddElement(run, 0);\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nparagraph.AddLineBreak();\nparagraph.AddElement(textForm);\ndoc.ClearAllFields();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"All fields from this document were just cleared.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "ClearAllFields(): boolean"
+}

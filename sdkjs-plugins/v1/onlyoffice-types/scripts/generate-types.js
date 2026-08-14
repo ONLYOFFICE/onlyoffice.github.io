@@ -173,22 +173,54 @@ async function fetchLegacyDescriptions(editor) {
   }
 }
 
+// The one thing the snapshot has and sdkjs does not: runnable examples. sdkjs's JSDoc carries only a
+// `@see office-js-api/Examples/.../<Method>.js` *path* - the code itself lives in another repository,
+// and ONLYOFFICE's own docs pipeline splices it in as a "## Try it" fenced block, which is what these
+// snapshots captured.
+function fencedExamples(description) {
+  return String(description || '').match(/```[^\n]*\n[\s\S]*?```/g) || [];
+}
+
+function withoutExamples(description) {
+  return String(description || '')
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/^[ \t]*#+[ \t]*Try it[ \t]*$/gim, '')
+    .trim();
+}
+
+// sdkjs is the structural source of truth and cannot drift from the runtime, while the snapshot is
+// pinned to one commit and ages. Measured across Word: of 845 methods documented in both, 789 have
+// byte-identical prose once the example is removed - and of the 56 that differ, sdkjs is the longer,
+// fresher text in 42, including three that carry `Breaking Change` / version notes the snapshot
+// predates (`Api.CreateTable` gained one in 9.4.0). Overwriting with the snapshot therefore threw
+// away newer prose to gain nothing. Prose now comes from sdkjs, the snapshot fills genuine gaps, and
+// its examples are appended so `splitDescription` still lifts them into `@example`.
+function preferSdkjsProse(sdkjsText, legacyText) {
+  const prose = withoutExamples(sdkjsText) || withoutExamples(legacyText);
+  return [prose, ...fencedExamples(legacyText)].filter(Boolean).join('\n\n');
+}
+
 function applyLegacyDescriptions(classes, typedefs, legacy) {
   if (!legacy) return;
 
   for (const [className, classData] of Object.entries(classes)) {
     const legacyClass = legacy.classes[className];
-    if (legacyClass && legacyClass.description) classData.description = legacyClass.description;
+    if (legacyClass && legacyClass.description) {
+      classData.description = preferSdkjsProse(classData.description, legacyClass.description);
+    }
     for (const [methodName, method] of Object.entries(classData.methods)) {
       const legacyMethod = legacyClass && legacyClass.methods[methodName];
       if (!legacyMethod) continue;
-      method.description = legacyMethod.description;
-      if (legacyMethod.returnDescription) method.returnDescription = legacyMethod.returnDescription;
+      method.description = preferSdkjsProse(method.description, legacyMethod.description);
+      if (!method.returnDescription && legacyMethod.returnDescription) {
+        method.returnDescription = legacyMethod.returnDescription;
+      }
       if (!method.docsUrl) method.docsUrl = legacyMethod.docsUrl;
       // Param descriptions are matched by name, not position: the snapshot occasionally documents a
       // different arity than the current sdkjs signature does, and a positional merge would then
       // attach one parameter's prose to another.
       for (const param of method.params) {
+        if (param.description) continue;
         const legacyParamDescription = legacyMethod.params[param.name];
         if (legacyParamDescription) param.description = legacyParamDescription;
       }
@@ -197,8 +229,9 @@ function applyLegacyDescriptions(classes, typedefs, legacy) {
   for (const [name, typedefData] of Object.entries(typedefs)) {
     const legacyTypedef = legacy.typedefs[name];
     if (!legacyTypedef) continue;
-    typedefData.description = legacyTypedef.description;
+    typedefData.description = preferSdkjsProse(typedefData.description, legacyTypedef.description);
     for (const prop of typedefData.properties) {
+      if (prop.description) continue;
       const legacyPropDescription = legacyTypedef.properties[prop.name];
       if (legacyPropDescription) prop.description = legacyPropDescription;
     }

@@ -1,0 +1,15 @@
+{
+  "description": "Returns a list of all forms in the document with the specified key.",
+  "params": [
+    {
+      "description": "The form key.",
+      "name": "key",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiForm[]"
+  },
+  "signature": "GetFormsByKey(key: string): ApiForm[]",
+  "since": "9.0.0"
+}

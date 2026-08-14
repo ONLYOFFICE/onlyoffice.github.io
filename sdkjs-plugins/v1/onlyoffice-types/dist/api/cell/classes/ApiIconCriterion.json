@@ -1,0 +1,115 @@
+{
+  "description": "Class representing a single icon criterion.",
+  "methods": {
+    "GetIcon": {
+      "description": "Returns the icon associated with the current icon criterion.",
+      "params": [],
+      "returns": {
+        "description": "The icon constant, or null if not available.",
+        "type": "XlIcon | null"
+      },
+      "signature": "GetIcon(): XlIcon | null",
+      "since": "9.1.0"
+    },
+    "GetIndex": {
+      "description": "Returns the index of the icon criterion in the collection.",
+      "params": [],
+      "returns": {
+        "description": "The 1-based index of the icon criterion.",
+        "type": "number"
+      },
+      "signature": "GetIndex(): number",
+      "since": "9.1.0"
+    },
+    "GetOperator": {
+      "description": "Returns the comparison operator of the icon criterion.",
+      "params": [],
+      "returns": {
+        "description": "The operator (\"xlGreaterEqual\" or \"xlGreater\"), or null if not available.",
+        "type": "string | null"
+      },
+      "signature": "GetOperator(): string | null",
+      "since": "9.1.0"
+    },
+    "GetType": {
+      "description": "Returns the condition value type for the icon criterion.",
+      "params": [],
+      "returns": {
+        "description": "The condition value type, or null if not available.",
+        "type": "XlConditionValueTypes | null"
+      },
+      "signature": "GetType(): XlConditionValueTypes | null",
+      "since": "9.1.0"
+    },
+    "GetValue": {
+      "description": "Returns the threshold value for the icon criterion.",
+      "params": [],
+      "returns": {
+        "description": "The threshold value, or null if not available.",
+        "type": "string | number | null"
+      },
+      "signature": "GetValue(): string | number | null",
+      "since": "9.1.0"
+    },
+    "SetIcon": {
+      "description": "Sets the icon for the current icon criterion.",
+      "params": [
+        {
+          "description": "The icon constant to set.",
+          "name": "icon",
+          "type": "XlIcon"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetIcon(icon: XlIcon): void",
+      "since": "9.1.0"
+    },
+    "SetOperator": {
+      "description": "Sets the comparison operator for the icon criterion.",
+      "params": [
+        {
+          "description": "The operator to set (\"xlGreaterEqual\" or \"xlGreater\").",
+          "name": "operator",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetOperator(operator: string): void",
+      "since": "9.1.0"
+    },
+    "SetType": {
+      "description": "Sets the condition value type for the icon criterion.",
+      "params": [
+        {
+          "description": "The condition value type. Only \"xlConditionValueNumber\", \"xlConditionValuePercent\", \"xlConditionValuePercentile\", or \"xlConditionValueFormula\" are supported.",
+          "name": "type",
+          "type": "XlConditionValueTypes"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetType(type: XlConditionValueTypes): void",
+      "since": "9.1.0"
+    },
+    "SetValue": {
+      "description": "Sets the threshold value for the icon criterion.",
+      "params": [
+        {
+          "description": "The threshold value to set.",
+          "name": "value",
+          "type": "string | number"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetValue(value: string | number): void",
+      "since": "9.1.0"
+    }
+  }
+}

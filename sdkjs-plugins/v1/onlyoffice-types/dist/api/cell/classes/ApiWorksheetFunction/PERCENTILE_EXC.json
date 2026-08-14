@@ -1,0 +1,23 @@
+{
+  "description": "Returns the k-th percentile of values in a range, where k is in the range 0..1, exclusive.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PERCENTILE_EXC/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet column1 = [1, 0, 7, 10];\nlet column2 = [3, 2, 5, 8];\nlet column3 = [5, 4, 3, 6];\nlet column4 = [7, 6, 5, 4];\n\nfor (let i = 0; i < column1.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(column1[i]);\n}\nfor (let j = 0; j < column2.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(column2[j]);\n}\nfor (let n = 0; n < column3.length; n++) {\n    worksheet.GetRange(\"C\" + (n + 1)).SetValue(column3[n]);\n}\nfor (let m = 0; m < column4.length; m++) {\n    worksheet.GetRange(\"D\" + (m + 1)).SetValue(column4[m]);\n}\n\nlet range = worksheet.GetRange(\"A1:D4\");\nworksheet.GetRange(\"D5\").SetValue(func.PERCENTILE_EXC(range, 0.5));"
+  ],
+  "params": [
+    {
+      "description": "The array or range of data that defines relative standing.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "The percentile value that is greater than 0 but less than 1.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PERCENTILE_EXC(arg1: ApiRange | ApiName | number[], arg2: ApiRange | ApiName | number): number"
+}

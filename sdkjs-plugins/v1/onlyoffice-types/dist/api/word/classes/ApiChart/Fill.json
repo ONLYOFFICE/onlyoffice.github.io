@@ -1,0 +1,15 @@
+{
+  "description": "Sets the fill formatting properties to the current graphic object.",
+  "params": [
+    {
+      "description": "The fill type used to fill the graphic object.",
+      "name": "oFill",
+      "type": "ApiFill"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "Fill(oFill: ApiFill): boolean"
+}

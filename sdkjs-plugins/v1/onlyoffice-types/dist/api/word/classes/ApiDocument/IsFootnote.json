@@ -1,0 +1,9 @@
+{
+  "description": "Check if the current document content is a footnote.",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "IsFootnote(): boolean",
+  "since": "9.3.0"
+}

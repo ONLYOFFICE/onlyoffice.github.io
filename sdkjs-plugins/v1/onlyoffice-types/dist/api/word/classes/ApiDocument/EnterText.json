@@ -1,0 +1,15 @@
+{
+  "description": "Add text to the document on the cursor position.",
+  "params": [
+    {
+      "description": "The text to add to document.",
+      "name": "sText",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "EnterText(sText: string): boolean",
+  "since": "9.2.0"
+}

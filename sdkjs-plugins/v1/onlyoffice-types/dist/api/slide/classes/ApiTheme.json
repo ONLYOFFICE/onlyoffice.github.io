@@ -1,0 +1,123 @@
+{
+  "description": "Class representing a presentation theme.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns the type of the ApiTheme class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oTheme = oMaster.GetTheme();\nvar sType = oTheme.GetClassType();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"theme\""
+      },
+      "signature": "GetClassType(): \"theme\""
+    },
+    "GetColorScheme": {
+      "description": "Returns the color scheme of the current theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetColorScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oTheme = oMaster.GetTheme();\nvar oClrScheme = oTheme.GetColorScheme();\noClrScheme.ChangeColor(0, Api.CreateRGBColor(255, 111, 61));\noClrScheme.ChangeColor(1, Api.CreateRGBColor(51, 51, 51));\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiThemeColorScheme"
+      },
+      "signature": "GetColorScheme(): ApiThemeColorScheme"
+    },
+    "GetFontScheme": {
+      "description": "Returns the font scheme of the current theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetFontScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oMaster = oPresentation.GetMaster(0);\nvar oTheme = oMaster.GetTheme();\nvar oFontScheme = oTheme.GetFontScheme();\nvar sType = oFontScheme.GetClassType();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiThemeFontScheme"
+      },
+      "signature": "GetFontScheme(): ApiThemeFontScheme"
+    },
+    "GetFormatScheme": {
+      "description": "Returns the format scheme of the current theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetFormatScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oMaster = oPresentation.GetMaster(0);\nvar oTheme = oMaster.GetTheme();\nvar oFormatScheme = oTheme.GetFormatScheme();\nvar sType = oFormatScheme.GetClassType();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiThemeFormatScheme"
+      },
+      "signature": "GetFormatScheme(): ApiThemeFormatScheme"
+    },
+    "GetMaster": {
+      "description": "Returns the slide master of the current theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetMaster/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oTheme = oSlide.GetTheme();\nvar oMaster = oTheme.GetMaster();\nvar sType = oMaster.GetClassType();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns null if slide master doesn't exist.",
+        "type": "ApiMaster | null"
+      },
+      "signature": "GetMaster(): ApiMaster | null"
+    },
+    "SetColorScheme": {
+      "description": "Sets the color scheme to the current presentation theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetColorScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), \n\tApi.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], \"New color scheme\");\nvar oTheme = oSlide.GetTheme();\noTheme.SetColorScheme(oClrScheme);\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "Theme color scheme.",
+          "name": "oApiColorScheme",
+          "type": "ApiThemeColorScheme"
+        }
+      ],
+      "returns": {
+        "description": "return false if color scheme doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetColorScheme(oApiColorScheme: ApiThemeColorScheme): boolean"
+    },
+    "SetFontScheme": {
+      "description": "Sets the font scheme to the current presentation theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetFontScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oFontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nvar oTheme = oSlide.GetTheme();\noTheme.SetFontScheme(oFontScheme);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\noDocContent.RemoveAllElements();\nvar oParagraph = Api.CreateParagraph();\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"This is an example of a paragraph with a new font scheme set.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Theme font scheme.",
+          "name": "oApiFontScheme",
+          "type": "ApiThemeFontScheme"
+        }
+      ],
+      "returns": {
+        "description": "return false if font scheme doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetFontScheme(oApiFontScheme: ApiThemeFontScheme): boolean"
+    },
+    "SetFormatScheme": {
+      "description": "Sets the format scheme to the current presentation theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetFormatScheme/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke1 = Api.CreateStroke(1 * 36000, oFill1);\nvar oFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oBgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oStroke2 = Api.CreateStroke(1 * 36000, oFill2);\nvar oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke3 = Api.CreateStroke(1 * 36000, oFill3);\nvar oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], \"New format scheme\");\nvar oTheme = oSlide.GetTheme();\noTheme.SetFormatScheme(oFormatScheme);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+      ],
+      "params": [
+        {
+          "description": "Theme format scheme.",
+          "name": "oApiFormatScheme",
+          "type": "ApiThemeFormatScheme"
+        }
+      ],
+      "returns": {
+        "description": "return false if format scheme doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetFormatScheme(oApiFormatScheme: ApiThemeFormatScheme): boolean"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Returns the inverse of the standard normal cumulative distribution (has a mean of zero and a standard deviation of one).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NORMSINV/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(0.25);\n\n//method params\nlet value = worksheet.GetRange(\"A1\").GetValue();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.NORMSINV(value);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "A probability corresponding to the normal distribution, a number between 0 and 1 inclusive.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "NORMSINV(arg1: ApiRange | ApiName | number): number"
+}

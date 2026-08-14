@@ -1,0 +1,1430 @@
+{
+  "Aggregation": {
+    "description": "A numeric value that specifies which function should be used to aggregate identical time values in the timeline data range.\n**1** (or omitted) - AVERAGE.\n**2** - COUNT.\n**3** - COUNTA.\n**4** - MAX.\n**5** - MEDIAN.\n**6** - MIN.\n**7** - SUM.",
+    "type": "1 | 2 | 3 | 4 | 5 | 6 | 7"
+  },
+  "Angle": {
+    "description": "Specifies the range angle.",
+    "examples": [
+      "worksheet.GetRange(\"A1\").SetOrientation(\"xlUpward\");"
+    ],
+    "type": "\"xlDownward\" | \"xlHorizontal\" | \"xlUpward\" | \"xlVertical\""
+  },
+  "AnimationEffectType": {
+    "description": "Animation effect type.",
+    "type": "\"entranceAppear\" | \"entranceFade\" | \"entranceFlyIn\" | \"entranceFloatIn\" | \"entranceSplit\" | \"entranceWipe\" | \"entranceCircle\" | \"entranceBox\" | \"entranceDiamond\" | \"entrancePlus\" | \"entranceWheel\" | \"entranceRandomBars\" | \"entranceGrowAndTurn\" | \"entranceZoom\" | \"entranceSwivel\" | \"entranceBounce\" | \"entranceBlinds\" | \"entranceCheckerboard\" | \"entrancePeekIn\" | \"entranceStrips\" | \"entranceExpand\" | \"entranceRiseUp\" | \"entranceCenterRevolve\" | \"entranceSpinner\" | \"entranceFloatUp\" | \"entranceFloatDown\" | \"entranceSpiralIn\" | \"entranceWedge\" | \"entranceDissolveIn\" | \"entrancePinwheel\" | \"exitDisappear\" | \"exitFadeOut\" | \"exitFlyOut\" | \"exitFloatOut\" | \"exitSplitOut\" | \"exitWipeOut\" | \"exitCircleOut\" | \"exitBoxOut\" | \"exitDiamondOut\" | \"exitPlusOut\" | \"exitWheelOut\" | \"exitRandomBarsOut\" | \"exitShrinkAndTurn\" | \"exitZoomOut\" | \"exitSwivelOut\" | \"exitBounceOut\" | \"exitSpiralOut\" | \"exitCollapse\" | \"emphasisPulse\" | \"emphasisColorPulse\" | \"emphasisTeeter\" | \"emphasisSpin\" | \"emphasisGrowShrink\" | \"emphasisDesaturate\" | \"emphasisDarken\" | \"emphasisLighten\" | \"emphasisTransparency\" | \"emphasisObjectColor\" | \"emphasisComplementaryColor\" | \"emphasisLineColor\" | \"emphasisFillColor\" | \"emphasisFontColor\" | \"emphasisBlink\" | \"emphasisShimmer\" | \"emphasisWave\" | \"pathCircle\" | \"pathSquare\" | \"pathDiamond\" | \"pathHeart\" | \"pathStar\" | \"pathHexagon\" | \"pathOctagon\" | \"pathRight\" | \"pathLeft\" | \"pathUp\" | \"pathDown\""
+  },
+  "AnimationTriggerType": {
+    "description": "Animation trigger type.",
+    "type": "\"onclick\" | \"withprevious\" | \"afterprevious\""
+  },
+  "ApiForm": {
+    "description": "Types of all supported forms.",
+    "examples": [
+      "let copyTextForm = textForm.Copy();"
+    ],
+    "type": "ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm | ApiSignatureForm"
+  },
+  "AxisPos": {
+    "description": "Axis position in the chart.",
+    "examples": [
+      "chart.SetAxieNumFormat(\"top\", \"0.00\");"
+    ],
+    "type": "\"top\" | \"bottom\" | \"right\" | \"left\""
+  },
+  "Base64Img": {
+    "description": "The Base64 image string.",
+    "type": "string"
+  },
+  "BlipFillType": {
+    "description": "The type of a fill which uses an image as a background.\n**\"tile\"** - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.\n**\"stretch\"** - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.",
+    "examples": [
+      "let blipFill = Api.CreateBlipFill(\"https://example.com/myimage.png\", \"tile\");"
+    ],
+    "type": "\"tile\" | \"stretch\""
+  },
+  "Border": {
+    "description": "The border properties object.",
+    "properties": {
+      "Color": {
+        "description": "The border color.",
+        "type": "ApiColor"
+      },
+      "Size": {
+        "description": "The border width measured in eighths of a point.",
+        "type": "pt_8"
+      },
+      "Space": {
+        "description": "The spacing offset from the text to the border measured in points.",
+        "type": "pt"
+      },
+      "Type": {
+        "description": "The border style.",
+        "type": "BorderType"
+      }
+    }
+  },
+  "BorderType": {
+    "description": "A border type.",
+    "examples": [
+      "paraPr.SetBottomBorder(\"single\", 24, 0, 0, 255, 0);"
+    ],
+    "type": "\"none\" | \"single\""
+  },
+  "BordersIndex": {
+    "description": "Specifies the cell border position.",
+    "examples": [
+      "worksheet.GetRange(\"E2\").SetBorders(\"Bottom\", \"Dotted\", Api.CreateColorFromRGB(0, 0, 0));"
+    ],
+    "type": "\"DiagonalDown\" | \"DiagonalUp\" | \"Bottom\" | \"Left\" | \"Right\" | \"Top\" | \"InsideHorizontal\" | \"InsideVertical\""
+  },
+  "BulletType": {
+    "description": "A bullet type which will be added to the paragraph in spreadsheet or presentation.",
+    "examples": [
+      "// The paragraph will be starting with the Arabic numeral which has parenthesis\nlet bullet = Api.CreateNumbering(\"ArabicParenR\");"
+    ],
+    "type": "\"None\" | \"ArabicPeriod\" | \"ArabicParenR\" | \"RomanUcPeriod\" | \"RomanLcPeriod\" | \"AlphaLcParenR\" | \"AlphaLcPeriod\" | \"AlphaUcParenR\" | \"AlphaUcPeriod\""
+  },
+  "CaptionLabel": {
+    "description": "Possible values for the caption label.",
+    "examples": [
+      "paragraph.AddCaptionCrossRef(\"Table\", \"pageNum\", caption);"
+    ],
+    "type": "\"Table\" | \"Equation\" | \"Figure\""
+  },
+  "CaptionNumberingFormat": {
+    "description": "Possible values for the caption numbering format.\n**\"ALPHABETIC\"** - upper letter.\n**\"alphabetic\"** - lower letter.\n**\"Roman\"** - upper Roman.\n**\"roman\"** - lower Roman.\n**\"Arabic\"** - arabic.",
+    "examples": [
+      "paragraph.AddCaption(\"\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");"
+    ],
+    "type": "\"ALPHABETIC\" | \"alphabetic\" | \"Roman\" | \"roman\" | \"Arabic\""
+  },
+  "CaptionSep": {
+    "description": "Possible values for the caption separator.\n**\"hyphen\"** - the \"-\" punctuation mark.\n**\"period\"** - the \".\" punctuation mark.\n**\"colon\"** - the \":\" punctuation mark.\n**\"longDash\"** - the \"—\" punctuation mark.\n**\"dash\"** - the \"-\" punctuation mark.",
+    "examples": [
+      "paragraph.AddCaption(\"\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");"
+    ],
+    "type": "\"hyphen\" | \"period\" | \"colon\" | \"longDash\" | \"dash\""
+  },
+  "ChartType": {
+    "description": "This type specifies the available chart types which can be used to create a new chart.",
+    "examples": [
+      "// ChartType used in text documents\n// The resulting chart will have a 'bar3D' type:\nvar chart = Api.CreateChart(\"bar3D\", [[200, 240, 280],[250, 260, 280]], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\n\n// ChartType used in spreadsheets\n// The resulting chart will have a 'bar3D' type:\nvar chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);"
+    ],
+    "type": "\"ColumnClustered\" | \"ColumnStacked\" | \"ColumnStacked100\" | \"3DColumnClustered\" | \"3DColumnStacked\" | \"3DColumnStacked100\" | \"3DColumn\" | \"BarClustered\" | \"BarStacked\" | \"BarStacked100\" | \"3DBarClustered\" | \"3DBarStacked\" | \"3DBarStacked100\" | \"Line\" | \"LineStacked\" | \"LineStacked100\" | \"LineMarkers\" | \"LineMarkersStacked\" | \"LineMarkersStacked100\" | \"3DLine\" | \"Pie\" | \"3DPie\" | \"Doughnut\" | \"XYScatter\" | \"XYScatterLines\" | \"XYScatterLinesNoMarkers\" | \"XYScatterSmooth\" | \"XYScatterSmoothNoMarkers\" | \"StockHLC\" | \"StockOHLC\" | \"StockVHLC\" | \"StockVOHLC\" | \"Area\" | \"AreaStacked\" | \"AreaStacked100\" | \"Combo\" | \"ComboColumnClusteredLine\" | \"ComboColumnClusteredLineSecondaryAxis\" | \"Radar\" | \"RadarMarkers\" | \"RadarFilled\" | \"unknown\""
+  },
+  "ChartTypeLegacy": {
+    "description": "This type specifies the legacy chart type names which are kept for backward compatibility.",
+    "type": "\"bar\" | \"barStacked\" | \"barStackedPercent\" | \"bar3D\" | \"barStacked3D\" | \"barStackedPercent3D\" | \"barStackedPercent3DPerspective\" | \"horizontalBar\" | \"horizontalBarStacked\" | \"horizontalBarStackedPercent\" | \"horizontalBar3D\" | \"horizontalBarStacked3D\" | \"horizontalBarStackedPercent3D\" | \"lineNormal\" | \"lineStacked\" | \"lineStackedPercent\" | \"lineNormalMarker\" | \"lineStackedMarker\" | \"lineStackedPerMarker\" | \"line3D\" | \"pie\" | \"pie3D\" | \"doughnut\" | \"scatter\" | \"scatterLine\" | \"scatterLineMarker\" | \"scatterSmooth\" | \"scatterSmoothMarker\" | \"stock\" | \"area\" | \"areaStacked\" | \"areaStackedPercent\" | \"comboCustom\" | \"comboBarLine\" | \"comboBarLineSecondary\" | \"radar\" | \"radarMarker\" | \"radarFilled\" | \"unknown\""
+  },
+  "CheckboxOption": {
+    "description": "Option for checkbox",
+    "type": "boolean"
+  },
+  "ChoiceOption": {
+    "description": "Option for radio groups, dropdowns and combo boxes.",
+    "properties": {
+      "label": {
+        "description": "Display text.",
+        "type": "string"
+      },
+      "value": {
+        "description": "Stored value.",
+        "type": "string"
+      }
+    }
+  },
+  "CommentReport": {
+    "description": "A dictionary of users and their comments.",
+    "examples": [
+      "let commentsReport = oDocument.GetCommentsReport();"
+    ],
+    "properties": {
+      "username": {
+        "description": "The comments grouped by username.",
+        "optional": true,
+        "type": "UserComments"
+      }
+    }
+  },
+  "CommentReportRecord": {
+    "description": "Represents a single comment record.",
+    "examples": [
+      "let commentsReport = oDocument.GetCommentsReport();"
+    ],
+    "properties": {
+      "CommentMessage": {
+        "description": "The comment text.",
+        "type": "string"
+      },
+      "Date": {
+        "description": "The comment local timestamp.",
+        "type": "number"
+      },
+      "DateUTC": {
+        "description": "The  comment UTC timestamp.",
+        "type": "number"
+      },
+      "IsAnswer": {
+        "description": "Specifies whether the comment is a response.",
+        "type": "boolean"
+      },
+      "QuoteText": {
+        "description": "The quoted text (if available).",
+        "optional": true,
+        "type": "string"
+      }
+    }
+  },
+  "ContentControlCheckBoxPr": {
+    "description": "The checkbox content control properties",
+    "properties": {
+      "checked": {
+        "description": "Indicates whether the checkbox is checked by default.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "checkedSymbol": {
+        "description": "A custom symbol to display when the checkbox is checked (e.g., \"☒\").",
+        "optional": true,
+        "type": "string"
+      },
+      "uncheckedSymbol": {
+        "description": "A custom symbol to display when the checkbox is unchecked (e.g., \"☐\").",
+        "optional": true,
+        "type": "string"
+      }
+    }
+  },
+  "ContentControlDatePr": {
+    "description": "The date picker content control properties.",
+    "properties": {
+      "format": {
+        "description": "The date format. Example: \"mm.dd.yyyy\".",
+        "type": "string"
+      },
+      "lang": {
+        "description": "The date language. Possible value for this parameter is a language identifier as defined by\rRFC 4646/BCP 47. Example: \"en-CA\".",
+        "type": "string"
+      }
+    }
+  },
+  "ContentControlListItem": {
+    "description": "The object representing the items in the combo box or drop-down list.",
+    "properties": {
+      "display": {
+        "description": "The text to be displayed in the combo box or drop-down list.",
+        "type": "string"
+      },
+      "value": {
+        "description": "The value associated with the item.",
+        "type": "string"
+      }
+    }
+  },
+  "CustomXmlNodeAttribute": {
+    "description": "Represents an attribute of an XML node.",
+    "properties": {
+      "name": {
+        "description": "The attribute name.",
+        "type": "string"
+      },
+      "value": {
+        "description": "The attribute value.",
+        "type": "string"
+      }
+    }
+  },
+  "DashType": {
+    "description": "Available dash type for line.",
+    "type": "\"dash\" | \"dashDot\" | \"dot\" | \"lgDash\" | \"lgDashDot\" | \"lgDashDotDot\" | \"solid\" | \"sysDash\" | \"sysDashDot\" | \"sysDashDotDot\" | \"sysDot\""
+  },
+  "DataConsolidateFunctionType": {
+    "description": "The type of calculation to perform on the data field items.",
+    "type": "\"Average\" | \"CountNumbers\" | \"Count\" | \"Max\" | \"Min\" | \"Product\" | \"StdDev\" | \"StdDevP\" | \"Sum\" | \"Var\" | \"VarP\""
+  },
+  "DeleteShiftDirection": {
+    "description": "Specifies how to shift cells to replace deleted cells.",
+    "type": "\"up\" | \"left\""
+  },
+  "Direction": {
+    "description": "Specifies the direction of end in the specified range.",
+    "examples": [
+      "worksheet.GetRange(\"C4:D5\").End(\"xlToLeft\").SetFillColor(Api.CreateColorFromRGB(255, 224, 204));"
+    ],
+    "type": "\"xlUp\" | \"xlDown\" | \"xlToRight\" | \"xlToLeft\""
+  },
+  "DocumentElement": {
+    "description": "Any valid element which can be added to the document structure.",
+    "examples": [
+      "doc.AddElement(paragraph);"
+    ],
+    "type": "ApiParagraph"
+  },
+  "Drawing": {
+    "description": "Any valid drawing element.",
+    "type": "ApiShape | ApiImage | ApiOleObject | ApiChart | ApiGroup | ApiSmartArt"
+  },
+  "DrawingForGroup": {
+    "description": "Available drawing element for grouping.",
+    "type": "ApiShape | ApiGroup | ApiImage | ApiChart"
+  },
+  "DrawingLockType": {
+    "description": "This type specifies the type of drawing lock.",
+    "examples": [
+      "let lockValue = drawing.GetLockValue(\"noSelect\");"
+    ],
+    "type": "\"noGrp\" | \"noUngrp\" | \"noSelect\" | \"noRot\" | \"noChangeAspect\" | \"noMove\" | \"noResize\" | \"noEditPoints\" | \"noAdjustHandles\" | \"noChangeArrowheads\" | \"noChangeShapeType\" | \"noDrilldown\" | \"noTextEdit\" | \"noCrop\" | \"txBox\""
+  },
+  "EMU": {
+    "description": "English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs.",
+    "type": "number"
+  },
+  "EntryEffect": {
+    "description": "The available slide transition effects (similar to PowerPoint VBA ppEffect).",
+    "type": "\"effectAppear\" | \"effectBlindsHorizontal\" | \"effectBlindsVertical\" | \"effectBoxDown\" | \"effectBoxIn\" | \"effectBoxLeft\" | \"effectBoxOut\" | \"effectBoxRight\" | \"effectBoxUp\" | \"effectCheckerboardAcross\" | \"effectCheckerboardDown\" | \"effectCircleOut\" | \"effectCombHorizontal\" | \"effectCombVertical\" | \"effectConveyorLeft\" | \"effectConveyorRight\" | \"effectCoverDown\" | \"effectCoverLeft\" | \"effectCoverLeftDown\" | \"effectCoverLeftUp\" | \"effectCoverRight\" | \"effectCoverRightDown\" | \"effectCoverRightUp\" | \"effectCoverUp\" | \"effectCubeDown\" | \"effectCubeLeft\" | \"effectCubeRight\" | \"effectCubeUp\" | \"effectCut\" | \"effectCutThroughBlack\" | \"effectDiamondOut\" | \"effectDissolve\" | \"effectDoorsHorizontal\" | \"effectDoorsVertical\" | \"effectFade\" | \"effectFadeSmoothly\" | \"effectFerrisWheelLeft\" | \"effectFerrisWheelRight\" | \"effectFlashbulb\" | \"effectFlipDown\" | \"effectFlipLeft\" | \"effectFlipRight\" | \"effectFlipUp\" | \"effectFlyThroughIn\" | \"effectFlyThroughInBounce\" | \"effectFlyThroughOut\" | \"effectFlyThroughOutBounce\" | \"effectGalleryLeft\" | \"effectGalleryRight\" | \"effectGlitterDiamondDown\" | \"effectGlitterDiamondLeft\" | \"effectGlitterDiamondRight\" | \"effectGlitterDiamondUp\" | \"effectGlitterHexagonDown\" | \"effectGlitterHexagonLeft\" | \"effectGlitterHexagonRight\" | \"effectGlitterHexagonUp\" | \"effectHoneycomb\" | \"effectNewsflash\" | \"effectOrbitDown\" | \"effectOrbitLeft\" | \"effectOrbitRight\" | \"effectOrbitUp\" | \"effectPanDown\" | \"effectPanLeft\" | \"effectPanRight\" | \"effectPanUp\" | \"effectPlusOut\" | \"effectPushDown\" | \"effectPushLeft\" | \"effectPushRight\" | \"effectPushUp\" | \"effectRandom\" | \"effectRandomBarsHorizontal\" | \"effectRandomBarsVertical\" | \"effectRevealBlackLeft\" | \"effectRevealBlackRight\" | \"effectRevealSmoothLeft\" | \"effectRevealSmoothRight\" | \"effectRippleCenter\" | \"effectRippleLeftDown\" | \"effectRippleLeftUp\" | \"effectRippleRightDown\" | \"effectRippleRightUp\" | \"effectRotateDown\" | \"effectRotateLeft\" | \"effectRotateRight\" | \"effectRotateUp\" | \"effectShredRectangleIn\" | \"effectShredRectangleOut\" | \"effectShredStripsIn\" | \"effectShredStripsOut\" | \"effectSplitHorizontalIn\" | \"effectSplitHorizontalOut\" | \"effectSplitVerticalIn\" | \"effectSplitVerticalOut\" | \"effectStripsDownLeft\" | \"effectStripsDownRight\" | \"effectStripsLeftDown\" | \"effectStripsLeftUp\" | \"effectStripsRightDown\" | \"effectStripsRightUp\" | \"effectStripsUpLeft\" | \"effectStripsUpRight\" | \"effectSwitchDown\" | \"effectSwitchLeft\" | \"effectSwitchRight\" | \"effectSwitchUp\" | \"effectUncoverDown\" | \"effectUncoverLeft\" | \"effectUncoverLeftDown\" | \"effectUncoverLeftUp\" | \"effectUncoverRight\" | \"effectUncoverRightDown\" | \"effectUncoverRightUp\" | \"effectUncoverUp\" | \"effectVortexDown\" | \"effectVortexLeft\" | \"effectVortexRight\" | \"effectVortexUp\" | \"effectWarpIn\" | \"effectWarpOut\" | \"effectWedge\" | \"effectWheel1Spoke\" | \"effectWheel2Spokes\" | \"effectWheel3Spokes\" | \"effectWheel4Spokes\" | \"effectWheel8Spokes\" | \"effectWheelReverse1Spoke\" | \"effectWindowHorizontal\" | \"effectWindowVertical\" | \"effectWipeDown\" | \"effectWipeLeft\" | \"effectWipeRight\" | \"effectWipeUp\" | \"effectNone\" | \"effectCrawlFromDown\" | \"effectCrawlFromLeft\" | \"effectCrawlFromRight\" | \"effectCrawlFromUp\" | \"effectFlashOnceFast\" | \"effectFlashOnceMedium\" | \"effectFlashOnceSlow\" | \"effectFlyFromBottom\" | \"effectFlyFromBottomLeft\" | \"effectFlyFromBottomRight\" | \"effectFlyFromLeft\" | \"effectFlyFromRight\" | \"effectFlyFromTop\" | \"effectFlyFromTopLeft\" | \"effectFlyFromTopRight\" | \"effectMixed\" | \"effectPeekFromDown\" | \"effectPeekFromLeft\" | \"effectPeekFromRight\" | \"effectPeekFromUp\" | \"effectSpiral\" | \"effectStretchAcross\" | \"effectStretchDown\" | \"effectStretchLeft\" | \"effectStretchRight\" | \"effectStretchUp\" | \"effectSwivel\" | \"effectZoomBottom\" | \"effectZoomCenter\" | \"effectZoomIn\" | \"effectZoomInSlightly\" | \"effectZoomOut\" | \"effectZoomOutSlightly\""
+  },
+  "ErrorValue": {
+    "description": "The error value.\n* **\"#NULL!\"** - 1\n* **\"#DIV/0!\"** - 2\n* **\"#VALUE!\"** - 3\n* **\"#REF!\"** - 4\n* **\"#NAME?\"** - 5\n* **\"#NUM!\"** - 6\n* **\"#N/A\"** - 7\n* **\"#GETTING_DATA\"** - 8\n* **\"Other\"** - \"#N/A\"",
+    "type": "\"#NULL!\" | \"#DIV/0!\" | \"#VALUE!\" | \"#REF!\" | \"#NAME?\" | \"#NUM!\" | \"#N/A\" | \"#GETTING_DATA\""
+  },
+  "FieldsInReportFilterType": {
+    "description": "Specifies how the report filter fields are located.",
+    "type": "\"OverThenDown\" | \"DownThenOver\""
+  },
+  "FillType": {
+    "description": "The available fill types.",
+    "type": "\"solid\" | \"gradient\" | \"pattern\" | \"blip\" | \"nofill\""
+  },
+  "FormData": {
+    "description": "Form data.",
+    "examples": [
+      "let formData = {key: \"CompanyName\", value: \"OnlyOffice\", type: \"text\"};"
+    ],
+    "properties": {
+      "format": {
+        "description": "The date format string (e.g. **MM/DD/YYYY**). Present only for date picker fields.",
+        "optional": true,
+        "type": "string"
+      },
+      "key": {
+        "description": "The form key. If the current form is a radio button, then this field contains the group key.",
+        "type": "string"
+      },
+      "label": {
+        "description": "The checkbox label. Present only for checkbox fields.",
+        "optional": true,
+        "type": "string"
+      },
+      "lang": {
+        "description": "The date language/locale name (e.g. **en-US**). Present only for date picker fields.",
+        "optional": true,
+        "type": "string"
+      },
+      "options": {
+        "description": "The list of available options for the field.\rPresent for checkboxes, radio button groups, dropdown lists, and combo boxes.",
+        "optional": true,
+        "type": "ChoiceOption[] | CheckboxOption[]"
+      },
+      "role": {
+        "description": "The form role.",
+        "optional": true,
+        "type": "string"
+      },
+      "roleColor": {
+        "description": "The form role color in hex format.",
+        "optional": true,
+        "type": "string"
+      },
+      "tag": {
+        "description": "The form tag.",
+        "type": "string"
+      },
+      "type": {
+        "description": "The form type.",
+        "type": "FormSpecificType"
+      },
+      "value": {
+        "description": "The current field value.",
+        "type": "string | boolean"
+      }
+    }
+  },
+  "FormSpecificType": {
+    "description": "The specific form type.",
+    "examples": [
+      "let formsData = doc.GetFormsData();"
+    ],
+    "type": "\"text\" | \"checkBox\" | \"picture\" | \"comboBox\" | \"dropDownList\" | \"dateTime\" | \"radio\" | \"complex\" | \"signature\""
+  },
+  "FormType": {
+    "description": "Form type.\nThe available form types.",
+    "examples": [
+      "let formType = textForm.GetFormType();"
+    ],
+    "type": "\"textForm\" | \"comboBoxForm\" | \"dropDownForm\" | \"checkBoxForm\" | \"radioButtonForm\" | \"pictureForm\" | \"complexForm\" | \"dateForm\" | \"signatureForm\""
+  },
+  "FreezePaneType": {
+    "description": "Specifies a type of freeze panes.",
+    "examples": [
+      "builder.CreateFile(\"xlsx\");\nApi.SetFreezePanesType('column');\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nlet range = freezePanes.GetLocation();\nworksheet.GetRange(\"A1\").SetValue(\"Location: \");\nworksheet.GetRange(\"B1\").SetValue(range.GetAddress());\nbuilder.SaveFile(\"xlsx\", \"FreezePanes.xlsx\");\nbuilder.CloseFile();"
+    ],
+    "type": "\"row\" | \"column\" | \"cell\" | null"
+  },
+  "GeometryCoordinate": {
+    "description": "The coordinate value for the geometry paths.\nCan be a guide name from \"gdLst\", a numeric value, or a string representation of a number.",
+    "type": "string | number"
+  },
+  "GeometryFormulaType": {
+    "description": "This type specifies the formula type that will be used for a geometry guide.",
+    "type": "\"*/\" | \"+-\" | \"+/\" | \"?:\" | \"abs\" | \"at2\" | \"cat2\" | \"cos\" | \"max\" | \"min\" | \"mod\" | \"pin\" | \"sat2\" | \"sin\" | \"sqrt\" | \"tan\" | \"val\""
+  },
+  "HdrFtrType": {
+    "description": "Header and footer types which can be applied to the document sections.\n**\"default\"** - a header or footer which can be applied to any default page.\n**\"title\"** - a header or footer which is applied to the title page.\n**\"even\"** - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).",
+    "examples": [
+      "let docContent = finalSection.RemoveHeader(\"title\");"
+    ],
+    "type": "\"default\" | \"title\" | \"even\""
+  },
+  "LayoutSubtotalLocationType": {
+    "description": "The layout subtotal location.",
+    "type": "\"Top\" | \"Bottom\""
+  },
+  "LayoutType": {
+    "description": "Available layout types.",
+    "type": "\"blank\" | \"chart\" | \"chartAndTx\" | \"clipArtAndTx\" | \"clipArtAndVertTx\" | \"cust\" | \"dgm\" | \"fourObj\" | \"mediaAndTx\" | \"obj\" | \"objAndTwoObj\" | \"objAndTx\" | \"objOnly\" | \"objOverTx\" | \"objTx\" | \"picTx\" | \"secHead\" | \"tbl\" | \"title\" | \"titleOnly\" | \"twoColTx\" | \"twoObj\" | \"twoObjAndObj\" | \"twoObjAndTx\" | \"twoObjOverTx\" | \"twoTxTwoObj\" | \"tx\" | \"txAndChart\" | \"txAndClipArt\" | \"txAndMedia\" | \"txAndObj\" | \"txAndTwoObj\" | \"txOverObj\" | \"vertTitleAndTx\" | \"vertTitleAndTxOverChart\" | \"vertTx\""
+  },
+  "LineEndSize": {
+    "description": "The line end size.",
+    "type": "\"large\" | \"medium\" | \"small\""
+  },
+  "LineEndType": {
+    "description": "The line end type.",
+    "type": "\"none\" | \"arrow\" | \"diamond\" | \"oval\" | \"stealth\" | \"triangle\""
+  },
+  "LineStyle": {
+    "description": "Specifies the line style used to form the cell border.",
+    "examples": [
+      "worksheet.GetRange(\"E2\").SetBorders(\"Bottom\", \"Dotted\", Api.CreateColorFromRGB(0, 0, 0));"
+    ],
+    "type": "\"None\" | \"Double\" | \"Hair\" | \"DashDotDot\" | \"DashDot\" | \"Dotted\" | \"Dashed\" | \"Thin\" | \"MediumDashDotDot\" | \"SlantDashDot\" | \"MediumDashDot\" | \"MediumDashed\" | \"Medium\" | \"Thick\""
+  },
+  "MatchType": {
+    "description": "The match type.\n* **-1** - The values must be sorted in descending order. If the exact match is not found, the function will return the smallest value that is greater than the searched value.\n* **0** - The values can be sorted in any order. If the exact match is not found, the function will return the *#N/A* error.\n* **1** (or omitted) - The values must be sorted in ascending order. If the exact match is not found, the function will return the largest value that is less than the searched value.",
+    "type": "\"-1\" | \"0\" | \"1\""
+  },
+  "NumFormat": {
+    "description": "Standard numeric format.",
+    "examples": [
+      "worksheet.GetRange(\"A1\").SetOrientation(\"xlUpward\");"
+    ],
+    "type": "\"General\" | \"0\" | \"0.00\" | \"#,##0\" | \"#,##0.00\" | \"0%\" | \"0.00%\" | \"0.00E+00\" | \"# ?/?\" | \"# ??/??\" | \"m/d/yyyy\" | \"d-mmm-yy\" | \"d-mmm\" | \"mmm-yy\" | \"h:mm AM/PM\" | \"h:mm:ss AM/PM\" | \"h:mm\" | \"h:mm:ss\" | \"m/d/yyyy h:mm\" | \"#,##0_);(#,##0)\" | \"#,##0_);[Red](#,##0)\" | \"#,##0.00_);(#,##0.00)\" | \"#,##0.00_);[Red](#,##0.00)\" | \"mm:ss\" | \"[h]:mm:ss\" | \"mm:ss.0\" | \"##0.0E+0\" | \"@\""
+  },
+  "PageOrientation": {
+    "description": "The page orientation type.",
+    "examples": [
+      "worksheet.SetPageOrientation(\"xlPortrait\");"
+    ],
+    "type": "\"xlLandscape\" | \"xlPortrait\""
+  },
+  "PaperSize": {
+    "description": "The paper size, specified as a value of the Excel **xlPaperSize** enumeration.",
+    "type": "\"xlPaperLetter\" | \"xlPaperLetterSmall\" | \"xlPaperTabloid\" | \"xlPaperLedger\" | \"xlPaperLegal\" | \"xlPaperStatement\" | \"xlPaperExecutive\" | \"xlPaperA3\" | \"xlPaperA4\" | \"xlPaperA4Small\" | \"xlPaperA5\" | \"xlPaperB4\" | \"xlPaperB5\" | \"xlPaperFolio\" | \"xlPaperQuarto\" | \"xlPaper10x14\" | \"xlPaper11x17\" | \"xlPaperNote\" | \"xlPaperEnvelope9\" | \"xlPaperEnvelope10\" | \"xlPaperEnvelope11\" | \"xlPaperEnvelope12\" | \"xlPaperEnvelope14\" | \"xlPaperCsheet\" | \"xlPaperDsheet\" | \"xlPaperEsheet\" | \"xlPaperEnvelopeDL\" | \"xlPaperEnvelopeC5\" | \"xlPaperEnvelopeC3\" | \"xlPaperEnvelopeC4\" | \"xlPaperEnvelopeC6\" | \"xlPaperEnvelopeC65\" | \"xlPaperEnvelopeB4\" | \"xlPaperEnvelopeB5\" | \"xlPaperEnvelopeB6\" | \"xlPaperEnvelopeItaly\" | \"xlPaperEnvelopeMonarch\" | \"xlPaperEnvelopePersonal\" | \"xlPaperFanfoldUS\" | \"xlPaperFanfoldStdGerman\" | \"xlPaperFanfoldLegalGerman\""
+  },
+  "ParagraphContent": {
+    "description": "The types of elements that can be added to the paragraph structure.",
+    "examples": [
+      "paragraph.AddElement(run, 0);"
+    ],
+    "type": "ApiUnsupported | ApiRun | ApiHyperlink"
+  },
+  "ParagraphLikeContainer": {
+    "description": "A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt, etc.).",
+    "type": "ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase"
+  },
+  "PasteSpecialOperation": {
+    "description": "The mathematical operation which will be applied to the copied data.",
+    "examples": [
+      "range.PasteSpecial(\"xlPasteAll\", \"xlPasteSpecialOperationAdd\");"
+    ],
+    "type": "\"xlPasteSpecialOperationAdd\" | \"xlPasteSpecialOperationDivide\" | \"xlPasteSpecialOperationMultiply\" | \"xlPasteSpecialOperationNone\" | \"xlPasteSpecialOperationSubtract\""
+  },
+  "PasteType": {
+    "description": "Specifies the part of the range to be pasted.",
+    "examples": [
+      "range.PasteSpecial(\"xlPasteAll\");"
+    ],
+    "type": "\"xlPasteAll\" | \"xlPasteAllExceptBorders\" | \"xlPasteColumnWidths\" | \"xlPasteComments\" | \"xlPasteFormats\" | \"xlPasteFormulas\" | \"xlPasteFormulasAndNumberFormats\" | \"xlPasteValues\" | \"xlPasteValuesAndNumberFormats\""
+  },
+  "PathCommandType": {
+    "description": "The path command types.",
+    "type": "\"moveTo\" | \"lineTo\" | \"bezier3\" | \"bezier4\" | \"arcTo\" | \"close\""
+  },
+  "PathFillType": {
+    "description": "The path fill type.",
+    "type": "\"none\" | \"norm\" | \"lighten\" | \"lightenLess\" | \"darken\" | \"darkenLess\""
+  },
+  "PatternType": {
+    "description": "The available preset patterns which can be used for the fill.",
+    "examples": [
+      "let fill = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(0, 225, 0), Api.CreateRGBColor(255, 0, 0));"
+    ],
+    "type": "\"cross\" | \"dashDnDiag\" | \"dashHorz\" | \"dashUpDiag\" | \"dashVert\" | \"diagBrick\" | \"diagCross\" | \"divot\" | \"dkDnDiag\" | \"dkHorz\" | \"dkUpDiag\" | \"dkVert\" | \"dnDiag\" | \"dotDmnd\" | \"dotGrid\" | \"horz\" | \"horzBrick\" | \"lgCheck\" | \"lgConfetti\" | \"lgGrid\" | \"ltDnDiag\" | \"ltHorz\" | \"ltUpDiag\" | \"ltVert\" | \"narHorz\" | \"narVert\" | \"openDmnd\" | \"pct10\" | \"pct20\" | \"pct25\" | \"pct30\" | \"pct40\" | \"pct5\" | \"pct50\" | \"pct60\" | \"pct70\" | \"pct75\" | \"pct80\" | \"pct90\" | \"plaid\" | \"shingle\" | \"smCheck\" | \"smConfetti\" | \"smGrid\" | \"solidDmnd\" | \"sphere\" | \"trellis\" | \"upDiag\" | \"vert\" | \"wave\" | \"wdDnDiag\" | \"wdUpDiag\" | \"weave\" | \"zigZag\""
+  },
+  "PivotFieldOrientationType": {
+    "description": "The pivot field orientation type.",
+    "type": "\"Rows\" | \"Columns\" | \"Filters\" | \"Values\" | \"Hidden\""
+  },
+  "PivotFieldSubtotals": {
+    "description": "Subtotal pivot field types (functions for subtotals).",
+    "properties": {
+      "Average": {
+        "description": "Specififes whether the AVERAGE function will be used.",
+        "type": "boolean"
+      },
+      "Count": {
+        "description": "Specififes whether the COUNTA function will be used.",
+        "type": "boolean"
+      },
+      "CountNumbers": {
+        "description": "Specififes whether the COUNT function will be used.",
+        "type": "boolean"
+      },
+      "Max": {
+        "description": "Specififes whether the MAX function will be used.",
+        "type": "boolean"
+      },
+      "Min": {
+        "description": "Specififes whether the MIN function will be used.",
+        "type": "boolean"
+      },
+      "Product": {
+        "description": "Specififes whether the PRODUCT function will be used.",
+        "type": "boolean"
+      },
+      "StdDev": {
+        "description": "Specififes whether the STDEV function will be used.",
+        "type": "boolean"
+      },
+      "StdDevP": {
+        "description": "Specififes whether the STDEV.P function will be used.",
+        "type": "boolean"
+      },
+      "Sum": {
+        "description": "Specififes whether the SUM function will be used.",
+        "type": "boolean"
+      },
+      "Var": {
+        "description": "Specififes whether the VAR function will be used.",
+        "type": "boolean"
+      },
+      "VarP": {
+        "description": "Specififes whether the VAR.P function will be used.",
+        "type": "boolean"
+      }
+    }
+  },
+  "PivotLayoutType": {
+    "description": "The layout type of the pivot table report.",
+    "type": "\"Tabular\" | \"Outline\""
+  },
+  "PivotMoveFieldType": {
+    "description": "The direction to move the pivot table field.",
+    "type": "\"Up\" | \"Down\" | \"Begin\" | \"End\""
+  },
+  "PivotSubtotalLayoutType": {
+    "description": "The type of the pivot table subtotal layout.",
+    "type": "\"Hidden\" | \"Top\" | \"Bottom\""
+  },
+  "PivotTableFieldOptions": {
+    "description": "The settings for adding row, column, and page fields to the pivot table report.",
+    "properties": {
+      "addToTable": {
+        "description": "Specifies whether to apply fields only to the pivot table reports. If `true`, the specified fields will be added to the report \rwithout replacing existing fields. If `false`, existing fields will be replaced with the new fields.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "columns": {
+        "description": "An array of field names or IDs to be added as columns or added to the series axis.",
+        "optional": true,
+        "type": "number | string | number[] | string[]"
+      },
+      "pages": {
+        "description": "An array of field names or IDs to be added as pages or added to the page area.",
+        "optional": true,
+        "type": "number | string | number[] | string[]"
+      },
+      "rows": {
+        "description": "An array of field names or IDs to be added as rows or added to the category axis.",
+        "optional": true,
+        "type": "number | string | number[] | string[]"
+      }
+    }
+  },
+  "PivotTableFilterAreaInfo": {
+    "description": "The report filter area settings.",
+    "properties": {
+      "ReportFilterFields": {
+        "description": "Defines the number of the report filter fields.",
+        "type": "number"
+      },
+      "Type": {
+        "description": "Specifies how the report filter fields are located.",
+        "type": "FieldsInReportFilterType"
+      }
+    }
+  },
+  "PlaceholderType": {
+    "description": "Available placeholder types.",
+    "type": "\"body\" | \"chart\" | \"clipArt\" | \"ctrTitle\" | \"diagram\" | \"date\" | \"footer\" | \"header\" | \"media\" | \"object\" | \"picture\" | \"sldImage\" | \"sldNumber\" | \"subTitle\" | \"table\" | \"title\""
+  },
+  "PositiveFixedAngle": {
+    "description": "60000th of a degree (5400000 = 90 degrees).",
+    "examples": [
+      "let fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);"
+    ],
+    "type": "number"
+  },
+  "PositivePercentage": {
+    "description": "The 1000th of a percent (100000 = 100%).",
+    "examples": [
+      "let gs = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);"
+    ],
+    "type": "number"
+  },
+  "PresetColor": {
+    "description": "The available preset color names.",
+    "examples": [
+      "let schemeColor = Api.CreatePresetColor(\"lightYellow\");"
+    ],
+    "type": "\"aliceBlue\" | \"antiqueWhite\" | \"aqua\" | \"aquamarine\" | \"azure\" | \"beige\" | \"bisque\" | \"black\" | \"blanchedAlmond\" | \"blue\" | \"blueViolet\" | \"brown\" | \"burlyWood\" | \"cadetBlue\" | \"chartreuse\" | \"chocolate\" | \"coral\" | \"cornflowerBlue\" | \"cornsilk\" | \"crimson\" | \"cyan\" | \"darkBlue\" | \"darkCyan\" | \"darkGoldenrod\" | \"darkGray\" | \"darkGreen\" | \"darkGrey\" | \"darkKhaki\" | \"darkMagenta\" | \"darkOliveGreen\" | \"darkOrange\" | \"darkOrchid\" | \"darkRed\" | \"darkSalmon\" | \"darkSeaGreen\" | \"darkSlateBlue\" | \"darkSlateGray\" | \"darkSlateGrey\" | \"darkTurquoise\" | \"darkViolet\" | \"deepPink\" | \"deepSkyBlue\" | \"dimGray\" | \"dimGrey\" | \"dkBlue\" | \"dkCyan\" | \"dkGoldenrod\" | \"dkGray\" | \"dkGreen\" | \"dkGrey\" | \"dkKhaki\" | \"dkMagenta\" | \"dkOliveGreen\" | \"dkOrange\" | \"dkOrchid\" | \"dkRed\" | \"dkSalmon\" | \"dkSeaGreen\" | \"dkSlateBlue\" | \"dkSlateGray\" | \"dkSlateGrey\" | \"dkTurquoise\" | \"dkViolet\" | \"dodgerBlue\" | \"firebrick\" | \"floralWhite\" | \"forestGreen\" | \"fuchsia\" | \"gainsboro\" | \"ghostWhite\" | \"gold\" | \"goldenrod\" | \"gray\" | \"green\" | \"greenYellow\" | \"grey\" | \"honeydew\" | \"hotPink\" | \"indianRed\" | \"indigo\" | \"ivory\" | \"khaki\" | \"lavender\" | \"lavenderBlush\" | \"lawnGreen\" | \"lemonChiffon\" | \"lightBlue\" | \"lightCoral\" | \"lightCyan\" | \"lightGoldenrodYellow\" | \"lightGray\" | \"lightGreen\" | \"lightGrey\" | \"lightPink\" | \"lightSalmon\" | \"lightSeaGreen\" | \"lightSkyBlue\" | \"lightSlateGray\" | \"lightSlateGrey\" | \"lightSteelBlue\" | \"lightYellow\" | \"lime\" | \"limeGreen\" | \"linen\" | \"ltBlue\" | \"ltCoral\" | \"ltCyan\" | \"ltGoldenrodYellow\" | \"ltGray\" | \"ltGreen\" | \"ltGrey\" | \"ltPink\" | \"ltSalmon\" | \"ltSeaGreen\" | \"ltSkyBlue\" | \"ltSlateGray\" | \"ltSlateGrey\" | \"ltSteelBlue\" | \"ltYellow\" | \"magenta\" | \"maroon\" | \"medAquamarine\" | \"medBlue\" | \"mediumAquamarine\" | \"mediumBlue\" | \"mediumOrchid\" | \"mediumPurple\" | \"mediumSeaGreen\" | \"mediumSlateBlue\" | \"mediumSpringGreen\" | \"mediumTurquoise\" | \"mediumVioletRed\" | \"medOrchid\" | \"medPurple\" | \"medSeaGreen\" | \"medSlateBlue\" | \"medSpringGreen\" | \"medTurquoise\" | \"medVioletRed\" | \"midnightBlue\" | \"mintCream\" | \"mistyRose\" | \"moccasin\" | \"navajoWhite\" | \"navy\" | \"oldLace\" | \"olive\" | \"oliveDrab\" | \"orange\" | \"orangeRed\" | \"orchid\" | \"paleGoldenrod\" | \"paleGreen\" | \"paleTurquoise\" | \"paleVioletRed\" | \"papayaWhip\" | \"peachPuff\" | \"peru\" | \"pink\" | \"plum\" | \"powderBlue\" | \"purple\" | \"red\" | \"rosyBrown\" | \"royalBlue\" | \"saddleBrown\" | \"salmon\" | \"sandyBrown\" | \"seaGreen\" | \"seaShell\" | \"sienna\" | \"silver\" | \"skyBlue\" | \"slateBlue\" | \"slateGray\" | \"slateGrey\" | \"snow\" | \"springGreen\" | \"steelBlue\" | \"tan\" | \"teal\" | \"thistle\" | \"tomato\" | \"turquoise\" | \"violet\" | \"wheat\" | \"white\" | \"whiteSmoke\" | \"yellow\" | \"yellowGreen\""
+  },
+  "ProtectedRangeUserType": {
+    "description": "Specifies the user type of the protected range.",
+    "examples": [
+      "protectedRange.SetAnyoneType(\"NotView\");"
+    ],
+    "type": "\"CanEdit\" | \"CanView\" | \"NotView\""
+  },
+  "ReadingOrder": {
+    "description": "The reading order (left-to-right or right-to-left).",
+    "type": "\"ltr\" | \"rtl\""
+  },
+  "ReferenceStyle": {
+    "description": "The cell reference type.",
+    "examples": [
+      "builder.CreateFile(\"xlsx\");\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(Api.GetReferenceStyle());\nbuilder.SaveFile(\"xlsx\", \"ReferenceStyle.xlsx\");\nbuilder.CloseFile();"
+    ],
+    "type": "'xlA1' | 'xlR1C1'"
+  },
+  "RelFromH": {
+    "description": "The possible values for the base which the relative horizontal positioning of an object will be calculated from.",
+    "examples": [
+      "drawing.SetHorAlign(\"page\", \"center\");"
+    ],
+    "type": "\"character\" | \"column\" | \"insideMargin\" | \"leftMargin\" | \"rightMargin\" | \"margin\" | \"outsideMargin\" | \"page\""
+  },
+  "RelFromV": {
+    "description": "The possible values for the base which the relative vertical positioning of an object will be calculated from.",
+    "examples": [
+      "drawing.SetVerAlign(\"page\", \"center\");"
+    ],
+    "type": "\"bottomMargin\" | \"insideMargin\" | \"topMargin\" | \"margin\" | \"outsideMargin\" | \"page\" | \"line\" | \"paragraph\""
+  },
+  "ReplaceData": {
+    "description": "Properties to make search and replace.",
+    "properties": {
+      "LookAt": {
+        "description": "Specifies whether the whole search text or any part of the search text is matched.",
+        "type": "XlLookAt"
+      },
+      "MatchCase": {
+        "description": "Case sensitive or not. The default value is \"false\".",
+        "type": "boolean"
+      },
+      "ReplaceAll": {
+        "description": "Specifies if all the found data will be replaced or not. The default value is \"true\".",
+        "type": "boolean"
+      },
+      "Replacement": {
+        "description": "The replacement string.",
+        "type": "string"
+      },
+      "SearchDirection": {
+        "description": "Range search direction - next match or previous match.",
+        "type": "XlSearchDirection"
+      },
+      "SearchOrder": {
+        "description": "Range search order - by rows or by columns.",
+        "type": "XlSearchOrder"
+      },
+      "What": {
+        "description": "The data to search for.",
+        "type": "string | undefined"
+      }
+    }
+  },
+  "ReviewReport": {
+    "description": "A dictionary of users and their review changes.",
+    "examples": [
+      "let reviewRecord = {\n\t\"John Smith\" : [{Type: \"TextRem\", Value: \"Hello, Mark!\", Date: 1679941734161},\n\t\t\t\t\t{Type: \"TextAdd\", Value: \"Dear Mr. Pottato.\", Date: 1679941736189}],\n\t\"Mark Pottato\" : [{Type: \"ParaRem\", Date: 1679941755942},\n\t\t\t\t\t{Type: \"TextPr\", Date: 1679941757832}]\n}"
+    ],
+    "properties": {
+      "username": {
+        "description": "The review changes grouped by username.",
+        "optional": true,
+        "type": "UserReviewChanges"
+      }
+    }
+  },
+  "ReviewReportRecord": {
+    "description": "Represents a single review change record.",
+    "examples": [
+      "let reviewReportRecord1 = {Type: \"TextRem\", Value: \"Hello, Mark!\", Date: 1679941734161};\nlet reviewReportRecord2 = {Type: \"TextAdd\", Value: \"Dear Mr. Pottato.\", Date: 1679941736189};\nlet reviewReportRecord3 = {Type: \"ParaRem\", Date: 1679941755942};\nlet reviewReportRecord4 = {Type: \"TextPr\", Date: 1679941757832};\nlet reviewRecord = {\n\t\"John Smith\" : [reviewReportRecord1, reviewReportRecord2],\n\t\"Mark Pottato\" : [reviewReportRecord3, reviewReportRecord4]\n};"
+    ],
+    "properties": {
+      "Date": {
+        "description": "The timestamp of the change.",
+        "type": "number"
+      },
+      "ReviewedElement": {
+        "description": "The element that was reviewed.",
+        "type": "ApiParagraph | ApiTable"
+      },
+      "Type": {
+        "description": "The review record type.",
+        "type": "ReviewReportRecordType"
+      },
+      "Value": {
+        "description": "The review change value (only for \"TextAdd\" and \"TextRem\" types).",
+        "optional": true,
+        "type": "string"
+      }
+    }
+  },
+  "ReviewReportRecordType": {
+    "description": "Review record type.",
+    "examples": [
+      "let reviewReportRecord1 = {Type: \"TextRem\", Value: \"Hello, Mark!\", Date: 1679941734161};\nlet reviewReportRecord2 = {Type: \"TextAdd\", Value: \"Dear Mr. Pottato.\", Date: 1679941736189};\nlet reviewReportRecord3 = {Type: \"ParaRem\", Date: 1679941755942};\nlet reviewReportRecord4 = {Type: \"TextPr\", Date: 1679941757832};\nlet reviewRecord = {\n\t\"John Smith\" : [reviewReportRecord1, reviewReportRecord2],\n\t\"Mark Pottato\" : [reviewReportRecord3, reviewReportRecord4]\n};"
+    ],
+    "type": "\"TextAdd\" | \"TextRem\" | \"ParaAdd\" | \"ParaRem\" | \"TextPr\" | \"ParaPr\" | \"Unknown\""
+  },
+  "ScaleFlag": {
+    "description": "The condition to scale an image in the picture form.",
+    "examples": [
+      "pictureForm.SetScaleFlag(\"tooBig\");"
+    ],
+    "type": "\"always\" | \"never\" | \"tooBig\" | \"tooSmall\""
+  },
+  "SchemeColorId": {
+    "description": "The available color scheme identifiers.",
+    "examples": [
+      "let schemeColor = Api.CreateSchemeColor(\"accent2\");"
+    ],
+    "type": "\"accent1\" | \"accent2\" | \"accent3\" | \"accent4\" | \"accent5\" | \"accent6\" | \"bg1\" | \"bg2\" | \"dk1\" | \"dk2\" | \"lt1\" | \"lt2\" | \"tx1\" | \"tx2\""
+  },
+  "SdtLock": {
+    "description": "The lock type of the content control.",
+    "examples": [
+      "inlineLvlSdt.SetLock(\"sdtContentLocked\");"
+    ],
+    "type": "\"unlocked\" | \"contentLocked\" | \"sdtContentLocked\" | \"sdtLocked\""
+  },
+  "SearchData": {
+    "description": "Properties to make search.",
+    "properties": {
+      "After": {
+        "description": "The cell after which you want the search to begin. If this argument is not specified, the search starts after the cell in the upper-left corner of the range.",
+        "type": "ApiRange"
+      },
+      "LookAt": {
+        "description": "Specifies whether the whole search text or any part of the search text is matched.",
+        "type": "XlLookAt"
+      },
+      "LookIn": {
+        "description": "Search data type (formulas or values).",
+        "type": "XlFindLookIn"
+      },
+      "MatchCase": {
+        "description": "Case sensitive or not. The default value is \"false\".",
+        "type": "boolean"
+      },
+      "SearchDirection": {
+        "description": "Range search direction - next match or previous match.",
+        "type": "XlSearchDirection"
+      },
+      "SearchOrder": {
+        "description": "Range search order - by rows or by columns.",
+        "type": "XlSearchOrder"
+      },
+      "What": {
+        "description": "The data to search for.",
+        "type": "string | undefined"
+      }
+    }
+  },
+  "SectionBreakType": {
+    "description": "The section break type which defines how the contents of the current section are placed relative to the previous section.\nWordprocessingML supports five distinct types of section breaks:\n**Next page** (\"nextPage\") - starts a new section on the next page (the default value).\n**Odd** (\"oddPage\") - starts a new section on the next odd-numbered page.\n**Even** (\"evenPage\") - starts a new section on the next even-numbered page.\n**Continuous** (\"continuous\") - starts a new section in the next paragraph.\nThis means that continuous section breaks might not specify certain page-level section properties,\nsince they shall be inherited from the following section.\nHowever, these breaks can specify other section properties, such as line numbering and footnote/endnote settings.\n**Column** (\"nextColumn\") - starts a new section in the next column on the page.",
+    "type": "\"nextPage\" | \"oddPage\" | \"evenPage\" | \"continuous\" | \"nextColumn\""
+  },
+  "SelectionType": {
+    "description": "Represents the type of objects in a selection.",
+    "type": "\"none\" | \"shapes\" | \"slides\" | \"text\""
+  },
+  "ShadowSettings": {
+    "description": "Properties used to create a shadow.",
+    "properties": {
+      "color": {
+        "description": "The shadow color (black by default).",
+        "optional": true,
+        "type": "ApiUniColor"
+      },
+      "offsetX": {
+        "description": "The horizontal offset of the shadow measured in points (a positive value offsets to the right).",
+        "optional": true,
+        "type": "number"
+      },
+      "offsetY": {
+        "description": "The vertical offset of the shadow measured in points (a positive value offsets downwards).",
+        "optional": true,
+        "type": "number"
+      },
+      "rotateWithShape": {
+        "description": "Specifies whether the shadow rotates together with the shape.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "size": {
+        "description": "The shadow size as a percentage of the shape size.",
+        "optional": true,
+        "type": "number"
+      },
+      "transparency": {
+        "description": "The shadow transparency from 0.0 (opaque) to 1.0 (clear).",
+        "optional": true,
+        "type": "number"
+      }
+    }
+  },
+  "ShapeType": {
+    "description": "This type specifies the preset shape geometry that will be used for a shape.",
+    "examples": [
+      "let drawing = Api.CreateShape(\"diamond\", 100 * 36000, 100 * 36000, fill, stroke);"
+    ],
+    "type": "\"accentBorderCallout1\" | \"accentBorderCallout2\" | \"accentBorderCallout3\" | \"accentCallout1\" | \"accentCallout2\" | \"accentCallout3\" | \"actionButtonBackPrevious\" | \"actionButtonBeginning\" | \"actionButtonBlank\" | \"actionButtonDocument\" | \"actionButtonEnd\" | \"actionButtonForwardNext\" | \"actionButtonHelp\" | \"actionButtonHome\" | \"actionButtonInformation\" | \"actionButtonMovie\" | \"actionButtonReturn\" | \"actionButtonSound\" | \"arc\" | \"bentArrow\" | \"bentConnector2\" | \"bentConnector3\" | \"bentConnector4\" | \"bentConnector5\" | \"bentUpArrow\" | \"bevel\" | \"blockArc\" | \"borderCallout1\" | \"borderCallout2\" | \"borderCallout3\" | \"bracePair\" | \"bracketPair\" | \"callout1\" | \"callout2\" | \"callout3\" | \"can\" | \"chartPlus\" | \"chartStar\" | \"chartX\" | \"chevron\" | \"chord\" | \"circularArrow\" | \"cloud\" | \"cloudCallout\" | \"corner\" | \"cornerTabs\" | \"cube\" | \"curvedConnector2\" | \"curvedConnector3\" | \"curvedConnector4\" | \"curvedConnector5\" | \"curvedDownArrow\" | \"curvedLeftArrow\" | \"curvedRightArrow\" | \"curvedUpArrow\" | \"decagon\" | \"diagStripe\" | \"diamond\" | \"dodecagon\" | \"donut\" | \"doubleWave\" | \"downArrow\" | \"downArrowCallout\" | \"ellipse\" | \"ellipseRibbon\" | \"ellipseRibbon2\" | \"flowChartAlternateProcess\" | \"flowChartCollate\" | \"flowChartConnector\" | \"flowChartDecision\" | \"flowChartDelay\" | \"flowChartDisplay\" | \"flowChartDocument\" | \"flowChartExtract\" | \"flowChartInputOutput\" | \"flowChartInternalStorage\" | \"flowChartMagneticDisk\" | \"flowChartMagneticDrum\" | \"flowChartMagneticTape\" | \"flowChartManualInput\" | \"flowChartManualOperation\" | \"flowChartMerge\" | \"flowChartMultidocument\" | \"flowChartOfflineStorage\" | \"flowChartOffpageConnector\" | \"flowChartOnlineStorage\" | \"flowChartOr\" | \"flowChartPredefinedProcess\" | \"flowChartPreparation\" | \"flowChartProcess\" | \"flowChartPunchedCard\" | \"flowChartPunchedTape\" | \"flowChartSort\" | \"flowChartSummingJunction\" | \"flowChartTerminator\" | \"foldedCorner\" | \"frame\" | \"funnel\" | \"gear6\" | \"gear9\" | \"halfFrame\" | \"heart\" | \"heptagon\" | \"hexagon\" | \"homePlate\" | \"horizontalScroll\" | \"irregularSeal1\" | \"irregularSeal2\" | \"leftArrow\" | \"leftArrowCallout\" | \"leftBrace\" | \"leftBracket\" | \"leftCircularArrow\" | \"leftRightArrow\" | \"leftRightArrowCallout\" | \"leftRightCircularArrow\" | \"leftRightRibbon\" | \"leftRightUpArrow\" | \"leftUpArrow\" | \"lightningBolt\" | \"line\" | \"lineInv\" | \"mathDivide\" | \"mathEqual\" | \"mathMinus\" | \"mathMultiply\" | \"mathNotEqual\" | \"mathPlus\" | \"moon\" | \"nonIsoscelesTrapezoid\" | \"noSmoking\" | \"notchedRightArrow\" | \"octagon\" | \"parallelogram\" | \"pentagon\" | \"pie\" | \"pieWedge\" | \"plaque\" | \"plaqueTabs\" | \"plus\" | \"quadArrow\" | \"quadArrowCallout\" | \"rect\" | \"ribbon\" | \"ribbon2\" | \"rightArrow\" | \"rightArrowCallout\" | \"rightBrace\" | \"rightBracket\" | \"round1Rect\" | \"round2DiagRect\" | \"round2SameRect\" | \"roundRect\" | \"rtTriangle\" | \"smileyFace\" | \"snip1Rect\" | \"snip2DiagRect\" | \"snip2SameRect\" | \"snipRoundRect\" | \"squareTabs\" | \"star10\" | \"star12\" | \"star16\" | \"star24\" | \"star32\" | \"star4\" | \"star5\" | \"star6\" | \"star7\" | \"star8\" | \"straightConnector1\" | \"stripedRightArrow\" | \"sun\" | \"swooshArrow\" | \"teardrop\" | \"trapezoid\" | \"triangle\" | \"upArrowCallout\" | \"upDownArrow\" | \"upDownArrow\" | \"upDownArrowCallout\" | \"uturnArrow\" | \"verticalScroll\" | \"wave\" | \"wedgeEllipseCallout\" | \"wedgeRectCallout\" | \"wedgeRoundRectCallout\""
+  },
+  "Shd": {
+    "description": "The shading information object.",
+    "properties": {
+      "Color": {
+        "description": "The shading color.",
+        "type": "ApiColor"
+      },
+      "Type": {
+        "description": "The shading type: **\"nil\"** - no shading, **\"clear\"** - solid fill.",
+        "type": "ShdType"
+      }
+    }
+  },
+  "ShdType": {
+    "description": "A shade type which can be added to the document element.",
+    "examples": [
+      "tablePr.SetShd(\"clear\", 0, 255, 0, false);"
+    ],
+    "type": "\"nil\" | \"clear\""
+  },
+  "SizeRelFromH": {
+    "description": "The possible values for the base which the relative horizontal size of an object will be calculated from.",
+    "type": "\"insideMargin\" | \"leftMargin\" | \"rightMargin\" | \"margin\" | \"outsideMargin\" | \"page\""
+  },
+  "SizeRelFromV": {
+    "description": "The possible values for the base which the relative vertical size of an object will be calculated from.",
+    "type": "\"bottomMargin\" | \"insideMargin\" | \"topMargin\" | \"margin\" | \"outsideMargin\" | \"page\""
+  },
+  "SortHeader": {
+    "description": "Specifies whether the first row of the sort range contains the header information.",
+    "examples": [
+      "worksheet.GetRange(\"A1:C5\").SetSort(\"A1:A5\", \"xlAscending\", \"B1:B5\", \"xlDescending\", \"C1:C5\", \"xlAscending\", \"xlYes\", \"xlSortColumns\");"
+    ],
+    "type": "\"xlNo\" | \"xlYes\""
+  },
+  "SortOrder": {
+    "description": "Specifies the sort order.",
+    "examples": [
+      "worksheet.GetRange(\"A1:C5\").SetSort(\"A1:A5\", \"xlAscending\", \"B1:B5\", \"xlDescending\", \"C1:C5\", \"xlAscending\", \"xlYes\", \"xlSortColumns\");"
+    ],
+    "type": "\"xlAscending\" | \"xlDescending\""
+  },
+  "SortOrientation": {
+    "description": "Specifies if the sort should be by row or column.",
+    "examples": [
+      "worksheet.GetRange(\"A1:C5\").SetSort(\"A1:A5\", \"xlAscending\", \"B1:B5\", \"xlDescending\", \"C1:C5\", \"xlAscending\", \"xlYes\", \"xlSortColumns\");"
+    ],
+    "type": "\"xlSortColumns\" | \"xlSortRows\""
+  },
+  "StatisticType": {
+    "description": "A numeric value between 1 and 8 that specifies which statistic will be returned.\n**1** - Alpha parameter of ETS algorithm - the base value parameter.\n**2** - Beta parameter of ETS algorithm - the trend value parameter.\n**3** - Gamma parameter of ETS algorithm - the seasonality value parameter.\n**4** - MASE (mean absolute scaled error) metric - a measure of the accuracy of forecasts.\n**5** - SMAPE (symmetric mean absolute percentage error) metric - a measure of the accuracy based on percentage errors.\n**6** - MAE (mean absolute error) metric - a measure of the accuracy of forecasts.\n**7** - RMSE (root mean squared error) metric - a measure of the differences between predicted and observed values.\n**8** - Step size detected in the timeline.",
+    "type": "1 | 2 | 3 | 4 | 5 | 6 | 7 | 8"
+  },
+  "StyleType": {
+    "description": "The style type used for the document element.",
+    "examples": [
+      "let normalStyle = doc.GetDefaultStyle(\"paragraph\");"
+    ],
+    "type": "\"paragraph\" | \"table\" | \"run\" | \"numbering\""
+  },
+  "TabJc": {
+    "description": "Types of custom tab.",
+    "examples": [
+      "paraPr.SetTabs([1000, 1500, 3000], [\"center\", \"left\", \"right\"]);"
+    ],
+    "type": "\"clear\" | \"left\" | \"right\" | \"center\""
+  },
+  "TabStop": {
+    "description": "A paragraph tab stop.",
+    "properties": {
+      "Leader": {
+        "description": "The tab leader character.",
+        "type": "\"none\" | \"dot\" | \"heavy\" | \"hyphen\" | \"middleDot\" | \"underscore\""
+      },
+      "Pos": {
+        "description": "The tab stop position measured in twentieths of a point (1/1440 of an inch).",
+        "type": "twips"
+      },
+      "Val": {
+        "description": "The tab stop alignment style.",
+        "type": "TabJc"
+      }
+    }
+  },
+  "TableLook": {
+    "properties": {
+      "bandHor": {
+        "description": "Specifies that the horizontal banding conditional formatting shall not be applied to the table.",
+        "type": "boolean"
+      },
+      "bandVer": {
+        "description": "Specifies that the vertical banding conditional formatting shall not be applied to the table.",
+        "type": "boolean"
+      },
+      "firstCol": {
+        "description": "Specifies that the first column conditional formatting shall be applied to the table.",
+        "type": "boolean"
+      },
+      "firstRow": {
+        "description": "Specifies that the first row conditional formatting shall be applied to the table.",
+        "type": "boolean"
+      },
+      "lastCol": {
+        "description": "Specifies that the last column conditional formatting shall be applied to the table.",
+        "type": "boolean"
+      },
+      "lastRow": {
+        "description": "Specifies that the last row conditional formatting shall be applied to the table.",
+        "type": "boolean"
+      }
+    }
+  },
+  "TableStyleOverrideType": {
+    "description": "This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used.\n**\"topLeftCell\"** - specifies that the table formatting is applied to the top left cell.\n**\"topRightCell\"** - specifies that the table formatting is applied to the top right cell.\n**\"bottomLeftCell\"** - specifies that the table formatting is applied to the bottom left cell.\n**\"bottomRightCell\"** - specifies that the table formatting is applied to the bottom right cell.\n**\"firstRow\"** - specifies that the table formatting is applied to the first row.\n**\"lastRow\"** - specifies that the table formatting is applied to the last row.\n**\"firstColumn\"** - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format.\n**\"lastColumn\"** - specifies that the table formatting is applied to the last column.\n**\"bandedColumn\"** - specifies that the table formatting is applied to odd numbered groupings of rows.\n**\"bandedColumnEven\"** - specifies that the table formatting is applied to even numbered groupings of rows.\n**\"bandedRow\"** - specifies that the table formatting is applied to odd numbered groupings of columns.\n**\"bandedRowEven\"** - specifies that the table formatting is applied to even numbered groupings of columns.\n**\"wholeTable\"** - specifies that the conditional formatting is applied to the whole table.",
+    "examples": [
+      "tableStyle.GetConditionalTableStyle(\"topLeftCell\").GetTableCellPr().SetShd(\"clear\", 255, 0, 0);"
+    ],
+    "type": "\"topLeftCell\" | \"topRightCell\" | \"bottomLeftCell\" | \"bottomRightCell\" | \"firstRow\" | \"lastRow\" | \"firstColumn\" | \"lastColumn\" | \"bandedColumn\" | \"bandedColumnEven\" | \"bandedRow\" | \"bandedRowEven\" | \"wholeTable\""
+  },
+  "TableWidth": {
+    "description": "The possible values for the units of the width property are defined by a specific table or table cell width property.\n**\"auto\"** - sets the table or table cell width to auto width.\n**\"twips\"** - sets the table or table cell width to be measured in twentieths of a point.\n**\"nul\"** - sets the table or table cell width to be of a zero value.\n**\"percent\"** - sets the table or table cell width to be measured in percent to the parent container.",
+    "examples": [
+      "tableCell.SetWidth(\"twips\", 2000);"
+    ],
+    "type": "\"auto\" | \"twips\" | \"nul\" | \"percent\""
+  },
+  "TextFitType": {
+    "description": "The available text autofit types inside a shape.",
+    "type": "\"noAutoFit\" | \"normAutoFit\" | \"autoFit\""
+  },
+  "TextFlowDirection": {
+    "description": "The available text flow direction inside a drawing content.",
+    "type": "\"lrtb\" | \"tbrl\" | \"btlr\""
+  },
+  "TextFormFormat": {
+    "description": "The text field format data.",
+    "properties": {
+      "type": {
+        "description": "The format type.",
+        "type": "\"none\" | \"digit\" | \"letter\" | \"mask\" | \"regExp\""
+      },
+      "value": {
+        "description": "The format value. Required for **\"mask\"** and **\"regExp\"** types.",
+        "optional": true,
+        "type": "string"
+      }
+    }
+  },
+  "TextTransform": {
+    "description": "Text transform type.",
+    "examples": [
+      "let textArt = Api.CreateWordArt(oTextPr, \"onlyoffice\", \"textArchUp\", fill, stroke, 0, 150 * 36000, 50 * 36000);"
+    ],
+    "type": "\"textArchDown\" | \"textArchDownPour\" | \"textArchUp\" | \"textArchUpPour\" | \"textButton\" | \"textButtonPour\" | \"textCanDown\" | \"textCanUp\" | \"textCascadeDown\" | \"textCascadeUp\" | \"textChevron\" | \"textChevronInverted\" | \"textCircle\" | \"textCirclePour\" | \"textCurveDown\" | \"textCurveUp\" | \"textDeflate\" | \"textDeflateBottom\" | \"textDeflateInflate\" | \"textDeflateInflateDeflate\" | \"textDeflateTop\" | \"textDoubleWave1\" | \"textFadeDown\" | \"textFadeLeft\" | \"textFadeRight\" | \"textFadeUp\" | \"textInflate\" | \"textInflateBottom\" | \"textInflateTop\" | \"textPlain\" | \"textRingInside\" | \"textRingOutside\" | \"textSlantDown\" | \"textSlantUp\" | \"textStop\" | \"textTriangle\" | \"textTriangleInverted\" | \"textWave1\" | \"textWave2\" | \"textWave4\" | \"textNoShape\""
+  },
+  "TickLabelPosition": {
+    "description": "Possible values for the position of chart tick labels (either horizontal or vertical).\n**\"none\"** - does not display the selected tick labels.\n**\"nextTo\"** - sets the position of the selected tick labels next to the main label.\n**\"low\"** - sets the position of the selected tick labels in the part of the chart with lower values.\n**\"high\"** - sets the position of the selected tick labels in the part of the chart with higher values.",
+    "examples": [
+      "chart.SetVertAxisTickLabelPosition(\"nextTo\");"
+    ],
+    "type": "\"none\" | \"nextTo\" | \"low\" | \"high\""
+  },
+  "TickMark": {
+    "description": "The type of tick mark appearance.",
+    "examples": [
+      "chart.SetVertAxisMajorTickMark(\"cross\");"
+    ],
+    "type": "\"cross\" | \"in\" | \"none\" | \"out\""
+  },
+  "ToHtmlOptions": {
+    "description": "Options for converting document content to an HTML string.",
+    "properties": {
+      "Base64img": {
+        "description": "Defines if the images will be created in the base64 format.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "DemoteHeadings": {
+        "description": "Defines if all heading levels will be demoted to conform with the following standard: single H1 as title, H2 as top-level heading in the text body.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "HtmlHeadings": {
+        "description": "Defines if the HTML headings and IDs will be generated when the Markdown renderer of your target platform does not handle Markdown-style IDs.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "RenderHTMLTags": {
+        "description": "Defines if HTML tags will be preserved. By default, the opening angle brackets will be replaced with the special characters.",
+        "optional": true,
+        "type": "boolean"
+      }
+    }
+  },
+  "TocBuildFromPr": {
+    "description": "Table of contents properties which specify whether to generate the table of contents from the outline levels or the specified styles.",
+    "examples": [
+      "let tocBuildFromPr = {\"OutlineLvls\": 9};\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": tocBuildFromPr, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
+    ],
+    "properties": {
+      "OutlineLvlStart": {
+        "description": "The highest heading level included in the table of contents (the start of the outline range).",
+        "optional": true,
+        "type": "number"
+      },
+      "OutlineLvls": {
+        "description": "The lowest heading level included in the table of contents (the end of the outline range).",
+        "optional": true,
+        "type": "number"
+      },
+      "StylesLvls": {
+        "description": "Style levels (for example, [{Name: \"Heading 1\", Lvl: 2}, {Name: \"Heading 2\", Lvl: 3}]).\r<note>If StylesLvls.length > 0, then the OutlineLvls property will be ignored.</note>",
+        "type": "TocStyleLvl[]"
+      }
+    }
+  },
+  "TocLeader": {
+    "description": "Possible values for the table of contents leader:\n**\"dot\"** - \".......\"\n**\"dash\"** - \"-------\"\n**\"underline\"** - \"_______\"",
+    "examples": [
+      "let tocLeader = \"dot\";\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": tocLeader, \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
+    ],
+    "type": "\"dot\" | \"dash\" | \"underline\" | \"none\""
+  },
+  "TocPr": {
+    "description": "Table of contents properties.",
+    "examples": [
+      "let tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
+    ],
+    "properties": {
+      "BuildFrom": {
+        "description": "Specifies whether to generate the table of contents from the outline levels or the specified styles.",
+        "optional": true,
+        "type": "TocBuildFromPr"
+      },
+      "FormatAsLinks": {
+        "description": "Specifies whether to format the table of contents as links.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "LeaderType": {
+        "description": "The leader type in the table of contents.",
+        "optional": true,
+        "type": "TocLeader"
+      },
+      "RightAlgn": {
+        "description": "Specifies whether to right-align page numbers in the table of contents.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "ShowPageNums": {
+        "description": "Specifies whether to show page numbers in the table of contents.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "TocStyle": {
+        "description": "The table of contents style type.",
+        "optional": true,
+        "type": "TocStyle"
+      }
+    }
+  },
+  "TocStyle": {
+    "description": "Possible values for the table of contents style.",
+    "examples": [
+      "let tocStyle = \"standard\";\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": tocStyle};\ndoc.AddTableOfContents(tocPr);"
+    ],
+    "type": "\"simple\" | \"online\" | \"standard\" | \"modern\" | \"classic\""
+  },
+  "TocStyleLvl": {
+    "description": "Table of contents style levels.",
+    "examples": [
+      "let tocStyleLvl = [{Name: \"Heading 1\", Lvl: 2}, {Name: \"Heading 2\", Lvl: 3}];\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"StylesLvls\": tocStyleLvl}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
+    ],
+    "properties": {
+      "Lvl": {
+        "description": "Level which will be applied to the specified style in the table of contents.",
+        "type": "number"
+      },
+      "Name": {
+        "description": "Style name (for example, \"Heading 1\").",
+        "type": "string"
+      }
+    }
+  },
+  "TofPr": {
+    "description": "Table of figures properties.",
+    "examples": [
+      "let tofPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": \"Figure\", \"LabelNumber\": true, \"TofStyle\": \"distinctive\"};\ndoc.AddTableOfFigures(tofPr);"
+    ],
+    "properties": {
+      "BuildFrom": {
+        "description": "Specifies whether to generate the table of figures based on the specified caption label or the paragraph style name used (for example, \"Heading 1\").",
+        "optional": true,
+        "type": "CaptionLabel | string"
+      },
+      "FormatAsLinks": {
+        "description": "Specifies whether to format the table of figures as links.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "LabelNumber": {
+        "description": "Specifies whether to include the label and number in the table of figures.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "LeaderType": {
+        "description": "The leader type in the table of figures.",
+        "optional": true,
+        "type": "TocLeader"
+      },
+      "RightAlgn": {
+        "description": "Specifies whether to right-align page numbers in the table of figures.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "ShowPageNums": {
+        "description": "Specifies whether to show page numbers in the table of figures.",
+        "optional": true,
+        "type": "boolean"
+      },
+      "TofStyle": {
+        "description": "The table of figures style type.",
+        "optional": true,
+        "type": "TofStyle"
+      }
+    }
+  },
+  "TofStyle": {
+    "description": "Possible values for the table of figures style.",
+    "examples": [
+      "let tofStyle = \"distinctive\";\nlet tofPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": \"Figure\", \"LabelNumber\": true, \"TofStyle\": tofStyle};\ndoc.AddTableOfFigures(tofPr);"
+    ],
+    "type": "\"simple\" | \"online\" | \"classic\" | \"distinctive\" | \"centered\" | \"formal\""
+  },
+  "TransitionSpeed": {
+    "description": "The available slide transition speed values (similar to PowerPoint VBA ppTransitionSpeed).",
+    "type": "\"slow\" | \"medium\" | \"fast\""
+  },
+  "UserComments": {
+    "description": "Represents a user's comment history.",
+    "properties": {
+      "comments": {
+        "description": "A list of comments.",
+        "type": "CommentReportRecord[]"
+      }
+    }
+  },
+  "UserReviewChanges": {
+    "description": "Represents a user's review history.",
+    "properties": {
+      "reviews": {
+        "description": "A list of review records.",
+        "type": "ReviewReportRecord[]"
+      }
+    }
+  },
+  "ValidationAlertStyle": {
+    "description": "The validation alert style.",
+    "type": "\"xlValidAlertStop\" | \"xlValidAlertWarning\" | \"xlValidAlertInformation\""
+  },
+  "ValidationOperator": {
+    "description": "The validation operator.",
+    "type": "\"xlBetween\" | \"xlNotBetween\" | \"xlEqual\" | \"xlNotEqual\" | \"xlGreater\" | \"xlLess\" | \"xlGreaterEqual\" | \"xlLessEqual\""
+  },
+  "ValidationType": {
+    "description": "The validation type.",
+    "type": "\"xlValidateInputOnly\" | \"xlValidateWholeNumber\" | \"xlValidateDecimal\" | \"xlValidateList\" | \"xlValidateDate\" | \"xlValidateTime\" | \"xlValidateTextLength\" | \"xlValidateCustom\""
+  },
+  "VerticalTextAlign": {
+    "description": "The available text vertical alignment (used to align text in a shape with a placement for text inside it).",
+    "examples": [
+      "drawing.SetVerticalTextAlign(\"top\");"
+    ],
+    "type": "\"top\" | \"center\" | \"bottom\""
+  },
+  "WatermarkDirection": {
+    "description": "The watermark direction.",
+    "examples": [
+      "watermarkSettings.SetDirection(\"clockwise45\");"
+    ],
+    "type": "\"horizontal\" | \"clockwise45\" | \"counterclockwise45\" | \"clockwise90\" | \"counterclockwise90\""
+  },
+  "WatermarkType": {
+    "description": "The watermark type.",
+    "examples": [
+      "watermarkSettings.SetType(\"text\");"
+    ],
+    "type": "\"none\" | \"text\" | \"image\""
+  },
+  "XlAutoFilterOperator": {
+    "description": "Filter type.",
+    "type": "\"xlAnd\" | \"xlBottom10Items\" | \"xlBottom10Percent\" | \"xlFilterCellColor\" | \"xlFilterDynamic\" | \"xlFilterFontColor\" | \"xlFilterValues\" | \"xlOr\" | \"xlTop10Items\" | \"xlTop10Percent\""
+  },
+  "XlCalcFor": {
+    "description": "The calculation scope for pivot table conditional formatting.",
+    "type": "\"xlAllValues\" | \"xlColItems\" | \"xlRowItems\""
+  },
+  "XlConditionValueTypes": {
+    "description": "The condition value types for color scale conditional formatting criteria.",
+    "type": "\"xlConditionValueAutomaticMax\" | \"xlConditionValueAutomaticMin\" | \"xlConditionValueHighestValue\" | \"xlConditionValueLowestValue\" | \"xlConditionValueNone\" | \"xlConditionValueNumber\" | \"xlConditionValuePercent\" | \"xlConditionValuePercentile\" | \"xlConditionValueFormula\""
+  },
+  "XlContainsOperator": {
+    "description": "The operator for text-based conditional formatting.",
+    "type": "\"xlContains\" | \"xlDoesNotContain\" | \"xlBeginsWith\" | \"xlEndsWith\""
+  },
+  "XlDataBarAxisPosition": {
+    "description": "The data bar axis position.",
+    "type": "\"xlDataBarAxisAutomatic\" | \"xlDataBarAxisMidpoint\" | \"xlDataBarAxisNone\""
+  },
+  "XlDataBarFillType": {
+    "description": "The data bar fill type.",
+    "type": "\"xlDataBarFillSolid\" | \"xlDataBarFillGradient\""
+  },
+  "XlDuplicateValues": {
+    "description": "Specifies whether to format duplicate or unique values.",
+    "type": "\"xlDuplicate\" | \"xlUnique\""
+  },
+  "XlDynamicFilterCriteria": {
+    "description": "Specifies the filter criterion.",
+    "type": "\"xlFilterAboveAverage\" | \"xlFilterAllDatesInPeriodApril\" | \"xlFilterAllDatesInPeriodAugust\" | \"xlFilterAllDatesInPeriodDecember\" | \"xlFilterAllDatesInPeriodFebruary\" | \"xlFilterAllDatesInPeriodJanuary\" | \"xlFilterAllDatesInPeriodJuly\" | \"xlFilterAllDatesInPeriodJune\" | \"xlFilterAllDatesInPeriodMarch\" | \"xlFilterAllDatesInPeriodMay\" | \"xlFilterAllDatesInPeriodNovember\" | \"xlFilterAllDatesInPeriodOctober\" | \"xlFilterAllDatesInPeriodQuarter1\" | \"xlFilterAllDatesInPeriodQuarter2\" | \"xlFilterAllDatesInPeriodQuarter3\" | \"xlFilterAllDatesInPeriodQuarter4\" | \"xlFilterBelowAverage\" | \"xlFilterLastMonth\" | \"xlFilterLastQuarter\" | \"xlFilterLastWeek\" | \"xlFilterLastYear\" | \"xlFilterNextMonth\" | \"xlFilterNextQuarter\" | \"xlFilterNextWeek\" | \"xlFilterNextYear\" | \"xlFilterThisMonth\" | \"xlFilterThisQuarter\" | \"xlFilterThisWeek\" | \"xlFilterThisYear\" | \"xlFilterToday\" | \"xlFilterTomorrow\" | \"xlFilterYearToDate\" | \"xlFilterYesterday\""
+  },
+  "XlFindLookIn": {
+    "description": "Search data type (formulas or values).",
+    "examples": [
+      "let searchRange = range.Find( { What: \"200\", After: oWorksheet.GetRange(\"B1\"), LookIn: \"xlValues\", LookAt: \"xlWhole\",\tSearchOrder: \"xlByColumns\", SearchDirection: \"xlNext\", MatchCase: true } );"
+    ],
+    "type": "\"xlFormulas\" | \"xlValues\""
+  },
+  "XlFormatConditionOperator": {
+    "description": "The format condition operator.",
+    "type": "\"xlBetween\" | \"xlNotBetween\" | \"xlEqual\" | \"xlNotEqual\" | \"xlGreater\" | \"xlLess\" | \"xlGreaterEqual\" | \"xlLessEqual\" | \"xlBeginsWith\" | \"xlEndsWith\" | \"xlContains\" | \"xlNotContains\""
+  },
+  "XlFormatConditionType": {
+    "description": "The conditional formatting type.",
+    "type": "\"xlCellValue\" | \"xlExpression\" | \"xlTop10\" | \"xlAboveAverageCondition\" | \"xlUniqueValues\" | \"xlTextString\" | \"xlBlanksCondition\" | \"xlNoBlanksCondition\" | \"xlTimePeriod\" | \"xlErrorsCondition\" | \"xlNoErrorsCondition\" | \"xlColorScale\" | \"xlDataBar\" | \"xlIconSet\""
+  },
+  "XlIcon": {
+    "description": "The icon constants for conditional formatting.",
+    "type": "\"xlIcon0Bars\" | \"xlIcon0FilledBoxes\" | \"xlIcon1Bar\" | \"xlIcon1FilledBox\" | \"xlIcon2Bars\" | \"xlIcon2FilledBoxes\" | \"xlIcon3Bars\" | \"xlIcon3FilledBoxes\" | \"xlIcon4Bars\" | \"xlIcon4FilledBoxes\" | \"xlIconBlackCircle\" | \"xlIconBlackCircleWithBorder\" | \"xlIconCircleWithOneWhiteQuarter\" | \"xlIconCircleWithThreeWhiteQuarters\" | \"xlIconCircleWithTwoWhiteQuarters\" | \"xlIconGoldStar\" | \"xlIconGrayCircle\" | \"xlIconGrayDownArrow\" | \"xlIconGrayDownInclineArrow\" | \"xlIconGraySideArrow\" | \"xlIconGrayUpArrow\" | \"xlIconGrayUpInclineArrow\" | \"xlIconGreenCheck\" | \"xlIconGreenCheckSymbol\" | \"xlIconGreenCircle\" | \"xlIconGreenFlag\" | \"xlIconGreenTrafficLight\" | \"xlIconGreenUpArrow\" | \"xlIconGreenUpTriangle\" | \"xlIconHalfGoldStar\" | \"xlIconNoCellIcon\" | \"xlIconPinkCircle\" | \"xlIconRedCircle\" | \"xlIconRedCircleWithBorder\" | \"xlIconRedCross\" | \"xlIconRedCrossSymbol\" | \"xlIconRedDiamond\" | \"xlIconRedDownArrow\" | \"xlIconRedDownTriangle\" | \"xlIconRedFlag\" | \"xlIconRedTrafficLight\" | \"xlIconSilverStar\" | \"xlIconWhiteCircleAllWhiteQuarters\" | \"xlIconYellowCircle\" | \"xlIconYellowDash\" | \"xlIconYellowDownInclineArrow\" | \"xlIconYellowExclamation\" | \"xlIconYellowExclamationSymbol\" | \"xlIconYellowFlag\" | \"xlIconYellowSideArrow\" | \"xlIconYellowTrafficLight\" | \"xlIconYellowTriangle\" | \"xlIconYellowUpInclineArrow\""
+  },
+  "XlIconSet": {
+    "description": "The icon set types for conditional formatting.",
+    "type": "\"xl3Arrows\" | \"xl3ArrowsGray\" | \"xl3Flags\" | \"xl3TrafficLights1\" | \"xl3TrafficLights2\" | \"xl3Signs\" | \"xl3Symbols\" | \"xl3Symbols2\" | \"xl4Arrows\" | \"xl4ArrowsGray\" | \"xl4RedToBlack\" | \"xl4CRV\" | \"xl4TrafficLights\" | \"xl5Arrows\" | \"xl5ArrowsGray\" | \"xl5CRV\" | \"xl5Quarters\" | \"xl3Stars\" | \"xl3Triangles\" | \"xl5Boxes\""
+  },
+  "XlLookAt": {
+    "description": "Specifies whether the whole search text or any part of the search text is matched.",
+    "examples": [
+      "let searchRange = range.Find( { What: \"200\", After: oWorksheet.GetRange(\"B1\"), LookIn: \"xlValues\", LookAt: \"xlWhole\",\tSearchOrder: \"xlByColumns\", SearchDirection: \"xlNext\", MatchCase: true } );"
+    ],
+    "type": "\"xlWhole\" | \"xlPart\""
+  },
+  "XlPivotConditionScope": {
+    "description": "The scope for pivot table conditional formatting rules.",
+    "type": "\"xlFieldsScope\" | \"xlSelectionScope\" | \"xlDataFieldScope\""
+  },
+  "XlPivotFilterType": {
+    "description": "The pivot filter type.",
+    "type": "\"xlAfter\" | \"xlAfterOrEqualTo\" | \"xlAllDatesInPeriodApril\" | \"xlAllDatesInPeriodAugust\" | \"xlAllDatesInPeriodDecember\" | \"xlAllDatesInPeriodFebruary\" | \"xlAllDatesInPeriodJanuary\" | \"xlAllDatesInPeriodJuly\" | \"xlAllDatesInPeriodJune\" | \"xlAllDatesInPeriodMarch\" | \"xlAllDatesInPeriodMay\" | \"xlAllDatesInPeriodNovember\" | \"xlAllDatesInPeriodOctober\" | \"xlAllDatesInPeriodQuarter1\" | \"xlAllDatesInPeriodQuarter2\" | \"xlAllDatesInPeriodQuarter3\" | \"xlAllDatesInPeriodQuarter4\" | \"xlAllDatesInPeriodSeptember\" | \"xlBefore\" | \"xlBeforeOrEqualTo\" | \"xlBottomCount\" | \"xlBottomPercent\" | \"xlBottomSum\" | \"xlCaptionBeginsWith\" | \"xlCaptionContains\" | \"xlCaptionDoesNotBeginWith\" | \"xlCaptionDoesNotContain\" | \"xlCaptionDoesNotEndWith\" | \"xlCaptionDoesNotEqual\" | \"xlCaptionEndsWith\" | \"xlCaptionEquals\" | \"xlCaptionIsBetween\" | \"xlCaptionIsGreaterThan\" | \"xlCaptionIsGreaterThanOrEqualTo\" | \"xlCaptionIsLessThan\" | \"xlCaptionIsLessThanOrEqualTo\" | \"xlCaptionIsNotBetween\" | \"xlDateBetween\" | \"xlDateLastMonth\" | \"xlDateLastQuarter\" | \"xlDateLastWeek\" | \"xlDateLastYear\" | \"xlDateNextMonth\" | \"xlDateNextQuarter\" | \"xlDateNextWeek\" | \"xlDateNextYear\" | \"xlDateThisMonth\" | \"xlDateThisQuarter\" | \"xlDateThisWeek\" | \"xlDateThisYear\" | \"xlDateToday\" | \"xlDateTomorrow\" | \"xlDateYesterday\" | \"xlNotSpecificDate\" | \"xlSpecificDate\" | \"xlTopCount\" | \"xlTopPercent\" | \"xlTopSum\" | \"xlValueDoesNotEqual\" | \"xlValueEquals\" | \"xlValueIsBetween\" | \"xlValueIsGreaterThan\" | \"xlValueIsGreaterThanOrEqualTo\" | \"xlValueIsLessThan\" | \"xlValueIsLessThanOrEqualTo\" | \"xlValueIsNotBetween\" | \"xlYearToDate\""
+  },
+  "XlReadingOrder": {
+    "description": "The reading order for data bars.",
+    "type": "\"xlLTR\" | \"xlRTL\" | \"xlContext\""
+  },
+  "XlSearchDirection": {
+    "description": "Range search direction - next match or previous match.",
+    "examples": [
+      "let searchRange = range.Find( { What: \"200\", After: oWorksheet.GetRange(\"B1\"), LookIn: \"xlValues\", LookAt: \"xlWhole\",\tSearchOrder: \"xlByColumns\", SearchDirection: \"xlNext\", MatchCase: true } );"
+    ],
+    "type": "\"xlNext\" | \"xlPrevious\""
+  },
+  "XlSearchOrder": {
+    "description": "Range search order - by rows or by columns.",
+    "examples": [
+      "let searchRange = range.Find( { What: \"200\", After: oWorksheet.GetRange(\"B1\"), LookIn: \"xlValues\", LookAt: \"xlWhole\",\tSearchOrder: \"xlByColumns\", SearchDirection: \"xlNext\", MatchCase: true } );"
+    ],
+    "type": "\"xlByRows\" | \"xlByColumns\""
+  },
+  "XlTimePeriods": {
+    "description": "The time period for conditional formatting.",
+    "type": "\"xlToday\" | \"xlYesterday\" | \"xlTomorrow\" | \"xlLast7Days\" | \"xlLastWeek\" | \"xlThisWeek\" | \"xlNextWeek\" | \"xlLastMonth\" | \"xlThisMonth\" | \"xlNextMonth\""
+  },
+  "XlTopBottom": {
+    "description": "The top/bottom type for conditional formatting rules.",
+    "type": "\"xlTop10Top\" | \"xlTop10Bottom\""
+  },
+  "XlUnderlineStyle": {
+    "description": "Underline type.",
+    "examples": [
+      "font.SetUnderline(\"xlUnderlineStyleSingle\");"
+    ],
+    "type": "\"xlUnderlineStyleDouble\" | \"xlUnderlineStyleDoubleAccounting\" | \"xlUnderlineStyleNone\" | \"xlUnderlineStyleSingle\" | \"xlUnderlineStyleSingleAccounting\""
+  },
+  "XmlMapping": {
+    "description": "This element specifies the information which shall be used to establish a mapping to an XML element stored within a Custom XML.",
+    "properties": {
+      "prefixMapping": {
+        "description": "The set of prefix mappings which shall be used to interpret the XPath expression specified in xpath.",
+        "type": "string"
+      },
+      "storeItemID": {
+        "description": "The custom XML data identifier.",
+        "type": "string"
+      },
+      "xpath": {
+        "description": "The XPath expression.",
+        "type": "string"
+      }
+    }
+  },
+  "bookmarkRefTo": {
+    "description": "Available values of the \"bookmark\" reference type:\n**\"text\"** - the entire bookmark text;\n**\"pageNum\"** - the bookmark page number;\n**\"paraNum\"** - the bookmark paragraph number;\n**\"noCtxParaNum\"** - the abbreviated paragraph number (the specific item only, e.g. instead of \"4.1.1\" you refer to \"1\" only);\n**\"fullCtxParaNum** - the full paragraph number, e.g. \"4.1.1\";\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
+    "examples": [
+      "paragraph.AddBookmarkCrossRef(\"pageNum\", bookmark);"
+    ],
+    "type": "\"text\" | \"pageNum\" | \"paraNum\" | \"noCtxParaNum\" | \"fullCtxParaNum\" | \"aboveBelow\""
+  },
+  "byte": {
+    "description": "A numeric value from 0 to 255.",
+    "examples": [
+      "// The resulting color is green, the bytes are measured in decimal numbers:\nlet rgbColorGreen = Api.CreateRGBColor(0, 255, 0);\n// The resulting color is red, the bytes are measured in hexadecimal numbers:\nlet rgbColorRed = Api.CreateRGBColor(0xff, 0, 0);"
+    ],
+    "type": "number"
+  },
+  "captionRefTo": {
+    "description": "Available values of the \"equation\"/\"figure\"/\"table\" reference type:\n**\"entireCaption\"**- the entire caption text;\n**\"labelNumber\"** - the label and object number only, e.g. \"Table 1.1\";\n**\"captionText\"** - the caption text only;\n**\"pageNum\"** - the page number containing the referenced object;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
+    "examples": [
+      "paragraph.AddCaptionCrossRef(\"table\", \"pageNum\", caption);"
+    ],
+    "type": "\"entireCaption\" | \"labelNumber\" | \"captionText\" | \"pageNum\" | \"aboveBelow\""
+  },
+  "endnoteRefTo": {
+    "description": "Available values of the \"endnote\" reference type:\n**\"endnoteNum\"** - the endnote number;\n**\"pageNum\"** - the endnote page number;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position;\n**\"formEndnoteNum\"** - the form number formatted as an endnote. The numbering of the actual endnotes is not affected.",
+    "examples": [
+      "paragraph.AddEndnoteCrossRef(\"pageNum\", endnoteParagraph);"
+    ],
+    "type": "\"endnoteNum\" | \"pageNum\" | \"aboveBelow\" | \"formEndnoteNum\""
+  },
+  "footnoteRefTo": {
+    "description": "Available values of the \"footnote\" reference type:\n**\"footnoteNum\"** - the footnote number;\n**\"pageNum\"** - the page number of the footnote;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the position of the item;\n**\"formFootnoteNum\"** - the form number formatted as a footnote. The numbering of the actual footnotes is not affected.",
+    "examples": [
+      "paragraph.AddFootnoteCrossRef(\"pageNum\", footnoteParagraph);"
+    ],
+    "type": "\"footnoteNum\" | \"pageNum\" | \"aboveBelow\" | \"formFootnoteNum\""
+  },
+  "headingRefTo": {
+    "description": "Available values of the \"heading\" reference type:\n**\"text\"** - the entire heading text;\n**\"pageNum\"** - the heading page number;\n**\"headingNum\"** - the heading sequence number;\n**\"noCtxHeadingNum\"** - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of \"4.B\" you receive \"B\" only;\n**\"fullCtxHeadingNum\"** - the full heading number even if the cursor pointer is in the same section;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
+    "examples": [
+      "paragraph.AddHeadingCrossRef(\"pageNum\", headingParagraph);"
+    ],
+    "type": "\"text\" | \"pageNum\" | \"headingNum\" | \"noCtxHeadingNum\" | \"fullCtxHeadingNum\" | \"aboveBelow\""
+  },
+  "highlightColor": {
+    "description": "Available highlight colors.",
+    "examples": [
+      "paragraph.SetHighlight(\"green\");"
+    ],
+    "type": "\"black\" | \"blue\" | \"cyan\" | \"green\" | \"magenta\" | \"red\" | \"yellow\" | \"white\" | \"darkBlue\" | \"darkCyan\" | \"darkGreen\" | \"darkMagenta\" | \"darkRed\" | \"darkYellow\" | \"darkGray\" | \"lightGray\" | \"none\""
+  },
+  "hps": {
+    "description": "Half-points (2 half-points = 1 point).",
+    "examples": [
+      "textPr.SetFontSize(22);"
+    ],
+    "type": "number"
+  },
+  "line240": {
+    "description": "240ths of a line.",
+    "examples": [
+      "paraPr.SetSpacingLine(240, \"auto\");"
+    ],
+    "type": "number"
+  },
+  "mm": {
+    "description": "1 millimetre equals 1/10th of a centimetre.",
+    "examples": [
+      "textForm.SetCellWidth(7);"
+    ],
+    "type": "number"
+  },
+  "numberedRefTo": {
+    "description": "Available values of the \"numbered\" reference type:\n**\"pageNum\"** - the numbered item page number;\n**\"paraNum\"** - the numbered item paragraph number;\n**\"noCtxParaNum\"** - the abbreviated paragraph number (the specific item only, e.g. instead of \"4.1.1\" you refer to \"1\" only);\n**\"fullCtxParaNum\"** - the full paragraph number, e.g. \"4.1.1\";\n**\"text\"** - the paragraph text value, e.g. if you have \"4.1.1. Terms and Conditions\", you refer to \"Terms and Conditions\" only;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
+    "examples": [
+      "paragraph.AddNumberedCrossRef(\"pageNum\", numberedParagraph, true, true);"
+    ],
+    "type": "\"pageNum\" | \"paraNum\" | \"noCtxParaNum\" | \"fullCtxParaNum\" | \"text\" | \"aboveBelow\""
+  },
+  "percentage": {
+    "description": "Value from 0 to 100.",
+    "examples": [
+      "pictureForm.SetPicturePosition(70, 70);"
+    ],
+    "type": "number"
+  },
+  "pt": {
+    "description": "A point.",
+    "examples": [
+      "paraPr.SetBottomBorder(\"single\", 24, 1, 0, 255, 0);"
+    ],
+    "type": "number"
+  },
+  "pt_8": {
+    "description": "Eighths of a point (24 eighths of a point = 3 points).",
+    "examples": [
+      "paraPr.SetBottomBorder(\"single\", 48, 0, 0, 255, 0);"
+    ],
+    "type": "number"
+  },
+  "twips": {
+    "description": "Twentieths of a point (equivalent to 1/1440th of an inch).",
+    "examples": [
+      "paragraph.SetEqualColumns(2, 720);"
+    ],
+    "type": "number"
+  }
+}

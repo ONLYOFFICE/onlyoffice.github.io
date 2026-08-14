@@ -1,0 +1,211 @@
+{
+  "description": "Class representing a smart art.",
+  "extends": [
+    "ApiDrawing"
+  ],
+  "methods": {
+    "CreateTextRange": {
+      "description": "Creates a text body for the drawing if it does not already exist and returns its full text range.",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "CreateTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiSmartArt class.",
+      "params": [],
+      "returns": {
+        "type": "\"smartArt\""
+      },
+      "signature": "GetClassType(): \"smartArt\""
+    },
+    "GetHyperlink": {
+      "description": "Returns the hyperlink from the current drawing object (shape or image).",
+      "params": [],
+      "returns": {
+        "description": "Returns the hyperlink object or null if no hyperlink is set.",
+        "type": "ApiHyperlink | null"
+      },
+      "signature": "GetHyperlink(): ApiHyperlink | null"
+    },
+    "GetInternalId": {
+      "description": "Returns an internal ID of the current drawing object.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetInternalId(): string"
+    },
+    "GetParent": {
+      "description": "Returns the drawing parent object.",
+      "params": [],
+      "returns": {
+        "type": "ApiSlide | ApiLayout | ApiMaster | null"
+      },
+      "signature": "GetParent(): ApiSlide | ApiLayout | ApiMaster | null"
+    },
+    "GetParentLayout": {
+      "description": "Returns the drawing parent slide layout.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide layout.",
+        "type": "ApiLayout | null"
+      },
+      "signature": "GetParentLayout(): ApiLayout | null"
+    },
+    "GetParentMaster": {
+      "description": "Returns the drawing parent slide master.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide master.",
+        "type": "ApiMaster | null"
+      },
+      "signature": "GetParentMaster(): ApiMaster | null"
+    },
+    "GetParentSlide": {
+      "description": "Returns the drawing parent slide.",
+      "params": [],
+      "returns": {
+        "description": "return null if parent ins't a slide.",
+        "type": "ApiSlide | null"
+      },
+      "signature": "GetParentSlide(): ApiSlide | null"
+    },
+    "GetPlaceholder": {
+      "description": "Returns a placeholder from the current drawing object.",
+      "params": [],
+      "returns": {
+        "description": "returns null if placeholder doesn't exist.",
+        "type": "ApiPlaceholder | null"
+      },
+      "signature": "GetPlaceholder(): ApiPlaceholder | null"
+    },
+    "GetPosX": {
+      "description": "Gets the x position of the drawing on the slide.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosX(): EMU"
+    },
+    "GetPosY": {
+      "description": "Gets the y position of the drawing on the slide.",
+      "params": [],
+      "returns": {
+        "type": "EMU"
+      },
+      "signature": "GetPosY(): EMU"
+    },
+    "GetTextRange": {
+      "description": "Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no text body (use CreateTextRange to create one).",
+      "params": [],
+      "returns": {
+        "type": "ApiTextRange | null"
+      },
+      "signature": "GetTextRange(): ApiTextRange | null",
+      "since": "9.5.0"
+    },
+    "IsTextRange": {
+      "description": "Checks whether the drawing has an associated text body.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsTextRange(): boolean",
+      "since": "9.5.0"
+    },
+    "ReplacePlaceholder": {
+      "description": "Replaces the placeholder by a drawing on the slide.",
+      "params": [
+        {
+          "description": "The drawing object that will replace the placeholder.",
+          "name": "drawing",
+          "type": "Drawing"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ReplacePlaceholder(drawing: Drawing): boolean"
+    },
+    "SetHyperlink": {
+      "description": "Sets a hyperlink to the current drawing object (shape or image).\nPass null to remove the hyperlink.",
+      "params": [
+        {
+          "description": "The hyperlink object to be set to the drawing, or null to remove the hyperlink.",
+          "name": "hyperlink",
+          "type": "ApiHyperlink | null"
+        }
+      ],
+      "returns": {
+        "description": "Returns true if the hyperlink was set or removed successfully.",
+        "type": "boolean"
+      },
+      "signature": "SetHyperlink(hyperlink: ApiHyperlink | null): boolean"
+    },
+    "SetPlaceholder": {
+      "description": "Sets the specified placeholder to the current drawing object.",
+      "params": [
+        {
+          "description": "Placeholder object.",
+          "name": "oPlaceholder",
+          "type": "ApiPlaceholder"
+        }
+      ],
+      "returns": {
+        "description": "returns false if parameter isn't a placeholder.",
+        "type": "boolean"
+      },
+      "signature": "SetPlaceholder(oPlaceholder: ApiPlaceholder): boolean"
+    },
+    "SetPosX": {
+      "description": "Sets the x position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
+          "name": "posX",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosX(posX: EMU): boolean"
+    },
+    "SetPosY": {
+      "description": "Sets the y position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
+          "name": "posY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosY(posY: EMU): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets the position of the drawing on the slide.",
+      "params": [
+        {
+          "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
+          "name": "nPosX",
+          "type": "EMU"
+        },
+        {
+          "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
+          "name": "nPosY",
+          "type": "EMU"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      },
+      "signature": "SetPosition(nPosX: EMU, nPosY: EMU): void"
+    }
+  }
+}

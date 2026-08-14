@@ -1,0 +1,434 @@
+{
+  "description": "Class representing a base markup annotation.",
+  "extends": [
+    "ApiBaseAnnotation"
+  ],
+  "methods": {
+    "AddReply": {
+      "description": "Adds reply on this annot.",
+      "params": [
+        {
+          "description": "The text annotation to use as a reply.",
+          "name": "textAnnot",
+          "type": "ApiTextAnnotation"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddReply(textAnnot: ApiTextAnnotation): boolean"
+    },
+    "Delete": {
+      "description": "Removes annotation from document.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAuthorName": {
+      "description": "Gets annotation author name.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetAuthorName(): string"
+    },
+    "GetBorderColor": {
+      "description": "Gets annotation border color.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetBorderColor(): ApiColor"
+    },
+    "GetBorderEffectIntensity": {
+      "description": "Gets annotation border effect intensity.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetBorderEffectIntensity(): number"
+    },
+    "GetBorderEffectStyle": {
+      "description": "Gets annotation border effect style.",
+      "params": [],
+      "returns": {
+        "type": "AnnotBorderEffectStyle"
+      },
+      "signature": "GetBorderEffectStyle(): AnnotBorderEffectStyle"
+    },
+    "GetBorderStyle": {
+      "description": "Gets annotation border style.",
+      "params": [],
+      "returns": {
+        "type": "AnnotBorderStyle"
+      },
+      "signature": "GetBorderStyle(): AnnotBorderStyle"
+    },
+    "GetBorderWidth": {
+      "description": "Gets annotation border width.",
+      "params": [],
+      "returns": {
+        "type": "pt"
+      },
+      "signature": "GetBorderWidth(): pt"
+    },
+    "GetContents": {
+      "description": "Gets annotation contents.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetContents(): string"
+    },
+    "GetCreationDate": {
+      "description": "Gets annotation creation date.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCreationDate(): number"
+    },
+    "GetDashPattern": {
+      "description": "Gets annotation dash pattern.",
+      "params": [],
+      "returns": {
+        "type": "number[]"
+      },
+      "signature": "GetDashPattern(): number[]"
+    },
+    "GetDisplay": {
+      "description": "Gets annotation display type.",
+      "params": [],
+      "returns": {
+        "type": "DisplayType"
+      },
+      "signature": "GetDisplay(): DisplayType"
+    },
+    "GetFillColor": {
+      "description": "Gets annotation fill color.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetFillColor(): ApiColor"
+    },
+    "GetModDate": {
+      "description": "Gets annotation last modification date.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetModDate(): number"
+    },
+    "GetOpacity": {
+      "description": "Gets annotation opacity.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetOpacity(): string"
+    },
+    "GetPosition": {
+      "description": "Gets annotation position.",
+      "params": [],
+      "returns": {
+        "type": "Point"
+      },
+      "signature": "GetPosition(): Point"
+    },
+    "GetQuads": {
+      "description": "Gets quads from current markup annotation.",
+      "params": [],
+      "returns": {
+        "type": "Quad[]"
+      },
+      "signature": "GetQuads(): Quad[]"
+    },
+    "GetRect": {
+      "description": "Gets annotation rect.",
+      "params": [],
+      "returns": {
+        "type": "Rect"
+      },
+      "signature": "GetRect(): Rect"
+    },
+    "GetReplies": {
+      "description": "Gets replies on this annot.",
+      "params": [],
+      "returns": {
+        "type": "ApiTextAnnotation[]"
+      },
+      "signature": "GetReplies(): ApiTextAnnotation[]"
+    },
+    "GetSubject": {
+      "description": "Gets annotation subject.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetSubject(): string"
+    },
+    "GetUniqueName": {
+      "description": "Gets annotation unique name.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetUniqueName(): string"
+    },
+    "SetAuthorName": {
+      "description": "Sets annotation author name.",
+      "params": [
+        {
+          "description": "The author name.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetAuthorName(name: string): boolean"
+    },
+    "SetBorderColor": {
+      "description": "Sets annotation border color.",
+      "params": [
+        {
+          "description": "The border color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderColor(color: ApiColor): boolean"
+    },
+    "SetBorderEffectIntensity": {
+      "description": "Sets annotation border effect intensity.\n<note> Can be applied to circle, square, freeText and polygon annotations </note>",
+      "params": [
+        {
+          "description": "The border effect intensity. Must be greater than or equal to 0.",
+          "name": "value",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderEffectIntensity(value: number): boolean"
+    },
+    "SetBorderEffectStyle": {
+      "description": "Sets annotation border effect style.\n<note> Can be applied to circle, square, freeText and polygon annotations </note>",
+      "params": [
+        {
+          "description": "The border effect style: **\"none\"** or **\"cloud\"**.",
+          "name": "style",
+          "type": "AnnotBorderEffectStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderEffectStyle(style: AnnotBorderEffectStyle): boolean"
+    },
+    "SetBorderStyle": {
+      "description": "Sets annotation border style.",
+      "params": [
+        {
+          "description": "The border style: **\"solid\"** or **\"dashed\"**.",
+          "name": "borderStyle",
+          "type": "AnnotBorderStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderStyle(borderStyle: AnnotBorderStyle): boolean"
+    },
+    "SetBorderWidth": {
+      "description": "Sets annotation border width.",
+      "params": [
+        {
+          "description": "The border width in points.",
+          "name": "width",
+          "type": "pt"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderWidth(width: pt): boolean"
+    },
+    "SetContents": {
+      "description": "Sets annotation contents.",
+      "params": [
+        {
+          "description": "The annotation text contents.",
+          "name": "contents",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetContents(contents: string): boolean"
+    },
+    "SetCreationDate": {
+      "description": "Sets annotation creation date.",
+      "params": [
+        {
+          "description": "The annotation creation date as a numeric timestamp.",
+          "name": "timeStamp",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCreationDate(timeStamp: number): boolean"
+    },
+    "SetDashPattern": {
+      "description": "Sets annotation dash pattern.\n<note> The border style property must be set to \"dashed\". </note>",
+      "params": [
+        {
+          "description": "A dash array defining a pattern of dashes and gaps to be used in drawing a dashed border. For example, a value of [3, 2] specifies a border drawn with 3-point dashes alternating with 2-point gaps.",
+          "name": "pattern",
+          "type": "number[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDashPattern(pattern: number[]): boolean"
+    },
+    "SetDisplay": {
+      "description": "Sets annotation display type.",
+      "params": [
+        {
+          "description": "The display type for the annotation.",
+          "name": "display",
+          "type": "DisplayType"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDisplay(display: DisplayType): boolean"
+    },
+    "SetFillColor": {
+      "description": "Sets annotation fill color.",
+      "params": [
+        {
+          "description": "color to set fill (omit the argument to set no fill)",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFillColor(color: ApiColor): boolean"
+    },
+    "SetModDate": {
+      "description": "Sets annotation last modification date.",
+      "params": [
+        {
+          "description": "The annotation last modification date as a numeric timestamp.",
+          "name": "timeStamp",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetModDate(timeStamp: number): boolean"
+    },
+    "SetOpacity": {
+      "description": "Sets annotation opacity.",
+      "params": [
+        {
+          "description": "The opacity value from 0 (transparent) to 100 (opaque).",
+          "name": "value",
+          "type": "percentage"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetOpacity(value: percentage): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets annotation position.",
+      "params": [
+        {
+          "description": "The new position of the annotation.",
+          "name": "position",
+          "type": "Point"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosition(position: Point): boolean"
+    },
+    "SetQuads": {
+      "description": "Sets quads to current markup annotation.",
+      "params": [
+        {
+          "description": "An array of quadrilaterals defining the highlighted regions.",
+          "name": "quads",
+          "type": "Quad[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetQuads(quads: Quad[]): boolean"
+    },
+    "SetRect": {
+      "description": "Sets annotation rect.",
+      "params": [
+        {
+          "description": "The new bounding rectangle for the annotation.",
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRect(rect: Rect): boolean"
+    },
+    "SetSubject": {
+      "description": "Sets annotation subject.",
+      "params": [
+        {
+          "description": "The annotation subject text.",
+          "name": "subject",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSubject(subject: string): boolean"
+    },
+    "SetUniqueName": {
+      "description": "Sets annotation unique name.",
+      "params": [
+        {
+          "description": "The unique name for the annotation.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetUniqueName(name: string): boolean"
+    }
+  }
+}

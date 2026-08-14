@@ -1,0 +1,126 @@
+{
+  "description": "Class representing a stroke.",
+  "methods": {
+    "GetBeginArrow": {
+      "description": "Returns the beginning arrow properties of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetBeginArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiStroke class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet rgbColor = Api.CreateRGBColor(255, 111, 61);\nlet fill = Api.CreateSolidFill(rgbColor);\nlet stroke = Api.CreateStroke(5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\nlet drawing = Api.CreateShape(\"roundRect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet classType = stroke.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"stroke\""
+      },
+      "signature": "GetClassType(): \"stroke\""
+    },
+    "GetDashType": {
+      "description": "Gets the dash type of the stroke.",
+      "params": [],
+      "returns": {
+        "description": "returns dash type (\"solid\", \"dash\", etc.) or null.",
+        "type": "DashType | null"
+      },
+      "signature": "GetDashType(): DashType | null"
+    },
+    "GetEndArrow": {
+      "description": "Returns the ending arrow properties of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "object | null"
+      },
+      "signature": "GetEndArrow(): object | null",
+      "since": "9.5.0"
+    },
+    "GetFill": {
+      "description": "Gets the fill (color) of the stroke.",
+      "params": [],
+      "returns": {
+        "type": "ApiFill | null"
+      },
+      "signature": "GetFill(): ApiFill | null"
+    },
+    "GetWidth": {
+      "description": "Gets the width of the stroke in English Metric Units.",
+      "params": [],
+      "returns": {
+        "type": "EMU | null"
+      },
+      "signature": "GetWidth(): EMU | null"
+    },
+    "SetBeginArrow": {
+      "description": "Sets the beginning arrow of the stroke.",
+      "params": [
+        {
+          "description": "The type of the beginning arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the beginning arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the beginning arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    },
+    "SetEndArrow": {
+      "description": "Sets the ending arrow of the stroke.",
+      "params": [
+        {
+          "description": "The type of the ending arrow.",
+          "name": "type",
+          "type": "LineEndType"
+        },
+        {
+          "description": "The width of the ending arrow.",
+          "name": "width",
+          "optional": true,
+          "type": "LineEndSize"
+        },
+        {
+          "description": "The length of the ending arrow.",
+          "name": "length",
+          "optional": true,
+          "type": "LineEndSize"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean",
+      "since": "9.5.0"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiStroke object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet rgbColor = Api.CreateRGBColor(255, 111, 61);\nlet fill = Api.CreateSolidFill(rgbColor);\nlet stroke = Api.CreateStroke(5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\nlet json = stroke.ToJSON();\nlet strokeFromJSON = Api.FromJSON(json);\nlet drawing = Api.CreateShape(\"roundRect\", 5930900, 395605, fill, strokeFromJSON);\nparagraph.AddDrawing(drawing);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "description": "Calculates predicted exponential growth by using existing data.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GROWTH/",
+  "examples": [
+    "const worksheet = Api.GetActiveSheet();\n\n// Configure function parameters\nlet data_array = [1289, 1590, 1652, 1107, 903]; \nlet months_array = [1, 2, 3, 4, 5]\n\n// Set data_array and months_array in cells\nfor (let i = 0; i < months_array.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(months_array[i]);\n}\nfor (let i = 0; i < data_array.length; i++) {\n  worksheet.GetRange(\"B\" + (i + 1)).SetValue(data_array[i]);\n  worksheet.GetRange(\"B\" + (i + 1)).SetNumberFormat(\"$#,##0.00\");\n}\n\n// Get the ranges for data_array and bins_array\nlet data_arrayRange = worksheet.GetRange(\"A1:A5\");\nlet months_arrayRange = worksheet.GetRange(\"B1:B5\");\n\n// Get the worksheet function object\nlet func = Api.GetWorksheetFunction();\n\n// Ensure the ranges are properly passed to the function\nlet growth = func.GROWTH(data_arrayRange, months_arrayRange);\n\n// Print the growth result\nworksheet.GetRange(\"D1\").SetValue(growth);"
+  ],
+  "params": [
+    {
+      "description": "The set of y-values from the *y = b*m^x* equation, an array or range of positive numbers.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "An optional set of x-values from the *y = b*m^x* equation, an array or range of positive numbers that has the same size as the set of y-values.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "New x-values for which the function will return the corresponding y-values.",
+      "name": "arg3",
+      "optional": true,
+      "type": "ApiRange | ApiName | number[]"
+    },
+    {
+      "description": "A logical value: the constant *b* is calculated normally if this parameter is set to **true**,\rand *b* is set equal to 1 if the parameter is **false** or omitted.",
+      "name": "arg4",
+      "optional": true,
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GROWTH(arg1: ApiRange | ApiName | number[], arg2?: ApiRange | ApiName | number[], arg3?: ApiRange | ApiName | number[], arg4?: ApiRange | ApiName | boolean): number"
+}

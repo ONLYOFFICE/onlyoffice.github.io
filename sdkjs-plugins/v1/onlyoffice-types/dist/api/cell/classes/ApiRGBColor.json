@@ -1,0 +1,20 @@
+{
+  "description": "Class representing an RGB Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiRGBColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRGBColor/Methods/GetClassType/",
+      "examples": [
+        "var oWorksheet = Api.GetActiveSheet();\nvar oRGBColor = Api.CreateRGBColor(255, 213, 191);\nvar oGs1 = Api.CreateGradientStop(oRGBColor, 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\noWorksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, oFill, oStroke, 0, 2 * 36000, 1, 3 * 36000);\nvar sClassType = oRGBColor.GetClassType();\noWorksheet.SetColumnWidth(0, 15);\noWorksheet.SetColumnWidth(1, 10);\noWorksheet.GetRange(\"A1\").SetValue(\"Class Type = \");\noWorksheet.GetRange(\"B1\").SetValue(sClassType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"rgbColor\""
+      },
+      "signature": "GetClassType(): \"rgbColor\""
+    }
+  }
+}

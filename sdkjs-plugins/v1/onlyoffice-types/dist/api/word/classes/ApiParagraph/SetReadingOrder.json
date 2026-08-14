@@ -1,0 +1,16 @@
+{
+  "description": "Specifies the reading order for the current paragraph.\nPossible values are:\n**null** - use the standart direction parameter;\n**\"ltr\"** - left-to-right text direction;\n**\"rtl\"** - right-to-left text direction.",
+  "params": [
+    {
+      "description": "The reading order.",
+      "name": "readingOrder",
+      "optional": true,
+      "type": "ReadingOrder"
+    }
+  ],
+  "returns": {
+    "description": "Returns the current paragraph itself (ApiParagraph).",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetReadingOrder(readingOrder?: ReadingOrder): ApiParagraph"
+}

@@ -1,0 +1,78 @@
+{
+  "description": "Class representing a placeholder.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns the type of the ApiPlaceholder class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/GetClassType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oPlaceholder = Api.CreatePlaceholder(\"chart\");\noShape.SetPlaceholder(oPlaceholder);\nvar sType = oPlaceholder.GetClassType();\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"placeholder\""
+      },
+      "signature": "GetClassType(): \"placeholder\""
+    },
+    "GetIndex": {
+      "description": "Returns the placeholder index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/GetIndex/",
+      "params": [],
+      "returns": {
+        "description": "Returns the placeholder index.",
+        "type": "number | undefined"
+      },
+      "signature": "GetIndex(): number | undefined",
+      "since": "8.2.0"
+    },
+    "GetType": {
+      "description": "Returns the placeholder type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/GetType/",
+      "examples": [
+        "let oPresentation = Api.GetPresentation();\nlet oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nlet oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nlet oPlaceholder = Api.CreatePlaceholder(\"chart\");\noShape.SetPlaceholder(oPlaceholder);\nlet oContent = oShape.GetContent();\nlet oParagraph = oContent.GetElement(0);\noParagraph.AddText('Placeholder type in this shape is: \"' + oPlaceholder.GetType() + '\"');\noSlide.AddObject(oShape);"
+      ],
+      "params": [],
+      "returns": {
+        "description": "Returns the placeholder type.",
+        "type": "PlaceholderType"
+      },
+      "signature": "GetType(): PlaceholderType",
+      "since": "8.2.0"
+    },
+    "SetIndex": {
+      "description": "Sets the placeholder index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/SetIndex/",
+      "params": [
+        {
+          "description": "The placeholder index.",
+          "name": "nIdx",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "Returns false if the placeholder index wasn't set.",
+        "type": "boolean"
+      },
+      "signature": "SetIndex(nIdx: number): boolean",
+      "since": "8.2.0"
+    },
+    "SetType": {
+      "description": "Sets the placeholder type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/SetType/",
+      "examples": [
+        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oPlaceholder = Api.CreatePlaceholder(\"chart\");\noShape.SetPlaceholder(oPlaceholder);\noPlaceholder.SetType(\"picture\");\noSlide.AddObject(oShape);"
+      ],
+      "params": [
+        {
+          "description": "Placeholder type",
+          "name": "sType",
+          "type": "PlaceholderType"
+        }
+      ],
+      "returns": {
+        "description": "returns false if placeholder type doesn't exist.",
+        "type": "boolean"
+      },
+      "signature": "SetType(sType: PlaceholderType): boolean"
+    }
+  }
+}

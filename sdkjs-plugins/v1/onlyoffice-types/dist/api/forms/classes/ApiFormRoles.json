@@ -1,0 +1,155 @@
+{
+  "description": "Class representing a collection of form roles.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/",
+  "methods": {
+    "Add": {
+      "description": "Adds a new form role.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/Add/",
+      "params": [
+        {
+          "description": "The name of role being added.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The role properties.",
+          "name": "props",
+          "type": "RoleProperties"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Add(name: string, props: RoleProperties): boolean",
+      "since": "9.0.0"
+    },
+    "GetAllRoles": {
+      "description": "Lists all available roles.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/GetAllRoles/",
+      "params": [],
+      "returns": {
+        "type": "string[]"
+      },
+      "signature": "GetAllRoles(): string[]",
+      "since": "9.0.0"
+    },
+    "GetCount": {
+      "description": "Returns a number of form roles.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/GetCount/",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCount(): number",
+      "since": "9.0.0"
+    },
+    "GetRoleColor": {
+      "description": "Returns the RGB color of the specified role.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/GetRoleColor/",
+      "params": [
+        {
+          "description": "The role name.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "null | object"
+      },
+      "signature": "GetRoleColor(name: string): null | object",
+      "since": "9.0.0"
+    },
+    "HaveRole": {
+      "description": "Checks if a role with the specified name exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/HaveRole/",
+      "params": [
+        {
+          "description": "The role name.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "HaveRole(name: string): boolean",
+      "since": "9.0.0"
+    },
+    "MoveDown": {
+      "description": "Moves a role down in filling order.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/MoveDown/",
+      "params": [
+        {
+          "description": "The role name.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveDown(name: string): boolean",
+      "since": "9.0.0"
+    },
+    "MoveUp": {
+      "description": "Moves a role up in filling order.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/MoveUp/",
+      "params": [
+        {
+          "description": "The role name.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveUp(name: string): boolean",
+      "since": "9.0.0"
+    },
+    "Remove": {
+      "description": "Removes a role with the specified name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/Remove/",
+      "params": [
+        {
+          "description": "The name of role to be removed.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The name of the role to which all forms bound to this role will be delegated.",
+          "name": "delegateRole",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Remove(name: string, delegateRole?: string): boolean",
+      "since": "9.0.0"
+    },
+    "SetRoleColor": {
+      "description": "Sets the color for the specified role.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormRoles/Methods/SetRoleColor/",
+      "params": [
+        {
+          "description": "The role name.",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "description": "The role color.",
+          "name": "color",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRoleColor(name: string, color: string): boolean",
+      "since": "9.0.0"
+    }
+  },
+  "since": "9.0.0"
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Returns the document content that contains the current paragraph.",
+  "params": [],
+  "returns": {
+    "description": "returns the main document, a document part (table cell, header/footer, footnote, etc.), or null if the paragraph has no parent.",
+    "type": "ApiDocument | ApiDocumentContent | null"
+  },
+  "signature": "GetParent(): ApiDocument | ApiDocumentContent | null",
+  "since": "9.5.0"
+}

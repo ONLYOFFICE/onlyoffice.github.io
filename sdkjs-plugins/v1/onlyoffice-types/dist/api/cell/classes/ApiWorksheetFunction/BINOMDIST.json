@@ -1,0 +1,33 @@
+{
+  "description": "Returns the individual term binomial distribution probability.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BINOMDIST/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BINOMDIST(50, 67, 0.45, false));"
+  ],
+  "params": [
+    {
+      "description": "The number of successes in trials.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The number of independent trials.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The probability of success on each trial.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "Specifies if this is the cumulative distribution function (**true**) or the probability mass function (**false**).",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | boolean"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BINOMDIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | boolean): number"
+}

@@ -1,0 +1,40 @@
+{
+  "description": "Class representing an RGB Color.",
+  "extends": [
+    "ApiUniColor"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiRGBColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRGBColor/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet rgbColor = Api.CreateRGBColor(255, 111, 61);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(rgbColor, 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet classType = rgbColor.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"rgbColor\""
+      },
+      "signature": "GetClassType(): \"rgbColor\""
+    },
+    "GetRGB": {
+      "description": "Returns a color value in RGB format.",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetRGB(): number"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiRGBColor object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRGBColor/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet rgbColor = Api.CreateRGBColor(255, 111, 61);\nlet json = rgbColor.ToJSON();\nlet rgbColorFromJSON = Api.FromJSON(json);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(rgbColor, 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nparagraph.AddDrawing(drawing);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(): object"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "description": "Class representing a base class for fill.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiFill class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFill/Methods/GetClassType/",
+      "examples": [
+        "let worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);\nlet classType = fill.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \" + classType);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"fill\""
+      },
+      "signature": "GetClassType(): \"fill\""
+    },
+    "GetType": {
+      "description": "Gets the fill type.",
+      "params": [],
+      "returns": {
+        "description": "returns \"solid\", \"gradient\", \"pattern\", \"blip\", \"nofill\" or null.",
+        "type": "FillType"
+      },
+      "signature": "GetType(): FillType"
+    }
+  }
+}

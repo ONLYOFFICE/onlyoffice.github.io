@@ -1,0 +1,14 @@
+{
+  "description": "Specifies that the current paragraph references the numbering definition instance in the current document.",
+  "params": [
+    {
+      "description": "The numbering level which will be used for assigning the numbers to the paragraph.",
+      "name": "oNumberingLevel",
+      "type": "ApiNumberingLevel"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetNumbering(oNumberingLevel: ApiNumberingLevel): boolean"
+}

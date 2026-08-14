@@ -1,0 +1,12 @@
+{
+  "description": "Returns a type of the ApiTable class.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetClassType/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet classType = table.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class Type = \" + classType);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "\"table\""
+  },
+  "signature": "GetClassType(): \"table\""
+}

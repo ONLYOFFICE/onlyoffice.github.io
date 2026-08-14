@@ -1,0 +1,9 @@
+{
+  "description": "Return current table from the current document.",
+  "params": [],
+  "returns": {
+    "type": "ApiTable | null"
+  },
+  "signature": "GetActiveTable(): ApiTable | null",
+  "since": "9.5.0"
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Returns the document information:\n**Application** - the application the document was created with.\n**CreatedRaw** - the date and time when the file was created.\n**Created** - the parsed date and time when the file was created.\n**LastModifiedRaw** - the date and time when the file was last modified.\n**LastModified** - the parsed date and time when the file was last modified.\n**LastModifiedBy** - the name of the user who made the latest change to the document.\n**Authors** - the persons who created the file.\n**Title** - the document title (this property allows you to simplify your documents classification).\n**Tags** - the document tags (this property allows you to simplify your documents classification).\n**Subject** - the document subject (this property allows you to simplify your documents classification).\n**Comment** - the comment to the document (this property allows you to simplify your documents classification).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetDocumentInfo/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet docInfo = doc.GetDocumentInfo();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText('This document has been created with: ' + docInfo.Application);\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "object"
+  },
+  "signature": "GetDocumentInfo(): object",
+  "since": "8.1.0"
+}

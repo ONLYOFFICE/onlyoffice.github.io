@@ -1,0 +1,33 @@
+{
+  "description": "Adds a drawing to the specified page.\n<note>This method can be a little bit slow, because it runs the document calculation\nprocess to arrange tables on the specified page.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddDrawingToPage/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet drawing = Api.CreateImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", 60 * 36000, 35 * 36000);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddPageBreak();\ndoc.Push(paragraph);\ndoc.AddDrawingToPage(drawing, 1, 50 * 36000, 50 * 36000);"
+  ],
+  "params": [
+    {
+      "description": "A drawing to add to the page.",
+      "name": "oDrawing",
+      "type": "ApiDrawing"
+    },
+    {
+      "description": "The page index.",
+      "name": "nPage",
+      "type": "number"
+    },
+    {
+      "description": "The X coordinate in English measure units.",
+      "name": "x",
+      "type": "EMU"
+    },
+    {
+      "description": "The Y coordinate in English measure units.",
+      "name": "y",
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "AddDrawingToPage(oDrawing: ApiDrawing, nPage: number, x: EMU, y: EMU): boolean"
+}

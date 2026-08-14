@@ -1,0 +1,18 @@
+{
+  "description": "Returns the inverse hyperbolic cotangent of a number.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ACOTH/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ACOTH(3));"
+  ],
+  "params": [
+    {
+      "description": "The angle hyperbolic cotangent. It must be less than -1 or greater than 1.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ACOTH(arg1: ApiRange | ApiName | number): number"
+}

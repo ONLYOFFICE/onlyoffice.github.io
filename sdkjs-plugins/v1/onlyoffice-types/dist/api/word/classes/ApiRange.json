@@ -1,0 +1,783 @@
+{
+  "description": "Class representing a continuous region in a document. \nEach Range object is determined by the position of the start and end characters.",
+  "methods": {
+    "AddBookmark": {
+      "description": "Adds a bookmark to the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/AddBookmark/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 9);\nrange.AddBookmark(\"Bookmark\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"A bookmark was added to the 'ONLYOFFICE' range.\");"
+      ],
+      "params": [
+        {
+          "description": "The bookmark name.",
+          "name": "sName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns false if range is empty.",
+        "type": "boolean"
+      },
+      "signature": "AddBookmark(sName: string): boolean"
+    },
+    "AddComment": {
+      "description": "Adds a comment to the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/AddComment/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Document\");\nlet range = doc.GetRange(0, 7);\nrange.AddText(\"ONLYOFFICE \", \"before\");\nrange.AddText(\" Builder\", \"after\");\nrange.AddComment(\"comment\", \"John Smith\");"
+      ],
+      "params": [
+        {
+          "description": "The comment text.",
+          "name": "sText",
+          "type": "string"
+        },
+        {
+          "description": "The author's name.",
+          "name": "sAuthor",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The user ID of the comment author.",
+          "name": "sUserId",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns null if the comment was not added.",
+        "type": "ApiComment"
+      },
+      "signature": "AddComment(sText: string, sAuthor?: string, sUserId?: string): ApiComment"
+    },
+    "AddField": {
+      "description": "Adds a field to the specified range by the field instruction code.\n<note> This method removes text within a range. </note>",
+      "params": [
+        {
+          "description": "The field instruction code.",
+          "name": "sCode",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddField(sCode: string): boolean",
+      "since": "9.0.0"
+    },
+    "AddHyperlink": {
+      "description": "Adds a hyperlink to the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/AddHyperlink/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 9);\nrange.AddHyperlink(\"https://www.onlyoffice.com/\", \"Main portal\");"
+      ],
+      "params": [
+        {
+          "description": "The link address.",
+          "name": "sLink",
+          "type": "string"
+        },
+        {
+          "description": "The screen tip text.",
+          "name": "sScreenTipText",
+          "type": "string"
+        },
+        {
+          "description": "name of a bookmark",
+          "name": "sBookmarkName",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns null if range contains more than one paragraph or sLink is invalid.",
+        "type": "ApiHyperlink"
+      },
+      "signature": "AddHyperlink(sLink: string, sScreenTipText: string, sBookmarkName: string): ApiHyperlink"
+    },
+    "AddText": {
+      "description": "Adds a text to the specified position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/AddText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Document\");\nlet range = doc.GetRange(0, 7);\nrange.AddText(\"ONLYOFFICE \", \"before\");\nrange.AddText(\" Builder\", \"after\");"
+      ],
+      "params": [
+        {
+          "description": "The text that will be added.",
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "description": "The position where the text will be added (\"before\" or \"after\" the range specified).",
+          "name": "position",
+          "optional": true,
+          "type": "\"after\" | \"before\""
+        }
+      ],
+      "returns": {
+        "description": "returns true if the text was successfully added.",
+        "type": "boolean"
+      },
+      "signature": "AddText(text: string, position?: \"after\" | \"before\"): boolean"
+    },
+    "Delete": {
+      "description": "Deletes all the contents from the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/Delete/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE delete text Document Builder\");\nlet range = doc.GetRange(10, 21);\nrange.Delete();"
+      ],
+      "params": [],
+      "returns": {
+        "description": "returns false if range is empty.",
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "ExpandTo": {
+      "description": "Returns a new range that goes beyond the specified range in any direction and spans a different range. The current range has not changed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/ExpandTo/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Lorem ipsum dolor sit amet,\");\nparagraph.AddText(\" consectetuer adipiscing elit,\");\nparagraph.AddText(\" sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.\");\nlet rangeFirst = doc.GetRange(0, 22);\nlet rangeSecond = doc.GetRange(49, 123);\nlet range = rangeFirst.ExpandTo(rangeSecond);\nrange.SetItalic(true);"
+      ],
+      "params": [
+        {
+          "description": "The range that will be expanded.",
+          "name": "oRange",
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "returns null if the specified range can't be expanded.",
+        "type": "ApiRange | null"
+      },
+      "signature": "ExpandTo(oRange: ApiRange): ApiRange | null"
+    },
+    "GetAllParagraphs": {
+      "description": "Returns a collection of paragraphs that represents all the paragraphs in the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetAllParagraphs/",
+      "examples": [
+        "let doc = editor.GetDocument();\nlet firstParagraph = doc.GetElement(0);\nfirstParagraph.AddText(\"First paragraph\");\nlet secondParagraph = editor.CreateParagraph();\nsecondParagraph.AddText(\"Second Paragraph\");\ndoc.Push(secondParagraph);\nlet range = doc.GetRange(0, 28);\nlet paragraphs = range.GetAllParagraphs();\nparagraphs[0].SetBold(\"true\");"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiParagraph[]"
+      },
+      "signature": "GetAllParagraphs(): ApiParagraph[]"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRange class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetClassType/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = paragraph.GetRange(0, 9);\nlet classType = range.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"range\""
+      },
+      "signature": "GetClassType(): \"range\""
+    },
+    "GetEndPage": {
+      "description": "Returns the end page number of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetEndPage/",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetEndPage(): number",
+      "since": "8.2.0"
+    },
+    "GetEndPos": {
+      "description": "Returns the end position of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetEndPos/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = paragraph.GetRange();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"We used range in previous paragraph with end position: \" + range.GetEndPos());\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetEndPos(): number",
+      "since": "8.2.0"
+    },
+    "GetParagraph": {
+      "description": "Returns a paragraph from all the paragraphs that are in the range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetParagraph/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet firstParagraph = doc.GetElement(0);\nfirstParagraph.AddText(\"First paragraph\");\nlet secondParagraph = Api.CreateParagraph();\nsecondParagraph.AddText(\"Second Paragraph\");\ndoc.Push(secondParagraph);\nlet range = doc.GetRange(0, 28);\nlet rangeParagraph = range.GetParagraph(1);\nrangeParagraph.SetBold(\"true\");"
+      ],
+      "params": [
+        {
+          "description": "The paragraph position in the range.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "description": "returns null if position is invalid.",
+        "type": "ApiParagraph | null"
+      },
+      "signature": "GetParagraph(nPos: number): ApiParagraph | null"
+    },
+    "GetRange": {
+      "description": "Returns a Range object that represents the document part contained in the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetRange/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range1 = doc.GetRange(0, 24);\nrange1.SetBold(true);\nlet range2 = range1.GetRange(0, 9);\nrange2.SetItalic(true);"
+      ],
+      "params": [
+        {
+          "description": "Start position index in the current range.",
+          "name": "Start",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "End position index in the current range (if <= 0, then the range is taken to the end).",
+          "name": "End",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRange"
+      },
+      "signature": "GetRange(Start?: number, End?: number): ApiRange"
+    },
+    "GetStartPage": {
+      "description": "Returns the start page number of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetStartPage/",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetStartPage(): number",
+      "since": "8.2.0"
+    },
+    "GetStartPos": {
+      "description": "Returns the start position of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetStartPos/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = paragraph.GetRange();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"We used range in previous paragraph with start position: \" + range.GetStartPos());\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetStartPos(): number",
+      "since": "8.2.0"
+    },
+    "GetText": {
+      "description": "Returns a text from the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetText/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"\\tONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 24);\nlet text = range.GetText({\"Numbering\": true, \"Math\": true, \"NewLineSeparator\": \"\\r\", \"TabSymbol\": \"\\t\", \"NewLineParagraph\": true, \"TableCellSeparator\": \"\\t\", \"TableRowSeparator\": \"\\r\\n\", \"ParaSeparator\": \"\\r\\n\"});\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The text of the specified range: \" + text);\ndoc.Push(paragraph);"
+      ],
+      "params": [
+        {
+          "description": "Options for formatting the returned text.",
+          "name": "options",
+          "optional": true,
+          "type": "object"
+        },
+        {
+          "description": "Defines if the resulting string will include numbering or not.",
+          "name": "options_Numbering",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines if the resulting string will include mathematical expressions or not.",
+          "name": "options_Math",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "Defines how the line separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\".",
+          "name": "options_NewLineSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table cell separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\t\".",
+          "name": "options_TableCellSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the table row separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\\n\".",
+          "name": "options_TableRowSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the paragraph separator will be specified in the resulting string. Any symbol can be used. The default separator is \"\\r\\n\".",
+          "name": "options_ParaSeparator",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "Defines how the tab will be specified in the resulting string (does not apply to numbering). Any symbol can be used. The default symbol is \"\\t\".",
+          "name": "options_TabSymbol",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "Returns an empty string if range is empty.",
+        "type": "string"
+      },
+      "signature": "GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string): string"
+    },
+    "GetTextPr": {
+      "description": "Returns the merged text properties of the entire range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/GetTextPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Welcome to ONLYOFFICE Document Builder\");\n\n// Get the text properties of the first range\nlet range1 = doc.GetRange(0, 31);\nlet textPr = range1.GetTextPr();\n\n// Modify the text properties (e.g., set italic)\ntextPr.SetItalic(true);\n\n// Apply the modified text properties to another range\nlet range2 = doc.GetRange(32, 63);\nrange2.SetTextPr(textPr);\n\n// Add a new paragraph to confirm the changes\nlet newParagraph = Api.CreateParagraph();\nnewParagraph.AddText(\"This text is in italic as per the modified text properties.\");\ndoc.Push(newParagraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiTextPr"
+      },
+      "signature": "GetTextPr(): ApiTextPr",
+      "since": "8.2.0"
+    },
+    "IntersectWith": {
+      "description": "Returns a new range as the intersection of the current range with another range. The current range has not changed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/IntersectWith/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Lorem ipsum dolor sit amet,\");\nparagraph.AddText(\" consectetuer adipiscing elit,\");\nparagraph.AddText(\" sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.\");\nlet rangeFirst = doc.GetRange(0, 49);\nlet rangeSecond = doc.GetRange(22, 123);\nlet range = rangeFirst.IntersectWith(rangeSecond);\nrange.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "The range that will be intersected with the current range.",
+          "name": "oRange",
+          "type": "ApiRange"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't intersect.",
+        "type": "ApiRange | null"
+      },
+      "signature": "IntersectWith(oRange: ApiRange): ApiRange | null"
+    },
+    "MoveCursorToPos": {
+      "description": "Moves a cursor to a specified position of the current range object.\nIf there is any selection in the document, it will be removed.",
+      "params": [
+        {
+          "description": "The desired cursor position.",
+          "name": "nPos",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveCursorToPos(nPos?: number): boolean",
+      "since": "9.0.0"
+    },
+    "Select": {
+      "description": "Sets the selection to the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/Select/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = paragraph.GetRange(0, 9);\nrange.Select();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The word 'ONLYOFFICE' was just selected.\");\ndoc.Push(paragraph);"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(): boolean"
+    },
+    "SetBold": {
+      "description": "Sets the bold property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetBold/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 24);\nrange.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the Range contents are displayed bold or not.",
+          "name": "isBold",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply bold.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetBold(isBold: boolean): ApiRange | null"
+    },
+    "SetCaps": {
+      "description": "Specifies that any lowercase characters in the current text Range are formatted for display only as their capital letter character equivalents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetCaps/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(10, 17);\nrange.SetCaps(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the Range contents are displayed capitalized or not.",
+          "name": "isCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply caps.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetCaps(isCaps: boolean): ApiRange | null"
+    },
+    "SetColor": {
+      "description": "Sets the text color to the current text Range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetColor/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 24);\nrange.SetColor(255, 111, 61);"
+      ],
+      "params": [
+        {
+          "description": "The text color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply color.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetColor(color: ApiColor): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "SetDoubleStrikeout": {
+      "description": "Specifies that the contents of the current Range are displayed with two horizontal lines through each character displayed on the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetDoubleStrikeout/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Server Builder\");\nlet range = doc.GetRange(18, 23);\nrange.SetDoubleStrikeout(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current Range are displayed double struck through or not.",
+          "name": "isDoubleStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply double strikeout.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiRange | null"
+    },
+    "SetEndPos": {
+      "description": "Sets the end position of the current range object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetEndPos/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = paragraph.GetRange();\nrange.SetEndPos(12);\nrange.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "End position.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetEndPos(nPos: number): boolean",
+      "since": "8.2.0"
+    },
+    "SetFontFamily": {
+      "description": "Sets all 4 font slots with the specified font family.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetFontFamily/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. \");\nparagraph.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\nlet range = doc.GetRange(22, 71);\nrange.SetFontFamily(\"Consolas\");"
+      ],
+      "params": [
+        {
+          "description": "The font family or families used for the current text Range.",
+          "name": "sFontFamily",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't set font family.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetFontFamily(sFontFamily: string): ApiRange | null"
+    },
+    "SetFontSize": {
+      "description": "Sets the font size to the characters of the current text Range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetFontSize/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 24);\nrange.SetFontSize(14);"
+      ],
+      "params": [
+        {
+          "description": "The text size value measured in half-points (1/144 of an inch).",
+          "name": "FontSize",
+          "type": "hps"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't set font size.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetFontSize(FontSize: hps): ApiRange | null"
+    },
+    "SetHighlight": {
+      "description": "Specifies a highlighting color which is applied as a background to the contents of the current Range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetHighlight/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 26);\nrange.SetHighlight(\"lightGray\");"
+      ],
+      "params": [
+        {
+          "description": "Available highlight color.",
+          "name": "sColor",
+          "type": "highlightColor"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply highlight.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetHighlight(sColor: highlightColor): ApiRange | null"
+    },
+    "SetItalic": {
+      "description": "Sets the italic property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetItalic/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 24);\nrange.SetItalic(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current Range are displayed italicized or not.",
+          "name": "isItalic",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply italic.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetItalic(isItalic: boolean): ApiRange | null"
+    },
+    "SetPosition": {
+      "description": "Specifies the amount by which text is raised or lowered for the current Range in relation to the default\nbaseline of the surrounding non-positioned text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetPosition/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. \");\nparagraph.AddText(\"This is a text run with the text raised 5 points (10 half-points).\");\nlet range = doc.GetRange(22, 75);\nrange.SetPosition(10);"
+      ],
+      "params": [
+        {
+          "description": "Specifies a positive (raised text) or negative (lowered text)\rmeasurement in half-points (1/144 of an inch).",
+          "name": "nPosition",
+          "type": "hps"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't set position.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetPosition(nPosition: hps): ApiRange | null"
+    },
+    "SetShd": {
+      "description": "Specifies the shading applied to the contents of the current text Range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetShd/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 24);\nrange.SetShd(\"clear\", 255, 111, 61);"
+      ],
+      "params": [
+        {
+          "description": "The shading type applied to the contents of the current text Range.",
+          "name": "type",
+          "type": "ShdType"
+        },
+        {
+          "description": "The shading color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply shadow.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetShd(type: ShdType, color: ApiColor): ApiRange | null",
+      "since": "9.1.0"
+    },
+    "SetSmallCaps": {
+      "description": "Specifies that all the lowercase letter characters in the current text Range are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetSmallCaps/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(10, 24);\nrange.SetSmallCaps(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current Range are displayed capitalized two points smaller or not.",
+          "name": "isSmallCaps",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply small caps.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetSmallCaps(isSmallCaps: boolean): ApiRange | null"
+    },
+    "SetSpacing": {
+      "description": "Sets the text spacing measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetSpacing/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 24);\nrange.SetSpacing(2);"
+      ],
+      "params": [
+        {
+          "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
+          "name": "nSpacing",
+          "type": "twips"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply spacing.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetSpacing(nSpacing: twips): ApiRange | null"
+    },
+    "SetStartPos": {
+      "description": "Sets the start position of the current range object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetStartPos/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = paragraph.GetRange();\nrange.SetStartPos(12);\nrange.SetBold(true);"
+      ],
+      "params": [
+        {
+          "description": "Start position.",
+          "name": "nPos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetStartPos(nPos: number): boolean",
+      "since": "8.2.0"
+    },
+    "SetStrikeout": {
+      "description": "Specifies that the contents of the current Range are displayed with a single horizontal line through the range center.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetStrikeout/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Server Builder\");\nlet range = doc.GetRange(18, 23);\nrange.SetStrikeout(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current Range are displayed struck through or not.",
+          "name": "isStrikeout",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply strikeout.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetStrikeout(isStrikeout: boolean): ApiRange | null"
+    },
+    "SetStyle": {
+      "description": "Sets the style to the current Range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetStyle/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 26);\nlet style = doc.GetStyle(\"Heading 2\");\nrange.SetStyle(style);"
+      ],
+      "params": [
+        {
+          "description": "The style which must be applied to the text character.",
+          "name": "oStyle",
+          "type": "ApiStyle"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't set style.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetStyle(oStyle: ApiStyle): ApiRange | null"
+    },
+    "SetTextPr": {
+      "description": "Sets the text properties to the current Range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetTextPr/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet textPr = paragraph.GetTextPr();\ntextPr.SetItalic(true);\nlet range = doc.GetRange(0, 24);\nrange.SetTextPr(textPr);"
+      ],
+      "params": [
+        {
+          "description": "The text properties that will be applied to the current range.",
+          "name": "oTextPr",
+          "type": "ApiTextPr"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't set text properties.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetTextPr(oTextPr: ApiTextPr): ApiRange | null"
+    },
+    "SetUnderline": {
+      "description": "Specifies that the contents of the current Range are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetUnderline/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 24);\nrange.SetUnderline(true);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the contents of the current Range are displayed underlined or not.",
+          "name": "isUnderline",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply underline.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetUnderline(isUnderline: boolean): ApiRange | null"
+    },
+    "SetVertAlign": {
+      "description": "Specifies the alignment which will be applied to the Range contents in relation to the default appearance of the Range text:\n**\"baseline\"** - the characters in the current text Range will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text Range will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text Range will be aligned above the default text baseline.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetVertAlign/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Copyright Document Builder\");\nlet range = doc.GetRange(10, 19);\nrange.SetVertAlign(\"superscript\");"
+      ],
+      "params": [
+        {
+          "description": "The vertical alignment type applied to the text contents.",
+          "name": "sType",
+          "type": "\"baseline\" | \"subscript\" | \"superscript\""
+        }
+      ],
+      "returns": {
+        "description": "returns null if can't apply align.",
+        "type": "ApiRange | null"
+      },
+      "signature": "SetVertAlign(sType: \"baseline\" | \"subscript\" | \"superscript\"): ApiRange | null"
+    },
+    "ToJSON": {
+      "description": "Converts the ApiRange object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/ToJSON/",
+      "examples": [
+        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = Api.CreateRange(paragraph, 0, 9);\nrange.SetBold(true);\nlet json = range.ToJSON(false, true);\nlet rangeFromJSON = Api.FromJSON(json);\ndoc.Push(rangeFromJSON[0]);"
+      ],
+      "params": [
+        {
+          "description": "Specifies if the used numberings will be written to the JSON object or not.",
+          "name": "bWriteNumberings",
+          "type": "boolean"
+        },
+        {
+          "description": "Specifies if the used styles will be written to the JSON object or not.",
+          "name": "bWriteStyles",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "object"
+      },
+      "signature": "ToJSON(bWriteNumberings: boolean, bWriteStyles: boolean): object"
+    }
+  }
+}

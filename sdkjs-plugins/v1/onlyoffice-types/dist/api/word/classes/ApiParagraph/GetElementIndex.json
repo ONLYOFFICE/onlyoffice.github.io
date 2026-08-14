@@ -1,0 +1,16 @@
+{
+  "description": "Returns the position (index) of the specified element within the current paragraph.",
+  "params": [
+    {
+      "description": "The inline element (run, inline content control, form, etc.) whose index will be returned.",
+      "name": "element",
+      "type": "ParagraphContent"
+    }
+  ],
+  "returns": {
+    "description": "returns -1 if the element is not a direct child of the current paragraph.",
+    "type": "number"
+  },
+  "signature": "GetElementIndex(element: ParagraphContent): number",
+  "since": "9.5.0"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Estimates variance based on a sample (ignores logical values and text in the sample).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/VAR_S/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet result = func.VAR_S(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)\nworksheet.GetRange(\"B2\").SetValue(result);"
+  ],
+  "params": [
+    {
+      "description": "Up to 255 numeric values for which the variance will be calculated.\rThe first argument is required, subsequent arguments are optional. Arguments can be numbers, names, ranges, or arrays of numbers.",
+      "name": "args",
+      "type": "number | ApiName | ApiRange | number[]"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "VAR_S(args: number | ApiName | ApiRange | number[]): number"
+}

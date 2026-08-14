@@ -1,0 +1,12 @@
+{
+  "description": "Adds an endnote for the selected text (or the current position if the selection doesn't exist).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddEndnote/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"This is just a sample text.\");\ndoc.AddEndnote();\nlet endNotesFirstParagraphs = doc.GetEndNotesFirstParagraphs();\nendNotesFirstParagraphs[0].AddText(\"Endnote 1\");\nendNotesFirstParagraphs[0].SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiDocumentContent"
+  },
+  "signature": "AddEndnote(): ApiDocumentContent"
+}

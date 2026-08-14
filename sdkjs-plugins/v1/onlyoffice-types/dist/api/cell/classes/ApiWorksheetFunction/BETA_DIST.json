@@ -1,0 +1,45 @@
+{
+  "description": "Returns the beta probability distribution function.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BETA_DIST/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.BETA_DIST(0.4, 4, 5, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+  ],
+  "params": [
+    {
+      "description": "The value between A and B at which to evaluate the function.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The alpha parameter of the distribution which must be greater than 0.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The beta parameter of the distribution which must be greater than 0.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "Specifies if this is the cumulative distribution function (**true**) or the probability density function (**false**).",
+      "name": "arg4",
+      "type": "ApiRange | ApiName | boolean"
+    },
+    {
+      "description": "An optional lower bound to the interval of x (A). If omitted, it is equal to 0.",
+      "name": "arg5",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "An optional upper bound to the interval of x (B). If omitted, it is equal to 1.",
+      "name": "arg6",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "BETA_DIST(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number, arg3: ApiRange | ApiName | number, arg4: ApiRange | ApiName | boolean, arg5?: ApiRange | ApiName | number, arg6?: ApiRange | ApiName | number): number"
+}

@@ -1,0 +1,432 @@
+{
+  "description": "Class representing a button widget.",
+  "extends": [
+    "ApiBaseWidget"
+  ],
+  "methods": {
+    "Delete": {
+      "description": "Removes widget from parent field.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetBackgroundColor": {
+      "description": "Gets widget background color.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetBackgroundColor(): ApiColor"
+    },
+    "GetBehavior": {
+      "description": "Gets button widget behavior.",
+      "params": [],
+      "returns": {
+        "type": "ButtonBehavior"
+      },
+      "signature": "GetBehavior(): ButtonBehavior"
+    },
+    "GetBorderColor": {
+      "description": "Gets widget border color.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetBorderColor(): ApiColor"
+    },
+    "GetBorderStyle": {
+      "description": "Gets widget border style.",
+      "params": [],
+      "returns": {
+        "type": "WidgetBorderStyle"
+      },
+      "signature": "GetBorderStyle(): WidgetBorderStyle"
+    },
+    "GetBorderWidth": {
+      "description": "Gets widget border width.",
+      "params": [],
+      "returns": {
+        "type": "WidgetBorderWidth"
+      },
+      "signature": "GetBorderWidth(): WidgetBorderWidth"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiButtonWidget class.",
+      "params": [],
+      "returns": {
+        "type": "\"buttonWidget\""
+      },
+      "signature": "GetClassType(): \"buttonWidget\""
+    },
+    "GetIconXPos": {
+      "description": "Gets button widget icon x position.",
+      "params": [],
+      "returns": {
+        "type": "percentage"
+      },
+      "signature": "GetIconXPos(): percentage"
+    },
+    "GetIconYPos": {
+      "description": "Gets button widget icon y position.",
+      "params": [],
+      "returns": {
+        "type": "percentage"
+      },
+      "signature": "GetIconYPos(): percentage"
+    },
+    "GetLabel": {
+      "description": "Gets label from button widget field.",
+      "params": [
+        {
+          "description": "The appearance state.",
+          "name": "appearance",
+          "optional": true,
+          "type": "ButtonAppearance"
+        }
+      ],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetLabel(appearance?: ButtonAppearance): string"
+    },
+    "GetLayout": {
+      "description": "Gets button widget layout type",
+      "params": [],
+      "returns": {
+        "type": "ButtonLayout"
+      },
+      "signature": "GetLayout(): ButtonLayout"
+    },
+    "GetPosition": {
+      "description": "Gets widget position.",
+      "params": [],
+      "returns": {
+        "type": "Point"
+      },
+      "signature": "GetPosition(): Point"
+    },
+    "GetRect": {
+      "description": "Sets field rect.",
+      "params": [],
+      "returns": {
+        "type": "Rect"
+      },
+      "signature": "GetRect(): Rect"
+    },
+    "GetScaleHow": {
+      "description": "Gets button widget scale when type",
+      "params": [],
+      "returns": {
+        "type": "ButtonScaleHow"
+      },
+      "signature": "GetScaleHow(): ButtonScaleHow"
+    },
+    "GetScaleWhen": {
+      "description": "Gets button widget scale when type",
+      "params": [],
+      "returns": {
+        "type": "ButtonScaleWhen"
+      },
+      "signature": "GetScaleWhen(): ButtonScaleWhen"
+    },
+    "GetTextColor": {
+      "description": "Gets widget text color.",
+      "params": [],
+      "returns": {
+        "type": "ApiColor"
+      },
+      "signature": "GetTextColor(): ApiColor"
+    },
+    "GetTextSize": {
+      "description": "Gets widget text size.\n<note> Text size === 0 means autofit </note>",
+      "params": [],
+      "returns": {
+        "type": "pt"
+      },
+      "signature": "GetTextSize(): pt"
+    },
+    "IsAutoFit": {
+      "description": "Checks if text is autofit.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsAutoFit(): boolean"
+    },
+    "IsFitBounds": {
+      "description": "Checks if button widget is fit bounds.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsFitBounds(): boolean"
+    },
+    "SetAutoFit": {
+      "description": "Sets text autofit.",
+      "params": [
+        {
+          "description": "Specifies whether text autofit is enabled.",
+          "name": "auto",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetAutoFit(auto: boolean): boolean"
+    },
+    "SetBackgroundColor": {
+      "description": "Sets widget background color.",
+      "params": [
+        {
+          "description": "The background color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBackgroundColor(color: ApiColor): boolean"
+    },
+    "SetBehavior": {
+      "description": "Sets button widget behavior.",
+      "params": [
+        {
+          "description": "The highlight behavior when the button is clicked.",
+          "name": "behavior",
+          "type": "ButtonBehavior"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBehavior(behavior: ButtonBehavior): boolean"
+    },
+    "SetBorderColor": {
+      "description": "Sets widget border color.",
+      "params": [
+        {
+          "description": "The border color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderColor(color: ApiColor): boolean"
+    },
+    "SetBorderStyle": {
+      "description": "Sets widget border style.",
+      "params": [
+        {
+          "description": "The border style.",
+          "name": "borderStyle",
+          "type": "WidgetBorderStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderStyle(borderStyle: WidgetBorderStyle): boolean"
+    },
+    "SetBorderWidth": {
+      "description": "Sets widget border width.",
+      "params": [
+        {
+          "description": "the width to set to the border.",
+          "name": "borderWidth",
+          "type": "WidgetBorderWidth"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetBorderWidth(borderWidth: WidgetBorderWidth): boolean"
+    },
+    "SetFitBounds": {
+      "description": "Sets button widget fit bounds.",
+      "params": [
+        {
+          "description": "Specifies whether the icon is scaled to fit the button bounds.",
+          "name": "fit",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFitBounds(fit: boolean): boolean"
+    },
+    "SetIconXPos": {
+      "description": "Sets button widget icon x position.",
+      "params": [
+        {
+          "description": "The horizontal position of the icon as a percentage of the button width.",
+          "name": "posX",
+          "type": "percentage"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIconXPos(posX: percentage): boolean"
+    },
+    "SetIconYPos": {
+      "description": "Sets button widget icon y position.",
+      "params": [
+        {
+          "description": "The vertical position of the icon as a percentage of the button height.",
+          "name": "posY",
+          "type": "percentage"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIconYPos(posY: percentage): boolean"
+    },
+    "SetImage": {
+      "description": "Sets image to button widget field.",
+      "params": [
+        {
+          "description": "The image URL.",
+          "name": "imageUrl",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "description": "The appearance state.",
+          "name": "appearance",
+          "optional": true,
+          "type": "ButtonAppearance"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetImage(imageUrl?: string, appearance?: ButtonAppearance): boolean"
+    },
+    "SetLabel": {
+      "description": "Sets label to button widget field.",
+      "params": [
+        {
+          "description": "The button label.",
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "description": "The appearance state.",
+          "name": "appearance",
+          "optional": true,
+          "type": "ButtonAppearance"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLabel(label: string, appearance?: ButtonAppearance): boolean"
+    },
+    "SetLayout": {
+      "description": "Sets button widget layout type",
+      "params": [
+        {
+          "description": "The button layout.",
+          "name": "layout",
+          "type": "ButtonLayout"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetLayout(layout: ButtonLayout): boolean"
+    },
+    "SetPosition": {
+      "description": "Sets widget position.",
+      "params": [
+        {
+          "description": "The new position of the widget.",
+          "name": "position",
+          "type": "Point"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPosition(position: Point): boolean"
+    },
+    "SetRect": {
+      "description": "Sets field rect.",
+      "params": [
+        {
+          "description": "The new bounding rectangle for the widget.",
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRect(rect: Rect): boolean"
+    },
+    "SetScaleHow": {
+      "description": "Sets button widget scale how type",
+      "params": [
+        {
+          "description": "The icon scaling mode.",
+          "name": "scaleHow",
+          "type": "ButtonScaleHow"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScaleHow(scaleHow: ButtonScaleHow): boolean"
+    },
+    "SetScaleWhen": {
+      "description": "Sets button widget scale when type",
+      "params": [
+        {
+          "description": "The condition that controls when the icon is scaled.",
+          "name": "scaleWhen",
+          "type": "ButtonScaleWhen"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScaleWhen(scaleWhen: ButtonScaleWhen): boolean"
+    },
+    "SetTextColor": {
+      "description": "Sets widget text color.",
+      "params": [
+        {
+          "description": "The text color.",
+          "name": "color",
+          "type": "ApiColor"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTextColor(color: ApiColor): boolean"
+    },
+    "SetTextSize": {
+      "description": "Sets widget text size.\n<note> Text size === 0 means autofit </note>",
+      "params": [
+        {
+          "description": "The font size in points.",
+          "name": "size",
+          "type": "pt"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTextSize(size: pt): boolean"
+    }
+  }
+}

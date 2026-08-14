@@ -1,0 +1,28 @@
+{
+  "description": "Estimates the standard deviation based on a sample from the selected database entries.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DSTDEV/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(\"Name\");\nworksheet.GetRange(\"B1\").SetValue(\"Month\");\nworksheet.GetRange(\"C1\").SetValue(\"Sales\");\nworksheet.GetRange(\"A2\").SetValue(\"Alice\");\nworksheet.GetRange(\"B2\").SetValue(\"Jan\");\nworksheet.GetRange(\"C2\").SetValue(200);\nworksheet.GetRange(\"A3\").SetValue(\"Andrew\");\nworksheet.GetRange(\"B3\").SetValue(\"Jan\");\nworksheet.GetRange(\"C3\").SetValue(300);\nworksheet.GetRange(\"A4\").SetValue(\"Bob\");\nworksheet.GetRange(\"B4\").SetValue(\"Jan\");\nworksheet.GetRange(\"C4\").SetValue(250);\nworksheet.GetRange(\"E1\").SetValue(\"Month\");\nworksheet.GetRange(\"E2\").SetValue(\"Jan\");\nworksheet.GetRange(\"F1\").SetValue(\"Sales\");\nworksheet.GetRange(\"F2\").SetValue(\">200\");\nlet range1 = worksheet.GetRange(\"A1:C4\");\nlet range2 = worksheet.GetRange(\"E1:F2\");\nworksheet.GetRange(\"F4\").SetValue(func.DSTDEV(range1, \"Sales\", range2));"
+  ],
+  "params": [
+    {
+      "description": "The range of cells that makes up the list or database. A database is a list of related data.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName"
+    },
+    {
+      "description": "The column which is used in the function. Either the label of the column in double quotation marks or a number that represents the column's position in the list.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number | string"
+    },
+    {
+      "description": "The range of cells that contains the conditions you specify. The range includes at least one column label and at least one cell below the column label for a condition.",
+      "name": "arg3",
+      "type": "ApiRange | ApiName"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "DSTDEV(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg3: ApiRange | ApiName): number"
+}

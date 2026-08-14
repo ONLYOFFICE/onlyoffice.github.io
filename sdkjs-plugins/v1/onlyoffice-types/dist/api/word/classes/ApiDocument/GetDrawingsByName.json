@@ -1,0 +1,15 @@
+{
+  "description": "Returns a collection of drawing objects from the document filtered by their names.",
+  "params": [
+    {
+      "description": "An array of drawing names to filter by.",
+      "name": "ids",
+      "type": "string[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiDrawing[]"
+  },
+  "signature": "GetDrawingsByName(ids: string[]): ApiDrawing[]",
+  "since": "9.3.0"
+}

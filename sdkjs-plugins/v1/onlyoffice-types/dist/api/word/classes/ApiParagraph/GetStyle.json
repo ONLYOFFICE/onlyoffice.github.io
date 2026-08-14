@@ -1,0 +1,13 @@
+{
+  "description": "Returns the paragraph style method.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetStyle/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet heading6Style = doc.GetStyle(\"Heading 6\");\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"center\");\nparaPr.SetStyle(heading6Style);\nparagraph.AddText(\"This is a text in a paragraph styled with the 'Heading 6' style.\");\nlet style = paraPr.GetStyle();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Style: \" + style.GetName());"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The style of the paragraph.",
+    "type": "ApiStyle"
+  },
+  "signature": "GetStyle(): ApiStyle"
+}

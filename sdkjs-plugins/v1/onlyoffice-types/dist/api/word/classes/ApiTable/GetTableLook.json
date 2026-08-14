@@ -1,0 +1,8 @@
+{
+  "description": "Gets table look properties",
+  "params": [],
+  "returns": {
+    "type": "TableLook"
+  },
+  "signature": "GetTableLook(): TableLook"
+}

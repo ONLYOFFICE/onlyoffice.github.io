@@ -1,0 +1,38 @@
+{
+  "description": "Class representing a underline annotation.",
+  "extends": [
+    "ApiBaseMarkupAnnotation"
+  ],
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiUnderlineAnnotation class.",
+      "params": [],
+      "returns": {
+        "type": "\"underlineAnnot\""
+      },
+      "signature": "GetClassType(): \"underlineAnnot\""
+    },
+    "GetQuads": {
+      "description": "Gets quads from current markup annotation.",
+      "params": [],
+      "returns": {
+        "type": "Quad[]"
+      },
+      "signature": "GetQuads(): Quad[]"
+    },
+    "SetQuads": {
+      "description": "Sets quads to current markup annotation.",
+      "params": [
+        {
+          "description": "An array of quadrilaterals defining the highlighted regions.",
+          "name": "quads",
+          "type": "Quad[]"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetQuads(quads: Quad[]): boolean"
+    }
+  }
+}

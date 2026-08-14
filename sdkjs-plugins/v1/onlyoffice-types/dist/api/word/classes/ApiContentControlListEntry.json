@@ -1,0 +1,167 @@
+{
+  "description": "Class representing an entry of the combo box / drop-down list content control.",
+  "methods": {
+    "Delete": {
+      "description": "Deletes the specified item in the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/Delete/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiContentControlListEntry class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetClassType/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "\"contentControlList\""
+      },
+      "signature": "GetClassType(): \"contentControlList\""
+    },
+    "GetIndex": {
+      "description": "Returns an index of the content control list item in the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetIndex/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetIndex(): number"
+    },
+    "GetParent": {
+      "description": "Returns a parent of the content control list item in the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetParent/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "ApiContentControlList"
+      },
+      "signature": "GetParent(): ApiContentControlList"
+    },
+    "GetText": {
+      "description": "Returns a String that represents the display text of a list item for the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetText/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetText(): string"
+    },
+    "GetValue": {
+      "description": "Returns a String that represents the value of a list item for the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetValue/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetValue(): string"
+    },
+    "MoveDown": {
+      "description": "Moves the current item in the parent combo box / drop-down list content control down one element, so that it is after the item that originally followed it.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/MoveDown/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveDown(): boolean"
+    },
+    "MoveUp": {
+      "description": "Moves the current item in the parent combo box / drop-down list content control up one element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/MoveUp/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "MoveUp(): boolean"
+    },
+    "Select": {
+      "description": "Selects the list entry in the combo box / drop-down list content control and sets the text of the content control to the selected item value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/Select/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Select(): boolean"
+    },
+    "SetIndex": {
+      "description": "Sets an index to the content control list item in the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/SetIndex/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [
+        {
+          "description": "An index of the content control list item.",
+          "name": "nIndex",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetIndex(nIndex: number): boolean"
+    },
+    "SetText": {
+      "description": "Sets a String that represents the display text of a list item for the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/SetText/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [
+        {
+          "description": "The display text of a list item.",
+          "name": "sText",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetText(sText: string): boolean"
+    },
+    "SetValue": {
+      "description": "Sets a String that represents the value of a list item for the combo box / drop-down list content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/SetValue/",
+      "examples": [
+        "// todo_example"
+      ],
+      "params": [
+        {
+          "description": "The value of a list item.",
+          "name": "sValue",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValue(sValue: string): boolean"
+    }
+  }
+}

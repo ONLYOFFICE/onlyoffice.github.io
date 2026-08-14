@@ -1,0 +1,24 @@
+{
+  "description": "Converts a number to text, using a currency format $#.##.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DOLLAR/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DOLLAR(98.9997, 3));"
+  ],
+  "params": [
+    {
+      "description": "A number, a reference to a cell containing a number, or a formula that returns a number.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number | string"
+    },
+    {
+      "description": "A number of digits to the right of the decimal point. The number is rounded as necessary.\rIf it is omitted, the function will assume it to be 2.",
+      "name": "arg2",
+      "optional": true,
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "DOLLAR(arg1: ApiRange | ApiName | number | string, arg2?: ApiRange | ApiName | number): string"
+}

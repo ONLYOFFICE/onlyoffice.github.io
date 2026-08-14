@@ -1,0 +1,20 @@
+{
+  "description": "Establishes automatic field-sorting rules for the pivot table reports.",
+  "params": [
+    {
+      "description": "The sort order.",
+      "name": "order",
+      "type": "SortOrder"
+    },
+    {
+      "description": "The name of the field to sort by (pivotField.SourceName, pivotField.Name, dataField.Name).",
+      "name": "field",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "AutoSort(order: SortOrder, field: string): void",
+  "since": "9.1.0"
+}

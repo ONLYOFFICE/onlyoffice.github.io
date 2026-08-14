@@ -1,0 +1,8 @@
+{
+  "description": "Class representing a paragraph.",
+  "extends": [
+    "ApiParaPr"
+  ],
+  "methodCount": 129,
+  "sharded": true
+}

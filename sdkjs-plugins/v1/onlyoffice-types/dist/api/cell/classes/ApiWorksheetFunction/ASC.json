@@ -1,0 +1,18 @@
+{
+  "description": "For double-byte character set (DBCS) languages, the function changes full-width (double-byte) characters to half-width (single-byte) characters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ASC/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ASC(\"text\"));"
+  ],
+  "params": [
+    {
+      "description": "The text or a reference to a cell containing the text to change.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | string"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "ASC(arg1: ApiRange | ApiName | string): string"
+}

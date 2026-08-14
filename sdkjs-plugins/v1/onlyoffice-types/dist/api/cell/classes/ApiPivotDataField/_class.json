@@ -1,0 +1,8 @@
+{
+  "description": "Class representing a pivot table data field.",
+  "extends": [
+    "ApiPivotField"
+  ],
+  "methodCount": 58,
+  "sharded": true
+}

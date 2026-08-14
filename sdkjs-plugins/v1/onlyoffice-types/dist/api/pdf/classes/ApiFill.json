@@ -1,0 +1,22 @@
+{
+  "description": "Class representing a base class for fill.",
+  "methods": {
+    "GetClassType": {
+      "description": "Returns a type of the ApiFill class.",
+      "params": [],
+      "returns": {
+        "type": "\"fill\""
+      },
+      "signature": "GetClassType(): \"fill\""
+    },
+    "GetType": {
+      "description": "Gets the fill type.",
+      "params": [],
+      "returns": {
+        "description": "returns \"solid\", \"gradient\", \"pattern\", \"blip\", \"nofill\" or null.",
+        "type": "FillType"
+      },
+      "signature": "GetType(): FillType"
+    }
+  }
+}

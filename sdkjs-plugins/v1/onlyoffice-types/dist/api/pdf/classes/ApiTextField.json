@@ -1,0 +1,452 @@
+{
+  "description": "Class representing a text field.",
+  "extends": [
+    "ApiBaseField"
+  ],
+  "methods": {
+    "AddWidget": {
+      "description": "Adds new widget - visual representation for field",
+      "params": [
+        {
+          "description": "page index to add widget",
+          "name": "pageIndex",
+          "type": "number"
+        },
+        {
+          "description": "field rect",
+          "name": "rect",
+          "type": "Rect"
+        }
+      ],
+      "returns": {
+        "type": "ApiWidget"
+      },
+      "signature": "AddWidget(pageIndex: number, rect: Rect): ApiWidget"
+    },
+    "ClearFormat": {
+      "description": "Clears format of field.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "ClearFormat(): boolean"
+    },
+    "Delete": {
+      "description": "Removes field from document.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Delete(): boolean"
+    },
+    "GetAllWidgets": {
+      "description": "Gets array with widgets of the current field.",
+      "params": [],
+      "returns": {
+        "description": "returns emptry array if the field is not added to the document.",
+        "type": "ApiWidget[]"
+      },
+      "signature": "GetAllWidgets(): ApiWidget[]"
+    },
+    "GetCharLimit": {
+      "description": "Gets the text field character limit.\n<note> Char limit 0 means field doesn't have char limit",
+      "params": [],
+      "returns": {
+        "type": "number"
+      },
+      "signature": "GetCharLimit(): number"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiTextField class.",
+      "params": [],
+      "returns": {
+        "type": "\"textField\""
+      },
+      "signature": "GetClassType(): \"textField\""
+    },
+    "GetFormattedValue": {
+      "description": "Gets formatted value of a field.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFormattedValue(): string"
+    },
+    "GetFullName": {
+      "description": "Gets field full name.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetFullName(): string"
+    },
+    "GetPartialName": {
+      "description": "Gets field partial name.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetPartialName(): string"
+    },
+    "GetPlaceholder": {
+      "description": "Gets text field placeholder.",
+      "params": [],
+      "returns": {
+        "type": "string"
+      },
+      "signature": "GetPlaceholder(): string"
+    },
+    "GetRegularExp": {
+      "description": "Gets text widget regular validate expression.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "GetRegularExp(): boolean"
+    },
+    "GetValue": {
+      "description": "Gets field value",
+      "params": [],
+      "returns": {
+        "type": "string | string[]"
+      },
+      "signature": "GetValue(): string | string[]"
+    },
+    "IsComb": {
+      "description": "Checks if the text field uses comb formatting.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsComb(): boolean"
+    },
+    "IsMultiline": {
+      "description": "Checks if text field is multiline.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsMultiline(): boolean"
+    },
+    "IsReadOnly": {
+      "description": "Checks if field is read only",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsReadOnly(): boolean"
+    },
+    "IsRequired": {
+      "description": "Checks if field is required",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsRequired(): boolean"
+    },
+    "IsScrollLongText": {
+      "description": "Checks if text field can scroll long text.",
+      "params": [],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "IsScrollLongText(): boolean"
+    },
+    "SetCharLimit": {
+      "description": "Sets the text field character limit.\n<note> Character limit 0 means the field doesn't have a character limit.",
+      "params": [
+        {
+          "description": "The maximum number of characters allowed in the field.",
+          "name": "charLimit",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetCharLimit(charLimit: number): boolean"
+    },
+    "SetComb": {
+      "description": "Sets whether the text field uses comb formatting.\n<note>The character limit must be greater than 0.</note>",
+      "params": [
+        {
+          "description": "Specifies whether comb formatting is enabled.",
+          "name": "comb",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetComb(comb: boolean): boolean"
+    },
+    "SetDateFormat": {
+      "description": "Sets date format for field.",
+      "params": [
+        {
+          "description": "date format (e.g. \"dd.mm.yyyy\")",
+          "name": "format",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetDateFormat(format: string): boolean"
+    },
+    "SetFullName": {
+      "description": "Sets new field name if possible.",
+      "params": [
+        {
+          "description": "The new full name for the field.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetFullName(name: string): boolean"
+    },
+    "SetMask": {
+      "description": "Sets the input mask for entered text.",
+      "params": [
+        {
+          "description": "The input mask (e.g. \"(999)999-9999\").",
+          "name": "inputMask",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMask(inputMask: string): boolean"
+    },
+    "SetMultiline": {
+      "description": "Sets text field multiline prop.",
+      "params": [
+        {
+          "description": "will the field be multiline",
+          "name": "multiline",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetMultiline(multiline: boolean): boolean"
+    },
+    "SetNumberFormat": {
+      "description": "Sets number format for field.",
+      "params": [
+        {
+          "description": "The number of digits after the decimal point.",
+          "name": "decimalPlaces",
+          "type": "number"
+        },
+        {
+          "description": "The number separator style.",
+          "name": "separatorStyle",
+          "type": "NumberSepStyle"
+        },
+        {
+          "description": "The negative number display style.",
+          "name": "negativeStyle",
+          "type": "NumberNegStyle"
+        },
+        {
+          "description": "The currency symbol.",
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "description": "If true, places the currency symbol before the number (e.g., $1,234.56);\rif false, places it after (e.g., 1,234.56$).",
+          "name": "currencyPrepend",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetNumberFormat(decimalPlaces: number, separatorStyle: NumberSepStyle, negativeStyle: NumberNegStyle, currency: string, currencyPrepend: boolean): boolean"
+    },
+    "SetPartialName": {
+      "description": "Sets new field partial name.",
+      "params": [
+        {
+          "description": "The new partial name for the field.",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPartialName(name: string): boolean"
+    },
+    "SetPercentageFormat": {
+      "description": "Sets percentage format for field.",
+      "params": [
+        {
+          "description": "The number of digits after the decimal point.",
+          "name": "decimalPlaces",
+          "type": "number"
+        },
+        {
+          "description": "The number separator style.",
+          "name": "separatorStyle",
+          "type": "NumberSepStyle"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPercentageFormat(decimalPlaces: number, separatorStyle: NumberSepStyle): boolean"
+    },
+    "SetPlaceholder": {
+      "description": "Sets text field placeholder.",
+      "params": [
+        {
+          "description": "field placeholder",
+          "name": "sPlaceholder",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetPlaceholder(sPlaceholder: string): boolean"
+    },
+    "SetReadOnly": {
+      "description": "Sets field read only",
+      "params": [
+        {
+          "description": "Specifies whether the field is read-only.",
+          "name": "readOnly",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetReadOnly(readOnly: boolean): boolean"
+    },
+    "SetRegularExp": {
+      "description": "Sets regular expression validate string for field.",
+      "params": [
+        {
+          "description": "The validation regular expression (e.g. \"\\\\S+@\\\\S+\\\\.\\\\S+\")",
+          "name": "regularExpression",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRegularExp(regularExpression: string): boolean"
+    },
+    "SetRequired": {
+      "description": "Sets field required",
+      "params": [
+        {
+          "description": "Specifies whether the field is required.",
+          "name": "required",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetRequired(required: boolean): boolean"
+    },
+    "SetScrollLongText": {
+      "description": "Sets whether the text field can scroll long text.",
+      "params": [
+        {
+          "description": "Specifies whether long text can be scrolled.",
+          "name": "allowScroll",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetScrollLongText(allowScroll: boolean): boolean"
+    },
+    "SetSpecialFormat": {
+      "description": "Sets special format for field.",
+      "params": [
+        {
+          "description": "the formatting style to apply to the value",
+          "name": "format",
+          "type": "PsfFormat"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetSpecialFormat(format: PsfFormat): boolean"
+    },
+    "SetTimeFormat": {
+      "description": "Sets time format for field.",
+      "params": [
+        {
+          "description": "available time format",
+          "name": "format",
+          "type": "TimeFormat"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetTimeFormat(format: TimeFormat): boolean"
+    },
+    "SetValidateRange": {
+      "description": "Sets validate range for field.\n<note> Can only be applied to fields with a percentage or number format. </note>",
+      "params": [
+        {
+          "description": "If true, enables minimum value validation using `greaterThanValue`.",
+          "name": "greaterThan",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "The minimum allowed value.",
+          "name": "greaterThanValue",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "description": "If true, enables maximum value validation using `lessThanValue`.",
+          "name": "lessThan",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "description": "The maximum allowed value.",
+          "name": "lessThanValue",
+          "optional": true,
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValidateRange(greaterThan?: boolean, greaterThanValue?: number, lessThan?: boolean, lessThanValue?: number): boolean"
+    },
+    "SetValue": {
+      "description": "Sets field value",
+      "params": [
+        {
+          "description": "The new value for the field.",
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "SetValue(value: string): boolean"
+    }
+  }
+}

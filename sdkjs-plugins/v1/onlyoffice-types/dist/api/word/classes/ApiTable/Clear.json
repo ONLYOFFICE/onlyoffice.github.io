@@ -1,0 +1,13 @@
+{
+  "description": "Clears the content from the table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/Clear/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ntable.GetCell(0, 0).GetContent().GetElement(0).AddText(\"This is just a sample text.\");\ndoc.Push(table);\ntable.Clear();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The content of the table was cleared.\");\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns true.",
+    "type": "boolean"
+  },
+  "signature": "Clear(): boolean"
+}

@@ -1,0 +1,23 @@
+{
+  "description": "Searches for a scope of a document object. The search results are a collection of ApiRange objects.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/Search/",
+  "examples": [
+    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is paragraph №1.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is paragraph №2.\");\ndoc.Push(paragraph);\nlet searchResults = doc.Search(\"paragraph\");\nsearchResults[1].SetBold(true);"
+  ],
+  "params": [
+    {
+      "description": "Search string, or a regular expression to match. When a RegExp is passed, the isMatchCase parameter is ignored (control case sensitivity with the \"i\" flag instead).",
+      "name": "sText",
+      "type": "string | RegExp"
+    },
+    {
+      "description": "Case sensitive or not.",
+      "name": "isMatchCase",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange[]"
+  },
+  "signature": "Search(sText: string | RegExp, isMatchCase: boolean): ApiRange[]"
+}

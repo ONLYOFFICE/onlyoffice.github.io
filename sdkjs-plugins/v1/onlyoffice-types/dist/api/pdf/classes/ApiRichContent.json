@@ -1,0 +1,90 @@
+{
+  "description": "Class representing a rich content.",
+  "methods": {
+    "AddElement": {
+      "description": "Adds a rich paragraph using its position in rich content.",
+      "params": [
+        {
+          "description": "The position where the rich paragraph will be added.",
+          "name": "pos",
+          "type": "number"
+        },
+        {
+          "description": "The rich paragraph which will be added at the current position.",
+          "name": "richPara",
+          "type": "ApiRichParagraph"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "AddElement(pos: number, richPara: ApiRichParagraph): boolean"
+    },
+    "GetClassType": {
+      "description": "Returns a type of the ApiRichContent class.",
+      "params": [],
+      "returns": {
+        "type": "\"richContent\""
+      },
+      "signature": "GetClassType(): \"richContent\""
+    },
+    "GetContent": {
+      "description": "Returns an array of rich paragraphs from the current rich content object.",
+      "params": [
+        {
+          "description": "Specifies if the copies of the document elements will be returned or not.",
+          "name": "getCopies",
+          "type": "boolean"
+        }
+      ],
+      "returns": {
+        "type": "ApiRichParagraph[]"
+      },
+      "signature": "GetContent(getCopies: boolean): ApiRichParagraph[]"
+    },
+    "GetCurrentParagraph": {
+      "description": "Returns the current paragraph where the cursor is located.",
+      "params": [],
+      "returns": {
+        "type": "ApiRichParagraph"
+      },
+      "signature": "GetCurrentParagraph(): ApiRichParagraph"
+    },
+    "GetCurrentRun": {
+      "description": "Returns the current run where the cursor is located.",
+      "params": [],
+      "returns": {
+        "type": "ApiRichRun"
+      },
+      "signature": "GetCurrentRun(): ApiRichRun"
+    },
+    "GetElement": {
+      "description": "Returns an rich paragraph by its position in the content.",
+      "params": [
+        {
+          "description": "The element position that will be taken from the content.",
+          "name": "pos",
+          "type": "number"
+        }
+      ],
+      "returns": {
+        "type": "ApiRichParagraph"
+      },
+      "signature": "GetElement(pos: number): ApiRichParagraph"
+    },
+    "Push": {
+      "description": "Pushes a rich paragraph to a rich content.",
+      "params": [
+        {
+          "description": "The rich paragraph which will be pushed to the rich content.",
+          "name": "richPara",
+          "type": "ApiRichParagraph"
+        }
+      ],
+      "returns": {
+        "type": "boolean"
+      },
+      "signature": "Push(richPara: ApiRichParagraph): boolean"
+    }
+  }
+}

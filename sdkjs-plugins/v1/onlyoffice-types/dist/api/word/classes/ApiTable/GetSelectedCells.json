@@ -1,0 +1,10 @@
+{
+  "description": "Returns the selected cells of the current table.",
+  "params": [],
+  "returns": {
+    "description": "An array of the currently selected cells (empty if there is no cell selection).",
+    "type": "ApiTableCell[]"
+  },
+  "signature": "GetSelectedCells(): ApiTableCell[]",
+  "since": "9.5.0"
+}

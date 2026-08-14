@@ -1,0 +1,9 @@
+{
+  "description": "Gets the outline properties from the current graphic object.",
+  "params": [],
+  "returns": {
+    "type": "ApiStroke | null"
+  },
+  "signature": "GetLine(): ApiStroke | null",
+  "since": "9.5.0"
+}

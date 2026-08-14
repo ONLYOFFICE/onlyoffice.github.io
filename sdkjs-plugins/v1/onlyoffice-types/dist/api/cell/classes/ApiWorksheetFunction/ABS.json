@@ -1,0 +1,18 @@
+{
+  "description": "Returns the absolute value of a number, a number without its sign.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ABS/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ABS(-123.14));"
+  ],
+  "params": [
+    {
+      "description": "The real number for which the absolute value will be returned.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "ABS(arg1: ApiRange | ApiName | number): number"
+}

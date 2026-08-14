@@ -1,0 +1,23 @@
+{
+  "description": "Returns a random number between the numbers specified.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/RANDBETWEEN/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.RANDBETWEEN(-1, 10));"
+  ],
+  "params": [
+    {
+      "description": "The smallest integer value.",
+      "name": "arg1",
+      "type": "ApiRange | ApiName | number"
+    },
+    {
+      "description": "The largest integer value.",
+      "name": "arg2",
+      "type": "ApiRange | ApiName | number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "RANDBETWEEN(arg1: ApiRange | ApiName | number, arg2: ApiRange | ApiName | number): number"
+}

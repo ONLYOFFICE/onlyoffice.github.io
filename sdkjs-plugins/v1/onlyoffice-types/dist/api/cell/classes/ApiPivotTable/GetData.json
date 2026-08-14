@@ -1,0 +1,19 @@
+{
+  "description": "Returns the value for the data field in a pivot table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotTable/Methods/GetData/",
+  "examples": [
+    "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Style');\nworksheet.GetRange('D1').SetValue('Price');\n\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('B4').SetValue('East');\nworksheet.GetRange('B5').SetValue('West');\n\nworksheet.GetRange('C2').SetValue('Fancy');\nworksheet.GetRange('C3').SetValue('Fancy');\nworksheet.GetRange('C4').SetValue('Tee');\nworksheet.GetRange('C5').SetValue('Tee');\n\nworksheet.GetRange('D2').SetValue(42.5);\nworksheet.GetRange('D3').SetValue(35.2);\nworksheet.GetRange('D4').SetValue(12.3);\nworksheet.GetRange('D5').SetValue(24.8);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$D$5\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\nlet dataField = pivotTable.AddDataField('Price');\ndataField.SetName('Regional prices');\npivotTable.AddFields({\n\trows: 'Region',\n\tcolumns: 'Style',\n});\n\nlet pivotWorksheet = Api.GetActiveSheet();\n\nlet value = pivotTable.GetData(['East', 'Tee']);\npivotWorksheet.GetRange('A9').SetValue('Value of East Tee Price:');\npivotWorksheet.GetRange('B9').SetValue(value);"
+  ],
+  "params": [
+    {
+      "description": "Describes a single cell in the pivot table report.\rFor example, \"'Estimated Costs' Tables May\", which shows the estimated costs for tables in May\r(Data field = Costs, Product = Tables, Month = May).",
+      "name": "items",
+      "type": "string[]"
+    }
+  ],
+  "returns": {
+    "type": "number | null"
+  },
+  "signature": "GetData(items: string[]): number | null",
+  "since": "8.2.0"
+}
