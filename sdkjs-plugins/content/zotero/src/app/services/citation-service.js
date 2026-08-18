@@ -1443,6 +1443,60 @@ class CitationService {
         return updatedField;
     }
 
+    /**
+     * Repairs citation/bibliography fields that were flattened into plain,
+     * visible text - this happens when a field is copy/pasted between two
+     * documents and the host editor fails to preserve the field wrapper,
+     * leaving the raw "ADDIN ZOTERO_ITEM CSL_CITATION {json}" instruction
+     * text visible in a footnote/endnote/paragraph instead of hidden field
+     * code. The embedded JSON is still intact, so it's re-wrapped as a real
+     * field here; callers are expected to run a normal refresh right after,
+     * which will pick up the restored fields like any other citation.
+     * @returns {Promise<{repaired: number, failed: number}>}
+     */
+    async repairBrokenCitations() {
+        const matches = await this.citationDocService.scanForBrokenFields();
+        let repaired = 0;
+        let failed = 0;
+
+        for (const match of matches) {
+            let citationObject;
+            try {
+                citationObject = this.#extractField({ Value: match.rawValue, FieldId: "", Content: "" });
+            } catch (e) {
+                console.error("Failed to parse broken field JSON:", e);
+            }
+            if (!citationObject || typeof citationObject !== "object") {
+                failed++;
+                continue;
+            }
+
+            const isBibliography = /ZOTERO_BIBL/i.test(match.rawValue);
+            const prefix = isBibliography ? this._bibPrefixNew : this._citPrefixNew;
+            const suffix = isBibliography ? this._bibSuffixNew : this._citSuffixNew;
+            const content = isBibliography
+                ? translate("Bibliography")
+                : (citationObject.properties && citationObject.properties.plainCitation) ||
+                  translate("Citation");
+
+            /** @type {AddinFieldData} */
+            const field = {
+                FieldId: "",
+                Value: prefix + " " + suffix + " " + JSON.stringify(citationObject),
+                Content: content,
+            };
+
+            const addedField = await this.citationDocService.repairBrokenField(match, field);
+            if (addedField) {
+                repaired++;
+            } else {
+                failed++;
+            }
+        }
+
+        return { repaired, failed };
+    }
+
     /** @param {string} message */
     async showWarningMessage(message) {
         this.#additionalWindow.showInfoWindow("Warning!", message);

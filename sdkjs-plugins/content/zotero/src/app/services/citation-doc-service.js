@@ -184,6 +184,61 @@ class CitationDocService {
         });
     }
 
+    /**
+     * Scans the document body, footnotes and endnotes for paragraphs whose
+     * ENTIRE text is a complex field's raw instruction text (e.g. "ADDIN
+     * ZOTERO_ITEM CSL_CITATION {json}") exposed as visible content instead
+     * of hidden field code. This happens when a field is copy/pasted into a
+     * different document and the host editor fails to preserve the field
+     * wrapper. Only whole-paragraph matches are reported, so paragraphs
+     * that merely mention Zotero amid other text are left untouched.
+     * @returns {Promise<Array<{location: "body" | "footnote" | "endnote", index: number, rawValue: string}>>}
+     */
+    scanForBrokenFields() {
+        return new Promise((resolve) => {
+            const isCalc = true;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    function scan(paragraphs, location) {
+                        const found = [];
+                        for (let i = 0; i < paragraphs.length; i++) {
+                            const text = paragraphs[i].GetText().trim();
+                            if (!/^ADDIN\s*(ZOTERO_ITEM|ZOTERO_BIBL)/i.test(text)) continue;
+                            if (text.indexOf("{") === -1) continue;
+                            if (text.lastIndexOf("}") !== text.length - 1) continue;
+                            found.push({ location: location, index: i, rawValue: text });
+                        }
+                        return found;
+                    }
+
+                    const doc = Api.GetDocument();
+                    return scan(doc.GetAllParagraphs(), "body")
+                        .concat(scan(doc.GetFootnotesFirstParagraphs(), "footnote"))
+                        .concat(scan(doc.GetEndNotesFirstParagraphs(), "endnote"));
+                },
+                isClose,
+                isCalc,
+                (result) => resolve(result || []),
+            );
+        });
+    }
+
+    /**
+     * Replaces a broken (plain-text) field's paragraph content with a real
+     * field carrying the given data.
+     * @param {{location: "body" | "footnote" | "endnote", index: number}} match
+     * @param {AddinFieldData} field
+     * @returns {Promise<AddinFieldData | null>}
+     */
+    async repairBrokenField(match, field) {
+        const selected = await this.#selectBrokenFieldParagraph(match.location, match.index);
+        if (!selected) return null;
+        await this.#removeSelectedContent();
+        await this.#addAddinField(field);
+        return this.getCurrentField();
+    }
+
     /** @returns {Promise<boolean>} */
     saveAsText() {
         return this.getAddinZoteroFields().then(function (arrFields) {
@@ -556,6 +611,44 @@ class CitationDocService {
         return new Promise(function (resolve) {
             window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
                 resolve(true),
+            );
+        });
+    }
+
+    /**
+     * Re-locates a paragraph reported by `scanForBrokenFields` by its stable
+     * index (paragraph object references don't survive across separate
+     * `callCommand` calls, so it has to be looked up again each time) and
+     * selects it, ready for `#removeSelectedContent`.
+     * @param {"body" | "footnote" | "endnote"} location
+     * @param {number} index
+     * @returns {Promise<boolean>}
+     */
+    #selectBrokenFieldParagraph(location, index) {
+        return new Promise((resolve) => {
+            Asc.scope.brokenFieldLocation = location;
+            Asc.scope.brokenFieldIndex = index;
+            const isCalc = true;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    let paragraphs;
+                    if ("footnote" === Asc.scope.brokenFieldLocation) {
+                        paragraphs = doc.GetFootnotesFirstParagraphs();
+                    } else if ("endnote" === Asc.scope.brokenFieldLocation) {
+                        paragraphs = doc.GetEndNotesFirstParagraphs();
+                    } else {
+                        paragraphs = doc.GetAllParagraphs();
+                    }
+                    const paragraph = paragraphs[Asc.scope.brokenFieldIndex];
+                    if (!paragraph) return false;
+                    paragraph.Select();
+                    return true;
+                },
+                isClose,
+                isCalc,
+                (result) => resolve(!!result),
             );
         });
     }

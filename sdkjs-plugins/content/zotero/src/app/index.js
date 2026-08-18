@@ -417,6 +417,18 @@ import "../styles.css";
             const isNotesFormat = styleManager.getLastUsedFormat() === "note";
 
             try {
+                // Fields that were flattened into plain visible text (e.g. by
+                // copying/pasting content from another document) still carry
+                // their original data - restore them as real fields first, so
+                // the refresh below picks them up like any other citation.
+                await lockDocumentGroupAction(true);
+                let repairResult;
+                try {
+                    repairResult = await citationService.repairBrokenCitations();
+                } finally {
+                    await unlockDocumentGroupAction(false);
+                }
+
                 if (isNotesFormat) {
                     // this way, because "SelectAddinField" does not work with notes
                     const prepared =
@@ -441,6 +453,16 @@ import "../styles.css";
                     } finally {
                         await unlockDocumentGroupAction(false);
                     }
+                }
+
+                if (repairResult.repaired > 0) {
+                    let message =
+                        translate("Repaired") + " " + repairResult.repaired + " " +
+                        translate("citation(s) that had lost their formatting.");
+                    if (repairResult.failed > 0) {
+                        message += " " + repairResult.failed + " " + translate("could not be repaired.");
+                    }
+                    citationService.showSuccessMessage(message);
                 }
             } catch (error) {
                 console.error(error);
