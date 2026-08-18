@@ -77,8 +77,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     if (this.resyncTimer) clearTimeout(this.resyncTimer);
     this.resyncTimer = setTimeout(() => {
       this.resyncTimer = null;
-      if (this.isApplyingCorrections) return;
-      this.loadZones().catch(() => {});
+      this.enqueue(() => this.loadZones()).catch(() => {});
     }, RESYNC_DEBOUNCE_MS);
   };
 
@@ -110,7 +109,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   }
 
   selectInterval(params: ParamsSelect): void {
-    selectIntervalInZones(this.zones, this.editor, params);
+    this.debounceSelectInterval(() => selectIntervalInZones(this.zones, this.editor, params));
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {

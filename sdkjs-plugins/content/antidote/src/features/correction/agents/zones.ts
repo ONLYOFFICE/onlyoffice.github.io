@@ -43,6 +43,13 @@ import { BaseEditor, DocumentParagraph } from '@api/editor';
 
 export interface ParagraphOffset extends DocumentParagraph {
   start: number;
+  appliedShifts?: { at: number; diff: number }[];
+}
+
+function withinParagraphShift(paragraph: ParagraphOffset, originalPosition: number): number {
+  return (paragraph.appliedShifts ?? [])
+    .filter((shift) => shift.at <= originalPosition)
+    .reduce((sum, shift) => sum + shift.diff, 0);
 }
 
 // One independent text zone for Antidote: a main-text segment or a single table cell (see
@@ -92,10 +99,37 @@ export function findParagraphAt(zones: Zone[], zoneId: string, position: number)
 // match a slice at all, so this fails closed on any lookup issue.
 export function allowEditInZones(zones: Zone[], params: ParamsAllowEdit): boolean {
   const paragraph = findParagraphAt(zones, params.zoneId, params.positionStart);
-  if (!paragraph) return false;
-  const localStart = params.positionStart - paragraph.start;
-  const localEnd = params.positionEnd - paragraph.start;
-  return paragraph.text.slice(localStart, localEnd) === params.context;
+  if (!paragraph) {
+    console.error('allowEditInZones: no cached paragraph for zone/position', {
+      zoneId: params.zoneId,
+      positionStart: params.positionStart,
+      positionEnd: params.positionEnd,
+      expectedContext: params.context,
+      knownZoneIds: zones.map((zone) => zone.zoneId),
+    });
+    return false;
+  }
+  const shift = withinParagraphShift(paragraph, params.positionStart);
+  const localStart = params.positionStart + shift - paragraph.start;
+  const localEnd = params.positionEnd + shift - paragraph.start;
+  const cachedSlice = paragraph.text.slice(localStart, localEnd);
+  const matches = cachedSlice === params.context;
+  if (!matches) {
+    console.error('allowEditInZones: cached text does not match what Antidote expects', {
+      zoneId: params.zoneId,
+      paragraphId: paragraph.id,
+      paragraphStart: paragraph.start,
+      paragraphText: paragraph.text,
+      positionStart: params.positionStart,
+      positionEnd: params.positionEnd,
+      shift,
+      localStart,
+      localEnd,
+      cachedSlice,
+      expectedContext: params.context,
+    });
+  }
+  return matches;
 }
 
 // Antidote calls this when the user selects text inside its own Corrector window — mirror that
@@ -108,8 +142,10 @@ export function selectIntervalInZones(zones: Zone[], editor: BaseEditor, params:
   // paragraph's `text` was clipped to a sub-range (a selection starting/ending mid-paragraph — see
   // DocumentParagraph.prefix/suffix), the trimmed prefix needs adding back so the position lands
   // where it actually is in the real paragraph, not `prefix.length` characters too early.
-  const localStart = params.positionStart - firstParagraph.start + (firstParagraph.prefix?.length ?? 0);
-  const localEnd = params.positionEnd - lastParagraph.start + (lastParagraph.prefix?.length ?? 0);
+  const localStart = params.positionStart + withinParagraphShift(firstParagraph, params.positionStart)
+    - firstParagraph.start + (firstParagraph.prefix?.length ?? 0);
+  const localEnd = params.positionEnd + withinParagraphShift(lastParagraph, params.positionEnd)
+    - lastParagraph.start + (lastParagraph.prefix?.length ?? 0);
   editor.selectContentRange(firstParagraph.id, lastParagraph.id, localStart, localEnd).catch(() => {
     console.error('Failed to select content range');
   });
@@ -126,9 +162,27 @@ export async function applyCorrectionInZones(
 ): Promise<number> {
   const paragraph = findParagraphAt(zones, params.zoneId, params.positionStartReplace);
   if (!paragraph) return 0;
-  const localStart = params.positionStartReplace - paragraph.start;
-  const localEnd = params.positionReplaceEnd - paragraph.start;
+  const shift = withinParagraphShift(paragraph, params.positionStartReplace);
+  const localStart = params.positionStartReplace + shift - paragraph.start;
+  const localEnd = params.positionReplaceEnd + shift - paragraph.start;
   const newText = paragraph.text.slice(0, localStart) + params.newString + paragraph.text.slice(localEnd);
+
+  // Update the in-memory zone/offset bookkeeping BEFORE awaiting the actual document write below.
+  // correctIntoWordProcessor already told Antidote this correction is accepted (it must return
+  // synchronously), so Antidote can send its next correction's allowEdit call at any moment
+  // afterward - if that arrives while editor.replaceContent's callCommand round-trip is still in
+  // flight (slow enough to matter e.g. on macOS) and this update ran only after it, allowEdit would
+  // still see pre-correction positions and reject a perfectly valid next edit ("the correct
+  // location in the text cannot be found"). Updating synchronously here closes that window.
+  const diff = newText.length - paragraph.text.length;
+  paragraph.text = newText;
+  paragraph.appliedShifts = [...(paragraph.appliedShifts ?? []), { at: params.positionStartReplace, diff }];
+  const zone = findZone(zones, params.zoneId);
+  if (zone) {
+    for (const other of zone.paragraphs) {
+      if (other.start > paragraph.start) other.start += diff;
+    }
+  }
 
   // If this paragraph's `text` was clipped to a sub-range (see DocumentParagraph.prefix/suffix),
   // replaceContent still overwrites the paragraph's *entire* real text — stitch the untouched
@@ -136,14 +190,6 @@ export async function applyCorrectionInZones(
   const fullText = (paragraph.prefix ?? '') + newText + (paragraph.suffix ?? '');
   await editor.replaceContent(fullText, paragraph.id);
 
-  const diff = newText.length - paragraph.text.length;
-  paragraph.text = newText;
-  const zone = findZone(zones, params.zoneId);
-  if (zone) {
-    for (const other of zone.paragraphs) {
-      if (other.start > paragraph.start) other.start += diff;
-    }
-  }
   return diff;
 }
 

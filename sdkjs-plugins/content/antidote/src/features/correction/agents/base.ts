@@ -42,6 +42,8 @@ function bytesToBase64(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
+const SELECT_INTERVAL_DEBOUNCE_MS = 500;
+
 // Antidote requires `correctIntoWordProcessor` to return synchronously, but applying a correction
 // into the ONLYOFFICE document is async (callCommand/executeMethod round-trip). Corrections are
 // queued and applied one at a time so two in-flight replacements can never race on the same
@@ -71,6 +73,28 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
 
   private queue: Promise<void> = Promise.resolve();
 
+  private selectIntervalTimer: ReturnType<typeof setTimeout> | null = null;
+
+  protected debounceSelectInterval(fn: () => void): void {
+    if (this.selectIntervalTimer) clearTimeout(this.selectIntervalTimer);
+    this.selectIntervalTimer = setTimeout(() => {
+      this.selectIntervalTimer = null;
+      fn();
+    }, SELECT_INTERVAL_DEBOUNCE_MS);
+  }
+
+  // Serializes arbitrary async work (e.g. a concurrent-edit resync rebuilding zone offsets) behind
+  // whatever correction is currently applying, and vice versa — the two must never run concurrently,
+  // since both mutate the same zone/offset bookkeeping. Without this, a resync racing an in-flight
+  // correctIntoWordProcessor can overwrite zones with a stale/mismatched view, so the *next*
+  // correction's offsets no longer match what Antidote expects ("the correct location in the text
+  // cannot be found") — reproducible via rapid undo/redo firing a burst of content-change events.
+  protected enqueue<T>(fn: () => Promise<T>): Promise<T> {
+    const result = this.queue.then(fn);
+    this.queue = result.then(() => undefined, () => undefined);
+    return result;
+  }
+
   constructor(title: string, private readonly onSessionEnded?: () => void) {
     super();
     this.title = title;
@@ -90,6 +114,7 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
   // state would only ever reset via our own "Stop" button, going stale the moment the user closes
   // Antidote's window directly instead.
   sessionEnded(): void {
+    if (this.selectIntervalTimer) clearTimeout(this.selectIntervalTimer);
     this.onSessionEnded?.();
   }
 
@@ -124,11 +149,9 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
 
   correctIntoWordProcessor(params: ParamsReplace): boolean {
     this.pendingCorrections += 1;
-    this.queue = this.queue
-      .then(() => this.applyCorrection(params))
-      .finally(() => {
-        this.pendingCorrections -= 1;
-      });
+    this.enqueue(() => this.applyCorrection(params)).finally(() => {
+      this.pendingCorrections -= 1;
+    });
     return true;
   }
 

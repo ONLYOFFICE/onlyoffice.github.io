@@ -91,8 +91,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     if (this.resyncTimer) clearTimeout(this.resyncTimer);
     this.resyncTimer = setTimeout(() => {
       this.resyncTimer = null;
-      if (this.isApplyingCorrections) return;
-      this.resync().catch(() => {});
+      this.enqueue(() => this.resync()).catch(() => {});
     }, RESYNC_DEBOUNCE_MS);
   };
 
@@ -158,7 +157,19 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
 
   allowEdit(params: ParamsAllowEdit): boolean {
     if (this.useZones) return allowEditInZones(this.zones, params);
-    return this.text.slice(params.positionStart, params.positionEnd) === params.context;
+    const cachedSlice = this.text.slice(params.positionStart, params.positionEnd);
+    const matches = cachedSlice === params.context;
+    if (!matches) {
+      console.error('SelectionCorrectionAgent.allowEdit: cached text does not match what Antidote expects', {
+        positionStart: params.positionStart,
+        positionEnd: params.positionEnd,
+        cachedSlice,
+        expectedContext: params.context,
+        selectionStart: this.selectionStart,
+        selectionEnd: this.selectionEnd,
+      });
+    }
+    return matches;
   }
 
   // Antidote calls this when the user selects text inside its own Corrector window — mirror that
@@ -166,7 +177,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   // for it (see BaseEditor.selectWithinSelection) — expected on cell, not a bug.
   selectInterval(params: ParamsSelect): void {
     if (this.useZones) {
-      selectIntervalInZones(this.zones, this.editor, params);
+      this.debounceSelectInterval(() => selectIntervalInZones(this.zones, this.editor, params));
       return;
     }
 
@@ -174,9 +185,11 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     const { positionStart, positionEnd } = params;
     const separatorLength = this.PARAGRAPH_SEPARATOR.length;
     const { selectionStart, selectionEnd } = this;
-    this.editor
-      .selectWithinSelection(selectionStart, selectionEnd, positionStart, positionEnd, separatorLength)
-      .catch(() => {});
+    this.debounceSelectInterval(() => {
+      this.editor
+        .selectWithinSelection(selectionStart, selectionEnd, positionStart, positionEnd, separatorLength)
+        .catch(() => {});
+    });
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {
