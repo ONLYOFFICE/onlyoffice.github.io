@@ -1,5 +1,16 @@
 # Change Log
 
+## 1.5.0
+
+* New: pinned values. Type a value you enter every day — your name, your department, the mailbox people should reply to — and tap the pin that appears next to the field. From then on, every document with a field of that name shows a filled pin: tap it and the value drops in. Tap it again while the field holds that value to forget it. One pin per field name, stored on this device only, and nothing is ever written without a tap — not into the pane, and certainly not into the document.
+* New: when a document has several pinned fields waiting, "Use them" below the list fills all of them at once (into the pane — Replace still decides what reaches the document).
+* New: Settings lists everything pinned on this device, with a forget button per entry and "Forget all".
+* Changed: the location pictogram next to each field now only appears when the document actually has placeholders in a header or footer. In a body-only document it said the same thing on every row, so it steps aside and gives the field its width back. The icon rail is tighter overall.
+* Changed: the "No new placeholders found" message after Refresh is gone — the refresh itself already shows that nothing changed. "No placeholders found in this document" still appears when the document is empty of placeholders.
+* Changed: the welcome screen now tells someone who is already signed in how to reach a pending team invitation (sign out and sign back in) — a signed-in pane never announces invitations; the team picker only exists at the door.
+* Changed: when your own trial has ended and a team has invited you, the next sign-in takes you straight into that team instead of showing an expired trial.
+* Date fields don't get a pin: today's date is rarely tomorrow's.
+
 ## 1.4.0
 
 * New: typed placeholders. Add a type after a colon — {Delivery date: date}, {Amount: number}, {Contact email: email}, {Remarks: multiline} — and the pane shows the right control: a date picker that writes the date as readable text in your language, a number-friendly input, an email field that quietly flags typos (and never blocks you), and a bigger box for longer text.
