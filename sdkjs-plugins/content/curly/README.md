@@ -39,7 +39,7 @@ Licenses can be shared with team members from the dashboard at
 
 ## Support
 
-- Help & contact: [curly.io](https://curly.io) · support@curly.io
+- Help & contact: [curly.io](https://curly.io) · info@curly.io
 - Feedback and questions:
   [discussion #607](https://github.com/ONLYOFFICE/onlyoffice.github.io/issues/607)
 
