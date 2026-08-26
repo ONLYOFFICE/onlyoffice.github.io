@@ -113,8 +113,9 @@ function attachButtonHandler(
   onCancel?: () => void,
   onClose?: () => void,
 ): () => void {
-  const handler = (e: CustomEvent<{ id: number | string }>) => {
-    window.removeEventListener(PLUGIN_BUTTON_EVENT, handler as EventListener);
+  const handler: EventListener = (event) => {
+    const e = event as CustomEvent<{ id: number | string }>;
+    window.removeEventListener(PLUGIN_BUTTON_EVENT, handler);
     const confirmed = e.detail.id === 0 || e.detail.id === '0';
     if (confirmed) {
       onConfirm?.();
@@ -125,9 +126,9 @@ function attachButtonHandler(
     onClose?.();
   };
 
-  window.addEventListener(PLUGIN_BUTTON_EVENT, handler as EventListener);
+  window.addEventListener(PLUGIN_BUTTON_EVENT, handler);
   return () => {
-    window.removeEventListener(PLUGIN_BUTTON_EVENT, handler as EventListener);
+    window.removeEventListener(PLUGIN_BUTTON_EVENT, handler);
     pluginWindow.close();
   };
 }
@@ -256,20 +257,20 @@ function createModalStore(): ModalStore {
       }
     }, POLL_INTERVAL);
 
-    const buttonHandler = (e: Event) => {
+    const buttonHandler: EventListener = (e) => {
       const { id, windowId } = (e as CustomEvent<{ id: number | string; windowId?: string | number }>).detail;
       const isPopupClose = !!windowId && !String(windowId).startsWith('iframe_asc.');
       const isMainClose = (id === -1 || id === '-1') && !isPopupClose;
       if (!isPopupClose && !isMainClose) return;
 
-      window.removeEventListener(PLUGIN_BUTTON_EVENT, buttonHandler as EventListener);
+      window.removeEventListener(PLUGIN_BUTTON_EVENT, buttonHandler);
       closeSoqlModal();
       onCancel?.();
     };
 
-    window.addEventListener(PLUGIN_BUTTON_EVENT, buttonHandler as EventListener);
+    window.addEventListener(PLUGIN_BUTTON_EVENT, buttonHandler);
     cleanup.value = () => {
-      window.removeEventListener(PLUGIN_BUTTON_EVENT, buttonHandler as EventListener);
+      window.removeEventListener(PLUGIN_BUTTON_EVENT, buttonHandler);
       if (pollInterval) {
         clearInterval(pollInterval);
         pollInterval = null;

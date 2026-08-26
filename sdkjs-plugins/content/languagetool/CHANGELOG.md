@@ -23,3 +23,7 @@
 ## 1.0.5
 
 * Switched LanguageTool API base URL to the new endpoint.
+
+## 1.0.6
+
+* Updated plugin UI.

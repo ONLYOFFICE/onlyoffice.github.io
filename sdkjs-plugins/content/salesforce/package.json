@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@preact/signals": "^2.5.1",
-    "preact": "^10.26.9",
+    "preact": "^10.29.7",
     "preact-iso": "^2.11.0",
     "preact-render-to-string": "^6.6.3"
   },
