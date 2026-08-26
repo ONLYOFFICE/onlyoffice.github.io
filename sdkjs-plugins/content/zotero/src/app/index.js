@@ -71,6 +71,23 @@ import "../styles.css";
     };
     let bInProgress = false;
 
+    /**
+     * Items already cited in the document, so that the search results can put
+     * them on top of the list. Collecting them walks every Zotero field of the
+     * document, which is too slow to redo on every keystroke, so the scan is
+     * cached for a short while and dropped whenever the plugin edits the
+     * document.
+     */
+    const usedItems = {
+        /** @type {Set<string>} */
+        keys: new Set(),
+        /** @type {Promise<Set<string>>|null} */
+        promise: null,
+        fetchedAt: 0,
+        ttl: 5000,
+        timeout: 3000,
+    };
+
     /** @type {SearchFilterComponents} */
     let searchFilter;
     /** @type {SelectCitationsComponent} */
@@ -215,6 +232,48 @@ import "../styles.css";
         });
         
     };
+
+    function invalidateUsedItems() {
+        usedItems.promise = null;
+        usedItems.fetchedAt = 0;
+    }
+
+    /** @returns {Promise<Set<string>>} */
+    function getUsedItemKeys() {
+        const now = Date.now();
+        if (usedItems.promise && now - usedItems.fetchedAt < usedItems.ttl) {
+            return usedItems.promise;
+        }
+        if (bInProgress) {
+            // A document action owns the editor: reading the fields would have
+            // to wait for it, and the search results must not wait for a sort
+            // hint. Rescan once the action is over.
+            return Promise.resolve(usedItems.keys);
+        }
+        usedItems.fetchedAt = now;
+        usedItems.promise = new Promise(function (resolve) {
+            const timer = setTimeout(function () {
+                // The editor did not answer - priority sorting is optional,
+                // displaying the results is not.
+                invalidateUsedItems();
+                resolve(usedItems.keys);
+            }, usedItems.timeout);
+            citationService
+                .getUsedItemKeys()
+                .then(function (keys) {
+                    clearTimeout(timer);
+                    usedItems.keys = keys;
+                    resolve(keys);
+                })
+                .catch(function (e) {
+                    clearTimeout(timer);
+                    console.error(e);
+                    invalidateUsedItems();
+                    resolve(usedItems.keys);
+                });
+        });
+        return usedItems.promise;
+    }
 
     function showCitationsAtTheStartFromMyLibrary() {
         libLoader.show();
@@ -939,6 +998,7 @@ import "../styles.css";
      */
     async function onEndAction(scrollToTarget, preloaderMessage, skipCursorRestore) {
         bInProgress = false;
+        invalidateUsedItems();
         insertBibBtn.enable();
         refreshBtn.enable();
         editCitationBtn.enable();
@@ -1108,7 +1168,10 @@ import "../styles.css";
             });
         }
 
-        return selectCitation.displaySearchItems(res, err, lastSearch);
+        return getUsedItemKeys().then(function (usedItemKeys) {
+            selectCitation.setUsedItemKeys(usedItemKeys);
+            return selectCitation.displaySearchItems(res, err, lastSearch);
+        });
     }
 
     /** @type {Object<string, string>} */

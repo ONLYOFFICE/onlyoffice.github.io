@@ -309,7 +309,10 @@ div::-moz-selection {
         margin-top: 6px;
     }
 }
-.page0 > .doc:first-child {
+/* The list is built from one wrapper per loaded page, plus the
+   .docs-priority wrapper for references the document already cites, so the
+   very first card of whichever wrapper comes first loses its top margin. */
+#docsHolder > div:first-child > .doc:first-child {
     margin-top: 0;
 }
 

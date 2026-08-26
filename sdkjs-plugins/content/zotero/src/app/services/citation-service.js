@@ -47,6 +47,7 @@ import { CitationDocService } from "./citation-doc-service";
 import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { AdditionalWindow } from "../pages/additional-window";
+import { collectItemKeys } from "../shared/item-keys";
 
 class CitationService {
     /** @type {AdditionalWindow} */
@@ -981,6 +982,51 @@ class CitationService {
             .replace(/&#60;/g, "<")
             .replace(/&#62;/g, ">")
             .replace(/&#38;/g, "&");
+    }
+
+    /**
+     * Keys of every item already cited somewhere in the document, used to give
+     * references the document already relies on priority in the search results.
+     * Deliberately does not touch `this._storage`: that is formatting engine
+     * state which only the insert/refresh flows may rebuild.
+     * @returns {Promise<Set<string>>}
+     */
+    async getUsedItemKeys() {
+        const self = this;
+        /** @type {Set<string>} */
+        const keys = new Set();
+        const arrFields = await this.citationDocService.getAddinZoteroFields();
+
+        arrFields.forEach(function (field) {
+            if (
+                field.Value.indexOf(self._citPrefixNew) === -1 &&
+                field.Value.indexOf(self._citPrefix) === -1
+            ) {
+                return;
+            }
+            let citationObject;
+            try {
+                citationObject = self.#extractField(field);
+            } catch (e) {
+                // A single unparseable field must not cost the priority
+                // sorting of the whole document.
+                console.error(e);
+                return;
+            }
+            if (
+                !citationObject ||
+                !Array.isArray(citationObject.citationItems)
+            ) {
+                return;
+            }
+            citationObject.citationItems.forEach(function (citationItem) {
+                collectItemKeys(citationItem).forEach(function (key) {
+                    keys.add(key);
+                });
+            });
+        });
+
+        return keys;
     }
 
     /** @returns {Promise<AddinFieldData | null>} */
