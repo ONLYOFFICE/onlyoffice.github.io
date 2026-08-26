@@ -85,33 +85,33 @@ label:hover input[type="file"] + svg {
 }
 
 /** focus **/
-.tui-image-editor-item:focus,
-.tui-image-editor-button:focus {
-    box-shadow: inset 0px -2px 0px -1px #ccc;
+.tui-image-editor-item:focus-visible,
+.tui-image-editor-button:focus-visible {
+    box-shadow: inset 0px 0 0 1px #ccc;
     outline: none;
 }
-input:not(:checked):focus + span::before {
+input:not(:checked):focus-visible + span::before {
     border: 2px solid #ccc !important;
     background-color: #333 !important;
 }
-input:checked:focus + span::before {
+input:checked:focus-visible + span::before {
     border: 2px solid #ccc !important;
 }
-.tui-colorpicker-palette-button:focus {
+.tui-colorpicker-palette-button:focus-visible {
     outline: 2px solid #ccc !important;
     outline-offset: -2px !important;
 }
-select:focus {
+select:focus-visible {
     outline: 1px solid #ccc !important;
     outline-offset: -1px !important;
 }
-.tui-colorpicker-palette-hex:focus {
+.tui-colorpicker-palette-hex:focus-visible {
     outline: 1px solid #ccc !important;
     outline-offset: 2px !important;
 }
 svg {
     color: #8a8a8a;
 }
-input[type="file"]:focus + svg {
+input[type="file"]:focus-visible + svg {
     color: #ccc;
 }
