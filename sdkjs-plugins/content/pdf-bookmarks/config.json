@@ -1,0 +1,40 @@
+{
+  "name": "PDF Bookmarks",
+  "guid": "asc.{D8E1B7A2-6C3F-4A90-9E12-7F4B5C8D0A31}",
+  "version": "1.0.6",
+  "offered": "Chenaters",
+  "minVersion": "9.4.0",
+  "help": "https://github.com/Chenaters/onlyoffice-pdf-bookmarks#readme",
+  "baseUrl": "",
+  "variations": [
+    {
+      "description": "Save named page markers in PDFs and return to them with one click.",
+      "url": "index.html",
+      "type": "panel",
+      "isActivated": true,
+      "icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
+      "isViewer": true,
+      "isDisplayedInViewer": true,
+      "EditorsSupport": ["pdf"],
+      "initDataType": "none",
+      "initOnSelectionChanged": false,
+      "store": {
+        "background": {
+          "light": "#F3F7FF",
+          "dark": "#15233B"
+        },
+        "categories": ["work"],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "screenshots": [
+          "resources/store/screenshots/screen_1.png",
+          "resources/store/screenshots/screen_2.png",
+          "resources/store/screenshots/screen_3.png"
+        ]
+      },
+      "buttons": []
+    }
+  ]
+}

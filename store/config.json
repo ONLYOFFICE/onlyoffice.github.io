@@ -49,5 +49,6 @@
 	{ "name": "nlpsolver", "discussion": "" },
 	{ "name": "salesforce", "discussion": "" },
 	{ "name": "curly", "discussion": "607" },
-	{ "name": "onlymath", "discussion": "" }
+	{ "name": "onlymath", "discussion": "" },
+	{ "name": "pdf-bookmarks", "discussion": "" }
 ]
