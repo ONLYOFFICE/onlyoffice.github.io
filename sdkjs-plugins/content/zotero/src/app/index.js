@@ -345,7 +345,29 @@ import "../styles.css";
                 );
             }
 
+            // Fields that were flattened into plain visible text (e.g. by
+            // copying/pasting content from another document) still carry
+            // their original data - restore them as real fields first, so
+            // the refresh below picks them up like any other citation.
+            let repairResult = { repaired: 0, failed: 0 };
+            try {
+                repairResult = await citationService.repairBrokenCitations();
+            } catch (error) {
+                console.error(error);
+            }
+
             updateFn()
+                .then(function () {
+                    if (repairResult.repaired > 0) {
+                        let message =
+                            translate("Repaired") + " " + repairResult.repaired + " " +
+                            translate("citation(s) that had lost their formatting.");
+                        if (repairResult.failed > 0) {
+                            message += " " + repairResult.failed + " " + translate("could not be repaired.");
+                        }
+                        citationService.showSuccessMessage(message);
+                    }
+                })
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to refresh");
