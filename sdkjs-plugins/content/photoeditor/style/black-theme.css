@@ -109,9 +109,6 @@ select:focus-visible {
     outline: 1px solid #ccc !important;
     outline-offset: 2px !important;
 }
-svg {
-    color: #8a8a8a;
-}
 input[type="file"]:focus-visible + svg {
-    color: #ccc;
+    filter: brightness(1.7) !important;
 }
