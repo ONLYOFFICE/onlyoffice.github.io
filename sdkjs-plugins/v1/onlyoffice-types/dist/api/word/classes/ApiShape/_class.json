@@ -1,9 +1,0 @@
-{
-  "description": "Class representing a shape.",
-  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/",
-  "extends": [
-    "ApiDrawing"
-  ],
-  "methodCount": 66,
-  "sharded": true
-}

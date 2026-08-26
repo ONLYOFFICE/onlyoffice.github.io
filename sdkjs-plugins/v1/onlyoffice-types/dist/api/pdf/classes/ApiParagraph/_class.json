@@ -1,9 +1,0 @@
-{
-  "description": "Class representing a paragraph.",
-  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/",
-  "extends": [
-    "ApiParaPr"
-  ],
-  "methodCount": 57,
-  "sharded": true
-}

@@ -1,9 +1,0 @@
-{
-  "description": "Class representing a pivot table data field.",
-  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotField/",
-  "extends": [
-    "ApiPivotField"
-  ],
-  "methodCount": 58,
-  "sharded": true
-}

@@ -1,7 +1,0 @@
-{
-  "description": "Class representing a document date field.",
-  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDateForm/",
-  "extends": [
-    "ApiFormBase"
-  ]
-}

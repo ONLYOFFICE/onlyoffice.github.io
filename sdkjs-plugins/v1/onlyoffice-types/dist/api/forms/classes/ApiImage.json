@@ -1,6 +1,0 @@
-{
-  "description": "Class representing an image.",
-  "extends": [
-    "ApiDrawing"
-  ]
-}

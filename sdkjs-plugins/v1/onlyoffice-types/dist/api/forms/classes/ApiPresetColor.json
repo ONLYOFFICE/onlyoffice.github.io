@@ -1,6 +1,0 @@
-{
-  "description": "Class representing a Preset Color.",
-  "extends": [
-    "ApiUniColor"
-  ]
-}

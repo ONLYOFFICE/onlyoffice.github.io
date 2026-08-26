@@ -1,3 +1,0 @@
-{
-  "description": "Class representing a continuous region in a document. \nEach Range object is determined by the position of the start and end characters."
-}

@@ -1,6 +1,0 @@
-{
-  "description": "Class representing a shape.",
-  "extends": [
-    "ApiDrawing"
-  ]
-}

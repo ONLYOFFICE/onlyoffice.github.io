@@ -1,6 +1,0 @@
-{
-  "description": "Class representing a worksheet function.",
-  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/",
-  "methodCount": 415,
-  "sharded": true
-}

@@ -1,9 +1,0 @@
-{
-  "description": "Class representing a paragraph.",
-  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/",
-  "extends": [
-    "ApiParaPr"
-  ],
-  "methodCount": 56,
-  "sharded": true
-}

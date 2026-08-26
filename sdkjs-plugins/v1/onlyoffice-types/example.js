@@ -5,11 +5,6 @@
 
 /// <reference path="./index.d.ts" />
 
-// This file demonstrates multiple editor variants in one smoke-test file. In a real plugin,
-// select exactly one editor entry point (`@onlyoffice/plugins-types/word`, `/cell`, or `/slide`).
-/** @type {any} */
-var Api;
-
 // Example 1: Basic plugin initialization
 function basicPluginExample() {
     window.Asc.plugin.init = function() {
@@ -24,7 +19,7 @@ function basicPluginExample() {
 // Example 2: Using callCommand with document API (Word)
 function documentPluginExample() {
     window.Asc.plugin.init = function() {
-        // In a Word plugin, include `@onlyoffice/plugins-types/word` in tsconfig.json.
+        // Use JSDoc to specify Api type: /** @type {import("./index").ApiWord} */
         window.Asc.plugin.callCommand(function() {
             var oDocument = Api.GetDocument();
             var oParagraph = Api.CreateParagraph();
@@ -46,10 +41,8 @@ function documentPluginExample() {
 function spreadsheetPluginExample() {
     window.Asc.plugin.init = function() {
         window.Asc.plugin.callCommand(function() {
-            /** @type {import("./src/generated/cell").Cell.Api} */
-            var cellApi = Api;
-            var activeSheet = cellApi.GetActiveSheet();
-            cellApi.GetRange("A1").SetValue("Hello from plugin!");
+            var activeSheet = Api.GetActiveSheet();
+            Api.GetRange("A1").SetValue("Hello from plugin!");
         }, true);
     };
 }
@@ -58,11 +51,9 @@ function spreadsheetPluginExample() {
 function presentationPluginExample() {
     window.Asc.plugin.init = function() {
         window.Asc.plugin.callCommand(function() {
-            /** @type {import("./src/generated/slide").Slide.Api} */
-            var slideApi = Api;
-            var oPresentation = slideApi.GetPresentation();
-            var oSlide = slideApi.CreateSlide();
-            oPresentation.AddSlide(oSlide, 0);
+            var oPresentation = Api.GetPresentation();
+            var oSlide = Api.CreateSlide();
+            oPresentation.AddSlide(oSlide);
         }, true);
     };
 }
@@ -93,16 +84,14 @@ var pluginConfig = {
         'ja': '私のプラグイン',
 
     },
-    offered: 'John Doe',
     description: 'A sample plugin',
     guid: 'asc.{12345678-1234-1234-1234-123456789012}',
-    version: '1.0.0',
-    minVersion: '8.2.0'
+    minVersion: '7.0.0'
 };
 
 export { 
     basicPluginExample, 
     documentPluginExample, 
-    eventsExample,
+    eventsExample, 
     pluginConfig 
 };

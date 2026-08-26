@@ -2,21 +2,16 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
-    "moduleResolution": "bundler",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    // Nothing in this package actually emits (every script passes --noEmit), but TS 6 errors on
-    // inferring the common source directory, and the tsconfig.test.*.json children pull in files
-    // from test/ and src/overrides/ - so rootDir must cover the whole package, not src/generated.
-    "rootDir": ".",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "lib": ["ES2020", "DOM"]
   },
-  "include": ["index.d.ts", "src/generated/*.ts", "src/*.d.ts", "src/plugin/**/*.d.ts", "src/config/**/*.d.ts", "src/services/**/*.d.ts", "src/theme/**/*.d.ts"],
-  "exclude": ["node_modules", "dist", "src/editors"]
+  "include": ["index.d.ts", "src/generated/*.ts"],
+  "exclude": ["node_modules", "dist", "src"]
 }

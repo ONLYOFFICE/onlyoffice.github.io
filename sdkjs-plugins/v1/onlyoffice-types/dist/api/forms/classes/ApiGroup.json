@@ -1,6 +1,0 @@
-{
-  "description": "Class representing a group of drawings.",
-  "extends": [
-    "ApiDrawing"
-  ]
-}

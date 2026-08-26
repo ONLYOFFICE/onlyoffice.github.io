@@ -1,140 +1,22 @@
 {
-  "$schema": "https://json.schemastore.org/package.json",
-  "name": "@onlyoffice/plugins-types",
-  "version": "9.5.0",
-  "description": "TypeScript type definitions for the ONLYOFFICE Plugin API",
+  "name": "@types/onlyoffice-plugins-api",
+  "version": "0.1.0",
   "types": "index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./index.d.ts"
-    },
-    "./word": {
-      "types": "./src/editors/word.d.ts"
-    },
-    "./cell": {
-      "types": "./src/editors/cell.d.ts"
-    },
-    "./slide": {
-      "types": "./src/editors/slide.d.ts"
-    },
-    "./pdf": {
-      "types": "./src/editors/pdf.d.ts"
-    },
-    "./plugin": {
-      "types": "./src/plugin/index.d.ts"
-    },
-    "./plugin/*": {
-      "types": "./src/plugin/*.d.ts"
-    },
-    "./config": {
-      "types": "./src/config/index.d.ts"
-    },
-    "./services": {
-      "types": "./src/services/index.d.ts"
-    },
-    "./config/schema.json": "./schemas/config.schema.json",
-    "./api/*": "./dist/api/*",
-    "./package.json": "./package.json"
-  },
-  "typesVersions": {
-    "*": {
-      "word": [
-        "src/editors/word.d.ts"
-      ],
-      "cell": [
-        "src/editors/cell.d.ts"
-      ],
-      "slide": [
-        "src/editors/slide.d.ts"
-      ],
-      "pdf": [
-        "src/editors/pdf.d.ts"
-      ],
-      "plugin": [
-        "src/plugin/index.d.ts"
-      ],
-      "plugin/*": [
-        "src/plugin/*"
-      ],
-      "config": [
-        "src/config/index.d.ts"
-      ],
-      "services": [
-        "src/services/index.d.ts"
-      ]
-    }
-  },
-  "files": [
-    "index.d.ts",
-    "src",
-    "schemas",
-    "dist/api",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md",
-    "AGENTS.md"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ONLYOFFICE/plugins-types.git"
-  },
-  "homepage": "https://api.onlyoffice.com/docs/plugins/get-started/",
-  "bugs": {
-    "url": "https://github.com/ONLYOFFICE/plugins-types/issues",
-    "email": "support@onlyoffice.com"
-  },
-  "license": "Apache-2.0",
-  "author": {
-    "name": "Ascensio System SIA",
-    "email": "integration@onlyoffice.com",
-    "url": "https://www.onlyoffice.com"
-  },
-  "maintainers": [
-    {
-      "name": "Ascensio System SIA",
-      "email": "integration@onlyoffice.com",
-      "url": "https://www.onlyoffice.com"
-    }
-  ],
+  "description": "TypeScript definitions for OnlyOffice plugins",
+  "license": "MIT",
   "keywords": [
     "onlyoffice",
     "plugin",
-    "plugins-api",
     "typescript",
     "types"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "generate": "node scripts/generate-types.js",
-    "postgenerate": "node scripts/generate-plugin-methods.js && node scripts/generate-runtime-index.js && node scripts/generate-ambient-bundle.js",
-    "generate-plugin-methods": "node scripts/generate-plugin-methods.js",
-    "generate-runtime-index": "node scripts/generate-runtime-index.js",
-    "generate-schema": "node scripts/generate-config-schema.js",
-    "generate-ambient": "node scripts/generate-ambient-bundle.js",
-    "check-generated": "npm run generate -- --require-clean-sources && git diff --exit-code -- src/generated",
-    "check-release-sources": "npm run generate -- --require-clean-sources --require-release-tag && git diff --exit-code -- src/generated",
-    "check-runtime-index": "npm run generate-runtime-index && git diff --exit-code -- dist/api",
-    "check-schema": "npm run generate-schema && git diff --exit-code -- schemas/config.schema.json",
-    "check-runtime": "node scripts/check-runtime-contract.js",
-    "check-plugin-events": "node scripts/check-plugin-events.js",
-    "validate-schema": "node scripts/validate-config-schema.js",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "npm run test:shared && npm run test:word && npm run test:cell && npm run test:slide && npm run test:pdf",
-    "test:shared": "tsc --noEmit -p tsconfig.typecheck.json",
-    "test:word": "tsc --noEmit -p tsconfig.test.word.json",
-    "test:cell": "tsc --noEmit -p tsconfig.test.cell.json",
-    "test:slide": "tsc --noEmit -p tsconfig.test.slide.json",
-    "test:pdf": "tsc --noEmit -p tsconfig.test.pdf.json"
+    "generate": "node scripts/generate-types.js"
   },
   "peerDependencies": {
-    "typescript": ">=5.0.0"
+    "typescript": ">=4.0.0"
   },
   "devDependencies": {
-    "ajv": "^8.20.0",
-    "jsdoc": "^4.0.5",
-    "ts-json-schema-generator": "^2.9.0",
     "typescript": "^5.9.3"
   }
 }

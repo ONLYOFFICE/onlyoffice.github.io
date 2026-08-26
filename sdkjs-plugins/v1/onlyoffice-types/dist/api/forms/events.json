@@ -1,6 +1,0 @@
-{
-  "onSubmitForm": {
-    "description": "The function called when the user clicks the \"Complete & Submit\" button.",
-    "params": []
-  }
-}

@@ -1,3 +1,0 @@
-{
-  "description": "Class representing a set of formatting properties which shall be conditionally applied to the parts of a table\nwhich match the requirement specified on the `Type`."
-}

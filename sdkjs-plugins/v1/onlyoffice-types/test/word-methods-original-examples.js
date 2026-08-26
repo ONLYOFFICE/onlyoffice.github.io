@@ -4,27 +4,11 @@
 /**
  * ONLYOFFICE Text Document API - Original Examples from Documentation
  * Source: https://api.onlyoffice.com/docs/plugin-and-macros/interacting-with-editors/text-document-api/Methods/
- *
+ * 
  * This file contains EXACT copies of examples from the official documentation.
  * All examples are taken from <pre> tags inside sections with id="example".
  * NO MODIFICATIONS were made to the original code.
- *
- * A handful of snippets reference variables/functions from the surrounding
- * plugin code shown on the docs page, which isn't part of the copied <pre>
- * block itself (config, id, removeGuid, Content, setPasswordByFile below).
- * They're declared here only so this file type-checks as a smoke test of the
- * executeMethod call shapes - the copied calls themselves are untouched.
  */
-/** @type {any} */
-var config;
-/** @type {any} */
-var id = "5_556";
-/** @type {string | null} */
-var removeGuid = null;
-/** @type {any} */
-var Content;
-/** @param {string} _algorithm @param {string} _password */
-function setPasswordByFile(_algorithm, _password) {}
 
 // ============================================================================
 // AcceptReviewChanges
@@ -146,14 +130,14 @@ window.Asc.plugin.executeMethod ("CoAuthoringChatSendMessage", [Asc.scope.meetin
 // ============================================================================
 let info = "";
 window.Asc.plugin.executeMethod ("ConvertDocument", ["markdown", false, false, true, false], function (output) {
-    /** @type {HTMLInputElement} */ (document.getElementById ("text-area")).value = info + output;
+    document.getElementById ("text-area").value = info + output;
 });
 
 // ============================================================================
 // EditOleObject
 // ============================================================================
-var _param2 = {"data": "{data}", "imgSrc": "https://link-to-the-image.jpg", "objectId": "5_556", "width": 70, "height": 70, "widthPix": 60 * 36000, "heightPix": 60 * 36000};
-window.Asc.plugin.executeMethod ("EditOleObject", [_param2], function () {
+var _param = {"data": "{data}", "imgSrc": "https://link-to-the-image.jpg", "objectId": "5_556", "width": 70, "height": 70, "widthPix": 60 * 36000, "heightPix": 60 * 36000};
+window.Asc.plugin.executeMethod ("EditOleObject", [_param], function () {
     window.Asc.plugin.executeCommand ("close", "");
 });
 

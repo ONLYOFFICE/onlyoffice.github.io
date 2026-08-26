@@ -1,9 +1,0 @@
-{
-  "description": "Class representing a data bar conditional formatting rule.",
-  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/",
-  "extends": [
-    "ApiFormatCondition"
-  ],
-  "methodCount": 61,
-  "sharded": true
-}
