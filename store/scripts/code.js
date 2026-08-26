@@ -689,7 +689,7 @@ function _onMessageTheme(message) {
 }
 function _onMessageMouseUp() {
 	if (pluginVersion > 1000005) {
-		MarketplacePluginService.closePluginCard();
+		//MarketplacePluginService.closePluginCard();
 		return;
 	}
 	let evt = document.createEvent('MouseEvents');
