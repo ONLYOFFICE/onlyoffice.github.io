@@ -65,7 +65,7 @@
 	};
 
 	function extend(obj, plugin) {
-		if (!obj || !("object" == typeof(obj) || "array" == typeof(obj)))
+		if (!obj || "object" != typeof(obj))
 			return obj;
 
 		var dst = (plugin === undefined) ? {} : plugin;
