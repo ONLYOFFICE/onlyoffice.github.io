@@ -106,6 +106,11 @@ function SettingsPage(router, displayNoneClass) {
         variant: "secondary",
     });
 
+    this._openAdvancedBtn = new Button("openAdvancedBtn", {
+        variant: "icon-only",
+        size: "small",
+    });
+
     this._styleSelect = new SelectBox("styleSelectList", {
         placeholder: "Enter style name",
         sortable: true
@@ -546,6 +551,12 @@ SettingsPage.prototype._addEventListeners = function () {
                 self._localesManager.getLastUsedLanguage()
             );
         }
+    });
+    this._openAdvancedBtn.subscribe(function (event) {
+        if (event.type !== "button:click") {
+            return;
+        }
+        self._router.openAdvanced();
     });
 };
 

@@ -40,6 +40,7 @@ import { Theme } from "./theme";
 import { Router } from "./router";
 import { ZoteroSdk } from "./zotero";
 import { SettingsPage } from "./pages/settings";
+import { AdvancedPage } from "./pages/advanced";
 import { LoginPage } from "./pages/login";
 import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
@@ -58,6 +59,8 @@ import "../styles.css";
 
     /** @type {SettingsPage} */
     let settings;
+    /** @type {AdvancedPage} */
+    let advanced;
 
     /** @type {CitationService} */
     let citationService;
@@ -135,12 +138,14 @@ import "../styles.css";
         sdk = new ZoteroSdk();
         const loginPage = new LoginPage(router, sdk);
         settings = new SettingsPage(router, displayNoneClass);
+        advanced = new AdvancedPage(router, displayNoneClass);
         citationService = new CitationService(
             settings.getLocalesManager(),
             settings.getStyleManager(),
             sdk,
             settings.getAbbreviationsManager()
         );
+        advanced.setCitationService(citationService);
         let isInit = false;
 
         addEventListeners();
@@ -345,29 +350,7 @@ import "../styles.css";
                 );
             }
 
-            // Fields that were flattened into plain visible text (e.g. by
-            // copying/pasting content from another document) still carry
-            // their original data - restore them as real fields first, so
-            // the refresh below picks them up like any other citation.
-            let repairResult = { repaired: 0, failed: 0 };
-            try {
-                repairResult = await citationService.repairBrokenCitations();
-            } catch (error) {
-                console.error(error);
-            }
-
             updateFn()
-                .then(function () {
-                    if (repairResult.repaired > 0) {
-                        let message =
-                            translate("Repaired") + " " + repairResult.repaired + " " +
-                            translate("citation(s) that had lost their formatting.");
-                        if (repairResult.failed > 0) {
-                            message += " " + repairResult.failed + " " + translate("could not be repaired.");
-                        }
-                        citationService.showSuccessMessage(message);
-                    }
-                })
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to refresh");

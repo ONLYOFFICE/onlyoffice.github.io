@@ -33,9 +33,9 @@
 // @ts-check
 
 function Router() {
-    this._states = ["mainState", "loginState", "settingsState"];
-    this._routes = ["main", "login", "settings"];
-    /** @type {"main"|"login"|"settings"} */
+    this._states = ["mainState", "loginState", "settingsState", "advancedState"];
+    this._routes = ["main", "login", "settings", "advanced"];
+    /** @type {"main"|"login"|"settings"|"advanced"} */
     this._currentRoute = "login";
     this._currentRouteIndex = 1;
     this._containers = this._states.map(function (route) {
@@ -45,12 +45,12 @@ function Router() {
     });
 }
 
-/** @returns {"main"|"login"|"settings"} */
+/** @returns {"main"|"login"|"settings"|"advanced"} */
 Router.prototype.getRoute = function () {
     return this._currentRoute;
 };
 
-/** @param {"main"|"login"|"settings"} route */
+/** @param {"main"|"login"|"settings"|"advanced"} route */
 Router.prototype._setCurrentRoute = function (route) {
     this._containers[this._currentRouteIndex].classList.add("hidden");
     this._currentRoute = route;
@@ -68,6 +68,10 @@ Router.prototype.openLogin = function () {
 
 Router.prototype.openSettings = function () {
     this._setCurrentRoute("settings");
+};
+
+Router.prototype.openAdvanced = function () {
+    this._setCurrentRoute("advanced");
 };
 
 export { Router };

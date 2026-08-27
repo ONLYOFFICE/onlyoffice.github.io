@@ -159,8 +159,11 @@ div::-moz-selection {
     }
 }
 
-#buttonsWrapper .custom-button-container:first-child {
-    width: calc(100% - 28px);
+.buttonsWrapper {
+    justify-content: space-between;
+    .custom-button-container:first-child {
+        width: calc(100% - 28px);
+    }
 }
 
 #prefixSuffixDiv {
@@ -171,6 +174,10 @@ div::-moz-selection {
     input[type="text"] {
         width: 50%;
     }
+}
+
+#repairBrokenFieldsWrapper .custom-button-container {
+    width: 100%;
 }
 
 #styleWrapper {
