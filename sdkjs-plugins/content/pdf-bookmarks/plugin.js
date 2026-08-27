@@ -483,6 +483,8 @@
   }
 
   window.Asc.plugin.init = initialize;
-  window.Asc.plugin.button = function () {};
+  window.Asc.plugin.button = function (id) {
+    this.executeCommand("close", "");
+  };
   window.Asc.plugin.onThemeChanged = applyTheme;
 })(window);
