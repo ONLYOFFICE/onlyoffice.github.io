@@ -224,9 +224,9 @@
   //
   // ENGINE_CDN is pinned to an immutable commit so the fetched engine can never
   // drift from the code that expects it. Hosted in the public OpenMath-eu org
-  // repo (the mr-mathiasen user account is an Enterprise Managed User and its
-  // repos are never anonymously reachable). Update it only when the engine
-  // binary is intentionally rebuilt (also update docs/ENGINE_NOTES.md).
+  // repo because nothing under the mr-mathiasen user account is anonymously
+  // reachable, so jsDelivr 404s on it even for public repos. Update it only when
+  // the engine binary is intentionally rebuilt (also update docs/ENGINE_NOTES.md).
   var ENGINE_LOCAL = "./giac/giacwasm.js";
   var ENGINE_CDN =
     "https://cdn.jsdelivr.net/gh/OpenMath-eu/onlymath-engine" +
