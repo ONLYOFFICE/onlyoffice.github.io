@@ -156,7 +156,12 @@ const MarketplaceStorage = {
             filteredPlugins = this.getPluginsToUpdate();
         } else if (category === "onlyoffice") {
             filteredPlugins = filteredPlugins.filter(function(plugin) {
-                return !(plugin && plugin.offered);
+                if (!plugin) {
+                    return false;
+                }
+                const offered = String(plugin.offered || "Ascensio System SIA").trim();
+                return offered.toUpperCase() === 'ONLYOFFICE' ||
+                       offered.toUpperCase() === 'ASCENSIO SYSTEM SIA';
             });
         } else if (category != "all") {
             filteredPlugins = filteredPlugins.filter(function(plugin) {
@@ -374,8 +379,16 @@ const MarketplaceStorage = {
         if (!variations) {
             return;
         }
-
-		if (!config.offered && !(plugin && plugin.offered) && !(installed && installed.obj && installed.obj.offered)) {
+        let offered = 'Ascensio System SIA';
+        if (config.offered) {
+            offered = String(config.offered).trim();
+        } else if (plugin && plugin.offered) {
+            offered = String(plugin.offered).trim();
+        } else if (installed && installed.obj && installed.obj.offered) {
+            offered = String(installed.obj.offered).trim();
+        }
+		if (offered.toUpperCase() === 'ONLYOFFICE' ||
+                offered.toUpperCase() === 'ASCENSIO SYSTEM SIA') {
 			let category = 'onlyoffice';
 			if (this._categories.has(category)) {
 				let num = Number(this._categories.get(category));
