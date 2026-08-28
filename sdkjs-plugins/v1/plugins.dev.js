@@ -270,6 +270,11 @@
 		this._onCustomMenuClick("windowHeaderMenuEvents", id);
 	};
 
+	window.Asc.plugin.attachFloatActionButtonClickEvent = function(id, action)
+	{
+		this._attachCustomMenuClickEvent("floatActionButtonEvents", id, action);
+	};
+
 	window.Asc.plugin.attachEvent = function(id, action)
 	{
 		var pluginObj = window.Asc.plugin;
@@ -356,6 +361,7 @@
 	Asc.Buttons.ButtonsToolbar = [];
 	Asc.Buttons.ButtonsContentControl = [];
 	Asc.Buttons.ButtonsWindowHeader = [];
+	Asc.Buttons.ButtonsFloatAction = [];
 
 	Asc.Buttons.registerContextMenu = function()
 	{
@@ -533,6 +539,26 @@
 		});
 	};
 
+	Asc.Buttons.registerFloatAction = function()
+	{
+		window.Asc.plugin.attachEditorEvent("onFloatActionButtonClick", function(id) {
+			this._onCustomMenuClick("floatActionButtonEvents", id);
+		});
+	};
+
+	Asc.Buttons.registerFloatActionButtons = function(buttons) {
+		Asc.Buttons.updateFloatActionButtons(buttons, true);
+	};
+
+	Asc.Buttons.updateFloatActionButtons = function(buttons, isAdd) {
+		let items = { guid : window.Asc.plugin.guid, items : [] };
+		for (let i = 0, len = buttons.length; i < len; i++)
+			items.items.push(buttons[i].toItem());
+
+		window.Asc.plugin.executeMethod(
+			!!isAdd ? "AddFloatActionButtons" : "UpdateFloatActionButtons", [items]);
+	};
+
 	var ToolbarButtonType = {
 		Button : "button",
 		BigButton : "big-button"
@@ -543,7 +569,8 @@
 		ContextMenu : 1,
 		Toolbar : 2,
 		ContentControl : 3,
-		WindowHeader : 4
+		WindowHeader : 4,
+		FloatAction : 5
 	};
 
 	function Button(parent, id)
@@ -909,9 +936,42 @@
 		}
 	};
 
+	function ButtonFloatAction(id)
+	{
+		Button.call(this, null, id);
+		this.itemType = ItemType.FloatAction;
+		this.visible  = undefined;
+		
+		if (0 === Asc.Buttons.ButtonsFloatAction.length)
+			Asc.Buttons.registerFloatAction();
+
+		Asc.Buttons.ButtonsFloatAction.push(this);
+	}
+	ButtonFloatAction.prototype = Object.create(Button.prototype);
+	ButtonFloatAction.prototype.constructor = ButtonFloatAction;
+
+	ButtonFloatAction.prototype.toItem = function()
+	{
+		let item = { id : this.id, text : translateItem(this.text) };
+		if (this.hint !== null)   item.hint = translateItem(this.hint);
+		if (this.icons)           item.icons = this.icons;
+		if (this.enableToggle)    item.enableToggle = true;
+		if (this.data)            item.data = this.data;
+		if (this.removed)         item.removed = true;
+		if (undefined !== this.visible) item.visible = !!this.visible;
+		item.disabled = !!this.disabled;
+		return item;
+	};
+
+	ButtonFloatAction.prototype.attachOnClick = function(handler)
+	{
+		window.Asc.plugin.attachFloatActionButtonClickEvent(this.id, handler);
+	};
+
 	Asc.ToolbarButtonType = ToolbarButtonType;
 	Asc.ButtonContextMenu = ButtonContextMenu;
 	Asc.ButtonToolbar = ButtonToolbar;
 	Asc.ButtonContentControl = ButtonContentControl;
 	Asc.ButtonWindowHeader = ButtonWindowHeader;
+	Asc.ButtonFloatAction = ButtonFloatAction;
 })(window);
