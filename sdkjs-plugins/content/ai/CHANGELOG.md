@@ -165,3 +165,7 @@
 
 ## 3.2.3
 * Bug fix.
+
+## 3.2.4
+* Add OpenCode and OpenCode Go as internal providers (dynamic model loading).
+* Thanks to Mickey Gudiel Reyes for the contribution.
