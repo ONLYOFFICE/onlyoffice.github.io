@@ -278,6 +278,7 @@ const PluginCard = {
             PluginCardUI.imgIcon.removeAttribute("srcset");
         }
         PluginCardUI.spanName.textContent = data.pluginName;
+        PluginCardUI.spanName.title = data.pluginName;
         
         if (this.config.local || (this.available && this.available.obj && this.available.obj.local)) {
             PluginCardUI.defaultPluginIcon.classList.remove("hidden");

@@ -390,6 +390,8 @@ main {
 		font-size: 14px;
 		margin-bottom: 2px;
 		overflow-wrap: anywhere;
+		max-height: 56px;
+		overflow: hidden;
 	}
 	.plugin-plate .by-onlyoffice {
 		display: inline-flex;
