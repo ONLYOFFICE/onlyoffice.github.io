@@ -7,9 +7,11 @@ The plugin uses the [highlight.js](https://highlightjs.org/) engine, [prettier](
 It is installed by default in cloud, [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop version](https://github.com/ONLYOFFICE/DesktopEditors) of ONLYOFFICE editors. 
 ## Supported languages and styles
 
-Supported languages: apache, bash, shell, matlab, erlang, javascript, profile, ruby, prolong, swift, sql, java, http, fortran, perl, xml, cpp, json, cs, nginx, basic, markdown, css, python, objectivec, php, delphi. 
+Supported languages are populated from the bundled `highlight.js` build at runtime via `hljs.listLanguages()`. The language picker also matches aliases exposed by `highlight.js`, such as `js`, `c++`, `c#`, `sh`, and `yml`.
 
 Supported styles: Googlecode, GitHub, GitHub Gist, Android Studio, Visual Studio, Visual Studio 2015, Idea, Qtcreator Dark, Qtcreator Light, XCode, Fortran, Foundation, XML 1, XML 2. 
+
+Code formatting is available for: `xml`, `javascript`, `typescript`, `css`, `markdown`, `json`, `php`, and `html`.
 
 ## How to use
 

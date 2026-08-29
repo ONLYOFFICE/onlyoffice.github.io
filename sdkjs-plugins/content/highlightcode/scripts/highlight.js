@@ -40,6 +40,8 @@
 	};
 
 	var languages = hljs.listLanguages().sort(),									// array languages
+		languageOptions = [],
+		languageAliases = {},
 		style_value,																// current value style
 		code_field,																	// field for higlight code
 		container,																	// scrollable conteiner
@@ -64,6 +66,9 @@
 		php : !isOldChrome,
 		html : true
 	};
+	var formatLangTooltip = Object.keys(format_lang).filter(function(lang) {
+		return format_lang[lang];
+	}).join(", ");
 	var settings = {								// object with current settings for user (there are default values)
 		curLang : "Auto",							// current language (default - Auto)
 		style : "googlecode.css",					// current style name (dafault - googlecode.css)
@@ -138,6 +143,8 @@
 	var myscroll = window.Asc.ScrollableDiv;
 
 	window.Asc.plugin.init = function(text) {
+		languageOptions = createLangForSelect();
+		languageAliases = createLanguageAliasMap(languageOptions);
 
 		get_supported_fonts();
 		$('#style_id').select2({
@@ -167,11 +174,12 @@
 			settings.font_size = this.value;
 		};
 		$('#language_id').select2({
-			data : createLangForSelect(),
-			minimumResultsForSearch: Infinity
+			data : languageOptions,
+			matcher: matchLanguageOption,
+			minimumResultsForSearch: 0
 		}).on('select2:select', function(e) {
 			text = code_field.innerText;
-			settings.curLang = e.params.data.text;		// change current language
+			settings.curLang = e.params.data.id;		// change current language
 			if (format_lang[settings.curLang]) {
 				document.getElementById("btn_format").removeAttribute('disabled');
 			} else {
@@ -209,11 +217,21 @@
 		};
 
 		function createLangForSelect() {
-			var tmpArr = [{id:0, text:"Auto"}];
+			var tmpArr = [{
+				id: "Auto",
+				text: "Auto",
+				searchText: "auto automatic autodetect highlight highlight.js"
+			}];
 			for (var i = 0; i < languages.length; i++) {
+				var searchText = [languages[i]];
+				var languageInfo = hljs.getLanguage(languages[i]);
+				if (languageInfo && Array.isArray(languageInfo.aliases))
+					searchText = searchText.concat(languageInfo.aliases);
+
 				tmpArr.push({
-					id : i+1,
-					text : languages[i]
+					id : languages[i],
+					text : languages[i],
+					searchText : searchText.join(" ").toLowerCase()
 				});
 			}
 			return tmpArr;
@@ -738,19 +756,48 @@
 		});
 	};
 
-	function select_language(lang) {
-		for (var i=0; i<$('#language_id')[0].length;i++) {
-			if ($('#language_id')[0].options[i].text == lang) {
-				settings.curLang = lang;
-				if (format_lang[lang]) {
-					document.getElementById("btn_format").removeAttribute('disabled');
-				} else {
-					document.getElementById("btn_format").setAttribute('disabled', true);
-				}
-				$('#language_id').val(i).trigger("change");
-				break;
-			}	
+	function createLanguageAliasMap(options) {
+		var aliasMap = {};
+		for (var i = 0; i < options.length; i++) {
+			var option = options[i];
+			var terms = option.searchText ? option.searchText.split(" ") : [option.id];
+			for (var j = 0; j < terms.length; j++) {
+				if (terms[j])
+					aliasMap[terms[j]] = option.id;
+			}
 		}
+		return aliasMap;
+	};
+
+	function matchLanguageOption(params, data) {
+		var term = $.trim(params.term || "").toLowerCase();
+		if (!term)
+			return data;
+		if (data.searchText && data.searchText.indexOf(term) !== -1)
+			return data;
+		return null;
+	};
+
+	function normalizeLanguage(lang) {
+		if (!lang)
+			return null;
+		if (lang === "Auto")
+			return lang;
+		return languageAliases[String(lang).toLowerCase()] || null;
+	};
+
+	function select_language(lang) {
+		var normalizedLang = normalizeLanguage(lang);
+		if (!normalizedLang)
+			return;
+
+		settings.curLang = normalizedLang;
+		if (format_lang[normalizedLang]) {
+			document.getElementById("btn_format").removeAttribute('disabled');
+		} else {
+			document.getElementById("btn_format").setAttribute('disabled', true);
+		}
+		$('#language_id').val(normalizedLang).trigger("change");
 	};
 
 	function select_style(style) {
@@ -892,7 +939,7 @@
 		var btn_format = document.getElementById("btn_format");
 		if (btn_format) {
 			btn_format.innerHTML = window.Asc.plugin.tr("Format");
-			btn_format.title = window.Asc.plugin.tr("Available only for the following languages") + ": xml, javascript, typescript, css, markdown, json, php, html";
+			btn_format.title = window.Asc.plugin.tr("Available only for the following languages") + ": " + formatLangTooltip;
 
 		}
 			
