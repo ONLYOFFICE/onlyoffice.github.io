@@ -10,3 +10,8 @@ License File:   licenses/citeproc.license
 
 License:        MIT
 License File:   licenses/core-js.license
+
+3. abbrv.jabref.org (journal_abbreviations_medicus.csv) - Index Medicus/MEDLINE journal title abbreviations, used to power the "Use MEDLINE journal abbreviations" option. (https://github.com/JabRef/abbrv.jabref.org)
+
+License:        CC0-1.0
+License File:   licenses/jabref-abbreviations.license
