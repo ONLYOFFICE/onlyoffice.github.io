@@ -1,0 +1,24 @@
+.ui-textarea {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  resize: vertical;
+}
+
+.ui-textarea::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ui-textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ui-textarea::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+html[data-plugin-theme="dark"] .ui-textarea::-webkit-scrollbar-thumb,
+html[data-plugin-theme="dark-contrast"] .ui-textarea::-webkit-scrollbar-thumb,
+html[data-plugin-theme="modern-dark"] .ui-textarea::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
