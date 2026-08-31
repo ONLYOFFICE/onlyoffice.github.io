@@ -539,24 +539,47 @@
 		});
 	};
 
-	Asc.Buttons.registerFloatAction = function()
+	var isFloatActionEventAttached = false;
+
+	function forgetRemovedFloatActionButtons(buttons)
 	{
-		window.Asc.plugin.attachEditorEvent("onFloatActionButtonClick", function(id) {
-			this._onCustomMenuClick("floatActionButtonEvents", id);
-		});
+		for (let i = 0, len = buttons.length; i < len; i++)
+		{
+			if (!buttons[i].removed)
+				continue;
+
+			let pos = Asc.Buttons.ButtonsFloatAction.indexOf(buttons[i]);
+			if (-1 !== pos)
+				Asc.Buttons.ButtonsFloatAction.splice(pos, 1);
+		}
+	}
+
+	Asc.Buttons.registerFloatActionButtons = function()
+	{
+		let items = {
+			guid : window.Asc.plugin.guid,
+			items : []
+		};
+
+		for (let i = 0, len = Asc.Buttons.ButtonsFloatAction.length; i < len; i++)
+			items.items.push(Asc.Buttons.ButtonsFloatAction[i].toItem());
+
+		window.Asc.plugin.executeMethod("AddFloatActionButtons", [items]);
+		forgetRemovedFloatActionButtons(Asc.Buttons.ButtonsFloatAction.slice());
 	};
 
-	Asc.Buttons.registerFloatActionButtons = function(buttons) {
-		Asc.Buttons.updateFloatActionButtons(buttons, true);
-	};
+	Asc.Buttons.updateFloatActionButtons = function(buttons)
+	{
+		let items = {
+			guid : window.Asc.plugin.guid,
+			items : []
+		};
 
-	Asc.Buttons.updateFloatActionButtons = function(buttons, isAdd) {
-		let items = { guid : window.Asc.plugin.guid, items : [] };
 		for (let i = 0, len = buttons.length; i < len; i++)
 			items.items.push(buttons[i].toItem());
 
-		window.Asc.plugin.executeMethod(
-			!!isAdd ? "AddFloatActionButtons" : "UpdateFloatActionButtons", [items]);
+		window.Asc.plugin.executeMethod("UpdateFloatActionButtons", [items]);
+		forgetRemovedFloatActionButtons(buttons);
 	};
 
 	var ToolbarButtonType = {
@@ -941,9 +964,14 @@
 		Button.call(this, null, id);
 		this.itemType = ItemType.FloatAction;
 		this.visible  = undefined;
-		
-		if (0 === Asc.Buttons.ButtonsFloatAction.length)
-			Asc.Buttons.registerFloatAction();
+
+		if (!isFloatActionEventAttached)
+		{
+			isFloatActionEventAttached = true;
+			window.Asc.plugin.attachEditorEvent("onFloatActionButtonClick", function(buttonId) {
+				this._onCustomMenuClick("floatActionButtonEvents", buttonId);
+			});
+		}
 
 		Asc.Buttons.ButtonsFloatAction.push(this);
 	}
