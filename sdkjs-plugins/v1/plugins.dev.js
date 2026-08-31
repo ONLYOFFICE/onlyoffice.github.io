@@ -539,21 +539,6 @@
 		});
 	};
 
-	var isFloatActionEventAttached = false;
-
-	function forgetRemovedFloatActionButtons(buttons)
-	{
-		for (let i = 0, len = buttons.length; i < len; i++)
-		{
-			if (!buttons[i].removed)
-				continue;
-
-			let pos = Asc.Buttons.ButtonsFloatAction.indexOf(buttons[i]);
-			if (-1 !== pos)
-				Asc.Buttons.ButtonsFloatAction.splice(pos, 1);
-		}
-	}
-
 	Asc.Buttons.registerFloatActionButtons = function()
 	{
 		let items = {
@@ -565,7 +550,6 @@
 			items.items.push(Asc.Buttons.ButtonsFloatAction[i].toItem());
 
 		window.Asc.plugin.executeMethod("AddFloatActionButtons", [items]);
-		forgetRemovedFloatActionButtons(Asc.Buttons.ButtonsFloatAction.slice());
 	};
 
 	Asc.Buttons.updateFloatActionButtons = function(buttons)
@@ -579,7 +563,6 @@
 			items.items.push(buttons[i].toItem());
 
 		window.Asc.plugin.executeMethod("UpdateFloatActionButtons", [items]);
-		forgetRemovedFloatActionButtons(buttons);
 	};
 
 	var ToolbarButtonType = {
@@ -965,9 +948,8 @@
 		this.itemType = ItemType.FloatAction;
 		this.visible  = undefined;
 
-		if (!isFloatActionEventAttached)
+		if (0 === Asc.Buttons.ButtonsFloatAction.length)
 		{
-			isFloatActionEventAttached = true;
 			window.Asc.plugin.attachEditorEvent("onFloatActionButtonClick", function(buttonId) {
 				this._onCustomMenuClick("floatActionButtonEvents", buttonId);
 			});
