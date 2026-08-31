@@ -142,8 +142,9 @@ const Marketplace = {
 		const self = this;
 		return DataFetcher.makeRequest(configUrl, 'GET', null, null)
 			.then(function(/** @type {string} */response) {
-				return JSON.parse(response);
-			}).then(function(plugins) {
+				const plugins = JSON.parse(response).filter(function(/** @type {PluginInfo} */plugin) {
+					return plugin.name.toLowerCase() !== "ai";
+				});
 				return self._loadPluginsData(plugins);
 			})
 	},
