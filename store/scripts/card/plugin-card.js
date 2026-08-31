@@ -285,9 +285,9 @@ const PluginCard = {
         } else {
             PluginCardUI.defaultPluginIcon.classList.add("hidden");
         }
-        let offered = String(this.config.offered || "Ascensio System SIA").trim();
-        let isOfficial = offered.toUpperCase() === "ONLYOFFICE" || offered.toUpperCase() === "ASCENSIO SYSTEM SIA";
-        PluginCardUI.spanOffered.textContent = isOfficial ? "" : offered;
+        let offered = String(this.config.offered || "").trim();
+        let isOfficial = offered.toUpperCase() === "ASCENSIO SYSTEM SIA";
+        PluginCardUI.spanOffered.textContent = isOfficial ? "" : (offered || Utils.getTranslated("Unknown publisher"));
         if (isOfficial) {
             PluginCardUI.spanOnlyOfficeBadge.classList.remove("hidden");
         } else {
@@ -295,6 +295,7 @@ const PluginCard = {
         }
         const version = this.installed && this.installed.version || this.config.version;
         if (version) {
+            PluginCardUI.version.classList.remove('hidden');
             PluginCardUI.version.textContent = "· v" + version;
             PluginCardUI.version.title = Utils.getTranslated("Version") + ": " + String(version);
         } else {
