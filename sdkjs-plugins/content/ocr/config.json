@@ -13,6 +13,7 @@
 		"sr-Latn-RS": "OCR",
 		"zh-ZH": "OCR 文字识别"
 	},
+	"offered": "Ascensio System SIA",
 	"guid": "asc.{440EBF13-9B19-4BD8-8621-05200E58140B}",
 	"version": "2.1.1",
 
