@@ -216,7 +216,9 @@
 					type: 'PluginReady',
 					version: editorVersion,
 					pluginVersion: window.Asc.plugin.version,
-					editorType: window.Asc.plugin.info.editorType
+					editorType: window.Asc.plugin.info.editorSubType === 'pdf'
+						? 'pdf'
+						: window.Asc.plugin.info.editorType
 				} );
 			});
 		};

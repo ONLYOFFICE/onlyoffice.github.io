@@ -389,6 +389,9 @@ main {
 		font-weight: 600;
 		font-size: 14px;
 		margin-bottom: 2px;
+		overflow-wrap: anywhere;
+		max-height: 56px;
+		overflow: hidden;
 	}
 	.plugin-plate .by-onlyoffice {
 		display: inline-flex;
@@ -396,7 +399,7 @@ main {
 		justify-content: center;
 		width: 13px;
 		height: 13px;
-		margin-left: 6px;
+		margin-right: 4px;
 		border-radius: 6.5px;
 		color: rgb(255, 255, 255);
 		font-size: 8.45px;
@@ -407,7 +410,6 @@ main {
 	.plugin-plate .description {
 		font-size: 13px;
 		line-height: 1.5;
-		min-height: 2.8em;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-moz-box-orient: vertical;
