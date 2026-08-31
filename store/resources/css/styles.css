@@ -376,10 +376,16 @@ main {
 		.plugin-plate .image img {
 			max-height: 100%;
 		}
-	.plugin-plate .manufacturer {
+	.plugin-plate .manufacturer.official {
 		font-size: 11.5px;
 		display: flex;
 		align-items: center;
+	}
+	.plugin-plate .manufacturer:not(.official) {
+		font-size: 11.5px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	.plugin-plate .name {
 		flex: 1 1 0%;

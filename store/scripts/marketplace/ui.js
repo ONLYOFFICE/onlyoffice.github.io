@@ -499,7 +499,7 @@ const UI = {
             '</div>' +
             '<div class="name">' +
                 '<div class="plugin-name">' + name + '</div>' +
-                '<div class="manufacturer">' +
+                '<div class="manufacturer' + (isOfficial ? ' official' : '') + '">' +
                     (isOfficial ? '<span class="by-onlyoffice">✓</span>' : '') +
                     offered +
                 '</div>' +
