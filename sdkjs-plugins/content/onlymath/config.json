@@ -1,13 +1,13 @@
 {
   "name": "OnlyMath",
   "guid": "asc.{F9C32B4D-7A18-4E5F-B02D-9C6E15A3D847}",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "offered": "OpenMath",
   "minVersion": "7.2.0",
   "baseUrl": "",
   "variations": [
     {
-      "description": "Insert and evaluate mathematics directly in your document. Calculate, solve equations, differentiate and integrate with a built-in computer algebra engine (Giac). Danish high-school notation and locale. Works fully offline.",
+      "description": "Calculate, solve, differentiate and integrate directly in your document's equation fields. Built-in computer algebra, Danish notation, works fully offline.",
       "url": "index.html",
       "icons": [
         "resources/light/icon.png",
