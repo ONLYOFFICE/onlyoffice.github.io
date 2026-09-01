@@ -1,7 +1,7 @@
 {
   "name": "OnlyMath",
   "guid": "asc.{F9C32B4D-7A18-4E5F-B02D-9C6E15A3D847}",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "offered": "OpenMath",
   "minVersion": "7.2.0",
   "baseUrl": "",

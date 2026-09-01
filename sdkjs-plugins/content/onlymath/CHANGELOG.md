@@ -3,6 +3,18 @@
 All notable changes to the OnlyMath plugin are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.2
+
+- The **X** on the Settings panel now closes it. Previously nothing happened,
+  because the editor asks the plugin to handle its own window-header buttons and
+  OnlyMath had no handler for them.
+- Closing the Settings panel no longer affects anything else: the shortcuts, the
+  toolbar menu and the computer-algebra engine keep running, so reopening
+  Settings is instant and closing it never interrupts your work.
+- Moved the **OnlyMath** button from the Insert tab to the **Plugins** tab, where
+  ONLYOFFICE groups plugin commands. The shortcuts and the right-click menu are
+  unchanged, and remain the quickest way to work.
+
 ## 1.0.1
 
 - Decimal comma now applies to every result, including symbolic ones such as √20.
