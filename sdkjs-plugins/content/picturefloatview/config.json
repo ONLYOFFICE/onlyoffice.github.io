@@ -1,0 +1,71 @@
+{
+    "name": "Picture Float View",
+    "nameLocale": {
+        "en": "Picture Float View",
+        "ru": "Предпросмотр изображения",
+        "zh-CN": "图片高清预览",
+        "de": "Bildansicht",
+        "es": "Vista previa de imagen",
+        "fr": "Aperçu d'image",
+        "it": "Anteprima immagine",
+        "pt-BR": "Visualização de imagem",
+        "ja": "プレビュー画像",
+        "sr-Cyrl-RS": "Преглед слике",
+        "sr-Latn-RS": "Pregled slike",
+        "sq-AL": "Shikimi i pictures",
+        "si": "පික්සරු පෙරදැක්වීම"
+    },
+    "guid": "asc.{eb6471e0-7981-4235-9856-42d48f101188}",
+    "version": "1.0.7",
+    "variations": [
+        {
+            "description": "Click to pop up an independent floating window to preview the image",
+            "descriptionLocale": {
+                "en": "Click to pop up an independent floating window to preview the image",
+                "ru": "Щелкните, чтобы всплывающее окно для предварительного просмотра изображения",
+                "zh-CN": "点击后弹出独立悬浮窗口预览图片",
+                "de": "Klicken Sie, um ein unabhängiges schwebendes Fenster zum Vorschaubild anzuzeigen",
+                "es": "Haga clic para abrir una ventana flotante independiente para previsualizar la imagen",
+                "fr": "Cliquez pour ouvrir une fenêtre flottante indépendante pour prévisualiser l'image",
+                "it": "Clicca per aprire una finestra flottante indipendente per l'anteprima dell'immagine",
+                "pt-BR": "Clique para abrir uma janela flutuante independente para pré-visualizar a imagem",
+                "ja": "クリックして独立した浮動ウィンドウを開いて画像をプレビューします",
+                "sr-Cyrl-RS": "Кликните да би се појавио независни плаваћи прозор за преглед слике",
+                "sr-Latn-RS": "Kliknite da bi se pojavio nezavisni plivački prozor za pregled slike",
+                "sq-AL": "Brisni për të hapur një dritare të lirë të pavarur për parashikimin e pictures",
+                "si": "තල්ලක් කිරීමෙන් ස්වාධීන ආලේපන කොටුවක් විවෘත කරමින් රූපය පෙරදැක්වීම"
+            },
+            "url": "index.html",
+            "icons": [
+                "resources/light/icon.png"
+            ],
+            "icons2": [
+                {
+                    "style": "light",
+                    "100%": {
+                        "normal": "resources/light/icon.png"
+                    },
+                    "200%": {
+                        "normal": "resources/light/icon.png"
+                    }
+                },
+                {
+                    "style": "dark",
+                    "100%": {
+                        "normal": "resources/dark/icon.png"
+                    },
+                    "200%": {
+                        "normal": "resources/dark/icon.png"
+                    }
+                }
+            ],
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": false,
+            "initDataType": "html",
+            "initOnSelectionChanged": true,
+            "EditorsSupport": ["word", "cell", "slide"],
+            "size": [800, 600]
+        }
+    ]
+}
