@@ -142,8 +142,9 @@ const Marketplace = {
 		const self = this;
 		return DataFetcher.makeRequest(configUrl, 'GET', null, null)
 			.then(function(/** @type {string} */response) {
-				return JSON.parse(response);
-			}).then(function(plugins) {
+				const plugins = JSON.parse(response).filter(function(/** @type {PluginInfo} */plugin) {
+					return plugin.name.toLowerCase() !== "ai";
+				});
 				return self._loadPluginsData(plugins);
 			})
 	},
@@ -689,7 +690,7 @@ function _onMessageTheme(message) {
 }
 function _onMessageMouseUp() {
 	if (pluginVersion > 1000005) {
-		MarketplacePluginService.closePluginCard();
+		//MarketplacePluginService.closePluginCard();
 		return;
 	}
 	let evt = document.createEvent('MouseEvents');

@@ -1,0 +1,25 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. Antidote API JS is a JavaScript/TypeScript library that integrates the Antidote corrector into web or hybrid applications. (https://www.npmjs.com/package/@druide-informatique/antidote-api-js)
+
+License:        MIT
+License File:   Antidote-api-js.license
+
+
+2. Preact is a fast 3kB alternative to React with the same modern API. (https://preactjs.com/)
+
+License:        MIT
+License File:   Preact.license
+
+
+3. preact-iso is an isomorphic async router and prerendering tools for Preact. (https://github.com/preactjs/preact-iso)
+
+License:        MIT
+License File:   Preact-iso.license
+
+
+4. Preact Signals is a state management library that makes state updates fast and simple. (https://preactjs.com/guide/v10/signals/)
+
+License:        MIT
+License File:   Preact-signals.license

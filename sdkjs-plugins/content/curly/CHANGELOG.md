@@ -1,5 +1,38 @@
 # Change Log
 
+## 1.5.0
+
+* New: pinned values. Type a value you enter every day — your name, your department, the mailbox people should reply to — and tap the pin that appears next to the field. From then on, every document with a field of that name shows a filled pin: tap it and the value drops in. Tap it again while the field holds that value to forget it. One pin per field name, stored on this device only, and nothing is ever written without a tap — not into the pane, and certainly not into the document.
+* New: when a document has several pinned fields waiting, "Use them" below the list fills all of them at once (into the pane — Replace still decides what reaches the document).
+* New: Settings lists everything pinned on this device, with a forget button per entry and "Forget all".
+* Changed: the location pictogram next to each field now only appears when the document actually has placeholders in a header or footer. In a body-only document it said the same thing on every row, so it steps aside and gives the field its width back. The icon rail is tighter overall.
+* Changed: the "No new placeholders found" message after Refresh is gone — the refresh itself already shows that nothing changed. "No placeholders found in this document" still appears when the document is empty of placeholders.
+* Changed: the welcome screen now tells someone who is already signed in how to reach a pending team invitation (sign out and sign back in) — a signed-in pane never announces invitations; the team picker only exists at the door.
+* Changed: when your own trial has ended and a team has invited you, the next sign-in takes you straight into that team instead of showing an expired trial.
+* Date fields don't get a pin: today's date is rarely tomorrow's.
+
+## 1.4.0
+
+* New: typed placeholders. Add a type after a colon — {Delivery date: date}, {Amount: number}, {Contact email: email}, {Remarks: multiline} — and the pane shows the right control: a date picker that writes the date as readable text in your language, a number-friendly input, an email field that quietly flags typos (and never blocks you), and a bigger box for longer text.
+* New: choice placeholders. {Delivery: Pickup | Courier | Post} puts the options one click away — and the field stays free text, so you can always type something else.
+* New: mandatory fields. End a placeholder's name with a star — {Client name*} — and the pane marks it and counts unfilled mandatory fields below the list. It never blocks Replace; it just tells you.
+* Insert tag now builds all of this for you: pick a field type, add choices, tick "Mandatory field", and watch the exact placeholder assemble in the live preview before it lands at your cursor.
+* Changed: automatic date detection from tag names is gone — it only worked in a few languages and guessed wrong in others. Declaring the type in the document ({Invoice date: date}) is the reliable replacement, and it works in every language.
+* The sample template ("Show me how Curly works") now demonstrates every field type.
+* New: a "What's new" sparkle on the pane menu whenever Curly ships something — one click opens the changelog, then it stays quiet until the next release.
+* Placeholders typed with fullwidth braces (from Chinese/Japanese keyboards) are now detected and filled.
+* Starting a trial with a brand-new email now shows a confirmation step first; signing in with an address that already has access says so instead of starting a new trial.
+* Fix: the sign-in email field now checks the address format before offering to send a code, so a typo like a missing dot in the domain is caught immediately instead of failing silently.
+
+## 1.3.0
+
+* Sign in with just your email address — Curly emails you a 6-digit code to confirm it, and you're in. License keys are gone (existing activations keep working unchanged, nobody has to reactivate).
+* New emails start a free 14-day trial automatically; known emails simply sign in — one flow for everyone.
+* If your email belongs to more than one workspace, a picker lets you choose which one to use on this device.
+* New: Insert tag — type a name and Curly drops the {placeholder} at your cursor, with a live preview. Date-like names (e.g. {Invoice date}) are detected automatically and get a real date picker at fill time, with a "type freely" escape for anything unusual.
+* Form fields (beta) improvements: filling now identifies each control directly instead of by position, so documents whose fields were edited or reordered fill reliably; and when the document's fields changed since the last scan, the pane says so and asks for a Refresh instead of silently updating nothing.
+* Fix: the Insert tag action did nothing in OnlyOffice.
+
 ## 1.2.0
 
 * New (beta): Form fields. An opt-in setting lists the document's native form controls in their own tab — text fields, checkboxes, dropdown lists, combo boxes (free text supported), and date pickers with a real date control. Rich-content containers are shown read-only (their multi-paragraph content is edited in the document, not through a form input); controls marked "contents cannot be edited" appear locked, and wrappers that group other controls are left untouched.

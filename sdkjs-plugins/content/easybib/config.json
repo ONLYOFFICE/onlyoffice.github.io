@@ -10,6 +10,7 @@
 		"sr-Cyrl-RS": "EasyBib",
 		"sr-Latn-RS": "EasyBib"
 	},
+	"offered": "Ascensio System SIA",
 	"guid"       : "asc.{c9d216a5-4f1a-49f2-9ff0-67c510a73523}",
 	"version"    : "1.0.2",
 	"variations" : [
