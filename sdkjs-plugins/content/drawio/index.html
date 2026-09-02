@@ -79,10 +79,44 @@
 			justify-content: center;
 			align-items: center;
 		}
+		.format-selector {
+			position: fixed;
+			top: 8px;
+			right: 70px;
+			z-index: 1000;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 11px;
+		}
+		.format-selector label {
+			color: #999;
+		}
+		.format-selector select {
+			padding: 3px 6px;
+			border: 1px solid #404040;
+			border-radius: 3px;
+			background: #2a2a2a;
+			color: #ccc;
+			font-size: 11px;
+			cursor: pointer;
+			outline: none;
+		}
+		.format-selector select:hover,
+		.format-selector select:focus {
+			border-color: #0066cc;
+		}
 	</style>
 </head>
 <body class="noselect">
 	<div id="div_preview" class="div_preview noselect hidden"></div>
 	<div id="loader-container" class="asc-loader-container div-loader"></div>
+	<div class="format-selector">
+		<label for="format-select">Export as:</label>
+		<select id="format-select">
+			<option value="xmlsvg">SVG (Scalable)</option>
+			<option value="xmlpng">PNG (Raster)</option>
+		</select>
+	</div>
 </body>
 </html>
