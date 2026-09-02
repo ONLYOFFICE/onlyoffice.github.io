@@ -40,16 +40,34 @@
  * @typedef {import('../zotero/zotero').ZoteroSdk} ZoteroSdk
  * @typedef {import('../csl/locales').LocalesManager} LocalesManager
  * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
+ * @typedef {(progress: {phase: "fetch"|"apply", completed: number, total: number}) => void} RefreshProgressCallback
  */
 
 import { CitationDocService } from "./citation-doc-service";
 import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { AdditionalWindow } from "../pages/additional-window";
+import { collectItemKeys } from "../shared/item-keys";
 
 class CitationService {
     /** @type {AdditionalWindow} */
     #additionalWindow;
+    /**
+     * Caches parsed CSL/locale XML (string -> DOM Element). citeproc-js
+     * falls back to a slow, pure-JS node-query engine (CSL.XmlJSON) whenever
+     * it's handed a raw XML string, instead of the native, much faster
+     * CSL.XmlDOM backend it uses for an already-parsed DOM Element - this
+     * was the dominant cost of every citation refresh/format.
+     * @type {Map<string, Element|string>}
+     */
+    #parsedXmlCache = new Map();
+    /**
+     * Identifies the style+language the current `this._formatter` engine was
+     * built for, so `#updateFormatter` can reuse it instead of recompiling
+     * the whole CSL style from scratch on every single citation action.
+     * @type {string|null}
+     */
+    #formatterCacheKey = null;
 
     /**
      * @param {LocalesManager} localesManager
@@ -81,6 +99,346 @@ class CitationService {
     }
 
     /**
+     * Persist abstracts only for CSL styles that explicitly reference them.
+     * When the style does not use the variable, storing it only bloats field payloads.
+     * @returns {boolean}
+     */
+    #shouldPersistAbstract() {
+        const styleId = this._cslStylesManager.getLastUsedStyleIdOrDefault();
+        const styleContent = this._cslStylesManager.cached(styleId);
+
+        if (typeof styleContent !== "string" || styleContent === "") {
+            return true;
+        }
+
+        return /\bvariable\s*=\s*"[^"]*\babstract\b[^"]*"/.test(
+            styleContent,
+        );
+    }
+
+    /**
+     * @param {any} citationObject
+     * @returns {void}
+     */
+    #stripAbstractFromCitation(citationObject) {
+        if (!citationObject || !Array.isArray(citationObject.citationItems)) {
+            return;
+        }
+
+        citationObject.citationItems.forEach(function (citationItem) {
+            if (
+                citationItem &&
+                citationItem.itemData &&
+                Object.hasOwnProperty.call(citationItem.itemData, "abstract")
+            ) {
+                delete citationItem.itemData.abstract;
+            }
+        });
+    }
+
+    /**
+     * @param {CSLCitation} cslCitation
+     * @returns {any}
+     */
+    #serializeCitation(cslCitation) {
+        const citationObject = cslCitation.toJSON();
+
+        if (!this.#shouldPersistAbstract()) {
+            this.#stripAbstractFromCitation(citationObject);
+        }
+
+        return citationObject;
+    }
+
+    /**
+     * Determines which Zotero library an item belongs to and which item key
+     * to fetch it under. `fetchKey` can differ from the stored `id`:
+     * citations created by the Word Zotero plugin (or by this plugin in
+     * desktop mode, where CSL JSON ids are citation keys such as Better
+     * BibTeX keys) store the real Zotero item key only inside their URIs.
+     * @param {CitationItem} item
+     * @param {string} id
+     * @returns {{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}|null}
+     */
+    #getLibraryContext(item, id) {
+        const userID = item.getProperty("userID");
+        const groupID = item.getProperty("groupID");
+
+        if (userID) {
+            return { id: id, fetchKey: id, userID: userID };
+        }
+        if (groupID) {
+            return { id: id, fetchKey: id, groupID: groupID };
+        }
+
+        const itemObject = item.toJSON();
+        if (!Array.isArray(itemObject.uris)) {
+            return null;
+        }
+
+        /** @type {{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}|null} */
+        let fallback = null;
+
+        for (let i = 0; i < itemObject.uris.length; i++) {
+            const uri = itemObject.uris[i];
+
+            /** @type {{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}|null} */
+            let context = null;
+
+            const remote = uri.match(
+                /zotero\.org\/(users|groups)\/(\d+)\/items\/([^/?#]+)/i,
+            );
+            // "users/local/<id>" URIs come from never-synced Zotero libraries;
+            // the items only exist in the local desktop library.
+            const local = uri.match(
+                /zotero\.org\/users\/local\/[^/]+\/items\/([^/?#]+)/i,
+            );
+
+            if (remote) {
+                context =
+                    remote[1] === "users"
+                        ? { id: id, fetchKey: remote[3], userID: remote[2] }
+                        : { id: id, fetchKey: remote[3], groupID: remote[2] };
+            } else if (local) {
+                context = { id: id, fetchKey: local[1], userID: "local" };
+            }
+
+            if (!context) {
+                continue;
+            }
+            // Prefer a URI whose key matches the stored id exactly; otherwise
+            // remember the first parseable URI as a fallback.
+            if (context.fetchKey === id) {
+                return context;
+            }
+            if (!fallback) {
+                fallback = context;
+            }
+        }
+
+        return fallback;
+    }
+
+    /**
+     * @param {(item: CitationItem, id: string) => boolean} shouldRefreshItem
+     * @param {"csljson"|"json"} [format]
+     * @param {RefreshProgressCallback} [onProgress]
+     * @returns {Promise<void>}
+     */
+    async #refreshStoredItems(shouldRefreshItem, format, onProgress) {
+        /** @type {Array<{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}>} */
+        const itemsToRefresh = [];
+        /** @type {Array<string>} */
+        const unresolvedIds = [];
+
+        this._storage.forEachItem((item, id) => {
+            if (!shouldRefreshItem(item, id)) {
+                return;
+            }
+
+            const libraryContext = this.#getLibraryContext(item, id);
+            if (libraryContext) {
+                itemsToRefresh.push(libraryContext);
+            } else {
+                unresolvedIds.push(id);
+            }
+        });
+
+        const total = itemsToRefresh.length + unresolvedIds.length;
+        if (total === 0) {
+            return;
+        }
+
+        let completed = 0;
+        const reportProgress = () => {
+            completed++;
+            if (onProgress) {
+                onProgress({ phase: "fetch", completed, total });
+            }
+        };
+
+        // One request per item key, via the single-item endpoint: Zotero's
+        // "csljson" format identifies items by their CSL citation key (e.g.
+        // a Better BibTeX key), not their Zotero item key, so a batched
+        // response cannot be matched back to the stored items. A single-item
+        // request maps its returned item back to the requested key
+        // unambiguously, and excludes child notes/attachments.
+        const keyedRequests = itemsToRefresh.map((context) => {
+            const requestPromise = context.groupID
+                ? this._sdk.getGroupItemByKey(
+                      context.groupID,
+                      context.fetchKey,
+                      format || "json",
+                  )
+                : this._sdk.getItemByKey(context.fetchKey, format || "json");
+
+            return requestPromise
+                .then((res) => {
+                    const items = this.#normalizeSingleItemResponse(res);
+                    if (items.length !== 1) {
+                        console.warn(
+                            "Zotero returned " +
+                                items.length +
+                                " items for key " +
+                                context.fetchKey,
+                        );
+                        return;
+                    }
+
+                    const storedItem = this._storage.getItem(context.id);
+                    if (!storedItem) {
+                        return;
+                    }
+                    if ((format || "json") === "csljson") {
+                        // A full refresh replaces the item data so fields
+                        // deleted in Zotero disappear; the "json" format is
+                        // only used for merge-style backfills (abstracts).
+                        storedItem.replaceItemDataFromCsl(items[0]);
+                    } else {
+                        storedItem.fillFromObject(items[0]);
+                    }
+                })
+                .catch((error) => {
+                    // One unresolvable item (deleted in Zotero, stale key,
+                    // library unavailable) must not abort the whole refresh.
+                    console.warn(
+                        "Failed to refresh item " +
+                            context.id +
+                            " (Zotero key " +
+                            context.fetchKey +
+                            "):",
+                        error,
+                    );
+                })
+                .finally(reportProgress);
+        });
+
+        const citationKeyRequests = unresolvedIds.map((id) =>
+            this.#refreshItemByCitationKey(id)
+                .catch((error) => {
+                    console.warn(
+                        "Failed to re-link item " + id + ":",
+                        error,
+                    );
+                })
+                .finally(reportProgress),
+        );
+
+        await Promise.all(keyedRequests.concat(citationKeyRequests));
+    }
+
+    /**
+     * Single-item responses are a one-element array in "csljson" format but
+     * a bare object in "json" format.
+     * @param {any} res
+     * @returns {Array<any>}
+     */
+    #normalizeSingleItemResponse(res) {
+        const items = res && res.items;
+        if (Array.isArray(items)) {
+            return items;
+        }
+        return items ? [items] : [];
+    }
+
+    /**
+     * Fallback for citations that carry no library information at all:
+     * their stored id is typically a CSL citation key (e.g. a Better BibTeX
+     * key) from a citation inserted in desktop mode. Searches the library
+     * for the key, verifies each candidate by comparing its own csljson
+     * citation key, and on a match also records the item's canonical URI so
+     * the rewritten field becomes directly resolvable in future refreshes.
+     * @param {string} storedId
+     * @returns {Promise<void>}
+     */
+    async #refreshItemByCitationKey(storedId) {
+        const searchResult = await this._sdk.searchUserItemsEverything(storedId);
+        const candidates = (searchResult && searchResult.items) || [];
+
+        for (const candidate of candidates) {
+            const candidateKey =
+                candidate.key || (candidate.data && candidate.data.key);
+            if (!candidateKey) {
+                continue;
+            }
+
+            const res = await this._sdk.getItemByKey(candidateKey, "csljson");
+            const cslItem = this.#normalizeSingleItemResponse(res)[0];
+            if (!cslItem) {
+                continue;
+            }
+            if (
+                cslItem["citation-key"] !== storedId &&
+                cslItem.id !== storedId
+            ) {
+                continue;
+            }
+
+            const storedItem = this._storage.getItem(storedId);
+            if (!storedItem) {
+                return;
+            }
+            storedItem.replaceItemDataFromCsl(cslItem);
+
+            const library = candidate.library;
+            if (library && library.id !== undefined && library.id !== null) {
+                const libraryPath =
+                    library.type === "group" ? "groups" : "users";
+                storedItem.addUri(
+                    "http://zotero.org/" +
+                        libraryPath +
+                        "/" +
+                        library.id +
+                        "/items/" +
+                        candidateKey,
+                );
+            }
+            return;
+        }
+
+        console.warn(
+            "Could not locate item " +
+                storedId +
+                " in the Zotero library; it will not be refreshed.",
+        );
+    }
+
+    /** @returns {Promise<void>} */
+    async #hydrateMissingAbstracts() {
+        if (!this.#shouldPersistAbstract()) {
+            return;
+        }
+
+        await this.#refreshStoredItems((item, id) => {
+            const flatItem = item.toFlatJSON(this._storage.getItemIndex(id));
+            return !(
+                Object.hasOwnProperty.call(flatItem, "abstract") &&
+                flatItem.abstract !== ""
+            );
+        }, "json");
+    }
+
+    /**
+     * @param {{refreshItems?: boolean, onProgress?: RefreshProgressCallback}} [options]
+     * @returns {Promise<void>}
+     */
+    async #prepareStorageForCurrentStyle(options) {
+        const refreshItems = !!(options && options.refreshItems);
+
+        if (refreshItems) {
+            await this.#refreshStoredItems(() => true, "csljson", options && options.onProgress);
+            // The reused citeproc engine caches item data inside its
+            // registry, so after fetching fresh data the engine must be
+            // rebuilt - otherwise it keeps formatting the stale copies.
+            this.#formatterCacheKey = null;
+        } else {
+            await this.#hydrateMissingAbstracts();
+        }
+
+        this.#updateFormatter();
+    }
+
+    /**
      * @param {CSLCitation} cslCitation
      * @returns {Promise<boolean>} - has notes
      */
@@ -109,14 +467,15 @@ class CitationService {
             })
             .then(() => this.#makeCitationHtml(cslCitation))
             .then((htmlCitation) => {
+                cslCitation.setFormattedCitation(htmlCitation);
                 let notesStyle = null;
                 if ("note" === self._cslStylesManager.getLastUsedFormat()) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
                 }
-
+                const serializedCitation = self.#serializeCitation(cslCitation);
                 return self.citationDocService.addCitation(
                     htmlCitation,
-                    JSON.stringify(cslCitation.toJSON()),
+                    JSON.stringify(serializedCitation),
                     notesStyle,
                 );
             });
@@ -154,58 +513,50 @@ class CitationService {
     }
 
     /**
+     * Fetches the given items one by one via the single-item endpoint. The
+     * list endpoint with ?itemKey= would also return each item's child
+     * notes/attachments, which must not end up inside citations.
      * @param {Array<any>} items
+     * @param {"csljson"|"json"} [format]
      * @returns {Promise<Array<SearchResultItem>>}
      */
-    #getSelectedInJsonFormat(items) {
-        var arrUsrItems = [];
-        /** @type {Object<string, string[]>} */
-        var arrGroupsItems = {};
-        for (var citationID in items) {
-            var item = items[citationID];
-            var userID = item["userID"];
-            const groupID = item["groupID"];
-            if (userID) {
-                arrUsrItems.push(item.id);
-            } else if (groupID) {
-                if (!arrGroupsItems[groupID]) {
-                    arrGroupsItems[groupID] = [];
-                }
-                arrGroupsItems[groupID].push(item.id);
-            }
-        }
+    #getSelectedInJsonFormat(items, format) {
+        format = format || "json";
 
-        /** @type {Array<Promise<SearchResultItem[]>>} */
-        var promises = [];
-        if (arrUsrItems.length) {
+        /** @type {Array<Promise<SearchResultItem|null>>} */
+        const promises = [];
+        for (const citationID in items) {
+            const item = items[citationID];
+            const groupID = item["groupID"];
+            const userID = item["userID"];
+
+            /** @type {Promise<any>|null} */
+            let requestPromise = null;
+            if (groupID) {
+                requestPromise = this._sdk.getGroupItemByKey(
+                    groupID,
+                    item.id,
+                    format,
+                );
+            } else if (userID || userID === 0 || userID === "0") {
+                requestPromise = this._sdk.getItemByKey(item.id, format);
+            }
+            if (!requestPromise) {
+                continue;
+            }
+
             promises.push(
-                this._sdk
-                    .getItems(null, arrUsrItems, "json")
-                    .then(function (res) {
-                        return res.items || [];
-                    }),
+                requestPromise.then((res) => {
+                    const resItems = this.#normalizeSingleItemResponse(res);
+                    return resItems[0] || null;
+                }),
             );
         }
 
-        for (var groupID in arrGroupsItems) {
-            if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
-                promises.push(
-                    this._sdk
-                        .getGroupItems(
-                            null,
-                            groupID,
-                            arrGroupsItems[groupID],
-                            "json",
-                        )
-                        .then(function (res) {
-                            return res.items || [];
-                        }),
-                );
-            }
-        }
-
         return Promise.all(promises).then(function (res) {
-            return res.reduce((acc, resItems) => acc.concat(resItems), []);
+            return res.filter(function (item) {
+                return item !== null;
+            });
         });
     }
 
@@ -403,15 +754,17 @@ class CitationService {
      * @param {{field: AddinFieldData, cslCitation: CSLCitation}[]} fieldsWithCitations
      * @param {boolean} bHardRefresh
      * @param {boolean} [bChangePosition]
+     * @param {RefreshProgressCallback} [onProgress]
      * @returns {Promise<AddinFieldData[]>}
      */
-    async #getUpdatedFields(fieldsWithCitations, bHardRefresh, bChangePosition) {
+    async #getUpdatedFields(fieldsWithCitations, bHardRefresh, bChangePosition, onProgress) {
         const fragment = document.createDocumentFragment();
         const tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
 
         /** @type {AddinFieldData[]} */
         const updatedFields = [];
+        const total = fieldsWithCitations.length;
 
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
             let bHasChanges = !!bChangePosition;
@@ -431,6 +784,7 @@ class CitationService {
 
             let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
             tempElement.innerHTML = htmlCitation;
+            cslCitation.setFormattedCitation(htmlCitation);
             let oldContentInCit = cslCitation.getPlainCitation();
             const oldContentInDoc = field["Content"];
             if (oldContentInCit === "") {
@@ -492,7 +846,12 @@ class CitationService {
             }
 
             if (cslCitation) {
-                const newValue = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                const newValue =
+                    this._citPrefixNew +
+                    " " +
+                    this._citSuffixNew +
+                    " " +
+                    JSON.stringify(this.#serializeCitation(cslCitation));
                 if (field["Value"] !== newValue) {
                     bHasChanges = true;
                 }
@@ -502,9 +861,52 @@ class CitationService {
             if (bHasChanges) {
                 updatedFields.push(field);
             }
+
+            if (onProgress) {
+                onProgress({
+                    phase: "apply",
+                    completed: total - i,
+                    total,
+                });
+            }
         }
 
         return updatedFields;
+    }
+
+    /**
+     * Parses a CSL/locale XML string into a DOM Element, so citeproc-js uses
+     * its native CSL.XmlDOM backend (getElementsByTagName) instead of the
+     * pure-JS CSL.XmlJSON fallback it uses for raw strings. Falls back to
+     * returning the original string (citeproc's slower but still correct
+     * path) if parsing fails for any reason.
+     * @param {string} xmlString
+     * @returns {Element|string}
+     */
+    #parseXmlCached(xmlString) {
+        const cached = this.#parsedXmlCache.get(xmlString);
+        if (cached) {
+            return cached;
+        }
+
+        let result = xmlString;
+        try {
+            const root = new DOMParser().parseFromString(
+                xmlString,
+                "application/xml",
+            ).documentElement;
+            if (root && root.nodeName !== "parsererror") {
+                result = root;
+            }
+        } catch (e) {
+            console.error(
+                "Failed to pre-parse CSL/locale XML, falling back to citeproc's slower string parser:",
+                e,
+            );
+        }
+
+        this.#parsedXmlCache.set(xmlString, result);
+        return result;
     }
 
     #updateFormatter() {
@@ -515,15 +917,40 @@ class CitationService {
         this._storage.forEachItem(function (item, id) {
             arrIds.push(id);
         });
+
+        const styleId = this._cslStylesManager.getLastUsedStyleIdOrDefault();
+        const language = this._localesManager.getLastUsedLanguage();
+        const styleContent = this._cslStylesManager.cached(styleId);
+        // Includes the style content's length so re-uploading/editing a
+        // custom style under the same id still invalidates the cache.
+        const cacheKey =
+            styleId + " " + language + " " + (styleContent ? styleContent.length : 0);
+
+        // Building a CSL.Engine compiles the *entire* style XML into an
+        // internal token tree - a fixed cost that's independent of how many
+        // items are cited, and the dominant cost of every citation action
+        // when repeated needlessly. citeproc-js is designed to have a single
+        // long-lived engine per document session, updated via updateItems()
+        // as citations change; only rebuild it when the style or language
+        // actually changed.
+        if (this._formatter && this.#formatterCacheKey === cacheKey) {
+            if (arrIds.length) {
+                this._formatter.updateItems(arrIds);
+            }
+            return;
+        }
+
         // @ts-ignore
         this._formatter = new CSL.Engine(
             {
                 /** @param {string} id */
                 retrieveLocale: function (id) {
-                    if (self._localesManager.getLocale(id)) {
-                        return self._localesManager.getLocale(id);
-                    }
-                    return self._localesManager.getLocale();
+                    const localeContent =
+                        self._localesManager.getLocale(id) ||
+                        self._localesManager.getLocale();
+                    return localeContent
+                        ? self.#parseXmlCached(localeContent)
+                        : localeContent;
                 },
                 /** @param {string} id */
                 retrieveItem: function (id) {
@@ -533,12 +960,11 @@ class CitationService {
                     return item.toFlatJSON(index);
                 },
             },
-            this._cslStylesManager.cached(
-                this._cslStylesManager.getLastUsedStyleIdOrDefault(),
-            ),
-            this._localesManager.getLastUsedLanguage(),
+            styleContent ? this.#parseXmlCached(styleContent) : styleContent,
+            language,
             true,
         );
+        this.#formatterCacheKey = cacheKey;
         if (arrIds.length) {
             this._formatter.updateItems(arrIds);
         }
@@ -556,6 +982,51 @@ class CitationService {
             .replace(/&#60;/g, "<")
             .replace(/&#62;/g, ">")
             .replace(/&#38;/g, "&");
+    }
+
+    /**
+     * Keys of every item already cited somewhere in the document, used to give
+     * references the document already relies on priority in the search results.
+     * Deliberately does not touch `this._storage`: that is formatting engine
+     * state which only the insert/refresh flows may rebuild.
+     * @returns {Promise<Set<string>>}
+     */
+    async getUsedItemKeys() {
+        const self = this;
+        /** @type {Set<string>} */
+        const keys = new Set();
+        const arrFields = await this.citationDocService.getAddinZoteroFields();
+
+        arrFields.forEach(function (field) {
+            if (
+                field.Value.indexOf(self._citPrefixNew) === -1 &&
+                field.Value.indexOf(self._citPrefix) === -1
+            ) {
+                return;
+            }
+            let citationObject;
+            try {
+                citationObject = self.#extractField(field);
+            } catch (e) {
+                // A single unparseable field must not cost the priority
+                // sorting of the whole document.
+                console.error(e);
+                return;
+            }
+            if (
+                !citationObject ||
+                !Array.isArray(citationObject.citationItems)
+            ) {
+                return;
+            }
+            citationObject.citationItems.forEach(function (citationItem) {
+                collectItemKeys(citationItem).forEach(function (key) {
+                    keys.add(key);
+                });
+            });
+        });
+
+        return keys;
     }
 
     /** @returns {Promise<AddinFieldData | null>} */
@@ -583,8 +1054,12 @@ class CitationService {
     async insertSelectedCitations(items) {
         const self = this;
 
-        await this.#synchronizeStorageWithDocItems();
-        this.#updateFormatter();
+        try {
+            await this.#synchronizeStorageWithDocItems();
+            await this.#prepareStorageForCurrentStyle();
+        } catch (e) {
+            throw e;
+        }
 
         const cslCitation = new CSLCitation("");
         for (var citationID in items) {
@@ -645,7 +1120,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             if (bibField) {
                 const updatedFields = [
@@ -688,15 +1163,16 @@ class CitationService {
 
     /**
      * @param {boolean} [bHardRefresh]
+     * @param {{skipCitations?: boolean, skipBibliography?: boolean}} [skipOptions]
      * @returns {Promise<void>}
      */
-    async updateCslItems(bHardRefresh) {
+    async updateCslItems(bHardRefresh, skipOptions) {
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = [];
@@ -707,14 +1183,17 @@ class CitationService {
                     bHardRefresh = true;
                 }
             }
-            if (typeof bHardRefresh === "boolean") {
+            const bSkipCitations = !!(skipOptions && skipOptions.skipCitations);
+            const bSkipBib = !!(skipOptions && skipOptions.skipBibliography);
+
+            if (!bSkipCitations && typeof bHardRefresh === "boolean") {
                 updatedFields = await this.#getUpdatedFields(
                     fieldsWithCitations,
                     bHardRefresh,
                 );
             }
 
-            if (bibField) {
+            if (!bSkipBib && bibField) {
                 updatedFields.push(
                     await this.#updateBibliography(bNoHaveFields, bibField),
                 );
@@ -738,7 +1217,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
@@ -765,6 +1244,109 @@ class CitationService {
     }
 
     /**
+     * Fetches fresh data from Zotero and recomputes formatted citations, without
+     * touching the document. Kept separate from `applyRefreshCslItems` so callers
+     * can avoid holding a document-wide edit lock for the (potentially slow)
+     * network round-trip.
+     * @param {{skipCitations?: boolean, skipBibliography?: boolean}} [skipOptions]
+     * @param {RefreshProgressCallback} [onProgress]
+     * @returns {Promise<AddinFieldData[]>}
+     */
+    async prepareRefreshCslItems(skipOptions, onProgress) {
+        const { fieldsWithCitations, bibField } =
+            await this.#synchronizeStorageWithDocItems();
+        const bNoHaveFields = fieldsWithCitations.length === 0;
+
+        await this.#prepareStorageForCurrentStyle({
+            refreshItems: true,
+            onProgress,
+        });
+
+        /** @type {AddinFieldData[]} */
+        let updatedFields = [];
+
+        const bSkipCitations = !!(skipOptions && skipOptions.skipCitations);
+        const bSkipBib = !!(skipOptions && skipOptions.skipBibliography);
+
+        if (!bSkipCitations) {
+            updatedFields = await this.#getUpdatedFields(
+                fieldsWithCitations,
+                false,
+                false,
+                onProgress,
+            );
+        }
+
+        if (!bSkipBib && bibField) {
+            updatedFields.push(
+                await this.#updateBibliography(bNoHaveFields, bibField),
+            );
+        }
+
+        return updatedFields;
+    }
+
+    /**
+     * @param {AddinFieldData[]} updatedFields
+     * @returns {Promise<string[] | void>}
+     */
+    async applyRefreshCslItems(updatedFields) {
+        if (updatedFields && updatedFields.length) {
+            return this.citationDocService.updateAddinFields(updatedFields);
+        }
+    }
+
+    /**
+     * @param {"footnotes" | "endnotes"} notesStyle
+     * @param {RefreshProgressCallback} [onProgress]
+     * @returns {Promise<{updatedFields: AddinFieldData[], bibFields: AddinFieldData[], notesStyle: "footnotes" | "endnotes"}>}
+     */
+    async prepareRefreshCslItemsInNotes(notesStyle, onProgress) {
+        const { fieldsWithCitations, bibField } =
+            await this.#synchronizeStorageWithDocItems();
+        const bNoHaveFields = fieldsWithCitations.length === 0;
+
+        await this.#prepareStorageForCurrentStyle({
+            refreshItems: true,
+            onProgress,
+        });
+
+        /** @type {AddinFieldData[]} */
+        const updatedFields = await this.#getUpdatedFields(
+            fieldsWithCitations,
+            false,
+            false,
+            onProgress,
+        );
+
+        /** @type {AddinFieldData[]} */
+        const bibFields = bibField
+            ? [await this.#updateBibliography(bNoHaveFields, bibField)]
+            : [];
+
+        return { updatedFields, bibFields, notesStyle };
+    }
+
+    /**
+     * @param {{updatedFields: AddinFieldData[], bibFields: AddinFieldData[], notesStyle: "footnotes" | "endnotes"}} prepared
+     * @returns {Promise<void>}
+     */
+    async applyRefreshCslItemsInNotes(prepared) {
+        const { updatedFields, bibFields, notesStyle } = prepared;
+
+        if (updatedFields && updatedFields.length) {
+            await this.citationDocService.convertNotesStyle(
+                updatedFields,
+                notesStyle,
+            );
+        }
+
+        if (bibFields && bibFields.length) {
+            await this.citationDocService.updateAddinFields(bibFields);
+        }
+    }
+
+    /**
      * @param {Object & {citationID: string}} updatedField
      * @param {"footnotes" | "endnotes"} [notesStyle]
      * @returns {Promise<void>}
@@ -775,7 +1357,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems(updatedField, updatedField.citationID);
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             if (updatedField) {
                 fieldsWithCitations = fieldsWithCitations.filter(
@@ -797,11 +1379,12 @@ class CitationService {
             );
 
             if (notesStyle && updatedFields && updatedFields.length) {
-                await this.citationDocService.convertNotesStyle(
+                // Editing an existing note citation should update that note in place.
+                // The note conversion path uses SelectAddinField, which is unreliable
+                // for notes and can move the viewport to unrelated pages.
+                return this.citationDocService.updateAddinFieldsInNotes(
                     updatedFields,
-                    notesStyle,
                 );
-                updatedFields = [];
             }
 
             /*if (bibField) {
@@ -828,7 +1411,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
@@ -869,7 +1452,7 @@ class CitationService {
             const { fieldsWithCitations } =
                 await this.#synchronizeStorageWithDocItems();
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
@@ -904,6 +1487,60 @@ class CitationService {
             return null;
         }
         return updatedField;
+    }
+
+    /**
+     * Repairs citation/bibliography fields that were flattened into plain,
+     * visible text - this happens when a field is copy/pasted between two
+     * documents and the host editor fails to preserve the field wrapper,
+     * leaving the raw "ADDIN ZOTERO_ITEM CSL_CITATION {json}" instruction
+     * text visible in a footnote/endnote/paragraph instead of hidden field
+     * code. The embedded JSON is still intact, so it's re-wrapped as a real
+     * field here; callers are expected to run a normal refresh right after,
+     * which will pick up the restored fields like any other citation.
+     * @returns {Promise<{repaired: number, failed: number}>}
+     */
+    async repairBrokenCitations() {
+        const matches = await this.citationDocService.scanForBrokenFields();
+        let repaired = 0;
+        let failed = 0;
+
+        for (const match of matches) {
+            let citationObject;
+            try {
+                citationObject = this.#extractField({ Value: match.rawValue, FieldId: "", Content: "" });
+            } catch (e) {
+                console.error("Failed to parse broken field JSON:", e);
+            }
+            if (!citationObject || typeof citationObject !== "object") {
+                failed++;
+                continue;
+            }
+
+            const isBibliography = /ZOTERO_BIBL/i.test(match.rawValue);
+            const prefix = isBibliography ? this._bibPrefixNew : this._citPrefixNew;
+            const suffix = isBibliography ? this._bibSuffixNew : this._citSuffixNew;
+            const content = isBibliography
+                ? translate("Bibliography")
+                : (citationObject.properties && citationObject.properties.plainCitation) ||
+                  translate("Citation");
+
+            /** @type {AddinFieldData} */
+            const field = {
+                FieldId: "",
+                Value: prefix + " " + suffix + " " + JSON.stringify(citationObject),
+                Content: content,
+            };
+
+            const addedField = await this.citationDocService.repairBrokenField(match, field);
+            if (addedField) {
+                repaired++;
+            } else {
+                failed++;
+            }
+        }
+
+        return { repaired, failed };
     }
 
     /** @param {string} message */

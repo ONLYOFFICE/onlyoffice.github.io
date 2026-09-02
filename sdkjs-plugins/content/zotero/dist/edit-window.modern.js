@@ -64,45 +64,42 @@ function r(e) {
 function i(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function a(e, t) {
+function a(e, n) {
+	return e.get(t(e, n));
+}
+function o(e, t, n) {
+	i(e, t), t.set(e, n);
+}
+function s(e, n, r) {
+	return e.set(t(e, n), r), r;
+}
+function c(e, t) {
 	i(e, t), t.add(e);
 }
-function o(t) {
+function l(t) {
 	var n, r;
 	function i(n, r) {
 		try {
 			var o = t[n](r), s = o.value, c = s instanceof e;
 			Promise.resolve(c ? s.v : s).then(function(e) {
 				if (c) {
-					var r = n === "return" ? "return" : "next";
+					var r = n === "return" && s.k ? n : "next";
 					if (!s.k || e.done) return i(r, e);
 					e = t[r](e).value;
 				}
-				a(o.done ? "return" : "normal", e);
+				a(!!o.done, e);
 			}, function(e) {
 				i("throw", e);
 			});
 		} catch (e) {
-			a("throw", e);
+			a(2, e);
 		}
 	}
 	function a(e, t) {
-		switch (e) {
-			case "return":
-				n.resolve({
-					value: t,
-					done: !0
-				});
-				break;
-			case "throw":
-				n.reject(t);
-				break;
-			default: n.resolve({
-				value: t,
-				done: !1
-			});
-		}
-		(n = n.next) ? i(n.key, n.arg) : r = null;
+		e === 2 ? n.reject(t) : n.resolve({
+			value: t,
+			done: e
+		}), (n = n.next) ? i(n.key, n.arg) : r = null;
 	}
 	this._invoke = function(e, t) {
 		return new Promise(function(a, o) {
@@ -117,18 +114,18 @@ function o(t) {
 		});
 	}, typeof t.return != "function" && (this.return = void 0);
 }
-o.prototype[typeof Symbol == "function" && Symbol.asyncIterator || "@@asyncIterator"] = function() {
+l.prototype[typeof Symbol == "function" && Symbol.asyncIterator || "@@asyncIterator"] = function() {
 	return this;
-}, o.prototype.next = function(e) {
+}, l.prototype.next = function(e) {
 	return this._invoke("next", e);
-}, o.prototype.throw = function(e) {
+}, l.prototype.throw = function(e) {
 	return this._invoke("throw", e);
-}, o.prototype.return = function(e) {
+}, l.prototype.return = function(e) {
 	return this._invoke("return", e);
 };
 //#endregion
 //#region src/app/shared/components/input.js
-function s(e, t) {
+function u(e, t) {
 	var n = this;
 	if (t ||= {}, typeof e == "string") {
 		var r = document.getElementById(e);
@@ -173,8 +170,8 @@ function s(e, t) {
 		};
 	}(this), 100);
 }
-s.prototype = {
-	constructor: s,
+u.prototype = {
+	constructor: u,
 	input: null,
 	_container: null,
 	_options: {},
@@ -379,7 +376,7 @@ s.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/message.js
-function c(e, t) {
+function d(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLElement && (e = n);
@@ -388,8 +385,8 @@ function c(e, t) {
 	else throw Error("Invalid container element");
 	this._options = Object.assign(this._options, t), this._isShow = !1;
 }
-c.prototype = {
-	constructor: c,
+d.prototype = {
+	constructor: d,
 	_options: {
 		type: "info",
 		text: "",
@@ -467,7 +464,7 @@ c.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/button.js
-function l(e, t) {
+function f(e, t) {
 	var n = this;
 	if (typeof e == "string") {
 		var r = document.getElementById(e);
@@ -496,8 +493,8 @@ function l(e, t) {
 		}
 	}, this._createDOM(), this._bindEvents(), this.updateState();
 }
-l.prototype = {
-	constructor: l,
+f.prototype = {
+	constructor: f,
 	_button: null,
 	_buttonText: null,
 	_spinner: null,
@@ -630,7 +627,7 @@ l.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/checkbox.js
-function u(e, t) {
+function p(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLInputElement && (e = n);
@@ -646,8 +643,8 @@ function u(e, t) {
 		value: "on"
 	}, t), this._options.disabled = t.disabled || !1, this._handlers = /* @__PURE__ */ new Map(), this._createDOM(e), this._setupEventListeners(), this._updateVisualState(), this._subscribers = [];
 }
-u.prototype = {
-	constructor: u,
+p.prototype = {
+	constructor: p,
 	_container: null,
 	_input: null,
 	_visualCheckbox: null,
@@ -758,9 +755,9 @@ u.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/selectbox.js
-var d = /*#__PURE__*/ new WeakSet(), f = class {
+var m = /*#__PURE__*/ new WeakSet(), h = class {
 	constructor(e, n) {
-		if (a(this, d), typeof e == "string") {
+		if (c(this, m), typeof e == "string") {
 			var r = document.getElementById(e);
 			if (r instanceof HTMLSelectElement) e = r;
 			else if (r instanceof HTMLElement) this._container = r;
@@ -778,34 +775,34 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 			description: n.description || ""
 		}), this._selectedValues = /* @__PURE__ */ new Set(), this.isOpen = !1, this._items = [], this._customItems = [], this._subscribers = [], this._boundHandles = {
 			toggle: (e) => {
-				t(d, this, h).call(this, e);
+				t(m, this, v).call(this, e);
 			},
 			search: (e) => {
-				t(d, this, _).call(this, e);
+				t(m, this, b).call(this, e);
 			},
 			close: (e) => {
-				e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option") && t(d, this, g).call(this);
+				e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option") && t(m, this, y).call(this);
 			},
 			keydown: (e) => {
-				t(d, this, y).call(this, e);
+				t(m, this, C).call(this, e);
 			},
 			dropdownClick: (e) => {
-				t(d, this, x).call(this, e);
+				t(m, this, T).call(this, e);
 			},
 			scrollCheck: () => {
 				if (this._headerRectOnOpen) {
 					var e = this._header.getBoundingClientRect();
-					Math.abs(e.top - this._headerRectOnOpen.top) > 1 && t(d, this, g).call(this);
+					Math.abs(e.top - this._headerRectOnOpen.top) > 1 && t(m, this, y).call(this);
 				}
 			}
-		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), t(d, this, p).call(this), t(d, this, m).call(this), t(d, this, b).call(this), D._.add(this);
+		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), t(m, this, g).call(this), t(m, this, _).call(this), t(m, this, w).call(this), j._.add(this);
 	}
 	openDropdown() {
 		this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = !0, this._dropdown.style.display = "block", this._headerRectOnOpen = this._header.getBoundingClientRect(), document.addEventListener("scroll", this._boundHandles.scrollCheck, !0), this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout(function(e) {
 			return function() {
 				e.searchInput && e.searchInput.focus();
 			};
-		}(this), 100), t(d, this, b).call(this), t(d, this, C).call(this);
+		}(this), 100), t(m, this, w).call(this), t(m, this, D).call(this);
 	}
 	subscribe(e) {
 		var t = this;
@@ -824,7 +821,7 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 			text: n,
 			selected: r
 		}), this._options.sortable && this._items.sort((e, t) => e && t ? e.text.localeCompare(t.text) : e ? -1 : +!!t);
-		r && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(e)), t(d, this, S).call(this);
+		r && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(e)), t(m, this, E).call(this);
 	}
 	addItems(e, n) {
 		var r = this;
@@ -837,7 +834,7 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 					selected: i
 				});
 			}
-		}, this), this.isOpen && t(d, this, b).call(this), t(d, this, S).call(this);
+		}, this), this.isOpen && t(m, this, w).call(this), t(m, this, E).call(this);
 	}
 	addCustomItem(e, t) {
 		this._customItems.push({
@@ -854,7 +851,7 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 			return t === null || t.value !== e;
 		}), this._customItems = this._customItems.filter(function(t) {
 			return t === null || t.value !== e;
-		}), this._selectedValues.delete(e), t(d, this, S).call(this);
+		}), this._selectedValues.delete(e), t(m, this, E).call(this);
 	}
 	getSelectedValue() {
 		if (this._options.multiple) return console.error("Method getSelectedValue is only available for single-select boxes."), null;
@@ -893,9 +890,9 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 				var s = this._optionsContainer.querySelector("[data-value=\"" + i + "\"]");
 				s && (s.classList.add("selectbox-option-selected"), s.classList.add("checkbox--checked"));
 			}
-			t(d, this, g).call(this);
+			t(m, this, y).call(this);
 		}
-		t(d, this, S).call(this), !n && t(d, this, w).call(this, i, !0);
+		t(m, this, E).call(this), !n && t(m, this, O).call(this, i, !0);
 	}
 	unselectItems(e, n) {
 		var r = this;
@@ -914,7 +911,7 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 		};
 		if (Array.isArray(e)) for (var o = 0; o < e.length; o++) i = e[o], this._selectedValues.has(i) && (this._selectedValues.delete(i), a(i));
 		else i = e, this._selectedValues.has(i) && (this._selectedValues.delete(i), a(i));
-		t(d, this, S).call(this), !n && t(d, this, w).call(this, i, !0);
+		t(m, this, E).call(this), !n && t(m, this, O).call(this, i, !0);
 	}
 	disable() {
 		this._select.classList.add("selectbox-disabled");
@@ -927,10 +924,10 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 			var n = this._items[0];
 			n && this._selectedValues.add(n.value);
 		}
-		t(d, this, S).call(this), t(d, this, b).call(this);
+		t(m, this, E).call(this), t(m, this, w).call(this);
 	}
 	destroy() {
-		this._subscribers = [], D._.delete(this);
+		this._subscribers = [], j._.delete(this);
 		try {
 			this._header && this._boundHandles && this._header.removeEventListener("click", this._boundHandles.toggle), this.searchInput && this._boundHandles && this.searchInput.removeEventListener("input", this._boundHandles.search), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("click", this._boundHandles.dropdownClick), document && this._boundHandles && document.removeEventListener("click", this._boundHandles.close), this._header && this._boundHandles && this._header.removeEventListener("keydown", this._boundHandles.keydown), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("keydown", this._boundHandles.keydown);
 		} catch (e) {
@@ -941,7 +938,7 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 		this._container.className = t.join(" ");
 	}
 };
-function p() {
+function g() {
 	this._container.innerHTML = "", this._container.className += " selectbox-container";
 	var e = document.createDocumentFragment();
 	if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), e.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text i18n", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._options.usePortal && (this._dropdown.className += " selectbox-fixed"), this._select.appendChild(this._dropdown), this._options.description) {
@@ -956,40 +953,46 @@ function p() {
 		var i = this._selectbox.parentNode;
 		if (i) {
 			i.insertBefore(this._container, this._selectbox);
-			var a = t(d, this, E).call(this, this._selectbox);
+			var a = t(m, this, A).call(this, this._selectbox);
 			this.addItems(a.values, a.selectedValue), this._selectbox.remove();
 		}
 	}
 }
-function m() {
+function _() {
 	this._header.addEventListener("click", this._boundHandles.toggle), this.searchInput && this.searchInput.addEventListener("input", this._boundHandles.search), this._dropdown.addEventListener("click", this._boundHandles.dropdownClick), this._dropdown.addEventListener("wheel", function(e) {
 		e.stopPropagation();
 	}), this._header.addEventListener("keydown", this._boundHandles.keydown), this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
 }
-function h(e) {
-	if (e && e.stopPropagation(), this.isOpen ? t(d, this, g).call(this) : this.openDropdown(), e && e.type === "click") for (var n of D._) n.isOpen && n !== this && t(d, n, g).call(n);
+function v(e) {
+	if (e && e.stopPropagation(), this.isOpen ? t(m, this, y).call(this) : this.openDropdown(), e && e.type === "click") for (var n of j._) n.isOpen && n !== this && t(m, n, y).call(n);
 }
-function g() {
+function y() {
 	this.isOpen && document && this._boundHandles && (document.removeEventListener("click", this._boundHandles.close), document.removeEventListener("scroll", this._boundHandles.scrollCheck, !0)), this.isOpen = !1, this._dropdown.style.display = "none", this._options.usePortal ? (this._dropdown.style.left = "", this._dropdown.style.width = "", this._dropdown.style.top = "") : this._dropdown.classList.remove("selectbox-dropdown-top");
 	for (var e = this._arrow.className.split(" "), t = [], n = 0; n < e.length; n++) e[n] !== "selectbox-arrow-open" && t.push(e[n]);
 	this._arrow.className = t.join(" ");
 	for (var r = this._header.className.split(" "), i = [], n = 0; n < r.length; n++) r[n] !== "selectbox-header-open" && i.push(r[n]);
 	this._header.className = i.join(" "), this.searchInput && (this.searchInput.value = "");
 }
-function _(e) {
+function b(e) {
 	var n = e.target;
 	if (n instanceof HTMLInputElement) {
 		var r = n.value.toLowerCase();
-		t(d, this, b).call(this, r);
+		t(m, this, w).call(this, r);
 	}
 }
-function v(e) {
+function x(e, t) {
+	if (t === null) return !1;
+	if (!e) return !0;
+	var n = e.split(/\s+/).filter(Boolean), r = t.text.toLowerCase();
+	return n.every(function(e) {
+		return r.indexOf(e) !== -1;
+	});
+}
+function S(e) {
 	var n = this.searchInput ? this.searchInput.value.toLowerCase() : "", r, i = this._items.filter(function(e) {
 		return e !== null;
 	});
-	if (n && (i = i.filter(function(e) {
-		return e.text.toLowerCase().indexOf(n) !== -1;
-	})), i.length !== 0) {
+	if (n && (i = i.filter((e) => t(m, this, x).call(this, n, e))), i.length !== 0) {
 		if (e === "up") if (this._selectedValues.size === 0 && i.length > 0) r = i[i.length - 1], this._selectedValues.add(r.value);
 		else {
 			for (var a = Array.from(this._selectedValues), o = -1, s = 0; s < i.length; s++) if (i[s].value === a[0]) {
@@ -1008,81 +1011,79 @@ function v(e) {
 			var l = (o + 1) % i.length;
 			l === i.length && (l = 0), this._selectedValues.clear(), r = i[l], this._selectedValues.add(r.value);
 		}
-		t(d, this, S).call(this), t(d, this, b).call(this, n, !0), t(d, this, w).call(this, r.value, !0);
+		t(m, this, E).call(this), t(m, this, w).call(this, n, !0), t(m, this, O).call(this, r.value, !0);
 	}
 }
-function y(e) {
+function C(e) {
 	switch (e.key || e.keyCode) {
 		case "Enter":
 		case 13:
-			e.preventDefault(), t(d, this, h).call(this, e);
+			e.preventDefault(), t(m, this, v).call(this, e);
 			break;
 		case "Escape":
 		case 27:
-			t(d, this, g).call(this);
+			t(m, this, y).call(this);
 			break;
 		case "ArrowDown":
 		case 40:
-			e.preventDefault(), t(d, this, v).call(this, "down");
+			e.preventDefault(), t(m, this, S).call(this, "down");
 			break;
 		case "ArrowUp":
 		case 38:
-			e.preventDefault(), t(d, this, v).call(this, "up");
+			e.preventDefault(), t(m, this, S).call(this, "up");
 			break;
 		case "Tab":
 		case 9:
-			t(d, this, g).call(this);
+			t(m, this, y).call(this);
 			break;
 	}
 }
-function b(e, t) {
+function w(e, n) {
 	if (e ||= "", this._optionsContainer) {
 		this._optionsContainer.innerHTML = "";
-		var n = null, r = this._items;
-		e && (r = r.filter(function(t) {
-			return t !== null && t.text.toLowerCase().indexOf(e) !== -1;
-		}));
-		for (var i = document.createDocumentFragment(), a = 0; a < r.length; a++) {
-			var o = r[a];
-			if (!o) {
-				var s = document.createElement("hr");
-				s.className += " selectbox-option-divider", i.appendChild(s);
+		var r = null, i = this._items;
+		e && (i = i.filter((n) => t(m, this, x).call(this, e, n)));
+		for (var a = document.createDocumentFragment(), o = 0; o < i.length; o++) {
+			var s = i[o];
+			if (!s) {
+				var c = document.createElement("hr");
+				c.className += " selectbox-option-divider", a.appendChild(c);
 				continue;
 			}
-			var c = document.createElement("div");
-			c.className += " selectbox-option", this._selectedValues.has(o.value) && (c.className += " selectbox-option-selected checkbox--checked", n = c), c.setAttribute("data-value", o.value);
-			var l = document.createElement("label");
-			if (l.className += " selectbox-option-text i18n", this._options.translate && (o.text = this._options.translate(o.text)), l.textContent = o.text, this._options.multiple) {
-				c.className += " selectbox-option-checkbox";
-				var u = document.createElement("input");
-				u.type = "checkbox", u.id = "checkbox-" + o.value, u.className += " selectbox-checkbox", u.checked = this._selectedValues.has(o.value), c.appendChild(u);
-				var d = document.createElement("span");
-				d.className = "checkbox-visual", d.setAttribute("aria-hidden", "true");
-				var f = "http://www.w3.org/2000/svg", p = document.createElementNS(f, "svg");
-				p.setAttribute("viewBox", "0 0 10 8"), p.setAttribute("class", "checkbox-checkmark");
-				var m = document.createElementNS(f, "path");
-				m.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), m.setAttribute("fill", "none"), m.setAttribute("stroke", "currentColor"), m.setAttribute("stroke-width", "2"), p.appendChild(m), d.appendChild(p), c.appendChild(d);
+			var l = document.createElement("div");
+			l.className += " selectbox-option", this._selectedValues.has(s.value) && (l.className += " selectbox-option-selected checkbox--checked", r = l), l.setAttribute("data-value", s.value);
+			var u = document.createElement("label");
+			if (u.className += " selectbox-option-text i18n", this._options.translate && (s.text = this._options.translate(s.text)), u.textContent = s.text, this._options.multiple) {
+				l.className += " selectbox-option-checkbox";
+				var d = document.createElement("input");
+				d.type = "checkbox", d.id = "checkbox-" + s.value, d.className += " selectbox-checkbox", d.checked = this._selectedValues.has(s.value), l.appendChild(d);
+				var f = document.createElement("span");
+				f.className = "checkbox-visual", f.setAttribute("aria-hidden", "true");
+				var p = "http://www.w3.org/2000/svg", h = document.createElementNS(p, "svg");
+				h.setAttribute("viewBox", "0 0 10 8"), h.setAttribute("class", "checkbox-checkmark");
+				var g = document.createElementNS(p, "path");
+				g.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), g.setAttribute("fill", "none"), g.setAttribute("stroke", "currentColor"), g.setAttribute("stroke-width", "2"), h.appendChild(g), f.appendChild(h), l.appendChild(f);
 			}
-			c.appendChild(l), i.appendChild(c);
+			l.appendChild(u), a.appendChild(l);
 		}
 		if (this._customItems.length) {
-			var h = document.createElement("hr");
-			h.className += " selectbox-option-divider", i.appendChild(h);
+			var _ = document.createElement("hr");
+			_.className += " selectbox-option-divider", a.appendChild(_);
 		}
-		for (var a = 0; a < this._customItems.length; a++) {
-			var g = this._customItems[a], _ = document.createElement("label");
-			_.className += " selectbox-custom-option", _.setAttribute("data-value", g.value), _.setAttribute("for", g.value);
-			var v = document.createElement("span");
-			v.className += " selectbox-option-text i18n", this._options.translate && (g.text = this._options.translate(g.text)), v.textContent = g.text, _.appendChild(v), i.appendChild(_);
+		for (var o = 0; o < this._customItems.length; o++) {
+			var v = this._customItems[o], y = document.createElement("label");
+			y.className += " selectbox-custom-option", y.setAttribute("data-value", v.value), y.setAttribute("for", v.value);
+			var b = document.createElement("span");
+			b.className += " selectbox-option-text i18n", this._options.translate && (v.text = this._options.translate(v.text)), b.textContent = v.text, y.appendChild(b), a.appendChild(y);
 		}
-		if (this._optionsContainer.appendChild(i), t && this.isOpen && this._optionsContainer && n) try {
-			n.scrollIntoView && n.scrollIntoView({ block: "nearest" });
+		if (this._optionsContainer.appendChild(a), n && this.isOpen && this._optionsContainer && r) try {
+			r.scrollIntoView && r.scrollIntoView({ block: "nearest" });
 		} catch (e) {
 			console.error(e);
 		}
 	}
 }
-function x(e) {
+function T(e) {
 	var n = e.target || e.srcElement, r = null;
 	if (n && n instanceof HTMLElement) {
 		for (var i = null, a = n.className.split(" "), o = !1, s = 0; s < a.length; s++) if (a[s] === "selectbox-option") {
@@ -1091,7 +1092,7 @@ function x(e) {
 		} else if (a[s] === "selectbox-custom-option") {
 			var c = n.getAttribute("data-value");
 			if (c) {
-				e.stopPropagation(), t(d, this, T).call(this, c), t(d, this, g).call(this);
+				e.stopPropagation(), t(m, this, k).call(this, c), t(m, this, y).call(this);
 				return;
 			}
 			break;
@@ -1102,9 +1103,9 @@ function x(e) {
 				u = !0;
 				break;
 			} else if (l[s] === "selectbox-custom-option") {
-				var f = n.parentNode.getAttribute("data-value");
-				if (f) {
-					e.stopPropagation(), t(d, this, T).call(this, f), t(d, this, g).call(this);
+				var d = n.parentNode.getAttribute("data-value");
+				if (d) {
+					e.stopPropagation(), t(m, this, k).call(this, d), t(m, this, y).call(this);
 					return;
 				}
 				break;
@@ -1114,13 +1115,13 @@ function x(e) {
 		if (i instanceof HTMLDivElement) r = i;
 		else return;
 	} else return;
-	var p = r.getAttribute("data-value");
-	if (p !== null) {
-		var m = !0;
-		this._options.multiple ? this._selectedValues.has(p) ? (this.unselectItems(p, !0), m = !1) : this.selectItems(p, !0) : (this.selectItems(p, !0), t(d, this, g).call(this)), t(d, this, S).call(this), t(d, this, w).call(this, p, m);
+	var f = r.getAttribute("data-value");
+	if (f !== null) {
+		var p = !0;
+		this._options.multiple ? this._selectedValues.has(f) ? (this.unselectItems(f, !0), p = !1) : this.selectItems(f, !0) : (this.selectItems(f, !0), t(m, this, y).call(this)), t(m, this, E).call(this), t(m, this, O).call(this, f, p);
 	}
 }
-function S() {
+function E() {
 	if (this._selectedValues.size === 0) {
 		this._selectedText.textContent = this._options.placeholder;
 		return;
@@ -1142,7 +1143,7 @@ function S() {
 		this._selectedText.textContent = r ? r.text : this._options.placeholder;
 	}
 }
-function C() {
+function D() {
 	var e = window.innerHeight;
 	if (this._options.usePortal) {
 		var t = this._header.getBoundingClientRect(), n = this._dropdown.offsetHeight;
@@ -1151,7 +1152,7 @@ function C() {
 		r < n && t.top > r ? this._dropdown.style.top = t.top - n - 2 + "px" : this._dropdown.style.top = t.bottom + 2 + "px";
 	} else this._dropdown.getBoundingClientRect().bottom > e && this._dropdown.classList.add("selectbox-dropdown-top");
 }
-function w(e, t) {
+function O(e, t) {
 	for (var n = Array.from(this._selectedValues), r = [], i = 0; i < this._items.length; i++) {
 		var a = this._items[i];
 		a && this._selectedValues.has(a.value) && r.push(a);
@@ -1169,7 +1170,7 @@ function w(e, t) {
 		});
 	});
 }
-function T(e) {
+function k(e) {
 	var t = {
 		values: [],
 		current: e,
@@ -1182,15 +1183,67 @@ function T(e) {
 		});
 	});
 }
-function E(e) {
+function A(e) {
 	var t = { values: Array.from(e.options).map((e) => [e.value, e.text]) }, n = e.value;
 	return n && (t.selectedValue = n), t;
 }
-var D = { _: /* @__PURE__ */ new Set() };
-document.getElementById("loader");
-//#endregion
-//#region src/app/shared/constants/locator-values.js
-var O = [
+var j = { _: /* @__PURE__ */ new Set() }, M, N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakSet();
+M = class e {
+	constructor(e, n) {
+		c(this, I), o(this, N, void 0), o(this, P, null), o(this, F, null);
+		var r = document.getElementById(e);
+		if (!(r instanceof HTMLElement)) throw Error("Invalid container");
+		s(N, this, r), t(I, this, L).call(this, n);
+	}
+	show() {
+		var e;
+		(e = a(N, this)) == null || e.classList.remove("hidden");
+	}
+	hide() {
+		var e;
+		(e = a(N, this)) == null || e.classList.add("hidden");
+	}
+	setText(e) {
+		a(F, this) && (a(F, this).innerText = e);
+	}
+	setProgress(t) {
+		R.call(e, a(N, this), a(P, this), t);
+	}
+	static show() {
+		var n;
+		(n = t(e, this, z)._) == null || n.classList.remove("hidden");
+	}
+	static hide() {
+		var n;
+		(n = t(e, this, z)._) == null || n.classList.add("hidden");
+	}
+	static setText(n) {
+		t(e, this, V)._ && (t(e, this, V)._.innerText = n);
+	}
+	static setProgress(n) {
+		t(e, this, R).call(this, t(e, this, z)._, t(e, this, B)._, n);
+	}
+};
+function L(e) {
+	a(N, this).classList.add("loader-container");
+	var t = "http://www.w3.org/2000/svg", n = document.createElementNS(t, "svg");
+	n.classList.add("loader-image"), n.setAttribute("viewBox", "0 0 20 20");
+	var r = document.createElementNS(t, "circle");
+	r.setAttribute("cx", "10"), r.setAttribute("cy", "10"), r.setAttribute("fill", "none"), r.setAttribute("stroke", "currentColor"), r.setAttribute("stroke-width", "1.5"), r.setAttribute("r", "7.25"), r.setAttribute("stroke-dasharray", "160%, 40%"), n.appendChild(r), a(N, this).appendChild(n);
+	var i = document.createElement("div");
+	i.classList.add("loader-title"), i.classList.add("i18n"), i.innerText = e, a(N, this).appendChild(i), s(P, this, r), s(F, this, i);
+}
+function R(e, n, r) {
+	if (!(!e || !n)) {
+		if (r == null) {
+			e.classList.remove("loader-determinate"), n.style.strokeDasharray = "", n.style.strokeDashoffset = "";
+			return;
+		}
+		var i = Math.max(0, Math.min(1, r));
+		e.classList.add("loader-determinate"), n.style.strokeDasharray = String(t(M, this, H)._), n.style.strokeDashoffset = String(t(M, this, H)._ * (1 - i));
+	}
+}
+var z = { _: document.getElementById("loader") }, B = { _: document.querySelector("#loader .loader-image circle") }, V = { _: document.querySelector("#loader .loader-title") }, H = { _: 2 * Math.PI * 7.25 }, U = [
 	["appendix", "Appendix"],
 	["article", "Article"],
 	["book", "Book"],
@@ -1212,7 +1265,7 @@ var O = [
 	["title", "Title"],
 	["verses", "Verses"],
 	["volume", "Volume"]
-], k = {
+], W = {
 	addStylesForComponents: function(e) {
 		var t = "";
 		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n.message { background-color: " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus:not(:active):not(:hover),\n.custom-button-secondary-icon:focus:not(:active):not(:hover),\n.custom-button-secondary:focus:not(:active):not(:hover),\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
@@ -1241,34 +1294,34 @@ var O = [
 			n.className = "message-close i18n", n.textContent = "×", n.setAttribute("aria-label", "Close"), n.setAttribute("title", "Remove"), n.setAttribute("type", "button"), n.onclick = this.removeItem.bind(this, t, e.id), t.appendChild(n);
 			var r = document.createElement("div");
 			r.classList.add("title"), r.textContent = e.itemData.title, t.appendChild(r);
-			var i = document.createDocumentFragment(), a = document.createElement("div"), o = document.createElement("input"), c = document.createElement("input"), l = document.createElement("div"), d = document.createElement("div"), p = document.createElement("input"), m = document.createElement("div"), h = document.createElement("input");
-			i.appendChild(l), l.appendChild(d), l.appendChild(p);
+			var i = document.createDocumentFragment(), a = document.createElement("div"), o = document.createElement("input"), s = document.createElement("input"), c = document.createElement("div"), l = document.createElement("div"), d = document.createElement("input"), f = document.createElement("div"), m = document.createElement("input");
+			i.appendChild(c), c.appendChild(l), c.appendChild(d);
 			var g = "";
-			i.appendChild(a), a.appendChild(o), a.appendChild(c), i.appendChild(m), m.appendChild(h);
-			var _ = new s(o, {
+			i.appendChild(a), a.appendChild(o), a.appendChild(s), i.appendChild(f), f.appendChild(m);
+			var _ = new u(o, {
 				type: "text",
 				placeholder: "Prefix",
 				value: e.prefix,
 				showClear: !1
-			}), v = new s(c, {
+			}), v = new u(s, {
 				type: "text",
 				placeholder: "Suffix",
 				value: e.suffix,
 				showClear: !1
-			}), y = new f(d, {
+			}), y = new h(l, {
 				placeholder: "Locator",
 				translate: Asc.plugin.tr
 			}), b = e.label || "page";
-			O.forEach(function(e) {
+			U.forEach(function(e) {
 				var t = e[0] === b;
 				y.addItem(e[0], e[1], t), t && (g = e[1]);
 			});
-			var x = new s(p, {
+			var x = new u(d, {
 				type: "text",
 				placeholder: g,
 				value: e.locator,
 				showClear: !1
-			}), S = new u(h, {
+			}), S = new p(m, {
 				label: "Omit Author",
 				checked: !!e["suppress-author"]
 			});
@@ -1308,7 +1361,7 @@ var O = [
 			}, n = 0; n < e.length; n++) if (t()) continue;
 		}
 		onThemeChanged(e) {
-			window.Asc.plugin.onThemeChangedBase(e), k.fixThemeForIE(e), k.addStylesForComponents(e);
+			window.Asc.plugin.onThemeChangedBase(e), W.fixThemeForIE(e), W.addStylesForComponents(e);
 			var t = "";
 			t += "body { background-color: " + e["background-normal"] + " !important;}\n";
 			var n = document.getElementById("pluginStyles");

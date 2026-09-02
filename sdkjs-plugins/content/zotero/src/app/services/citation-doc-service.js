@@ -77,7 +77,7 @@ class CitationDocService {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: fieldId,
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibPrefix + " " + value + " " + this.#bibSuffix,
                 Content: formattingPositions.text,
             };
 
@@ -87,15 +87,21 @@ class CitationDocService {
                 }).then((addedField) => {
                     fieldId = addedField?.FieldId || "";
                     if (!formattingPositions.formatting.length) return;
+                    if (fieldId) {
+                        return this.#selectField(fieldId).then(() =>
+                            CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions)
+                        );
+                    }
                     return CslDocFormatter.formatAfterInsert(
                         formattingPositions.formatting,
+                        formattingPositions.text,
                     );
                 }).then(() => fieldId);
         } else {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: "",
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibPrefix + " " + value + " " + this.#bibSuffix,
                 Content: " ",
             };
 
@@ -114,19 +120,31 @@ class CitationDocService {
         /** @type {AddinFieldData} */
         const field = {
             FieldId: "",
-            Value: this.#citPrefix + " " + this.#citSuffix + value,
+            Value: this.#citPrefix + " " + this.#citSuffix + " " + value,
             Content: formattingPositions.text,
         };
-        const bHasNotes = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1)
+        const wantsNote = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1);
+        const alreadyInNote = wantsNote ? await this.#isInNote() : false;
+        const bHasNotes = wantsNote && !alreadyInNote;
         if (bHasNotes) {
             await this.#addNote(notesStyle);
         }
 
         await this.#addAddinField(field);
 
-        if (!formattingPositions.formatting.length) return bHasNotes;
-        await CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-        
+        if (formattingPositions.formatting.length) {
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(
+                    addedField.FieldId,
+                    formattingPositions,
+                );
+            } else {
+                await CslDocFormatter.formatAfterInsert(formattingPositions.formatting, formattingPositions.text);
+            }
+        }
+
         if (bHasNotes) {
             await this.#selectFieldReference();
         }
@@ -164,6 +182,61 @@ class CitationDocService {
                 resolve(arrFields);
             });
         });
+    }
+
+    /**
+     * Scans the document body, footnotes and endnotes for paragraphs whose
+     * ENTIRE text is a complex field's raw instruction text (e.g. "ADDIN
+     * ZOTERO_ITEM CSL_CITATION {json}") exposed as visible content instead
+     * of hidden field code. This happens when a field is copy/pasted into a
+     * different document and the host editor fails to preserve the field
+     * wrapper. Only whole-paragraph matches are reported, so paragraphs
+     * that merely mention Zotero amid other text are left untouched.
+     * @returns {Promise<Array<{location: "body" | "footnote" | "endnote", index: number, rawValue: string}>>}
+     */
+    scanForBrokenFields() {
+        return new Promise((resolve) => {
+            const isCalc = true;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    function scan(paragraphs, location) {
+                        const found = [];
+                        for (let i = 0; i < paragraphs.length; i++) {
+                            const text = paragraphs[i].GetText().trim();
+                            if (!/^ADDIN\s*(ZOTERO_ITEM|ZOTERO_BIBL)/i.test(text)) continue;
+                            if (text.indexOf("{") === -1) continue;
+                            if (text.lastIndexOf("}") !== text.length - 1) continue;
+                            found.push({ location: location, index: i, rawValue: text });
+                        }
+                        return found;
+                    }
+
+                    const doc = Api.GetDocument();
+                    return scan(doc.GetAllParagraphs(), "body")
+                        .concat(scan(doc.GetFootnotesFirstParagraphs(), "footnote"))
+                        .concat(scan(doc.GetEndNotesFirstParagraphs(), "endnote"));
+                },
+                isClose,
+                isCalc,
+                (result) => resolve(result || []),
+            );
+        });
+    }
+
+    /**
+     * Replaces a broken (plain-text) field's paragraph content with a real
+     * field carrying the given data.
+     * @param {{location: "body" | "footnote" | "endnote", index: number}} match
+     * @param {AddinFieldData} field
+     * @returns {Promise<AddinFieldData | null>}
+     */
+    async repairBrokenField(match, field) {
+        const selected = await this.#selectBrokenFieldParagraph(match.location, match.index);
+        if (!selected) return null;
+        await this.#removeSelectedContent();
+        await this.#addAddinField(field);
+        return this.getCurrentField();
     }
 
     /** @returns {Promise<boolean>} */
@@ -233,6 +306,34 @@ class CitationDocService {
     }
 
     /**
+     * Update fields that are already inside notes without re-selecting addin fields.
+     * SelectAddinField is unreliable for notes and can move the viewport unexpectedly.
+     * @param {Array<AddinFieldData>} fields
+     * @returns {Promise<string[]>}
+     */
+    async updateAddinFieldsInNotes(fields) {
+        const fieldIds = fields.map(field => field.FieldId);
+        const formats = this.#makeFormattingPositions(fields);
+
+        await new Promise((resolve) => {
+            window.Asc.plugin.executeMethod(
+                "UpdateAddinFields",
+                [fields],
+                resolve,
+            );
+        });
+
+        if (!formats.size) return fieldIds;
+        for (const [fieldId, formattingPositions] of formats) {
+            await CslDocFormatter.formatAfterUpdate(
+                fieldId,
+                formattingPositions,
+            );
+        }
+        return fieldIds;
+    }
+
+    /**
      * @param {Array<AddinFieldData>} fields
      * @returns {Promise<void>}
      */
@@ -255,7 +356,13 @@ class CitationDocService {
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
     }
 
@@ -278,7 +385,13 @@ class CitationDocService {
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
     }
 
@@ -290,6 +403,7 @@ class CitationDocService {
     async convertNotesStyle(fields, notesStyle) {
         /** @type {Array<AddinFieldData>} */
         const editedFields = [];
+
         const formats = this.#makeFormattingPositions(fields);
 
         for (let i = 0; i < fields.length; i++) {
@@ -304,15 +418,26 @@ class CitationDocService {
 
             const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
-            const isReferenceSelected = await this.#selectFieldReference();
-            if (!isReferenceSelected) continue;
-            await this.#removeSuperscript();
-            await this.#removeSelectedContent();
+
+            const isInNote = await this.#isInNote();
+            if (isInNote) {
+                // Field is already in a footnote/endnote - update in place
+                editedFields.push(field);
+                continue;
+            }
+
+            // Field is inline - needs to be moved into a note
             await this.#addNote(notesStyle);
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
         if (editedFields.length) {
             await new Promise(function (resolve) {
@@ -322,6 +447,17 @@ class CitationDocService {
                     resolve,
                 );
             });
+            // Apply formatting (italic, bold, etc.) after updating fields
+            for (const field of editedFields) {
+                const formatting = formats.get(field.FieldId);
+                if (!formatting) continue;
+                const selectFieldResult = await this.#selectField(field.FieldId);
+                if (!selectFieldResult) continue;
+                await CslDocFormatter.formatAfterUpdate(
+                    field.FieldId,
+                    formatting,
+                );
+            }
         }
     }
 
@@ -441,6 +577,22 @@ class CitationDocService {
         });
     }
 
+    /** @returns {Promise<boolean>} */
+    #isInNote() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const note = doc.GetCurrentFootEndnote();
+                    return !!note;
+                },
+                false,
+                true,
+                (result) => resolve(!!result),
+            );
+        });
+    }
+
     /** @returns {Promise<void>} */
     #removeSelectedContent() {
         return new Promise((resolve) => {
@@ -459,6 +611,44 @@ class CitationDocService {
         return new Promise(function (resolve) {
             window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
                 resolve(true),
+            );
+        });
+    }
+
+    /**
+     * Re-locates a paragraph reported by `scanForBrokenFields` by its stable
+     * index (paragraph object references don't survive across separate
+     * `callCommand` calls, so it has to be looked up again each time) and
+     * selects it, ready for `#removeSelectedContent`.
+     * @param {"body" | "footnote" | "endnote"} location
+     * @param {number} index
+     * @returns {Promise<boolean>}
+     */
+    #selectBrokenFieldParagraph(location, index) {
+        return new Promise((resolve) => {
+            Asc.scope.brokenFieldLocation = location;
+            Asc.scope.brokenFieldIndex = index;
+            const isCalc = true;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    let paragraphs;
+                    if ("footnote" === Asc.scope.brokenFieldLocation) {
+                        paragraphs = doc.GetFootnotesFirstParagraphs();
+                    } else if ("endnote" === Asc.scope.brokenFieldLocation) {
+                        paragraphs = doc.GetEndNotesFirstParagraphs();
+                    } else {
+                        paragraphs = doc.GetAllParagraphs();
+                    }
+                    const paragraph = paragraphs[Asc.scope.brokenFieldIndex];
+                    if (!paragraph) return false;
+                    paragraph.Select();
+                    return true;
+                },
+                isClose,
+                isCalc,
+                (result) => resolve(!!result),
             );
         });
     }

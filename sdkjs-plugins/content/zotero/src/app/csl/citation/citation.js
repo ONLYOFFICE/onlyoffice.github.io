@@ -81,7 +81,7 @@ class CSLCitation {
         this._manualOverride = {}; // for mendeley
 
         this._schema =
-            "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
+            "https://github.com/citation-style-language/schema/raw/master/csl-citation.json";
     }
 
     static resetUsedIDs() {
@@ -312,6 +312,15 @@ class CSLCitation {
     }
 
     /**
+     * @param {string} formattedCitation
+     * @returns
+     */
+    setFormattedCitation(formattedCitation) {
+        this.#setProperties({ formattedCitation: formattedCitation });
+        return this;
+    }
+
+    /**
      * @param {string} citeprocText
      * @param {string} [manualOverrideText]
      * @returns
@@ -391,7 +400,10 @@ class CSLCitation {
         });
 
         if (this._properties && Object.keys(this._properties).length > 0) {
-            result.properties = this._properties;
+            const { index, ...rest } = this._properties;
+            if (Object.keys(rest).length > 0) {
+                result.properties = rest;
+            }
         }
         if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
             result.manualOverride = this._manualOverride;

@@ -4962,7 +4962,7 @@
         </if>
         <else-if variable="publisher">
           <group delimiter=": ">
-            <!-- <text text-case="capitalize-first" variable="publisher-place"/> -->
+            <text text-case="capitalize-first" variable="publisher-place"/>
             <text text-case="capitalize-first" variable="publisher"/>
           </group>
         </else-if>
@@ -4988,7 +4988,7 @@
         </if>
         <else-if variable="publisher">
           <group delimiter=": ">
-            <!-- <text variable="publisher-place"/> -->
+            <text variable="publisher-place"/>
             <text variable="publisher"/>
           </group>
         </else-if>
@@ -5010,7 +5010,7 @@
     <choose>
       <if variable="original-publisher">
         <group delimiter=": ">
-          <!-- <text text-case="capitalize-first" variable="original-publisher-place"/> -->
+          <text text-case="capitalize-first" variable="original-publisher-place"/>
           <text text-case="capitalize-first" variable="original-publisher"/>
         </group>
       </if>
@@ -5023,7 +5023,7 @@
     <choose>
       <if variable="original-publisher">
         <group delimiter=": ">
-          <!-- <text variable="original-publisher-place"/> -->
+          <text variable="original-publisher-place"/>
           <text variable="original-publisher"/>
         </group>
       </if>
