@@ -47,7 +47,7 @@ To find the x-coordinate of the vertex, the student solves the equation f'(x)=0 
 
 **Toolbar**
 
-As an alternative to the shortcuts, use the Insert tab menu of ONLYOFFICE, click OnlyMath (the blue icon) and choose your command.
+As an alternative to the shortcuts, open the Plugins tab of ONLYOFFICE, click OnlyMath (the blue icon) and choose your command.
 
 **Right-click in math field** — with the cursor inside a math field, the context menu offers Calculate, Solve and OnlyMath Settings.
 
