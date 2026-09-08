@@ -415,7 +415,7 @@ main {
 	}
 	.plugin-plate .description {
 		font-size: 13px;
-		line-height: 1.5;
+		line-height: 1.4;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-moz-box-orient: vertical;
