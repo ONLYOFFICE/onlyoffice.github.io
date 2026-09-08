@@ -14,3 +14,101 @@
 .tui-image-editor-container .tui-image-editor-range-wrap label {
 	color: #fff;
 }
+
+/** checkbox — editor theme style **/
+.tui-image-editor-container .tui-image-editor-checkbox input + label::before,
+.tui-image-editor-container .tui-image-editor-checkbox > label > span::before {
+    background-color: #333 !important;
+    border: 1px solid #666 !important;
+}
+.tui-image-editor-container .tui-image-editor-checkbox input[type='checkbox']:checked + span::before {
+    background-image: none !important;
+}
+.tui-image-editor-container .tui-image-editor-checkbox > label > span::after {
+    content: '';
+    position: absolute;
+    display: none;
+    width: 3px;
+    height: 7px;
+    left: -14px;
+    top: 8px;
+    box-sizing: content-box;
+    border: solid rgba(255, 255, 255, 0.8);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.tui-image-editor-container .tui-image-editor-checkbox input[type='checkbox']:checked + span::after {
+    display: block;
+}
+.tui-image-editor-container .filter-color-item .tui-image-editor-checkbox > label > span::after {
+    left: -13px;
+}
+
+/** hover **/
+.tui-image-editor-container .tui-image-editor-checkbox label {
+    cursor: pointer;
+}
+.tui-image-editor-container .tui-image-editor-checkbox label:hover > span::before {
+    border-color: #8a8a8a !important;
+}
+.tui-image-editor-container .tui-image-editor-range {
+    cursor: pointer;
+}
+.tui-image-editor-container .tui-image-editor-range:hover .tui-image-editor-virtual-range-pointer {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+.tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-range {
+    cursor: default;
+}
+.tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-range:hover .tui-image-editor-virtual-range-pointer {
+    box-shadow: none;
+}
+.tui-colorpicker-palette-button:hover {
+    outline: 2px solid #8a8a8a !important;
+    outline-offset: -2px !important;
+    cursor: pointer;
+}
+select:hover {
+    outline: 1px solid #8a8a8a !important;
+    outline-offset: -1px !important;
+}
+.tui-colorpicker-palette-hex:hover {
+    outline: 1px solid #8a8a8a !important;
+    outline-offset: 2px !important;
+}
+.tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button:hover {
+    cursor: pointer;
+}
+label:hover input[type="file"] + svg {
+    color: #fff;
+    cursor: pointer;
+}
+
+/** focus **/
+.tui-image-editor-item:focus-visible,
+.tui-image-editor-button:focus-visible {
+    box-shadow: inset 0px 0 0 1px #ccc;
+    outline: none;
+}
+input:not(:checked):focus-visible + span::before {
+    border: 2px solid #ccc !important;
+    background-color: #333 !important;
+}
+input:checked:focus-visible + span::before {
+    border: 2px solid #ccc !important;
+}
+.tui-colorpicker-palette-button:focus-visible {
+    outline: 2px solid #ccc !important;
+    outline-offset: -2px !important;
+}
+select:focus-visible {
+    outline: 1px solid #ccc !important;
+    outline-offset: -1px !important;
+}
+.tui-colorpicker-palette-hex:focus-visible {
+    outline: 1px solid #ccc !important;
+    outline-offset: 2px !important;
+}
+input[type="file"]:focus-visible + svg {
+    filter: brightness(1.7) !important;
+}

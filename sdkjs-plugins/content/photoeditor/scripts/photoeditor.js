@@ -38,8 +38,10 @@ var bNewVersion = false;
 
     window.Asc.plugin.onThemeChanged = function (theme) {
 
-        var head  = document.getElementsByTagName('head')[0];
+        var head  = document.head;
+        var oldLink = document.getElementById('plugin-theme-style');
         var link  = document.createElement('link');
+        link.id   = 'plugin-theme-style';
         link.rel  = 'stylesheet';
         link.type = 'text/css';
         link.media = 'all';
@@ -51,6 +53,8 @@ var bNewVersion = false;
             themeStyle = whiteTheme;
             link.href = './style/white-theme.css';
         }
+        if (oldLink)
+            head.removeChild(oldLink);
         head.appendChild(link);
     };
 
@@ -138,14 +142,14 @@ var bNewVersion = false;
 
         CreateImageEditor();
         translationDone = true;
+        let shortLang = 'en';
+        if (window.Asc.plugin.tr("Close") !== 'Close') {
+            shortLang = window.Asc.plugin.info.lang.split('-')[0];
+        }
+        document.documentElement.lang = shortLang;
     };
 
     window.Asc.plugin.init = function (sHtml) {
-        window.Asc.plugin.executeMethod('GetVersion', [], function(ver) {
-            Version = ver;
-            console.log(Version);
-        });
-
         window.Asc.plugin.executeMethod("GetImageDataFromSelection", [], function(oResult) {
             if (oResult) {
                 oImage = document.createElement("img");
@@ -191,6 +195,399 @@ var bNewVersion = false;
         }
     };
 
+    function hideUnwantedElements() {
+        const zoomIn = document.getElementsByClassName('tie-btn-zoomIn')[0];
+        const zoomOut = document.getElementsByClassName('tie-btn-zoomOut')[0];
+        const hand = document.getElementsByClassName('tie-btn-hand')[0];
+        const handNext = hand.nextSibling;
+        
+        zoomIn.style.display = 'none';
+        zoomOut.style.display = 'none';
+        hand.style.display = 'none';
+        handNext.style.display = 'none';
+        zoomIn.classList.remove('tui-image-editor-item');
+        zoomOut.classList.remove('tui-image-editor-item');
+        hand.classList.remove('tui-image-editor-item');
+        handNext.classList.remove('tui-image-editor-item');
+    }
+
+    function enableToolbarKeyboardNav(container) {
+        const ITEM_SELECTOR = '.tui-image-editor-help-menu .tui-image-editor-item[tooltip-content]' + 
+                             ', .tui-image-editor-menu .tui-image-editor-item' + 
+                             ', .tui-image-editor-button';
+        const ITEMS_TO_REMOVE_TABINDEX = 'ol.history-list' + 
+                                         ', .tui-image-editor-menu-mask li:first-child .tui-image-editor-button' +
+                                         ', .tui-image-editor-menu-icon .tie-icon-add-button:nth-child(3) .tui-image-editor-button';
+
+        function initGroup(parent) {
+            var items = filterItems(parent.children);
+            if (!items.length) {
+                return;
+            }
+            var hasActive = items.some(function (el) {
+                return el.getAttribute('tabindex') === '0';
+            });
+            items.forEach(function (el, i) {
+                el.setAttribute('role', el.getAttribute('role') || 'button');
+                el.setAttribute('tabindex', !hasActive && i === 0 ? '0' : '-1');
+            });
+        }
+
+        function filterItems(children) {
+            return Array.prototype.filter.call(children, function (el) {
+                return el.nodeType === 1 && el.matches(ITEM_SELECTOR);
+            });
+        }
+
+        function initAll(root) {
+            var parents = [];
+            Array.prototype.forEach.call(root.querySelectorAll(ITEM_SELECTOR), function (el) {
+                if (el.parentElement && parents.indexOf(el.parentElement) === -1) {
+                    parents.push(el.parentElement);
+                }
+            });
+            parents.forEach(initGroup);
+        }
+
+        function removeTabindex(root) {
+            var parents = [];
+            Array.prototype.forEach.call(root.querySelectorAll(ITEMS_TO_REMOVE_TABINDEX), function (el) {
+                if (el.parentElement && parents.indexOf(el.parentElement) === -1) {
+                    parents.push(el.parentElement);
+                }
+            });
+            parents.forEach(function (parent) {
+                var items = filterItems(parent.children);
+                items.forEach(function (el) {
+                    el.removeAttribute('tabindex');
+                    el.removeAttribute('role');
+                });
+            });
+        }
+
+        function moveFocus(group, fromIndex, toIndex) {
+            group[fromIndex].setAttribute('tabindex', '-1');
+            var next = group[(toIndex + group.length) % group.length];
+            next.setAttribute('tabindex', '0');
+            next.focus();
+        }
+
+        function fallbackMoveCursorToHeightRangeValue() {
+            const heightRangeValue = document.querySelector('.tui-image-editor-range-value.tie-height-range-value');
+            if (heightRangeValue) {
+                heightRangeValue.focus();
+            }
+        }
+        function getTabNeighbor(el, direction) {
+            const selectors = [
+                'a[href]', 'area[href]', 'input:not([disabled])',
+                'select:not([disabled])', 'textarea:not([disabled])',
+                'button:not([disabled])', '[tabindex]', '[contenteditable="true"]'
+            ].join(',');
+
+            let focusable = Array.from(document.querySelectorAll(selectors))
+                .filter(item => {
+                return item.tabIndex >= 0 && 
+                        item.offsetWidth > 0 && 
+                        item.offsetHeight > 0 && 
+                        window.getComputedStyle(item).visibility !== 'hidden';
+                });
+
+            focusable.sort((a, b) => {
+                const aTab = a.tabIndex > 0 ? a.tabIndex : Infinity;
+                const bTab = b.tabIndex > 0 ? b.tabIndex : Infinity;
+                if (aTab !== bTab) return aTab - bTab;
+                return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+            });
+
+            const index = focusable.indexOf(el);
+            if (index === -1) return null;
+
+            const nextIndex = (index + direction + focusable.length) % focusable.length;
+            return focusable[nextIndex];
+        }
+        function fallbackMoveCursorToElement(currentElement, neighborIndex) {
+            if (!neighborIndex) {
+                neighborIndex = 1;
+            }
+            const neighborEl = getTabNeighbor(currentElement, neighborIndex);
+            if (neighborEl) {
+                neighborEl.focus();
+            }
+        }
+
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                Array.prototype.forEach.call(mutation.addedNodes, function (node) {
+                    if (node.nodeType !== 1) {
+                        return;
+                    }
+                    if (node.matches && node.matches(ITEM_SELECTOR)) {
+                        initGroup(node.parentElement);
+                    }
+                    if (node.querySelectorAll) {
+                        initAll(node);
+                    }
+                });
+            });
+        });
+        observer.observe(container, { childList: true, subtree: true });
+
+        initAll(container);
+        removeTabindex(container);
+
+        container.addEventListener('keydown', function (e) {
+            var target = e.target;
+            if (!target.matches || !target.matches(ITEM_SELECTOR)) {
+                if (e.key === 'Tab' && target.classList && target.classList.contains('tui-image-editor-range-value')) {
+                    let neighborIndex = 1;
+                    if (e.shiftKey) {
+                        neighborIndex = -1;
+                    }
+                    fallbackMoveCursorToElement(target, neighborIndex);
+                    return;
+                }
+                return;
+            }
+
+            var group = filterItems(target.parentElement.children);
+            var currentIndex = group.indexOf(target);
+            if (currentIndex === -1) {
+                console.log('Current index not found');
+                return;
+            }
+
+            switch (e.key) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    e.preventDefault();
+                    moveFocus(group, currentIndex, currentIndex + 1);
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    e.preventDefault();
+                    moveFocus(group, currentIndex, currentIndex - 1);
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    moveFocus(group, currentIndex, 0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    moveFocus(group, currentIndex, group.length - 1);
+                    break;
+                case 'Enter':
+                case ' ':
+                    e.preventDefault();
+                    target.click();
+                    break;
+            }
+        });
+    }
+
+    function enableToolbarAria(container) {
+        function setupBar(bar, barLabel, mode) {
+            if (!bar) {
+                return;
+            }
+            bar.setAttribute('role', mode);
+            bar.setAttribute('aria-label', barLabel);
+
+            var buttons = Array.prototype.filter.call(bar.children, function (el) {
+                return el.classList.contains('tui-image-editor-item');
+            });
+
+            var isRadioGroup = mode === 'radiogroup';
+
+            function syncState(el) {
+                if (isRadioGroup) {
+                    el.setAttribute('aria-checked', el.classList.contains('active') ? 'true' : 'false');
+                }
+            }
+
+            buttons.forEach(function (el) {
+                if (isRadioGroup) {
+                    el.setAttribute('role', 'radio');
+                }
+                var label = el.getAttribute('tooltip-content');
+                if (label) {
+                    el.setAttribute('aria-label', label);
+                }
+                syncState(el);
+            });
+
+            if (!isRadioGroup) {
+                return;
+            }
+
+            var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        syncState(mutation.target);
+                    }
+                });
+            });
+            buttons.forEach(function (el) {
+                observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+            });
+        }
+
+        setupBar(container.querySelector('.tui-image-editor-menu'), window.Asc.plugin.tr('Photo editor tools'), 'radiogroup');
+        setupBar(container.querySelector('.tui-image-editor-help-menu'), window.Asc.plugin.tr('Photo editor actions'), 'toolbar');
+    }
+
+    function enableRangeInputAria(container) {
+        var inputs = container.querySelectorAll('input.tui-image-editor-range-value');
+        Array.prototype.forEach.call(inputs, function (input) {
+            var node = input.previousElementSibling;
+            while (node && !(node.tagName === 'LABEL' && node.classList.contains('range'))) {
+                node = node.previousElementSibling;
+            }
+            if (node) {
+                input.setAttribute('aria-label', node.textContent.trim());
+            }
+        });
+
+        var maskInput = container.querySelector('.tie-mask-image-file');
+        var maskButton = maskInput && maskInput.closest('.tui-image-editor-button');
+        var maskLabel = maskButton && maskButton.querySelector('label');
+        if (maskInput && maskLabel) {
+            maskInput.setAttribute('aria-label', maskLabel.textContent.trim());
+        }
+    }
+
+    function enableFilterRangeKeyboardAccess(container) {
+        var RANGES = {
+            'tie-removewhite-distance-range': { min: 0, max: 1 },
+            'tie-brightness-range': { min: -1, max: 1 },
+            'tie-noise-range': { min: 0, max: 1000 },
+            'tie-pixelate-range': { min: 2, max: 20 },
+            'tie-colorfilter-threshold-range': { min: 0, max: 1 }
+        };
+
+        function findLabel(slider) {
+            var prev = slider.previousElementSibling;
+            if (prev && prev.tagName === 'LABEL') {
+                return prev.textContent.trim();
+            }
+            var group = slider.closest('.tui-image-editor-checkbox-group');
+            var span = group && group.querySelector('.tui-image-editor-checkbox span');
+            return span ? span.textContent.trim() : null;
+        }
+
+        Object.keys(RANGES).forEach(function (sliderClass) {
+            var slider = container.querySelector('.' + sliderClass);
+            if (!slider) {
+                return;
+            }
+            var pointer = slider.querySelector('.tui-image-editor-virtual-range-pointer');
+            var bar = slider.querySelector('.tui-image-editor-virtual-range-bar');
+            if (!pointer || !bar) {
+                return;
+            }
+
+            var range = RANGES[sliderClass];
+            var label = findLabel(slider);
+
+            pointer.setAttribute('role', 'slider');
+            pointer.setAttribute('tabindex', '0');
+            if (label) {
+                pointer.setAttribute('aria-label', label);
+            }
+            pointer.setAttribute('aria-valuemin', String(range.min));
+            pointer.setAttribute('aria-valuemax', String(range.max));
+
+            function rangeWidth() {
+                return bar.clientWidth || 0;
+            }
+
+            function syncValueNow() {
+                var width = rangeWidth();
+                var left = parseFloat(pointer.style.left) || 0;
+                var ratio = width > 0 ? left / width : 0;
+                pointer.setAttribute('aria-valuenow', (range.min + ratio * (range.max - range.min)).toFixed(2));
+            }
+
+            new MutationObserver(syncValueNow).observe(pointer, { attributes: true, attributeFilter: ['style'] });
+            syncValueNow();
+
+            function dragBy(deltaPx) {
+                pointer.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, screenX: 0 }));
+                document.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, screenX: deltaPx }));
+                document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, screenX: deltaPx }));
+            }
+
+            pointer.addEventListener('keydown', function (e) {
+                var width = rangeWidth();
+                var step = Math.max(1, Math.round(width / 20)) * (e.shiftKey ? 5 : 1);
+                switch (e.key) {
+                    case 'ArrowRight':
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        dragBy(step);
+                        break;
+                    case 'ArrowLeft':
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        dragBy(-step);
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        dragBy(-width);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        dragBy(width);
+                        break;
+                }
+            });
+        });
+    }
+
+    // Iframe is a single tab stop for the host page, so Tab past the last
+    // focusable element normally leaves the plugin instead of wrapping.
+    function trapFocusInsideIframe(root) {
+        var FOCUSABLE_SELECTOR = [
+            'a[href]',
+            'button:not([disabled])',
+            'input:not([disabled])',
+            'select:not([disabled])',
+            'textarea:not([disabled])',
+            '[tabindex]:not([tabindex="-1"])',
+            '[contenteditable="true"]'
+        ].join(',');
+
+        function isVisible(el) {
+            return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+        }
+
+        function getFocusable() {
+            return Array.prototype.filter.call(root.querySelectorAll(FOCUSABLE_SELECTOR), isVisible);
+        }
+
+        root.addEventListener('keydown', function (e) {
+            if (e.key !== 'Tab') {
+                return;
+            }
+
+            var focusable = getFocusable();
+            if (!focusable.length) {
+                return;
+            }
+
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+
+            if (e.shiftKey && root.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && root.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        });
+    }
+
     function CreateImageEditor() {
 
         if (initializationDone == true || translationDone == true) {
@@ -210,10 +607,18 @@ var bNewVersion = false;
                 cssMaxWidth: 700,
                 cssMaxHeight: 500,
             });
-            document.getElementsByClassName('tie-btn-zoomIn')[0].style.display = 'none';
-            document.getElementsByClassName('tie-btn-zoomOut')[0].style.display = 'none';
-            document.getElementsByClassName('tie-btn-hand')[0].style.display = 'none';
-            document.getElementsByClassName('tie-btn-hand')[0].nextSibling.style.display = 'none';
+            const container = document.getElementById('tui-image-editor-container');
+            hideUnwantedElements();
+            enableToolbarKeyboardNav(container);
+            enableToolbarAria(container);
+            enableRangeInputAria(container);
+            enableFilterRangeKeyboardAccess(container);
+            trapFocusInsideIframe(document);
+
+            var firstMenuItem = document.querySelector('.tui-image-editor-help-menu .tui-image-editor-item');
+            if (firstMenuItem) {
+                firstMenuItem.focus();
+            }
         }
     }
 
