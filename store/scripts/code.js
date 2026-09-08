@@ -433,6 +433,20 @@ const availablePluginsPromise = MarketplacePluginService.getAvailablePlugins(gui
 		console.error('Failed to load available plugins:', error);
 		return [];
 	}).then(function(/** @type {Array<AvailablePluginInfo>} */availablePlugins) {
+		const AI_TOOLS_GUID = 'asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}';
+		// in 10.0.0 AI Tools was moved to the core
+		availablePlugins = availablePlugins.filter(function(plugin) {
+			if (plugin.guid !== AI_TOOLS_GUID) {
+				return true;			
+			}
+			const AI_TOOLS_MIN_PLUGIN_VERSION = 3003000;
+			const version = Utils.convertPluginVersionToNumber(plugin.obj.version || '');
+			if (version < AI_TOOLS_MIN_PLUGIN_VERSION) {
+				return true;
+			}	
+			return false;
+		});
+
 		const backupPlugins = _loadBackupPlugins();
 		backupPlugins.forEach(function(plugin) {
 			if (availablePlugins.findIndex(function(el) { return el.guid === plugin.guid; }) === -1) {
