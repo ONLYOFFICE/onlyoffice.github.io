@@ -1,5 +1,5 @@
 # PictureFloatView
-加入了一款OnlyOffice的浮动窗口放大查看图片插件（类似WPSoffice的图片查看功能）
+一款OnlyOffice的浮动窗口放大查看图片插件（类似WPSoffice的图片查看功能）
 
 效果演示
 
@@ -33,35 +33,3 @@ https://github.com/user-attachments/assets/eb6e1277-1766-436e-bde9-c555a193e5f3
 ##### 比较遗憾没办法完全做到WPSoffice浮窗查看图片的全部功能，比如选中图片后图片旁边能够出现一个快捷按钮来触发浮窗，而不用去到插件菜单栏去点击插件。甚至想过有没有办法双击图片后解发浮窗口都没办法实现。
 ##### 希望OnlyOffice开发人员能够开发这样的功能让OnlyOffice软件更好用！
 #### 最后还是要感谢OnlyOffice开发人员写出了这样的软件！让大家可以免费使用！
-
-
-
-
-
-[![License](https://img.shields.io/badge/License-GNU_AGPL_v3-green.svg)](https://www.gnu.org/licenses/agpl-3.0)
-
-## Overview
-
-Welcome to the onlyoffice.github.io repository! This repository contains the necessary files and resources to set up and manage plugins for ONLYOFFICE.
-
-## Repository Structure
-
-* [**sdkjs-plugins**](sdkjs-plugins): This directory contains the stylesheets and CSS files used for plugin customization and styling. Also it contains the code and resourses of all plugins in store.
-* [**store**](store): This directory contains the code and resources for the Plugins Manager. It includes the necessary scripts and configurations to manage plugins within ONLYOFFICE.
-
-## Contributing
-
-If you would like to contribute to the ONLYOFFICE Plugin Marketplace, we welcome your contributions. To contribute, please follow these [guidelines](https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/store#how-to-build-and-add-your-own-plugin). We appreciate your contributions and will review them as soon as possible.
-
-## License
-
-onlyoffice.github.io is licensed under the GNU Affero General Public License v3.0. See [LICENSE.txt](LICENSE.txt) for more information.
-
-## User Feedback and Support
-
-If you have any problems with or questions about ONLYOFFICE Plugins and Plugin Marketplace, please visit our official forum to find answers to your questions: [forum.onlyoffice.com](https://forum.onlyoffice.com) or you can ask and answer ONLYOFFICE development questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/onlyoffice).
-If you encounter any issues or have any questions regarding the ONLYOFFICE Plugins and Plugin Marketplace, please open an issue in the repository. We'll be glad to assist you.
-
-## Acknowledgments
-
-We would like to thank all the contributors and developers who have worked on the ONLYOFFICE Plugin Marketplace.
