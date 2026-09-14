@@ -1,0 +1,53 @@
+{
+  "name": "QuickTranslator",
+  "guid": "asc.{B745EE18-0FF6-4552-95C4-7C902BE9F888}",
+  "version": "1.3.2",
+  "minVersion": "7.0.0",
+  "category": "Text and content",
+  "description": "QuickTranslator is a high-performance translation plugin for ONLYOFFICE Documents, Spreadsheets, and Presentations. It enables real-time translation of highlighted text across 30+ languages with automatic source language detection and one-click insertion.",
+  "variations": [
+    {
+      "description": "Instantly translate selected text into 30+ languages with auto-detection and one-click insertion.",
+      "url": "index.html",
+      "icons": [
+        "resources/icon.png",
+        "resources/icon@2x.png",
+        "resources/icon.svg"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": { "normal": "resources/icon.png" },
+          "125%": { "normal": "resources/icon.png" },
+          "150%": { "normal": "resources/icon@2x.png" },
+          "175%": { "normal": "resources/icon@2x.png" },
+          "200%": { "normal": "resources/icon@2x.png" }
+        },
+        {
+          "style": "dark",
+          "100%": { "normal": "resources/icon.png" },
+          "125%": { "normal": "resources/icon.png" },
+          "150%": { "normal": "resources/icon@2x.png" },
+          "175%": { "normal": "resources/icon@2x.png" },
+          "200%": { "normal": "resources/icon@2x.png" }
+        }
+      ],
+      "isViewer": true,
+      "EditorsSupport": [
+        "word",
+        "cell",
+        "slide"
+      ],
+      "isVisual": true,
+      "isModal": false,
+      "isInsideMode": true,
+      "initDataType": "text",
+      "initData": "",
+      "initOnSelectionChanged": true,
+      "events": [
+        "onTargetPositionChanged"
+      ],
+      "buttons": []
+    }
+  ]
+}
