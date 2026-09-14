@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickTranslator</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Official OnlyOffice Plugin API bridge (local and CDN fallback) -->
+  <script type="text/javascript" src="../v1/plugins.js"></script>
+  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+  <script type="text/javascript" src="plugin.js"></script>
+</head>
+<body class="quicktranslator-body">
+  <div class="plugin-container">
+    <!-- Header -->
+    <header class="plugin-header">
+      <div class="header-branding">
+        <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+        </svg>
+        <span class="header-title">QuickTranslator</span>
+      </div>
+      <span id="statusBadge" class="status-badge status-ready">Ready</span>
+    </header>
+
+    <!-- Language Selector Bar -->
+    <section class="language-bar">
+      <div class="select-group">
+        <label for="sourceLangSelect" class="field-label">Source Language</label>
+        <select id="sourceLangSelect" class="lang-select" aria-label="Source Language">
+          <option value="auto" selected>AUTO - Auto Detect</option>
+          <option value="ar">AR - Arabic</option>
+          <option value="bg">BG - Bulgarian</option>
+          <option value="cs">CS - Czech</option>
+          <option value="da">DA - Danish</option>
+          <option value="de">DE - German</option>
+          <option value="el">EL - Greek</option>
+          <option value="en">EN - English</option>
+          <option value="es">ES - Spanish</option>
+          <option value="et">ET - Estonian</option>
+          <option value="fi">FI - Finnish</option>
+          <option value="fr">FR - French</option>
+          <option value="hi">HI - Hindi</option>
+          <option value="hu">HU - Hungarian</option>
+          <option value="id">ID - Indonesian</option>
+          <option value="is">IS - Icelandic</option>
+          <option value="it">IT - Italian</option>
+          <option value="ja">JA - Japanese</option>
+          <option value="ko">KO - Korean</option>
+          <option value="lt">LT - Lithuanian</option>
+          <option value="lv">LV - Latvian</option>
+          <option value="nl">NL - Dutch</option>
+          <option value="no">NO - Norwegian</option>
+          <option value="pl">PL - Polish</option>
+          <option value="pt">PT - Portuguese</option>
+          <option value="ro">RO - Romanian</option>
+          <option value="ru">RU - Russian</option>
+          <option value="sk">SK - Slovak</option>
+          <option value="sl">SL - Slovenian</option>
+          <option value="sv">SV - Swedish</option>
+          <option value="tr">TR - Turkish</option>
+          <option value="uk">UK - Ukrainian</option>
+          <option value="vi">VI - Vietnamese</option>
+          <option value="zh">ZH - Chinese</option>
+        </select>
+      </div>
+
+      <button id="swapBtn" class="btn-swap" type="button" title="Swap languages (⇄)" aria-label="Swap Languages">
+        ⇄
+      </button>
+
+      <div class="select-group">
+        <label for="targetLangSelect" class="field-label">Target Language</label>
+        <select id="targetLangSelect" class="lang-select" aria-label="Target Language">
+          <option value="ar">AR - Arabic</option>
+          <option value="bg">BG - Bulgarian</option>
+          <option value="cs">CS - Czech</option>
+          <option value="da">DA - Danish</option>
+          <option value="de">DE - German</option>
+          <option value="el">EL - Greek</option>
+          <option value="en">EN - English</option>
+          <option value="es">ES - Spanish</option>
+          <option value="et">ET - Estonian</option>
+          <option value="fi">FI - Finnish</option>
+          <option value="fr">FR - French</option>
+          <option value="hi">HI - Hindi</option>
+          <option value="hu">HU - Hungarian</option>
+          <option value="id">ID - Indonesian</option>
+          <option value="is">IS - Icelandic</option>
+          <option value="it" selected>IT - Italian</option>
+          <option value="ja">JA - Japanese</option>
+          <option value="ko">KO - Korean</option>
+          <option value="lt">LT - Lithuanian</option>
+          <option value="lv">LV - Latvian</option>
+          <option value="nl">NL - Dutch</option>
+          <option value="no">NO - Norwegian</option>
+          <option value="pl">PL - Polish</option>
+          <option value="pt">PT - Portuguese</option>
+          <option value="ro">RO - Romanian</option>
+          <option value="ru">RU - Russian</option>
+          <option value="sk">SK - Slovak</option>
+          <option value="sl">SL - Slovenian</option>
+          <option value="sv">SV - Swedish</option>
+          <option value="tr">TR - Turkish</option>
+          <option value="uk">UK - Ukrainian</option>
+          <option value="vi">VI - Vietnamese</option>
+          <option value="zh">ZH - Chinese</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Action Button: Translate -->
+    <div class="action-row">
+      <button id="translateBtn" class="btn-translate" type="button">
+        <span class="btn-spinner" id="btnSpinner" style="display: none;"></span>
+        <span id="translateBtnText">Traduci (Translate)</span>
+      </button>
+    </div>
+
+    <!-- Source Text Area -->
+    <section class="text-section">
+      <div class="section-top">
+        <label for="sourceText" class="section-label">Source Text</label>
+        <div class="section-actions">
+          <button id="syncSelectionBtn" class="btn-text-action btn-sync-action" type="button" title="Prendi testo selezionato nel documento">🔄 Cattura Selezione</button>
+          <span id="sourceCharCount" class="char-count">0 chars</span>
+          <button id="clearSourceBtn" class="btn-text-action" type="button" title="Clear text">Clear</button>
+        </div>
+      </div>
+      <textarea
+        id="sourceText"
+        class="text-box"
+        placeholder="Type, paste, or select text in the document..."
+        rows="6"
+        spellcheck="false"
+      ></textarea>
+    </section>
+
+    <!-- Translated Text Area -->
+    <section class="text-section">
+      <div class="section-top">
+        <label for="targetText" class="section-label">Translated Text</label>
+        <div class="section-actions">
+          <button id="copyTargetBtn" class="btn-text-action" type="button" title="Copy to clipboard">Copy</button>
+        </div>
+      </div>
+      <textarea
+        id="targetText"
+        class="text-box target-box"
+        placeholder="Translation will appear here automatically..."
+        rows="6"
+        readonly
+      ></textarea>
+      <div id="errorAlert" class="error-alert" style="display: none;"></div>
+    </section>
+
+    <!-- Bottom Action Button: Insert into Document -->
+    <footer class="plugin-footer">
+      <button id="insertBtn" class="btn-insert" type="button">
+        <svg class="insert-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+        </svg>
+        <span>Aggiungi (Insert into Doc)</span>
+      </button>
+    </footer>
+  </div>
+</body>
+</html>
