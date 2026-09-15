@@ -10,12 +10,87 @@
   --accent-primary: #2563eb;
   --accent-hover: #1d4ed8;
   --accent-light: #eff6ff;
+  --target-box-bg: #f1f5f9;
+  --swap-btn-bg: #f8fafc;
+  --sync-btn-bg: #f0f9ff;
+  --sync-btn-text: #0284c7;
+  --sync-btn-border: #bae6fd;
+  --sync-btn-hover-bg: #e0f2fe;
+  --status-ready-bg: #ecfdf5;
+  --status-ready-text: #059669;
+  --status-ready-border: #a7f3d0;
+  --status-busy-bg: #eff6ff;
+  --status-busy-text: #2563eb;
+  --status-busy-border: #bfdbfe;
+  --status-error-bg: #fef2f2;
+  --status-error-text: #dc2626;
+  --status-error-border: #fecaca;
   --success-color: #10b981;
   --danger-color: #ef4444;
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
+}
+
+/* Dark Theme Support for ONLYOFFICE (.theme-dark, [data-theme="dark"], and system dark) */
+body.quicktranslator-body.theme-dark,
+body.quicktranslator-body[data-theme="dark"] {
+  --bg-primary: #1e1e1e;
+  --bg-card: #252526;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #3e3e42;
+  --border-focus: #007acc;
+  --accent-primary: #007acc;
+  --accent-hover: #0062a3;
+  --accent-light: #1e293b;
+  --target-box-bg: #181818;
+  --swap-btn-bg: #2d2d30;
+  --sync-btn-bg: #1e293b;
+  --sync-btn-text: #38bdf8;
+  --sync-btn-border: #0369a1;
+  --sync-btn-hover-bg: #0c4a6e;
+  --status-ready-bg: #064e3b;
+  --status-ready-text: #34d399;
+  --status-ready-border: #059669;
+  --status-busy-bg: #1e3a8a;
+  --status-busy-text: #60a5fa;
+  --status-busy-border: #2563eb;
+  --status-error-bg: #450a0a;
+  --status-error-text: #f87171;
+  --status-error-border: #991b1b;
+}
+
+@media (prefers-color-scheme: dark) {
+  body.quicktranslator-body:not(.theme-light) {
+    --bg-primary: #1e1e1e;
+    --bg-card: #252526;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: #3e3e42;
+    --border-focus: #007acc;
+    --accent-primary: #007acc;
+    --accent-hover: #0062a3;
+    --accent-light: #1e293b;
+    --target-box-bg: #181818;
+    --swap-btn-bg: #2d2d30;
+    --sync-btn-bg: #1e293b;
+    --sync-btn-text: #38bdf8;
+    --sync-btn-border: #0369a1;
+    --sync-btn-hover-bg: #0c4a6e;
+    --status-ready-bg: #064e3b;
+    --status-ready-text: #34d399;
+    --status-ready-border: #059669;
+    --status-busy-bg: #1e3a8a;
+    --status-busy-text: #60a5fa;
+    --status-busy-border: #2563eb;
+    --status-error-bg: #450a0a;
+    --status-error-text: #f87171;
+    --status-error-border: #991b1b;
+  }
 }
 
 * {
@@ -34,6 +109,7 @@ body.quicktranslator-body {
   overflow-x: hidden;
   overflow-y: auto;
   user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .plugin-container {
@@ -81,21 +157,21 @@ body.quicktranslator-body {
 }
 
 .status-ready {
-  background-color: #ecfdf5;
-  color: #059669;
-  border: 1px solid #a7f3d0;
+  background-color: var(--status-ready-bg);
+  color: var(--status-ready-text);
+  border: 1px solid var(--status-ready-border);
 }
 
 .status-busy {
-  background-color: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #bfdbfe;
+  background-color: var(--status-busy-bg);
+  color: var(--status-busy-text);
+  border: 1px solid var(--status-busy-border);
 }
 
 .status-error {
-  background-color: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
+  background-color: var(--status-error-bg);
+  color: var(--status-error-text);
+  border: 1px solid var(--status-error-border);
 }
 
 /* Language Selection Bar */
@@ -137,7 +213,7 @@ body.quicktranslator-body {
   border-radius: var(--radius-sm);
   outline: none;
   cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
 .lang-select:focus {
@@ -151,7 +227,7 @@ body.quicktranslator-body {
   justify-content: center;
   width: 30px;
   height: 30px;
-  background-color: var(--bg-primary);
+  background-color: var(--swap-btn-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
@@ -247,22 +323,23 @@ body.quicktranslator-body {
   cursor: pointer;
   padding: 2px 4px;
   border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
 }
 
 .btn-sync-action {
-  color: #0284c7;
+  color: var(--sync-btn-text);
   font-weight: 600;
-  background-color: #f0f9ff;
-  border: 1px solid #bae6fd;
+  background-color: var(--sync-btn-bg);
+  border: 1px solid var(--sync-btn-border);
   padding: 2px 6px;
   border-radius: 4px;
   transition: all 0.15s ease;
 }
 
 .btn-sync-action:hover {
-  background-color: #e0f2fe;
-  color: #0369a1;
-  border-color: #7dd3fc;
+  background-color: var(--sync-btn-hover-bg);
+  color: var(--sync-btn-text);
+  border-color: var(--accent-primary);
   text-decoration: none;
 }
 
@@ -285,7 +362,7 @@ body.quicktranslator-body {
   resize: vertical;
   min-height: 105px;
   user-select: text;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 
 .text-box:focus {
@@ -294,7 +371,7 @@ body.quicktranslator-body {
 }
 
 .target-box {
-  background-color: #f1f5f9;
+  background-color: var(--target-box-bg);
   cursor: text;
 }
 
@@ -302,9 +379,9 @@ body.quicktranslator-body {
 .error-alert {
   padding: 6px 10px;
   font-size: 11px;
-  color: var(--danger-color);
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
+  color: var(--status-error-text);
+  background-color: var(--status-error-bg);
+  border: 1px solid var(--status-error-border);
   border-radius: var(--radius-sm);
 }
 

@@ -324,7 +324,7 @@
           isTranslating = false;
           elements.translateBtn.disabled = false;
           if (elements.btnSpinner) elements.btnSpinner.style.display = 'none';
-          if (elements.translateBtnText) elements.translateBtnText.textContent = 'Traduci (Translate)';
+          if (elements.translateBtnText) elements.translateBtnText.textContent = 'Translate';
 
           // If text changed in the textarea while the request was in flight, translate newest content
           var latestText = cleanAndNormalizeText(elements.sourceText.value);
@@ -530,6 +530,37 @@
    */
   window.Asc.plugin.event_onTargetPositionChanged = onPositionChanged;
   window.Asc.plugin.onTargetPositionChanged = onPositionChanged;
+
+  /**
+   * Theme changed event handler (ONLYOFFICE marketplace requirement)
+   * Dynamically toggles dark/light theme classes on body.
+   */
+  window.Asc.plugin.onThemeChanged = function (theme) {
+    if (window.Asc.plugin.onThemeChangedBase) {
+      try {
+        window.Asc.plugin.onThemeChangedBase(theme);
+      } catch (e) {}
+    }
+    var isDark = false;
+    if (theme) {
+      if (theme.type && (theme.type === 'dark' || theme.type === 'contrast-dark')) {
+        isDark = true;
+      } else if (theme.name && theme.name.toLowerCase().indexOf('dark') !== -1) {
+        isDark = true;
+      } else if (typeof theme === 'string' && theme.toLowerCase().indexOf('dark') !== -1) {
+        isDark = true;
+      }
+    }
+    if (document.body) {
+      if (isDark) {
+        document.body.classList.add('theme-dark');
+        document.body.classList.remove('theme-light');
+      } else {
+        document.body.classList.remove('theme-dark');
+        document.body.classList.add('theme-light');
+      }
+    }
+  };
 
   /**
    * Modal / Panel button handler

@@ -48,14 +48,29 @@ Compatible with:
 
 ```
 QuickTranslator/
-├── config.json       # OnlyOffice Manifest configuration
-├── index.html        # Side panel HTML markup
-├── plugin.js         # Core logic & OnlyOffice Asc.plugin bridge
-├── style.css         # Responsive styling for OnlyOffice side panel
-├── LICENSE           # GNU General Public License v3
-├── README.md         # Documentation & installation instructions
+├── config.json                # OnlyOffice Manifest configuration
+├── index.html                 # Side panel HTML markup
+├── plugin.js                  # Core logic & OnlyOffice Asc.plugin bridge
+├── style.css                  # Responsive stylesheet with Light & Dark theme support
+├── CHANGELOG.md               # Version history for OnlyOffice Marketplace
+├── LICENSE                    # GNU General Public License v3
+├── README.md                  # Documentation & installation instructions
+├── translations/
+│   ├── langs.json             # Marketplace language index
+│   └── it-IT.json             # Italian translations
 └── resources/
-    ├── icon.svg      # Scalable vector icon
-    ├── icon.png      # 32x32 standard icon
-    └── icon@2x.png   # 48x48 high-DPI icon
+    ├── img/
+    │   ├── icon.png           # 48x48 ribbon icon
+    │   ├── icon@1.25x.png     # 125% DPI ribbon icon
+    │   ├── icon@1.5x.png      # 150% DPI ribbon icon
+    │   ├── icon@1.75x.png     # 175% DPI ribbon icon
+    │   └── icon@2x.png        # 96x96 High-DPI ribbon icon
+    └── store/
+        ├── screenshots/
+        │   ├── screen_1.png   # Store screenshot 1 (Document overview & Italian translation)
+        │   ├── screen_2.png   # Store screenshot 2 (Auto-detect to German translation)
+        │   └── screen_3.png   # Store screenshot 3 (Italian to Danish translation)
+        └── icons/
+            ├── icon.png       # 120x60 1x Store card banner
+            └── icon@2x.png    # 240x120 2x Retina Store card banner
 ```
