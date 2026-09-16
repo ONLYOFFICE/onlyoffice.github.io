@@ -353,6 +353,7 @@ const Theme = {
                 ".selectbox-dropdown,\n" +
                 ".radio-visual, \n" +
                 ".checkbox-visual, \n" +
+                "#previewWrapper, \n" +
                 ".message { background-color: " +
                 theme["background-normal"] +
                 "; }\n";
@@ -379,6 +380,7 @@ const Theme = {
                 ".selectbox-header,\n" +
                 ".selectbox-dropdown,\n" +
                 ".selectbox-search-input:focus,\n" +
+                "#previewWrapper,\n" +
                 ".message { border-color: " +
                 theme["border-regular-control"] +
                 "; }\n";
@@ -507,6 +509,7 @@ const Theme = {
             fontSize = "12px";
             styles +=
                 ".message,\n" +
+                "#previewWrapper,\n" +
                 ".custom-button,\n" +
                 ".selectbox-header,\n" +
                 ".input-field-element { border-radius: 4px; }\n";

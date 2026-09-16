@@ -19,6 +19,8 @@
     "Display citations as:": "Показывать цитаты как:",
     "Footnotes": "Сноски",
     "Endnotes": "Концевые сноски",
+    "Include URLs of paper articles": "Включать URL журнальных статей в цитирования",
+    "Use MEDLINE journal abbreviations": "Использовать сокращения названий журналов из базы MEDLINE",
     "Reconfigure": "Перенастроить",
     "Learn more here.": "Подробности здесь.",
     "Save": "Сохранить",

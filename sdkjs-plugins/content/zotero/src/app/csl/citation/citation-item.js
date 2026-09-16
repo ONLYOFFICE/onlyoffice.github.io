@@ -246,16 +246,16 @@ CitationItem.prototype.addUri = function (uri) {
 };
 
 /**
- * @param {boolean} [bCompressed]
+ * @param {boolean} [skipUrlForPaperArticles]
  * @returns 
  */
-CitationItem.prototype.toJSON = function (bCompressed) {
+CitationItem.prototype.toJSON = function (skipUrlForPaperArticles) {
     var result = {};
     result.id = this.id;
 
     if (this._itemData) {
         result.itemData = this._itemData.toJSON
-            ? this._itemData.toJSON(bCompressed || false)
+            ? this._itemData.toJSON(skipUrlForPaperArticles)
             : this._itemData;
     }
     if (this._prefix !== undefined) result.prefix = this._prefix;
@@ -273,9 +273,10 @@ CitationItem.prototype.toJSON = function (bCompressed) {
 
 /**
  * @param {number} index
+ * @param {boolean} [skipUrlForPaperArticles]
  * @returns
  */
-CitationItem.prototype.toFlatJSON = function (index) {
+CitationItem.prototype.toFlatJSON = function (index, skipUrlForPaperArticles) {
     /** @type {OldCitationItem} */
     var oldItem = {
         id: this.id,
@@ -285,7 +286,7 @@ CitationItem.prototype.toFlatJSON = function (index) {
         oldItem["suppress-author"] = this._suppressAuthor;
     }
 
-    let itemDataObject = this._itemData.toJSON();
+    let itemDataObject = this._itemData.toJSON(skipUrlForPaperArticles);
     Object.assign(oldItem, itemDataObject);
 
     if (

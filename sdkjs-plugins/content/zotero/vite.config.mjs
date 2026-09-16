@@ -3,6 +3,8 @@ import { babel } from "@rollup/plugin-babel";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 
+const __dirname = import.meta.dirname;
+
 const isES5Build = process.env.TARGET === "es5";
 const suffix = isES5Build ? "es5" : "modern";
 
