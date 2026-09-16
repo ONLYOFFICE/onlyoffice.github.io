@@ -37,6 +37,41 @@
 	var loader;
 	var lang = "";
 	var title = "Click on diagram to edit."
+	var STORAGE_KEY = "drawio_export_format";
+
+	function getExportFormat()
+	{
+		try {
+			return localStorage.getItem(STORAGE_KEY) || 'xmlsvg';
+		} catch (e) {
+			return 'xmlsvg';
+		}
+	};
+
+	function setExportFormat(format)
+	{
+		try {
+			localStorage.setItem(STORAGE_KEY, format);
+		} catch (e) {
+			// localStorage may be blocked in sandboxed environments
+		}
+	};
+
+	function initFormatSelector()
+	{
+		var select = document.getElementById('format-select');
+
+		if (select) {
+			select.value = getExportFormat();
+			select.addEventListener('change', function() {
+				setExportFormat(this.value);
+
+				if (editor) {
+					editor.format = this.value;
+				}
+			});
+		}
+	};
 
 	window.Asc.plugin.init = function(data)
 	{
@@ -50,12 +85,18 @@
 
 		img.setAttribute('src', data);
 		var config = {css: "button.geBigButton:nth-of-type(1) {background-color:transparent !important; color:"+ (UI == 'dark' ? '#ccc' : '#000') +" !important;} body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }"};
+		initFormatSelector();
 		img.onclick = function() {
 			makeLoader();
 			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
-			editor.isChanged = true;
+			if (editor) {
+				editor.format = getExportFormat();
+				editor.isChanged = true;
+			}
 		}
 		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&dev=1&spin=0'], closePlugin, hideLoader);
+		if (editor)
+			editor.format = getExportFormat();
 		window.Asc.plugin.resizeWindow(1200, 1000, 800, 600, 0, 0);
 	};
 
