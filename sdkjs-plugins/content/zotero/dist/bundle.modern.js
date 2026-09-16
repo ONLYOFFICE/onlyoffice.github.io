@@ -138,7 +138,7 @@ function h(e) {
 	return e;
 }
 function g(e, t) {
-	return n(e) || f(e, t) || ee(e, t) || p();
+	return n(e) || f(e, t) || y(e, t) || p();
 }
 function _(e, t) {
 	if (typeof e != "object" || !e) return e;
@@ -154,14 +154,14 @@ function v(e) {
 	var t = _(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function ee(e, n) {
+function y(e, n) {
 	if (e) {
 		if (typeof e == "string") return t(e, n);
 		var r = {}.toString.call(e).slice(8, -1);
 		return r === "Object" && e.constructor && (r = e.constructor.name), r === "Map" || r === "Set" ? Array.from(e) : r === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r) ? t(e, n) : void 0;
 	}
 }
-function y(t) {
+function b(t) {
 	var n, r;
 	function i(n, r) {
 		try {
@@ -199,18 +199,18 @@ function y(t) {
 		});
 	}, typeof t.return != "function" && (this.return = void 0);
 }
-y.prototype[typeof Symbol == "function" && Symbol.asyncIterator || "@@asyncIterator"] = function() {
+b.prototype[typeof Symbol == "function" && Symbol.asyncIterator || "@@asyncIterator"] = function() {
 	return this;
-}, y.prototype.next = function(e) {
+}, b.prototype.next = function(e) {
 	return this._invoke("next", e);
-}, y.prototype.throw = function(e) {
+}, b.prototype.throw = function(e) {
 	return this._invoke("throw", e);
-}, y.prototype.return = function(e) {
+}, b.prototype.return = function(e) {
 	return this._invoke("return", e);
 };
 //#endregion
 //#region src/app/theme.js
-var te = {
+var ee = {
 	addStylesForComponents: function(e) {
 		var t = "";
 		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus:not(:active):not(:hover),\n.custom-button-secondary-icon:focus:not(:active):not(:hover),\n.custom-button-secondary:focus:not(:active):not(:hover),\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
@@ -225,38 +225,42 @@ var te = {
 };
 //#endregion
 //#region src/app/router.js
-function b() {
+function x() {
 	this._states = [
 		"mainState",
 		"loginState",
-		"settingsState"
+		"settingsState",
+		"advancedState"
 	], this._routes = [
 		"main",
 		"login",
-		"settings"
+		"settings",
+		"advanced"
 	], this._currentRoute = "login", this._currentRouteIndex = 1, this._containers = this._states.map(function(e) {
 		var t = document.getElementById(e);
 		if (!t) throw Error(`container ${e} not found`);
 		return t;
 	});
 }
-b.prototype.getRoute = function() {
+x.prototype.getRoute = function() {
 	return this._currentRoute;
-}, b.prototype._setCurrentRoute = function(e) {
+}, x.prototype._setCurrentRoute = function(e) {
 	this._containers[this._currentRouteIndex].classList.add("hidden"), this._currentRoute = e, this._currentRouteIndex = this._routes.indexOf(e), this._containers[this._currentRouteIndex].classList.remove("hidden");
-}, b.prototype.openMain = function() {
+}, x.prototype.openMain = function() {
 	this._setCurrentRoute("main");
-}, b.prototype.openLogin = function() {
+}, x.prototype.openLogin = function() {
 	this._setCurrentRoute("login");
-}, b.prototype.openSettings = function() {
+}, x.prototype.openSettings = function() {
 	this._setCurrentRoute("settings");
+}, x.prototype.openAdvanced = function() {
+	this._setCurrentRoute("advanced");
 };
 //#endregion
 //#region src/app/zotero/zotero-environment.js
-var ne = {
+var S = {
 	restApiUrl: "https://api.zotero.org/",
 	desktopApiUrl: "http://127.0.0.1:23119/api/"
-}, x = {
+}, te = {
 	_done: !1,
 	_desktop: !1,
 	_hasPermission: !0,
@@ -301,14 +305,14 @@ var ne = {
 	},
 	_checkApiAvailable: function(e) {
 		var t = this;
-		return Promise.all([fetch(ne.restApiUrl, {
+		return Promise.all([fetch(S.restApiUrl, {
 			method: "GET",
 			cache: "no-cache"
 		}).then(function(e) {
 			return e.status === 200;
 		}).catch(function() {
 			return !1;
-		}), t._sendDesktopRequest(ne.desktopApiUrl).then(function(e) {
+		}), t._sendDesktopRequest(S.desktopApiUrl).then(function(e) {
 			return t._hasPermission = e.hasPermission, e.isZoteroRunning;
 		}).catch(function() {
 			return !1;
@@ -352,68 +356,68 @@ var ne = {
 			});
 		});
 	}
-}, S = /*#__PURE__*/ new WeakMap(), re = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), ie = /*#__PURE__*/ new WeakMap(), ae = /*#__PURE__*/ new WeakMap(), oe = /*#__PURE__*/ new WeakMap(), se = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), ce = /*#__PURE__*/ new WeakMap(), le = /*#__PURE__*/ new WeakMap(), T = /*#__PURE__*/ new WeakSet(), ue = class {
+}, ne = /*#__PURE__*/ new WeakMap(), re = /*#__PURE__*/ new WeakMap(), ie = /*#__PURE__*/ new WeakMap(), ae = /*#__PURE__*/ new WeakMap(), oe = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), T = /*#__PURE__*/ new WeakMap(), E = /*#__PURE__*/ new WeakMap(), D = /*#__PURE__*/ new WeakMap(), O = /*#__PURE__*/ new WeakSet(), se = class {
 	constructor() {
 		var e = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-		u(this, T), c(this, S, void 0), c(this, re, void 0), c(this, C, void 0), c(this, ie, void 0), c(this, ae, void 0), c(this, oe, void 0), c(this, se, void 0), c(this, w, void 0), c(this, ce, void 0), c(this, le, void 0), l(S, this, e.maxRetries || 5), l(re, this, e.initialDelay || 1e3), l(C, this, e.maxDelay || 5e3), l(ie, this, e.backoffFactor || 2), l(ae, this, e.retryOn || [
+		u(this, O), c(this, ne, void 0), c(this, re, void 0), c(this, ie, void 0), c(this, ae, void 0), c(this, oe, void 0), c(this, C, void 0), c(this, w, void 0), c(this, T, void 0), c(this, E, void 0), c(this, D, void 0), l(ne, this, e.maxRetries || 5), l(re, this, e.initialDelay || 1e3), l(ie, this, e.maxDelay || 5e3), l(ae, this, e.backoffFactor || 2), l(oe, this, e.retryOn || [
 			429,
 			502,
 			503,
 			504
-		]), l(oe, this, 10), l(se, this, 5e3), l(w, this, []), l(ce, this, 0), l(le, this, 0);
+		]), l(C, this, 10), l(w, this, 5e3), l(T, this, []), l(E, this, 0), l(D, this, 0);
 	}
 	fetchWithRetry(e, t, n) {
 		var i = this;
 		return a(function* () {
 			try {
-				yield r(T, i, fe).call(i);
+				yield r(O, i, le).call(i);
 				var a = yield fetch(e, { headers: t });
 				if (a.ok) return a;
-				if (s(ae, i).includes(a.status) && n < s(S, i)) {
-					var o = r(T, i, me).call(i, n, a);
-					return console.log(`Attempt ${n + 1}/${s(S, i)} failed with ${a.status}. Retrying in ${o}ms`), yield r(T, i, he).call(i, o), i.fetchWithRetry(e, t, n + 1);
+				if (s(oe, i).includes(a.status) && n < s(ne, i)) {
+					var o = r(O, i, de).call(i, n, a);
+					return console.log(`Attempt ${n + 1}/${s(ne, i)} failed with ${a.status}. Retrying in ${o}ms`), yield r(O, i, fe).call(i, o), i.fetchWithRetry(e, t, n + 1);
 				}
 				throw Error(`${a.status} ${a.statusText}`);
 			} catch (a) {
-				if (n >= s(S, i)) {
+				if (n >= s(ne, i)) {
 					var c = "";
-					throw a instanceof Error && (c = a.message), Error(`Request failed after ${s(S, i)} attempts: ${c}`);
+					throw a instanceof Error && (c = a.message), Error(`Request failed after ${s(ne, i)} attempts: ${c}`);
 				}
-				if (n < s(S, i)) {
-					var l = r(T, i, me).call(i, n);
-					return console.log(`Network error on attempt ${n + 1}. Retrying in ${l}ms`), yield r(T, i, he).call(i, l), i.fetchWithRetry(e, t, n + 1);
+				if (n < s(ne, i)) {
+					var l = r(O, i, de).call(i, n);
+					return console.log(`Network error on attempt ${n + 1}. Retrying in ${l}ms`), yield r(O, i, fe).call(i, l), i.fetchWithRetry(e, t, n + 1);
 				}
 				throw a;
 			}
 		})();
 	}
 	resetCounter() {
-		l(w, this, []), l(ce, this, 0), l(le, this, 0);
+		l(T, this, []), l(E, this, 0), l(D, this, 0);
 	}
 };
-function de() {
+function ce() {
 	var e = Date.now();
-	l(w, this, s(w, this).filter((t) => e - t < s(se, this)));
+	l(T, this, s(T, this).filter((t) => e - t < s(w, this)));
 }
-function fe() {
-	return pe.apply(this, arguments);
+function le() {
+	return ue.apply(this, arguments);
 }
-function pe() {
-	return pe = a(function* () {
+function ue() {
+	return ue = a(function* () {
 		var e;
-		if (r(T, this, de).call(this), s(w, this).length >= s(oe, this)) {
-			var t = s(w, this)[0];
-			if (Date.now() - t < s(se, this)) {
-				var n = 500 * s(w, this).length - s(oe, this);
-				n < 0 && (n = 0, console.warn("Wait time is less than 0")), console.log(`Rate limit prevention: ${s(w, this).length} requests in last ${s(se, this)}ms. Waiting ${n}ms...`), yield r(T, this, he).call(this, n), r(T, this, de).call(this);
+		if (r(O, this, ce).call(this), s(T, this).length >= s(C, this)) {
+			var t = s(T, this)[0];
+			if (Date.now() - t < s(w, this)) {
+				var n = 500 * s(T, this).length - s(C, this);
+				n < 0 && (n = 0, console.warn("Wait time is less than 0")), console.log(`Rate limit prevention: ${s(T, this).length} requests in last ${s(w, this)}ms. Waiting ${n}ms...`), yield r(O, this, fe).call(this, n), r(O, this, ce).call(this);
 			}
 		}
-		s(w, this).push(Date.now()), l(ce, this, (e = s(ce, this), e++, e));
-		var i = Date.now() - s(le, this), a = 100;
-		i < a && s(le, this) > 0 && (yield r(T, this, he).call(this, a - i)), l(le, this, Date.now());
-	}), pe.apply(this, arguments);
+		s(T, this).push(Date.now()), l(E, this, (e = s(E, this), e++, e));
+		var i = Date.now() - s(D, this), a = 100;
+		i < a && s(D, this) > 0 && (yield r(O, this, fe).call(this, a - i)), l(D, this, Date.now());
+	}), ue.apply(this, arguments);
 }
-function me(e) {
+function de(e) {
 	var t = (arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : null)?.headers.get("Retry-After");
 	if (t) {
 		var n = parseInt(t);
@@ -423,31 +427,31 @@ function me(e) {
 		}
 		return n * 1e3;
 	}
-	var i = s(re, this) * s(ie, this) ** +e, a = Math.random() * 1e3;
-	return Math.min(i + a, s(C, this));
+	var i = s(re, this) * s(ae, this) ** +e, a = Math.random() * 1e3;
+	return Math.min(i + a, s(ie, this));
 }
-function he(e) {
+function fe(e) {
 	return new Promise((t) => setTimeout(t, e));
 }
 //#endregion
 //#region src/app/zotero/zotero.js
-var E = function() {
-	this._apiKey = null, this._userId = 0, this._userGroups = [], this._isOnlineAvailable = !0, this._fetcher = new ue({
+var k = function() {
+	this._apiKey = null, this._userId = 0, this._userGroups = [], this._isOnlineAvailable = !0, this._fetcher = new se({
 		maxRetries: 5,
 		initialDelay: 5e3
 	});
 };
-E.prototype.ZOTERO_API_VERSION = "3", E.prototype.USER_AGENT = "AscDesktopEditor", E.prototype.DEFAULT_FORMAT = "csljson", E.prototype.STORAGE_KEYS = {
+k.prototype.ZOTERO_API_VERSION = "3", k.prototype.USER_AGENT = "AscDesktopEditor", k.prototype.DEFAULT_FORMAT = "csljson", k.prototype.STORAGE_KEYS = {
 	USER_ID: "zoteroUserId",
 	API_KEY: "zoteroApiKey"
-}, E.prototype.API_PATHS = {
+}, k.prototype.API_PATHS = {
 	USERS: "users",
 	GROUPS: "groups",
 	ITEMS: "items",
 	KEYS: "keys"
-}, E.prototype._getBaseUrl = function() {
-	return this._isOnlineAvailable ? ne.restApiUrl : ne.desktopApiUrl;
-}, E.prototype._getDesktopRequest = function(e) {
+}, k.prototype._getBaseUrl = function() {
+	return this._isOnlineAvailable ? S.restApiUrl : S.desktopApiUrl;
+}, k.prototype._getDesktopRequest = function(e) {
 	var t = this;
 	return new Promise(function(n, r) {
 		window.AscSimpleRequest.createRequest({
@@ -463,7 +467,7 @@ E.prototype.ZOTERO_API_VERSION = "3", E.prototype.USER_AGENT = "AscDesktopEditor
 			}
 		});
 	});
-}, E.prototype._getOnlineRequest = function(e) {
+}, k.prototype._getOnlineRequest = function(e) {
 	var t = {
 		"Zotero-API-Version": this.ZOTERO_API_VERSION,
 		"Zotero-API-Key": this._apiKey || ""
@@ -477,27 +481,27 @@ E.prototype.ZOTERO_API_VERSION = "3", E.prototype.USER_AGENT = "AscDesktopEditor
 	}).catch(function(e) {
 		throw typeof e == "object" && (e.message = "Connection to Zotero failed"), e;
 	});
-}, E.prototype._getRequestWithOfflineSupport = function(e) {
+}, k.prototype._getRequestWithOfflineSupport = function(e) {
 	return this._isOnlineAvailable ? this._getOnlineRequest(e) : this._getDesktopRequest(e.href);
-}, E.prototype._buildGetRequest = function(e, t) {
+}, k.prototype._buildGetRequest = function(e, t) {
 	t ||= {};
 	var n = new URL(e, this._getBaseUrl());
 	return Object.keys(t).forEach(function(e) {
 		t[e] !== void 0 && t[e] !== null && n.searchParams.append(e, t[e]);
 	}), this._getRequestWithOfflineSupport(n);
-}, E.prototype._parseLinkHeader = function(e) {
+}, k.prototype._parseLinkHeader = function(e) {
 	var t = {}, n = /<(.*?)>; rel="(.*?)"/g;
 	if (!e) return t;
 	for (var r; (r = n.exec(e.trim())) !== null;) t[r[2]] = r[1];
 	return t;
-}, E.prototype._parseDesktopItemsResponse = function(e, t) {
+}, k.prototype._parseDesktopItemsResponse = function(e, t) {
 	return e.then(function(e) {
 		return {
 			items: JSON.parse(e.responseText),
 			id: t
 		};
 	});
-}, E.prototype._parseItemsResponse = function(e, t) {
+}, k.prototype._parseItemsResponse = function(e, t) {
 	var n = this;
 	return e.then(function(e) {
 		return Promise.all([e.json(), e]);
@@ -510,14 +514,14 @@ E.prototype.ZOTERO_API_VERSION = "3", E.prototype.USER_AGENT = "AscDesktopEditor
 			return n._parseItemsResponse(n._getOnlineRequest(new URL(a.next)), t);
 		}), o;
 	});
-}, E.prototype._parseResponse = function(e, t) {
+}, k.prototype._parseResponse = function(e, t) {
 	if (this._isOnlineAvailable) {
 		var n = e;
 		return this._parseItemsResponse(n, t);
 	}
 	var r = e;
 	return this._parseDesktopItemsResponse(r, t);
-}, E.prototype.getItems = function(e, t, n) {
+}, k.prototype.getItems = function(e, t, n) {
 	var r = this;
 	n ||= r.DEFAULT_FORMAT;
 	var i = {
@@ -527,14 +531,14 @@ E.prototype.ZOTERO_API_VERSION = "3", E.prototype.USER_AGENT = "AscDesktopEditor
 	e ? i.q = e : t ? i.itemKey = t.join(",") : (i.limit = 20, this._isOnlineAvailable || (i.format = "json"));
 	var a = r.API_PATHS.USERS + "/" + r._userId + "/" + r.API_PATHS.ITEMS, o = r._buildGetRequest(a, i);
 	return r._parseResponse(o, r._userId);
-}, E.prototype.getGroupItems = function(e, t, n, r) {
+}, k.prototype.getGroupItems = function(e, t, n, r) {
 	var i = this;
 	r ||= i.DEFAULT_FORMAT;
 	var a = { format: r };
 	e ? a.q = e : n && (a.itemKey = n.join(","));
 	var o = i.API_PATHS.GROUPS + "/" + t + "/" + i.API_PATHS.ITEMS, s = i._buildGetRequest(o, a);
 	return i._parseResponse(s, t);
-}, E.prototype.getUserGroups = function() {
+}, k.prototype.getUserGroups = function() {
 	var e = this;
 	return new Promise(function(t, n) {
 		if (e._userGroups.length > 0) {
@@ -558,7 +562,7 @@ E.prototype.ZOTERO_API_VERSION = "3", E.prototype.USER_AGENT = "AscDesktopEditor
 			}), t(e._userGroups);
 		}).catch(n);
 	});
-}, E.prototype.setApiKey = function(e) {
+}, k.prototype.setApiKey = function(e) {
 	var t = this, n = this.API_PATHS.KEYS + "/" + e;
 	return this._buildGetRequest(n).then(function(e) {
 		var t = e;
@@ -567,23 +571,23 @@ E.prototype.ZOTERO_API_VERSION = "3", E.prototype.USER_AGENT = "AscDesktopEditor
 	}).then(function(n) {
 		return t._saveSettings(n.userID, e), !0;
 	});
-}, E.prototype._applySettings = function(e, t) {
+}, k.prototype._applySettings = function(e, t) {
 	this._userId = e, this._apiKey = t;
-}, E.prototype._saveSettings = function(e, t) {
+}, k.prototype._saveSettings = function(e, t) {
 	this._applySettings(e, t), localStorage.setItem(this.STORAGE_KEYS.USER_ID, String(e)), localStorage.setItem(this.STORAGE_KEYS.API_KEY, t);
-}, E.prototype.hasSettings = function() {
+}, k.prototype.hasSettings = function() {
 	var e = localStorage.getItem(this.STORAGE_KEYS.USER_ID), t = localStorage.getItem(this.STORAGE_KEYS.API_KEY);
 	return e && t ? (this._applySettings(Number(e), t), !0) : !1;
-}, E.prototype.clearSettings = function() {
+}, k.prototype.clearSettings = function() {
 	localStorage.removeItem(this.STORAGE_KEYS.USER_ID), localStorage.removeItem(this.STORAGE_KEYS.API_KEY), this._userGroups = [], this._userId = 0, this._apiKey = null;
-}, E.prototype.getUserId = function() {
+}, k.prototype.getUserId = function() {
 	return this._userId;
-}, E.prototype.setIsOnlineAvailable = function(e) {
+}, k.prototype.setIsOnlineAvailable = function(e) {
 	this._isOnlineAvailable = e;
 };
 //#endregion
 //#region src/app/shared/components/input.js
-function ge(e, t) {
+function A(e, t) {
 	var n = this;
 	if (t ||= {}, typeof e == "string") {
 		var r = document.getElementById(e);
@@ -628,8 +632,8 @@ function ge(e, t) {
 		};
 	}(this), 100);
 }
-ge.prototype = {
-	constructor: ge,
+A.prototype = {
+	constructor: A,
 	input: null,
 	_container: null,
 	_options: {},
@@ -834,7 +838,7 @@ ge.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/message.js
-function _e(e, t) {
+function j(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLElement && (e = n);
@@ -843,8 +847,8 @@ function _e(e, t) {
 	else throw Error("Invalid container element");
 	this._options = Object.assign(this._options, t), this._isShow = !1;
 }
-_e.prototype = {
-	constructor: _e,
+j.prototype = {
+	constructor: j,
 	_options: {
 		type: "info",
 		text: "",
@@ -918,7 +922,7 @@ _e.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/button.js
-function D(e, t) {
+function M(e, t) {
 	var n = this;
 	if (typeof e == "string") {
 		var r = document.getElementById(e);
@@ -947,8 +951,8 @@ function D(e, t) {
 		}
 	}, this._createDOM(), this._bindEvents(), this.updateState();
 }
-D.prototype = {
-	constructor: D,
+M.prototype = {
+	constructor: M,
 	_button: null,
 	_buttonText: null,
 	_spinner: null,
@@ -1083,14 +1087,14 @@ D.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/radio.js
-var O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), ve = /*#__PURE__*/ new WeakMap(), A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), ye = /*#__PURE__*/ new WeakMap(), be = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakSet(), xe = class {
+var N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), pe = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakMap(), me = /*#__PURE__*/ new WeakMap(), he = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakSet(), ge = class {
 	constructor(e, t) {
-		if (u(this, M), c(this, O, void 0), c(this, k, void 0), c(this, ve, void 0), c(this, A, null), c(this, j, void 0), c(this, ye, /* @__PURE__ */ new Map()), c(this, be, []), typeof e == "string") {
+		if (u(this, L), c(this, N, void 0), c(this, P, void 0), c(this, pe, void 0), c(this, F, null), c(this, I, void 0), c(this, me, /* @__PURE__ */ new Map()), c(this, he, []), typeof e == "string") {
 			var n = document.getElementById(e);
 			n instanceof HTMLInputElement && (e = n);
 		}
 		if (!(e instanceof HTMLInputElement)) throw Error("Invalid input element");
-		if (l(k, this, e), l(j, this, Object.assign({
+		if (l(P, this, e), l(I, this, Object.assign({
 			id: `radio_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
 			checked: !1,
 			disabled: !1,
@@ -1098,115 +1102,115 @@ var O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), ve = /*#__
 			label: "",
 			name: "",
 			value: "on"
-		}, t)), r(M, this, Se).call(this), l(O, this, document.createElement("div")), l(ve, this, document.createElement("span")), r(M, this, Ce).call(this), r(M, this, Te).call(this), r(M, this, Ee).call(this), !s(j, this).name) throw Error("Name attribute is required");
-		var i = Oe._.get(s(j, this).name);
-		i || (i = [], Oe._.set(s(j, this).name, i)), i.push(this);
+		}, t)), r(L, this, _e).call(this), l(N, this, document.createElement("div")), l(pe, this, document.createElement("span")), r(L, this, ve).call(this), r(L, this, be).call(this), r(L, this, xe).call(this), !s(I, this).name) throw Error("Name attribute is required");
+		var i = Ce._.get(s(I, this).name);
+		i || (i = [], Ce._.set(s(I, this).name, i)), i.push(this);
 	}
 	subscribe(e) {
 		var t = this;
-		return s(be, this).push(e), { unsubscribe: function() {
-			l(be, t, s(be, t).filter(function(t) {
+		return s(he, this).push(e), { unsubscribe: function() {
+			l(he, t, s(he, t).filter(function(t) {
 				return t !== e;
 			}));
 		} };
 	}
 	getElement() {
-		return s(O, this);
+		return s(N, this);
 	}
 	check(e) {
-		if (!(s(j, this).disabled || s(j, this).checked)) {
-			if (s(j, this).name) {
-				var t = Oe._.get(s(j, this).name);
+		if (!(s(I, this).disabled || s(I, this).checked)) {
+			if (s(I, this).name) {
+				var t = Ce._.get(s(I, this).name);
 				t && t.forEach((e) => {
-					e !== this && s(j, e).checked && e.uncheck();
+					e !== this && s(I, e).checked && e.uncheck();
 				});
 			}
-			s(j, this).checked = !0, r(M, this, Ee).call(this), !e && r(M, this, De).call(this);
+			s(I, this).checked = !0, r(L, this, xe).call(this), !e && r(L, this, Se).call(this);
 		}
 	}
 	uncheck(e) {
-		s(j, this).disabled || !s(j, this).checked || (s(j, this).checked = !1, r(M, this, Ee).call(this), !e && r(M, this, De).call(this));
+		s(I, this).disabled || !s(I, this).checked || (s(I, this).checked = !1, r(L, this, xe).call(this), !e && r(L, this, Se).call(this));
 	}
 	enable() {
-		s(j, this).disabled && (s(j, this).disabled = !1, s(k, this).disabled = !1, s(O, this).setAttribute("aria-disabled", "false"), s(j, this).checked ? s(O, this).tabIndex = 0 : r(M, this, we).call(this), s(O, this).classList.remove("radio--disabled"));
+		s(I, this).disabled && (s(I, this).disabled = !1, s(P, this).disabled = !1, s(N, this).setAttribute("aria-disabled", "false"), s(I, this).checked ? s(N, this).tabIndex = 0 : r(L, this, ye).call(this), s(N, this).classList.remove("radio--disabled"));
 	}
 	disable() {
-		s(j, this).disabled || (s(j, this).disabled = !0, s(k, this).disabled = !0, s(O, this).setAttribute("aria-disabled", "true"), s(O, this).tabIndex = -1, s(O, this).classList.add("radio--disabled"));
+		s(I, this).disabled || (s(I, this).disabled = !0, s(P, this).disabled = !0, s(N, this).setAttribute("aria-disabled", "true"), s(N, this).tabIndex = -1, s(N, this).classList.add("radio--disabled"));
 	}
 	setLabel(e) {
-		s(j, this).label = e, s(A, this) ? s(A, this).textContent = e : e && (l(A, this, document.createElement("label")), s(A, this).className = "radio-label", s(A, this).htmlFor = String(s(j, this).id), s(A, this).textContent = e, s(O, this).appendChild(s(A, this)));
+		s(I, this).label = e, s(F, this) ? s(F, this).textContent = e : e && (l(F, this, document.createElement("label")), s(F, this).className = "radio-label", s(F, this).htmlFor = String(s(I, this).id), s(F, this).textContent = e, s(N, this).appendChild(s(F, this)));
 	}
 	getState() {
 		return {
-			checked: !!s(j, this).checked,
-			disabled: !!s(j, this).disabled,
-			value: s(j, this).value || "",
-			name: s(j, this).name || ""
+			checked: !!s(I, this).checked,
+			disabled: !!s(I, this).disabled,
+			value: s(I, this).value || "",
+			name: s(I, this).name || ""
 		};
 	}
 	destroy() {
-		if (l(be, this, []), s(j, this).name) {
-			var e = Oe._.get(s(j, this).name);
+		if (l(he, this, []), s(I, this).name) {
+			var e = Ce._.get(s(I, this).name);
 			if (e) {
 				var t = e.indexOf(this);
 				t >= 0 && e.splice(t, 1);
 			}
-			s(ye, this).forEach((e, t) => {
-				s(O, this).removeEventListener(t, e);
-			}), s(ye, this).clear(), s(O, this) && s(O, this).parentNode && s(O, this).parentNode.removeChild(s(O, this)), l(A, this, null);
+			s(me, this).forEach((e, t) => {
+				s(N, this).removeEventListener(t, e);
+			}), s(me, this).clear(), s(N, this) && s(N, this).parentNode && s(N, this).parentNode.removeChild(s(N, this)), l(F, this, null);
 		}
 	}
 };
-function Se() {
-	s(k, this).type = "radio";
-	var e = s(k, this).getAttribute("id"), t = s(k, this).getAttribute("name"), n = s(k, this).getAttribute("value"), r = s(k, this).getAttribute("checked"), i = s(k, this).getAttribute("disabled");
-	e === null ? s(j, this).id && s(k, this).setAttribute("id", s(j, this).id) : s(j, this).id = e, t === null ? s(j, this).name && s(k, this).setAttribute("name", s(j, this).name) : s(j, this).name = t, n === null ? s(j, this).value && s(k, this).setAttribute("value", s(j, this).value) : s(j, this).value = n, r === null ? s(j, this).checked && s(k, this).setAttribute("checked", "true") : s(j, this).checked = r === "true", i === null ? s(j, this).disabled && s(k, this).setAttribute("disabled", "true") : s(j, this).disabled = i === "true";
+function _e() {
+	s(P, this).type = "radio";
+	var e = s(P, this).getAttribute("id"), t = s(P, this).getAttribute("name"), n = s(P, this).getAttribute("value"), r = s(P, this).getAttribute("checked"), i = s(P, this).getAttribute("disabled");
+	e === null ? s(I, this).id && s(P, this).setAttribute("id", s(I, this).id) : s(I, this).id = e, t === null ? s(I, this).name && s(P, this).setAttribute("name", s(I, this).name) : s(I, this).name = t, n === null ? s(I, this).value && s(P, this).setAttribute("value", s(I, this).value) : s(I, this).value = n, r === null ? s(I, this).checked && s(P, this).setAttribute("checked", "true") : s(I, this).checked = r === "true", i === null ? s(I, this).disabled && s(P, this).setAttribute("disabled", "true") : s(I, this).disabled = i === "true";
 }
-function Ce() {
-	var e = s(k, this).parentNode, t = document.createDocumentFragment();
-	t.appendChild(s(O, this)), s(O, this).classList.add("radio-button-container"), s(O, this).setAttribute("role", "radio"), s(O, this).setAttribute("aria-checked", String(!!s(j, this).checked)), s(O, this).setAttribute("aria-disabled", String(!!s(j, this).disabled)), s(O, this).tabIndex = s(j, this).disabled ? -1 : 0, s(ve, this).className = "radio-visual", s(ve, this).setAttribute("aria-hidden", "true"), s(j, this).label && (l(A, this, document.createElement("label")), s(A, this).className = "i18n radio-label", s(A, this).htmlFor = String(s(j, this).id), s(A, this).textContent = s(j, this).label), s(j, this).disabled && s(O, this).classList.add("radio--disabled"), e && e.insertBefore(t, s(k, this)), s(O, this).appendChild(s(k, this)), s(O, this).appendChild(s(ve, this)), s(A, this) && s(O, this).appendChild(s(A, this)), r(M, this, we).call(this);
+function ve() {
+	var e = s(P, this).parentNode, t = document.createDocumentFragment();
+	t.appendChild(s(N, this)), s(N, this).classList.add("radio-button-container"), s(N, this).setAttribute("role", "radio"), s(N, this).setAttribute("aria-checked", String(!!s(I, this).checked)), s(N, this).setAttribute("aria-disabled", String(!!s(I, this).disabled)), s(N, this).tabIndex = s(I, this).disabled ? -1 : 0, s(pe, this).className = "radio-visual", s(pe, this).setAttribute("aria-hidden", "true"), s(I, this).label && (l(F, this, document.createElement("label")), s(F, this).className = "i18n radio-label", s(F, this).htmlFor = String(s(I, this).id), s(F, this).textContent = s(I, this).label), s(I, this).disabled && s(N, this).classList.add("radio--disabled"), e && e.insertBefore(t, s(P, this)), s(N, this).appendChild(s(P, this)), s(N, this).appendChild(s(pe, this)), s(F, this) && s(N, this).appendChild(s(F, this)), r(L, this, ye).call(this);
 }
-function we() {
-	if (s(j, this).checked) s(O, this).tabIndex = s(j, this).disabled ? -1 : 0;
-	else if (s(j, this).name && Oe._.has(s(j, this).name)) {
-		var e = Oe._.get(s(j, this).name), t = !1;
+function ye() {
+	if (s(I, this).checked) s(N, this).tabIndex = s(I, this).disabled ? -1 : 0;
+	else if (s(I, this).name && Ce._.has(s(I, this).name)) {
+		var e = Ce._.get(s(I, this).name), t = !1;
 		e && e.forEach((e) => {
-			s(j, e).checked && e !== this && (t = !0);
-		}), !t && !s(j, this).checked && !s(j, this).disabled ? s(O, this).tabIndex = 0 : s(O, this).tabIndex = -1;
+			s(I, e).checked && e !== this && (t = !0);
+		}), !t && !s(I, this).checked && !s(I, this).disabled ? s(N, this).tabIndex = 0 : s(N, this).tabIndex = -1;
 	}
 }
-function Te() {
+function be() {
 	var e = (e) => {
-		e.preventDefault(), !s(j, this).disabled && !s(j, this).checked && (this.check(), s(O, this).focus());
+		e.preventDefault(), !s(I, this).disabled && !s(I, this).checked && (this.check(), s(N, this).focus());
 	}, t = (e) => {
-		if (!s(j, this).disabled) switch (e.key) {
+		if (!s(I, this).disabled) switch (e.key) {
 			case " ":
 			case "Spacebar":
-			case "Enter": e.preventDefault(), s(j, this).checked || this.check();
+			case "Enter": e.preventDefault(), s(I, this).checked || this.check();
 		}
 	}, n = () => {
-		s(O, this).classList.add("radio--focused");
+		s(N, this).classList.add("radio--focused");
 	}, r = () => {
-		s(O, this).classList.remove("radio--focused");
+		s(N, this).classList.remove("radio--focused");
 	};
-	s(ye, this).set("click", e), s(ye, this).set("keydown", t), s(ye, this).set("focus", n), s(ye, this).set("blur", r), s(O, this).addEventListener("click", e), s(O, this).addEventListener("keydown", t), s(O, this).addEventListener("focus", n), s(O, this).addEventListener("blur", r);
+	s(me, this).set("click", e), s(me, this).set("keydown", t), s(me, this).set("focus", n), s(me, this).set("blur", r), s(N, this).addEventListener("click", e), s(N, this).addEventListener("keydown", t), s(N, this).addEventListener("focus", n), s(N, this).addEventListener("blur", r);
 }
-function Ee() {
-	s(O, this).setAttribute("aria-checked", String(!!s(j, this).checked)), s(O, this).classList.toggle("radio--checked", s(j, this).checked), s(k, this).checked = !!s(j, this).checked, r(M, this, we).call(this);
+function xe() {
+	s(N, this).setAttribute("aria-checked", String(!!s(I, this).checked)), s(N, this).classList.toggle("radio--checked", s(I, this).checked), s(P, this).checked = !!s(I, this).checked, r(L, this, ye).call(this);
 }
-function De(e) {
+function Se(e) {
 	var t = {
 		type: "radio:change",
 		detail: this.getState()
 	};
-	e && (t.originalEvent = e), s(be, this).forEach(function(e) {
+	e && (t.originalEvent = e), s(he, this).forEach(function(e) {
 		e(t);
 	});
 }
-var Oe = { _: /* @__PURE__ */ new Map() };
+var Ce = { _: /* @__PURE__ */ new Map() };
 //#endregion
 //#region src/app/shared/components/checkbox.js
-function ke(e, t) {
+function we(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLInputElement && (e = n);
@@ -1222,8 +1226,8 @@ function ke(e, t) {
 		value: "on"
 	}, t), this._options.disabled = t.disabled || !1, this._handlers = /* @__PURE__ */ new Map(), this._createDOM(e), this._setupEventListeners(), this._updateVisualState(), this._subscribers = [];
 }
-ke.prototype = {
-	constructor: ke,
+we.prototype = {
+	constructor: we,
 	_container: null,
 	_input: null,
 	_visualCheckbox: null,
@@ -1332,9 +1336,9 @@ ke.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/selectbox.js
-var N = /*#__PURE__*/ new WeakSet(), Ae = class {
+var R = /*#__PURE__*/ new WeakSet(), Te = class {
 	constructor(e, t) {
-		if (u(this, N), typeof e == "string") {
+		if (u(this, R), typeof e == "string") {
 			var n = document.getElementById(e);
 			if (n instanceof HTMLSelectElement) e = n;
 			else if (n instanceof HTMLElement) this._container = n;
@@ -1352,34 +1356,34 @@ var N = /*#__PURE__*/ new WeakSet(), Ae = class {
 			description: t.description || ""
 		}), this._selectedValues = /* @__PURE__ */ new Set(), this.isOpen = !1, this._items = [], this._customItems = [], this._subscribers = [], this._boundHandles = {
 			toggle: (e) => {
-				r(N, this, Ne).call(this, e);
+				r(R, this, Oe).call(this, e);
 			},
 			search: (e) => {
-				r(N, this, Pe).call(this, e);
+				r(R, this, ke).call(this, e);
 			},
 			close: (e) => {
-				e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option") && r(N, this, P).call(this);
+				e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option") && r(R, this, z).call(this);
 			},
 			keydown: (e) => {
-				r(N, this, Ie).call(this, e);
+				r(R, this, je).call(this, e);
 			},
 			dropdownClick: (e) => {
-				r(N, this, Re).call(this, e);
+				r(R, this, Ne).call(this, e);
 			},
 			scrollCheck: () => {
 				if (this._headerRectOnOpen) {
 					var e = this._header.getBoundingClientRect();
-					Math.abs(e.top - this._headerRectOnOpen.top) > 1 && r(N, this, P).call(this);
+					Math.abs(e.top - this._headerRectOnOpen.top) > 1 && r(R, this, z).call(this);
 				}
 			}
-		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), r(N, this, je).call(this), r(N, this, Me).call(this), r(N, this, Le).call(this), Ue._.add(this);
+		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), r(R, this, Ee).call(this), r(R, this, De).call(this), r(R, this, Me).call(this), ze._.add(this);
 	}
 	openDropdown() {
 		this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = !0, this._dropdown.style.display = "block", this._headerRectOnOpen = this._header.getBoundingClientRect(), document.addEventListener("scroll", this._boundHandles.scrollCheck, !0), this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout(function(e) {
 			return function() {
 				e.searchInput && e.searchInput.focus();
 			};
-		}(this), 100), r(N, this, Le).call(this), r(N, this, ze).call(this);
+		}(this), 100), r(R, this, Me).call(this), r(R, this, Fe).call(this);
 	}
 	subscribe(e) {
 		var t = this;
@@ -1398,7 +1402,7 @@ var N = /*#__PURE__*/ new WeakSet(), Ae = class {
 			text: t,
 			selected: n
 		}), this._options.sortable && this._items.sort((e, t) => e && t ? e.text.localeCompare(t.text) : e ? -1 : +!!t);
-		n && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(e)), r(N, this, F).call(this);
+		n && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(e)), r(R, this, Pe).call(this);
 	}
 	addItems(e, t) {
 		var n = this;
@@ -1411,7 +1415,7 @@ var N = /*#__PURE__*/ new WeakSet(), Ae = class {
 					selected: i
 				});
 			}
-		}, this), this.isOpen && r(N, this, Le).call(this), r(N, this, F).call(this);
+		}, this), this.isOpen && r(R, this, Me).call(this), r(R, this, Pe).call(this);
 	}
 	addCustomItem(e, t) {
 		this._customItems.push({
@@ -1428,7 +1432,7 @@ var N = /*#__PURE__*/ new WeakSet(), Ae = class {
 			return t === null || t.value !== e;
 		}), this._customItems = this._customItems.filter(function(t) {
 			return t === null || t.value !== e;
-		}), this._selectedValues.delete(e), r(N, this, F).call(this);
+		}), this._selectedValues.delete(e), r(R, this, Pe).call(this);
 	}
 	getSelectedValue() {
 		if (this._options.multiple) return console.error("Method getSelectedValue is only available for single-select boxes."), null;
@@ -1467,9 +1471,9 @@ var N = /*#__PURE__*/ new WeakSet(), Ae = class {
 				var s = this._optionsContainer.querySelector("[data-value=\"" + i + "\"]");
 				s && (s.classList.add("selectbox-option-selected"), s.classList.add("checkbox--checked"));
 			}
-			r(N, this, P).call(this);
+			r(R, this, z).call(this);
 		}
-		r(N, this, F).call(this), !t && r(N, this, Be).call(this, i, !0);
+		r(R, this, Pe).call(this), !t && r(R, this, Ie).call(this, i, !0);
 	}
 	unselectItems(e, t) {
 		var n = this;
@@ -1488,7 +1492,7 @@ var N = /*#__PURE__*/ new WeakSet(), Ae = class {
 		};
 		if (Array.isArray(e)) for (var o = 0; o < e.length; o++) i = e[o], this._selectedValues.has(i) && (this._selectedValues.delete(i), a(i));
 		else i = e, this._selectedValues.has(i) && (this._selectedValues.delete(i), a(i));
-		r(N, this, F).call(this), !t && r(N, this, Be).call(this, i, !0);
+		r(R, this, Pe).call(this), !t && r(R, this, Ie).call(this, i, !0);
 	}
 	disable() {
 		this._select.classList.add("selectbox-disabled");
@@ -1501,10 +1505,10 @@ var N = /*#__PURE__*/ new WeakSet(), Ae = class {
 			var t = this._items[0];
 			t && this._selectedValues.add(t.value);
 		}
-		r(N, this, F).call(this), r(N, this, Le).call(this);
+		r(R, this, Pe).call(this), r(R, this, Me).call(this);
 	}
 	destroy() {
-		this._subscribers = [], Ue._.delete(this);
+		this._subscribers = [], ze._.delete(this);
 		try {
 			this._header && this._boundHandles && this._header.removeEventListener("click", this._boundHandles.toggle), this.searchInput && this._boundHandles && this.searchInput.removeEventListener("input", this._boundHandles.search), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("click", this._boundHandles.dropdownClick), document && this._boundHandles && document.removeEventListener("click", this._boundHandles.close), this._header && this._boundHandles && this._header.removeEventListener("keydown", this._boundHandles.keydown), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("keydown", this._boundHandles.keydown);
 		} catch (e) {
@@ -1515,7 +1519,7 @@ var N = /*#__PURE__*/ new WeakSet(), Ae = class {
 		this._container.className = t.join(" ");
 	}
 };
-function je() {
+function Ee() {
 	this._container.innerHTML = "", this._container.className += " selectbox-container";
 	var e = document.createDocumentFragment();
 	if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), e.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text i18n", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._options.usePortal && (this._dropdown.className += " selectbox-fixed"), this._select.appendChild(this._dropdown), this._options.description) {
@@ -1530,34 +1534,34 @@ function je() {
 		var i = this._selectbox.parentNode;
 		if (i) {
 			i.insertBefore(this._container, this._selectbox);
-			var a = r(N, this, He).call(this, this._selectbox);
+			var a = r(R, this, Re).call(this, this._selectbox);
 			this.addItems(a.values, a.selectedValue), this._selectbox.remove();
 		}
 	}
 }
-function Me() {
+function De() {
 	this._header.addEventListener("click", this._boundHandles.toggle), this.searchInput && this.searchInput.addEventListener("input", this._boundHandles.search), this._dropdown.addEventListener("click", this._boundHandles.dropdownClick), this._dropdown.addEventListener("wheel", function(e) {
 		e.stopPropagation();
 	}), this._header.addEventListener("keydown", this._boundHandles.keydown), this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
 }
-function Ne(e) {
-	if (e && e.stopPropagation(), this.isOpen ? r(N, this, P).call(this) : this.openDropdown(), e && e.type === "click") for (var t of Ue._) t.isOpen && t !== this && r(N, t, P).call(t);
+function Oe(e) {
+	if (e && e.stopPropagation(), this.isOpen ? r(R, this, z).call(this) : this.openDropdown(), e && e.type === "click") for (var t of ze._) t.isOpen && t !== this && r(R, t, z).call(t);
 }
-function P() {
+function z() {
 	this.isOpen && document && this._boundHandles && (document.removeEventListener("click", this._boundHandles.close), document.removeEventListener("scroll", this._boundHandles.scrollCheck, !0)), this.isOpen = !1, this._dropdown.style.display = "none", this._options.usePortal ? (this._dropdown.style.left = "", this._dropdown.style.width = "", this._dropdown.style.top = "") : this._dropdown.classList.remove("selectbox-dropdown-top");
 	for (var e = this._arrow.className.split(" "), t = [], n = 0; n < e.length; n++) e[n] !== "selectbox-arrow-open" && t.push(e[n]);
 	this._arrow.className = t.join(" ");
 	for (var r = this._header.className.split(" "), i = [], n = 0; n < r.length; n++) r[n] !== "selectbox-header-open" && i.push(r[n]);
 	this._header.className = i.join(" "), this.searchInput && (this.searchInput.value = "");
 }
-function Pe(e) {
+function ke(e) {
 	var t = e.target;
 	if (t instanceof HTMLInputElement) {
 		var n = t.value.toLowerCase();
-		r(N, this, Le).call(this, n);
+		r(R, this, Me).call(this, n);
 	}
 }
-function Fe(e) {
+function Ae(e) {
 	var t = this.searchInput ? this.searchInput.value.toLowerCase() : "", n, i = this._items.filter(function(e) {
 		return e !== null;
 	});
@@ -1583,79 +1587,86 @@ function Fe(e) {
 			var l = (o + 1) % i.length;
 			l === i.length && (l = 0), this._selectedValues.clear(), n = i[l], this._selectedValues.add(n.value);
 		}
-		r(N, this, F).call(this), r(N, this, Le).call(this, t, !0), r(N, this, Be).call(this, n.value, !0);
+		r(R, this, Pe).call(this), r(R, this, Me).call(this, t, !0), r(R, this, Ie).call(this, n.value, !0);
 	}
 }
-function Ie(e) {
+function je(e) {
 	switch (e.key || e.keyCode) {
 		case "Enter":
 		case 13:
-			e.preventDefault(), r(N, this, Ne).call(this, e);
+			e.preventDefault(), r(R, this, Oe).call(this, e);
 			break;
 		case "Escape":
 		case 27:
-			r(N, this, P).call(this);
+			r(R, this, z).call(this);
 			break;
 		case "ArrowDown":
 		case 40:
-			e.preventDefault(), r(N, this, Fe).call(this, "down");
+			e.preventDefault(), r(R, this, Ae).call(this, "down");
 			break;
 		case "ArrowUp":
 		case 38:
-			e.preventDefault(), r(N, this, Fe).call(this, "up");
+			e.preventDefault(), r(R, this, Ae).call(this, "up");
 			break;
 		case "Tab":
-		case 9: r(N, this, P).call(this);
+		case 9: r(R, this, z).call(this);
 	}
 }
-function Le(e, t) {
+function Me(e, t) {
 	if (e ||= "", this._optionsContainer) {
 		this._optionsContainer.innerHTML = "";
 		var n = null, r = this._items;
-		e && (r = r.filter(function(t) {
-			return t !== null && t.text.toLowerCase().indexOf(e) !== -1;
-		}));
-		for (var i = document.createDocumentFragment(), a = 0; a < r.length; a++) {
-			var o = r[a];
-			if (!o) {
-				var s = document.createElement("hr");
-				s.className += " selectbox-option-divider", i.appendChild(s);
+		if (e) {
+			var i = e.split(/\s+/).filter(Boolean);
+			r = r.filter(function(e) {
+				if (e === null) return !1;
+				var t = e.text.toLowerCase();
+				return i.every(function(e) {
+					return t.indexOf(e) !== -1;
+				});
+			});
+		}
+		for (var a = document.createDocumentFragment(), o = 0; o < r.length; o++) {
+			var s = r[o];
+			if (!s) {
+				var c = document.createElement("hr");
+				c.className += " selectbox-option-divider", a.appendChild(c);
 				continue;
 			}
-			var c = document.createElement("div");
-			c.className += " selectbox-option", this._selectedValues.has(o.value) && (c.className += " selectbox-option-selected checkbox--checked", n = c), c.setAttribute("data-value", o.value);
-			var l = document.createElement("label");
-			if (l.className += " selectbox-option-text i18n", this._options.translate && (o.text = this._options.translate(o.text)), l.textContent = o.text, this._options.multiple) {
-				c.className += " selectbox-option-checkbox";
-				var u = document.createElement("input");
-				u.type = "checkbox", u.id = "checkbox-" + o.value, u.className += " selectbox-checkbox", u.checked = this._selectedValues.has(o.value), c.appendChild(u);
-				var d = document.createElement("span");
-				d.className = "checkbox-visual", d.setAttribute("aria-hidden", "true");
-				var f = "http://www.w3.org/2000/svg", p = document.createElementNS(f, "svg");
-				p.setAttribute("viewBox", "0 0 10 8"), p.setAttribute("class", "checkbox-checkmark");
-				var m = document.createElementNS(f, "path");
-				m.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), m.setAttribute("fill", "none"), m.setAttribute("stroke", "currentColor"), m.setAttribute("stroke-width", "2"), p.appendChild(m), d.appendChild(p), c.appendChild(d);
+			var l = document.createElement("div");
+			l.className += " selectbox-option", this._selectedValues.has(s.value) && (l.className += " selectbox-option-selected checkbox--checked", n = l), l.setAttribute("data-value", s.value);
+			var u = document.createElement("label");
+			if (u.className += " selectbox-option-text i18n", this._options.translate && (s.text = this._options.translate(s.text)), u.textContent = s.text, this._options.multiple) {
+				l.className += " selectbox-option-checkbox";
+				var d = document.createElement("input");
+				d.type = "checkbox", d.id = "checkbox-" + s.value, d.className += " selectbox-checkbox", d.checked = this._selectedValues.has(s.value), l.appendChild(d);
+				var f = document.createElement("span");
+				f.className = "checkbox-visual", f.setAttribute("aria-hidden", "true");
+				var p = "http://www.w3.org/2000/svg", m = document.createElementNS(p, "svg");
+				m.setAttribute("viewBox", "0 0 10 8"), m.setAttribute("class", "checkbox-checkmark");
+				var h = document.createElementNS(p, "path");
+				h.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), h.setAttribute("fill", "none"), h.setAttribute("stroke", "currentColor"), h.setAttribute("stroke-width", "2"), m.appendChild(h), f.appendChild(m), l.appendChild(f);
 			}
-			c.appendChild(l), i.appendChild(c);
+			l.appendChild(u), a.appendChild(l);
 		}
 		if (this._customItems.length) {
-			var h = document.createElement("hr");
-			h.className += " selectbox-option-divider", i.appendChild(h);
+			var g = document.createElement("hr");
+			g.className += " selectbox-option-divider", a.appendChild(g);
 		}
-		for (var a = 0; a < this._customItems.length; a++) {
-			var g = this._customItems[a], _ = document.createElement("label");
-			_.className += " selectbox-custom-option", _.setAttribute("data-value", g.value), _.setAttribute("for", g.value);
-			var v = document.createElement("span");
-			v.className += " selectbox-option-text i18n", this._options.translate && (g.text = this._options.translate(g.text)), v.textContent = g.text, _.appendChild(v), i.appendChild(_);
+		for (var o = 0; o < this._customItems.length; o++) {
+			var _ = this._customItems[o], v = document.createElement("label");
+			v.className += " selectbox-custom-option", v.setAttribute("data-value", _.value), v.setAttribute("for", _.value);
+			var y = document.createElement("span");
+			y.className += " selectbox-option-text i18n", this._options.translate && (_.text = this._options.translate(_.text)), y.textContent = _.text, v.appendChild(y), a.appendChild(v);
 		}
-		if (this._optionsContainer.appendChild(i), t && this.isOpen && this._optionsContainer && n) try {
+		if (this._optionsContainer.appendChild(a), t && this.isOpen && this._optionsContainer && n) try {
 			n.scrollIntoView && n.scrollIntoView({ block: "nearest" });
 		} catch (e) {
 			console.error(e);
 		}
 	}
 }
-function Re(e) {
+function Ne(e) {
 	var t = e.target || e.srcElement, n = null;
 	if (t && t instanceof HTMLElement) {
 		for (var i = null, a = t.className.split(" "), o = !1, s = 0; s < a.length; s++) if (a[s] === "selectbox-option") {
@@ -1664,7 +1675,7 @@ function Re(e) {
 		} else if (a[s] === "selectbox-custom-option") {
 			var c = t.getAttribute("data-value");
 			if (c) {
-				e.stopPropagation(), r(N, this, Ve).call(this, c), r(N, this, P).call(this);
+				e.stopPropagation(), r(R, this, Le).call(this, c), r(R, this, z).call(this);
 				return;
 			}
 			break;
@@ -1677,7 +1688,7 @@ function Re(e) {
 			} else if (l[s] === "selectbox-custom-option") {
 				var d = t.parentNode.getAttribute("data-value");
 				if (d) {
-					e.stopPropagation(), r(N, this, Ve).call(this, d), r(N, this, P).call(this);
+					e.stopPropagation(), r(R, this, Le).call(this, d), r(R, this, z).call(this);
 					return;
 				}
 				break;
@@ -1690,10 +1701,10 @@ function Re(e) {
 	var f = n.getAttribute("data-value");
 	if (f !== null) {
 		var p = !0;
-		this._options.multiple ? this._selectedValues.has(f) ? (this.unselectItems(f, !0), p = !1) : this.selectItems(f, !0) : (this.selectItems(f, !0), r(N, this, P).call(this)), r(N, this, F).call(this), r(N, this, Be).call(this, f, p);
+		this._options.multiple ? this._selectedValues.has(f) ? (this.unselectItems(f, !0), p = !1) : this.selectItems(f, !0) : (this.selectItems(f, !0), r(R, this, z).call(this)), r(R, this, Pe).call(this), r(R, this, Ie).call(this, f, p);
 	}
 }
-function F() {
+function Pe() {
 	if (this._selectedValues.size === 0) {
 		this._selectedText.textContent = this._options.placeholder;
 		return;
@@ -1715,7 +1726,7 @@ function F() {
 		this._selectedText.textContent = r ? r.text : this._options.placeholder;
 	}
 }
-function ze() {
+function Fe() {
 	var e = window.innerHeight;
 	if (this._options.usePortal) {
 		var t = this._header.getBoundingClientRect(), n = this._dropdown.offsetHeight;
@@ -1724,7 +1735,7 @@ function ze() {
 		r < n && t.top > r ? this._dropdown.style.top = t.top - n - 2 + "px" : this._dropdown.style.top = t.bottom + 2 + "px";
 	} else this._dropdown.getBoundingClientRect().bottom > e && this._dropdown.classList.add("selectbox-dropdown-top");
 }
-function Be(e, t) {
+function Ie(e, t) {
 	for (var n = Array.from(this._selectedValues), r = [], i = 0; i < this._items.length; i++) {
 		var a = this._items[i];
 		a && this._selectedValues.has(a.value) && r.push(a);
@@ -1742,7 +1753,7 @@ function Be(e, t) {
 		});
 	});
 }
-function Ve(e) {
+function Le(e) {
 	var t = {
 		values: [],
 		current: e,
@@ -1755,47 +1766,47 @@ function Ve(e) {
 		});
 	});
 }
-function He(e) {
+function Re(e) {
 	var t = { values: Array.from(e.options).map((e) => [e.value, e.text]) }, n = e.value;
 	return n && (t.selectedValue = n), t;
 }
-var Ue = { _: /* @__PURE__ */ new Set() }, We = /*#__PURE__*/ new WeakMap(), Ge = /*#__PURE__*/ new WeakSet(), Ke = class e {
+var ze = { _: /* @__PURE__ */ new Set() }, Be = /*#__PURE__*/ new WeakMap(), Ve = /*#__PURE__*/ new WeakSet(), He = class e {
 	constructor(e, t) {
-		u(this, Ge), c(this, We, void 0);
+		u(this, Ve), c(this, Be, void 0);
 		var n = document.getElementById(e);
 		if (!(n instanceof HTMLElement)) throw Error("Invalid container");
-		l(We, this, n), r(Ge, this, qe).call(this, t);
+		l(Be, this, n), r(Ve, this, Ue).call(this, t);
 	}
 	show() {
 		var e;
-		(e = s(We, this)) == null || e.classList.remove("hidden");
+		(e = s(Be, this)) == null || e.classList.remove("hidden");
 	}
 	hide() {
 		var e;
-		(e = s(We, this)) == null || e.classList.add("hidden");
+		(e = s(Be, this)) == null || e.classList.add("hidden");
 	}
 	static show() {
 		var t;
-		(t = r(e, this, Je)._) == null || t.classList.remove("hidden");
+		(t = r(e, this, We)._) == null || t.classList.remove("hidden");
 	}
 	static hide() {
 		var t;
-		(t = r(e, this, Je)._) == null || t.classList.add("hidden");
+		(t = r(e, this, We)._) == null || t.classList.add("hidden");
 	}
 };
-function qe(e) {
-	s(We, this).classList.add("loader-container");
+function Ue(e) {
+	s(Be, this).classList.add("loader-container");
 	var t = "http://www.w3.org/2000/svg", n = document.createElementNS(t, "svg");
 	n.classList.add("loader-image"), n.setAttribute("viewBox", "0 0 20 20");
 	var r = document.createElementNS(t, "circle");
-	r.setAttribute("cx", "10"), r.setAttribute("cy", "10"), r.setAttribute("fill", "none"), r.setAttribute("stroke", "currentColor"), r.setAttribute("stroke-width", "1.5"), r.setAttribute("r", "7.25"), r.setAttribute("stroke-dasharray", "160%, 40%"), n.appendChild(r), s(We, this).appendChild(n);
+	r.setAttribute("cx", "10"), r.setAttribute("cy", "10"), r.setAttribute("fill", "none"), r.setAttribute("stroke", "currentColor"), r.setAttribute("stroke-width", "1.5"), r.setAttribute("r", "7.25"), r.setAttribute("stroke-dasharray", "160%, 40%"), n.appendChild(r), s(Be, this).appendChild(n);
 	var i = document.createElement("div");
-	i.classList.add("loader-title"), i.classList.add("i18n"), i.innerText = e, s(We, this).appendChild(i);
+	i.classList.add("loader-title"), i.classList.add("i18n"), i.innerText = e, s(Be, this).appendChild(i);
 }
-var Je = { _: document.getElementById("loader") };
+var We = { _: document.getElementById("loader") };
 //#endregion
 //#region src/app/services/translate-service.js
-function I(e) {
+function B(e) {
 	try {
 		return window.Asc.plugin.tr(e);
 	} catch (t) {
@@ -1804,10 +1815,10 @@ function I(e) {
 }
 //#endregion
 //#region src/app/services/csl-html-parser.js
-var Ye = class e {
+var Ge = class e {
 	static purifyHtml(t) {
 		if (typeof t != "string" || t.length === 0) return "";
-		var n = r(e, this, Ze)._, i = new DOMParser().parseFromString("<div id=\"__purify_root__\">" + t + "</div>", "text/html").getElementById("__purify_root__");
+		var n = r(e, this, qe)._, i = new DOMParser().parseFromString("<div id=\"__purify_root__\">" + t + "</div>", "text/html").getElementById("__purify_root__");
 		if (!i) return "";
 		var a = (e) => {
 			var t = e.parentNode;
@@ -1818,7 +1829,7 @@ var Ye = class e {
 		};
 		for (var o of Array.from(i.getElementsByTagName("*"))) {
 			var s = o.tagName.toLowerCase();
-			n.has(s) ? Xe.call(e, o) : a(o);
+			n.has(s) ? Ke.call(e, o) : a(o);
 		}
 		return i.innerHTML;
 	}
@@ -1843,7 +1854,7 @@ var Ye = class e {
 				continue;
 			}
 			var f = d;
-			if (l.indexOf("font-variant:small-caps") === -1 ? l.indexOf("text-decoration:underline") !== -1 && (f = "u") : f = "sc", r(e, this, Ze)._.has(d)) {
+			if (l.indexOf("font-variant:small-caps") === -1 ? l.indexOf("text-decoration:underline") !== -1 && (f = "u") : f = "sc", r(e, this, qe)._.has(d)) {
 				if (s) {
 					for (var p = i.length - 1; p >= 0; p--) if (i[p].tag === d) {
 						var m = i.splice(p, 1)[0], h = m.start, g = m.styleTag;
@@ -1865,7 +1876,7 @@ var Ye = class e {
 		return n.formatting.sort((e, t) => e.start === t.start ? t.end - e.end : e.start - t.start), n;
 	}
 };
-function Xe(e) {
+function Ke(e) {
 	var t = /^\s*(javascript|vbscript|data)\s*:/i;
 	for (var n of Array.from(e.attributes)) {
 		var r = n.name.toLowerCase(), i = n.value || "";
@@ -1873,7 +1884,7 @@ function Xe(e) {
 			e.removeAttribute(n.name);
 			continue;
 		}
-		if (Qe._.has(r)) {
+		if (Je._.has(r)) {
 			var a = i.replace(/[\u0000-\u001F\u007F]/g, "");
 			if (t.test(a)) {
 				e.removeAttribute(n.name);
@@ -1883,7 +1894,7 @@ function Xe(e) {
 		r === "style" && /expression\s*\(|javascript\s*:/i.test(i) && e.removeAttribute(n.name);
 	}
 }
-var Ze = { _: /* @__PURE__ */ new Set([
+var qe = { _: /* @__PURE__ */ new Set([
 	"i",
 	"u",
 	"b",
@@ -1894,7 +1905,7 @@ var Ze = { _: /* @__PURE__ */ new Set([
 	"em",
 	"div",
 	"span"
-]) }, Qe = { _: /* @__PURE__ */ new Set([
+]) }, Je = { _: /* @__PURE__ */ new Set([
 	"href",
 	"src",
 	"xlink:href",
@@ -1905,7 +1916,7 @@ var Ze = { _: /* @__PURE__ */ new Set([
 	"srcdoc",
 	"ping",
 	"data"
-]) }, $e = class {
+]) }, Ye = class {
 	static formatAfterInsert(e) {
 		return new Promise(function(t) {
 			var n = !0, r = !1;
@@ -1940,41 +1951,41 @@ var Ze = { _: /* @__PURE__ */ new Set([
 			}, !1, !0, e);
 		});
 	}
-}, et = /*#__PURE__*/ new WeakMap(), tt = /*#__PURE__*/ new WeakMap(), nt = /*#__PURE__*/ new WeakMap(), rt = /*#__PURE__*/ new WeakMap(), it = /*#__PURE__*/ new WeakMap(), at = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakSet(), ot = class {
+}, Xe = /*#__PURE__*/ new WeakMap(), Ze = /*#__PURE__*/ new WeakMap(), Qe = /*#__PURE__*/ new WeakMap(), $e = /*#__PURE__*/ new WeakMap(), et = /*#__PURE__*/ new WeakMap(), tt = /*#__PURE__*/ new WeakMap(), V = /*#__PURE__*/ new WeakSet(), nt = class {
 	constructor(e, t, n, r) {
-		u(this, L), c(this, et, void 0), c(this, tt, void 0), c(this, nt, void 0), c(this, rt, void 0), c(this, it, void 0), c(this, at, void 0), l(et, this, "ZOTERO_CITATION"), l(nt, this, "ZOTERO_BIBLIOGRAPHY"), l(tt, this, e), l(rt, this, t), l(it, this, n), l(at, this, r);
+		u(this, V), c(this, Xe, void 0), c(this, Ze, void 0), c(this, Qe, void 0), c(this, $e, void 0), c(this, et, void 0), c(this, tt, void 0), l(Xe, this, "ZOTERO_CITATION"), l(Qe, this, "ZOTERO_BIBLIOGRAPHY"), l(Ze, this, e), l($e, this, t), l(et, this, n), l(tt, this, r);
 	}
 	addBibliography(e, t) {
 		var n = this;
 		return a(function* () {
 			var i = window.Asc.scope.editorVersion;
 			if (i && i < 9004e3) {
-				var a = Ye.parseHtmlFormatting(e), o = "", c = {
+				var a = Ge.parseHtmlFormatting(e), o = "", c = {
 					FieldId: o,
-					Value: s(it, n) + t + s(at, n),
+					Value: s(et, n) + t + s(tt, n),
 					Content: a.text
 				};
-				return r(L, n, st).call(n, c).then(() => n.getCurrentField()).then((e) => {
-					if (o = e?.FieldId || "", a.formatting.length) return $e.formatAfterInsert(a.formatting);
+				return r(V, n, rt).call(n, c).then(() => n.getCurrentField()).then((e) => {
+					if (o = e?.FieldId || "", a.formatting.length) return Ye.formatAfterInsert(a.formatting);
 				}).then(() => o);
 			}
 			var l = {
 				FieldId: "",
-				Value: s(it, n) + t + s(at, n),
+				Value: s(et, n) + t + s(tt, n),
 				Content: " "
 			};
-			return yield r(L, n, _t).call(n, l, e);
+			return yield r(V, n, mt).call(n, l, e);
 		})();
 	}
 	addCitation(e, t, n) {
 		var i = this;
 		return a(function* () {
-			var a = Ye.parseHtmlFormatting(e), o = {
+			var a = Ge.parseHtmlFormatting(e), o = {
 				FieldId: "",
-				Value: s(tt, i) + " " + s(rt, i) + t,
+				Value: s(Ze, i) + " " + s($e, i) + t,
 				Content: a.text
 			}, c = !!(n && ["footnotes", "endnotes"].indexOf(n) !== -1);
-			return c && (yield r(L, i, ct).call(i, n)), yield r(L, i, st).call(i, o), a.formatting.length ? (yield $e.formatAfterInsert(a.formatting), c && (yield r(L, i, ht).call(i)), c) : c;
+			return c && (yield r(V, i, it).call(i, n)), yield r(V, i, rt).call(i, o), a.formatting.length ? (yield Ye.formatAfterInsert(a.formatting), c && (yield r(V, i, ft).call(i)), c) : c;
 		})();
 	}
 	getCurrentField() {
@@ -1985,10 +1996,10 @@ var Ze = { _: /* @__PURE__ */ new Set([
 	getAddinZoteroFields() {
 		var e = this;
 		return new Promise(function(t, n) {
-			r(L, e, lt).call(e).then(function(r) {
+			r(V, e, at).call(e).then(function(r) {
 				try {
 					r.length && (r = r.filter(function(t) {
-						return t.Value.indexOf(s(tt, e)) !== -1 || t.Value.indexOf(s(it, e)) !== -1 || t.Value.indexOf(s(et, e)) !== -1 || t.Value.indexOf(s(nt, e)) !== -1;
+						return t.Value.indexOf(s(Ze, e)) !== -1 || t.Value.indexOf(s(et, e)) !== -1 || t.Value.indexOf(s(Xe, e)) !== -1 || t.Value.indexOf(s(Qe, e)) !== -1;
 					}));
 				} catch (e) {
 					n(e);
@@ -2019,7 +2030,7 @@ var Ze = { _: /* @__PURE__ */ new Set([
 	repairBrokenField(e, t) {
 		var n = this;
 		return a(function* () {
-			return (yield r(L, n, mt).call(n, e.location, e.index)) ? (yield r(L, n, ft).call(n), yield r(L, n, st).call(n, t), n.getCurrentField()) : null;
+			return (yield r(V, n, dt).call(n, e.location, e.index)) ? (yield r(V, n, lt).call(n), yield r(V, n, rt).call(n, t), n.getCurrentField()) : null;
 		})();
 	}
 	saveAsText() {
@@ -2036,21 +2047,21 @@ var Ze = { _: /* @__PURE__ */ new Set([
 	updateAddinFields(e) {
 		var t = this;
 		return a(function* () {
-			var n = e.map((e) => e.FieldId), i = window.Asc.scope.editorVersion, a = e.filter((e) => e.Value.indexOf(s(it, t)) === 0);
+			var n = e.map((e) => e.FieldId), i = window.Asc.scope.editorVersion, a = e.filter((e) => e.Value.indexOf(s(et, t)) === 0);
 			if (a.length && i && i >= 9004e3) {
-				e = e.filter((e) => e.Value.indexOf(s(it, t)) !== 0);
+				e = e.filter((e) => e.Value.indexOf(s(et, t)) !== 0);
 				var o = a[0];
-				yield r(L, t, pt).call(t, o.FieldId);
+				yield r(V, t, ut).call(t, o.FieldId);
 				var c = o.Content || "";
-				o.Content = " ", yield r(L, t, ft).call(t), yield r(L, t, _t).call(t, o, c);
+				o.Content = " ", yield r(V, t, lt).call(t), yield r(V, t, mt).call(t, o, c);
 			}
-			var l = r(L, t, ut).call(t, e);
+			var l = r(V, t, ot).call(t, e);
 			if (yield new Promise((t) => {
 				window.Asc.plugin.executeMethod("UpdateAddinFields", [e], t);
 			}), !l.size) return n;
 			for (var u of l) {
 				var d = g(u, 2), f = d[0], p = d[1];
-				(yield r(L, t, pt).call(t, f)) && (yield $e.formatAfterUpdate(f, p));
+				(yield r(V, t, ut).call(t, f)) && (yield Ye.formatAfterUpdate(f, p));
 			}
 			return n;
 		})();
@@ -2058,16 +2069,16 @@ var Ze = { _: /* @__PURE__ */ new Set([
 	convertNotesToText(e) {
 		var t = this;
 		return a(function* () {
-			for (var n = r(L, t, ut).call(t, e), i = 0; i < e.length; i++) {
+			for (var n = r(V, t, ot).call(t, e), i = 0; i < e.length; i++) {
 				var a = e[i];
 				if (!a.FieldId) {
 					console.error("Field id is not defined");
 					continue;
 				}
-				if ((yield r(L, t, pt).call(t, a.FieldId)) && (yield r(L, t, ht).call(t))) {
-					yield r(L, t, gt).call(t), yield r(L, t, ft).call(t), yield r(L, t, st).call(t, a);
+				if ((yield r(V, t, ut).call(t, a.FieldId)) && (yield r(V, t, ft).call(t))) {
+					yield r(V, t, pt).call(t), yield r(V, t, lt).call(t), yield r(V, t, rt).call(t, a);
 					var o = n.get(a.FieldId);
-					o && (yield $e.formatAfterInsert(o.formatting));
+					o && (yield Ye.formatAfterInsert(o.formatting));
 				}
 			}
 		})();
@@ -2075,12 +2086,12 @@ var Ze = { _: /* @__PURE__ */ new Set([
 	convertTextToNotes(e, t) {
 		var n = this;
 		return a(function* () {
-			for (var i = r(L, n, ut).call(n, e), a = 0; a < e.length; a++) {
+			for (var i = r(V, n, ot).call(n, e), a = 0; a < e.length; a++) {
 				var o = e[a];
-				if (o.FieldId && (yield r(L, n, pt).call(n, o.FieldId))) {
-					yield r(L, n, ft).call(n), yield r(L, n, ct).call(n, t), yield r(L, n, st).call(n, o);
+				if (o.FieldId && (yield r(V, n, ut).call(n, o.FieldId))) {
+					yield r(V, n, lt).call(n), yield r(V, n, it).call(n, t), yield r(V, n, rt).call(n, o);
 					var s = i.get(o.FieldId);
-					s && (yield $e.formatAfterInsert(s.formatting));
+					s && (yield Ye.formatAfterInsert(s.formatting));
 				}
 			}
 		})();
@@ -2088,23 +2099,33 @@ var Ze = { _: /* @__PURE__ */ new Set([
 	convertNotesStyle(e, t) {
 		var n = this;
 		return a(function* () {
-			for (var i = [], a = r(L, n, ut).call(n, e), o = 0; o < e.length; o++) {
+			for (var i = [], a = r(V, n, ot).call(n, e), o = 0; o < e.length; o++) {
 				var s = e[o];
 				if (s.FieldId) {
 					if (!s.Content) {
 						i.push(s);
 						continue;
 					}
-					if ((yield r(L, n, pt).call(n, s.FieldId)) && (yield r(L, n, ht).call(n))) {
-						yield r(L, n, gt).call(n), yield r(L, n, ft).call(n), yield r(L, n, ct).call(n, t), yield r(L, n, st).call(n, s);
+					if (yield r(V, n, ut).call(n, s.FieldId)) {
+						if (yield r(V, n, ct).call(n)) {
+							i.push(s);
+							continue;
+						}
+						yield r(V, n, it).call(n, t), yield r(V, n, rt).call(n, s);
 						var c = a.get(s.FieldId);
-						c && (yield $e.formatAfterInsert(c.formatting));
+						c && (yield Ye.formatAfterInsert(c.formatting));
 					}
 				}
 			}
-			i.length && (yield new Promise(function(e) {
-				window.Asc.plugin.executeMethod("UpdateAddinFields", [i], e);
-			}));
+			if (i.length) {
+				yield new Promise(function(e) {
+					window.Asc.plugin.executeMethod("UpdateAddinFields", [i], e);
+				});
+				for (var l of i) {
+					var u = a.get(l.FieldId);
+					u && (yield r(V, n, ut).call(n, l.FieldId)) && (yield Ye.formatAfterUpdate(l.FieldId, u));
+				}
+			}
 		})();
 	}
 	moveCursorToField(e, t) {
@@ -2131,12 +2152,12 @@ var Ze = { _: /* @__PURE__ */ new Set([
 		})();
 	}
 };
-function st(e) {
+function rt(e) {
 	return new Promise(function(t) {
 		window.Asc.plugin.executeMethod("AddAddinField", [e], t);
 	});
 }
-function ct(e) {
+function it(e) {
 	return Asc.scope.notesStyle = e, new Promise((e) => {
 		Asc.plugin.callCommand(() => {
 			var e = Api.GetDocument();
@@ -2144,36 +2165,41 @@ function ct(e) {
 		}, !1, !1, e);
 	});
 }
-function lt() {
+function at() {
 	return new Promise(function(e, t) {
 		window.Asc.plugin.executeMethod("GetAllAddinFields", void 0, e);
 	});
 }
-function ut(e) {
+function ot(e) {
 	var t = /* @__PURE__ */ new Map();
 	return e.forEach(function(e) {
 		if (e.Content) {
-			var n = Ye.parseHtmlFormatting(e.Content);
+			var n = Ge.parseHtmlFormatting(e.Content);
 			e.Content = n.text, n.formatting.length && e.FieldId && t.set(e.FieldId, n);
 		}
 	}), t;
 }
-function dt(e) {
+function st(e) {
 	return new Promise(function(t) {
 		window.Asc.plugin.executeMethod("PasteHtml", [e], t);
 	});
 }
-function ft() {
+function ct() {
+	return new Promise((e) => {
+		Asc.plugin.callCommand(() => !!Api.GetDocument().GetCurrentFootEndnote(), !1, !0, (t) => e(!!t));
+	});
+}
+function lt() {
 	return new Promise((e) => {
 		window.Asc.plugin.executeMethod("RemoveSelectedContent", void 0, e);
 	});
 }
-function pt(e) {
+function ut(e) {
 	return new Promise(function(t) {
 		window.Asc.plugin.executeMethod("SelectAddinField", [e], () => t(!0));
 	});
 }
-function mt(e, t) {
+function dt(e, t) {
 	return new Promise((n) => {
 		Asc.scope.brokenFieldLocation = e, Asc.scope.brokenFieldIndex = t, Asc.plugin.callCommand(() => {
 			var e = Api.GetDocument(), t = (Asc.scope.brokenFieldLocation === "footnote" ? e.GetFootnotesFirstParagraphs() : Asc.scope.brokenFieldLocation === "endnote" ? e.GetEndNotesFirstParagraphs() : e.GetAllParagraphs())[Asc.scope.brokenFieldIndex];
@@ -2181,7 +2207,7 @@ function mt(e, t) {
 		}, !1, !0, (e) => n(!!e));
 	});
 }
-function ht() {
+function ft() {
 	return new Promise(function(e) {
 		Asc.plugin.callCommand(() => {
 			var e = Api.GetDocument().GetCurrentFootEndnote();
@@ -2189,7 +2215,7 @@ function ht() {
 		}, !1, !0, () => e(!0));
 	});
 }
-function gt() {
+function pt() {
 	return new Promise(function(e) {
 		Asc.plugin.callCommand(() => {
 			var e = Api.GetDocument().GetRangeBySelect();
@@ -2197,12 +2223,12 @@ function gt() {
 		}, !1, !1, e);
 	});
 }
-function _t(e, t) {
-	return vt.apply(this, arguments);
+function mt(e, t) {
+	return ht.apply(this, arguments);
 }
-function vt() {
-	return vt = a(function* (e, t) {
-		if (t = Ye.purifyHtml(t), yield r(L, this, st).call(this, e), yield new Promise((e) => {
+function ht() {
+	return ht = a(function* (e, t) {
+		if (t = Ge.purifyHtml(t), yield r(V, this, rt).call(this, e), yield new Promise((e) => {
 			Asc.plugin.callCommand(() => {
 				Api.GetDocument().MoveCursorLeft(1, !0);
 			}, !1, !0, e);
@@ -2218,7 +2244,7 @@ function vt() {
 			}
 			for (var c = document.createElement("p"); e.firstChild;) c.appendChild(e.firstChild);
 			e.replaceWith(c);
-		}), t = n.body.innerHTML, yield r(L, this, dt).call(this, t);
+		}), t = n.body.innerHTML, yield r(V, this, st).call(this, t);
 		var s = yield this.getCurrentField();
 		if (!s) {
 			console.warn("Failed to get current field after paste");
@@ -2229,7 +2255,7 @@ function vt() {
 			}), s = yield this.getCurrentField(), !s); c++);
 			if (!s) throw Error("Failed to get current field after paste");
 		}
-		return yield r(L, this, pt).call(this, s.FieldId), yield new Promise((e) => {
+		return yield r(V, this, ut).call(this, s.FieldId), yield new Promise((e) => {
 			var t = !1, n = !1;
 			Asc.scope.numbers = a, Asc.scope.hash = o, Asc.plugin.callCommand(() => {
 				var e = Api.GetDocument().GetRangeBySelect();
@@ -2254,79 +2280,79 @@ function vt() {
 				}
 			}, n, t, e);
 		}), Asc.scope.bibStyle = null, s.FieldId;
-	}), vt.apply(this, arguments);
+	}), ht.apply(this, arguments);
 }
 //#endregion
 //#region src/app/csl/citation/storage.js
-var R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), yt = /*#__PURE__*/ new WeakSet(), bt = class {
+var gt = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), _t = /*#__PURE__*/ new WeakSet(), vt = class {
 	constructor() {
-		u(this, yt), c(this, R, void 0), c(this, z, void 0), c(this, B, void 0), l(R, this, []), l(z, this, []), l(B, this, []), this.size = 0;
+		u(this, _t), c(this, gt, void 0), c(this, H, void 0), c(this, U, void 0), l(gt, this, []), l(H, this, []), l(U, this, []), this.size = 0;
 	}
 	getItem(e) {
 		e = e.toString();
-		var t = s(z, this).indexOf(e);
-		return t >= 0 ? s(R, this)[t] : null;
+		var t = s(H, this).indexOf(e);
+		return t >= 0 ? s(gt, this)[t] : null;
 	}
 	getItemIndex(e) {
-		return e = e.toString(), s(z, this).indexOf(e);
+		return e = e.toString(), s(H, this).indexOf(e);
 	}
 	clear() {
-		return l(R, this, []), l(B, this, []), l(z, this, []), this.size = 0, this;
+		return l(gt, this, []), l(U, this, []), l(H, this, []), this.size = 0, this;
 	}
 	deleteItem(e) {
 		e = e.toString();
-		var t = s(z, this).indexOf(e);
-		return t >= 0 && (s(R, this).splice(t, 1), s(z, this).splice(t, 1), this.size--), this;
+		var t = s(H, this).indexOf(e);
+		return t >= 0 && (s(gt, this).splice(t, 1), s(H, this).splice(t, 1), this.size--), this;
 	}
 	forEachItem(e) {
-		for (var t = 0; t < this.size; t++) e(s(R, this)[t], s(z, this)[t], this);
+		for (var t = 0; t < this.size; t++) e(s(gt, this)[t], s(H, this)[t], this);
 	}
 	hasItem(e) {
-		return e = e.toString(), s(z, this).indexOf(e) >= 0;
+		return e = e.toString(), s(H, this).indexOf(e) >= 0;
 	}
 	addCslCitation(e) {
-		return s(B, this).push(e), e.setNoteIndex(s(B, this).length), e.getCitationItems().forEach((e) => {
-			r(yt, this, xt).call(this, e.id, e);
+		return s(U, this).push(e), e.setNoteIndex(s(U, this).length), e.getCitationItems().forEach((e) => {
+			r(_t, this, yt).call(this, e.id, e);
 		}), this;
 	}
 	getAllCitationsInJson() {
-		return s(B, this).map((e) => e.toJSON());
+		return s(U, this).map((e) => e.toJSON());
 	}
 	getCitation(e) {
-		return s(B, this).find((t) => t.citationID === e);
+		return s(U, this).find((t) => t.citationID === e);
 	}
 	getCitationIndex(e) {
-		return s(B, this).findIndex((t) => t.citationID === e);
+		return s(U, this).findIndex((t) => t.citationID === e);
 	}
 	getCitationsPre(e) {
 		var t = [];
-		return s(B, this).find((n, r) => n.citationID === e || (t.push([n.citationID, r + 1]), !1)), t;
+		return s(U, this).find((n, r) => n.citationID === e || (t.push([n.citationID, r + 1]), !1)), t;
 	}
 	getCitationsPost(e) {
-		for (var t = [], n = this.getCitationIndex(e) + 1; n < s(B, this).length; n++) {
-			var r = s(B, this)[n];
+		for (var t = [], n = this.getCitationIndex(e) + 1; n < s(U, this).length; n++) {
+			var r = s(U, this)[n];
 			t.push([r.citationID, n + 1]);
 		}
 		return t;
 	}
 };
-function xt(e, t) {
+function yt(e, t) {
 	e = e.toString();
-	var n = s(z, this).indexOf(e);
-	return n >= 0 ? (s(R, this)[n] = t, this) : (s(R, this).push(t), s(z, this).push(e), this.size++, this);
+	var n = s(H, this).indexOf(e);
+	return n >= 0 ? (s(gt, this)[n] = t, this) : (s(gt, this).push(t), s(H, this).push(e), this.size++, this);
 }
 //#endregion
 //#region src/app/csl/citation/citation-item-data.js
-function V(e) {
+function W(e) {
 	if (typeof e != "string" && typeof e != "number") throw Error("CitationItemData: id is required");
 	this._id = e, this._type = void 0, this._citationKey = void 0, this._categories = [], this._language = void 0, this._journalAbbreviation = void 0, this._shortTitle = void 0, this._author = [], this._chair = [], this._collectionEditor = [], this._compiler = [], this._composer = [], this._containerAuthor = [], this._contributor = [], this._curator = [], this._director = [], this._editor = [], this._editorialDirector = [], this._executiveProducer = [], this._guest = [], this._host = [], this._illustrator = [], this._narrator = [], this._organizer = [], this._originalAuthor = [], this._performer = [], this._producer = [], this._recipient = [], this._reviewedAuthor = [], this._scriptwriter = [], this._seriesCreator = [], this._translator = [], this._accessed = {}, this._container = {}, this._eventDate = {}, this._issued = {}, this._originalDate = {}, this._submitted = {}, this._abstract = void 0, this._annote = void 0, this._archive = void 0, this._archiveCollection = void 0, this._archiveLocation = void 0, this._archivePlace = void 0, this._authority = void 0, this._callNumber = void 0, this._chapterNumber = void 0, this._citationNumber = void 0, this._citationLabel = void 0, this._collectionNumber = void 0, this._collectionTitle = void 0, this._containerTitle = void 0, this._containerTitleShort = void 0, this._dimensions = void 0, this._DOI = void 0, this._edition = void 0, this._event = void 0, this._eventTitle = void 0, this._eventPlace = void 0, this._firstReferenceNoteNumber = void 0, this._genre = void 0, this._ISBN = void 0, this._ISSN = void 0, this._issue = void 0, this._jurisdiction = void 0, this._keyword = void 0, this._locator = void 0, this._medium = void 0, this._note = void 0, this._number = void 0, this._numberOfPages = void 0, this._numberOfVolumes = void 0, this._originalPublisher = void 0, this._originalPublisherPlace = void 0, this._originalTitle = void 0, this._page = void 0, this._part = void 0, this._partTitle = void 0, this._pageFirst = void 0, this._PMCID = void 0, this._PMID = void 0, this._printing = void 0, this._publisher = void 0, this._publisherPlace = void 0, this._references = void 0, this._reviewedGenre = void 0, this._reviewedTitle = void 0, this._scale = void 0, this._section = void 0, this._source = void 0, this._status = void 0, this._title = void 0, this._titleShort = void 0, this._URL = void 0, this._version = void 0, this._volume = void 0, this._volumeTitle = void 0, this._volumeTitleShort = void 0, this._yearSuffix = void 0, this._custom = {}, this.schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-data.json#/items";
 }
-V.prototype._addCustomProperty = function(e, t) {
+W.prototype._addCustomProperty = function(e, t) {
 	return this._custom[e] = t, this;
-}, V.prototype.getCustomProperty = function(e) {
+}, W.prototype.getCustomProperty = function(e) {
 	return Object.hasOwnProperty.call(this._custom, e) ? this._custom[e] : null;
-}, V.prototype.fillFromObject = function(e) {
-	if (Object.hasOwnProperty.call(e, "type") && (this._type = e.type), Object.hasOwnProperty.call(e, "categories") && (this._categories = e.categories), Object.hasOwnProperty.call(e, "citation-key") && (this._citationKey = e["citation-key"]), Object.hasOwnProperty.call(e, "language") && (this._language = e.language), Object.hasOwnProperty.call(e, "journalAbbreviation") && (this._journalAbbreviation = e.journalAbbreviation), Object.hasOwnProperty.call(e, "shortTitle") && (this._shortTitle = e.shortTitle), Object.hasOwnProperty.call(e, "author") && (this._author = e.author), Object.hasOwnProperty.call(e, "chair") && (this._chair = e.chair), Object.hasOwnProperty.call(e, "collection-editor") && (this._collectionEditor = e["collection-editor"]), Object.hasOwnProperty.call(e, "compiler") && (this._compiler = e.compiler), Object.hasOwnProperty.call(e, "composer") && (this._composer = e.composer), Object.hasOwnProperty.call(e, "container-author") && (this._containerAuthor = e["container-author"]), Object.hasOwnProperty.call(e, "contributor") && (this._contributor = e.contributor), Object.hasOwnProperty.call(e, "curator") && (this._curator = e.curator), Object.hasOwnProperty.call(e, "director") && (this._director = e.director), Object.hasOwnProperty.call(e, "editorial-director") && (this._editorialDirector = e["editorial-director"]), Object.hasOwnProperty.call(e, "editor") && (this._editor = e.editor), Object.hasOwnProperty.call(e, "executive-producer") && (this._executiveProducer = e["executive-producer"]), Object.hasOwnProperty.call(e, "guest") && (this._guest = e.guest), Object.hasOwnProperty.call(e, "host") && (this._host = e.host), Object.hasOwnProperty.call(e, "illustrator") && (this._illustrator = e.illustrator), Object.hasOwnProperty.call(e, "narrator") && (this._narrator = e.narrator), Object.hasOwnProperty.call(e, "organizer") && (this._organizer = e.organizer), Object.hasOwnProperty.call(e, "original-author") && (this._originalAuthor = e["original-author"]), Object.hasOwnProperty.call(e, "performer") && (this._performer = e.performer), Object.hasOwnProperty.call(e, "producer") && (this._producer = e.producer), Object.hasOwnProperty.call(e, "recipient") && (this._recipient = e.recipient), Object.hasOwnProperty.call(e, "reviewed-author") && (this._reviewedAuthor = e["reviewed-author"]), Object.hasOwnProperty.call(e, "script-writer") && (this._scriptWriter = e["script-writer"]), Object.hasOwnProperty.call(e, "series-creator") && (this._seriesCreator = e["series-creator"]), Object.hasOwnProperty.call(e, "translator") && (this._translator = e.translator), Object.hasOwnProperty.call(e, "accessed") && (this._accessed = e.accessed), Object.hasOwnProperty.call(e, "container") && (this._container = e.container), Object.hasOwnProperty.call(e, "event-date") && (this._eventDate = e["event-date"]), Object.hasOwnProperty.call(e, "issued") && (this._issued = e.issued), Object.hasOwnProperty.call(e, "original-date") && (this._originalDate = e["original-date"]), Object.hasOwnProperty.call(e, "submitted") && (this._submitted = e.submitted), Object.hasOwnProperty.call(e, "abstract") && (this._abstract = e.abstract), Object.hasOwnProperty.call(e, "annote") && (this._annote = e.annote), Object.hasOwnProperty.call(e, "archive") && (this._archive = e.archive), Object.hasOwnProperty.call(e, "archive_collection") && (this._archiveCollection = e.archive_collection), Object.hasOwnProperty.call(e, "archive_location") && (this._archiveLocation = e.archive_location), Object.hasOwnProperty.call(e, "archive-place") && (this._archivePlace = e["archive-place"]), Object.hasOwnProperty.call(e, "authority") && (this._authority = e.authority), Object.hasOwnProperty.call(e, "call-number") && (this._callNumber = e["call-number"]), Object.hasOwnProperty.call(e, "chapter-number") && (this._chapterNumber = e["chapter-number"]), Object.hasOwnProperty.call(e, "citation-number") && (this._citationNumber = e["citation-number"]), Object.hasOwnProperty.call(e, "citation-label") && (this._citationLabel = e["citation-label"]), Object.hasOwnProperty.call(e, "collection-number") && (this._collectionNumber = e["collection-number"]), Object.hasOwnProperty.call(e, "collection-title") && (this._collectionTitle = e["collection-title"]), Object.hasOwnProperty.call(e, "container-title") && (this._containerTitle = e["container-title"]), Object.hasOwnProperty.call(e, "container-title-short") && (this._containerTitleShort = e["container-title-short"]), Object.hasOwnProperty.call(e, "dimensions") && (this._dimensions = e.dimensions), Object.hasOwnProperty.call(e, "DOI") && (this._DOI = e.DOI), Object.hasOwnProperty.call(e, "edition") && (this._edition = e.edition), Object.hasOwnProperty.call(e, "event") && (this._event = e.event), Object.hasOwnProperty.call(e, "event-title") && (this._eventTitle = e["event-title"]), Object.hasOwnProperty.call(e, "event-place") && (this._eventPlace = e["event-place"]), Object.hasOwnProperty.call(e, "first-reference-note-number") && (this._firstReferenceNoteNumber = e["first-reference-note-number"]), Object.hasOwnProperty.call(e, "genre") && (this._genre = e.genre), Object.hasOwnProperty.call(e, "ISBN") && (this._ISBN = e.ISBN), Object.hasOwnProperty.call(e, "ISSN") && (this._ISSN = e.ISSN), Object.hasOwnProperty.call(e, "issue") && (this._issue = e.issue), Object.hasOwnProperty.call(e, "jurisdiction") && (this._jurisdiction = e.jurisdiction), Object.hasOwnProperty.call(e, "keyword") && (this._keyword = e.keyword), Object.hasOwnProperty.call(e, "locator") && (this._locator = e.locator), Object.hasOwnProperty.call(e, "medium") && (this._medium = e.medium), Object.hasOwnProperty.call(e, "note") && (this._note = e.note), Object.hasOwnProperty.call(e, "number") && (this._number = e.number), Object.hasOwnProperty.call(e, "number-of-pages") && (this._numberOfPages = e["number-of-pages"]), Object.hasOwnProperty.call(e, "number-of-volumes") && (this._numberOfVolumes = e["number-of-volumes"]), Object.hasOwnProperty.call(e, "original-publisher") && (this._originalPublisher = e["original-publisher"]), Object.hasOwnProperty.call(e, "original-publisher-place") && (this._originalPublisherPlace = e["original-publisher-place"]), Object.hasOwnProperty.call(e, "original-title") && (this._originalTitle = e["original-title"]), Object.hasOwnProperty.call(e, "page") && (this._page = e.page), Object.hasOwnProperty.call(e, "page-first") && (this._pageFirst = e["page-first"]), Object.hasOwnProperty.call(e, "part") && (this._part = e.part), Object.hasOwnProperty.call(e, "part-title") && (this._partTitle = e["part-title"]), Object.hasOwnProperty.call(e, "PMCID") && (this._PMCID = e.PMCID), Object.hasOwnProperty.call(e, "PMID") && (this._PMID = e.PMID), Object.hasOwnProperty.call(e, "printing") && (this._printing = e.printing), Object.hasOwnProperty.call(e, "publisher") && (this._publisher = e.publisher), Object.hasOwnProperty.call(e, "publisher-place") && (this._publisherPlace = e["publisher-place"]), Object.hasOwnProperty.call(e, "references") && (this._references = e.references), Object.hasOwnProperty.call(e, "reviewed-genre") && (this._reviewedGenre = e["reviewed-genre"]), Object.hasOwnProperty.call(e, "reviewed-title") && (this._reviewedTitle = e["reviewed-title"]), Object.hasOwnProperty.call(e, "scale") && (this._scale = e.scale), Object.hasOwnProperty.call(e, "section") && (this._section = e.section), Object.hasOwnProperty.call(e, "source") && (this._source = e.source), Object.hasOwnProperty.call(e, "status") && (this._status = e.status), Object.hasOwnProperty.call(e, "title") && (this._title = e.title), Object.hasOwnProperty.call(e, "title-short") && (this._titleShort = e["title-short"]), Object.hasOwnProperty.call(e, "URL") && (this._URL = e.URL), Object.hasOwnProperty.call(e, "version") && (this._version = e.version), Object.hasOwnProperty.call(e, "volume") && (this._volume = e.volume), Object.hasOwnProperty.call(e, "volume-title") && (this._volumeTitle = e["volume-title"]), Object.hasOwnProperty.call(e, "volume-title-short") && (this._volumeTitleShort = e["volume-title-short"]), Object.hasOwnProperty.call(e, "year-suffix") && (this._yearSuffix = e["year-suffix"]), Object.hasOwnProperty.call(e, "custom") && (this._custom = e.custom), Object.hasOwnProperty.call(e, "userID") && this._addCustomProperty("userID", e.userID), Object.hasOwnProperty.call(e, "groupID") && this._addCustomProperty("groupID", e.groupID), Object.hasOwnProperty.call(e, "creators")) {
+}, W.prototype.fillFromObject = function(e) {
+	if (Object.hasOwnProperty.call(e, "type") && (this._type = e.type), Object.hasOwnProperty.call(e, "categories") && (this._categories = e.categories), Object.hasOwnProperty.call(e, "citation-key") && (this._citationKey = e["citation-key"]), Object.hasOwnProperty.call(e, "language") && (this._language = e.language), Object.hasOwnProperty.call(e, "journalAbbreviation") && (this._journalAbbreviation = e.journalAbbreviation), Object.hasOwnProperty.call(e, "shortTitle") && (this._shortTitle = e.shortTitle), Object.hasOwnProperty.call(e, "author") && (this._author = e.author), Object.hasOwnProperty.call(e, "chair") && (this._chair = e.chair), Object.hasOwnProperty.call(e, "collection-editor") && (this._collectionEditor = e["collection-editor"]), Object.hasOwnProperty.call(e, "compiler") && (this._compiler = e.compiler), Object.hasOwnProperty.call(e, "composer") && (this._composer = e.composer), Object.hasOwnProperty.call(e, "container-author") && (this._containerAuthor = e["container-author"]), Object.hasOwnProperty.call(e, "contributor") && (this._contributor = e.contributor), Object.hasOwnProperty.call(e, "curator") && (this._curator = e.curator), Object.hasOwnProperty.call(e, "director") && (this._director = e.director), Object.hasOwnProperty.call(e, "editorial-director") && (this._editorialDirector = e["editorial-director"]), Object.hasOwnProperty.call(e, "editor") && (this._editor = e.editor), Object.hasOwnProperty.call(e, "executive-producer") && (this._executiveProducer = e["executive-producer"]), Object.hasOwnProperty.call(e, "guest") && (this._guest = e.guest), Object.hasOwnProperty.call(e, "host") && (this._host = e.host), Object.hasOwnProperty.call(e, "illustrator") && (this._illustrator = e.illustrator), Object.hasOwnProperty.call(e, "narrator") && (this._narrator = e.narrator), Object.hasOwnProperty.call(e, "organizer") && (this._organizer = e.organizer), Object.hasOwnProperty.call(e, "original-author") && (this._originalAuthor = e["original-author"]), Object.hasOwnProperty.call(e, "performer") && (this._performer = e.performer), Object.hasOwnProperty.call(e, "producer") && (this._producer = e.producer), Object.hasOwnProperty.call(e, "recipient") && (this._recipient = e.recipient), Object.hasOwnProperty.call(e, "reviewed-author") && (this._reviewedAuthor = e["reviewed-author"]), Object.hasOwnProperty.call(e, "script-writer") && (this._scriptWriter = e["script-writer"]), Object.hasOwnProperty.call(e, "series-creator") && (this._seriesCreator = e["series-creator"]), Object.hasOwnProperty.call(e, "translator") && (this._translator = e.translator), Object.hasOwnProperty.call(e, "accessed") && (this._accessed = e.accessed), Object.hasOwnProperty.call(e, "container") && (this._container = e.container), Object.hasOwnProperty.call(e, "event-date") && (this._eventDate = e["event-date"]), Object.hasOwnProperty.call(e, "issued") && (this._issued = e.issued), Object.hasOwnProperty.call(e, "original-date") && (this._originalDate = e["original-date"]), Object.hasOwnProperty.call(e, "submitted") && (this._submitted = e.submitted), Object.hasOwnProperty.call(e, "abstract") && (this._abstract = e.abstract), Object.hasOwnProperty.call(e, "annote") && (this._annote = e.annote), Object.hasOwnProperty.call(e, "archive") && (this._archive = e.archive), Object.hasOwnProperty.call(e, "archive_collection") && (this._archiveCollection = e.archive_collection), Object.hasOwnProperty.call(e, "archive_location") && (this._archiveLocation = e.archive_location), Object.hasOwnProperty.call(e, "archive-place") && (this._archivePlace = e["archive-place"]), Object.hasOwnProperty.call(e, "authority") && (this._authority = e.authority), Object.hasOwnProperty.call(e, "call-number") && (this._callNumber = e["call-number"]), Object.hasOwnProperty.call(e, "chapter-number") && (this._chapterNumber = e["chapter-number"]), Object.hasOwnProperty.call(e, "citation-number") && (this._citationNumber = e["citation-number"]), Object.hasOwnProperty.call(e, "citation-label") && (this._citationLabel = e["citation-label"]), Object.hasOwnProperty.call(e, "collection-number") && (this._collectionNumber = e["collection-number"]), Object.hasOwnProperty.call(e, "collection-title") && (this._collectionTitle = e["collection-title"]), Object.hasOwnProperty.call(e, "container-title") && (this._containerTitle = e["container-title"]), Object.hasOwnProperty.call(e, "container-title-short") && (this._containerTitleShort = e["container-title-short"]), Object.hasOwnProperty.call(e, "dimensions") && (this._dimensions = e.dimensions), Object.hasOwnProperty.call(e, "DOI") && (this._DOI = e.DOI), Object.hasOwnProperty.call(e, "edition") && (this._edition = e.edition), Object.hasOwnProperty.call(e, "event") && (this._event = e.event), Object.hasOwnProperty.call(e, "event-title") && (this._eventTitle = e["event-title"]), Object.hasOwnProperty.call(e, "event-place") && (this._eventPlace = e["event-place"]), Object.hasOwnProperty.call(e, "first-reference-note-number") && (this._firstReferenceNoteNumber = e["first-reference-note-number"]), Object.hasOwnProperty.call(e, "genre") && (this._genre = e.genre), Object.hasOwnProperty.call(e, "ISBN") && (this._ISBN = e.ISBN), Object.hasOwnProperty.call(e, "ISSN") && (this._ISSN = e.ISSN), Object.hasOwnProperty.call(e, "issue") && (this._issue = e.issue), Object.hasOwnProperty.call(e, "jurisdiction") && (this._jurisdiction = e.jurisdiction), Object.hasOwnProperty.call(e, "keyword") && (this._keyword = e.keyword), Object.hasOwnProperty.call(e, "locator") && (this._locator = e.locator), Object.hasOwnProperty.call(e, "medium") && (this._medium = e.medium), Object.hasOwnProperty.call(e, "note") && (this._note = e.note), Object.hasOwnProperty.call(e, "number") && (this._number = e.number), Object.hasOwnProperty.call(e, "number-of-pages") && (this._numberOfPages = e["number-of-pages"]), Object.hasOwnProperty.call(e, "number-of-volumes") && (this._numberOfVolumes = e["number-of-volumes"]), Object.hasOwnProperty.call(e, "original-publisher") && (this._originalPublisher = e["original-publisher"]), Object.hasOwnProperty.call(e, "original-publisher-place") && (this._originalPublisherPlace = e["original-publisher-place"]), Object.hasOwnProperty.call(e, "original-title") && (this._originalTitle = e["original-title"]), Object.hasOwnProperty.call(e, "page") && (this._page = e.page), Object.hasOwnProperty.call(e, "page-first") && (this._pageFirst = e["page-first"]), Object.hasOwnProperty.call(e, "part") && (this._part = e.part), Object.hasOwnProperty.call(e, "part-title") && (this._partTitle = e["part-title"]), Object.hasOwnProperty.call(e, "PMCID") && (this._PMCID = e.PMCID), Object.hasOwnProperty.call(e, "PMID") && (this._PMID = e.PMID), Object.hasOwnProperty.call(e, "printing") && (this._printing = e.printing), Object.hasOwnProperty.call(e, "publisher") && (this._publisher = e.publisher), Object.hasOwnProperty.call(e, "publisher-place") && (this._publisherPlace = e["publisher-place"]), Object.hasOwnProperty.call(e, "references") && (this._references = e.references), Object.hasOwnProperty.call(e, "reviewed-genre") && (this._reviewedGenre = e["reviewed-genre"]), Object.hasOwnProperty.call(e, "reviewed-title") && (this._reviewedTitle = e["reviewed-title"]), Object.hasOwnProperty.call(e, "scale") && (this._scale = e.scale), Object.hasOwnProperty.call(e, "section") && (this._section = e.section), Object.hasOwnProperty.call(e, "source") && (this._source = e.source), Object.hasOwnProperty.call(e, "status") && (this._status = e.status), Object.hasOwnProperty.call(e, "title") && (this._title = e.title), Object.hasOwnProperty.call(e, "title-short") && (this._titleShort = e["title-short"]), Object.hasOwnProperty.call(e, "URL") && (this._URL = e.URL), Object.hasOwnProperty.call(e, "versionNumber") && (this._version = e.versionNumber), Object.hasOwnProperty.call(e, "volume") && (this._volume = e.volume), Object.hasOwnProperty.call(e, "volume-title") && (this._volumeTitle = e["volume-title"]), Object.hasOwnProperty.call(e, "volume-title-short") && (this._volumeTitleShort = e["volume-title-short"]), Object.hasOwnProperty.call(e, "year-suffix") && (this._yearSuffix = e["year-suffix"]), Object.hasOwnProperty.call(e, "custom") && (this._custom = e.custom), Object.hasOwnProperty.call(e, "userID") && this._addCustomProperty("userID", e.userID), Object.hasOwnProperty.call(e, "groupID") && this._addCustomProperty("groupID", e.groupID), Object.hasOwnProperty.call(e, "creators")) {
 		var t = this;
 		e.creators.forEach(function(e) {
 			var n = {};
@@ -2336,255 +2362,264 @@ V.prototype._addCustomProperty = function(e, t) {
 		}, this);
 	}
 	Object.hasOwnProperty.call(e, "libraryCatalog") && (this._source = e.libraryCatalog), Object.hasOwnProperty.call(e, "place") && (this._eventPlace = e.place, this._publisherPlace = e.place), Object.hasOwnProperty.call(e, "numberOfVolumes") && (this._numberOfVolumes = e.numberOfVolumes), Object.hasOwnProperty.call(e, "callNumber") && (this._callNumber = e.callNumber), Object.hasOwnProperty.call(e, "seriesNumber") && (this._collectionNumber = e.seriesNumber), Object.hasOwnProperty.call(e, "series") && (this._collectionTitle = e.series), Object.hasOwnProperty.call(e, "bookTitle") && (this._containerTitle = e.bookTitle), Object.hasOwnProperty.call(e, "extra") && (this._note = e.extra), Object.hasOwnProperty.call(e, "rights") && (this._license = e.rights), Object.hasOwnProperty.call(e, "archiveLocation") && (this._archiveLocation = e.archiveLocation), Object.hasOwnProperty.call(e, "abstractNote") && (this._abstract = e.abstractNote);
-}, V.prototype.getTitle = function() {
+}, W.prototype.getTitle = function() {
 	return this._title;
-}, V.prototype.getType = function() {
+}, W.prototype.getType = function() {
 	return this._type;
-}, V.prototype.setType = function(e) {
+}, W.prototype.setType = function(e) {
 	return this._type = e, this;
-}, V.prototype.setCitationKey = function(e) {
+}, W.prototype.setCitationKey = function(e) {
 	return this._citationKey = e, this;
-}, V.prototype.setCategories = function(e) {
+}, W.prototype.setCategories = function(e) {
 	return this._categories = e, this;
-}, V.prototype.setLanguage = function(e) {
+}, W.prototype.setLanguage = function(e) {
 	return this._language = e, this;
-}, V.prototype.setJournalAbbreviation = function(e) {
+}, W.prototype.setJournalAbbreviation = function(e) {
 	return this._journalAbbreviation = e, this;
-}, V.prototype.setShortTitle = function(e) {
+}, W.prototype.setShortTitle = function(e) {
 	return this._shortTitle = e, this;
-}, V.prototype.setAuthor = function(e) {
+}, W.prototype.setAuthor = function(e) {
 	return this._author = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setChair = function(e) {
+}, W.prototype.setChair = function(e) {
 	return this._chair = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setCollectionEditor = function(e) {
+}, W.prototype.setCollectionEditor = function(e) {
 	return this._collectionEditor = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setCompiler = function(e) {
+}, W.prototype.setCompiler = function(e) {
 	return this._compiler = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setComposer = function(e) {
+}, W.prototype.setComposer = function(e) {
 	return this._composer = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setContainerAuthor = function(e) {
+}, W.prototype.setContainerAuthor = function(e) {
 	return this._containerAuthor = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setContributor = function(e) {
+}, W.prototype.setContributor = function(e) {
 	return this._contributor = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setCurator = function(e) {
+}, W.prototype.setCurator = function(e) {
 	return this._curator = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setDirector = function(e) {
+}, W.prototype.setDirector = function(e) {
 	return this._director = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setEditor = function(e) {
+}, W.prototype.setEditor = function(e) {
 	return this._editor = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setEditorialDirector = function(e) {
+}, W.prototype.setEditorialDirector = function(e) {
 	return this._editorialDirector = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setExecutiveProducer = function(e) {
+}, W.prototype.setExecutiveProducer = function(e) {
 	return this._executiveProducer = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setGuest = function(e) {
+}, W.prototype.setGuest = function(e) {
 	return this._guest = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setHost = function(e) {
+}, W.prototype.setHost = function(e) {
 	return this._host = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setIllustrator = function(e) {
+}, W.prototype.setIllustrator = function(e) {
 	return this._illustrator = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setNarrator = function(e) {
+}, W.prototype.setNarrator = function(e) {
 	return this._narrator = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setOrganizer = function(e) {
+}, W.prototype.setOrganizer = function(e) {
 	return this._organizer = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setOriginalAuthor = function(e) {
+}, W.prototype.setOriginalAuthor = function(e) {
 	return this._originalAuthor = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setPerformer = function(e) {
+}, W.prototype.setPerformer = function(e) {
 	return this._performer = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setProducer = function(e) {
+}, W.prototype.setProducer = function(e) {
 	return this._producer = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setRecipient = function(e) {
+}, W.prototype.setRecipient = function(e) {
 	return this._recipient = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setReviewedAuthor = function(e) {
+}, W.prototype.setReviewedAuthor = function(e) {
 	return this._reviewedAuthor = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setScriptwriter = function(e) {
+}, W.prototype.setScriptwriter = function(e) {
 	return this._scriptwriter = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setSeriesCreator = function(e) {
+}, W.prototype.setSeriesCreator = function(e) {
 	return this._seriesCreator = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setTranslator = function(e) {
+}, W.prototype.setTranslator = function(e) {
 	return this._translator = Array.isArray(e) ? e : [e], this;
-}, V.prototype.setAccessed = function(e) {
+}, W.prototype.setAccessed = function(e) {
 	return this._accessed = e || {}, this;
-}, V.prototype.setContainer = function(e) {
+}, W.prototype.setContainer = function(e) {
 	return this._container = e || {}, this;
-}, V.prototype.setEventDate = function(e) {
+}, W.prototype.setEventDate = function(e) {
 	return this._eventDate = e || {}, this;
-}, V.prototype.setIssued = function(e) {
+}, W.prototype.setIssued = function(e) {
 	return this._issued = e || {}, this;
-}, V.prototype.setOriginalDate = function(e) {
+}, W.prototype.setOriginalDate = function(e) {
 	return this._originalDate = e || {}, this;
-}, V.prototype.setSubmitted = function(e) {
+}, W.prototype.setSubmitted = function(e) {
 	return this._submitted = e || {}, this;
-}, V.prototype.setAbstract = function(e) {
+}, W.prototype.setAbstract = function(e) {
 	return this._abstract = e, this;
-}, V.prototype.setAnnote = function(e) {
+}, W.prototype.setAnnote = function(e) {
 	return this._annote = e, this;
-}, V.prototype.setArchive = function(e) {
+}, W.prototype.setArchive = function(e) {
 	return this._archive = e, this;
-}, V.prototype.setArchiveCollection = function(e) {
+}, W.prototype.setArchiveCollection = function(e) {
 	return this._archiveCollection = e, this;
-}, V.prototype.setArchiveLocation = function(e) {
+}, W.prototype.setArchiveLocation = function(e) {
 	return this._archiveLocation = e, this;
-}, V.prototype.setArchivePlace = function(e) {
+}, W.prototype.setArchivePlace = function(e) {
 	return this._archivePlace = e, this;
-}, V.prototype.setAuthority = function(e) {
+}, W.prototype.setAuthority = function(e) {
 	return this._authority = e, this;
-}, V.prototype.setCallNumber = function(e) {
+}, W.prototype.setCallNumber = function(e) {
 	return this._callNumber = e, this;
-}, V.prototype.setChapterNumber = function(e) {
+}, W.prototype.setChapterNumber = function(e) {
 	return this._chapterNumber = e, this;
-}, V.prototype.setCitationNumber = function(e) {
+}, W.prototype.setCitationNumber = function(e) {
 	return this._citationNumber = e, this;
-}, V.prototype.setCitationLabel = function(e) {
+}, W.prototype.setCitationLabel = function(e) {
 	return this._citationLabel = e, this;
-}, V.prototype.setCollectionNumber = function(e) {
+}, W.prototype.setCollectionNumber = function(e) {
 	return this._collectionNumber = e, this;
-}, V.prototype.setCollectionTitle = function(e) {
+}, W.prototype.setCollectionTitle = function(e) {
 	return this._collectionTitle = e, this;
-}, V.prototype.setContainerTitle = function(e) {
+}, W.prototype.setContainerTitle = function(e) {
 	return this._containerTitle = e, this;
-}, V.prototype.setContainerTitleShort = function(e) {
+}, W.prototype.setContainerTitleShort = function(e) {
 	return this._containerTitleShort = e, this;
-}, V.prototype.setDimensions = function(e) {
+}, W.prototype.setDimensions = function(e) {
 	return this._dimensions = e, this;
-}, V.prototype.setDOI = function(e) {
+}, W.prototype.setDOI = function(e) {
 	return this._DOI = e, this;
-}, V.prototype.setEdition = function(e) {
+}, W.prototype.setEdition = function(e) {
 	return this._edition = e, this;
-}, V.prototype.setEvent = function(e) {
+}, W.prototype.setEvent = function(e) {
 	return this._event = e, this;
-}, V.prototype.setEventTitle = function(e) {
+}, W.prototype.setEventTitle = function(e) {
 	return this._eventTitle = e, this;
-}, V.prototype.setEventPlace = function(e) {
+}, W.prototype.setEventPlace = function(e) {
 	return this._eventPlace = e, this;
-}, V.prototype.setFirstReferenceNoteNumber = function(e) {
+}, W.prototype.setFirstReferenceNoteNumber = function(e) {
 	return this._firstReferenceNoteNumber = e, this;
-}, V.prototype.setGenre = function(e) {
+}, W.prototype.setGenre = function(e) {
 	return this._genre = e, this;
-}, V.prototype.setISBN = function(e) {
+}, W.prototype.setISBN = function(e) {
 	return this._ISBN = e, this;
-}, V.prototype.setISSN = function(e) {
+}, W.prototype.setISSN = function(e) {
 	return this._ISSN = e, this;
-}, V.prototype.setIssue = function(e) {
+}, W.prototype.setIssue = function(e) {
 	return this._issue = e, this;
-}, V.prototype.setJurisdiction = function(e) {
+}, W.prototype.setJurisdiction = function(e) {
 	return this._jurisdiction = e, this;
-}, V.prototype.setKeyword = function(e) {
+}, W.prototype.setKeyword = function(e) {
 	return this._keyword = e, this;
-}, V.prototype.setLocator = function(e) {
+}, W.prototype.setLocator = function(e) {
 	return this._locator = e, this;
-}, V.prototype.setMedium = function(e) {
+}, W.prototype.setMedium = function(e) {
 	return this._medium = e, this;
-}, V.prototype.setNote = function(e) {
+}, W.prototype.setNote = function(e) {
 	return this._note = e, this;
-}, V.prototype.setNumber = function(e) {
+}, W.prototype.setNumber = function(e) {
 	return this._number = e, this;
-}, V.prototype.setNumberOfPages = function(e) {
+}, W.prototype.setNumberOfPages = function(e) {
 	return this._numberOfPages = e, this;
-}, V.prototype.setNumberOfVolumes = function(e) {
+}, W.prototype.setNumberOfVolumes = function(e) {
 	return this._numberOfVolumes = e, this;
-}, V.prototype.setOriginalPublisher = function(e) {
+}, W.prototype.setOriginalPublisher = function(e) {
 	return this._originalPublisher = e, this;
-}, V.prototype.setOriginalPublisherPlace = function(e) {
+}, W.prototype.setOriginalPublisherPlace = function(e) {
 	return this._originalPublisherPlace = e, this;
-}, V.prototype.setOriginalTitle = function(e) {
+}, W.prototype.setOriginalTitle = function(e) {
 	return this._originalTitle = e, this;
-}, V.prototype.setPage = function(e) {
+}, W.prototype.setPage = function(e) {
 	return this._page = e, this;
-}, V.prototype.setPageFirst = function(e) {
+}, W.prototype.setPageFirst = function(e) {
 	return this._pageFirst = e, this;
-}, V.prototype.setPart = function(e) {
+}, W.prototype.setPart = function(e) {
 	return this._part = e, this;
-}, V.prototype.setPartTitle = function(e) {
+}, W.prototype.setPartTitle = function(e) {
 	return this._partTitle = e, this;
-}, V.prototype.setPMCID = function(e) {
+}, W.prototype.setPMCID = function(e) {
 	return this._PMCID = e, this;
-}, V.prototype.setPMID = function(e) {
+}, W.prototype.setPMID = function(e) {
 	return this._PMID = e, this;
-}, V.prototype.setPrinting = function(e) {
+}, W.prototype.setPrinting = function(e) {
 	return this._printing = e, this;
-}, V.prototype.setPublisher = function(e) {
+}, W.prototype.setPublisher = function(e) {
 	return this._publisher = e, this;
-}, V.prototype.setPublisherPlace = function(e) {
+}, W.prototype.setPublisherPlace = function(e) {
 	return this._publisherPlace = e, this;
-}, V.prototype.setReferences = function(e) {
+}, W.prototype.setReferences = function(e) {
 	return this._references = e, this;
-}, V.prototype.setReviewedGenre = function(e) {
+}, W.prototype.setReviewedGenre = function(e) {
 	return this._reviewedGenre = e, this;
-}, V.prototype.setReviewedTitle = function(e) {
+}, W.prototype.setReviewedTitle = function(e) {
 	return this._reviewedTitle = e, this;
-}, V.prototype.setScale = function(e) {
+}, W.prototype.setScale = function(e) {
 	return this._scale = e, this;
-}, V.prototype.setSection = function(e) {
+}, W.prototype.setSection = function(e) {
 	return this._section = e, this;
-}, V.prototype.setSource = function(e) {
+}, W.prototype.setSource = function(e) {
 	return this._source = e, this;
-}, V.prototype.setStatus = function(e) {
+}, W.prototype.setStatus = function(e) {
 	return this._status = e, this;
-}, V.prototype.setTitle = function(e) {
+}, W.prototype.setTitle = function(e) {
 	return this._title = e, this;
-}, V.prototype.setTitleShort = function(e) {
+}, W.prototype.setTitleShort = function(e) {
 	return this._titleShort = e, this;
-}, V.prototype.setURL = function(e) {
+}, W.prototype.setURL = function(e) {
 	return this._URL = e, this;
-}, V.prototype.setVersion = function(e) {
+}, W.prototype.setVersion = function(e) {
 	return this._version = e, this;
-}, V.prototype.setVolume = function(e) {
+}, W.prototype.setVolume = function(e) {
 	return this._volume = e, this;
-}, V.prototype.setVolumeTitle = function(e) {
+}, W.prototype.setVolumeTitle = function(e) {
 	return this._volumeTitle = e, this;
-}, V.prototype.setVolumeTitleShort = function(e) {
+}, W.prototype.setVolumeTitleShort = function(e) {
 	return this._volumeTitleShort = e, this;
-}, V.prototype.setYearSuffix = function(e) {
+}, W.prototype.setYearSuffix = function(e) {
 	return this._yearSuffix = e, this;
-}, V.prototype.setCustom = function(e) {
+}, W.prototype.setCustom = function(e) {
 	return this._custom = Object.assign(this._custom, e), this;
-}, V.prototype.toJSON = function(e) {
+}, W.prototype.toJSON = function(e) {
 	var t = {};
 	return t.id = this._id, this._type !== void 0 && this._type !== "" && (t.type = this._type), this._citationKey !== void 0 && this._citationKey !== "" && (t["citation-key"] = this._citationKey), this._categories.length > 0 && (t.categories = this._categories), this._language !== void 0 && this._language !== "" && (t.language = this._language), this._journalAbbreviation !== void 0 && this._journalAbbreviation !== "" && (t.journalAbbreviation = this._journalAbbreviation), this._shortTitle !== void 0 && this._shortTitle !== "" && (t.shortTitle = this._shortTitle, this._titleShort === void 0 && (t["title-short"] = this._shortTitle)), this._author.length > 0 && (t.author = this._author), this._chair.length > 0 && (t.chair = this._chair), this._collectionEditor.length > 0 && (t["collection-editor"] = this._collectionEditor), this._compiler.length > 0 && (t.compiler = this._compiler), this._composer.length > 0 && (t.composer = this._composer), this._containerAuthor.length > 0 && (t["container-author"] = this._containerAuthor), this._contributor.length > 0 && (t.contributor = this._contributor), this._curator.length > 0 && (t.curator = this._curator), this._director.length > 0 && (t.director = this._director), this._editor.length > 0 && (t.editor = this._editor), this._editorialDirector.length > 0 && (t["editorial-director"] = this._editorialDirector), this._executiveProducer.length > 0 && (t["executive-producer"] = this._executiveProducer), this._guest.length > 0 && (t.guest = this._guest), this._host.length > 0 && (t.host = this._host), this._illustrator.length > 0 && (t.illustrator = this._illustrator), this._narrator.length > 0 && (t.narrator = this._narrator), this._organizer.length > 0 && (t.organizer = this._organizer), this._originalAuthor.length > 0 && (t["original-author"] = this._originalAuthor), this._performer.length > 0 && (t.performer = this._performer), this._producer.length > 0 && (t.producer = this._producer), this._recipient.length > 0 && (t.recipient = this._recipient), this._reviewedAuthor.length > 0 && (t["reviewed-author"] = this._reviewedAuthor), this._scriptwriter.length > 0 && (t["script-writer"] = this._scriptwriter), this._seriesCreator.length > 0 && (t["series-creator"] = this._seriesCreator), this._translator.length > 0 && (t.translator = this._translator), Object.keys(this._accessed).length > 0 && (t.accessed = this._accessed), Object.keys(this._container).length > 0 && (t.container = this._container), Object.keys(this._eventDate).length > 0 && (t["event-date"] = this._eventDate), Object.keys(this._issued).length > 0 && (t.issued = this._issued), Object.keys(this._originalDate).length > 0 && (t["original-date"] = this._originalDate), Object.keys(this._submitted).length > 0 && (t.submitted = this._submitted), this._abstract !== void 0 && this._abstract !== "" && (t.abstract = this._abstract), this._annote !== void 0 && this._annote !== "" && (t.annote = this._annote), this._archive !== void 0 && this._archive !== "" && (t.archive = this._archive), this._archiveCollection !== void 0 && this._archiveCollection !== "" && (t.archive_collection = this._archiveCollection), this._archiveLocation !== void 0 && this._archiveLocation !== "" && (t.archive_location = this._archiveLocation), this._archivePlace !== void 0 && this._archivePlace !== "" && (t["archive-place"] = this._archivePlace), this._authority !== void 0 && this._authority !== "" && (t.authority = this._authority), this._callNumber !== void 0 && this._callNumber !== "" && (t["call-number"] = this._callNumber), this._chapterNumber !== void 0 && this._chapterNumber !== "" && (t["chapter-number"] = this._chapterNumber), this._citationNumber !== void 0 && this._citationNumber !== "" && (t["citation-number"] = this._citationNumber), this._citationLabel !== void 0 && this._citationLabel !== "" && (t["citation-label"] = this._citationLabel), this._collectionNumber !== void 0 && this._collectionNumber !== "" && (t["collection-number"] = this._collectionNumber), this._collectionTitle !== void 0 && this._collectionTitle !== "" && (t["collection-title"] = this._collectionTitle), this._containerTitle !== void 0 && this._containerTitle !== "" && (t["container-title"] = this._containerTitle), this._containerTitleShort !== void 0 && this._containerTitleShort !== "" && (t["container-title-short"] = this._containerTitleShort), this._dimensions !== void 0 && this._dimensions !== "" && (t.dimensions = this._dimensions), this._DOI !== void 0 && this._DOI !== "" && (t.DOI = this._DOI), this._edition !== void 0 && this._edition !== "" && (t.edition = this._edition), this._event !== void 0 && this._event !== "" && (t.event = this._event), this._eventTitle !== void 0 && this._eventTitle !== "" && (t["event-title"] = this._eventTitle), this._eventPlace !== void 0 && this._eventPlace !== "" && (t["event-place"] = this._eventPlace), this._firstReferenceNoteNumber !== void 0 && this._firstReferenceNoteNumber !== "" && (t["first-reference-note-number"] = this._firstReferenceNoteNumber), this._genre !== void 0 && this._genre !== "" && (t.genre = this._genre), this._ISBN !== void 0 && this._ISBN !== "" && (t.ISBN = this._ISBN), this._ISSN !== void 0 && this._ISSN !== "" && (t.ISSN = this._ISSN), this._issue !== void 0 && this._issue !== "" && (t.issue = this._issue), this._jurisdiction !== void 0 && this._jurisdiction !== "" && (t.jurisdiction = this._jurisdiction), this._keyword !== void 0 && this._keyword !== "" && (t.keyword = this._keyword), this._locator !== void 0 && this._locator !== "" && (t.locator = this._locator), this._medium !== void 0 && this._medium !== "" && (t.medium = this._medium), this._note !== void 0 && this._note !== "" && (t.note = this._note), this._number !== void 0 && this._number !== "" && (t.number = this._number), this._numberOfPages !== void 0 && this._numberOfPages !== "" && (t["number-of-pages"] = this._numberOfPages), this._numberOfVolumes !== void 0 && this._numberOfVolumes !== "" && (t["number-of-volumes"] = this._numberOfVolumes), this._originalPublisher !== void 0 && this._originalPublisher !== "" && (t["original-publisher"] = this._originalPublisher), this._originalPublisherPlace !== void 0 && this._originalPublisherPlace !== "" && (t["original-publisher-place"] = this._originalPublisherPlace), this._originalTitle !== void 0 && this._originalTitle !== "" && (t["original-title"] = this._originalTitle), this._page !== void 0 && this._page !== "" && (t.page = this._page), this._pageFirst !== void 0 && this._pageFirst !== "" && (t["page-first"] = this._pageFirst), this._part !== void 0 && this._part !== "" && (t.part = this._part), this._partTitle !== void 0 && this._partTitle !== "" && (t["part-title"] = this._partTitle), this._PMCID !== void 0 && this._PMCID !== "" && (t.PMCID = this._PMCID), this._PMID !== void 0 && this._PMID !== "" && (t.PMID = this._PMID), this._printing !== void 0 && this._printing !== "" && (t.printing = this._printing), this._publisher !== void 0 && this._publisher !== "" && (t.publisher = this._publisher), this._publisherPlace !== void 0 && this._publisherPlace !== "" && (t["publisher-place"] = this._publisherPlace), this._references !== void 0 && this._references !== "" && (t.references = this._references), this._reviewedGenre !== void 0 && this._reviewedGenre !== "" && (t["reviewed-genre"] = this._reviewedGenre), this._reviewedTitle !== void 0 && this._reviewedTitle !== "" && (t["reviewed-title"] = this._reviewedTitle), this._scale !== void 0 && this._scale !== "" && (t.scale = this._scale), this._section !== void 0 && this._section !== "" && (t.section = this._section), this._source !== void 0 && this._source !== "" && (t.source = this._source), this._status !== void 0 && this._status !== "" && (t.status = this._status), this._title !== void 0 && this._title !== "" && (t.title = this._title), this._titleShort !== void 0 && this._titleShort !== "" && (t["title-short"] = this._titleShort), this._URL !== void 0 && this._URL !== "" && (t.URL = this._URL), this._version !== void 0 && this._version !== "" && (t.version = this._version), this._volume !== void 0 && this._volume !== "" && (t.volume = this._volume), this._volumeTitle !== void 0 && this._volumeTitle !== "" && (t["volume-title"] = this._volumeTitle), this._volumeTitleShort !== void 0 && this._volumeTitleShort !== "" && (t["volume-title-short"] = this._volumeTitleShort), this._yearSuffix !== void 0 && this._yearSuffix !== "" && (t["year-suffix"] = this._yearSuffix), Object.keys(this._custom).length !== 0 && (t.custom = this._custom), this._license !== void 0 && this._license !== "" && (t.license = this._license), e && t.page && (t.type === "article-journal" || t.type === "article-magazine" || t.type === "article-newspaper") && delete t.URL, t;
 };
 //#endregion
 //#region src/app/csl/citation/citation-item.js
-function H(e) {
+function G(e) {
 	if (typeof e != "string" && typeof e != "number") throw Error("CitationItem: id is required");
-	this.id = e, this._itemData = new V(e), this._prefix = void 0, this._suffix = void 0, this._locator = void 0, this._label = void 0, this._suppressAuthor = void 0, this._authorOnly = void 0, this._uris = [];
+	this.id = e, this._itemData = new W(e), this._prefix = void 0, this._suffix = void 0, this._locator = void 0, this._label = void 0, this._suppressAuthor = void 0, this._authorOnly = void 0, this._uris = [];
 }
-H.prototype.fillFromObject = function(e) {
+G.prototype.fillFromObject = function(e) {
 	var t = this;
 	Object.hasOwnProperty.call(e, "version") && Object.hasOwnProperty.call(e, "library") ? (this._itemData.fillFromObject(e.data), Object.hasOwnProperty.call(e, "links") && (Object.hasOwnProperty.call(e.links, "self") && this.addUri(e.links.self.href), Object.hasOwnProperty.call(e.links, "alternate") && this.addUri(e.links.alternate.href))) : Object.hasOwnProperty.call(e, "itemData") ? this._itemData.fillFromObject(e.itemData) : this._itemData.fillFromObject(e), Object.hasOwnProperty.call(e, "prefix") && (this._prefix = e.prefix), Object.hasOwnProperty.call(e, "suffix") && (this._suffix = e.suffix), Object.hasOwnProperty.call(e, "locator") && (this._locator = e.locator), Object.hasOwnProperty.call(e, "label") && (this._label = e.label), Object.hasOwnProperty.call(e, "suppress-author") && (this._suppressAuthor = e["suppress-author"]), Object.hasOwnProperty.call(e, "author-only") && (this._authorOnly = e["author-only"]), Object.hasOwnProperty.call(e, "uris") && e.uris.forEach(function(e) {
 		t.addUri(e);
 	}, this);
-}, H.prototype.getInfoForCitationCluster = function() {
+}, G.prototype.getInfoForCitationCluster = function() {
 	var e = {
 		id: this.id,
 		"suppress-author": this._suppressAuthor
 	};
 	return this._prefix && (e.prefix = this._prefix), this._suffix && (e.suffix = this._suffix), this._locator && (e.locator = this._locator), this._label && (e.label = this._label), e;
-}, H.prototype.getItemData = function() {
+}, G.prototype.getItemData = function() {
 	return this._itemData;
-}, H.prototype.getProperty = function(e) {
+}, G.prototype.getProperty = function(e) {
 	return this._itemData.getCustomProperty(e) === null ? null : this._itemData.getCustomProperty(e);
-}, H.prototype.setPrefix = function(e) {
+}, G.prototype.setPrefix = function(e) {
 	return this._prefix = e, this;
-}, H.prototype.setSuffix = function(e) {
+}, G.prototype.setSuffix = function(e) {
 	return this._suffix = e, this;
-}, H.prototype.setLocator = function(e) {
+}, G.prototype.setLocator = function(e) {
 	return this._locator = e, this;
-}, H.prototype.setLabel = function(e) {
+}, G.prototype.setLabel = function(e) {
 	if (e) {
 		if ((/* @__PURE__ */ "act.appendix.article-locator.book.canon.chapter.column.elocation.equation.figure.folio.issue.line.note.opus.page.paragraph.part.rule.scene.section.sub-verbo.supplement.table.timestamp.title-locator.verse.version.volume".split(".")).indexOf(e) === -1) throw Error("CitationItem.setLocator: Invalid label \"" + e + "\"");
 		this._label = e;
 	}
 	return this;
-}, H.prototype.setSuppressAuthor = function(e) {
+}, G.prototype.setSuppressAuthor = function(e) {
 	return this._suppressAuthor = e, this;
-}, H.prototype.setAuthorOnly = function(e) {
+}, G.prototype.setAuthorOnly = function(e) {
 	return this._authorOnly = e, this;
-}, H.prototype.addUri = function(e) {
+}, G.prototype.addUri = function(e) {
 	return this._uris.indexOf(e) === -1 && this._uris.push(e), this;
-}, H.prototype.toJSON = function(e) {
+}, G.prototype.toJSON = function(e) {
 	var t = {};
-	return t.id = this.id, this._itemData && (t.itemData = this._itemData.toJSON ? this._itemData.toJSON(e) : this._itemData), this._prefix !== void 0 && (t.prefix = this._prefix), this._suffix !== void 0 && (t.suffix = this._suffix), this._locator !== void 0 && (t.locator = this._locator), this._label !== void 0 && (t.label = this._label), this._suppressAuthor !== void 0 && (t["suppress-author"] = this._suppressAuthor), this._authorOnly !== void 0 && (t["author-only"] = this._authorOnly), this._uris.length && (t.uris = this._uris), t;
-}, H.prototype.toFlatJSON = function(e, t) {
+	t.id = this.id, this._itemData && (t.itemData = this._itemData.toJSON ? this._itemData.toJSON(e) : this._itemData), this._prefix !== void 0 && (t.prefix = this._prefix), this._suffix !== void 0 && (t.suffix = this._suffix), this._locator !== void 0 && (t.locator = this._locator), this._label !== void 0 && (t.label = this._label), this._suppressAuthor !== void 0 && (t["suppress-author"] = this._suppressAuthor), this._authorOnly !== void 0 && (t["author-only"] = this._authorOnly);
+	var n = this._uris.filter(function(e) {
+		return e.indexOf("127.0.0.1") === -1 && e.indexOf("localhost") === -1 && e.indexOf("api.zotero.org") === -1;
+	});
+	if (n.length) t.uris = n;
+	else {
+		var r = this._itemData && this._itemData.getCustomProperty ? this._itemData.getCustomProperty("userID") : null, i = this._itemData && this._itemData.getCustomProperty ? this._itemData.getCustomProperty("groupID") : null, a = typeof this.id == "string" ? this.id : "";
+		t.uris = a && r ? ["http://zotero.org/users/" + r + "/items/" + a] : a && i ? ["http://zotero.org/groups/" + i + "/items/" + a] : [];
+	}
+	return t;
+}, G.prototype.toFlatJSON = function(e, t) {
 	var n = {
 		id: this.id,
 		index: e
@@ -2595,15 +2630,15 @@ H.prototype.fillFromObject = function(e) {
 };
 //#endregion
 //#region src/app/csl/citation/citation.js
-var U = /*#__PURE__*/ new WeakSet(), St = class {
+var K = /*#__PURE__*/ new WeakSet(), bt = class {
 	constructor(e) {
-		u(this, U), e ||= r(U, this, At).call(this), jt._.has(e) && (console.warn("Citation ID must be unique"), e = r(U, this, At).call(this)), jt._.add(e), this.citationID = e, this._citationItems = [], this._properties = {}, this._manualOverride = {}, this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
+		u(this, K), e ||= r(K, this, Ot).call(this), kt._.has(e) && (console.warn("Citation ID must be unique"), e = r(K, this, Ot).call(this)), kt._.add(e), this.citationID = e, this._citationItems = [], this._properties = {}, this._manualOverride = {}, this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
 	}
 	static resetUsedIDs() {
-		jt._ = /* @__PURE__ */ new Set();
+		kt._ = /* @__PURE__ */ new Set();
 	}
 	fillFromObject(e) {
-		return Object.hasOwnProperty.call(e, "properties") || Object.hasOwnProperty.call(e, "manualOverride") || Object.hasOwnProperty.call(e, "schema") ? r(U, this, Ct).call(this, e) : Object.hasOwnProperty.call(e, "citationItems") ? r(U, this, wt).call(this, e) : Object.hasOwnProperty.call(e, "version") && Object.hasOwnProperty.call(e, "library") ? r(U, this, Et).call(this, e) : r(U, this, Tt).call(this, e);
+		return Object.hasOwnProperty.call(e, "properties") || Object.hasOwnProperty.call(e, "manualOverride") || Object.hasOwnProperty.call(e, "schema") ? r(K, this, xt).call(this, e) : Object.hasOwnProperty.call(e, "citationItems") ? r(K, this, St).call(this, e) : Object.hasOwnProperty.call(e, "version") && Object.hasOwnProperty.call(e, "library") ? r(K, this, wt).call(this, e) : r(K, this, Ct).call(this, e);
 	}
 	getCitationItems() {
 		return this._citationItems;
@@ -2620,13 +2655,13 @@ var U = /*#__PURE__*/ new WeakSet(), St = class {
 		return Object.hasOwnProperty.call(this._properties, "plainCitation") ? String(this._properties.plainCitation) : this._manualOverride && Object.keys(this._manualOverride).length > 0 ? String(this._manualOverride.citeprocText) : "";
 	}
 	setDoNotUpdate() {
-		return r(U, this, Ot).call(this, { dontUpdate: !0 }), this;
+		return r(K, this, Et).call(this, { dontUpdate: !0 }), this;
 	}
 	setNoteIndex(e) {
-		return r(U, this, Ot).call(this, { noteIndex: e }), this;
+		return r(K, this, Et).call(this, { noteIndex: e }), this;
 	}
 	setPlainCitation(e) {
-		return r(U, this, Ot).call(this, { plainCitation: e }), this;
+		return r(K, this, Et).call(this, { plainCitation: e }), this;
 	}
 	setManualOverride(e, t) {
 		var n = {
@@ -2651,64 +2686,64 @@ var U = /*#__PURE__*/ new WeakSet(), St = class {
 		})), e;
 	}
 };
-function Ct(e) {
+function xt(e) {
 	var t = this;
-	if (Object.hasOwnProperty.call(e, "schema"), Object.hasOwnProperty.call(e, "properties") && r(U, this, Ot).call(this, e.properties), Object.hasOwnProperty.call(e, "manualOverride") && (this._manualOverride = e.manualOverride), !Object.hasOwnProperty.call(e, "citationItems")) return console.error("citationItems is empty"), 0;
+	if (Object.hasOwnProperty.call(e, "schema"), Object.hasOwnProperty.call(e, "properties") && r(K, this, Et).call(this, e.properties), Object.hasOwnProperty.call(e, "manualOverride") && (this._manualOverride = e.manualOverride), !Object.hasOwnProperty.call(e, "citationItems")) return console.error("citationItems is empty"), 0;
 	var n = this._citationItems.map(function(e) {
 		return e.id;
 	});
 	return e.citationItems.forEach(function(e) {
 		var i = e.id, a;
-		n.indexOf(i) >= 0 ? a = t._citationItems[n.indexOf(i)] : (a = new H(i), n.push(i)), typeof i == "number" && (i = r(U, t, kt).call(t, e)), a.fillFromObject(e), r(U, t, Dt).call(t, a);
+		n.indexOf(i) >= 0 ? a = t._citationItems[n.indexOf(i)] : (a = new G(i), n.push(i)), typeof i == "number" && (i = r(K, t, Dt).call(t, e)), a.fillFromObject(e), r(K, t, Tt).call(t, a);
 	}, this), n.length;
 }
-function wt(e) {
+function St(e) {
 	var t = this;
 	return e.citationItems.length === 0 ? (console.error("CSLCitation.citationItems: citationItems is empty"), 0) : (e.citationItems.length > 1 && console.warn("CSLCitation.citationItems: citationItems has more than one item"), e.citationItems.forEach(function(e) {
-		r(U, t, Tt).call(t, e);
+		r(K, t, Ct).call(t, e);
 	}, this), 1);
 }
-function Tt(e) {
+function Ct(e) {
 	var t = e.id, n, i = this._citationItems.map(function(e) {
 		return e.id;
 	});
-	return n = i.indexOf(t) >= 0 ? this._citationItems[i.indexOf(t)] : new H(t), n.fillFromObject(e), r(U, this, Dt).call(this, n), 1;
+	return n = i.indexOf(t) >= 0 ? this._citationItems[i.indexOf(t)] : new G(t), n.fillFromObject(e), r(K, this, Tt).call(this, n), 1;
 }
-function Et(e) {
+function wt(e) {
 	if (!Object.hasOwnProperty.call(e, "data")) return console.error("Invalid citation object"), 0;
 	var t = this._citationItems.map(function(e) {
 		return e.id;
-	}), n = e.data.key, i = t.indexOf(n) >= 0 ? this._citationItems[t.indexOf(n)] : new H(n);
-	return i.fillFromObject(e), r(U, this, Dt).call(this, i), 1;
+	}), n = e.data.key, i = t.indexOf(n) >= 0 ? this._citationItems[t.indexOf(n)] : new G(n);
+	return i.fillFromObject(e), r(K, this, Tt).call(this, i), 1;
 }
-function Dt(e) {
+function Tt(e) {
 	var t = this._citationItems.map(function(e) {
 		return e.id;
 	});
 	return t.indexOf(e.id) >= 0 ? (this._citationItems[t.indexOf(e.id)] = e, this) : (this._citationItems.push(e), this);
 }
-function Ot(e) {
+function Et(e) {
 	var t = this;
 	return Object.keys(e).forEach(function(n) {
 		Object.hasOwnProperty.call(e, n) && (t._properties[n] = e[n]);
 	}, this), this;
 }
-function kt(e) {
+function Dt(e) {
 	if (Object.hasOwnProperty.call(e, "uris") && e.uris.length) {
 		var t = e.uris[0].lastIndexOf("/");
 		return e.uris[0].slice(t + 1);
 	}
 	return e.id;
 }
-function At() {
+function Ot() {
 	return Math.random().toString(36).substring(2, 15);
 }
-var jt = { _: /* @__PURE__ */ new Set() }, W = /*#__PURE__*/ new WeakMap(), Mt = /*#__PURE__*/ new WeakMap(), Nt = /*#__PURE__*/ new WeakMap(), Pt = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakSet(), Ft = class {
+var kt = { _: /* @__PURE__ */ new Set() }, q = /*#__PURE__*/ new WeakMap(), At = /*#__PURE__*/ new WeakMap(), jt = /*#__PURE__*/ new WeakMap(), Mt = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakSet(), Nt = class {
 	constructor() {
-		u(this, G), c(this, W, void 0), c(this, Mt, void 0), c(this, Nt, void 0), c(this, Pt, void 0), l(W, this, null), l(Mt, this, window.Asc.plugin.button), l(Nt, this, Asc.plugin.onThemeChanged), l(Pt, this, Asc.plugin.onTranslate);
+		u(this, J), c(this, q, void 0), c(this, At, void 0), c(this, jt, void 0), c(this, Mt, void 0), l(q, this, null), l(At, this, window.Asc.plugin.button), l(jt, this, Asc.plugin.onThemeChanged), l(Mt, this, Asc.plugin.onTranslate);
 	}
 	show(e, t) {
-		s(W, this) && r(G, this, Lt).call(this), l(W, this, new window.Asc.PluginWindow());
+		s(q, this) && r(J, this, Ft).call(this), l(q, this, new window.Asc.PluginWindow());
 		var n = {
 			name: "Zotero",
 			url: "info-window.html",
@@ -2729,15 +2764,15 @@ var jt = { _: /* @__PURE__ */ new Set() }, W = /*#__PURE__*/ new WeakMap(), Mt =
 			isDisplayedInViewer: !1,
 			isInsideMode: !1
 		};
-		return r(G, this, It).call(this, n, t, "default"), s(W, this).show(n), new Promise((e, t) => {
+		return r(J, this, Pt).call(this, n, t, "default"), s(q, this).show(n), new Promise((e, t) => {
 			window.Asc.plugin.button = (t, n) => {
-				e(t === 0), r(G, this, Lt).call(this);
+				e(t === 0), r(J, this, Ft).call(this);
 			};
 		});
 	}
 	showEditWindow(e) {
 		var t = this;
-		s(W, this) && r(G, this, Lt).call(this), l(W, this, new window.Asc.PluginWindow());
+		s(q, this) && r(J, this, Ft).call(this), l(q, this, new window.Asc.PluginWindow());
 		var n = {
 			name: "Zotero",
 			url: "edit-window.html",
@@ -2758,17 +2793,17 @@ var jt = { _: /* @__PURE__ */ new Set() }, W = /*#__PURE__*/ new WeakMap(), Mt =
 			isDisplayedInViewer: !1,
 			isInsideMode: !1
 		};
-		return r(G, this, It).call(this, n, e, "default"), s(W, this).show(n), new Promise((e, n) => {
+		return r(J, this, Pt).call(this, n, e, "default"), s(q, this).show(n), new Promise((e, n) => {
 			window.Asc.plugin.button = /*#__PURE__*/ function() {
 				var n = a(function* (n, i) {
 					var a = yield new Promise((e) => {
-						if (!s(W, t)) {
+						if (!s(q, t)) {
 							e(null);
 							return;
 						}
-						s(W, t).attachEvent("onSaveFields", e), s(W, t).command("onClickSave");
+						s(q, t).attachEvent("onSaveFields", e), s(q, t).command("onClickSave");
 					});
-					e(n === 0 ? a : null), r(G, t, Lt).call(t);
+					e(n === 0 ? a : null), r(J, t, Ft).call(t);
 				});
 				return function(e, t) {
 					return n.apply(this, arguments);
@@ -2777,7 +2812,7 @@ var jt = { _: /* @__PURE__ */ new Set() }, W = /*#__PURE__*/ new WeakMap(), Mt =
 		});
 	}
 	showInfoWindow(e, t, n) {
-		s(W, this) && r(G, this, Lt).call(this), typeof n != "string" && (n = "warning"), l(W, this, new window.Asc.PluginWindow());
+		s(q, this) && r(J, this, Ft).call(this), typeof n != "string" && (n = "warning"), l(q, this, new window.Asc.PluginWindow());
 		var i = {
 			name: "Zotero",
 			url: "info-window.html",
@@ -2795,43 +2830,43 @@ var jt = { _: /* @__PURE__ */ new Set() }, W = /*#__PURE__*/ new WeakMap(), Mt =
 			isDisplayedInViewer: !1,
 			isInsideMode: !1
 		};
-		return r(G, this, It).call(this, i, window.Asc.plugin.tr(t), n), s(W, this).show(i), new Promise((e, t) => {
+		return r(J, this, Pt).call(this, i, window.Asc.plugin.tr(t), n), s(q, this).show(i), new Promise((e, t) => {
 			window.Asc.plugin.button = (t, n) => {
-				e(t === 0), r(G, this, Lt).call(this);
+				e(t === 0), r(J, this, Ft).call(this);
 			};
 		});
 	}
 };
-function It(e, t, n) {
-	s(W, this) && (l(Mt, this, window.Asc.plugin.button), l(Nt, this, Asc.plugin.onThemeChanged), l(Pt, this, Asc.plugin.onTranslate), window.Asc.plugin.onThemeChanged = (e) => {
+function Pt(e, t, n) {
+	s(q, this) && (l(At, this, window.Asc.plugin.button), l(jt, this, Asc.plugin.onThemeChanged), l(Mt, this, Asc.plugin.onTranslate), window.Asc.plugin.onThemeChanged = (e) => {
 		var t;
-		(t = s(W, this)) == null || t.command("onThemeChanged", e), s(Nt, this).call(this, e);
+		(t = s(q, this)) == null || t.command("onThemeChanged", e), s(jt, this).call(this, e);
 	}, window.Asc.plugin.onTranslate = () => {
 		var e;
-		(e = s(W, this)) == null || e.command("onTranslate"), s(Pt, this).call(this);
-	}, s(W, this).attachEvent("onWindowReady", () => {
+		(e = s(q, this)) == null || e.command("onTranslate"), s(Mt, this).call(this);
+	}, s(q, this).attachEvent("onWindowReady", () => {
 		if (n === "warning") {
 			var e;
-			(e = s(W, this)) == null || e.command("onWarning", t);
+			(e = s(q, this)) == null || e.command("onWarning", t);
 		} else if (n === "success") {
 			var r;
-			(r = s(W, this)) == null || r.command("onSuccess", t);
+			(r = s(q, this)) == null || r.command("onSuccess", t);
 		} else {
 			var i;
-			(i = s(W, this)) == null || i.command("onAttachedContent", t);
+			(i = s(q, this)) == null || i.command("onAttachedContent", t);
 		}
-	}), s(W, this).attachEvent("onUpdateHeight", (t) => {
-		Asc.plugin.executeMethod("ResizeWindow", [s(W, this)?.id, [e.size[0] - 2, t]], () => {});
+	}), s(q, this).attachEvent("onUpdateHeight", (t) => {
+		Asc.plugin.executeMethod("ResizeWindow", [s(q, this)?.id, [e.size[0] - 2, t]], () => {});
 	}));
 }
-function Lt() {
-	s(W, this) && (s(W, this).close(), l(W, this, null)), window.Asc.plugin.button = s(Mt, this), window.Asc.plugin.onThemeChanged = s(Nt, this);
+function Ft() {
+	s(q, this) && (s(q, this).close(), l(q, this, null)), window.Asc.plugin.button = s(At, this), window.Asc.plugin.onThemeChanged = s(jt, this);
 }
 //#endregion
 //#region src/app/services/citation-service.js
-var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakSet(), Vt = class {
+var It = /*#__PURE__*/ new WeakMap(), Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakSet(), zt = class {
 	constructor(e, t, n, r) {
-		u(this, K), c(this, Rt, void 0), c(this, zt, void 0), c(this, Bt, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = n, this._localesManager = e, this._cslStylesManager = t, this._storage = new bt(), this._formatter, this.citationDocService = new ot(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), l(Rt, this, new Ft()), l(zt, this, !1), l(Bt, this, r), s(Bt, this).load();
+		u(this, Y), c(this, It, void 0), c(this, Lt, void 0), c(this, Rt, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = n, this._localesManager = e, this._cslStylesManager = t, this._storage = new vt(), this._formatter, this.citationDocService = new nt(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), l(It, this, new Nt()), l(Lt, this, !1), l(Rt, this, r), s(Rt, this).load();
 	}
 	getCurrentField() {
 		var e = this;
@@ -2850,45 +2885,45 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 		var t = this;
 		return a(function* () {
 			var n = t;
-			yield r(K, t, q).call(t), r(K, t, J).call(t);
-			var i = new St("");
+			yield r(Y, t, Kt).call(t), r(Y, t, X).call(t);
+			var i = new bt("");
 			for (var a in e) {
 				var o = e[a];
 				i.fillFromObject(o);
 			}
-			return r(K, t, Wt).call(t, e).then((e) => (e.forEach(function(e) {
+			return r(Y, t, Ht).call(t, e).then((e) => (e.forEach(function(e) {
 				i.fillFromObject(e);
-			}), t._storage.addCslCitation(i), r(K, n, Ht).call(n, i)));
+			}), t._storage.addCslCitation(i), r(Y, n, Bt).call(n, i)));
 		})();
 	}
 	insertSelectedCitationsToCurrentField(e, t) {
 		var n = this;
 		return a(function* () {
-			var i = r(K, n, qt).call(n, t), a = i.citationID, o = new St("");
+			var i = r(Y, n, Gt).call(n, t), a = i.citationID, o = new bt("");
 			for (var s in o.fillFromObject(i), e) {
 				var c = e[s];
 				o.fillFromObject(c);
 			}
-			(yield r(K, n, Wt).call(n, e)).forEach(function(e) {
+			(yield r(Y, n, Ht).call(n, e)).forEach(function(e) {
 				o.fillFromObject(e);
 			});
-			var l = (yield r(K, n, q).call(n, o.toJSON(), a)).fieldsWithCitations;
-			r(K, n, J).call(n);
+			var l = (yield r(Y, n, Kt).call(n, o.toJSON(), a)).fieldsWithCitations;
+			r(Y, n, X).call(n);
 			var u = l.find((e) => e.cslCitation.citationID === a)?.cslCitation;
 			if (!u) throw Error("Citation not found");
-			return r(K, n, Ut).call(n, u).then((e) => (t.Content = e, t.Value = n._citPrefixNew + " " + n._citSuffixNew + JSON.stringify(u.toJSON()), t));
+			return r(Y, n, Vt).call(n, u).then((e) => (t.Content = e, t.Value = n._citPrefixNew + " " + n._citSuffixNew + JSON.stringify(u.toJSON()), t));
 		})();
 	}
 	insertBibliography() {
 		var e = this;
 		return a(function* () {
 			try {
-				var t = yield r(K, e, q).call(e), n = t.fieldsWithCitations, i = t.bibFieldValue, a = t.bibField, o = n.length === 0;
-				if (r(K, e, J).call(e), a) {
-					var s = [yield r(K, e, Yt).call(e, o, a)];
+				var t = yield r(Y, e, Kt).call(e), n = t.fieldsWithCitations, i = t.bibFieldValue, a = t.bibField, o = n.length === 0;
+				if (r(Y, e, X).call(e), a) {
+					var s = [yield r(Y, e, Jt).call(e, o, a)];
 					return e.citationDocService.updateAddinFields(s).then((e) => e ? e[0] : "");
 				}
-				return r(K, e, Jt).call(e, o, i);
+				return r(Y, e, qt).call(e, o, i);
 			} catch (e) {
 				throw e;
 			}
@@ -2916,10 +2951,10 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 		var t = this;
 		return a(function* () {
 			try {
-				var n = yield r(K, t, q).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
-				r(K, t, J).call(t);
+				var n = yield r(Y, t, Kt).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
+				r(Y, t, X).call(t);
 				var s = [];
-				return e === void 0 && t._cslStylesManager.getLastUsedFormat() === "numeric" && (e = !0), typeof e == "boolean" && (s = yield r(K, t, Xt).call(t, i, e)), a && s.push(yield r(K, t, Yt).call(t, o, a)), s && s.length ? t.citationDocService.updateAddinFields(s) : [];
+				return e === void 0 && t._cslStylesManager.getLastUsedFormat() === "numeric" && (e = !0), typeof e == "boolean" && (s = yield r(Y, t, Yt).call(t, i, e)), a && s.push(yield r(Y, t, Jt).call(t, o, a)), s && s.length ? t.citationDocService.updateAddinFields(s) : [];
 			} catch (e) {
 				throw e;
 			}
@@ -2929,11 +2964,11 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 		var t = this;
 		return a(function* () {
 			try {
-				var n = yield r(K, t, q).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
-				r(K, t, J).call(t);
-				var s = yield r(K, t, Xt).call(t, i, !1);
+				var n = yield r(Y, t, Kt).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
+				r(Y, t, X).call(t);
+				var s = yield r(Y, t, Yt).call(t, i, !1);
 				if (s && s.length && (yield t.citationDocService.convertNotesStyle(s, e)), a) {
-					var c = [yield r(K, t, Yt).call(t, o, a)];
+					var c = [yield r(Y, t, Jt).call(t, o, a)];
 					yield t.citationDocService.updateAddinFields(c);
 				}
 			} catch (e) {
@@ -2945,11 +2980,11 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 		var n = this;
 		return a(function* () {
 			try {
-				var i = yield r(K, n, q).call(n, e, e.citationID), a = i.fieldsWithCitations;
-				i.bibField, a.length, r(K, n, J).call(n), e && (a = a.filter(function(t) {
+				var i = yield r(Y, n, Kt).call(n, e, e.citationID), a = i.fieldsWithCitations;
+				i.bibField, a.length, r(Y, n, X).call(n), e && (a = a.filter(function(t) {
 					return t.cslCitation.citationID === e.citationID;
 				}));
-				var o = yield r(K, n, Xt).call(n, a, !0);
+				var o = yield r(Y, n, Yt).call(n, a, !0);
 				return t && o && o.length && (yield n.citationDocService.convertNotesStyle(o, t), o = []), o && o.length ? n.citationDocService.updateAddinFields(o) : [];
 			} catch (e) {
 				throw e;
@@ -2960,11 +2995,11 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 		var t = this;
 		return a(function* () {
 			try {
-				var n = yield r(K, t, q).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
-				r(K, t, J).call(t);
-				var s = yield r(K, t, Xt).call(t, i, !0);
+				var n = yield r(Y, t, Kt).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
+				r(Y, t, X).call(t);
+				var s = yield r(Y, t, Yt).call(t, i, !0);
 				if (s && s.length && (e ? yield t.citationDocService.convertTextToNotes(s, e) : yield t.citationDocService.convertNotesToText(s)), a) {
-					var c = [yield r(K, t, Yt).call(t, o, a)];
+					var c = [yield r(Y, t, Jt).call(t, o, a)];
 					yield t.citationDocService.updateAddinFields(c);
 				}
 			} catch (e) {
@@ -2976,9 +3011,9 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 		var t = this;
 		return a(function* () {
 			try {
-				var n = (yield r(K, t, q).call(t)).fieldsWithCitations;
-				r(K, t, J).call(t);
-				var i = yield r(K, t, Xt).call(t, n, !1, !0);
+				var n = (yield r(Y, t, Kt).call(t)).fieldsWithCitations;
+				r(Y, t, X).call(t);
+				var i = yield r(Y, t, Yt).call(t, n, !1, !0);
 				if (!i || !i.length) return;
 				yield t.citationDocService.convertNotesStyle(i, e);
 			} catch (e) {
@@ -2990,8 +3025,8 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 		var t = this;
 		return a(function* () {
 			if (!e) return null;
-			var n = r(K, t, qt).call(t, e);
-			return (yield s(Rt, t).showEditWindow(n)) || null;
+			var n = r(Y, t, Gt).call(t, e);
+			return (yield s(It, t).showEditWindow(n)) || null;
 		})();
 	}
 	repairBrokenCitations() {
@@ -3004,7 +3039,7 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 			for (var a of t) {
 				var o = void 0;
 				try {
-					o = r(K, e, qt).call(e, {
+					o = r(Y, e, Gt).call(e, {
 						Value: a.rawValue,
 						FieldId: "",
 						Content: ""
@@ -3016,7 +3051,7 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 					i++;
 					continue;
 				}
-				var s = /ZOTERO_BIBL/i.test(a.rawValue), c = s ? e._bibPrefixNew : e._citPrefixNew, l = s ? e._bibSuffixNew : e._citSuffixNew, u = s ? I("Bibliography") : o.properties && o.properties.plainCitation || I("Citation"), d = {
+				var s = /ZOTERO_BIBL/i.test(a.rawValue), c = s ? e._bibPrefixNew : e._citPrefixNew, l = s ? e._bibSuffixNew : e._citSuffixNew, u = s ? B("Bibliography") : o.properties && o.properties.plainCitation || B("Citation"), d = {
 					FieldId: "",
 					Value: c + " " + l + " " + JSON.stringify(o),
 					Content: u
@@ -3032,17 +3067,17 @@ var Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), Bt = /*#
 	showWarningMessage(e) {
 		var t = this;
 		return a(function* () {
-			s(Rt, t).showInfoWindow("Warning!", e);
+			s(It, t).showInfoWindow("Warning!", e);
 		})();
 	}
 	showSuccessMessage(e) {
 		var t = this;
 		return a(function* () {
-			s(Rt, t).showInfoWindow("Success!", e, "success");
+			s(It, t).showInfoWindow("Success!", e, "success");
 		})();
 	}
 };
-function Ht(e) {
+function Bt(e) {
 	var t = this, n = !1;
 	return Promise.resolve().then(function() {
 		if (e.getCitationItems().forEach(function(e) {
@@ -3053,12 +3088,12 @@ function Ht(e) {
 				r.push(t);
 			}), t._formatter.updateItems(r);
 		}
-	}).then(() => r(K, this, Kt).call(this, e)).then((n) => {
+	}).then(() => r(Y, this, Wt).call(this, e)).then((n) => {
 		var r = null;
 		return t._cslStylesManager.getLastUsedFormat() === "note" && (r = t._cslStylesManager.getLastUsedNotesStyle()), t.citationDocService.addCitation(n, JSON.stringify(e.toJSON()), r);
 	});
 }
-function Ut(e) {
+function Vt(e) {
 	var t = this, n = !1;
 	return Promise.resolve().then(function() {
 		if (e.getCitationItems().forEach(function(e) {
@@ -3069,9 +3104,9 @@ function Ut(e) {
 				r.push(t);
 			}), t._formatter.updateItems(r);
 		}
-	}).then(() => r(K, this, Kt).call(this, e));
+	}).then(() => r(Y, this, Wt).call(this, e));
 }
-function Wt(e) {
+function Ht(e) {
 	var t = [], n = {};
 	for (var r in e) {
 		var i = e[r], a = i.userID, o = i.groupID;
@@ -3087,14 +3122,14 @@ function Wt(e) {
 		return e.reduce((e, t) => e.concat(t), []);
 	});
 }
-function Gt() {
+function Ut() {
 	try {
 		var e = [];
-		l(zt, this, !this._cslStylesManager.getIncludeUrlForPaperArticles()), s(zt, this) && r(K, this, J).call(this);
+		l(Lt, this, !this._cslStylesManager.getIncludeUrlForPaperArticles()), s(Lt, this) && r(Y, this, X).call(this);
 		var t = this._formatter.makeBibliography();
-		s(zt, this) && (l(zt, this, !1), r(K, this, J).call(this));
+		s(Lt, this) && (l(Lt, this, !1), r(Y, this, X).call(this));
 		for (var n = 0; n < t[1].length; n++) {
-			var i = r(K, this, Qt).call(this, t[1][n]).replaceAll("\n", "").replaceAll("\r", "").replace(/\s+/g, " ").trim(), a = "<div class=\"csl-entry\">", o = "</div>";
+			var i = r(Y, this, Zt).call(this, t[1][n]).replaceAll("\n", "").replaceAll("\r", "").replace(/\s+/g, " ").trim(), a = "<div class=\"csl-entry\">", o = "</div>";
 			i.indexOf(a) === 0 && i.endsWith(o) && (i = a + i.substring(a.length, i.length - o.length).trim() + o), t[0]["second-field-align"] || (i = i.replace(/<div class=\"csl-left-margin\">([\s\S]*?)<\/div>/, "$1	"), i = i.replace(/<div class=\"csl-block\">([\s\S]*?)<\/div>/, "$1\n\r"), i = i.replace(/<\/?div[^>]*>/g, " "), i = "<p>" + i.trim() + "</p>"), i = i.split("\n").map((e) => e.replace(/[ ]{2,}/g, " ").trim()).join("\n"), window.Asc.scope.editorVersion < 9004e3 && (i += "\n"), e.push(i);
 		}
 		var c = e.join("").trim();
@@ -3105,13 +3140,13 @@ function Gt() {
 		return "";
 	}
 }
-function Kt(e) {
+function Wt(e) {
 	var t = document.createDocumentFragment(), n = document.createElement("div"), i = this._storage.getCitationsPre(e.citationID), a = this._storage.getCitationsPost(e.citationID), o = this._storage.getAllCitationsInJson();
 	this._formatter.rebuildProcessorState(o);
-	var s = this._formatter.processCitationCluster(e.toJSON(), i, a), c = r(K, this, Qt).call(this, s[1][0][1]);
+	var s = this._formatter.processCitationCluster(e.toJSON(), i, a), c = r(Y, this, Zt).call(this, s[1][0][1]);
 	return t.appendChild(n), n.innerHTML = c, e.setPlainCitation(n.innerText), c;
 }
-function qt(e) {
+function Gt(e) {
 	var t, n = e.Value.indexOf("{"), r = e.Value.lastIndexOf("}");
 	if (n !== -1) {
 		var i = e.Value.slice(n, r + 1);
@@ -3119,22 +3154,22 @@ function qt(e) {
 	}
 	return t;
 }
-function q(e, t) {
+function Kt(e, t) {
 	var n = this;
-	return this._storage.clear(), St.resetUsedIDs(), this.citationDocService.getAddinZoteroFields().then(function(i) {
+	return this._storage.clear(), bt.resetUsedIDs(), this.citationDocService.getAddinZoteroFields().then(function(i) {
 		var a = 0, o = " ", s = i.find(function(e) {
 			return e.Value.indexOf(n._bibPrefixNew) !== -1 || e.Value.indexOf(n._bibPrefix) !== -1;
 		});
 		if (s) {
-			var c = r(K, n, qt).call(n, s);
+			var c = r(Y, n, Gt).call(n, s);
 			typeof c == "object" && Object.keys(c).length > 0 && (o = JSON.stringify(c));
 		}
 		var l = i.filter(function(e) {
 			return e.Value.indexOf(n._citPrefixNew) !== -1 || e.Value.indexOf(n._citPrefix) !== -1;
 		}).map(function(i) {
-			var o = r(K, n, qt).call(n, i), s = "";
+			var o = r(Y, n, Gt).call(n, i), s = "";
 			i.Value.indexOf(n._citPrefix) === -1 && (s = o.citationID);
-			var c = new St(s);
+			var c = new bt(s);
 			return a += e && t === s ? c.fillFromObject(e) : c.fillFromObject(o), n._storage.addCslCitation(c), {
 				field: h({}, i),
 				cslCitation: c
@@ -3147,45 +3182,45 @@ function q(e, t) {
 		};
 	});
 }
-function Jt(e, t) {
-	var n = r(K, this, Gt).call(this);
-	if (e && (n = I(this._bibPlaceholderIfEmpty)), this._cslStylesManager.isLastUsedStyleContainBibliography()) return this.citationDocService.addBibliography(n, t);
+function qt(e, t) {
+	var n = r(Y, this, Ut).call(this);
+	if (e && (n = B(this._bibPlaceholderIfEmpty)), this._cslStylesManager.isLastUsedStyleContainBibliography()) return this.citationDocService.addBibliography(n, t);
 	throw "The current bibliographic style does not describe the bibliography";
 }
-function Yt(e, t) {
-	return t.Content = e ? I(this._bibPlaceholderIfEmpty) : r(K, this, Gt).call(this), t;
+function Jt(e, t) {
+	return t.Content = e ? B(this._bibPlaceholderIfEmpty) : r(Y, this, Ut).call(this), t;
 }
-function Xt(e, t, n) {
-	return Zt.apply(this, arguments);
+function Yt(e, t, n) {
+	return Xt.apply(this, arguments);
 }
-function Zt() {
-	return Zt = a(function* (e, t, n) {
+function Xt() {
+	return Xt = a(function* (e, t, n) {
 		var i = document.createDocumentFragment(), a = document.createElement("div");
 		i.appendChild(a);
 		for (var o = [], c = e.length - 1; c >= 0; c--) {
 			var l = !!n, u = e[c], d = u.field, f = u.cslCitation, p = this._storage.getCitationsPre(f.citationID), m = this._storage.getCitationsPost(f.citationID), h = this._storage.getAllCitationsInJson();
 			this._formatter.rebuildProcessorState(h);
-			var g = this._formatter.processCitationCluster(f.toJSON(), p, m), _ = r(K, this, Qt).call(this, g[1][0][1]);
+			var g = this._formatter.processCitationCluster(f.toJSON(), p, m), _ = r(Y, this, Zt).call(this, g[1][0][1]);
 			a.innerHTML = _;
-			var v = f.getPlainCitation(), ee = d.Content;
-			v === "" && (v = ee);
-			var y = a.innerText;
+			var v = f.getPlainCitation(), y = d.Content;
+			v === "" && (v = y);
+			var b = a.innerText;
 			if (!f.getDoNotUpdate()) {
-				if (v !== ee && !t) {
-					var te = "<p>" + I("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + I("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + I("Original:") + " " + y + "</p><p>" + I("Modified:") + " " + ee + "</p>";
-					(yield s(Rt, this).show("Saving custom edits", te)) ? (f.setDoNotUpdate(), delete d.Content) : (d.Content = _, f.setPlainCitation(y)), l = !0;
-				} else (y !== ee || v !== ee || v !== y) && (l = !0), d.Content = _, f.setPlainCitation(y);
+				if (v !== y && !t) {
+					var ee = "<p>" + B("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + B("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + B("Original:") + " " + b + "</p><p>" + B("Modified:") + " " + y + "</p>";
+					(yield s(It, this).show("Saving custom edits", ee)) ? (f.setDoNotUpdate(), delete d.Content) : (d.Content = _, f.setPlainCitation(b)), l = !0;
+				} else (b !== y || v !== y || v !== b) && (l = !0), d.Content = _, f.setPlainCitation(b);
 				if (f) {
-					var b = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(f.toJSON());
-					d.Value !== b && (l = !0), d.Value = b;
+					var x = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(f.toJSON());
+					d.Value !== x && (l = !0), d.Value = x;
 				}
 				l && o.push(d);
 			}
 		}
 		return o;
-	}), Zt.apply(this, arguments);
+	}), Xt.apply(this, arguments);
 }
-function J() {
+function X() {
 	var e = this, t = [];
 	this._storage.forEachItem(function(e, n) {
 		t.push(n);
@@ -3196,17 +3231,17 @@ function J() {
 		},
 		retrieveItem: function(t) {
 			var n = e._storage.getItem(t), r = e._storage.getItemIndex(t);
-			return n ? n.toFlatJSON(r, s(zt, e)) : null;
+			return n ? n.toFlatJSON(r, s(Lt, e)) : null;
 		}
 	};
-	s(Bt, this).isLoaded() && this._cslStylesManager.getAbbreviateJournalTitles() && (n.getAbbreviation = s(Bt, this).createCiteprocHook()), this._formatter = new CSL.Engine(n, this._cslStylesManager.cached(this._cslStylesManager.getLastUsedStyleIdOrDefault()), this._localesManager.getLastUsedLanguage(), !0), t.length && this._formatter.updateItems(t);
+	s(Rt, this).isLoaded() && this._cslStylesManager.getAbbreviateJournalTitles() && (n.getAbbreviation = s(Rt, this).createCiteprocHook()), this._formatter = new CSL.Engine(n, this._cslStylesManager.cached(this._cslStylesManager.getLastUsedStyleIdOrDefault()), this._localesManager.getLastUsedLanguage(), !0), t.length && this._formatter.updateItems(t);
 }
-function Qt(e) {
+function Zt(e) {
 	return e.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
 }
 //#endregion
 //#region src/app/services/cursor-service.js
-var $t = class {
+var Qt = class {
 	static getCursorPosition() {
 		return new Promise(function(e) {
 			Asc.plugin.callCommand(() => {
@@ -3227,7 +3262,7 @@ var $t = class {
 			}, r, n, t);
 		});
 	}
-}, en = {
+}, $t = {
 	getStyleInfo: function(e, t) {
 		var n = {
 			categories: {
@@ -3294,35 +3329,35 @@ var $t = class {
 };
 //#endregion
 //#region src/app/csl/styles/storage.js
-function tn() {
+function en() {
 	this._customStyleNamesKey = "zoteroCustomStyleNames", this._customStylesKey = "zoteroCustomStyles";
 }
-tn.prototype.getStyleNames = function() {
+en.prototype.getStyleNames = function() {
 	var e = localStorage.getItem(this._customStyleNamesKey);
 	return e ? JSON.parse(e) : [];
-}, tn.prototype._getStyles = function() {
+}, en.prototype._getStyles = function() {
 	var e = localStorage.getItem(this._customStylesKey);
 	return e ? JSON.parse(e) : [];
-}, tn.prototype.getStyle = function(e) {
+}, en.prototype.getStyle = function(e) {
 	var t = this.getStyleNames().indexOf(e);
 	return t === -1 ? null : this._getStyles()[t];
-}, tn.prototype.getStylesInfo = function() {
+}, en.prototype.getStylesInfo = function() {
 	for (var e = this.getStyleNames(), t = this._getStyles(), n = [], r = 0; r < e.length; r++) {
-		var i = en.getStyleInfo(e[r], t[r]);
+		var i = $t.getStyleInfo(e[r], t[r]);
 		n.push(i);
 	}
 	return n;
-}, tn.prototype.setStyle = function(e, t) {
+}, en.prototype.setStyle = function(e, t) {
 	var n = this.getStyleNames(), r = this._getStyles(), i = n.indexOf(e);
-	return i === -1 && (i = n.length), n[i] = e, r[i] = t, localStorage.setItem(this._customStyleNamesKey, JSON.stringify(n)), localStorage.setItem(this._customStylesKey, JSON.stringify(r)), en.getStyleInfo(e, t);
-}, tn.prototype.deleteStyle = function(e) {
+	return i === -1 && (i = n.length), n[i] = e, r[i] = t, localStorage.setItem(this._customStyleNamesKey, JSON.stringify(n)), localStorage.setItem(this._customStylesKey, JSON.stringify(r)), $t.getStyleInfo(e, t);
+}, en.prototype.deleteStyle = function(e) {
 	var t = this.getStyleNames(), n = this._getStyles(), r = t.indexOf(e);
 	return r === -1 ? e : (t.splice(r, 1), n.splice(r, 1), localStorage.setItem(this._customStyleNamesKey, JSON.stringify(t)), localStorage.setItem(this._customStylesKey, JSON.stringify(n)), e);
 };
 //#endregion
 //#region src/app/csl/styles/styles-manager.js
-function Y(e) {
-	this._isOnlineAvailable = !1, this._isDesktopAvailable = !1, this._customStylesStorage = new tn(), this._STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json", this._STYLES_JSON_LOCAL = "./resources/csl/styles.json", this._STYLES_URL = "https://www.zotero.org/styles/", this._STYLES_LOCAL = "./resources/csl/styles/", this._lastStyleKey = e, this._lastNotesStyleKey = "zoteroNotesStyleId", this._lastFormatKey = "zoteroFormatId", this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography", this._lastIncludeUrlForPaperArticlesKey = "zoteroIncludeUrlForPaperArticles", this._lastAbbreviateJournalTitlesKey = "zoteroAbbreviateJournalTitles", this._defaultStyles = [
+function Z(e) {
+	this._isOnlineAvailable = !1, this._isDesktopAvailable = !1, this._customStylesStorage = new en(), this._STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json", this._STYLES_JSON_LOCAL = "./resources/csl/styles.json", this._STYLES_URL = "https://www.zotero.org/styles/", this._STYLES_LOCAL = "./resources/csl/styles/", this._lastStyleKey = e, this._lastNotesStyleKey = "zoteroNotesStyleId", this._lastFormatKey = "zoteroFormatId", this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography", this._lastIncludeUrlForPaperArticlesKey = "zoteroIncludeUrlForPaperArticles", this._lastAbbreviateJournalTitlesKey = "zoteroAbbreviateJournalTitles", this._defaultStyles = [
 		"american-anthropological-association",
 		"american-medical-association",
 		"american-political-science-association",
@@ -3336,7 +3371,7 @@ function Y(e) {
 		"nature"
 	], this._cache = {};
 }
-Y.prototype.addCustomStyle = function(e) {
+Z.prototype.addCustomStyle = function(e) {
 	var t = this;
 	return new Promise(function(t, n) {
 		var r = e.name.toLowerCase();
@@ -3346,7 +3381,7 @@ Y.prototype.addCustomStyle = function(e) {
 			return t._defaultStyles.indexOf(n) === -1 && t._defaultStyles.push(n), t._customStylesStorage.setStyle(n, e);
 		});
 	});
-}, Y.prototype.getLastUsedFormat = function() {
+}, Z.prototype.getLastUsedFormat = function() {
 	var e = localStorage.getItem(this._lastFormatKey);
 	switch (e) {
 		case "note":
@@ -3356,14 +3391,14 @@ Y.prototype.addCustomStyle = function(e) {
 		case "label": return e;
 	}
 	return "numeric";
-}, Y.prototype.getLastUsedNotesStyle = function() {
+}, Z.prototype.getLastUsedNotesStyle = function() {
 	var e = localStorage.getItem(this._lastNotesStyleKey);
 	return e === "footnotes" || e === "endnotes" ? e : "footnotes";
-}, Y.prototype.getLastUsedStyleId = function() {
+}, Z.prototype.getLastUsedStyleId = function() {
 	return localStorage.getItem(this._lastStyleKey) || null;
-}, Y.prototype.getLastUsedStyleIdOrDefault = function() {
+}, Z.prototype.getLastUsedStyleIdOrDefault = function() {
 	return localStorage.getItem(this._lastStyleKey) || "ieee";
-}, Y.prototype.getStyle = function(e) {
+}, Z.prototype.getStyle = function(e) {
 	var t = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0, n = this;
 	return Promise.resolve(e).then(function(e) {
 		if (n._cache[e]) return n._cache[e];
@@ -3376,20 +3411,20 @@ Y.prototype.addCustomStyle = function(e) {
 		});
 	}).then(function(t) {
 		if (t && !n._isValidCSL(t) && n._isOnlineAvailable) {
-			var r = en.getStyleInfo(e, t);
+			var r = $t.getStyleInfo(e, t);
 			if (r && r.dependent > 0 && r.parent) return fetch(r.parent).then(function(e) {
 				return e.text();
 			});
 		}
 		return t;
 	}).then(function(r) {
-		var i = r && en.getCitationFormat(r) || "numeric", a = {
+		var i = r && $t.getCitationFormat(r) || "numeric", a = {
 			content: r,
 			styleFormat: i
 		};
 		return r && t && n._saveLastUsedStyle(e, r, i), a;
 	});
-}, Y.prototype.getStylesInfo = function() {
+}, Z.prototype.getStylesInfo = function() {
 	var e = this;
 	return Promise.all([this._getStylesJson(), this._customStylesStorage.getStylesInfo()]).then(function(t) {
 		var n = e.getLastUsedStyleId() || "ieee", r = [], i = e._customStylesStorage.getStyleNames(), a = t[0], o = t[1];
@@ -3401,7 +3436,7 @@ Y.prototype.addCustomStyle = function(e) {
 			i.indexOf(e.name) === -1 && r.push(e);
 		}), r.sort((e, t) => e.name.localeCompare(t.name)), r;
 	});
-}, Y.prototype._getStylesJson = function() {
+}, Z.prototype._getStylesJson = function() {
 	var e = this._STYLES_JSON_LOCAL, t = e;
 	return this._isOnlineAvailable && (t = this._STYLES_JSON_URL), fetch(t).then(function(e) {
 		return e.json();
@@ -3410,15 +3445,15 @@ Y.prototype.addCustomStyle = function(e) {
 			return e.json();
 		});
 	});
-}, Y.prototype.cached = function(e) {
+}, Z.prototype.cached = function(e) {
 	return Object.hasOwnProperty.call(this._cache, e) ? this._cache[e] : null;
-}, Y.prototype.isLastUsedStyleContainBibliography = function() {
+}, Z.prototype.isLastUsedStyleContainBibliography = function() {
 	return localStorage.getItem(this._lastUsedStyleContainBibliographyKey) !== "false";
-}, Y.prototype.isStyleDefault = function(e) {
+}, Z.prototype.isStyleDefault = function(e) {
 	return this._defaultStyles.indexOf(e) >= 0;
-}, Y.prototype._isValidCSL = function(e) {
+}, Z.prototype._isValidCSL = function(e) {
 	return e.indexOf("<?xml") > -1 && e.indexOf("<style") > -1 && e.indexOf("<macro") > -1 && e.indexOf("citation") > -1;
-}, Y.prototype._readCSLFile = function(e) {
+}, Z.prototype._readCSLFile = function(e) {
 	var t = this;
 	return new Promise(function(n, r) {
 		var i = new FileReader();
@@ -3433,31 +3468,31 @@ Y.prototype.addCustomStyle = function(e) {
 			r("Failed to read file");
 		}, i.readAsText(e);
 	});
-}, Y.prototype._saveLastUsedStyle = function(e, t, n) {
+}, Z.prototype._saveLastUsedStyle = function(e, t, n) {
 	this._cache[e] = t, localStorage.setItem(this._lastStyleKey, e), localStorage.setItem(this._lastFormatKey, n);
-	var r = en.isStyleContainBibliography(t);
+	var r = $t.isStyleContainBibliography(t);
 	localStorage.setItem(this._lastUsedStyleContainBibliographyKey, r.toString());
-}, Y.prototype.saveLastUsedNotesStyle = function(e) {
+}, Z.prototype.saveLastUsedNotesStyle = function(e) {
 	localStorage.setItem(this._lastNotesStyleKey, e);
-}, Y.prototype.getIncludeUrlForPaperArticles = function() {
+}, Z.prototype.getIncludeUrlForPaperArticles = function() {
 	return localStorage.getItem(this._lastIncludeUrlForPaperArticlesKey) !== "false";
-}, Y.prototype.saveIncludeUrlForPaperArticles = function(e) {
+}, Z.prototype.saveIncludeUrlForPaperArticles = function(e) {
 	localStorage.setItem(this._lastIncludeUrlForPaperArticlesKey, e ? "true" : "false");
-}, Y.prototype.getAbbreviateJournalTitles = function() {
+}, Z.prototype.getAbbreviateJournalTitles = function() {
 	return localStorage.getItem(this._lastAbbreviateJournalTitlesKey) === "true";
-}, Y.prototype.saveAbbreviateJournalTitles = function(e) {
+}, Z.prototype.saveAbbreviateJournalTitles = function(e) {
 	localStorage.setItem(this._lastAbbreviateJournalTitlesKey, e ? "true" : "false");
-}, Y.prototype.setDesktopApiAvailable = function(e) {
+}, Z.prototype.setDesktopApiAvailable = function(e) {
 	this._isDesktopAvailable = e;
-}, Y.prototype.setRestApiAvailable = function(e) {
+}, Z.prototype.setRestApiAvailable = function(e) {
 	this._isOnlineAvailable = e;
 };
 //#endregion
 //#region src/app/csl/locales/locales-manager.js
-function X() {
+function tn() {
 	this._isOnlineAvailable = !1, this._isDesktopAvailable = !1, this._LOCALES_URL = "https://raw.githubusercontent.com/citation-style-language/locales/master/", this._LOCALES_PATH = "./resources/csl/locales/", this._lastLanguageKey = "zoteroLang", this._selectedLanguage = null, this._cache = {};
 }
-X.prototype.loadLocale = function(e) {
+tn.prototype.loadLocale = function(e) {
 	var t = this;
 	if (this._selectedLanguage = e, this._cache[e]) return Promise.resolve(this._cache[e]);
 	var n = this._getLocalesUrl() + "locales-" + e + ".xml";
@@ -3468,17 +3503,17 @@ X.prototype.loadLocale = function(e) {
 	}).then(function(n) {
 		return t._cache[e] = n, n;
 	});
-}, X.prototype.getLastUsedLanguage = function() {
+}, tn.prototype.getLastUsedLanguage = function() {
 	return this._selectedLanguage = this._selectedLanguage || localStorage.getItem(this._lastLanguageKey) || "en-US", this._selectedLanguage;
-}, X.prototype.getLocale = function(e) {
+}, tn.prototype.getLocale = function(e) {
 	return e ? this._cache[e] ? this._cache[e] : null : this._selectedLanguage && this._cache[this._selectedLanguage] ? this._cache[this._selectedLanguage] : null;
-}, X.prototype.saveLastUsedLanguage = function(e) {
+}, tn.prototype.saveLastUsedLanguage = function(e) {
 	this._selectedLanguage = e, localStorage.setItem(this._lastLanguageKey, e);
-}, X.prototype._getLocalesUrl = function() {
+}, tn.prototype._getLocalesUrl = function() {
 	return this._isOnlineAvailable ? this._LOCALES_URL : this._LOCALES_PATH;
-}, X.prototype.setDesktopApiAvailable = function(e) {
+}, tn.prototype.setDesktopApiAvailable = function(e) {
 	this._isDesktopAvailable = e;
-}, X.prototype.setRestApiAvailable = function(e) {
+}, tn.prototype.setRestApiAvailable = function(e) {
 	this._isOnlineAvailable = e;
 };
 //#endregion
@@ -3557,19 +3592,22 @@ var rn = [{
 		15
 	]] }
 }];
-function Z(e, t) {
-	if (this._router = e, this._displayNoneClass = t, this._saveBtn = new D("saveSettingsBtn", { variant: "primary" }), this._cancelBtn = new D("cancelBtn", { variant: "secondary" }), this._styleSelect = new Ae("styleSelectList", {
+function Q(e, t) {
+	if (this._router = e, this._displayNoneClass = t, this._saveBtn = new M("saveSettingsBtn", { variant: "primary" }), this._cancelBtn = new M("cancelBtn", { variant: "secondary" }), this._openAdvancedBtn = new M("openAdvancedBtn", {
+		variant: "icon-only",
+		size: "small"
+	}), this._styleSelect = new Te("styleSelectList", {
 		placeholder: "Enter style name",
 		sortable: !0
-	}), this._styleSelectListOther = new Ae("styleSelectedListOther", {
+	}), this._styleSelectListOther = new Te("styleSelectedListOther", {
 		placeholder: "Enter style name",
 		searchable: !0
 	}), this._notesStyleWrapper = document.getElementById("notesStyle"), !this._notesStyleWrapper) throw Error("notesStyleWrapper not found");
-	if (this._footNotes = new xe("footNotes", { label: "Footnotes" }), this._endNotes = new xe("endNotes", { label: "Endnotes" }), this._includeUrlWrapper = document.getElementById("includeUrlWrapper"), !this._includeUrlWrapper) throw Error("includeUrlWrapper not found");
-	if (this._includeUrlCheckbox = new ke("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._abbreviateJournalTitlesWrapper = document.getElementById("abbreviateJournalTitlesWrapper"), !this._abbreviateJournalTitlesWrapper) throw Error("abbreviateJournalTitlesWrapper not found");
-	if (this._abbreviateJournalTitlesCheckbox = new ke("abbreviateJournalTitles", { label: "Use MEDLINE journal abbreviations" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
-	if (this._languageSelect = new Ae("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
-	this._cslStylesManager = new Y("zoteroStyleId"), this._localesManager = new X(), this._abbreviationsManager = new nn(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new _e("styleMessage", { type: "error" }), this._langMessage = new _e("langMessage", { type: "error" }), this._LANGUAGES = [
+	if (this._footNotes = new ge("footNotes", { label: "Footnotes" }), this._endNotes = new ge("endNotes", { label: "Endnotes" }), this._includeUrlWrapper = document.getElementById("includeUrlWrapper"), !this._includeUrlWrapper) throw Error("includeUrlWrapper not found");
+	if (this._includeUrlCheckbox = new we("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._abbreviateJournalTitlesWrapper = document.getElementById("abbreviateJournalTitlesWrapper"), !this._abbreviateJournalTitlesWrapper) throw Error("abbreviateJournalTitlesWrapper not found");
+	if (this._abbreviateJournalTitlesCheckbox = new we("abbreviateJournalTitles", { label: "Use MEDLINE journal abbreviations" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
+	if (this._languageSelect = new Te("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
+	this._cslStylesManager = new Z("zoteroStyleId"), this._localesManager = new tn(), this._abbreviationsManager = new nn(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new j("styleMessage", { type: "error" }), this._langMessage = new j("langMessage", { type: "error" }), this._LANGUAGES = [
 		["af-ZA", "Afrikaans"],
 		["ar", "Arabic"],
 		["bg-BG", "Bulgarian"],
@@ -3631,30 +3669,30 @@ function Z(e, t) {
 		abbreviateJournalTitles: !1
 	};
 }
-Z.prototype.getLocalesManager = function() {
+Q.prototype.getLocalesManager = function() {
 	return this._localesManager;
-}, Z.prototype.getStyleManager = function() {
+}, Q.prototype.getStyleManager = function() {
 	return this._cslStylesManager;
-}, Z.prototype.getAbbreviationsManager = function() {
+}, Q.prototype.getAbbreviationsManager = function() {
 	return this._abbreviationsManager;
-}, Z.prototype.getLocale = function() {
+}, Q.prototype.getLocale = function() {
 	return this._localesManager.getLocale();
-}, Z.prototype.getLastUsedStyleId = function() {
+}, Q.prototype.getLastUsedStyleId = function() {
 	return this._cslStylesManager.getLastUsedStyleId();
-}, Z.prototype.init = function() {
+}, Q.prototype.init = function() {
 	var e = this, t = this._cslStylesManager.getLastUsedStyleId() || "ieee", n = this._localesManager.getLastUsedLanguage();
 	this._addEventListeners(), this._languageSelect.addItems(this._LANGUAGES, n);
 	var r = Promise.all([this._localesManager.loadLocale(n), this._abbreviationsManager.load()]).then(function() {
 		return e._onStyleChange(t);
 	});
 	return Promise.all([r, this._loadStyles()]);
-}, Z.prototype.onChangeState = function(e) {
+}, Q.prototype.onChangeState = function(e) {
 	this._onChangeState = e;
-}, Z.prototype.setDesktopApiAvailable = function(e) {
+}, Q.prototype.setDesktopApiAvailable = function(e) {
 	this._localesManager.setDesktopApiAvailable(e), this._cslStylesManager.setDesktopApiAvailable(e);
-}, Z.prototype.setRestApiAvailable = function(e) {
+}, Q.prototype.setRestApiAvailable = function(e) {
 	this._localesManager.setRestApiAvailable(e), this._cslStylesManager.setRestApiAvailable(e);
-}, Z.prototype._addEventListeners = function() {
+}, Q.prototype._addEventListeners = function() {
 	var e = this;
 	this._saveBtn.subscribe(function(t) {
 		if (t.type === "button:click") {
@@ -3665,7 +3703,7 @@ Z.prototype.getLocalesManager = function() {
 			}
 			var r = h({}, e._stateSettings), i = [];
 			e._stateSettings.language !== n && (e._localesManager.saveLastUsedLanguage(n), i.push(e._localesManager.loadLocale(n).catch(function(t) {
-				throw console.error(t), e._langMessage.show(I("Failed to load language")), t;
+				throw console.error(t), e._langMessage.show(B("Failed to load language")), t;
 			})));
 			var a = "footnotes";
 			e._endNotes.getState().checked && (a = "endnotes"), e._stateSettings.notesStyle !== a && (e._cslStylesManager.saveLastUsedNotesStyle(a), e._cslStylesManager.getLastUsedFormat() === "note" && i.push(Promise.resolve()));
@@ -3708,7 +3746,7 @@ Z.prototype.getLocalesManager = function() {
 				e._cslStylesManager.addCustomStyle(r).then(function(t) {
 					e._addStylesToList([t]);
 				}).catch(function(t) {
-					console.error(t), e._styleMessage.show(I("Invalid CSL style file"));
+					console.error(t), e._styleMessage.show(B("Invalid CSL style file"));
 				}).finally(function() {
 					e._hideLoader();
 				});
@@ -3735,12 +3773,14 @@ Z.prototype.getLocalesManager = function() {
 		e._somethingWasChanged(), e._currentStyleContent && e._showPreview(e._currentStyleContent, e._localesManager.getLastUsedLanguage());
 	}), this._abbreviateJournalTitlesCheckbox.subscribe(function(t) {
 		e._somethingWasChanged(), e._currentStyleContent && e._showPreview(e._currentStyleContent, e._localesManager.getLastUsedLanguage());
+	}), this._openAdvancedBtn.subscribe(function(t) {
+		t.type === "button:click" && e._router.openAdvanced();
 	});
-}, Z.prototype._hideAllMessages = function() {
+}, Q.prototype._hideAllMessages = function() {
 	this._langMessage.close(), this._styleMessage.close();
-}, Z.prototype._hide = function() {
+}, Q.prototype._hide = function() {
 	this._router.openMain();
-}, Z.prototype.show = function() {
+}, Q.prototype.show = function() {
 	this._stateSettings = {
 		language: this._localesManager.getLastUsedLanguage(),
 		style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),
@@ -3749,23 +3789,23 @@ Z.prototype.getLocalesManager = function() {
 		includeUrlForPaperArticles: this._cslStylesManager.getIncludeUrlForPaperArticles(),
 		abbreviateJournalTitles: this._cslStylesManager.getAbbreviateJournalTitles()
 	}, this._saveBtn.disable(), this._router.openSettings(), this._stateSettings.notesStyle === this._endNotes.getState().value ? this._endNotes.check(!0) : this._footNotes.check(!0), this._stateSettings.includeUrlForPaperArticles ? this._includeUrlCheckbox.check(!0) : this._includeUrlCheckbox.uncheck(!0), this._stateSettings.abbreviateJournalTitles ? this._abbreviateJournalTitlesCheckbox.check(!0) : this._abbreviateJournalTitlesCheckbox.uncheck(!0), this._currentStyleContent && this._showPreview(this._currentStyleContent, this._stateSettings.language || this._localesManager.getLastUsedLanguage());
-}, Z.prototype._loadStyles = function() {
+}, Q.prototype._loadStyles = function() {
 	var e = this;
 	return this._cslStylesManager.getStylesInfo().then(function(t) {
 		e._addStylesToList(t), e._styleSelect.addCustomItem("more_styles", "More Styles..."), e._styleSelect.addCustomItem("cslFileInput", "Add custom style...");
 	}).catch(function(e) {
 		console.error(e);
 	});
-}, Z.prototype._addStylesToList = function(e) {
+}, Q.prototype._addStylesToList = function(e) {
 	var t = this, n = this._cslStylesManager.getLastUsedStyleIdOrDefault(), r = e.map(function(e) {
 		return [e.name, e.title];
 	}), i = r.filter(function(e) {
 		return !!(e[0] == n || t._cslStylesManager.isStyleDefault(e[0]));
 	});
 	this._styleSelect.addItems(i, n), this._styleSelectListOther.addItems(r, n);
-}, Z.prototype._somethingWasChanged = function() {
+}, Q.prototype._somethingWasChanged = function() {
 	this._saveBtn.enable();
-}, Z.prototype._showPreview = function(e, t) {
+}, Q.prototype._showPreview = function(e, t) {
 	if (!e) {
 		this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
 		return;
@@ -3780,7 +3820,7 @@ Z.prototype.getLocalesManager = function() {
 			retrieveItem: function(e) {
 				var t = r[e];
 				if (!t) return null;
-				var i = new V(e);
+				var i = new W(e);
 				return i.fillFromObject(t), i.toJSON(n);
 			}
 		};
@@ -3793,13 +3833,13 @@ Z.prototype.getLocalesManager = function() {
 			return;
 		}
 		var u = document.createElement("div");
-		u.className = "preview-title", u.textContent = I("Bibliography preview");
+		u.className = "preview-title", u.textContent = B("Bibliography preview");
 		var d = document.createElement("div");
-		d.className = "preview-content", d.innerHTML = Ye.purifyHtml(l.join("")), this._applyBibliographyStyles(d, c), this._previewWrapper.innerHTML = "", this._previewWrapper.appendChild(u), this._previewWrapper.appendChild(d), this._previewWrapper.classList.remove(this._displayNoneClass);
+		d.className = "preview-content", d.innerHTML = Ge.purifyHtml(l.join("")), this._applyBibliographyStyles(d, c), this._previewWrapper.innerHTML = "", this._previewWrapper.appendChild(u), this._previewWrapper.appendChild(d), this._previewWrapper.classList.remove(this._displayNoneClass);
 	} catch (e) {
 		console.error("Failed to render bibliography preview:", e), this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
 	}
-}, Z.prototype._applyBibliographyStyles = function(e, t) {
+}, Q.prototype._applyBibliographyStyles = function(e, t) {
 	if (t) {
 		for (var n = e.querySelectorAll(".csl-entry"), r = 0; r < n.length; r++) {
 			var i = n[r];
@@ -3816,7 +3856,7 @@ Z.prototype.getLocalesManager = function() {
 			}
 		}
 	}
-}, Z.prototype._styleRespondsToIncludeUrlToggle = function(e, t) {
+}, Q.prototype._styleRespondsToIncludeUrlToggle = function(e, t) {
 	var n = this._localesManager, r = Object.fromEntries(rn.map(function(e) {
 		return [e.id, e];
 	}));
@@ -3828,7 +3868,7 @@ Z.prototype.getLocalesManager = function() {
 			retrieveItem: function(e) {
 				var t = r[e];
 				if (!t) return null;
-				var n = new V(e);
+				var n = new W(e);
 				return n.fillFromObject(t), n.toJSON(i);
 			}
 		}, e, t, !0);
@@ -3842,7 +3882,7 @@ Z.prototype.getLocalesManager = function() {
 	} catch (e) {
 		return console.error("Failed to probe include-URL toggle:", e), !0;
 	}
-}, Z.prototype._styleRespondsToAbbreviateJournalTitles = function(e, t) {
+}, Q.prototype._styleRespondsToAbbreviateJournalTitles = function(e, t) {
 	if (!this._abbreviationsManager.isLoaded()) return !0;
 	var n = this._abbreviationsManager, r = this._localesManager, i = !this._includeUrlCheckbox.getState().checked, a = Object.fromEntries(rn.map(function(e) {
 		return [e.id, e];
@@ -3855,7 +3895,7 @@ Z.prototype.getLocalesManager = function() {
 			retrieveItem: function(e) {
 				var t = a[e];
 				if (!t) return null;
-				var n = new V(e);
+				var n = new W(e);
 				return n.fillFromObject(t), n.toJSON(i);
 			}
 		};
@@ -3870,34 +3910,60 @@ Z.prototype.getLocalesManager = function() {
 	} catch (e) {
 		return console.error("Failed to probe abbreviate-journal-titles toggle:", e), !0;
 	}
-}, Z.prototype._onStyleChange = function(e, t) {
+}, Q.prototype._onStyleChange = function(e, t) {
 	var n = this;
 	return t && n._showLoader(), n._cslStylesManager.getStyle(e, !t).then(function(e) {
 		var r = e.styleFormat;
 		n._bNumFormat = r == "numeric", r === "note" ? n._notesStyleWrapper.classList.remove(n._displayNoneClass) : n._notesStyleWrapper.classList.add(n._displayNoneClass), n._currentStyleContent = e.content, n._showPreview(e.content, n._localesManager.getLastUsedLanguage()), e.content && n._styleRespondsToIncludeUrlToggle(e.content, n._localesManager.getLastUsedLanguage()) ? n._includeUrlWrapper.classList.remove(n._displayNoneClass) : n._includeUrlWrapper.classList.add(n._displayNoneClass), e.content && n._styleRespondsToAbbreviateJournalTitles(e.content, n._localesManager.getLastUsedLanguage()) ? n._abbreviateJournalTitlesWrapper.classList.remove(n._displayNoneClass) : n._abbreviateJournalTitlesWrapper.classList.add(n._displayNoneClass), t && n._hideLoader();
 	}).catch(function(e) {
-		throw console.error(e), typeof e == "string" && n._styleMessage.show(I(e)), t && n._hideLoader(), e;
+		throw console.error(e), typeof e == "string" && n._styleMessage.show(B(e)), t && n._hideLoader(), e;
 	});
-}, Z.prototype._showLoader = function() {
+}, Q.prototype._showLoader = function() {
 	this._cancelBtn.disable(), this._saveBtn.disable(), this._styleSelect.disable(), this._languageSelect.disable();
-}, Z.prototype._hideLoader = function() {
+}, Q.prototype._hideLoader = function() {
 	this._cancelBtn.enable(), this._saveBtn.enable(), this._styleSelect.enable(), this._languageSelect.enable();
 };
 //#endregion
+//#region src/app/pages/advanced.js
+function an(e, t) {
+	this._router = e, this._displayNoneClass = t, this._citationService = null, this._backBtn = new M("backToSettingsBtn", { variant: "secondary" }), this._repairBrokenFieldsBtn = new M("repairBrokenFieldsBtn", { variant: "secondary" }), this._addEventListeners();
+}
+an.prototype.setCitationService = function(e) {
+	this._citationService = e;
+}, an.prototype.show = function() {
+	this._router.openAdvanced();
+}, an.prototype._addEventListeners = function() {
+	var e = this;
+	this._backBtn.subscribe(function(t) {
+		t.type === "button:click" && e._router.openSettings();
+	}), this._repairBrokenFieldsBtn.subscribe(function(t) {
+		t.type === "button:click" && e._citationService && (e._repairBrokenFieldsBtn.disable(), e._citationService.repairBrokenCitations().then(function(t) {
+			if (t.repaired > 0) {
+				var n = B("Repaired") + " " + t.repaired + " " + B("citation(s) that had lost their formatting.");
+				t.failed > 0 && (n += " " + t.failed + " " + B("could not be repaired.")), e._citationService && e._citationService.showSuccessMessage(n);
+			} else t.failed > 0 ? e._citationService && e._citationService.showWarningMessage(t.failed + " " + B("citation(s) could not be repaired.")) : e._citationService && e._citationService.showSuccessMessage(B("No broken citations were found."));
+		}).catch(function(t) {
+			console.error(t), e._citationService && e._citationService.showWarningMessage(B("Failed to repair broken citations"));
+		}).finally(function() {
+			e._repairBrokenFieldsBtn.enable();
+		}));
+	});
+};
+//#endregion
 //#region src/app/pages/login.js
-function Q(e, t) {
-	if (this._router = e, this._sdk = t, this._apiKeyLoginField = new ge("apiKeyField", {
+function on(e, t) {
+	if (this._router = e, this._sdk = t, this._apiKeyLoginField = new A("apiKeyField", {
 		autofocus: !0,
 		autocomplete: "on"
-	}), this._saveApiKeyBtn = new D("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new _e("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new _e("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new D("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
+	}), this._saveApiKeyBtn = new M("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new j("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new j("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new M("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
 	if (this._logoutLink = document.getElementById("logoutLink"), !this._logoutLink) throw Error("logoutLink not found");
 	this._onAuthorized = function(e) {}, this._onChangeState = function(e) {}, this._onOpen = function() {};
 }
-Q.prototype.init = function() {
+on.prototype.init = function() {
 	var e = this;
 	this._addEventListeners();
 	var t = !1, n = document.querySelectorAll(".for-zotero-online");
-	x.runApisChecker(e._sdk).subscribe(function(r) {
+	te.runApisChecker(e._sdk).subscribe(function(r) {
 		if (e._onChangeState(r), t || (t = !0, !r.desktopVersion && e._useDesktopApp && e._useDesktopApp.classList.add("hidden"), e._onOpen(), e._show()), r.online ? n.forEach(function(e) {
 			e.classList.remove("hidden");
 		}) : n.forEach(function(e) {
@@ -3923,58 +3989,58 @@ Q.prototype.init = function() {
 		}
 	};
 	return r;
-}, Q.prototype._addEventListeners = function() {
+}, on.prototype._addEventListeners = function() {
 	var e = this;
 	this._apiKeyLoginField.subscribe(function(t) {
 		t.type, t.type === "inputfield:input" && (e._apiKeyLoginField.getValue() ? e._saveApiKeyBtn.enable() : e._saveApiKeyBtn.disable());
 	}), this._saveApiKeyBtn.subscribe(function(t) {
 		t.type === "button:click" && e._tryToApplyKey();
 	}), this._connectToLocalZotero.subscribe(function(t) {
-		t.type === "button:click" && (e._showLoader(), x.checkStatus(e._sdk).then(function(t) {
-			t.desktop && t.hasPermission ? (e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages()) : t.desktop && !t.hasPermission ? e._useDesktopMessage.show(I("Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"")) : t.desktop || e._useDesktopMessage.show(I("Connection to Zotero failed. Make sure Zotero is running."));
+		t.type === "button:click" && (e._showLoader(), te.checkStatus(e._sdk).then(function(t) {
+			t.desktop && t.hasPermission ? (e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages()) : t.desktop && !t.hasPermission ? e._useDesktopMessage.show(B("Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"")) : t.desktop || e._useDesktopMessage.show(B("Connection to Zotero failed. Make sure Zotero is running."));
 		}).finally(function() {
 			e._hideLoader();
 		}));
 	}), this._logoutLink.onclick = function(t) {
 		return e._sdk.clearSettings(), e._show(), !0;
 	};
-}, Q.prototype._tryToApplyKey = function() {
+}, on.prototype._tryToApplyKey = function() {
 	var e = this, t = e._apiKeyLoginField.getValue();
 	t && (e._showLoader(), e._sdk.setApiKey(t).then(function() {
-		x.successfullyLoggedInUsingApiKey(), e._hide(!0);
+		te.successfullyLoggedInUsingApiKey(), e._hide(!0);
 	}).catch(function(t) {
-		console.error(t), e._apiKeyMessage.show(I("Invalid API key"));
+		console.error(t), e._apiKeyMessage.show(B("Invalid API key"));
 	}).finally(function() {
 		e._hideLoader();
 	}));
-}, Q.prototype._hideAllMessages = function() {
+}, on.prototype._hideAllMessages = function() {
 	this._apiKeyMessage.close();
-}, Q.prototype._hide = function(e) {
+}, on.prototype._hide = function(e) {
 	this._router.openMain(), e && this._logoutLink.classList.remove("hidden");
-}, Q.prototype._show = function() {
+}, on.prototype._show = function() {
 	this._router.openLogin(), this._logoutLink.classList.add("hidden");
-}, Q.prototype._showLoader = function() {
+}, on.prototype._showLoader = function() {
 	this._saveApiKeyBtn.disable(), this._connectToLocalZotero.disable(), this._apiKeyLoginField.disable();
-}, Q.prototype._hideLoader = function() {
+}, on.prototype._hideLoader = function() {
 	this._saveApiKeyBtn.enable(), this._connectToLocalZotero.enable(), this._apiKeyLoginField.enable();
 };
 //#endregion
 //#region src/app/shared/ui/search-filter.js
-function an() {
-	this._searchField = new ge("searchField", {
+function sn() {
+	this._searchField = new A("searchField", {
 		type: "text",
 		autofocus: !0,
 		showClear: !1
-	}), this._filterButton = new D("filterButton", {
+	}), this._filterButton = new M("filterButton", {
 		variant: "secondary-icon",
 		size: "small"
-	}), this._librarySelectList = new Ae("librarySelectList", {
-		placeholder: I("No items selected"),
+	}), this._librarySelectList = new Te("librarySelectList", {
+		placeholder: B("No items selected"),
 		multiple: !0,
-		description: I("Search in:")
+		description: B("Search in:")
 	}), this._subscribers = [], this._addEventListeners();
 }
-an.prototype._addEventListeners = function() {
+sn.prototype._addEventListeners = function() {
 	var e = this;
 	this._searchField.subscribe(function(t) {
 		if (t.type === "inputfield:blur" || t.type === "inputfield:submit") {
@@ -3986,7 +4052,7 @@ an.prototype._addEventListeners = function() {
 	}), this._filterButton.subscribe(function(t) {
 		t.type === "button:click" && (e._librarySelectList.isOpen || (t.detail.originalEvent && t.detail.originalEvent.stopPropagation(), e._librarySelectList.openDropdown()));
 	});
-}, an.prototype.addGroups = function(e) {
+}, sn.prototype.addGroups = function(e) {
 	var t = this, n = localStorage.getItem("selectedGroups"), r = n ? JSON.parse(n).map(function(e) {
 		return e.toString();
 	}) : ["my_library", "group_libraries"], i = !1;
@@ -3995,10 +4061,10 @@ an.prototype._addEventListeners = function() {
 	});
 	var a = [{
 		id: "my_library",
-		name: I("My Library")
+		name: B("My Library")
 	}, {
 		id: "group_libraries",
-		name: I("Group Libraries")
+		name: B("Group Libraries")
 	}];
 	!i && a.forEach(function(e) {
 		r.indexOf(e.id) !== -1 && (i = !0);
@@ -4006,7 +4072,7 @@ an.prototype._addEventListeners = function() {
 		r.indexOf(e.id.toString()) !== -1 && (i = !0);
 	}), i || (r = ["my_library", "group_libraries"]);
 	for (var o = function(e, n, r) {
-		typeof e == "number" && (e = e.toString()), t._librarySelectList instanceof Ae && t._librarySelectList.addItem(e, n, r);
+		typeof e == "number" && (e = e.toString()), t._librarySelectList instanceof Te && t._librarySelectList.addItem(e, n, r);
 	}, s = 0; s < a.length; s++) {
 		var c = a[s].id, l = a[s].name;
 		o(c, l, r.indexOf(c) !== -1);
@@ -4019,21 +4085,21 @@ an.prototype._addEventListeners = function() {
 		}
 		this._selectedGroupsWatcher(a, e);
 	}
-}, an.prototype._getSelectedGroups = function() {
+}, sn.prototype._getSelectedGroups = function() {
 	var e = this, t = this._librarySelectList.getSelectedValues();
 	return (Array.isArray(t) === !1 || t.length === 0) && setTimeout(function() {
 		e._librarySelectList.openDropdown();
 	}, 500), t === null || typeof t == "string" ? [] : t;
-}, an.prototype.subscribe = function(e) {
+}, sn.prototype.subscribe = function(e) {
 	var t = this;
 	return this._subscribers.push(e), { unsubscribe: function() {
 		t._subscribers = t._subscribers.filter(function(t) {
 			return t !== e;
 		});
 	} };
-}, an.prototype._selectedGroupsWatcher = function(e, t) {
+}, sn.prototype._selectedGroupsWatcher = function(e, t) {
 	var n = this;
-	this._librarySelectList instanceof Ae && this._librarySelectList.subscribe(function(r) {
+	this._librarySelectList instanceof Te && this._librarySelectList.subscribe(function(r) {
 		if (r.type === "selectbox:change") {
 			var i = [], a = r.detail.values, o = r.detail.current, s = r.detail.enabled, c = e.map(function(e) {
 				return e.id;
@@ -4050,7 +4116,7 @@ an.prototype._addEventListeners = function() {
 };
 //#endregion
 //#region src/app/shared/constants/locator-values.js
-var on = [
+var cn = [
 	["appendix", "Appendix"],
 	["article", "Article"],
 	["book", "Book"],
@@ -4076,7 +4142,7 @@ var on = [
 //#endregion
 //#region src/app/shared/ui/select-citation.js
 function $(e, t, n) {
-	this._displayNoneClass = e, this._items = {}, this._html = {}, this._checks = {}, this._cancelSelectBtn = document.getElementById("cancelSelectBtn"), this._docsHolder = document.getElementById("docsHolder"), this._nothingFound = document.getElementById("nothingFound"), this._docsThumb = document.getElementById("docsThumb"), this._selectedWrapper = document.getElementById("selectedWrapper"), this._selectedHolder = document.getElementById("selectedHolder"), this._selectedInfo = document.getElementById("selectedInfo"), this._selectedCount = document.getElementById("selectedCount"), this._selectedThumb = document.getElementById("selectedThumb"), this._selectedHolder && this._selectedThumb && (this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20)), this._docsHolder && this._docsThumb && (this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this))), this._lastSearch = null, this._subscribers = [], this._fShouldLoadMore = n, this._fLoadMore = t, this._loadTimeout, this._init();
+	this._displayNoneClass = e, this._items = {}, this._html = {}, this._checks = {}, this._cancelSelectBtn = document.getElementById("cancelSelectBtn"), this._docsHolder = document.getElementById("docsHolder"), this._nothingFound = document.getElementById("nothingFound"), this._docsThumb = document.getElementById("docsThumb"), this._selectedWrapper = document.getElementById("selectedWrapper"), this._selectedHolder = document.getElementById("selectedHolder"), this._selectedInfo = document.getElementById("selectedInfo"), this._selectedCount = document.getElementById("selectedCount"), this._selectedThumb = document.getElementById("selectedThumb"), this._selectedHolder && this._selectedThumb && (this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20)), this._docsHolder && this._docsThumb && (this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this))), this._lastSearch = null, this._subscribers = [], this._fShouldLoadMore = n, this._fLoadMore = t, this._loadTimeout, this._editMode = !1, this._init();
 }
 //#endregion
 //#region src/app/index.js
@@ -4128,7 +4194,9 @@ $.prototype._init = function() {
 		});
 	} };
 }, $.prototype._buildDocElement = function(e) {
-	var t = this, n = document.createElement("div");
+	var t = this;
+	this._items[e.id] && (e = this._items[e.id]);
+	var n = document.createElement("div");
 	n.classList.add("doc");
 	var r = document.createElement("div");
 	r.classList.add("docInfo");
@@ -4146,7 +4214,7 @@ $.prototype._init = function() {
 	a.length === 0 && (a = s.textContent), s.setAttribute("title", s.textContent), r.appendChild(s);
 	var l = document.createElement("input");
 	i.appendChild(l);
-	var u = new ke(l, {
+	var u = new we(l, {
 		checked: !!this._items[e.id],
 		label: a,
 		title: !0,
@@ -4161,31 +4229,37 @@ $.prototype._init = function() {
 		n.type === "checkbox:change" && (n.detail.checked ? t._addSelected(e, u) : t._removeSelected(e.id));
 	}), n;
 }, $.prototype._buildCitationParams = function(e) {
-	var t = localStorage.getItem("selectedLocator") || "page";
+	var t = e.label || localStorage.getItem("selectedLocator") || "page";
 	e.label = t;
 	var n = document.createDocumentFragment(), r = document.createElement("div"), i = document.createElement("input"), a = document.createElement("input"), o = document.createElement("div"), s = document.createElement("div"), c = document.createElement("input"), l = document.createElement("div"), u = document.createElement("input");
 	n.appendChild(r), r.appendChild(i), r.appendChild(a), n.appendChild(o), o.appendChild(s), o.appendChild(c);
 	var d = "";
 	n.appendChild(l), l.appendChild(u);
-	var f = new ge(i, {
+	var f = new A(i, {
 		type: "text",
-		placeholder: I("Prefix")
-	}), p = new ge(a, {
+		placeholder: B("Prefix"),
+		value: e.prefix || ""
+	}), p = new A(a, {
 		type: "text",
-		placeholder: I("Suffix")
-	}), m = new Ae(s, {
-		placeholder: I("Locator"),
+		placeholder: B("Suffix"),
+		value: e.suffix || ""
+	}), m = new Te(s, {
+		placeholder: B("Locator"),
 		usePortal: !0,
-		translate: I
+		translate: B
 	});
-	on.forEach(function(e) {
+	cn.forEach(function(e) {
 		var n = e[0] === t;
 		m.addItem(e[0], e[1], n), n && (d = e[1]);
 	});
-	var h = new ge(c, {
+	var h = new A(c, {
 		type: "text",
-		placeholder: I(d)
-	}), g = new ke(u, { label: I("Omit Author") });
+		placeholder: B(d),
+		value: e.locator || ""
+	}), g = new we(u, {
+		label: B("Omit Author"),
+		checked: !!e["suppress-author"]
+	});
 	return f.subscribe(function(t) {
 		t.type === "inputfield:input" && (e.prefix = t.detail.value);
 	}), p.subscribe(function(t) {
@@ -4202,15 +4276,24 @@ $.prototype._init = function() {
 	}), n;
 }, $.prototype._buildSelectedElement = function(e) {
 	var t = this, n = document.createElement("div");
-	n.classList.add("selDoc");
+	n.classList.add("selDoc"), n.setAttribute("data-id", String(e.id));
 	var r = document.createElement("span");
-	r.textContent = e.author && e.author.length > 0 ? e.author.map(function(e) {
+	if (r.textContent = e.author && e.author.length > 0 ? e.author.map(function(e) {
 		return e.family + ", " + e.given;
-	}).join("; ") : e.title, e.issued && e.issued["date-parts"] && (r.textContent += " " + e.issued["date-parts"][0].join("-")), r.setAttribute("title", r.textContent), n.appendChild(r);
-	var i = document.createElement("span");
-	return i.onclick = function() {
+	}).join("; ") : e.title, e.issued && e.issued["date-parts"] && (r.textContent += " " + e.issued["date-parts"][0].join("-")), r.setAttribute("title", r.textContent), n.appendChild(r), this._editMode) {
+		var i = document.createElement("span");
+		i.className = "selDoc-move", i.textContent = "▲", i.title = B("Move up"), i.onclick = function() {
+			t._moveItem(e.id, -1);
+		}, n.appendChild(i);
+		var a = document.createElement("span");
+		a.className = "selDoc-move", a.textContent = "▼", a.title = B("Move down"), a.onclick = function() {
+			t._moveItem(e.id, 1);
+		}, n.appendChild(a);
+	}
+	var o = document.createElement("span");
+	return o.onclick = function() {
 		t._removeSelected(e.id);
-	}, i.innerHTML = "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z\" fill=\"currentColor\" fill-opacity=\"0.8\"/></svg>", n.appendChild(i), n;
+	}, o.innerHTML = "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z\" fill=\"currentColor\" fill-opacity=\"0.8\"/></svg>", n.appendChild(o), n;
 }, $.prototype._addSelected = function(e, t) {
 	var n = this._buildSelectedElement(e);
 	this._items[e.id] = e, this._html[e.id] = n, this._checks[e.id] = t, this._selectedHolder && this._selectedHolder.appendChild(n), this._docsScroller.onscroll(), this._selectedScroller.onscroll(), this._checkSelected();
@@ -4256,212 +4339,259 @@ $.prototype._init = function() {
 	this._selectedHolder && this._selectedHolder.removeChild(t), delete this._items[e], delete this._html[e], this._checks[e] && (this._checks[e].uncheck(!0), delete this._checks[e]), this._docsScroller.onscroll(), this._selectedScroller.onscroll(), this._checkSelected();
 }, $.prototype._checkSelected = function() {
 	var e = this.count();
-	!this._selectedInfo || !this._selectedCount || !this._selectedWrapper || (e <= 0 ? (this._selectedWrapper.classList.add(this._displayNoneClass), this._selectedInfo.classList.add(this._displayNoneClass)) : (this._selectedWrapper.classList.remove(this._displayNoneClass), this._selectedInfo.classList.remove(this._displayNoneClass), this._selectedCount.textContent = e + " " + I("selected")), this._subscribers.forEach(function(t) {
+	!this._selectedInfo || !this._selectedCount || !this._selectedWrapper || (e <= 0 ? (this._selectedWrapper.classList.add(this._displayNoneClass), this._selectedInfo.classList.add(this._displayNoneClass)) : (this._selectedWrapper.classList.remove(this._displayNoneClass), this._selectedInfo.classList.remove(this._displayNoneClass), this._selectedCount.textContent = e + " " + B("selected")), this._subscribers.forEach(function(t) {
 		t(e);
 	}));
 }, $.prototype.count = function() {
 	var e = 0;
 	for (var t in this._items) e++;
 	return e;
+}, $.prototype.setEditMode = function(e) {
+	this._editMode = e, this._selectedWrapper && (e ? this._selectedWrapper.classList.add("edit-mode") : this._selectedWrapper.classList.remove("edit-mode"));
+}, $.prototype.addPreselectedItem = function(e) {
+	this._items[e.id] = e;
+	var t = this._buildSelectedElement(e);
+	this._html[e.id] = t, this._selectedHolder && this._selectedHolder.appendChild(t);
+	var n = this._buildDocElement(e);
+	this._docsHolder && this._docsHolder.appendChild(n), this._docsScroller.onscroll(), this._selectedScroller.onscroll(), this._checkSelected();
+}, $.prototype._moveItem = function(e, t) {
+	var n = this._html[e];
+	!n || !this._selectedHolder || (t === -1 && n.previousElementSibling ? this._selectedHolder.insertBefore(n, n.previousElementSibling) : t === 1 && n.nextElementSibling && n.nextElementSibling.after(n), this._selectedScroller.onscroll());
+}, $.prototype.getSelectedItemsOrdered = function() {
+	var e = [], t = this._selectedHolder;
+	if (!t) return e;
+	for (var n = 0; n < t.children.length; n++) {
+		var r = t.children[n].getAttribute("data-id");
+		r && this._items[r] && e.push(this._items[r]);
+	}
+	return e;
 }, (function() {
-	var e = "hidden", t, n, r, i, o = {
+	var e = "hidden", t, n, r, i, o, s = {
 		text: "",
 		obj: null,
 		groups: [],
 		groupsHash: ""
-	}, s = !1, c, l, u, d, f, p, m, h = new Ke("libLoader", I("Loading...")), g = {};
-	function _() {
+	}, c = !1, l, u, d, f = !1, p = null, m = null, h, g, _, v, y, b, S = new He("libLoader", B("Loading...")), te = {};
+	function ne() {
 		var t = document.getElementById("errorWrapper");
 		if (!t) throw Error("errorWrapper not found");
 		var n = document.getElementById("mainState");
 		if (!n) throw Error("mainState not found");
-		c = new an(), l = new $(e, oe, se), u = new D("saveAsTextBtn", { variant: "secondary" }), d = new D("insertLinkBtn", { disabled: !0 }), f = new D("settingsBtn", {
+		l = new sn(), u = new $(e, se, ce), h = new M("saveAsTextBtn", { variant: "secondary" }), g = new M("insertLinkBtn", { disabled: !0 }), v = new M("editCitationBtn", { variant: "secondary" }), _ = new M("settingsBtn", {
 			variant: "icon-only",
 			size: "small"
-		}), p = new D("insertBibBtn", { variant: "secondary" }), m = new D("refreshBtn", { variant: "secondary" }), g = {
+		}), y = new M("insertBibBtn", { variant: "secondary" }), b = new M("refreshBtn", { variant: "secondary" }), d = new M("cancelEditBtn", { variant: "secondary" }), te = {
 			error: t,
 			mainState: n
 		};
 	}
 	window.Asc.plugin.init = function() {
-		Ke.show(), _(), t = new b(), n = new E();
-		var a = new Q(t, n);
-		r = new Z(t, e), i = new Vt(r.getLocalesManager(), r.getStyleManager(), n, r.getAbbreviationsManager());
-		var o = !1;
-		y(), a.init().onOpen(function() {
-			Ke.hide();
+		He.show(), ne(), t = new x(), n = new k();
+		var a = new on(t, n);
+		r = new Q(t, e), i = new an(t, e), o = new zt(r.getLocalesManager(), r.getStyleManager(), n, r.getAbbreviationsManager()), i.setCitationService(o);
+		var s = !1;
+		ae(), a.init().onOpen(function() {
+			He.hide();
 		}).onChangeState(function(e) {
 			r.setDesktopApiAvailable(e.desktop), r.setRestApiAvailable(e.online);
 		}).onAuthorized(function(e) {
-			if (!o) {
-				o = !0, Ke.show();
-				var t = ee().catch((e) => {
-					console.error(e), x(I("An error occurred while loading library groups. Try restarting the plugin."));
-				}), n = r.init().catch((e) => {
-					console.error(e), x(I("An error occurred while loading settings. Try restarting the plugin.")), r.show();
+			if (!s) {
+				s = !0, He.show();
+				var t = ie().catch((e) => {
+					console.error(e), C(B("An error occurred while loading library groups. Try restarting the plugin."));
+				}), n = P(r.getStyleManager()).catch((e) => console.error("Failed to read document prefs:", e)).then(() => r.init()).catch((e) => {
+					console.error(e), C(B("An error occurred while loading settings. Try restarting the plugin.")), r.show();
 				});
 				Promise.all([t, n]).then(function() {
-					return Ke.hide(), v();
+					return He.hide(), re();
 				}).finally(function() {
-					Ke.hide();
+					He.hide();
 				});
 			}
-		}), window.Asc.plugin.onTranslate = ne, ue().then((e) => {
-			window.Asc.scope.editorVersion = e, fe();
+		}), window.Asc.plugin.onTranslate = oe, F().then((e) => {
+			window.Asc.scope.editorVersion = e, me();
 		}).catch((e) => {
 			console.error(e);
 		});
 	};
-	function v() {
-		return h.show(), w(n.getItems(null).then((e) => (delete e.next, e)), !1).then((e) => {
-			ae(e > 0 ? "started" : "empty");
+	function re() {
+		return S.show(), le(n.getItems(null).then((e) => (delete e.next, e)), !1).then((e) => {
+			O(e > 0 ? "started" : "empty");
 		}).catch((e) => {
 			console.error(e);
 		}).finally(() => {
-			h.hide();
+			S.hide();
 		});
 	}
-	function ee() {
+	function ie() {
 		return n.getUserGroups().then(function(e) {
-			return c.addGroups(e), e;
+			return l.addGroups(e), e;
 		});
 	}
-	function y() {
-		l.subscribe(T);
+	function ae() {
+		u.subscribe(fe);
 		function t(e, t, r) {
-			l.clearLibrary();
+			u.clearLibrary();
 			var i = [];
 			return n.getUserGroups().then(function(a) {
-				var s = t.filter(function(e) {
+				var o = t.filter(function(e) {
 					return e !== "my_library" && e !== "group_libraries";
 				});
-				t.indexOf("my_library") !== -1 && i.push(w(n.getItems(e), !1));
-				for (var c = 0; c < s.length; c++) i.push(w(n.getGroupItems(e, s[c]), !0));
-				return o.text = e, o.obj = null, o.groups = [], o.groupsHash = r, i;
+				t.indexOf("my_library") !== -1 && i.push(le(n.getItems(e), !1));
+				for (var c = 0; c < o.length; c++) i.push(le(n.getGroupItems(e, o[c]), !0));
+				return s.text = e, s.obj = null, s.groups = [], s.groupsHash = r, i;
 			});
 		}
-		c.subscribe(function(n, r) {
+		l.subscribe(function(n, r) {
 			n = n.trim();
 			var i = r.join(",");
-			g.mainState.classList.contains(e) || !n || n == o.text && i === o.groupsHash || r.length === 0 || t(n, r, i).catch(() => []).then(function(e) {
-				return e.length && (h.show(), Promise.any(e).then(function() {
-					h.hide();
+			te.mainState.classList.contains(e) || !n || n == s.text && i === s.groupsHash || r.length === 0 || t(n, r, i).catch(() => []).then(function(e) {
+				return e.length && (S.show(), Promise.any(e).then(function() {
+					S.hide();
 				}).finally(function() {
-					h.hide();
+					S.hide();
 				})), Promise.allSettled(e);
 			}).then(function(e) {
 				var t = 0;
 				e.forEach(function(e) {
 					e.status === "fulfilled" && (t += e.value);
-				}), t === 0 ? (ae("empty"), l.displayNothingFound()) : ae("not-empty");
+				}), t === 0 ? (O("empty"), u.displayNothingFound()) : O("not-empty");
 			});
-		}), m.subscribe(/*#__PURE__*/ function() {
+		}), v.subscribe(/*#__PURE__*/ function() {
+			var e = a(function* (e) {
+				e.type === "button:click" && (yield A());
+			});
+			return function(t) {
+				return e.apply(this, arguments);
+			};
+		}()), d.subscribe(function(e) {
+			e.type === "button:click" && N();
+		}), b.subscribe(/*#__PURE__*/ function() {
 			var e = a(function* (e) {
 				if (e.type === "button:click") {
 					if (!r.getLastUsedStyleId()) {
-						x(I("Style is not selected"));
+						C(B("Style is not selected"));
 						return;
 					}
 					if (!r.getLocale()) {
-						x(I("Language is not selected"));
+						C(B("Language is not selected"));
 						return;
 					}
-					yield S(!0, "Zotero (" + I("Updating citations") + ")");
-					var t = i.updateCslItems.bind(i, !1), n = r.getStyleManager();
-					n.getLastUsedFormat() === "note" && (t = i.updateCslItemsInNotes.bind(i, n.getLastUsedNotesStyle()));
-					var a = {
-						repaired: 0,
-						failed: 0
-					};
-					try {
-						a = yield i.repairBrokenCitations();
-					} catch (e) {
+					yield w(!0, "Zotero (" + B("Updating citations") + ")");
+					var t = o.updateCslItems.bind(o, !1), n = r.getStyleManager();
+					n.getLastUsedFormat() === "note" && (t = o.updateCslItemsInNotes.bind(o, n.getLastUsedNotesStyle())), t().catch(function(e) {
 						console.error(e);
-					}
-					t().then(function() {
-						if (a.repaired > 0) {
-							var e = I("Repaired") + " " + a.repaired + " " + I("citation(s) that had lost their formatting.");
-							a.failed > 0 && (e += " " + a.failed + " " + I("could not be repaired.")), i.showSuccessMessage(e);
-						}
-					}).catch(function(e) {
-						console.error(e);
-						var t = I("Failed to refresh");
-						typeof e == "string" && (t += ". " + I(e)), x(t);
+						var t = B("Failed to refresh");
+						typeof e == "string" && (t += ". " + B(e)), C(t);
 					}).finally(function() {
-						C(!1, "Zotero (" + I("Updating citations") + ")");
+						E(!1, "Zotero (" + B("Updating citations") + ")");
 					});
 				}
 			});
 			return function(t) {
 				return e.apply(this, arguments);
 			};
-		}()), p.subscribe(/*#__PURE__*/ function() {
+		}()), y.subscribe(/*#__PURE__*/ function() {
 			var e = a(function* (e) {
 				if (e.type === "button:click") {
 					if (!r.getLastUsedStyleId()) {
-						x(I("Style is not selected"));
+						C(B("Style is not selected"));
 						return;
 					}
 					if (!r.getLocale()) {
-						x(I("Language is not selected"));
+						C(B("Language is not selected"));
 						return;
 					}
-					yield S(!1, "Zotero (" + I("Inserting bibliography") + ")");
+					yield w(!1, "Zotero (" + B("Inserting bibliography") + ")");
 					var t = "";
-					i.insertBibliography().then(function(e) {
+					o.insertBibliography().then(function(e) {
 						t = e;
 					}).catch(function(e) {
-						console.error(e), i.showWarningMessage("Failed to insert bibliography"), typeof e == "string" && x(I(e));
+						console.error(e), o.showWarningMessage("Failed to insert bibliography"), typeof e == "string" && C(B(e));
 					}).finally(function() {
-						C(!1, "Zotero (" + I("Inserting bibliography") + ")"), t && i.moveCursorOutsideField(t);
+						E(!1, "Zotero (" + B("Inserting bibliography") + ")"), t && o.moveCursorOutsideField(t);
 					});
 				}
 			});
 			return function(t) {
 				return e.apply(this, arguments);
 			};
-		}()), d.subscribe(/*#__PURE__*/ function() {
+		}()), g.subscribe(/*#__PURE__*/ function() {
 			var e = a(function* (e) {
 				if (e.type === "button:click") {
 					if (!r.getLastUsedStyleId()) {
-						x(I("Style is not selected"));
+						C(B("Style is not selected"));
 						return;
 					}
 					if (!r.getLocale()) {
-						x(I("Language is not selected"));
+						C(B("Language is not selected"));
 						return;
 					}
-					yield S(!0, "Zotero (" + I("Inserting citation") + ")");
-					var t = l.getSelectedItems(), n = !1, o = yield i.getCurrentField();
-					return o ? i.insertSelectedCitationsToCurrentField(t, o).then((e) => (l.removeItems(Object.keys(t)), pe(e))).then((e) => {
-						e && o && i.showSuccessMessage("Citation has been updated successfully");
+					if (f) {
+						var t = u.getSelectedItemsOrdered();
+						if (t.length === 0) {
+							C(B("No citations selected"));
+							return;
+						}
+						function e(e, t) {
+							return e.prefix = t.prefix || "", e.suffix = t.suffix || "", e.locator = t.locator || "", e.label = t.label || "page", e["suppress-author"] = !!t["suppress-author"], e;
+						}
+						var n = t.map(function(t) {
+							var n = m.citationItems.find(function(e) {
+								return e.id === t.id || e.itemData && e.itemData.id === t.id;
+							});
+							if (n) return e(n, t);
+							var r = {
+								id: t.id,
+								itemData: Object.assign({}, t),
+								uris: t.uris || []
+							};
+							return delete r.itemData.prefix, delete r.itemData.suffix, delete r.itemData.locator, delete r.itemData.label, delete r.itemData["suppress-author"], delete r.itemData.uris, e(r, t);
+						}), i = JSON.parse(JSON.stringify(m));
+						i.citationItems = n;
+						var s = p;
+						N(), yield w(!1, "Zotero (" + B("Updating citations") + ")");
+						var c = o.updateItem.bind(o, i), l = r.getStyleManager();
+						l.getLastUsedFormat() === "note" && (c = o.updateItem.bind(o, i, l.getLastUsedNotesStyle())), c().catch(function(e) {
+							console.error(e);
+							var t = B("Failed to update citation");
+							typeof e == "string" && (t += ". " + B(e)), C(t);
+						}).finally(function() {
+							E(!1, "Zotero (" + B("Updating citations") + ")"), s && o.moveCursorOutsideField(s.FieldId);
+						});
+						return;
+					}
+					yield w(!0, "Zotero (" + B("Inserting citation") + ")");
+					var d = u.getSelectedItems(), h = !1, g = yield o.getCurrentField();
+					return g ? o.insertSelectedCitationsToCurrentField(d, g).then((e) => (u.removeItems(Object.keys(d)), he(e))).then((e) => {
+						e && g && o.showSuccessMessage("Citation has been updated successfully");
 					}).finally(/*#__PURE__*/ a(function* () {
-						C(!1, "Zotero (" + I("Inserting citation") + ")");
-					})) : i.insertSelectedCitations(t).then(function(e) {
-						return n = e, l.removeItems(Object.keys(t)), i.getCurrentField();
+						E(!1, "Zotero (" + B("Inserting citation") + ")");
+					})) : o.insertSelectedCitations(d).then(function(e) {
+						return h = e, u.removeItems(Object.keys(d)), o.getCurrentField();
 					}).then(function(e) {
-						return o = e, n ? i.updateCslItems(!1) : i.updateCslItems();
+						return g = e, h ? o.updateCslItems(!1) : o.updateCslItems();
 					}).then(() => {
-						if (n) return i.moveCursorRight();
-						if (o) return i.moveCursorOutsideField(o.FieldId);
+						if (h) return o.moveCursorRight();
+						if (g) return o.moveCursorOutsideField(g.FieldId);
 					}).catch(function(e) {
 						console.error(e);
-						var t = I("Failed to insert citation");
-						typeof e == "string" && (t += ". " + I(e)), x(t);
+						var t = B("Failed to insert citation");
+						typeof e == "string" && (t += ". " + B(e)), C(t);
 					}).finally(/*#__PURE__*/ a(function* () {
-						C(!1, "Zotero (" + I("Inserting citation") + ")");
+						E(!1, "Zotero (" + B("Inserting citation") + ")");
 					}));
 				}
 			});
 			return function(t) {
 				return e.apply(this, arguments);
 			};
-		}()), f.subscribe(function(e) {
+		}()), _.subscribe(function(e) {
 			e.type === "button:click" && r.show();
-		}), u.subscribe(/*#__PURE__*/ function() {
+		}), h.subscribe(/*#__PURE__*/ function() {
 			var e = a(function* (e) {
-				e.type === "button:click" && (yield S(!1, "Zotero (" + I("Saving as text") + ")"), i.saveAsText().then(function() {
-					C(!1, "Zotero (" + I("Saving as text") + ")");
+				e.type === "button:click" && (yield w(!1, "Zotero (" + B("Saving as text") + ")"), o.saveAsText().then(function() {
+					E(!1, "Zotero (" + B("Saving as text") + ")");
 				}));
 			});
 			return function(t) {
@@ -4469,14 +4599,14 @@ $.prototype._init = function() {
 			};
 		}()), r.onChangeState(/*#__PURE__*/ function() {
 			var e = a(function* (e, t) {
-				yield S(!0, "Zotero (" + I("Updating citations") + ")");
-				var n = i.updateCslItems.bind(i, !0);
-				[e.styleFormat, t.styleFormat].includes("note") && (n = e.styleFormat === t.styleFormat ? e.notesStyle === t.notesStyle ? i.updateCslItems.bind(i, !0) : i.convertNotesStyle.bind(i, e.notesStyle) : e.styleFormat === "note" ? i.switchingBetweenNotesAndText.bind(i, e.notesStyle) : i.switchingBetweenNotesAndText.bind(i)), n().catch(function(e) {
+				yield w(!0, "Zotero (" + B("Updating citations") + ")");
+				var n = o.updateCslItems.bind(o, !0);
+				[e.styleFormat, t.styleFormat].includes("note") && (n = e.styleFormat === t.styleFormat ? e.notesStyle === t.notesStyle ? o.updateCslItems.bind(o, !0) : o.convertNotesStyle.bind(o, e.notesStyle) : e.styleFormat === "note" ? o.switchingBetweenNotesAndText.bind(o, e.notesStyle) : o.switchingBetweenNotesAndText.bind(o)), n().catch(function(e) {
 					console.error(e);
-					var t = I("Failed to refresh");
-					typeof e == "string" && (t += ". " + I(e)), x(t);
+					var t = B("Failed to refresh");
+					typeof e == "string" && (t += ". " + B(e)), C(t);
 				}).finally(function() {
-					C(!1, "Zotero (" + I("Updating citations") + ")");
+					E(!1, "Zotero (" + B("Updating citations") + ")");
 				});
 			});
 			return function(t, n) {
@@ -4485,7 +4615,7 @@ $.prototype._init = function() {
 		}());
 	}
 	Asc.plugin.onThemeChanged = function(e) {
-		window.Asc.plugin.onThemeChangedBase(e), te.fixThemeForIE(e), te.addStylesForComponents(e);
+		window.Asc.plugin.onThemeChangedBase(e), ee.fixThemeForIE(e), ee.addStylesForComponents(e);
 		var t = "";
 		t += ".link, .link:visited, .link:hover { color : " + window.Asc.plugin.theme["text-normal"] + " !important;}\n", t += ".doc { border-color: " + e["border-regular-control"] + "; background-color: " + e["background-normal"] + "; }\n", t += ".scrollThumb { box-shadow: 0 0 8px 8px " + e["highlight-button-hover"] + " inset; }\n", t += ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " + e["canvas-scroll-thumb-pressed"] + " inset; }\n", t += ".scrollThumb:hover { box-shadow: 0 0 8px 8px " + e["canvas-scroll-thumb-hover"] + " inset; }\n", (["theme-white", "theme-night"].indexOf(e.name) !== -1 || ["theme-white", "theme-night"].indexOf(e.Name) !== -1) && (t += ".doc { border-radius: 4px; }\n");
 		var n = document.getElementById("pluginStyles");
@@ -4493,52 +4623,52 @@ $.prototype._init = function() {
 		var r = e.type || "light", i = document.body;
 		i.classList.remove("theme-dark"), i.classList.remove("theme-light"), i.classList.add("theme-" + r);
 	};
-	function ne() {
+	function oe() {
 		for (var e = document.getElementsByClassName("i18n"), t = function() {
 			var t = e[n];
 			if (!(t instanceof HTMLElement)) return 1;
 			["placeholder", "title"].forEach((e) => {
-				t.hasAttribute(e) && t.setAttribute(e, I(t.getAttribute(e) || ""));
+				t.hasAttribute(e) && t.setAttribute(e, B(t.getAttribute(e) || ""));
 			});
-			var r = I(t.innerText.trim().replace(/\s+/g, " "));
+			var r = B(t.innerText.trim().replace(/\s+/g, " "));
 			r && (t.innerText = r);
 		}, n = 0; n < e.length; n++) if (t()) continue;
 	}
-	function x(t) {
-		t && typeof t == "string" ? (I(""), g.error.classList.remove(e), g.error.textContent = t, setTimeout(function() {
+	function C(t) {
+		t && typeof t == "string" ? (B(""), te.error.classList.remove(e), te.error.textContent = t, setTimeout(function() {
 			window.onclick = function() {
-				x(!1);
+				C(!1);
 			};
-		}, 100)) : (g.error.classList.add(e), g.error.textContent = "", window.onclick = null);
+		}, 100)) : (te.error.classList.add(e), te.error.textContent = "", window.onclick = null);
 	}
-	function S(e, t) {
-		return re.apply(this, arguments);
+	function w(e, t) {
+		return T.apply(this, arguments);
 	}
-	function re() {
-		return re = a(function* (e, t) {
-			s = !0, p.disable(), m.disable(), d.disable();
+	function T() {
+		return T = a(function* (e, t) {
+			c = !0, y.disable(), b.disable(), g.disable(), v.disable();
 			var n = window.Asc.scope.editorVersion;
-			n && n < 9004e3 ? window._cursorPosition = yield $t.getCursorPosition() : yield new Promise((t) => {
+			n && n < 9004e3 ? window._cursorPosition = yield Qt.getCursorPosition() : yield new Promise((t) => {
 				Asc.plugin.executeMethod("StartAction", ["GroupActions", {
 					lockScroll: !0,
 					keepSelection: e
 				}], t);
 			});
-		}), re.apply(this, arguments);
+		}), T.apply(this, arguments);
 	}
-	function C(e, t) {
-		return ie.apply(this, arguments);
+	function E(e, t) {
+		return D.apply(this, arguments);
 	}
-	function ie() {
-		return ie = a(function* (e, t) {
-			s = !1, p.enable(), m.enable(), T();
+	function D() {
+		return D = a(function* (e, t) {
+			c = !1, y.enable(), b.enable(), v.enable(), fe();
 			var n = window.Asc.scope.editorVersion;
-			n && n < 9004e3 ? $t.setCursorPosition(window._cursorPosition || 0) : yield new Promise((t) => {
+			n && n < 9004e3 ? Qt.setCursorPosition(window._cursorPosition || 0) : yield new Promise((t) => {
 				Asc.plugin.executeMethod("EndAction", ["GroupActions", { scrollToTarget: e }], t);
 			});
-		}), ie.apply(this, arguments);
+		}), D.apply(this, arguments);
 	}
-	function ae(e) {
+	function O(e) {
 		var t = document.getElementById("searchLabel");
 		if (!t) {
 			console.error("Search label not found");
@@ -4559,37 +4689,37 @@ $.prototype._init = function() {
 			case "started": r.classList.remove("hidden"), i.classList.remove("hidden");
 		}
 	}
-	function oe() {
-		console.warn("Loading more..."), o.obj && o.obj.next && w(o.obj.next(), !1);
-		for (var e = 0; e < o.groups.length && o.groups[e].next; e++) w(n.getGroupItems(o.groups[e].next(), o.groups[e].id), !0);
+	function se() {
+		console.warn("Loading more..."), s.obj && s.obj.next && le(s.obj.next(), !1);
+		for (var e = 0; e < s.groups.length && s.groups[e].next; e++) le(n.getGroupItems(s.groups[e].next(), s.groups[e].id), !0);
 	}
-	function se(e) {
+	function ce(e) {
 		if (t.getRoute() != "main" || e.scrollTop + e.clientHeight < e.scrollHeight) return !1;
 		var n = !0;
-		return o.groups.forEach(function(e) {
+		return s.groups.forEach(function(e) {
 			e.next && (n = !1);
-		}), !(!o.obj || !o.obj.next || !n || !o.obj && !o.text.trim() && !o.groups.length);
+		}), !(!s.obj || !s.obj.next || !n || !s.obj && !s.text.trim() && !s.groups.length);
 	}
-	function w(e, t) {
+	function le(e, t) {
 		return e.then(function(e) {
-			return ce(e, null, t);
+			return ue(e, null, t);
 		}).catch(function(e) {
-			return console.error(e), e.message && x(I(e.message)), ce(null, e, t);
+			return console.error(e), e.message && C(B(e.message)), ue(null, e, t);
 		}).then(function(e) {
 			return e;
 		});
 	}
-	function ce(e, t, n) {
+	function ue(e, t, n) {
 		var r = !1;
-		!o.obj && e && e.items && !e.items.length && (r = !0), t ? (r && (o.obj = null, o.groups = []), o && o.obj && delete o.obj.next) : n && e && e.next ? o.groups.push(e) : o.obj = e && e.items.length ? e : null;
+		!s.obj && e && e.items && !e.items.length && (r = !0), t ? (r && (s.obj = null, s.groups = []), s && s.obj && delete s.obj.next) : n && e && e.next ? s.groups.push(e) : s.obj = e && e.items.length ? e : null;
 		var i = function(e) {
 			if (!e.id) return e;
 			var t = e.id.indexOf("/") + 1, n = e.id.lastIndexOf("/") + 1, r = e.id.indexOf("http");
 			return t !== n && r === 0 && (e.uris ||= [], e.uris.push(e.id)), n && (e.id = e.id.substring(n)), e;
 		};
-		return e && e.items && e.items.length > 0 && (e.items = e.items.map((t) => (t = le(t), t[n ? "groupID" : "userID"] = e.id, i(t), t))), l.displaySearchItems(e, t, o);
+		return e && e.items && e.items.length > 0 && (e.items = e.items.map((t) => (t = de(t), t[n ? "groupID" : "userID"] = e.id, i(t), t))), u.displaySearchItems(e, t, s);
 	}
-	function le(e) {
+	function de(e) {
 		if (e.id || !e.key) return e;
 		var t = {
 			id: e.key,
@@ -4598,14 +4728,84 @@ $.prototype._init = function() {
 		};
 		return Object.hasOwnProperty.call(e, "url") && (t.URL = e.data.url), Object.hasOwnProperty.call(e, "volume") && (t.volume = e.data.volume), Object.hasOwnProperty.call(e, "language") && (t.language = e.data.language), Object.hasOwnProperty.call(e, "abstract") && (t.abstract = e.data.abstract), Object.hasOwnProperty.call(e, "note") && (t.note = e.data.note), Object.hasOwnProperty.call(e, "page") && (t.page = e.data.page), Object.hasOwnProperty.call(e, "shortTitle") && (t.shortTitle = e.data.shortTitle), Object.hasOwnProperty.call(e, "links") && (t.uris = [], Object.hasOwnProperty.call(e.links, "self") && t.uris.push(e.links.self.href), Object.hasOwnProperty.call(e.links, "alternate") && t.uris.push(e.links.alternate.href)), t;
 	}
-	function T(e) {
-		e === void 0 && (e = l.count()), e <= 0 ? (d.disable(), d.setText(I("Insert/Edit Citation"))) : (!s && d.enable(), e > 1 ? d.setText(I("Insert " + e + " Citations")) : d.setText(I("Insert/Edit Citation")));
+	function fe(e) {
+		if (e === void 0 && (e = u.count()), f) {
+			e <= 0 ? (g.disable(), g.setText(B("Update Citation"))) : (g.enable(), g.setText(B("Update Citation")));
+			return;
+		}
+		e <= 0 ? (g.disable(), g.setText(B("Insert/Edit Citation"))) : (!c && g.enable(), e > 1 ? g.setText(B("Insert " + e + " Citations")) : g.setText(B("Insert/Edit Citation")));
 	}
-	function ue() {
-		return de.apply(this, arguments);
+	function A() {
+		return j.apply(this, arguments);
 	}
-	function de() {
-		return de = a(function* () {
+	function j() {
+		return j = a(function* () {
+			var e = yield new Promise((e) => {
+				window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, e);
+			});
+			if (!e || !e.Value || e.Value.toLowerCase().indexOf("zotero_item") === -1) {
+				o.showWarningMessage(B("No Zotero citation found at the cursor. Please click directly on a citation to edit it."));
+				return;
+			}
+			var t = e.Value.indexOf("{"), n = e.Value.lastIndexOf("}");
+			if (t === -1) {
+				o.showWarningMessage(B("Could not parse the citation data."));
+				return;
+			}
+			var r = JSON.parse(e.Value.slice(t, n + 1));
+			u.removeItems(Object.keys(u.getSelectedItems())), u.clearLibrary(), f = !0, p = e, m = r, u.setEditMode(!0), r.citationItems && r.citationItems.forEach(function(e) {
+				var t = Object.assign({}, e.itemData || {});
+				!t.id && e.id && (t.id = e.id), e.uris && (t.uris = e.uris), e.prefix && (t.prefix = e.prefix), e.suffix && (t.suffix = e.suffix), e.locator && (t.locator = e.locator), e.label && (t.label = e.label), e["suppress-author"] && (t["suppress-author"] = e["suppress-author"]), u.addPreselectedItem(t);
+			}), d._container.classList.remove("hidden"), v._container.classList.add("hidden"), y._container.classList.add("hidden"), b._container.classList.add("hidden"), g.setText(B("Update Citation")), g.enable(), fe();
+		}), j.apply(this, arguments);
+	}
+	function N() {
+		f = !1, p = null, m = null, u.setEditMode(!1), u.removeItems(Object.keys(u.getSelectedItems())), u.clearLibrary(), d._container.classList.add("hidden"), v._container.classList.remove("hidden"), y._container.classList.remove("hidden"), b._container.classList.remove("hidden"), g.disable(), fe(), re();
+	}
+	function P(e) {
+		return pe.apply(this, arguments);
+	}
+	function pe() {
+		return pe = a(function* (e) {
+			if (!e.getLastUsedStyleId()) {
+				var t = yield new Promise((e) => {
+					Asc.plugin.callCommand(() => {
+						var e = Api.GetDocument().GetCustomProperties();
+						if (!e) return "";
+						for (var t = "", n = 1;;) {
+							var r = e.Get("ZOTERO_PREF_" + n);
+							if (r == null) break;
+							t += String(r), n++;
+						}
+						return t;
+					}, !1, !0, (t) => e(t || ""));
+				});
+				if (t) try {
+					var n = new DOMParser().parseFromString(t, "text/xml"), r = n.querySelector("style");
+					if (r) {
+						var i = r.getAttribute("id") || "", a = r.getAttribute("locale") || "";
+						if (i) {
+							var o = i.replace(/^.*\/styles\//, "");
+							o && localStorage.setItem("zoteroStyleId", o);
+						}
+						a && localStorage.setItem("zoteroLocale", a);
+					}
+					var s = n.querySelector("pref[name=\"noteType\"]");
+					if (s) {
+						var c = s.getAttribute("value");
+						c === "1" ? localStorage.setItem("zoteroNotesStyleId", "footnotes") : c === "2" && localStorage.setItem("zoteroNotesStyleId", "endnotes");
+					}
+				} catch (e) {
+					console.error("Failed to parse ZOTERO_PREF XML:", e);
+				}
+			}
+		}), pe.apply(this, arguments);
+	}
+	function F() {
+		return I.apply(this, arguments);
+	}
+	function I() {
+		return I = a(function* () {
 			try {
 				var e = yield new Promise((e) => {
 					Asc.plugin.executeMethod("GetVersion", [], e);
@@ -4616,32 +4816,29 @@ $.prototype._init = function() {
 			} catch (e) {
 				return console.error(e), 99999999;
 			}
-		}), de.apply(this, arguments);
-	}
-	function fe() {
-		var e = new Asc.ButtonContextMenu();
-		e.text = "Edit citation", e.addCheckers("Target", "Selection"), e.attachOnClick(/*#__PURE__*/ a(function* () {
-			var e = yield new Promise((e) => {
-				window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, e);
-			});
-			yield S(!1, "Zotero (" + I("Updating citations") + ")"), yield pe(e), yield C(!1, "Zotero (" + I("Updating citations") + ")");
-		})), Asc.Buttons.registerContextMenu();
-	}
-	function pe(e) {
-		return me.apply(this, arguments);
+		}), I.apply(this, arguments);
 	}
 	function me() {
-		return me = a(function* (e) {
-			if (!e || !e.Value || e.Value.toLowerCase().indexOf("zotero_item") === -1) return i.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it."), !1;
-			var t = yield i.showEditCitationWindow(e);
+		var e = new Asc.ButtonContextMenu();
+		e.text = "Edit citation", e.addCheckers("Target", "Selection"), e.attachOnClick(/*#__PURE__*/ a(function* () {
+			t.openMain(), yield A();
+		})), Asc.Buttons.registerContextMenu();
+	}
+	function he(e) {
+		return L.apply(this, arguments);
+	}
+	function L() {
+		return L = a(function* (e) {
+			if (!e || !e.Value || e.Value.toLowerCase().indexOf("zotero_item") === -1) return o.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it."), !1;
+			var t = yield o.showEditCitationWindow(e);
 			if (!t) return !1;
-			var n = i.updateItem.bind(i, t), a = r.getStyleManager();
-			return a.getLastUsedFormat() === "note" && (n = i.updateItem.bind(i, t, a.getLastUsedNotesStyle())), n().then(() => (e && i.moveCursorOutsideField(e.FieldId), !0)).catch(function(e) {
+			var n = o.updateItem.bind(o, t), i = r.getStyleManager();
+			return i.getLastUsedFormat() === "note" && (n = o.updateItem.bind(o, t, i.getLastUsedNotesStyle())), n().then(() => (e && o.moveCursorOutsideField(e.FieldId), !0)).catch(function(e) {
 				console.error(e);
-				var t = I("Failed to insert citation");
-				return typeof e == "string" && (t += ". " + I(e)), x(t), !1;
+				var t = B("Failed to insert citation");
+				return typeof e == "string" && (t += ". " + B(e)), C(t), !1;
 			});
-		}), me.apply(this, arguments);
+		}), L.apply(this, arguments);
 	}
 })();
 //#endregion

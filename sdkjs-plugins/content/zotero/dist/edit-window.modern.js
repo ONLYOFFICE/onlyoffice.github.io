@@ -1022,43 +1022,50 @@ function b(e, t) {
 	if (e ||= "", this._optionsContainer) {
 		this._optionsContainer.innerHTML = "";
 		var n = null, r = this._items;
-		e && (r = r.filter(function(t) {
-			return t !== null && t.text.toLowerCase().indexOf(e) !== -1;
-		}));
-		for (var i = document.createDocumentFragment(), a = 0; a < r.length; a++) {
-			var o = r[a];
-			if (!o) {
-				var s = document.createElement("hr");
-				s.className += " selectbox-option-divider", i.appendChild(s);
+		if (e) {
+			var i = e.split(/\s+/).filter(Boolean);
+			r = r.filter(function(e) {
+				if (e === null) return !1;
+				var t = e.text.toLowerCase();
+				return i.every(function(e) {
+					return t.indexOf(e) !== -1;
+				});
+			});
+		}
+		for (var a = document.createDocumentFragment(), o = 0; o < r.length; o++) {
+			var s = r[o];
+			if (!s) {
+				var c = document.createElement("hr");
+				c.className += " selectbox-option-divider", a.appendChild(c);
 				continue;
 			}
-			var c = document.createElement("div");
-			c.className += " selectbox-option", this._selectedValues.has(o.value) && (c.className += " selectbox-option-selected checkbox--checked", n = c), c.setAttribute("data-value", o.value);
-			var l = document.createElement("label");
-			if (l.className += " selectbox-option-text i18n", this._options.translate && (o.text = this._options.translate(o.text)), l.textContent = o.text, this._options.multiple) {
-				c.className += " selectbox-option-checkbox";
-				var u = document.createElement("input");
-				u.type = "checkbox", u.id = "checkbox-" + o.value, u.className += " selectbox-checkbox", u.checked = this._selectedValues.has(o.value), c.appendChild(u);
-				var d = document.createElement("span");
-				d.className = "checkbox-visual", d.setAttribute("aria-hidden", "true");
-				var f = "http://www.w3.org/2000/svg", p = document.createElementNS(f, "svg");
-				p.setAttribute("viewBox", "0 0 10 8"), p.setAttribute("class", "checkbox-checkmark");
-				var m = document.createElementNS(f, "path");
-				m.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), m.setAttribute("fill", "none"), m.setAttribute("stroke", "currentColor"), m.setAttribute("stroke-width", "2"), p.appendChild(m), d.appendChild(p), c.appendChild(d);
+			var l = document.createElement("div");
+			l.className += " selectbox-option", this._selectedValues.has(s.value) && (l.className += " selectbox-option-selected checkbox--checked", n = l), l.setAttribute("data-value", s.value);
+			var u = document.createElement("label");
+			if (u.className += " selectbox-option-text i18n", this._options.translate && (s.text = this._options.translate(s.text)), u.textContent = s.text, this._options.multiple) {
+				l.className += " selectbox-option-checkbox";
+				var d = document.createElement("input");
+				d.type = "checkbox", d.id = "checkbox-" + s.value, d.className += " selectbox-checkbox", d.checked = this._selectedValues.has(s.value), l.appendChild(d);
+				var f = document.createElement("span");
+				f.className = "checkbox-visual", f.setAttribute("aria-hidden", "true");
+				var p = "http://www.w3.org/2000/svg", m = document.createElementNS(p, "svg");
+				m.setAttribute("viewBox", "0 0 10 8"), m.setAttribute("class", "checkbox-checkmark");
+				var h = document.createElementNS(p, "path");
+				h.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), h.setAttribute("fill", "none"), h.setAttribute("stroke", "currentColor"), h.setAttribute("stroke-width", "2"), m.appendChild(h), f.appendChild(m), l.appendChild(f);
 			}
-			c.appendChild(l), i.appendChild(c);
+			l.appendChild(u), a.appendChild(l);
 		}
 		if (this._customItems.length) {
-			var h = document.createElement("hr");
-			h.className += " selectbox-option-divider", i.appendChild(h);
+			var g = document.createElement("hr");
+			g.className += " selectbox-option-divider", a.appendChild(g);
 		}
-		for (var a = 0; a < this._customItems.length; a++) {
-			var g = this._customItems[a], _ = document.createElement("label");
-			_.className += " selectbox-custom-option", _.setAttribute("data-value", g.value), _.setAttribute("for", g.value);
-			var v = document.createElement("span");
-			v.className += " selectbox-option-text i18n", this._options.translate && (g.text = this._options.translate(g.text)), v.textContent = g.text, _.appendChild(v), i.appendChild(_);
+		for (var o = 0; o < this._customItems.length; o++) {
+			var _ = this._customItems[o], v = document.createElement("label");
+			v.className += " selectbox-custom-option", v.setAttribute("data-value", _.value), v.setAttribute("for", _.value);
+			var y = document.createElement("span");
+			y.className += " selectbox-option-text i18n", this._options.translate && (_.text = this._options.translate(_.text)), y.textContent = _.text, v.appendChild(y), a.appendChild(v);
 		}
-		if (this._optionsContainer.appendChild(i), t && this.isOpen && this._optionsContainer && n) try {
+		if (this._optionsContainer.appendChild(a), t && this.isOpen && this._optionsContainer && n) try {
 			n.scrollIntoView && n.scrollIntoView({ block: "nearest" });
 		} catch (e) {
 			console.error(e);

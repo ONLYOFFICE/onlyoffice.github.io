@@ -460,8 +460,8 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "URL")) {
         this._URL = itemDataObject.URL;
     }
-    if (Object.hasOwnProperty.call(itemDataObject, "version")) {
-        this._version = itemDataObject.version;
+    if (Object.hasOwnProperty.call(itemDataObject, "versionNumber")) {
+        this._version = itemDataObject.versionNumber;
     }
     if (Object.hasOwnProperty.call(itemDataObject, "volume")) {
         this._volume = itemDataObject.volume;
