@@ -2,3 +2,4 @@
 *.json.bak
 
 *node_modules*
+*source-docx*
