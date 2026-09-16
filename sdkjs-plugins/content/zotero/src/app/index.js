@@ -79,23 +79,11 @@ import "../styles.css";
     /** @type {SelectCitationsComponent} */
     let selectCitation;
     /** @type {Button} */
-    let cancelEditBtn;
-
-    /** Edit mode state */
-    let editMode = false;
-    /** @type {AddinFieldData | null} */
-    let editField = null;
-    /** @type {Object | null} */
-    let editCitationObject = null;
-
-    /** @type {Button} */
     let saveAsTextBtn;
     /** @type {Button} */
     let insertLinkBtn;
     /** @type {Button} */
     let openSettingsBtn;
-    /** @type {Button} */
-    let editCitationBtn;
     /** @type {Button} */
     let insertBibBtn;
     /** @type {Button} */
@@ -126,9 +114,6 @@ import "../styles.css";
         insertLinkBtn = new Button("insertLinkBtn", {
             disabled: true,
         });
-        editCitationBtn = new Button("editCitationBtn", {
-            variant: "secondary",
-        });
         openSettingsBtn = new Button("settingsBtn", {
             variant: "icon-only",
             size: "small",
@@ -137,9 +122,6 @@ import "../styles.css";
             variant: "secondary",
         });
         refreshBtn = new Button("refreshBtn", {
-            variant: "secondary",
-        });
-        cancelEditBtn = new Button("cancelEditBtn", {
             variant: "secondary",
         });
         elements = {
@@ -343,20 +325,6 @@ import "../styles.css";
                 );
         });
 
-        editCitationBtn.subscribe(async function (event) {
-            if (event.type !== "button:click") {
-                return;
-            }
-            await enterEditMode();
-        });
-
-        cancelEditBtn.subscribe(function (event) {
-            if (event.type !== "button:click") {
-                return;
-            }
-            exitEditMode();
-        });
-
         refreshBtn.subscribe(async function (event) {
             if (event.type !== "button:click") {
                 return;
@@ -449,96 +417,6 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-
-            if (editMode) {
-                // Edit mode: build updated citation object and call updateItem
-                const orderedItems = selectCitation.getSelectedItemsOrdered();
-                if (orderedItems.length === 0) {
-                    showError(translate("No citations selected"));
-                    return;
-                }
-
-                /**
-                 * @param {Object} target
-                 * @param {Object} item
-                 */
-                function applyCitationParams(target, item) {
-                    target.prefix = item.prefix || "";
-                    target.suffix = item.suffix || "";
-                    target.locator = item.locator || "";
-                    target.label = item.label || "page";
-                    target["suppress-author"] = !!item["suppress-author"];
-                    return target;
-                }
-
-                // Rebuild citationItems from selected items
-                const newCitationItems = orderedItems.map(function (item) {
-                    // Look for original citationItem by id
-                    const origItem = editCitationObject.citationItems.find(function (ci) {
-                        return ci.id === item.id || (ci.itemData && ci.itemData.id === item.id);
-                    });
-                    if (origItem) {
-                        // Update params from the UI-modified item
-                        return applyCitationParams(origItem, item);
-                    }
-
-                    // New item from search — build citationItem structure
-                    const newItem = {
-                        id: item.id,
-                        itemData: Object.assign({}, item),
-                        uris: item.uris || [],
-                    };
-                    // Remove UI-only properties from itemData copy
-                    delete newItem.itemData.prefix;
-                    delete newItem.itemData.suffix;
-                    delete newItem.itemData.locator;
-                    delete newItem.itemData.label;
-                    delete newItem.itemData["suppress-author"];
-                    delete newItem.itemData.uris;
-
-                    return applyCitationParams(newItem, item);
-                });
-
-                const updatedCitationObject = JSON.parse(JSON.stringify(editCitationObject));
-                updatedCitationObject.citationItems = newCitationItems;
-
-                const field = editField;
-                exitEditMode();
-
-                await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
-
-                let updateFn = citationService.updateItem.bind(
-                    citationService,
-                    updatedCitationObject
-                );
-
-                const styleManager = settings.getStyleManager();
-                if (styleManager.getLastUsedFormat() === "note") {
-                    updateFn = citationService.updateItem.bind(
-                        citationService,
-                        updatedCitationObject,
-                        styleManager.getLastUsedNotesStyle()
-                    );
-                }
-
-                updateFn()
-                    .catch(function (error) {
-                        console.error(error);
-                        let message = translate("Failed to update citation");
-                        if (typeof error === "string") {
-                            message += ". " + translate(error);
-                        }
-                        showError(message);
-                    })
-                    .finally(function () {
-                        onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-                        if (field) {
-                            citationService.moveCursorOutsideField(field.FieldId);
-                        }
-                    });
-                return;
-            }
-
             await onStartAction(true, "Zotero (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
             let bHasNotes = false;
@@ -773,7 +651,6 @@ import "../styles.css";
         insertBibBtn.disable();
         refreshBtn.disable();
         insertLinkBtn.disable();
-        editCitationBtn.disable();
 
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9004000) {
@@ -801,7 +678,6 @@ import "../styles.css";
         bInProgress = false;
         insertBibBtn.enable();
         refreshBtn.enable();
-        editCitationBtn.enable();
         checkSelected();
         
         const editorVersion = window.Asc.scope.editorVersion;
@@ -1029,16 +905,6 @@ import "../styles.css";
         if (typeof numOfSelected === "undefined") {
             numOfSelected = selectCitation.count();
         }
-        if (editMode) {
-            if (numOfSelected <= 0) {
-                insertLinkBtn.disable();
-                insertLinkBtn.setText(translate("Update Citation"));
-            } else {
-                insertLinkBtn.enable();
-                insertLinkBtn.setText(translate("Update Citation"));
-            }
-            return;
-        }
         if (numOfSelected <= 0) {
             insertLinkBtn.disable();
             insertLinkBtn.setText(translate("Insert/Edit Citation"));
@@ -1053,90 +919,6 @@ import "../styles.css";
                 insertLinkBtn.setText(translate("Insert/Edit Citation"));
             }
         }
-    }
-
-    async function enterEditMode() {
-        /** @type {AddinFieldData | null} */
-        const field = await new Promise((resolve) => {
-            window.Asc.plugin.executeMethod(
-                "GetCurrentAddinField",
-                undefined,
-                resolve,
-            );
-        });
-        if (
-            !field ||
-            !field.Value ||
-            field.Value.toLowerCase().indexOf("zotero_item") === -1
-        ) {
-            citationService.showWarningMessage(translate("No Zotero citation found at the cursor. Please click directly on a citation to edit it."));
-            return;
-        }
-
-        const citationStartIndex = field.Value.indexOf("{");
-        const citationEndIndex = field.Value.lastIndexOf("}");
-        if (citationStartIndex === -1) {
-            citationService.showWarningMessage(translate("Could not parse the citation data."));
-            return;
-        }
-        const citationObject = JSON.parse(
-            field.Value.slice(citationStartIndex, citationEndIndex + 1)
-        );
-
-        // Clear current state
-        selectCitation.removeItems(Object.keys(selectCitation.getSelectedItems()));
-        selectCitation.clearLibrary();
-
-        // Enable edit mode
-        editMode = true;
-        editField = field;
-        editCitationObject = citationObject;
-        selectCitation.setEditMode(true);
-
-        // Pre-populate selected items from citation
-        if (citationObject.citationItems) {
-            citationObject.citationItems.forEach(function (ci) {
-                // Convert citationItem to SearchResultItem format
-                const item = Object.assign({}, ci.itemData || {});
-                if (!item.id && ci.id) item.id = ci.id;
-                if (ci.uris) item.uris = ci.uris;
-                if (ci.prefix) item.prefix = ci.prefix;
-                if (ci.suffix) item.suffix = ci.suffix;
-                if (ci.locator) item.locator = ci.locator;
-                if (ci.label) item.label = ci.label;
-                if (ci["suppress-author"]) item["suppress-author"] = ci["suppress-author"];
-                selectCitation.addPreselectedItem(item);
-            });
-        }
-
-        // Update UI
-        cancelEditBtn._container.classList.remove("hidden");
-        editCitationBtn._container.classList.add("hidden");
-        insertBibBtn._container.classList.add("hidden");
-        refreshBtn._container.classList.add("hidden");
-        insertLinkBtn.setText(translate("Update Citation"));
-        insertLinkBtn.enable();
-        checkSelected();
-    }
-
-    function exitEditMode() {
-        editMode = false;
-        editField = null;
-        editCitationObject = null;
-
-        selectCitation.setEditMode(false);
-        selectCitation.removeItems(Object.keys(selectCitation.getSelectedItems()));
-        selectCitation.clearLibrary();
-
-        cancelEditBtn._container.classList.add("hidden");
-        editCitationBtn._container.classList.remove("hidden");
-        insertBibBtn._container.classList.remove("hidden");
-        refreshBtn._container.classList.remove("hidden");
-        insertLinkBtn.disable();
-        checkSelected();
-
-        // Reload initial library
-        showCitationsAtTheStartFromMyLibrary();
     }
 
     /**
@@ -1232,8 +1014,17 @@ import "../styles.css";
         buttonMain.text = "Edit citation";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
-            router.openMain();
-            await enterEditMode();
+            /** @type {AddinFieldData | null} */
+            const field = await new Promise((resolve) => {
+                window.Asc.plugin.executeMethod(
+                    "GetCurrentAddinField",
+                    undefined,
+                    resolve,
+                );
+            });
+            await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
+            await showEditCitationWindow(field);
+            await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
         });
         Asc.Buttons.registerContextMenu();
 

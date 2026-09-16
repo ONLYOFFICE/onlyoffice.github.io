@@ -345,7 +345,6 @@ class CitationDocService {
     async convertNotesStyle(fields, notesStyle) {
         /** @type {Array<AddinFieldData>} */
         const editedFields = [];
-
         const formats = this.#makeFormattingPositions(fields);
 
         for (let i = 0; i < fields.length; i++) {
