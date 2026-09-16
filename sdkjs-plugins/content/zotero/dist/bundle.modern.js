@@ -4111,21 +4111,14 @@ function hn() {
 	}), this._subscribers = [], this._addEventListeners();
 }
 hn.prototype._addEventListeners = function() {
-	var e = this, t = null;
-	this._searchField.subscribe(function(n) {
-		if (n.type === "inputfield:blur" || n.type === "inputfield:submit") {
-			t &&= (clearTimeout(t), null);
-			var r = e._getSelectedGroups();
+	var e = this;
+	this._searchField.subscribe(function(t) {
+		if (t.type === "inputfield:blur" || t.type === "inputfield:submit") {
+			var n = e._getSelectedGroups();
 			e._subscribers.forEach(function(e) {
-				e(n.detail.value, r);
+				e(t.detail.value, n);
 			});
-		} else n.type === "inputfield:input" && (t && clearTimeout(t), t = setTimeout(function() {
-			t = null;
-			var r = e._getSelectedGroups();
-			e._subscribers.forEach(function(e) {
-				e(n.detail.value, r);
-			});
-		}, 350));
+		}
 	}), this._filterButton.subscribe(function(t) {
 		t.type === "button:click" && (e._librarySelectList.isOpen || (t.detail.originalEvent && t.detail.originalEvent.stopPropagation(), e._librarySelectList.openDropdown()));
 	});
@@ -4798,7 +4791,7 @@ $.prototype._init = function() {
 			var t = {};
 			e.firstName && (t.given = e.firstName), e.lastName && (t.family = e.lastName), e.name && (t.literal = e.name);
 			var r = se[e.creatorType] || "author";
-			n[r] || (n[r] = []), n[r].push(t);
+			n[r] || (n[r] = []), Object.keys(t).length > 0 && n[r].push(t);
 		}), t.date) {
 			var r = /^(-?\d{1,4})(?:[-/](\d{1,2}))?(?:[-/](\d{1,2}))?$/.exec(t.date.trim());
 			if (r) {

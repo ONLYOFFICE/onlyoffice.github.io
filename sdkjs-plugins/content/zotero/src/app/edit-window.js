@@ -68,8 +68,9 @@ import "../edit-window.css";
             
             /** @type {{citationItems: CitationItem[]} | null} */
             this.citationObject = null;
-            /** @type {Array<{omitAuthorInput: Checkbox, prefixInput: InputField, suffixInput: InputField, locatorInput: InputField, locatorSelectbox: SelectBox}>} */
+            /** @type {Array<{id: string, omitAuthorInput: Checkbox, prefixInput: InputField, suffixInput: InputField, locatorInput: InputField, locatorSelectbox: SelectBox}>} */
             this.forms = [];
+            this._hasRemovedItems = false;
         }
 
         /**
@@ -160,6 +161,7 @@ import "../edit-window.css";
             });
 
             this.forms.push({
+                id: citationItem.id,
                 omitAuthorInput,
                 prefixInput,
                 suffixInput,
@@ -194,6 +196,8 @@ import "../edit-window.css";
                 return;
             }
             this.citationObject.citationItems = this.citationObject.citationItems.filter(item => item.id !== id);
+            this.forms = this.forms.filter(f => f.id !== id);
+            this._hasRemovedItems = true;
             this._container.removeChild(form);
 
             this.updateRemoveButtonsVisibility();
@@ -268,10 +272,12 @@ import "../edit-window.css";
         }
 
         onClickSave() {
-            let bHasChanges = false;
+            let bHasChanges = this._hasRemovedItems;
             for (let i = 0; i < this.forms.length; i++) {
                 const form = this.forms[i];
-                const citationItem = this.citationObject?.citationItems[i];
+                const citationItem = this.citationObject?.citationItems.find(
+                    (item) => item.id === form.id,
+                );
                 if (!citationItem) {
                     continue;
                 }

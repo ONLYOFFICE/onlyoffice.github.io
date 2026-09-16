@@ -1222,7 +1222,7 @@ var O = [
 		constructor() {
 			var e = document.querySelector(".container");
 			if (!(e instanceof HTMLElement)) throw Error("container is not initialized");
-			this._container = e, this.citationObject = null, this.forms = [];
+			this._container = e, this.citationObject = null, this.forms = [], this._hasRemovedItems = !1;
 		}
 		createForm(e) {
 			var t = document.createElement("form");
@@ -1268,6 +1268,7 @@ var O = [
 					x.setPlaceholder(t.text);
 				}
 			}), this.forms.push({
+				id: e.id,
 				omitAuthorInput: S,
 				prefixInput: _,
 				suffixInput: v,
@@ -1284,7 +1285,7 @@ var O = [
 			}
 		}
 		removeItem(e, t) {
-			this.citationObject && (this.citationObject.citationItems = this.citationObject.citationItems.filter((e) => e.id !== t), this._container.removeChild(e), this.updateRemoveButtonsVisibility());
+			this.citationObject && (this.citationObject.citationItems = this.citationObject.citationItems.filter((e) => e.id !== t), this.forms = this.forms.filter((e) => e.id !== t), this._hasRemovedItems = !0, this._container.removeChild(e), this.updateRemoveButtonsVisibility());
 		}
 		onTranslate() {
 			for (var e = document.getElementsByClassName("i18n"), t = function() {
@@ -1322,14 +1323,13 @@ var O = [
 			})();
 		}
 		onClickSave() {
-			for (var e = !1, t = 0; t < this.forms.length; t++) {
-				var n = this.forms[t], r = this.citationObject?.citationItems[t];
-				if (r) {
-					var i = n.prefixInput.getValue(), a = n.suffixInput.getValue(), o = n.locatorSelectbox.getSelectedValue(), s = n.locatorInput.getValue(), c = n.omitAuthorInput.getState().checked;
-					(r.prefix || i) && r.prefix !== i && (r.prefix = i, e = !0), (r.suffix || a) && r.suffix !== a && (r.suffix = a, e = !0), (r.label || o) && r.label !== o && o && (r.label = o, e = !0), (r.locator || s) && r.locator !== s && (r.locator = s, e = !0), !!r["suppress-author"] !== c && (r["suppress-author"] = c, e = !0);
-				}
-			}
-			return e;
+			for (var e = this, t = this._hasRemovedItems, n = function() {
+				var n = e.forms[r], i = e.citationObject?.citationItems.find((e) => e.id === n.id);
+				if (!i) return 1;
+				var a = n.prefixInput.getValue(), o = n.suffixInput.getValue(), s = n.locatorSelectbox.getSelectedValue(), c = n.locatorInput.getValue(), l = n.omitAuthorInput.getState().checked;
+				(i.prefix || a) && i.prefix !== a && (i.prefix = a, t = !0), (i.suffix || o) && i.suffix !== o && (i.suffix = o, t = !0), (i.label || s) && i.label !== s && s && (i.label = s, t = !0), (i.locator || c) && i.locator !== c && (i.locator = c, t = !0), !!i["suppress-author"] !== l && (i["suppress-author"] = l, t = !0);
+			}, r = 0; r < this.forms.length; r++) if (n()) continue;
+			return t;
 		}
 	}
 	var t = new e();

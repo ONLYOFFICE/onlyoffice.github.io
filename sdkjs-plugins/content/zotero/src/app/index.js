@@ -949,7 +949,9 @@ import "../styles.css";
                 if (c.name) name.literal = c.name;
                 var cslRole = zoteroCreatorTypeToCsl[c.creatorType] || "author";
                 if (!res[cslRole]) res[cslRole] = [];
-                res[cslRole].push(name);
+                if (Object.keys(name).length > 0) {
+                    res[cslRole].push(name);
+                }
             });
         }
 
