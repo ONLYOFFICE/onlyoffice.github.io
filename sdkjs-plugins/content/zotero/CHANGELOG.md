@@ -61,3 +61,4 @@
 * Add MEDLINE journal title abbreviation option.
 * Add option to include URLs of paper articles.
 * Add bibliography preview to the settings page.
+* Fix incorrect "(Version N)" appearing in bibliographies (e.g. APA 7th edition) for items with no real citable version.
