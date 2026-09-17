@@ -587,7 +587,7 @@ O.prototype.ZOTERO_API_VERSION = "3", O.prototype.USER_AGENT = "AscDesktopEditor
 };
 //#endregion
 //#region src/app/shared/components/input.js
-function me(e, t) {
+function k(e, t) {
 	var n = this;
 	if (t ||= {}, typeof e == "string") {
 		var r = document.getElementById(e);
@@ -632,8 +632,8 @@ function me(e, t) {
 		};
 	}(this), 100);
 }
-me.prototype = {
-	constructor: me,
+k.prototype = {
+	constructor: k,
 	input: null,
 	_container: null,
 	_options: {},
@@ -838,7 +838,7 @@ me.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/message.js
-function he(e, t) {
+function me(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLElement && (e = n);
@@ -847,8 +847,8 @@ function he(e, t) {
 	else throw Error("Invalid container element");
 	this._options = Object.assign(this._options, t), this._isShow = !1;
 }
-he.prototype = {
-	constructor: he,
+me.prototype = {
+	constructor: me,
 	_options: {
 		type: "info",
 		text: "",
@@ -922,7 +922,7 @@ he.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/button.js
-function k(e, t) {
+function A(e, t) {
 	var n = this;
 	if (typeof e == "string") {
 		var r = document.getElementById(e);
@@ -951,8 +951,8 @@ function k(e, t) {
 		}
 	}, this._createDOM(), this._bindEvents(), this.updateState();
 }
-k.prototype = {
-	constructor: k,
+A.prototype = {
+	constructor: A,
 	_button: null,
 	_buttonText: null,
 	_spinner: null,
@@ -1087,14 +1087,14 @@ k.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/radio.js
-var A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), ge = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), _e = /*#__PURE__*/ new WeakMap(), ve = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakSet(), ye = class {
+var j = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), he = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), ge = /*#__PURE__*/ new WeakMap(), _e = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakSet(), ve = class {
 	constructor(e, t) {
-		if (u(this, P), c(this, A, void 0), c(this, j, void 0), c(this, ge, void 0), c(this, M, null), c(this, N, void 0), c(this, _e, /* @__PURE__ */ new Map()), c(this, ve, []), typeof e == "string") {
+		if (u(this, F), c(this, j, void 0), c(this, M, void 0), c(this, he, void 0), c(this, N, null), c(this, P, void 0), c(this, ge, /* @__PURE__ */ new Map()), c(this, _e, []), typeof e == "string") {
 			var n = document.getElementById(e);
 			n instanceof HTMLInputElement && (e = n);
 		}
 		if (!(e instanceof HTMLInputElement)) throw Error("Invalid input element");
-		if (l(j, this, e), l(N, this, Object.assign({
+		if (l(M, this, e), l(P, this, Object.assign({
 			id: `radio_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
 			checked: !1,
 			disabled: !1,
@@ -1102,115 +1102,115 @@ var A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), ge = /*#__
 			label: "",
 			name: "",
 			value: "on"
-		}, t)), r(P, this, be).call(this), l(A, this, document.createElement("div")), l(ge, this, document.createElement("span")), r(P, this, xe).call(this), r(P, this, Ce).call(this), r(P, this, we).call(this), !s(N, this).name) throw Error("Name attribute is required");
-		var i = Ee._.get(s(N, this).name);
-		i || (i = [], Ee._.set(s(N, this).name, i)), i.push(this);
+		}, t)), r(F, this, ye).call(this), l(j, this, document.createElement("div")), l(he, this, document.createElement("span")), r(F, this, be).call(this), r(F, this, Se).call(this), r(F, this, Ce).call(this), !s(P, this).name) throw Error("Name attribute is required");
+		var i = Te._.get(s(P, this).name);
+		i || (i = [], Te._.set(s(P, this).name, i)), i.push(this);
 	}
 	subscribe(e) {
 		var t = this;
-		return s(ve, this).push(e), { unsubscribe: function() {
-			l(ve, t, s(ve, t).filter(function(t) {
+		return s(_e, this).push(e), { unsubscribe: function() {
+			l(_e, t, s(_e, t).filter(function(t) {
 				return t !== e;
 			}));
 		} };
 	}
 	getElement() {
-		return s(A, this);
+		return s(j, this);
 	}
 	check(e) {
-		if (!(s(N, this).disabled || s(N, this).checked)) {
-			if (s(N, this).name) {
-				var t = Ee._.get(s(N, this).name);
+		if (!(s(P, this).disabled || s(P, this).checked)) {
+			if (s(P, this).name) {
+				var t = Te._.get(s(P, this).name);
 				t && t.forEach((e) => {
-					e !== this && s(N, e).checked && e.uncheck();
+					e !== this && s(P, e).checked && e.uncheck();
 				});
 			}
-			s(N, this).checked = !0, r(P, this, we).call(this), !e && r(P, this, Te).call(this);
+			s(P, this).checked = !0, r(F, this, Ce).call(this), !e && r(F, this, we).call(this);
 		}
 	}
 	uncheck(e) {
-		s(N, this).disabled || !s(N, this).checked || (s(N, this).checked = !1, r(P, this, we).call(this), !e && r(P, this, Te).call(this));
+		s(P, this).disabled || !s(P, this).checked || (s(P, this).checked = !1, r(F, this, Ce).call(this), !e && r(F, this, we).call(this));
 	}
 	enable() {
-		s(N, this).disabled && (s(N, this).disabled = !1, s(j, this).disabled = !1, s(A, this).setAttribute("aria-disabled", "false"), s(N, this).checked ? s(A, this).tabIndex = 0 : r(P, this, Se).call(this), s(A, this).classList.remove("radio--disabled"));
+		s(P, this).disabled && (s(P, this).disabled = !1, s(M, this).disabled = !1, s(j, this).setAttribute("aria-disabled", "false"), s(P, this).checked ? s(j, this).tabIndex = 0 : r(F, this, xe).call(this), s(j, this).classList.remove("radio--disabled"));
 	}
 	disable() {
-		s(N, this).disabled || (s(N, this).disabled = !0, s(j, this).disabled = !0, s(A, this).setAttribute("aria-disabled", "true"), s(A, this).tabIndex = -1, s(A, this).classList.add("radio--disabled"));
+		s(P, this).disabled || (s(P, this).disabled = !0, s(M, this).disabled = !0, s(j, this).setAttribute("aria-disabled", "true"), s(j, this).tabIndex = -1, s(j, this).classList.add("radio--disabled"));
 	}
 	setLabel(e) {
-		s(N, this).label = e, s(M, this) ? s(M, this).textContent = e : e && (l(M, this, document.createElement("label")), s(M, this).className = "radio-label", s(M, this).htmlFor = String(s(N, this).id), s(M, this).textContent = e, s(A, this).appendChild(s(M, this)));
+		s(P, this).label = e, s(N, this) ? s(N, this).textContent = e : e && (l(N, this, document.createElement("label")), s(N, this).className = "radio-label", s(N, this).htmlFor = String(s(P, this).id), s(N, this).textContent = e, s(j, this).appendChild(s(N, this)));
 	}
 	getState() {
 		return {
-			checked: !!s(N, this).checked,
-			disabled: !!s(N, this).disabled,
-			value: s(N, this).value || "",
-			name: s(N, this).name || ""
+			checked: !!s(P, this).checked,
+			disabled: !!s(P, this).disabled,
+			value: s(P, this).value || "",
+			name: s(P, this).name || ""
 		};
 	}
 	destroy() {
-		if (l(ve, this, []), s(N, this).name) {
-			var e = Ee._.get(s(N, this).name);
+		if (l(_e, this, []), s(P, this).name) {
+			var e = Te._.get(s(P, this).name);
 			if (e) {
 				var t = e.indexOf(this);
 				t >= 0 && e.splice(t, 1);
 			}
-			s(_e, this).forEach((e, t) => {
-				s(A, this).removeEventListener(t, e);
-			}), s(_e, this).clear(), s(A, this) && s(A, this).parentNode && s(A, this).parentNode.removeChild(s(A, this)), l(M, this, null);
+			s(ge, this).forEach((e, t) => {
+				s(j, this).removeEventListener(t, e);
+			}), s(ge, this).clear(), s(j, this) && s(j, this).parentNode && s(j, this).parentNode.removeChild(s(j, this)), l(N, this, null);
 		}
 	}
 };
+function ye() {
+	s(M, this).type = "radio";
+	var e = s(M, this).getAttribute("id"), t = s(M, this).getAttribute("name"), n = s(M, this).getAttribute("value"), r = s(M, this).getAttribute("checked"), i = s(M, this).getAttribute("disabled");
+	e === null ? s(P, this).id && s(M, this).setAttribute("id", s(P, this).id) : s(P, this).id = e, t === null ? s(P, this).name && s(M, this).setAttribute("name", s(P, this).name) : s(P, this).name = t, n === null ? s(P, this).value && s(M, this).setAttribute("value", s(P, this).value) : s(P, this).value = n, r === null ? s(P, this).checked && s(M, this).setAttribute("checked", "true") : s(P, this).checked = r === "true", i === null ? s(P, this).disabled && s(M, this).setAttribute("disabled", "true") : s(P, this).disabled = i === "true";
+}
 function be() {
-	s(j, this).type = "radio";
-	var e = s(j, this).getAttribute("id"), t = s(j, this).getAttribute("name"), n = s(j, this).getAttribute("value"), r = s(j, this).getAttribute("checked"), i = s(j, this).getAttribute("disabled");
-	e === null ? s(N, this).id && s(j, this).setAttribute("id", s(N, this).id) : s(N, this).id = e, t === null ? s(N, this).name && s(j, this).setAttribute("name", s(N, this).name) : s(N, this).name = t, n === null ? s(N, this).value && s(j, this).setAttribute("value", s(N, this).value) : s(N, this).value = n, r === null ? s(N, this).checked && s(j, this).setAttribute("checked", "true") : s(N, this).checked = r === "true", i === null ? s(N, this).disabled && s(j, this).setAttribute("disabled", "true") : s(N, this).disabled = i === "true";
+	var e = s(M, this).parentNode, t = document.createDocumentFragment();
+	t.appendChild(s(j, this)), s(j, this).classList.add("radio-button-container"), s(j, this).setAttribute("role", "radio"), s(j, this).setAttribute("aria-checked", String(!!s(P, this).checked)), s(j, this).setAttribute("aria-disabled", String(!!s(P, this).disabled)), s(j, this).tabIndex = s(P, this).disabled ? -1 : 0, s(he, this).className = "radio-visual", s(he, this).setAttribute("aria-hidden", "true"), s(P, this).label && (l(N, this, document.createElement("label")), s(N, this).className = "i18n radio-label", s(N, this).htmlFor = String(s(P, this).id), s(N, this).textContent = s(P, this).label), s(P, this).disabled && s(j, this).classList.add("radio--disabled"), e && e.insertBefore(t, s(M, this)), s(j, this).appendChild(s(M, this)), s(j, this).appendChild(s(he, this)), s(N, this) && s(j, this).appendChild(s(N, this)), r(F, this, xe).call(this);
 }
 function xe() {
-	var e = s(j, this).parentNode, t = document.createDocumentFragment();
-	t.appendChild(s(A, this)), s(A, this).classList.add("radio-button-container"), s(A, this).setAttribute("role", "radio"), s(A, this).setAttribute("aria-checked", String(!!s(N, this).checked)), s(A, this).setAttribute("aria-disabled", String(!!s(N, this).disabled)), s(A, this).tabIndex = s(N, this).disabled ? -1 : 0, s(ge, this).className = "radio-visual", s(ge, this).setAttribute("aria-hidden", "true"), s(N, this).label && (l(M, this, document.createElement("label")), s(M, this).className = "i18n radio-label", s(M, this).htmlFor = String(s(N, this).id), s(M, this).textContent = s(N, this).label), s(N, this).disabled && s(A, this).classList.add("radio--disabled"), e && e.insertBefore(t, s(j, this)), s(A, this).appendChild(s(j, this)), s(A, this).appendChild(s(ge, this)), s(M, this) && s(A, this).appendChild(s(M, this)), r(P, this, Se).call(this);
-}
-function Se() {
-	if (s(N, this).checked) s(A, this).tabIndex = s(N, this).disabled ? -1 : 0;
-	else if (s(N, this).name && Ee._.has(s(N, this).name)) {
-		var e = Ee._.get(s(N, this).name), t = !1;
+	if (s(P, this).checked) s(j, this).tabIndex = s(P, this).disabled ? -1 : 0;
+	else if (s(P, this).name && Te._.has(s(P, this).name)) {
+		var e = Te._.get(s(P, this).name), t = !1;
 		e && e.forEach((e) => {
-			s(N, e).checked && e !== this && (t = !0);
-		}), !t && !s(N, this).checked && !s(N, this).disabled ? s(A, this).tabIndex = 0 : s(A, this).tabIndex = -1;
+			s(P, e).checked && e !== this && (t = !0);
+		}), !t && !s(P, this).checked && !s(P, this).disabled ? s(j, this).tabIndex = 0 : s(j, this).tabIndex = -1;
 	}
 }
-function Ce() {
+function Se() {
 	var e = (e) => {
-		e.preventDefault(), !s(N, this).disabled && !s(N, this).checked && (this.check(), s(A, this).focus());
+		e.preventDefault(), !s(P, this).disabled && !s(P, this).checked && (this.check(), s(j, this).focus());
 	}, t = (e) => {
-		if (!s(N, this).disabled) switch (e.key) {
+		if (!s(P, this).disabled) switch (e.key) {
 			case " ":
 			case "Spacebar":
-			case "Enter": e.preventDefault(), s(N, this).checked || this.check();
+			case "Enter": e.preventDefault(), s(P, this).checked || this.check();
 		}
 	}, n = () => {
-		s(A, this).classList.add("radio--focused");
+		s(j, this).classList.add("radio--focused");
 	}, r = () => {
-		s(A, this).classList.remove("radio--focused");
+		s(j, this).classList.remove("radio--focused");
 	};
-	s(_e, this).set("click", e), s(_e, this).set("keydown", t), s(_e, this).set("focus", n), s(_e, this).set("blur", r), s(A, this).addEventListener("click", e), s(A, this).addEventListener("keydown", t), s(A, this).addEventListener("focus", n), s(A, this).addEventListener("blur", r);
+	s(ge, this).set("click", e), s(ge, this).set("keydown", t), s(ge, this).set("focus", n), s(ge, this).set("blur", r), s(j, this).addEventListener("click", e), s(j, this).addEventListener("keydown", t), s(j, this).addEventListener("focus", n), s(j, this).addEventListener("blur", r);
 }
-function we() {
-	s(A, this).setAttribute("aria-checked", String(!!s(N, this).checked)), s(A, this).classList.toggle("radio--checked", s(N, this).checked), s(j, this).checked = !!s(N, this).checked, r(P, this, Se).call(this);
+function Ce() {
+	s(j, this).setAttribute("aria-checked", String(!!s(P, this).checked)), s(j, this).classList.toggle("radio--checked", s(P, this).checked), s(M, this).checked = !!s(P, this).checked, r(F, this, xe).call(this);
 }
-function Te(e) {
+function we(e) {
 	var t = {
 		type: "radio:change",
 		detail: this.getState()
 	};
-	e && (t.originalEvent = e), s(ve, this).forEach(function(e) {
+	e && (t.originalEvent = e), s(_e, this).forEach(function(e) {
 		e(t);
 	});
 }
-var Ee = { _: /* @__PURE__ */ new Map() };
+var Te = { _: /* @__PURE__ */ new Map() };
 //#endregion
 //#region src/app/shared/components/checkbox.js
-function De(e, t) {
+function Ee(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLInputElement && (e = n);
@@ -1226,8 +1226,8 @@ function De(e, t) {
 		value: "on"
 	}, t), this._options.disabled = t.disabled || !1, this._handlers = /* @__PURE__ */ new Map(), this._createDOM(e), this._setupEventListeners(), this._updateVisualState(), this._subscribers = [];
 }
-De.prototype = {
-	constructor: De,
+Ee.prototype = {
+	constructor: Ee,
 	_container: null,
 	_input: null,
 	_visualCheckbox: null,
@@ -1336,9 +1336,9 @@ De.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/selectbox.js
-var F = /*#__PURE__*/ new WeakSet(), Oe = class {
+var I = /*#__PURE__*/ new WeakSet(), De = class {
 	constructor(e, t) {
-		if (u(this, F), typeof e == "string") {
+		if (u(this, I), typeof e == "string") {
 			var n = document.getElementById(e);
 			if (n instanceof HTMLSelectElement) e = n;
 			else if (n instanceof HTMLElement) this._container = n;
@@ -1356,34 +1356,34 @@ var F = /*#__PURE__*/ new WeakSet(), Oe = class {
 			description: t.description || ""
 		}), this._selectedValues = /* @__PURE__ */ new Set(), this.isOpen = !1, this._items = [], this._customItems = [], this._subscribers = [], this._boundHandles = {
 			toggle: (e) => {
-				r(F, this, je).call(this, e);
+				r(I, this, Ae).call(this, e);
 			},
 			search: (e) => {
-				r(F, this, Me).call(this, e);
+				r(I, this, je).call(this, e);
 			},
 			close: (e) => {
-				e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option") && r(F, this, I).call(this);
+				e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option") && r(I, this, L).call(this);
 			},
 			keydown: (e) => {
-				r(F, this, Pe).call(this, e);
+				r(I, this, Ne).call(this, e);
 			},
 			dropdownClick: (e) => {
-				r(F, this, Ie).call(this, e);
+				r(I, this, Fe).call(this, e);
 			},
 			scrollCheck: () => {
 				if (this._headerRectOnOpen) {
 					var e = this._header.getBoundingClientRect();
-					Math.abs(e.top - this._headerRectOnOpen.top) > 1 && r(F, this, I).call(this);
+					Math.abs(e.top - this._headerRectOnOpen.top) > 1 && r(I, this, L).call(this);
 				}
 			}
-		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), r(F, this, ke).call(this), r(F, this, Ae).call(this), r(F, this, Fe).call(this), Ve._.add(this);
+		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), r(I, this, Oe).call(this), r(I, this, ke).call(this), r(I, this, Pe).call(this), Ve._.add(this);
 	}
 	openDropdown() {
 		this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = !0, this._dropdown.style.display = "block", this._headerRectOnOpen = this._header.getBoundingClientRect(), document.addEventListener("scroll", this._boundHandles.scrollCheck, !0), this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout(function(e) {
 			return function() {
 				e.searchInput && e.searchInput.focus();
 			};
-		}(this), 100), r(F, this, Fe).call(this), r(F, this, Le).call(this);
+		}(this), 100), r(I, this, Pe).call(this), r(I, this, Le).call(this);
 	}
 	subscribe(e) {
 		var t = this;
@@ -1402,7 +1402,7 @@ var F = /*#__PURE__*/ new WeakSet(), Oe = class {
 			text: t,
 			selected: n
 		}), this._options.sortable && this._items.sort((e, t) => e && t ? e.text.localeCompare(t.text) : e ? -1 : +!!t);
-		n && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(e)), r(F, this, L).call(this);
+		n && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(e)), r(I, this, Ie).call(this);
 	}
 	addItems(e, t) {
 		var n = this;
@@ -1415,7 +1415,7 @@ var F = /*#__PURE__*/ new WeakSet(), Oe = class {
 					selected: i
 				});
 			}
-		}, this), this.isOpen && r(F, this, Fe).call(this), r(F, this, L).call(this);
+		}, this), this.isOpen && r(I, this, Pe).call(this), r(I, this, Ie).call(this);
 	}
 	addCustomItem(e, t) {
 		this._customItems.push({
@@ -1432,7 +1432,7 @@ var F = /*#__PURE__*/ new WeakSet(), Oe = class {
 			return t === null || t.value !== e;
 		}), this._customItems = this._customItems.filter(function(t) {
 			return t === null || t.value !== e;
-		}), this._selectedValues.delete(e), r(F, this, L).call(this);
+		}), this._selectedValues.delete(e), r(I, this, Ie).call(this);
 	}
 	getSelectedValue() {
 		if (this._options.multiple) return console.error("Method getSelectedValue is only available for single-select boxes."), null;
@@ -1471,9 +1471,9 @@ var F = /*#__PURE__*/ new WeakSet(), Oe = class {
 				var s = this._optionsContainer.querySelector("[data-value=\"" + i + "\"]");
 				s && (s.classList.add("selectbox-option-selected"), s.classList.add("checkbox--checked"));
 			}
-			r(F, this, I).call(this);
+			r(I, this, L).call(this);
 		}
-		r(F, this, L).call(this), !t && r(F, this, Re).call(this, i, !0);
+		r(I, this, Ie).call(this), !t && r(I, this, Re).call(this, i, !0);
 	}
 	unselectItems(e, t) {
 		var n = this;
@@ -1492,7 +1492,7 @@ var F = /*#__PURE__*/ new WeakSet(), Oe = class {
 		};
 		if (Array.isArray(e)) for (var o = 0; o < e.length; o++) i = e[o], this._selectedValues.has(i) && (this._selectedValues.delete(i), a(i));
 		else i = e, this._selectedValues.has(i) && (this._selectedValues.delete(i), a(i));
-		r(F, this, L).call(this), !t && r(F, this, Re).call(this, i, !0);
+		r(I, this, Ie).call(this), !t && r(I, this, Re).call(this, i, !0);
 	}
 	disable() {
 		this._select.classList.add("selectbox-disabled");
@@ -1505,7 +1505,7 @@ var F = /*#__PURE__*/ new WeakSet(), Oe = class {
 			var t = this._items[0];
 			t && this._selectedValues.add(t.value);
 		}
-		r(F, this, L).call(this), r(F, this, Fe).call(this);
+		r(I, this, Ie).call(this), r(I, this, Pe).call(this);
 	}
 	destroy() {
 		this._subscribers = [], Ve._.delete(this);
@@ -1519,7 +1519,7 @@ var F = /*#__PURE__*/ new WeakSet(), Oe = class {
 		this._container.className = t.join(" ");
 	}
 };
-function ke() {
+function Oe() {
 	this._container.innerHTML = "", this._container.className += " selectbox-container";
 	var e = document.createDocumentFragment();
 	if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), e.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text i18n", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._options.usePortal && (this._dropdown.className += " selectbox-fixed"), this._select.appendChild(this._dropdown), this._options.description) {
@@ -1534,34 +1534,34 @@ function ke() {
 		var i = this._selectbox.parentNode;
 		if (i) {
 			i.insertBefore(this._container, this._selectbox);
-			var a = r(F, this, Be).call(this, this._selectbox);
+			var a = r(I, this, Be).call(this, this._selectbox);
 			this.addItems(a.values, a.selectedValue), this._selectbox.remove();
 		}
 	}
 }
-function Ae() {
+function ke() {
 	this._header.addEventListener("click", this._boundHandles.toggle), this.searchInput && this.searchInput.addEventListener("input", this._boundHandles.search), this._dropdown.addEventListener("click", this._boundHandles.dropdownClick), this._dropdown.addEventListener("wheel", function(e) {
 		e.stopPropagation();
 	}), this._header.addEventListener("keydown", this._boundHandles.keydown), this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
 }
-function je(e) {
-	if (e && e.stopPropagation(), this.isOpen ? r(F, this, I).call(this) : this.openDropdown(), e && e.type === "click") for (var t of Ve._) t.isOpen && t !== this && r(F, t, I).call(t);
+function Ae(e) {
+	if (e && e.stopPropagation(), this.isOpen ? r(I, this, L).call(this) : this.openDropdown(), e && e.type === "click") for (var t of Ve._) t.isOpen && t !== this && r(I, t, L).call(t);
 }
-function I() {
+function L() {
 	this.isOpen && document && this._boundHandles && (document.removeEventListener("click", this._boundHandles.close), document.removeEventListener("scroll", this._boundHandles.scrollCheck, !0)), this.isOpen = !1, this._dropdown.style.display = "none", this._options.usePortal ? (this._dropdown.style.left = "", this._dropdown.style.width = "", this._dropdown.style.top = "") : this._dropdown.classList.remove("selectbox-dropdown-top");
 	for (var e = this._arrow.className.split(" "), t = [], n = 0; n < e.length; n++) e[n] !== "selectbox-arrow-open" && t.push(e[n]);
 	this._arrow.className = t.join(" ");
 	for (var r = this._header.className.split(" "), i = [], n = 0; n < r.length; n++) r[n] !== "selectbox-header-open" && i.push(r[n]);
 	this._header.className = i.join(" "), this.searchInput && (this.searchInput.value = "");
 }
-function Me(e) {
+function je(e) {
 	var t = e.target;
 	if (t instanceof HTMLInputElement) {
 		var n = t.value.toLowerCase();
-		r(F, this, Fe).call(this, n);
+		r(I, this, Pe).call(this, n);
 	}
 }
-function Ne(e) {
+function Me(e) {
 	var t = this.searchInput ? this.searchInput.value.toLowerCase() : "", n, i = this._items.filter(function(e) {
 		return e !== null;
 	});
@@ -1587,32 +1587,32 @@ function Ne(e) {
 			var l = (o + 1) % i.length;
 			l === i.length && (l = 0), this._selectedValues.clear(), n = i[l], this._selectedValues.add(n.value);
 		}
-		r(F, this, L).call(this), r(F, this, Fe).call(this, t, !0), r(F, this, Re).call(this, n.value, !0);
+		r(I, this, Ie).call(this), r(I, this, Pe).call(this, t, !0), r(I, this, Re).call(this, n.value, !0);
 	}
 }
-function Pe(e) {
+function Ne(e) {
 	switch (e.key || e.keyCode) {
 		case "Enter":
 		case 13:
-			e.preventDefault(), r(F, this, je).call(this, e);
+			e.preventDefault(), r(I, this, Ae).call(this, e);
 			break;
 		case "Escape":
 		case 27:
-			r(F, this, I).call(this);
+			r(I, this, L).call(this);
 			break;
 		case "ArrowDown":
 		case 40:
-			e.preventDefault(), r(F, this, Ne).call(this, "down");
+			e.preventDefault(), r(I, this, Me).call(this, "down");
 			break;
 		case "ArrowUp":
 		case 38:
-			e.preventDefault(), r(F, this, Ne).call(this, "up");
+			e.preventDefault(), r(I, this, Me).call(this, "up");
 			break;
 		case "Tab":
-		case 9: r(F, this, I).call(this);
+		case 9: r(I, this, L).call(this);
 	}
 }
-function Fe(e, t) {
+function Pe(e, t) {
 	if (e ||= "", this._optionsContainer) {
 		this._optionsContainer.innerHTML = "";
 		var n = null, r = this._items;
@@ -1666,7 +1666,7 @@ function Fe(e, t) {
 		}
 	}
 }
-function Ie(e) {
+function Fe(e) {
 	var t = e.target || e.srcElement, n = null;
 	if (t && t instanceof HTMLElement) {
 		for (var i = null, a = t.className.split(" "), o = !1, s = 0; s < a.length; s++) if (a[s] === "selectbox-option") {
@@ -1675,7 +1675,7 @@ function Ie(e) {
 		} else if (a[s] === "selectbox-custom-option") {
 			var c = t.getAttribute("data-value");
 			if (c) {
-				e.stopPropagation(), r(F, this, ze).call(this, c), r(F, this, I).call(this);
+				e.stopPropagation(), r(I, this, ze).call(this, c), r(I, this, L).call(this);
 				return;
 			}
 			break;
@@ -1688,7 +1688,7 @@ function Ie(e) {
 			} else if (l[s] === "selectbox-custom-option") {
 				var d = t.parentNode.getAttribute("data-value");
 				if (d) {
-					e.stopPropagation(), r(F, this, ze).call(this, d), r(F, this, I).call(this);
+					e.stopPropagation(), r(I, this, ze).call(this, d), r(I, this, L).call(this);
 					return;
 				}
 				break;
@@ -1701,10 +1701,10 @@ function Ie(e) {
 	var f = n.getAttribute("data-value");
 	if (f !== null) {
 		var p = !0;
-		this._options.multiple ? this._selectedValues.has(f) ? (this.unselectItems(f, !0), p = !1) : this.selectItems(f, !0) : (this.selectItems(f, !0), r(F, this, I).call(this)), r(F, this, L).call(this), r(F, this, Re).call(this, f, p);
+		this._options.multiple ? this._selectedValues.has(f) ? (this.unselectItems(f, !0), p = !1) : this.selectItems(f, !0) : (this.selectItems(f, !0), r(I, this, L).call(this)), r(I, this, Ie).call(this), r(I, this, Re).call(this, f, p);
 	}
 }
-function L() {
+function Ie() {
 	if (this._selectedValues.size === 0) {
 		this._selectedText.textContent = this._options.placeholder;
 		return;
@@ -3786,21 +3786,21 @@ var mn = [{
 	]] }
 }];
 function Z(e, t) {
-	if (this._router = e, this._displayNoneClass = t, this._saveBtn = new k("saveSettingsBtn", { variant: "primary" }), this._cancelBtn = new k("cancelBtn", { variant: "secondary" }), this._openAdvancedBtn = new k("openAdvancedBtn", {
+	if (this._router = e, this._displayNoneClass = t, this._saveBtn = new A("saveSettingsBtn", { variant: "primary" }), this._cancelBtn = new A("cancelBtn", { variant: "secondary" }), this._openAdvancedBtn = new A("openAdvancedBtn", {
 		variant: "icon-only",
 		size: "small"
-	}), this._styleSelect = new Oe("styleSelectList", {
+	}), this._styleSelect = new De("styleSelectList", {
 		placeholder: "Enter style name",
 		sortable: !0
-	}), this._styleSelectListOther = new Oe("styleSelectedListOther", {
+	}), this._styleSelectListOther = new De("styleSelectedListOther", {
 		placeholder: "Enter style name",
 		searchable: !0
 	}), this._notesStyleWrapper = document.getElementById("notesStyle"), !this._notesStyleWrapper) throw Error("notesStyleWrapper not found");
-	if (this._footNotes = new ye("footNotes", { label: "Footnotes" }), this._endNotes = new ye("endNotes", { label: "Endnotes" }), this._includeUrlWrapper = document.getElementById("includeUrlWrapper"), !this._includeUrlWrapper) throw Error("includeUrlWrapper not found");
-	if (this._includeUrlCheckbox = new De("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._abbreviateJournalTitlesWrapper = document.getElementById("abbreviateJournalTitlesWrapper"), !this._abbreviateJournalTitlesWrapper) throw Error("abbreviateJournalTitlesWrapper not found");
-	if (this._abbreviateJournalTitlesCheckbox = new De("abbreviateJournalTitles", { label: "Use MEDLINE journal abbreviations" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
-	if (this._languageSelect = new Oe("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
-	this._cslStylesManager = new X("zoteroStyleId"), this._localesManager = new fn(), this._abbreviationsManager = new pn(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new he("styleMessage", { type: "error" }), this._langMessage = new he("langMessage", { type: "error" }), this._LANGUAGES = [
+	if (this._footNotes = new ve("footNotes", { label: "Footnotes" }), this._endNotes = new ve("endNotes", { label: "Endnotes" }), this._includeUrlWrapper = document.getElementById("includeUrlWrapper"), !this._includeUrlWrapper) throw Error("includeUrlWrapper not found");
+	if (this._includeUrlCheckbox = new Ee("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._abbreviateJournalTitlesWrapper = document.getElementById("abbreviateJournalTitlesWrapper"), !this._abbreviateJournalTitlesWrapper) throw Error("abbreviateJournalTitlesWrapper not found");
+	if (this._abbreviateJournalTitlesCheckbox = new Ee("abbreviateJournalTitles", { label: "Use MEDLINE journal abbreviations" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
+	if (this._languageSelect = new De("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
+	this._cslStylesManager = new X("zoteroStyleId"), this._localesManager = new fn(), this._abbreviationsManager = new pn(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new me("styleMessage", { type: "error" }), this._langMessage = new me("langMessage", { type: "error" }), this._LANGUAGES = [
 		["af-ZA", "Afrikaans"],
 		["ar", "Arabic"],
 		["bg-BG", "Bulgarian"],
@@ -4119,7 +4119,7 @@ Z.prototype.getLocalesManager = function() {
 //#endregion
 //#region src/app/pages/advanced.js
 function hn(e, t) {
-	this._router = e, this._displayNoneClass = t, this._citationService = null, this._backBtn = new k("backToSettingsBtn", { variant: "secondary" }), this._repairBrokenFieldsBtn = new k("repairBrokenFieldsBtn", { variant: "secondary" }), this._addEventListeners();
+	this._router = e, this._displayNoneClass = t, this._citationService = null, this._backBtn = new A("backToSettingsBtn", { variant: "secondary" }), this._repairBrokenFieldsBtn = new A("repairBrokenFieldsBtn", { variant: "secondary" }), this._addEventListeners();
 }
 hn.prototype.setCitationService = function(e) {
 	this._citationService = e;
@@ -4145,10 +4145,10 @@ hn.prototype.setCitationService = function(e) {
 //#endregion
 //#region src/app/pages/login.js
 function Q(e, t) {
-	if (this._router = e, this._sdk = t, this._apiKeyLoginField = new me("apiKeyField", {
+	if (this._router = e, this._sdk = t, this._apiKeyLoginField = new k("apiKeyField", {
 		autofocus: !0,
 		autocomplete: "on"
-	}), this._saveApiKeyBtn = new k("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new he("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new he("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new k("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
+	}), this._saveApiKeyBtn = new A("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new me("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new me("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new A("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
 	if (this._logoutLink = document.getElementById("logoutLink"), !this._logoutLink) throw Error("logoutLink not found");
 	this._onAuthorized = function(e) {}, this._onChangeState = function(e) {}, this._onOpen = function() {};
 }
@@ -4220,14 +4220,14 @@ Q.prototype.init = function() {
 //#endregion
 //#region src/app/shared/ui/search-filter.js
 function gn() {
-	this._searchField = new me("searchField", {
+	this._searchField = new k("searchField", {
 		type: "text",
 		autofocus: !0,
 		showClear: !1
-	}), this._filterButton = new k("filterButton", {
+	}), this._filterButton = new A("filterButton", {
 		variant: "secondary-icon",
 		size: "small"
-	}), this._librarySelectList = new Oe("librarySelectList", {
+	}), this._librarySelectList = new De("librarySelectList", {
 		placeholder: R("No items selected"),
 		multiple: !0,
 		description: R("Search in:")
@@ -4265,7 +4265,7 @@ gn.prototype._addEventListeners = function() {
 		r.indexOf(e.id.toString()) !== -1 && (i = !0);
 	}), i || (r = ["my_library", "group_libraries"]);
 	for (var o = function(e, n, r) {
-		typeof e == "number" && (e = e.toString()), t._librarySelectList instanceof Oe && t._librarySelectList.addItem(e, n, r);
+		typeof e == "number" && (e = e.toString()), t._librarySelectList instanceof De && t._librarySelectList.addItem(e, n, r);
 	}, s = 0; s < a.length; s++) {
 		var c = a[s].id, l = a[s].name;
 		o(c, l, r.indexOf(c) !== -1);
@@ -4292,7 +4292,7 @@ gn.prototype._addEventListeners = function() {
 	} };
 }, gn.prototype._selectedGroupsWatcher = function(e, t) {
 	var n = this;
-	this._librarySelectList instanceof Oe && this._librarySelectList.subscribe(function(r) {
+	this._librarySelectList instanceof De && this._librarySelectList.subscribe(function(r) {
 		if (r.type === "selectbox:change") {
 			var i = [], a = r.detail.values, o = r.detail.current, s = r.detail.enabled, c = e.map(function(e) {
 				return e.id;
@@ -4405,7 +4405,7 @@ $.prototype._init = function() {
 	a.length === 0 && (a = s.textContent), s.setAttribute("title", s.textContent), r.appendChild(s);
 	var l = document.createElement("input");
 	i.appendChild(l);
-	var u = new De(l, {
+	var u = new Ee(l, {
 		checked: !!this._items[e.id],
 		label: a,
 		title: !0,
@@ -4426,15 +4426,15 @@ $.prototype._init = function() {
 	n.appendChild(r), r.appendChild(i), r.appendChild(a), n.appendChild(o), o.appendChild(s), o.appendChild(c);
 	var d = "";
 	n.appendChild(l), l.appendChild(u);
-	var f = new me(i, {
+	var f = new k(i, {
 		type: "text",
 		placeholder: R("Prefix"),
 		value: e.prefix || ""
-	}), p = new me(a, {
+	}), p = new k(a, {
 		type: "text",
 		placeholder: R("Suffix"),
 		value: e.suffix || ""
-	}), m = new Oe(s, {
+	}), m = new De(s, {
 		placeholder: R("Locator"),
 		usePortal: !0,
 		translate: R
@@ -4443,11 +4443,11 @@ $.prototype._init = function() {
 		var n = e[0] === t;
 		m.addItem(e[0], e[1], n), n && (d = e[1]);
 	});
-	var h = new me(c, {
+	var h = new k(c, {
 		type: "text",
 		placeholder: R(d),
 		value: e.locator || ""
-	}), g = new De(u, {
+	}), g = new Ee(u, {
 		label: R("Omit Author"),
 		checked: !!e["suppress-author"]
 	});
@@ -4540,10 +4540,10 @@ $.prototype._init = function() {
 		if (!t) throw Error("errorWrapper not found");
 		var n = document.getElementById("mainState");
 		if (!n) throw Error("mainState not found");
-		l = new gn(), u = new $(e, oe, T), d = new k("saveAsTextBtn", { variant: "secondary" }), f = new k("insertLinkBtn", { disabled: !0 }), p = new k("settingsBtn", {
+		l = new gn(), u = new $(e, oe, T), d = new A("saveAsTextBtn", { variant: "secondary" }), f = new A("insertLinkBtn", { disabled: !0 }), p = new A("settingsBtn", {
 			variant: "icon-only",
 			size: "small"
-		}), m = new k("insertBibBtn", { variant: "secondary" }), h = new k("refreshBtn", { variant: "secondary" }), _ = {
+		}), m = new A("insertBibBtn", { variant: "secondary" }), h = new A("refreshBtn", { variant: "secondary" }), _ = {
 			error: t,
 			mainState: n
 		};
@@ -4571,7 +4571,7 @@ $.prototype._init = function() {
 					We.hide();
 				});
 			}
-		}), window.Asc.plugin.onTranslate = ne, fe().then((e) => {
+		}), window.Asc.plugin.onTranslate = ne, pe().then((e) => {
 			window.Asc.scope.editorVersion = e, me();
 		}).catch((e) => {
 			console.error(e);
@@ -4683,7 +4683,7 @@ $.prototype._init = function() {
 					}
 					yield C(!0, "Zotero (" + R("Inserting citation") + ")");
 					var t = u.getSelectedItems(), n = !1, i = yield o.getCurrentField();
-					return i ? o.insertSelectedCitationsToCurrentField(t, i).then((e) => (u.removeItems(Object.keys(t)), he(e))).then((e) => {
+					return i ? o.insertSelectedCitationsToCurrentField(t, i).then((e) => (u.removeItems(Object.keys(t)), j(e))).then((e) => {
 						e && i && o.showSuccessMessage("Citation has been updated successfully");
 					}).finally(/*#__PURE__*/ a(function* () {
 						w(!1, "Zotero (" + R("Inserting citation") + ")");
@@ -4699,7 +4699,7 @@ $.prototype._init = function() {
 						var t = R("Failed to insert citation");
 						typeof e == "string" && (t += ". " + R(e)), S(t);
 					}).finally(/*#__PURE__*/ a(function* () {
-						w(!1, "Zotero (" + R("Inserting citation") + ")");
+						w(!1, "Zotero (" + R("Inserting citation") + ")"), fe();
 					}));
 				}
 			});
@@ -4726,7 +4726,7 @@ $.prototype._init = function() {
 					var t = R("Failed to refresh");
 					typeof e == "string" && (t += ". " + R(e)), S(t);
 				}).finally(function() {
-					w(!1, "Zotero (" + R("Updating citations") + ")");
+					w(!1, "Zotero (" + R("Updating citations") + ")"), fe();
 				});
 			});
 			return function(t, n) {
@@ -4897,45 +4897,58 @@ $.prototype._init = function() {
 	}
 	function de() {
 		return de = a(function* (e) {
-			if (!e.getLastUsedStyleId()) {
-				var t = yield new Promise((e) => {
-					Asc.plugin.callCommand(() => {
-						var e = Api.GetDocument().GetCustomProperties();
-						if (!e) return "";
-						for (var t = "", n = 1;;) {
-							var r = e.Get("ZOTERO_PREF_" + n);
-							if (r == null) break;
-							t += String(r), n++;
-						}
-						return t;
-					}, !1, !0, (t) => e(t || ""));
-				});
-				if (t) try {
-					var n = new DOMParser().parseFromString(t, "text/xml"), r = n.querySelector("style");
-					if (r) {
-						var i = r.getAttribute("id") || "", a = r.getAttribute("locale") || "";
-						if (i) {
-							var o = i.replace(/^.*\/styles\//, "");
-							o && localStorage.setItem("zoteroStyleId", o);
-						}
-						a && localStorage.setItem("zoteroLocale", a);
+			var t = yield new Promise((e) => {
+				Asc.plugin.callCommand(() => {
+					var e = Api.GetDocument().GetCustomProperties();
+					if (!e) return "";
+					for (var t = "", n = 1;;) {
+						var r = e.Get("ZOTERO_PREF_" + n);
+						if (r == null) break;
+						t += String(r), n++;
 					}
-					var s = n.querySelector("pref[name=\"noteType\"]");
-					if (s) {
-						var c = s.getAttribute("value");
-						c === "1" ? localStorage.setItem("zoteroNotesStyleId", "footnotes") : c === "2" && localStorage.setItem("zoteroNotesStyleId", "endnotes");
+					return t;
+				}, !1, !0, (t) => e(t || ""));
+			});
+			if (t) try {
+				var n = new DOMParser().parseFromString(t, "text/xml"), r = n.querySelector("style");
+				if (r) {
+					var i = r.getAttribute("id") || "", a = r.getAttribute("locale") || "";
+					if (i) {
+						var o = i.replace(/^.*\/styles\//, "");
+						o && localStorage.setItem("zoteroStyleId", o);
 					}
-				} catch (e) {
-					console.error("Failed to parse ZOTERO_PREF XML:", e);
+					a && localStorage.setItem("zoteroLocale", a);
 				}
+				var s = n.querySelector("pref[name=\"noteType\"]");
+				if (s) {
+					var c = s.getAttribute("value");
+					c === "1" ? localStorage.setItem("zoteroNotesStyleId", "footnotes") : c === "2" && localStorage.setItem("zoteroNotesStyleId", "endnotes");
+				}
+			} catch (e) {
+				console.error("Failed to parse ZOTERO_PREF XML:", e);
 			}
 		}), de.apply(this, arguments);
 	}
 	function fe() {
-		return pe.apply(this, arguments);
+		var e = r.getStyleManager(), t = e.getLastUsedStyleId();
+		if (!t) return Promise.resolve();
+		var n = r.getLocalesManager().getLastUsedLanguage() || "en-US", i = e.getLastUsedFormat(), a = e.getLastUsedNotesStyle(), o = "0";
+		i === "note" && (o = a === "endnotes" ? "2" : "1");
+		for (var s = e.isLastUsedStyleContainBibliography() ? "1" : "0", c = "<data data-version=\"3\" zotero-version=\"5.0.96\"><style id=\"http://www.zotero.org/styles/" + t + "\" locale=\"" + n + "\" hasBibliography=\"" + s + "\" bibliographyStyleHasBeenSet=\"1\"/><prefs><pref name=\"fieldType\" value=\"Field\"/><pref name=\"automaticJournalAbbreviations\" value=\"true\"/><pref name=\"noteType\" value=\"" + o + "\"/></prefs></data>", l = [], u = 0; u < c.length; u += 255) l.push(c.substring(u, u + 255));
+		var d = Math.max(l.length, 10);
+		return new Promise(function(e) {
+			Asc.scope.prefChunks = l, Asc.scope.prefSlotsToClear = d, Asc.plugin.callCommand(function() {
+				for (var e = Api.GetDocument().GetCustomProperties(), t = Asc.scope.prefChunks, n = 0; n < Asc.scope.prefSlotsToClear; n++) e.Add("ZOTERO_PREF_" + (n + 1), n < t.length ? t[n] : "");
+			}, !1, !1, function() {
+				e();
+			});
+		});
 	}
 	function pe() {
-		return pe = a(function* () {
+		return k.apply(this, arguments);
+	}
+	function k() {
+		return k = a(function* () {
 			try {
 				var e = yield new Promise((e) => {
 					Asc.plugin.executeMethod("GetVersion", [], e);
@@ -4946,7 +4959,7 @@ $.prototype._init = function() {
 			} catch (e) {
 				return console.error(e), 99999999;
 			}
-		}), pe.apply(this, arguments);
+		}), k.apply(this, arguments);
 	}
 	function me() {
 		var e = new Asc.ButtonContextMenu();
@@ -4954,14 +4967,14 @@ $.prototype._init = function() {
 			var e = yield new Promise((e) => {
 				window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, e);
 			});
-			yield C(!1, "Zotero (" + R("Updating citations") + ")"), yield he(e), yield w(!1, "Zotero (" + R("Updating citations") + ")");
+			yield C(!1, "Zotero (" + R("Updating citations") + ")"), yield j(e), yield w(!1, "Zotero (" + R("Updating citations") + ")");
 		})), Asc.Buttons.registerContextMenu();
 	}
-	function he(e) {
-		return A.apply(this, arguments);
+	function j(e) {
+		return M.apply(this, arguments);
 	}
-	function A() {
-		return A = a(function* (e) {
+	function M() {
+		return M = a(function* (e) {
 			if (!e || !e.Value || e.Value.toLowerCase().indexOf("zotero_item") === -1) return o.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it."), !1;
 			var t = yield o.showEditCitationWindow(e);
 			if (!t) return !1;
@@ -4971,7 +4984,7 @@ $.prototype._init = function() {
 				var t = R("Failed to insert citation");
 				return typeof e == "string" && (t += ". " + R(e)), S(t), !1;
 			});
-		}), A.apply(this, arguments);
+		}), M.apply(this, arguments);
 	}
 })();
 //#endregion
