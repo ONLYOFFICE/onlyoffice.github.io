@@ -349,9 +349,9 @@ function fetchExternal(url, options, isStreaming) {
 		if (!_provider.createInstance && _provider.url !== undefined)
 			url = _provider.url;
 
-		// Allow provider to return absolute URL (e.g. Cloudflare direct mode with Account ID)
+		// Allow provider to return absolute URL (e.g. Cloudflare direct mode) or external fetch URL
 		let endpointUrl = provider.getEndpointUrl(endpoint, model, options);
-		if (endpointUrl && (endpointUrl.startsWith("http://") || endpointUrl.startsWith("https://")))
+		if (endpointUrl && (endpointUrl.startsWith("http://") || endpointUrl.startsWith("https://") || endpointUrl.startsWith("[external]")))
 			return endpointUrl;
 
 		if (url.endsWith("/"))

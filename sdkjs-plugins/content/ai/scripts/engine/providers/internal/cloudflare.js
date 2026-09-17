@@ -56,10 +56,9 @@ class Provider extends AI.Provider {
 	}
 
 	isUseProxy() {
-		// Direct Cloudflare API (api.cloudflare.com) has no CORS for onlyoffice://plugin
-		// and file:// – must use native AscSimpleRequest on desktop and ONLYOFFICE
-		// proxy on web. Worker mode already sends CORS but proxy is harmless.
-		return true;
+		// Cloudflare direct API rejects unknown fields like 'target' that isUseProxy injects.
+		// Use fetchExternal ([external] prefix) to bypass CORS without target injection.
+		return false;
 	}
 
 	_isDirectMode() {
@@ -81,42 +80,52 @@ class Provider extends AI.Provider {
 			let u = (this.url || "").trim();
 			// Direct Cloudflare API mode: url is Account ID or full api URL containing api.cloudflare.com
 			if (u && (this._isDirectMode() || u.includes("api.cloudflare.com"))) {
-				// If user pasted full API URL already containing /ai/run/, use it as-is
+				// If user pasted full API URL already containing /ai/run/, use it as-is (via external fetch)
 				if (u.startsWith("http://") || u.startsWith("https://")) {
 					if (u.includes("/ai/run/"))
-						return "";
+						return "[external]" + u;
 					// If url is https://api.cloudflare.com/client/v4/accounts/{id}
 					if (u.includes("accounts/")) {
 						let modelId = model && model.id ? model.id : "@cf/black-forest-labs/flux-1-schnell";
 						if (!modelId.startsWith("@cf/"))
 							modelId = "@cf/black-forest-labs/flux-1-schnell";
-						return "/ai/run/" + modelId;
+						// Return external-prefixed URL to bypass CORS without target injection
+						return "[external]" + u.replace(/\/$/, "") + "/ai/run/" + modelId;
 					}
 				}
-				// Direct mode with bare Account ID → absolute URL
+				// Direct mode with bare Account ID → absolute URL via external fetch
 				let accountId = u;
 				let m = u.match(/accounts\/([a-f0-9]{32})/i);
 				if (m) accountId = m[1];
 				let modelId = model && model.id ? model.id : "@cf/black-forest-labs/flux-1-schnell";
 				if (!modelId.startsWith("@cf/"))
 					modelId = "@cf/black-forest-labs/flux-1-schnell";
-				return "https://api.cloudflare.com/client/v4/accounts/" + accountId + "/ai/run/" + modelId;
+				return "[external]https://api.cloudflare.com/client/v4/accounts/" + accountId + "/ai/run/" + modelId;
 			}
-			// Worker proxy mode: url is https://... → append /generate
+			// Worker proxy mode: url is https://... → append /generate (also via external fetch to avoid CORS)
 			if (!u || u.startsWith("http://") || u.startsWith("https://")) {
-				if (!u) return "/generate";
-				if (u.endsWith("/generate"))
-					return "";
-				if (u.indexOf("/generate") !== -1)
-					return "";
-				return "/generate";
+				let base = u;
+				let suffix = "";
+				if (!u) {
+					base = "https://YOUR-WORKER.workers.dev";
+					suffix = "/generate";
+				} else if (u.endsWith("/generate")) {
+					suffix = "";
+				} else if (u.indexOf("/generate") !== -1) {
+					suffix = "";
+				} else {
+					suffix = "/generate";
+				}
+				// Use external fetch for worker as well to bypass CORS on desktop
+				if (!u) return "[external]" + base + suffix;
+				return "[external]" + base.replace(/\/$/, "") + suffix;
 			}
 			// Fallback (should not happen) → treat as Account ID
 			let accountId = u;
 			let modelId = model && model.id ? model.id : "@cf/black-forest-labs/flux-1-schnell";
 			if (!modelId.startsWith("@cf/"))
 				modelId = "@cf/black-forest-labs/flux-1-schnell";
-			return "https://api.cloudflare.com/client/v4/accounts/" + accountId + "/ai/run/" + modelId;
+			return "[external]https://api.cloudflare.com/client/v4/accounts/" + accountId + "/ai/run/" + modelId;
 		}
 		return super.getEndpointUrl(endpoint, model, options);
 	}
