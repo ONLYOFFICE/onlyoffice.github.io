@@ -795,6 +795,58 @@ class CitationDocService {
         Asc.scope.bibStyle = null;
         return addedField.FieldId;
     }
+
+    async loadStyleFromDocument() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const props = doc.GetCustomProperties();
+                    if (!props) return "";
+                    let xml = "";
+                    let i = 1;
+                    const MAX_ZOTERO_PREF_CHUNKS = 1000;
+                    while (i <= MAX_ZOTERO_PREF_CHUNKS) {
+                        const val = props.Get("ZOTERO_PREF_" + i);
+                        if (val === null || val === undefined) break;
+                        xml += String(val);
+                        i++;
+                    }
+                    return xml;
+                },
+                false,
+                true,
+                (result) => resolve(result || ""),
+            );
+        });
+    }
+
+    /**
+     * @param {Array<string>} chunks
+     * @returns 
+     */
+    async saveStyleToDocument(chunks) {
+        return new Promise(function (resolve) {
+            Asc.scope.prefChunks = chunks;
+            Asc.plugin.callCommand(
+                function () {
+                    var doc = Api.GetDocument();
+                    var props = doc.GetCustomProperties();
+                    var chunks = Asc.scope.prefChunks;
+                    var slotsToClear = Math.max(chunks.length, 10);
+                    for (var i = 0; i < slotsToClear; i++) {
+                        props.Add("ZOTERO_PREF_" + (i + 1), i < chunks.length ? chunks[i] : "");
+                    }
+                },
+                false,
+                false,
+                function () {
+                    lastSavedPrefXml = prefXml;
+                    resolve();
+                },
+            );
+        });
+    }
 }
 
 export { CitationDocService };

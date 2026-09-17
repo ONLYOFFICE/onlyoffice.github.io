@@ -587,7 +587,7 @@ O.prototype.ZOTERO_API_VERSION = "3", O.prototype.USER_AGENT = "AscDesktopEditor
 };
 //#endregion
 //#region src/app/shared/components/input.js
-function k(e, t) {
+function me(e, t) {
 	var n = this;
 	if (t ||= {}, typeof e == "string") {
 		var r = document.getElementById(e);
@@ -632,8 +632,8 @@ function k(e, t) {
 		};
 	}(this), 100);
 }
-k.prototype = {
-	constructor: k,
+me.prototype = {
+	constructor: me,
 	input: null,
 	_container: null,
 	_options: {},
@@ -838,7 +838,7 @@ k.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/message.js
-function me(e, t) {
+function k(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLElement && (e = n);
@@ -847,8 +847,8 @@ function me(e, t) {
 	else throw Error("Invalid container element");
 	this._options = Object.assign(this._options, t), this._isShow = !1;
 }
-me.prototype = {
-	constructor: me,
+k.prototype = {
+	constructor: k,
 	_options: {
 		type: "info",
 		text: "",
@@ -3800,7 +3800,7 @@ function Z(e, t) {
 	if (this._includeUrlCheckbox = new Ee("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._abbreviateJournalTitlesWrapper = document.getElementById("abbreviateJournalTitlesWrapper"), !this._abbreviateJournalTitlesWrapper) throw Error("abbreviateJournalTitlesWrapper not found");
 	if (this._abbreviateJournalTitlesCheckbox = new Ee("abbreviateJournalTitles", { label: "Use MEDLINE journal abbreviations" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
 	if (this._languageSelect = new De("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
-	this._cslStylesManager = new X("zoteroStyleId"), this._localesManager = new fn(), this._abbreviationsManager = new pn(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new me("styleMessage", { type: "error" }), this._langMessage = new me("langMessage", { type: "error" }), this._LANGUAGES = [
+	this._cslStylesManager = new X("zoteroStyleId"), this._localesManager = new fn(), this._abbreviationsManager = new pn(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new k("styleMessage", { type: "error" }), this._langMessage = new k("langMessage", { type: "error" }), this._LANGUAGES = [
 		["af-ZA", "Afrikaans"],
 		["ar", "Arabic"],
 		["bg-BG", "Bulgarian"],
@@ -4145,10 +4145,10 @@ hn.prototype.setCitationService = function(e) {
 //#endregion
 //#region src/app/pages/login.js
 function Q(e, t) {
-	if (this._router = e, this._sdk = t, this._apiKeyLoginField = new k("apiKeyField", {
+	if (this._router = e, this._sdk = t, this._apiKeyLoginField = new me("apiKeyField", {
 		autofocus: !0,
 		autocomplete: "on"
-	}), this._saveApiKeyBtn = new A("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new me("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new me("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new A("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
+	}), this._saveApiKeyBtn = new A("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new k("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new k("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new A("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
 	if (this._logoutLink = document.getElementById("logoutLink"), !this._logoutLink) throw Error("logoutLink not found");
 	this._onAuthorized = function(e) {}, this._onChangeState = function(e) {}, this._onOpen = function() {};
 }
@@ -4220,7 +4220,7 @@ Q.prototype.init = function() {
 //#endregion
 //#region src/app/shared/ui/search-filter.js
 function gn() {
-	this._searchField = new k("searchField", {
+	this._searchField = new me("searchField", {
 		type: "text",
 		autofocus: !0,
 		showClear: !1
@@ -4426,11 +4426,11 @@ $.prototype._init = function() {
 	n.appendChild(r), r.appendChild(i), r.appendChild(a), n.appendChild(o), o.appendChild(s), o.appendChild(c);
 	var d = "";
 	n.appendChild(l), l.appendChild(u);
-	var f = new k(i, {
+	var f = new me(i, {
 		type: "text",
 		placeholder: R("Prefix"),
 		value: e.prefix || ""
-	}), p = new k(a, {
+	}), p = new me(a, {
 		type: "text",
 		placeholder: R("Suffix"),
 		value: e.suffix || ""
@@ -4443,7 +4443,7 @@ $.prototype._init = function() {
 		var n = e[0] === t;
 		m.addItem(e[0], e[1], n), n && (d = e[1]);
 	});
-	var h = new k(c, {
+	var h = new me(c, {
 		type: "text",
 		placeholder: R(d),
 		value: e.locator || ""
@@ -4571,8 +4571,8 @@ $.prototype._init = function() {
 					We.hide();
 				});
 			}
-		}), window.Asc.plugin.onTranslate = ne, pe().then((e) => {
-			window.Asc.scope.editorVersion = e, me();
+		}), window.Asc.plugin.onTranslate = ne, me().then((e) => {
+			window.Asc.scope.editorVersion = e, j();
 		}).catch((e) => {
 			console.error(e);
 		});
@@ -4683,7 +4683,7 @@ $.prototype._init = function() {
 					}
 					yield C(!0, "Zotero (" + R("Inserting citation") + ")");
 					var t = u.getSelectedItems(), n = !1, i = yield o.getCurrentField();
-					return i ? o.insertSelectedCitationsToCurrentField(t, i).then((e) => (u.removeItems(Object.keys(t)), j(e))).then((e) => {
+					return i ? o.insertSelectedCitationsToCurrentField(t, i).then((e) => (u.removeItems(Object.keys(t)), M(e))).then((e) => {
 						e && i && o.showSuccessMessage("Citation has been updated successfully");
 					}).finally(/*#__PURE__*/ a(function* () {
 						w(!1, "Zotero (" + R("Inserting citation") + ")");
@@ -4699,7 +4699,7 @@ $.prototype._init = function() {
 						var t = R("Failed to insert citation");
 						typeof e == "string" && (t += ". " + R(e)), S(t);
 					}).finally(/*#__PURE__*/ a(function* () {
-						w(!1, "Zotero (" + R("Inserting citation") + ")"), fe();
+						w(!1, "Zotero (" + R("Inserting citation") + ")"), pe();
 					}));
 				}
 			});
@@ -4726,7 +4726,7 @@ $.prototype._init = function() {
 					var t = R("Failed to refresh");
 					typeof e == "string" && (t += ". " + R(e)), S(t);
 				}).finally(function() {
-					w(!1, "Zotero (" + R("Updating citations") + ")"), fe();
+					w(!1, "Zotero (" + R("Updating citations") + ")"), pe();
 				});
 			});
 			return function(t, n) {
@@ -4929,22 +4929,25 @@ $.prototype._init = function() {
 			}
 		}), de.apply(this, arguments);
 	}
-	function fe() {
+	var fe = null;
+	function pe() {
 		var e = r.getStyleManager(), t = e.getLastUsedStyleId();
 		if (!t) return Promise.resolve();
 		var n = r.getLocalesManager().getLastUsedLanguage() || "en-US", i = e.getLastUsedFormat(), a = e.getLastUsedNotesStyle(), o = "0";
 		i === "note" && (o = a === "endnotes" ? "2" : "1");
-		for (var s = e.isLastUsedStyleContainBibliography() ? "1" : "0", c = "<data data-version=\"3\" zotero-version=\"5.0.96\"><style id=\"http://www.zotero.org/styles/" + t + "\" locale=\"" + n + "\" hasBibliography=\"" + s + "\" bibliographyStyleHasBeenSet=\"1\"/><prefs><pref name=\"fieldType\" value=\"Field\"/><pref name=\"automaticJournalAbbreviations\" value=\"true\"/><pref name=\"noteType\" value=\"" + o + "\"/></prefs></data>", l = [], u = 0; u < c.length; u += 255) l.push(c.substring(u, u + 255));
+		var s = e.isLastUsedStyleContainBibliography() ? "1" : "0", c = "<data data-version=\"3\" zotero-version=\"5.0.96\"><style id=\"http://www.zotero.org/styles/" + t + "\" locale=\"" + n + "\" hasBibliography=\"" + s + "\" bibliographyStyleHasBeenSet=\"1\"/><prefs><pref name=\"fieldType\" value=\"Field\"/><pref name=\"automaticJournalAbbreviations\" value=\"true\"/><pref name=\"noteType\" value=\"" + o + "\"/></prefs></data>";
+		if (c === fe) return Promise.resolve();
+		for (var l = [], u = 0; u < c.length; u += 255) l.push(c.substring(u, u + 255));
 		var d = Math.max(l.length, 10);
 		return new Promise(function(e) {
 			Asc.scope.prefChunks = l, Asc.scope.prefSlotsToClear = d, Asc.plugin.callCommand(function() {
 				for (var e = Api.GetDocument().GetCustomProperties(), t = Asc.scope.prefChunks, n = 0; n < Asc.scope.prefSlotsToClear; n++) e.Add("ZOTERO_PREF_" + (n + 1), n < t.length ? t[n] : "");
 			}, !1, !1, function() {
-				e();
+				fe = c, e();
 			});
 		});
 	}
-	function pe() {
+	function me() {
 		return k.apply(this, arguments);
 	}
 	function k() {
@@ -4961,20 +4964,20 @@ $.prototype._init = function() {
 			}
 		}), k.apply(this, arguments);
 	}
-	function me() {
+	function j() {
 		var e = new Asc.ButtonContextMenu();
 		e.text = "Edit citation", e.addCheckers("Target", "Selection"), e.attachOnClick(/*#__PURE__*/ a(function* () {
 			var e = yield new Promise((e) => {
 				window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, e);
 			});
-			yield C(!1, "Zotero (" + R("Updating citations") + ")"), yield j(e), yield w(!1, "Zotero (" + R("Updating citations") + ")");
+			yield C(!1, "Zotero (" + R("Updating citations") + ")"), yield M(e), yield w(!1, "Zotero (" + R("Updating citations") + ")");
 		})), Asc.Buttons.registerContextMenu();
 	}
-	function j(e) {
-		return M.apply(this, arguments);
+	function M(e) {
+		return he.apply(this, arguments);
 	}
-	function M() {
-		return M = a(function* (e) {
+	function he() {
+		return he = a(function* (e) {
 			if (!e || !e.Value || e.Value.toLowerCase().indexOf("zotero_item") === -1) return o.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it."), !1;
 			var t = yield o.showEditCitationWindow(e);
 			if (!t) return !1;
@@ -4984,7 +4987,7 @@ $.prototype._init = function() {
 				var t = R("Failed to insert citation");
 				return typeof e == "string" && (t += ". " + R(e)), S(t), !1;
 			});
-		}), M.apply(this, arguments);
+		}), he.apply(this, arguments);
 	}
 })();
 //#endregion

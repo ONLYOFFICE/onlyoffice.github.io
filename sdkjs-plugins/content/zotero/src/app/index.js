@@ -169,7 +169,7 @@ import "../styles.css";
                     console.error(e);
                     showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
                 });
-                let initSettingsPromise = loadStyleFromDocument(settings.getStyleManager())
+                let initSettingsPromise = citationService.loadStyleFromDocument(settings.getStyleManager())
                     .catch((e) => console.error("Failed to read document prefs:", e))
                     .then(() => settings.init())
                     .catch((e) => {
@@ -470,7 +470,8 @@ import "../styles.css";
                 })
                 .finally(async () => {
                     onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
-                    saveStyleToDocument();
+                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
                 });
         });
 
@@ -543,7 +544,8 @@ import "../styles.css";
                         false,
                         "Zotero (" + translate("Updating citations") + ")",
                     );
-                    saveStyleToDocument();
+                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+                    citationService.saveStyleToDocument(settings.getStyleManager(), locale);
                 });
         });
     }
@@ -990,147 +992,6 @@ import "../styles.css";
                 insertLinkBtn.setText(translate("Insert/Edit Citation"));
             }
         }
-    }
-
-    /**
-     * @returns {Promise<number>}
-     */
-    /**
-     * Reads ZOTERO_PREF from document custom properties and applies it,
-     * unconditionally - this document's own saved style should win over
-     * whatever was last used elsewhere, since saveStyleToDocument() keeps
-     * ZOTERO_PREF in sync with every citation change made here. This
-     * preserves the citation style when opening a DOCX created by the
-     * Word Zotero plugin, or a previous session of this plugin.
-     * @param {import('./csl/styles').CslStylesManager} styleManager
-     * @returns {Promise<void>}
-     */
-    async function loadStyleFromDocument(styleManager) {
-        const prefXml = await new Promise((resolve) => {
-            Asc.plugin.callCommand(
-                () => {
-                    const doc = Api.GetDocument();
-                    const props = doc.GetCustomProperties();
-                    if (!props) return "";
-                    let xml = "";
-                    let i = 1;
-                    while (true) {
-                        const val = props.Get("ZOTERO_PREF_" + i);
-                        if (val === null || val === undefined) break;
-                        xml += String(val);
-                        i++;
-                    }
-                    return xml;
-                },
-                false,
-                true,
-                (result) => resolve(result || ""),
-            );
-        });
-
-        if (!prefXml) return;
-
-        try {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(prefXml, "text/xml");
-            const styleEl = xmlDoc.querySelector("style");
-            if (styleEl) {
-                const styleUrl = styleEl.getAttribute("id") || "";
-                const locale = styleEl.getAttribute("locale") || "";
-                if (styleUrl) {
-                    const styleId = styleUrl.replace(/^.*\/styles\//, "");
-                    if (styleId) {
-                        localStorage.setItem("zoteroStyleId", styleId);
-                    }
-                }
-                if (locale) {
-                    localStorage.setItem("zoteroLocale", locale);
-                }
-            }
-            const noteTypePref = xmlDoc.querySelector('pref[name="noteType"]');
-            if (noteTypePref) {
-                const noteType = noteTypePref.getAttribute("value");
-                if (noteType === "1") {
-                    localStorage.setItem("zoteroNotesStyleId", "footnotes");
-                } else if (noteType === "2") {
-                    localStorage.setItem("zoteroNotesStyleId", "endnotes");
-                }
-            }
-        } catch (e) {
-            console.error("Failed to parse ZOTERO_PREF XML:", e);
-        }
-    }
-
-    /**
-     * Writes ZOTERO_PREF_{n} to document custom properties so that Word/Zotero
-     * can read the chosen citation style when the file is opened there.
-     * The XML is chunked into 255-char segments across multiple properties
-     * to respect the OOXML custom property value length limit.
-     * @returns {Promise<void>}
-     */
-    function saveStyleToDocument() {
-        const styleManager = settings.getStyleManager();
-        const styleId = styleManager.getLastUsedStyleId();
-        if (!styleId) return Promise.resolve();
-
-        const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
-        const format = styleManager.getLastUsedFormat();
-        const notesStyle = styleManager.getLastUsedNotesStyle();
-
-        let noteTypeValue = "0";
-        if (format === "note") {
-            noteTypeValue = notesStyle === "endnotes" ? "2" : "1";
-        }
-
-        const hasBib = styleManager.isLastUsedStyleContainBibliography() ? "1" : "0";
-
-        const prefXml =
-            '<data data-version="3" zotero-version="5.0.96">' +
-            '<style id="http://www.zotero.org/styles/' + styleId + '"' +
-            ' locale="' + locale + '"' +
-            ' hasBibliography="' + hasBib + '"' +
-            ' bibliographyStyleHasBeenSet="1"/>' +
-            '<prefs>' +
-            '<pref name="fieldType" value="Field"/>' +
-            '<pref name="automaticJournalAbbreviations" value="true"/>' +
-            '<pref name="noteType" value="' + noteTypeValue + '"/>' +
-            '</prefs>' +
-            '</data>';
-
-        // Chunk into 255-char segments (OOXML custom property value limit)
-        var chunks = [];
-        for (var i = 0; i < prefXml.length; i += 255) {
-            chunks.push(prefXml.substring(i, i + 255));
-        }
-
-        // ApiCustomProperties only exposes Add/Get, no way to remove a
-        // property - and Add() overwrites an existing one by name rather
-        // than appending, so switching to a style/locale that needs fewer
-        // chunks than before would otherwise leave stale trailing
-        // ZOTERO_PREF_N values in place. loadStyleFromDocument() reads
-        // ZOTERO_PREF_1..N until one is missing, so a leftover chunk from
-        // the previous, longer XML would get concatenated onto the new
-        // (shorter) one and fail to parse. Blank out a generous number of
-        // slots first so old chunks can never outlive the value they came from.
-        var slotsToClear = Math.max(chunks.length, 10);
-
-        return new Promise(function (resolve) {
-            Asc.scope.prefChunks = chunks;
-            Asc.scope.prefSlotsToClear = slotsToClear;
-            Asc.plugin.callCommand(
-                function () {
-                    var doc = Api.GetDocument();
-                    var props = doc.GetCustomProperties();
-                    var chunks = Asc.scope.prefChunks;
-                    for (var i = 0; i < Asc.scope.prefSlotsToClear; i++) {
-                        props.Add("ZOTERO_PREF_" + (i + 1), i < chunks.length ? chunks[i] : "");
-                    }
-                },
-                false,
-                false,
-                function () { resolve(); },
-            );
-        });
     }
 
     async function getEditorVersion() {
