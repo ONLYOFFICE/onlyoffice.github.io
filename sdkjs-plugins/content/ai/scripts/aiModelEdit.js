@@ -399,6 +399,26 @@ function onChangeNameInput() {
 	isCustomName = nameInputEl.value.trim().length > 0;
 }
 
+function updateCloudflareUI() {
+	var isCloudflare = providerNameCmbEl.value === "Cloudflare";
+	var urlLabel = document.getElementById("provider-url-label");
+	var keyLabel = document.getElementById("provider-key-label");
+	var hint = document.getElementById("cloudflare-hint");
+	if (isCloudflare) {
+		if (urlLabel) urlLabel.textContent = "Account ID / Worker URL";
+		providerUrlInputEl.placeholder = "32-char Account ID or https://your-worker.workers.dev";
+		if (keyLabel) keyLabel.textContent = "API Token";
+		providerKeyInputEl.placeholder = "Cloudflare API Token (direct mode) or leave empty for Worker";
+		if (hint) hint.style.display = "block";
+	} else {
+		if (urlLabel) urlLabel.textContent = window.Asc.plugin.tr("URL");
+		providerUrlInputEl.placeholder = "";
+		if (keyLabel) keyLabel.textContent = window.Asc.plugin.tr("Key");
+		providerKeyInputEl.placeholder = "e.g. abc123...";
+		if (hint) hint.style.display = "none";
+	}
+}
+
 function onChangeProviderComboBox() {
 	var provider = providersList.filter(function(el) { return el.id == providerNameCmbEl.value })[0] || null;
 
@@ -413,6 +433,8 @@ function onChangeProviderComboBox() {
 		providerUrlInputEl.removeAttribute('disabled');
 		providerKeyInputEl.removeAttribute('disabled');
 	}
+
+	updateCloudflareUI();
 
 	if (providerUrlInputEl.value) {
 		updateModelsList();

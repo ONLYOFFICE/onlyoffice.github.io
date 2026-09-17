@@ -126,30 +126,64 @@ HELPERS.word.push((function(){
 			let imageUrl;
 			imageUrl = await requestEngine.imageGenerationRequest(fullPrompt);
 			
+			console.log("[AI.addImage] model:", requestEngine.modelUI.name, "imageUrl length:", imageUrl ? imageUrl.length : 0, "prefix:", imageUrl ? imageUrl.substring(0, 30) : "null");
 			
 			await Asc.Editor.callMethod("EndAction", ["Block", actionName]);
-			if (imageUrl) {
-				
+			if (!imageUrl) {
+				throw new window.AgentState.ToolError("Image generation failed: no image data returned from " + requestEngine.modelUI.name + ". Check Images model config and provider response.");
+			}
+			
+			let widthEmu, heightEmu;
+			try {
 				const img = new Image();
 				img.src = imageUrl;
 				await img.decode();
-
-				const widthEmu = img.naturalWidth * 9525 + 0.5 >> 0;
-				const heightEmu = img.naturalHeight * 9525 + 0.5 >> 0;
-				
-				
-				Asc.scope.imageUrl = imageUrl;
-				Asc.scope.width = widthEmu;
-				Asc.scope.height = heightEmu;
-				
-				await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-				await Asc.Editor.callCommand(function () {
-					let doc = Api.GetDocument();
-					doc.ReplaceCurrentImage(Asc.scope.imageUrl, Asc.scope.width, Asc.scope.height);
-				});
-				await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+				widthEmu = img.naturalWidth * 9525 + 0.5 >> 0;
+				heightEmu = img.naturalHeight * 9525 + 0.5 >> 0;
+			} catch (e) {
+				console.warn("[AI.addImage] img.decode failed, fallback to requested size", e);
+				widthEmu = widthMm * 36000;
+				heightEmu = heightMm * 36000;
 			}
+			
+			// Desktop Editors >=9 needs local path conversion (see library.js GetLocalImagePath)
+			let urlForDoc = imageUrl;
+			try {
+				let ver = await Asc.Library.GetEditorVersion();
+				if (ver >= 9000000) {
+					let local = await Asc.Library.GetLocalImagePath(imageUrl);
+					if (local && !local.error && local.url)
+						urlForDoc = local.url;
+					else
+						console.warn("[AI.addImage] GetLocalImagePath failed, using data URL directly", local);
+				}
+			} catch (e) {
+				console.warn("[AI.addImage] GetLocalImagePath exception", e);
+			}
+			
+			Asc.scope.imageUrl = urlForDoc;
+			Asc.scope.width = widthEmu;
+			Asc.scope.height = heightEmu;
+			
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+			let insertRes = await Asc.Editor.callCommand(function () {
+				let doc = Api.GetDocument();
+				let para = Api.CreateParagraph();
+				let drawing = Api.CreateImage(Asc.scope.imageUrl, Asc.scope.width, Asc.scope.height);
+				if (!drawing) return { error: "createImage_failed" };
+				para.AddDrawing(drawing);
+				doc.InsertContent([para], true);
+				return { ok: true };
+			});
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+			if (insertRes && insertRes.error) {
+				throw new window.AgentState.ToolError("Failed to insert image into document: " + insertRes.error);
+			}
+			console.log("[AI.addImage] inserted at cursor", widthEmu, heightEmu);
 		} catch (error) {
+			console.error("[AI.addImage] error:", error);
+			if (error && error.name === "ToolError") throw error;
+			throw new window.AgentState.ToolError(error ? (error.message || String(error)) : "Unknown image generation error");
 		}
 
 	};
@@ -4098,6 +4132,7 @@ The value passed to 'return' will be the tool's output.`,
 - Do NOT wrap the code in a function or IIFE — output only the statements to execute directly
 - SELF-CHECK before returning code: if this is a READ (not modifying the document), your code MUST contain a top-level 'return' statement; if it does not, rewrite to add one (e.g. oDoc.GetElement(0).GetText() → return oDoc.GetElement(0).GetText()). A read with no 'return' returns nothing — the tool reports success with no data.
 - Do NOT include any explanation, comments, or markdown — output raw JavaScript only
+- To GET/READ data: use an explicit 'return' statement (e.g. return oDoc.GetElement(0).GetText()); do NOT insert the read content back into the document
 - To get the presentation object: let oPresentation = Api.GetPresentation()
 - To get the current slide: oPresentation.GetCurrentSlide()
 - To get slide by index: oPresentation.GetSlideByIndex(index)
@@ -5041,30 +5076,52 @@ HELPERS.cell.push((function(){
 			let imageUrl;
 			imageUrl = await requestEngine.imageGenerationRequest(fullPrompt);
 			
+			console.log("[AI.addImage cell] model:", requestEngine.modelUI.name, "imageUrl length:", imageUrl ? imageUrl.length : 0);
 			
 			await Asc.Editor.callMethod("EndAction", ["Block", actionName]);
-			if (imageUrl) {
-				
+			if (!imageUrl) {
+				throw new window.AgentState.ToolError("Image generation failed: no image data returned from " + requestEngine.modelUI.name);
+			}
+			let widthEmu, heightEmu;
+			try {
 				const img = new Image();
 				img.src = imageUrl;
 				await img.decode();
-
-				const widthEmu = img.naturalWidth * 9525 + 0.5 >> 0;
-				const heightEmu = img.naturalHeight * 9525 + 0.5 >> 0;
-				
-				
-				Asc.scope.imageUrl = imageUrl;
-				Asc.scope.width = widthEmu;
-				Asc.scope.height = heightEmu;
-				
-				await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-				await Asc.Editor.callCommand(function () {
-					let worksheet = Api.GetActiveSheet();
-					worksheet.ReplaceCurrentImage(Asc.scope.imageUrl, Asc.scope.width, Asc.scope.height);
-				});
-				await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+				widthEmu = img.naturalWidth * 9525 + 0.5 >> 0;
+				heightEmu = img.naturalHeight * 9525 + 0.5 >> 0;
+			} catch (e) {
+				console.warn("[AI.addImage cell] img.decode failed", e);
+				widthEmu = widthMm * 36000;
+				heightEmu = heightMm * 36000;
+			}
+			let urlForDoc = imageUrl;
+			try {
+				let ver = await Asc.Library.GetEditorVersion();
+				if (ver >= 9000000) {
+					let local = await Asc.Library.GetLocalImagePath(imageUrl);
+					if (local && !local.error && local.url)
+						urlForDoc = local.url;
+				}
+			} catch (e) {}
+			Asc.scope.imageUrl = urlForDoc;
+			Asc.scope.width = widthEmu;
+			Asc.scope.height = heightEmu;
+			
+			await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+			let insertRes = await Asc.Editor.callCommand(function () {
+				let ws = Api.GetActiveSheet();
+				// Insert at A1 offset like library.js does; use AddImage with EMU
+				ws.AddImage(Asc.scope.imageUrl, Asc.scope.width, Asc.scope.height, 0, 0, 0, 0);
+				return { ok: true };
+			});
+			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+			if (insertRes && insertRes.error) {
+				throw new window.AgentState.ToolError("Failed to insert image: " + insertRes.error);
 			}
 		} catch (error) {
+			console.error("[AI.addImage cell] error:", error);
+			if (error && error.name === "ToolError") throw error;
+			throw new window.AgentState.ToolError(error ? (error.message || String(error)) : "Unknown image error");
 		}
 
 	};

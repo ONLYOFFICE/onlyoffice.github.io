@@ -349,6 +349,11 @@ function fetchExternal(url, options, isStreaming) {
 		if (!_provider.createInstance && _provider.url !== undefined)
 			url = _provider.url;
 
+		// Allow provider to return absolute URL (e.g. Cloudflare direct mode with Account ID)
+		let endpointUrl = provider.getEndpointUrl(endpoint, model, options);
+		if (endpointUrl && (endpointUrl.startsWith("http://") || endpointUrl.startsWith("https://")))
+			return endpointUrl;
+
 		if (url.endsWith("/"))
 			url = url.substring(0, url.length - 1);
 		if ("" !== provider.addon)
@@ -359,7 +364,7 @@ function fetchExternal(url, options, isStreaming) {
 				url += plus;
 		}
 
-		return url + provider.getEndpointUrl(endpoint, model, options);
+		return url + endpointUrl;
 	};
 
 	AI.getModels = async function(provider)
@@ -1042,8 +1047,15 @@ function fetchExternal(url, options, isStreaming) {
 
 		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
 
+		console.log("[AI.imageGenerationRequest] provider selected:", provider.name);
+		console.log("[AI.imageGenerationRequest] model:", this.modelUI ? this.modelUI.name + " (" + this.modelUI.id + ")" : (model ? model.id : "unknown"));
+		console.log("[AI.imageGenerationRequest] request URL:", objRequest.url);
+		// Never log Authorization header / tokens
+
 		let result = await requestWrapper(objRequest);
+		console.log("[AI.imageGenerationRequest] response status:", result.error ? ("error " + result.error + ": " + (result.message || "")) : "ok");
 		if (result.error) {
+			console.log("[AI.imageGenerationRequest] image data exists: false, length: 0");
 			throw {
 				error : result.error, 
 				message : result.message
@@ -1051,13 +1063,19 @@ function fetchExternal(url, options, isStreaming) {
 			return;
 		}
 		if (result.data && result.data.errors) {
+			console.log("[AI.imageGenerationRequest] image data exists: false, length: 0");
 			throw {
 				error : 1, 
 				message : result.data.errors[0]
 			};
 			return;
 		}
-		return processResult(result);
+		let imageResult = await processResult(result);
+		console.log("[AI.imageGenerationRequest] image data exists:", !!imageResult, "length:", imageResult ? imageResult.length : 0);
+		if (!imageResult) {
+			console.warn("[AI.imageGenerationRequest] no image data returned from provider", provider.name);
+		}
+		return imageResult;
 	};
 
 	AI.Request.prototype.imageVisionRequest = async function(data, block) {
@@ -1263,6 +1281,7 @@ function fetchExternal(url, options, isStreaming) {
 	};
 
 	AI.ImageEngine.getBase64FromUrl = async function(url) {
+		if (!url) return "";
 		if (url.startsWith("data:image"))
 			return url;
 
@@ -1272,9 +1291,17 @@ function fetchExternal(url, options, isStreaming) {
 		if (url.startsWith("/9j/"))
 			return "data:image/jpeg;base64," + url;
 
+		// Raw base64 (Gemini inlineData, OpenAI b64_json) - heuristic: >100 chars and base64 charset, no URL
+		if (url.length > 100 && /^[A-Za-z0-9+/=\n\r]+$/.test(url.trim()) && !url.startsWith("http") && !url.startsWith("/")) {
+			// Default to png if cannot detect; provider.js should have already added mime prefix
+			return "data:image/png;base64," + url.replace(/\s/g, "");
+		}
+
 		let canvas = await AI.ImageEngine.getNearestImage(url);
-		if (!canvas)
+		if (!canvas) {
+			console.warn("[AI.getBase64FromUrl] could not decode URL, length", url.length, "prefix", url.substring(0,20));
 			return "";
+		}
 
 		return AI.ImageEngine.getBase64(canvas);
 	};

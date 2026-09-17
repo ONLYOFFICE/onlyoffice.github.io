@@ -73,14 +73,17 @@
 			</div>
 			<div class="form-horizontal-item">
 				<label class="d-flex-center">
-					<span class="i18n">URL</span>
+					<span id="provider-url-label" class="i18n">URL</span>
 					<span class="required-mark">*</span>
 				</label>
 				<input id="provider-url-input" type="text" class="form-control"/>
 			</div>
 			<div class="form-horizontal-item">
-				<label class="i18n">Key</label>
+				<label id="provider-key-label" class="i18n">Key</label>
 				<input id="provider-key-input" placeholder="e.g. abc123..." type="text" class="form-control"/>
+			</div>
+			<div id="cloudflare-hint" class="form-horizontal-item" style="display:none; font-size:11px; color:#666; margin-top:4px;">
+				<span class="i18n">Cloudflare: enter Account ID (32 hex) + API Token for direct API, or Worker URL (https://...) for proxy. Direct mode calls https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/ai/run/@cf/black-forest-labs/flux-1-schnell</span>
 			</div>
 		</div>
 
