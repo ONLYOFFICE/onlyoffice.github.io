@@ -118,7 +118,7 @@ div::-moz-selection {
     flex-direction: row;
     overflow-y: hidden;
     font-size: 10px;
-    max-height: 33px;
+    max-height: 50px;
     margin-top: 14px;
 }
 
@@ -359,7 +359,7 @@ div::-moz-selection {
 .selDoc {
     display: inline-block;
     margin-right: 6px;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
 }
 
 .selDoc > span {
