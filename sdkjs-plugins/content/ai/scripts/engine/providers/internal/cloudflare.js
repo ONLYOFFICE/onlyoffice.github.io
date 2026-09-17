@@ -149,15 +149,18 @@ class Provider extends AI.Provider {
 		if (!data) {
 			console.log("[Cloudflare] response status: empty");
 			console.log("[Cloudflare] image data exists: false, length: 0");
+			console.log("[Cloudflare] raw message:", JSON.stringify(message).substring(0,1000));
 			return "";
 		}
 
-		// Log keys without dumping full base64
+		// Log keys without dumping full base64 - ALWAYS log preview
 		try {
 			console.log("[Cloudflare] response keys:", Object.keys(data).join(","));
 			if (data.result && typeof data.result === "object")
 				console.log("[Cloudflare] result keys:", Object.keys(data.result).join(","));
-		} catch(e) {}
+			console.log("[Cloudflare] raw data preview:", JSON.stringify(data).substring(0,2000));
+			if (data.success !== undefined) console.log("[Cloudflare] success:", data.success, "errors:", JSON.stringify(data.errors).substring(0,500));
+		} catch(e) { console.log("[Cloudflare] log error", e); }
 
 		let imageUrl = "";
 		let getProp = function(name) {

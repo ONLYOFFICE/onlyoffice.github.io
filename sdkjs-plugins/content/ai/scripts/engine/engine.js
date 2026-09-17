@@ -1054,6 +1054,8 @@ function fetchExternal(url, options, isStreaming) {
 
 		let result = await requestWrapper(objRequest);
 		console.log("[AI.imageGenerationRequest] response status:", result.error ? ("error " + result.error + ": " + (result.message || "")) : "ok");
+		try { console.log("[AI.imageGenerationRequest] raw result.data preview:", JSON.stringify(result.data).substring(0,2000)); } catch(e) { console.log("[AI.imageGenerationRequest] raw result.data preview error", e); }
+		try { console.log("[AI.imageGenerationRequest] raw result keys:", result.data ? Object.keys(result.data).join(",") : "no data"); if (result.data && result.data.result) console.log("[AI.imageGenerationRequest] result.result type:", typeof result.data.result, result.data.result ? Object.keys(result.data.result).join(",").substring(0,200) : "null"); } catch(e) {}
 		if (result.error) {
 			console.log("[AI.imageGenerationRequest] image data exists: false, length: 0");
 			throw {
@@ -1063,12 +1065,16 @@ function fetchExternal(url, options, isStreaming) {
 			return;
 		}
 		if (result.data && result.data.errors) {
+			console.log("[AI.imageGenerationRequest] data.errors:", JSON.stringify(result.data.errors).substring(0,500));
 			console.log("[AI.imageGenerationRequest] image data exists: false, length: 0");
 			throw {
 				error : 1, 
-				message : result.data.errors[0]
+				message : typeof result.data.errors[0] === "string" ? result.data.errors[0] : JSON.stringify(result.data.errors[0])
 			};
 			return;
+		}
+		if (result.data && result.data.success === false) {
+			console.log("[AI.imageGenerationRequest] success false, errors:", JSON.stringify(result.data.errors).substring(0,500), "messages:", JSON.stringify(result.data.messages).substring(0,500));
 		}
 		let imageResult = await processResult(result);
 		console.log("[AI.imageGenerationRequest] image data exists:", !!imageResult, "length:", imageResult ? imageResult.length : 0);
