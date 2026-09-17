@@ -37,6 +37,7 @@
 class CslDocFormatter {
     /**
      * @param {Array<FormattingPositions>} positions
+     * @param {string} text
      * @returns {Promise<void>}
      */
     static formatAfterInsert(positions, text) {
