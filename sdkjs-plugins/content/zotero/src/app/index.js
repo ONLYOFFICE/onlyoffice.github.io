@@ -45,6 +45,7 @@ import { LoginPage } from "./pages/login";
 import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "./shared/components";
+import { ZOTERO_TYPE_TO_CSL } from "./csl/zotero-type-map";
 
 import "../components.css";
 import "../styles.css";
@@ -852,43 +853,6 @@ import "../styles.css";
         return selectCitation.displaySearchItems(res, err, lastSearch);
     }
 
-    /** @type {Object<string, string>} */
-    const zoteroTypeToCsl = {
-        "artwork": "graphic",
-        "audioRecording": "song",
-        "bill": "bill",
-        "blogPost": "post-weblog",
-        "book": "book",
-        "bookSection": "chapter",
-        "case": "legal_case",
-        "computerProgram": "software",
-        "conferencePaper": "paper-conference",
-        "dictionaryEntry": "entry-dictionary",
-        "document": "document",
-        "email": "personal_communication",
-        "encyclopediaEntry": "entry-encyclopedia",
-        "film": "motion_picture",
-        "forumPost": "post",
-        "hearing": "hearing",
-        "instantMessage": "personal_communication",
-        "interview": "interview",
-        "journalArticle": "article-journal",
-        "letter": "personal_communication",
-        "magazineArticle": "article-magazine",
-        "manuscript": "manuscript",
-        "map": "map",
-        "newspaperArticle": "article-newspaper",
-        "patent": "patent",
-        "podcast": "song",
-        "presentation": "speech",
-        "radioBroadcast": "broadcast",
-        "report": "report",
-        "statute": "legislation",
-        "thesis": "thesis",
-        "tvBroadcast": "broadcast",
-        "videoRecording": "motion_picture",
-        "webpage": "webpage",
-    };
 
     // Zotero creatorType -> CSL name variable. Only maps to variables this
     // plugin's own CitationItemData actually recognizes (see its
@@ -934,7 +898,7 @@ import "../styles.css";
         const res = {
             id: item.key,
             title: d.title || "",
-            type: zoteroTypeToCsl[d.itemType] || d.itemType || "",
+            type: ZOTERO_TYPE_TO_CSL[d.itemType] || d.itemType || "",
         };
 
         // creators → CSL name variables. Zotero's creatorType values don't
