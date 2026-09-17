@@ -55,6 +55,13 @@ class Provider extends AI.Provider {
 		return AI.CapabilitiesUI.Image;
 	}
 
+	isUseProxy() {
+		// Direct Cloudflare API (api.cloudflare.com) has no CORS for onlyoffice://plugin
+		// and file:// – must use native AscSimpleRequest on desktop and ONLYOFFICE
+		// proxy on web. Worker mode already sends CORS but proxy is harmless.
+		return true;
+	}
+
 	_isDirectMode() {
 		let u = (this.url || "").trim();
 		if (!u) return false;
