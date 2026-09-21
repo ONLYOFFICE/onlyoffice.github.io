@@ -60,21 +60,53 @@
 	let removeGuid = '';
 	let editorVersion = '';
 	let marketplaceURl = '';
+	// address set through the developer window, it lives in this browser only
+	let developerMarketplaceUrl = '';
+	// address set by the administrator in editorConfig.plugins.options
+	let adminMarketplaceUrl = '';
+	// true when the current address is not the one this installation expects (we warn the user about it)
+	let isDeveloperMarketplace = false;
+	// false when the administrator turned the developer mode off in editorConfig.plugins.options
+	let isDevModeAllowed = true;
 	const OOMarketplaceUrl = isLocal ? './store/index.html' : 'https://onlyoffice.github.io/store/index.html';
 	try {
 		// for incognito mode
-		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
+		developerMarketplaceUrl = localStorage.getItem('DeveloperMarketplaceUrl') || '';
 	} catch (err) {
-		marketplaceURl = OOMarketplaceUrl;
+		developerMarketplaceUrl = '';
 	}
-	
-	window.Asc.plugin.init = function() {
-		const showDevModeButton = !this.info.options || this.info.options.developerMode !== false;
-		if (showDevModeButton) {
-			window.Asc.plugin.executeMethod('ShowButton',['developer', true, 'right']);
+
+	// with the developer mode off the button stays while an address is still stored, so it can always be cleared
+	function applyDevModeButton() {
+		const isVisible = isDevModeAllowed || !!developerMarketplaceUrl;
+		window.Asc.plugin.executeMethod('ShowButton', ['developer', isVisible, 'right']);
+	}
+
+	// the developer address is a local override, it works only while the developer mode is allowed
+	function applyMarketplaceUrl() {
+		const expectedUrl = adminMarketplaceUrl || OOMarketplaceUrl;
+		if (adminMarketplaceUrl && !isDevModeAllowed) {
+			marketplaceURl = adminMarketplaceUrl;
+			developerMarketplaceUrl = '';
 		} else {
-			marketplaceURl = OOMarketplaceUrl;
+			marketplaceURl = developerMarketplaceUrl || expectedUrl;
 		}
+		
+		if (adminMarketplaceUrl && adminMarketplaceUrl === marketplaceURl) {
+			isDeveloperMarketplace = false;
+		} else {
+			isDeveloperMarketplace = marketplaceURl !== OOMarketplaceUrl;
+		}
+	}
+
+	window.Asc.plugin.init = function() {
+		const options = this.info.options || {};
+		isDevModeAllowed = options.developerMode !== false;
+		
+		adminMarketplaceUrl = typeof options.marketplaceUrl === 'string' ? options.marketplaceUrl : '';
+
+		applyMarketplaceUrl();
+		applyDevModeButton();
 
 		// resize window
 		window.Asc.plugin.resizeWindow(winSizes.width, winSizes.height, winSizes.minWidth, winSizes.minHeight, 0, 0);
@@ -194,7 +226,8 @@
 
 	function initPlugin() {
 		document.body.appendChild(iframe);
-		if (marketplaceURl !== OOMarketplaceUrl)
+
+		if (isDeveloperMarketplace)
 			document.getElementById('notification').classList.remove('hidden');
 
 		// send message that plugin is ready
@@ -389,7 +422,7 @@
 		} else {
 			const noInternetElement = document.getElementById('div_noIternet');
 			if (!noInternetElement) {
-				console.error('div_noIternet element not found');
+				console.error('noInternetElement element not found');
 				return;
 			}
 			noInternetElement.classList.remove('hidden');
@@ -462,14 +495,18 @@
 							return;
 						}
 						if (message.url.length) {
-							marketplaceURl = message.url;
-							localStorage.setItem('DeveloperMarketplaceUrl', marketplaceURl);
-							notificationElement.classList.remove('hidden');
+							developerMarketplaceUrl = message.url;
+							localStorage.setItem('DeveloperMarketplaceUrl', developerMarketplaceUrl);
 						} else {
-							marketplaceURl = OOMarketplaceUrl;
+							developerMarketplaceUrl = '';
 							localStorage.removeItem('DeveloperMarketplaceUrl');
-							notificationElement.classList.add('hidden');
 						}
+						applyMarketplaceUrl();
+						if (isDeveloperMarketplace)
+							notificationElement.classList.remove('hidden');
+						else
+							notificationElement.classList.add('hidden');
+						applyDevModeButton();
 						iframe.src = marketplaceURl + window.location.search;
 					}
 					if (developerWindow) {
