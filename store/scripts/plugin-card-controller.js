@@ -151,8 +151,13 @@ window.addEventListener('popstate', function() {
 });
 
 window.addEventListener('keydown', function(e) {
-    if (e && e.key === 'Escape') {
-        MarketplacePluginService.closePluginCard();
-        PluginCardController.goBackToMarketplace();
+    if (!e || e.key !== 'Escape')
+        return;
+
+    const panel = document.getElementById('plugin_card_panel');
+    if (panel && !panel.classList.contains('hidden')) {
+        return PluginCardController.goBackToMarketplace();
     }
+
+    MarketplacePluginService.closeMarketplace();
 });

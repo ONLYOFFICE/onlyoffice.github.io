@@ -249,6 +249,7 @@
 				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (PluginCard.window && PluginCard.window.id == windowID) {
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+			PluginCard.window = null;
 		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
 			if (iframe && iframe.contentWindow)
@@ -295,6 +296,12 @@
 				break;
 			case 'hidePluginCard':
 				PluginCard.hide();
+				break;
+			case 'closeMarketplace':
+				if (PluginCard.window)
+					PluginCard.hide();
+				else
+					window.Asc.plugin.executeCommand('close', '');
 				break;
 			case 'resize':
 				if (!data.width || !data.height) {
