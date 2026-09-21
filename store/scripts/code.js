@@ -75,6 +75,9 @@ Utils.init();
 // it's necessary for loader (because it detects theme by this object)
 window.Asc = /** @type {Asc} */ (/** @type {unknown} */ ({ plugin: { theme: { type: Utils.themeType } } }));
 
+// it's necessary for keydown handlers (Escape) - they don't fire until this frame has focus
+if (!independentMode)
+	window.focus();
 
 
 /**
