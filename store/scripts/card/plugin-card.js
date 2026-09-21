@@ -76,8 +76,8 @@ const PluginCard = {
         const self = this;
         window.onresize = function() {
             self.setDivHeight();
-            if (typeof _syncPluginCardModalState === 'function') {
-                _syncPluginCardModalState(data.independentMode);
+            if (typeof PluginCardController !== 'undefined') {
+                PluginCardController.syncPluginCardModalState(data.independentMode);
             }
         };
         this._resetDom();
@@ -720,3 +720,14 @@ window.addEventListener('message', function(event) {
 			break;
 	};
 }, false);
+
+if (typeof PluginCardController === 'undefined') {
+	window.addEventListener('keydown', function(e) {
+		if (!e || e.key !== 'Escape')
+			return;
+		if (!PluginCard.config)
+			return;
+
+		PluginCard.onClickClose();
+	});
+}
