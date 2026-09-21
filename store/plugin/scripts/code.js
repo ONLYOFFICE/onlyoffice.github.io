@@ -69,7 +69,13 @@
 	}
 	
 	window.Asc.plugin.init = function() {
-		window.Asc.plugin.executeMethod('ShowButton',['developer', true, 'right']);
+		const showDevModeButton = !this.info.options || this.info.options.developerMode !== false;
+		if (showDevModeButton) {
+			window.Asc.plugin.executeMethod('ShowButton',['developer', true, 'right']);
+		} else {
+			marketplaceURl = OOMarketplaceUrl;
+		}
+
 		// resize window
 		window.Asc.plugin.resizeWindow(winSizes.width, winSizes.height, winSizes.minWidth, winSizes.minHeight, 0, 0);
 		if (!isLocal) {
