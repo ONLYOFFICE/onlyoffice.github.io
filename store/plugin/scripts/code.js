@@ -254,8 +254,7 @@
 			else
 				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (PluginCard.window && PluginCard.window.id == windowID) {
-			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
-			PluginCard.window = null;
+			PluginCard.hide();
 		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
 			if (iframe && iframe.contentWindow)
