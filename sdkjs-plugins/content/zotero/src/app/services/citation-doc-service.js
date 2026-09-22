@@ -123,7 +123,11 @@ class CitationDocService {
             Value: this.#citPrefix + " " + this.#citSuffix + value,
             Content: formattingPositions.text,
         };
-        const bHasNotes = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1)
+        // Inserting while the cursor already sits inside a footnote/endnote
+        // must not open a second note nested in the first one.
+        const wantsNote = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1);
+        const bHasNotes = wantsNote && !(await this.#isInNote());
+
         if (bHasNotes) {
             await this.#addNote(notesStyle);
         }
