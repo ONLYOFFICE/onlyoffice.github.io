@@ -1,0 +1,294 @@
+/* OO-Layout Plugin – css/layout.css
+ *
+ * Supplements the official OnlyOffice plugins.css to style the right-panel
+ * layout controls. Variables mirror the ONLYOFFICE dark-/light-theme tokens
+ * where possible so the panel looks native.
+ */
+
+/* ── Reset / base ────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--font-family-base, "Open Sans", Arial, sans-serif);
+  font-size: 11px;
+  color: var(--color-text, #333);
+  background: var(--color-bg-base, #f4f4f4);
+  overflow-x: hidden;
+}
+
+/* ── App wrapper ─────────────────────────────────────────────────────────── */
+
+#app {
+  padding: 8px;
+  min-height: 100vh;
+}
+
+/* ── Utility ─────────────────────────────────────────────────────────────── */
+
+.hidden {
+  display: none !important;
+}
+
+.selection-status {
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border, #d8d8d8);
+  border-radius: 4px;
+  background: var(--color-bg-panel, #fff);
+  color: var(--color-text-secondary, #888);
+}
+
+.selection-status.has-selection {
+  color: var(--color-text, #333);
+}
+
+/* ── Placeholder ─────────────────────────────────────────────────────────── */
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  text-align: center;
+  color: var(--color-text-secondary, #888);
+  padding: 16px;
+}
+
+/* ── Section ─────────────────────────────────────────────────────────────── */
+
+.panel-section {
+  background: var(--color-bg-panel, #fff);
+  border: 1px solid var(--color-border, #d8d8d8);
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.panel-section.is-disabled {
+  opacity: 0.62;
+}
+
+.section-title {
+  margin: 0 0 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary, #888);
+}
+
+/* ── Row / field layout ──────────────────────────────────────────────────── */
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.row:last-child {
+  margin-bottom: 0;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.field--wide {
+  flex: 2;
+}
+
+.label-text {
+  font-size: 10px;
+  color: var(--color-text-secondary, #888);
+  min-width: 12px;
+  text-align: right;
+}
+
+/* ── Input wrapper ───────────────────────────────────────────────────────── */
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  border: 1px solid var(--color-border, #d8d8d8);
+  border-radius: 3px;
+  background: var(--color-bg-input, #fff);
+  overflow: hidden;
+}
+
+.input-wrap:focus-within {
+  border-color: var(--color-accent, #446ceb);
+}
+
+.input-wrap input[type="number"] {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 3px 4px;
+  font-size: 11px;
+  color: inherit;
+  width: 0; /* let flex grow */
+  /* hide browser spin buttons */
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.input-wrap input[type="number"]::-webkit-inner-spin-button,
+.input-wrap input[type="number"]::-webkit-outer-spin-button {
+  display: none;
+}
+
+.input-wrap input[type="number"]:disabled {
+  color: var(--color-text-secondary, #888);
+  cursor: not-allowed;
+}
+
+.input-wrap input[type="number"]:disabled + .unit {
+  color: var(--color-text-secondary, #888);
+  background: var(--color-bg-unit, #f0f0f0);
+}
+
+.unit {
+  padding: 0 5px;
+  font-size: 9px;
+  color: var(--color-text-secondary, #888);
+  background: var(--color-bg-unit, #f0f0f0);
+  border-left: 1px solid var(--color-border, #d8d8d8);
+  line-height: 23px;
+  user-select: none;
+}
+
+/* ── Checkbox ────────────────────────────────────────────────────────────── */
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--color-text-secondary, #888);
+}
+
+.checkbox-field input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: var(--color-accent, #446ceb);
+}
+
+.checkbox-field input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+}
+
+.checkbox-field input[type="checkbox"]:disabled + span {
+  color: var(--color-text-secondary, #888);
+}
+
+/* ── Alignment / distribute button grid ─────────────────────────────────── */
+
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.btn-grid--2 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 4px;
+  border: 1px solid var(--color-border, #d8d8d8);
+  border-radius: 3px;
+  background: var(--color-bg-btn, #fff);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.icon-btn:hover {
+  background: var(--color-bg-btn-hover, #eef2ff);
+  border-color: var(--color-accent, #446ceb);
+}
+
+.icon-btn:active {
+  background: var(--color-bg-btn-active, #dce4fd);
+}
+
+.icon-btn .toolbar__icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.icon-svg {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px 20px;
+}
+
+.icon-align-left {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 3v14M6 6h8M6 10h6M6 14h9' fill='none' stroke='%23333' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.icon-align-center-h {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 3v14M5 6h10M7 10h6M4 14h12' fill='none' stroke='%23333' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.icon-align-right {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16 3v14M6 6h8M8 10h6M5 14h9' fill='none' stroke='%23333' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.icon-align-top {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M3 4h14M6 6v8M10 6v6M14 6v9' fill='none' stroke='%23333' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.icon-align-center-v {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M3 10h14M6 5v10M10 7v6M14 4v12' fill='none' stroke='%23333' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.icon-align-bottom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M3 16h14M6 6v8M10 8v6M14 5v9' fill='none' stroke='%23333' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.icon-distribute-h {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 4v12M15 4v12M8 7h1.5v6H8zM10.5 7h1.5v6h-1.5z' fill='none' stroke='%23333' stroke-width='1.2'/%3E%3C/svg%3E");
+}
+
+.icon-distribute-v {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 5h12M4 15h12M7 8h6v1.5H7zM7 10.5h6V12H7z' fill='none' stroke='%23333' stroke-width='1.2'/%3E%3C/svg%3E");
+}
+
+.icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background: var(--color-bg-btn, #fff);
+  border-color: var(--color-border, #d8d8d8);
+}
+
+.icon-btn:disabled .toolbar__icon {
+  opacity: 0.65;
+  filter: grayscale(1);
+}
+
+.icon-btn:disabled .icon-svg {
+  opacity: 0.5;
+}
+
