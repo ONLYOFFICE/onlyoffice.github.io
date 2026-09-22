@@ -70,6 +70,8 @@ function LoginPage(router, sdk) {
     if (!this._logoutLink) {
         throw new Error("logoutLink not found");
     }
+    this._onlineZoteroElements =
+        document.querySelectorAll(".for-zotero-online");
 
     /**
      * @param {AvailableApis} e
@@ -86,7 +88,6 @@ LoginPage.prototype.init = function () {
     const self = this;
     this._addEventListeners();
     let hasFirstAnswer = false;
-    let onlineZoteroElements = document.querySelectorAll(".for-zotero-online");
 
     const apisChecker = ZoteroApiChecker.runApisChecker(self._sdk);
 
@@ -101,15 +102,7 @@ LoginPage.prototype.init = function () {
             self._show();
         }
 
-        if (apis.online) {
-            onlineZoteroElements.forEach(function (element) {
-                element.classList.remove("hidden");
-            });
-        } else {
-            onlineZoteroElements.forEach(function (element) {
-                element.classList.add("hidden");
-            });
-        }
+        self._applyApisToUi(apis);
         if (apis.online && apis.hasKey) {
             self._sdk.setIsOnlineAvailable(true);
             self._hide(true);
@@ -149,6 +142,17 @@ LoginPage.prototype.init = function () {
     };
 
     return triggers;
+};
+
+/** @param {AvailableApis} apis */
+LoginPage.prototype._applyApisToUi = function (apis) {
+    this._onlineZoteroElements.forEach(function (element) {
+        if (apis.online) {
+            element.classList.remove("hidden");
+        } else {
+            element.classList.add("hidden");
+        }
+    });
 };
 
 LoginPage.prototype._addEventListeners = function () {

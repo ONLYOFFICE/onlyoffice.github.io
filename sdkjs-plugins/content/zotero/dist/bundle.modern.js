@@ -4245,38 +4245,38 @@ function Q(e, t) {
 		autocomplete: "on"
 	}), this._saveApiKeyBtn = new A("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new me("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new me("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new A("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
 	if (this._logoutLink = document.getElementById("logoutLink"), !this._logoutLink) throw Error("logoutLink not found");
-	this._onAuthorized = function(e) {}, this._onChangeState = function(e) {}, this._onOpen = function() {};
+	this._onlineZoteroElements = document.querySelectorAll(".for-zotero-online"), this._onAuthorized = function(e) {}, this._onChangeState = function(e) {}, this._onOpen = function() {};
 }
 Q.prototype.init = function() {
 	var e = this;
 	this._addEventListeners();
-	var t = !1, n = document.querySelectorAll(".for-zotero-online");
-	ne.runApisChecker(e._sdk).subscribe(function(r) {
-		if (e._onChangeState(r), t || (t = !0, !r.desktopVersion && e._useDesktopApp && e._useDesktopApp.classList.add("hidden"), e._onOpen(), e._show()), r.online ? n.forEach(function(e) {
-			e.classList.remove("hidden");
-		}) : n.forEach(function(e) {
-			e.classList.add("hidden");
-		}), r.online && r.hasKey) {
-			e._sdk.setIsOnlineAvailable(!0), e._hide(!0), e._onAuthorized(r);
+	var t = !1;
+	ne.runApisChecker(e._sdk).subscribe(function(n) {
+		if (e._onChangeState(n), t || (t = !0, !n.desktopVersion && e._useDesktopApp && e._useDesktopApp.classList.add("hidden"), e._onOpen(), e._show()), e._applyApisToUi(n), n.online && n.hasKey) {
+			e._sdk.setIsOnlineAvailable(!0), e._hide(!0), e._onAuthorized(n);
 			return;
 		}
-		if (r.desktop && r.hasPermission) {
-			e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages(), e._onAuthorized(r);
+		if (n.desktop && n.hasPermission) {
+			e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages(), e._onAuthorized(n);
 			return;
 		}
 	});
-	var r = {
+	var n = {
 		onOpen: function(t) {
-			return e._onOpen = t, r;
+			return e._onOpen = t, n;
 		},
 		onChangeState: function(t) {
-			return e._onChangeState = t, r;
+			return e._onChangeState = t, n;
 		},
 		onAuthorized: function(t) {
-			return e._onAuthorized = t, r;
+			return e._onAuthorized = t, n;
 		}
 	};
-	return r;
+	return n;
+}, Q.prototype._applyApisToUi = function(e) {
+	this._onlineZoteroElements.forEach(function(t) {
+		e.online ? t.classList.remove("hidden") : t.classList.add("hidden");
+	});
 }, Q.prototype._addEventListeners = function() {
 	var e = this;
 	this._apiKeyLoginField.subscribe(function(t) {
