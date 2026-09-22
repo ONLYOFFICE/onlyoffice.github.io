@@ -877,9 +877,10 @@ class CitationService {
 
     /**
      * @param {boolean} [bHardRefresh]
+     * @param {{skipCitations?: boolean, skipBibliography?: boolean}} [skipOptions]
      * @returns {Promise<Array<string>>}
      */
-    async updateCslItems(bHardRefresh) {
+    async updateCslItems(bHardRefresh, skipOptions) {
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
@@ -896,14 +897,19 @@ class CitationService {
                     bHardRefresh = true;
                 }
             }
-            if (typeof bHardRefresh === "boolean") {
+            const bSkipCitations = !!(skipOptions && skipOptions.skipCitations);
+            const bSkipBibliography = !!(
+                skipOptions && skipOptions.skipBibliography
+            );
+
+            if (!bSkipCitations && typeof bHardRefresh === "boolean") {
                 updatedFields = await this.#getUpdatedFields(
                     fieldsWithCitations,
                     bHardRefresh,
                 );
             }
 
-            if (bibField) {
+            if (!bSkipBibliography && bibField) {
                 updatedFields.push(
                     await this.#updateBibliography(bNoHaveFields, bibField),
                 );

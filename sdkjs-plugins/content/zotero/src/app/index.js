@@ -46,6 +46,7 @@ import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "./shared/components";
 import { ZOTERO_TYPE_TO_CSL } from "./csl/zotero-type-map";
+import { AutoUpdatePreferences } from "./auto-update-preferences";
 
 import "../components.css";
 import "../styles.css";
@@ -448,10 +449,16 @@ import "../styles.css";
                 })
                 .then(function (field) {
                     currentField = field;
+                    const skipOptions = {
+                        skipCitations:
+                            !AutoUpdatePreferences.shouldUpdateCitations(),
+                        skipBibliography:
+                            !AutoUpdatePreferences.shouldUpdateBibliography(),
+                    };
                     if (bHasNotes) {
-                        return citationService.updateCslItems(false);
+                        return citationService.updateCslItems(false, skipOptions);
                     }
-                    return citationService.updateCslItems();
+                    return citationService.updateCslItems(undefined, skipOptions);
                 })
                 .then(() => {
                     if (bHasNotes) {

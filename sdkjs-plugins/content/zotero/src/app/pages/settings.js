@@ -50,6 +50,7 @@ import { CslHtmlParser } from "../services/csl-html-parser";
 import { LocalesManager } from "../csl/locales";
 import { AbbreviationsManager } from "../csl/abbreviations";
 import { CitationItemData } from "../csl/citation/citation-item-data";
+import { AutoUpdatePreferences } from "../auto-update-preferences";
 
 const PREVIEW_ITEMS = [
     {
@@ -89,6 +90,8 @@ const PREVIEW_ITEMS = [
  * @property {StyleFormat} styleFormat
  * @property {boolean} includeUrlForPaperArticles
  * @property {boolean} abbreviateJournalTitles
+ * @property {boolean} autoUpdateCitations
+ * @property {boolean} autoUpdateBibliography
  */
 
 /**
@@ -152,6 +155,16 @@ function SettingsPage(router, displayNoneClass) {
         "abbreviateJournalTitles",
         {
             label: "Use MEDLINE journal abbreviations",
+        }
+    );
+
+    this._autoUpdateCitationsCheckbox = new Checkbox("autoUpdateCitations", {
+        label: "Update other citations when inserting a new one",
+    });
+    this._autoUpdateBibliographyCheckbox = new Checkbox(
+        "autoUpdateBibliography",
+        {
+            label: "Update the bibliography when inserting a citation",
         }
     );
 
@@ -252,6 +265,8 @@ function SettingsPage(router, displayNoneClass) {
         styleFormat: "numeric",
         includeUrlForPaperArticles: false,
         abbreviateJournalTitles: false,
+        autoUpdateCitations: true,
+        autoUpdateBibliography: true,
     };
 }
 
@@ -408,6 +423,29 @@ SettingsPage.prototype._addEventListeners = function () {
             promises.push(Promise.resolve());
         }
 
+        const autoUpdateCitationsChecked =
+            self._autoUpdateCitationsCheckbox.getState().checked;
+        if (
+            self._stateSettings.autoUpdateCitations !== autoUpdateCitationsChecked
+        ) {
+            AutoUpdatePreferences.setShouldUpdateCitations(
+                autoUpdateCitationsChecked
+            );
+            promises.push(Promise.resolve());
+        }
+
+        const autoUpdateBibliographyChecked =
+            self._autoUpdateBibliographyCheckbox.getState().checked;
+        if (
+            self._stateSettings.autoUpdateBibliography !==
+            autoUpdateBibliographyChecked
+        ) {
+            AutoUpdatePreferences.setShouldUpdateBibliography(
+                autoUpdateBibliographyChecked
+            );
+            promises.push(Promise.resolve());
+        }
+
         if (promises.length) {
             self._showLoader();
             Promise.all(promises)
@@ -422,6 +460,8 @@ SettingsPage.prototype._addEventListeners = function () {
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
                         includeUrlForPaperArticles: includeUrlChecked,
                         abbreviateJournalTitles: abbreviateJournalTitlesChecked,
+                        autoUpdateCitations: autoUpdateCitationsChecked,
+                        autoUpdateBibliography: autoUpdateBibliographyChecked,
                     };
 
                     self._onChangeState(newState, oldState);
@@ -534,6 +574,12 @@ SettingsPage.prototype._addEventListeners = function () {
     this._endNotes.subscribe(function (event) {
         self._somethingWasChanged();
     });
+    this._autoUpdateCitationsCheckbox.subscribe(function (event) {
+        self._somethingWasChanged();
+    });
+    this._autoUpdateBibliographyCheckbox.subscribe(function (event) {
+        self._somethingWasChanged();
+    });
     this._includeUrlCheckbox.subscribe(function (event) {
         self._somethingWasChanged();
         if (self._currentStyleContent) {
@@ -579,6 +625,9 @@ SettingsPage.prototype.show = function () {
             this._cslStylesManager.getIncludeUrlForPaperArticles(),
         abbreviateJournalTitles:
             this._cslStylesManager.getAbbreviateJournalTitles(),
+        autoUpdateCitations: AutoUpdatePreferences.shouldUpdateCitations(),
+        autoUpdateBibliography:
+            AutoUpdatePreferences.shouldUpdateBibliography(),
     };
     this._saveBtn.disable();
     this._router.openSettings();
@@ -596,6 +645,16 @@ SettingsPage.prototype.show = function () {
         this._abbreviateJournalTitlesCheckbox.check(true);
     } else {
         this._abbreviateJournalTitlesCheckbox.uncheck(true);
+    }
+    if (this._stateSettings.autoUpdateCitations) {
+        this._autoUpdateCitationsCheckbox.check(true);
+    } else {
+        this._autoUpdateCitationsCheckbox.uncheck(true);
+    }
+    if (this._stateSettings.autoUpdateBibliography) {
+        this._autoUpdateBibliographyCheckbox.check(true);
+    } else {
+        this._autoUpdateBibliographyCheckbox.uncheck(true);
     }
     if (this._currentStyleContent) {
         this._showPreview(
