@@ -43,6 +43,7 @@ const ZoteroSdk = function () {
     this._userId = 0;
     /** @type {Array<UserGroupInfo>}} */
     this._userGroups = [];
+    this._userGroupsLoaded = false;
     this._isOnlineAvailable = true;
 
     this._fetcher = new RateLimitedFetcher({
@@ -90,6 +91,7 @@ ZoteroSdk.prototype._getDesktopRequest = function (url) {
             headers: {
                 "Zotero-API-Version": self.ZOTERO_API_VERSION,
                 "User-Agent": self.USER_AGENT,
+                "Cache-Control": "no-cache",
             },
             complete: resolve,
             error: function (/** @type {AscSimpleResponse} */ error) {
@@ -117,7 +119,7 @@ ZoteroSdk.prototype._getOnlineRequest = function (url) {
 
     //return this._fetcher.fetchWithRetry(url, headers, 9);
 
-    return fetch(url, { headers: headers })
+    return fetch(url, { headers: headers, cache: "no-store" })
         .then(function (response) {
             if (!response.ok) {
                 const message = response.status + " " + response.statusText;
@@ -279,18 +281,22 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
-    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
+    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType?: string}} */
     let queryParams = {
         format: format,
-        itemType: "-attachment", // skip attachments (pdf, docx, etc.)
     };
 
     if (search) {
         queryParams.q = search;
+        queryParams.itemType = "-attachment"; // skip attachments (pdf, docx, etc.)
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
+        // No itemType filter here on purpose: a negated itemType makes the
+        // local Zotero API search the whole library instead of addressing
+        // the keys directly, and it is pointless when the keys are known.
     } else {
         queryParams.limit = 20;
+        queryParams.itemType = "-attachment"; // skip attachments (pdf, docx, etc.)
         if (!this._isOnlineAvailable) {
             queryParams.format = "json";
         }
@@ -350,7 +356,7 @@ ZoteroSdk.prototype.getUserGroups = function () {
     var self = this;
 
     return new Promise(function (resolve, reject) {
-        if (self._userGroups.length > 0) {
+        if (self._userGroupsLoaded) {
             resolve(self._userGroups);
             return;
         }
@@ -386,6 +392,7 @@ ZoteroSdk.prototype.getUserGroups = function () {
                         name: group.data.name,
                     };
                 });
+                self._userGroupsLoaded = true;
                 resolve(self._userGroups);
             })
             .catch(reject);
@@ -461,6 +468,7 @@ ZoteroSdk.prototype.clearSettings = function () {
     localStorage.removeItem(this.STORAGE_KEYS.USER_ID);
     localStorage.removeItem(this.STORAGE_KEYS.API_KEY);
     this._userGroups = [];
+    this._userGroupsLoaded = false;
     this._userId = 0;
     this._apiKey = null;
 };

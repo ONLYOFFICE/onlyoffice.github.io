@@ -844,10 +844,7 @@ class CitationDocService {
                 },
                 false,
                 false,
-                function () {
-                    lastSavedPrefXml = prefXml;
-                    resolve();
-                },
+                resolve
             );
         });
     }

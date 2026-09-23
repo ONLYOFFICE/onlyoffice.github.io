@@ -51,6 +51,19 @@ import { AdditionalWindow } from "../pages/additional-window";
 class CitationService {
     /** @type {AdditionalWindow} */
     #additionalWindow;
+    /**
+     * Parsed CSL/locale XML, keyed by the source string. Handed a raw
+     * string, citeproc-js falls back to its pure-JS CSL.XmlJSON node engine
+     * instead of the native CSL.XmlDOM one it uses for a DOM Element.
+     * @type {Map<string, Element|string>}
+     */
+    #parsedXmlCache = new Map();
+    /**
+     * Identifies what this._formatter was built for, so an engine that is
+     * still valid is reused instead of recompiling the whole CSL style.
+     * @type {string|null}
+     */
+    #formatterCacheKey = null;
     /** @type {boolean} */
     #skipUrlForPaperArticles;
     /** @type {AbbreviationsManager} */
@@ -213,6 +226,11 @@ class CitationService {
         }
 
         const refreshedItems = await this.#getSelectedInJsonFormat(itemsToRefresh);
+
+        // citeproc keeps item data in its own registry and updateItems() does
+        // not re-read items it already knows, so an engine built before this
+        // backfill would go on formatting the stale copies.
+        this.#formatterCacheKey = null;
 
         refreshedItems.forEach((item) => {
             const itemId = item.key || (item.data && item.data.key) || item.id;
@@ -680,6 +698,39 @@ class CitationService {
         return updatedFields;
     }
 
+    /**
+     * Parses CSL/locale XML into a DOM Element so citeproc-js takes its
+     * native CSL.XmlDOM path. Returns the original string if parsing fails,
+     * which citeproc still handles, only slower.
+     * @param {string} xmlString
+     * @returns {Element|string}
+     */
+    #parseXmlCached(xmlString) {
+        const cached = this.#parsedXmlCache.get(xmlString);
+        if (cached) {
+            return cached;
+        }
+
+        let result = xmlString;
+        try {
+            const root = new DOMParser().parseFromString(
+                xmlString,
+                "application/xml",
+            ).documentElement;
+            if (root && root.nodeName !== "parsererror") {
+                result = root;
+            }
+        } catch (e) {
+            console.error(
+                "Failed to pre-parse CSL/locale XML, falling back to citeproc's string parser:",
+                e,
+            );
+        }
+
+        this.#parsedXmlCache.set(xmlString, result);
+        return result;
+    }
+
     #updateFormatter() {
         const self = this;
 
@@ -689,14 +740,46 @@ class CitationService {
             arrIds.push(id);
         });
 
+        const styleId = this._cslStylesManager.getLastUsedStyleIdOrDefault();
+        const language = this._localesManager.getLastUsedLanguage();
+        const styleContent = this._cslStylesManager.cached(styleId);
+        const bAbbreviate =
+            this.#abbreviationsManager.isLoaded() &&
+            this._cslStylesManager.getAbbreviateJournalTitles();
+        // Building a CSL.Engine compiles the whole style XML into a token
+        // tree, a fixed cost paid on every citation action. citeproc-js is
+        // meant to keep one engine per session and be fed updateItems(), so
+        // only rebuild when something the engine baked in has changed. The
+        // style content length is part of the key so that re-uploading a
+        // custom style under the same id still invalidates it, and the
+        // abbreviation flag is there because the hook below is bound once,
+        // at construction.
+        const cacheKey =
+            styleId +
+            " " +
+            language +
+            " " +
+            (styleContent ? styleContent.length : 0) +
+            " " +
+            bAbbreviate;
+
+        if (this._formatter && this.#formatterCacheKey === cacheKey) {
+            if (arrIds.length) {
+                this._formatter.updateItems(arrIds);
+            }
+            return;
+        }
+
         /** @type {Object<string, any>} */
         const sys = {
             /** @param {string} id */
             retrieveLocale: function (id) {
-                if (self._localesManager.getLocale(id)) {
-                    return self._localesManager.getLocale(id);
-                }
-                return self._localesManager.getLocale();
+                const localeContent =
+                    self._localesManager.getLocale(id) ||
+                    self._localesManager.getLocale();
+                return localeContent
+                    ? self.#parseXmlCached(localeContent)
+                    : localeContent;
             },
             /** @param {string} id */
             retrieveItem: function (id) {
@@ -707,22 +790,18 @@ class CitationService {
             },
         };
 
-        if (
-            this.#abbreviationsManager.isLoaded() &&
-            this._cslStylesManager.getAbbreviateJournalTitles()
-        ) {
+        if (bAbbreviate) {
             sys.getAbbreviation = this.#abbreviationsManager.createCiteprocHook();
         }
 
         // @ts-ignore
         this._formatter = new CSL.Engine(
             sys,
-            this._cslStylesManager.cached(
-                this._cslStylesManager.getLastUsedStyleIdOrDefault(),
-            ),
-            this._localesManager.getLastUsedLanguage(),
+            styleContent ? this.#parseXmlCached(styleContent) : styleContent,
+            language,
             true,
         );
+        this.#formatterCacheKey = cacheKey;
         if (arrIds.length) {
             this._formatter.updateItems(arrIds);
         }
