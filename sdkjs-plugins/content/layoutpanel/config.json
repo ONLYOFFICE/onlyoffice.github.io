@@ -10,8 +10,26 @@
       "description": "Layout Panel - a plug in for Only Office Presentation Editor that quickly provides size, position and alignment controls for the selected object without digging through menus. Alignment and distribution are not supported for line selections.",
       "url": "index.html",
       "icons": [
-        "resources/img/icon.png",
-        "resources/img/icon@2x.png"
+        "resources/classic/light/icon.png",
+        "resources/classic/dark/icon.png"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": { "normal": "resources/classic/light/icon.png" },
+          "125%": { "normal": "resources/classic/light/icon@1.25x.png" },
+          "150%": { "normal": "resources/classic/light/icon@1.5x.png" },
+          "175%": { "normal": "resources/classic/light/icon@1.75x.png" },
+          "200%": { "normal": "resources/classic/light/icon@2x.png" }
+        },
+        {
+          "style": "dark",
+          "100%": { "normal": "resources/classic/dark/icon.png" },
+          "125%": { "normal": "resources/classic/dark/icon@1.25x.png" },
+          "150%": { "normal": "resources/classic/dark/icon@1.5x.png" },
+          "175%": { "normal": "resources/classic/dark/icon@1.75x.png" },
+          "200%": { "normal": "resources/classic/dark/icon@2x.png" }
+        }
       ],
       "EditorsSupport": ["slide"],
       "isViewer": false,
