@@ -26,15 +26,19 @@ body.theme-type-dark {
   --color-text: #ffffff;
   --color-text-secondary: #d9d9d9;
   --color-bg-base: #2d2d2d;
-  --color-bg-panel: #3b3b3b;
-  --color-bg-input: #2e2e2e;
-  --color-bg-unit: #232323;
-  --color-border: #6a6a6a;
+  --color-bg-panel: #404040;
+  --color-bg-input: #2f2f2f;
+  --color-bg-unit: #2a2a2a;
+  --color-border: #686868;
   --color-accent: #6e9fec;
-  --color-bg-btn: #3b3b3b;
-  --color-bg-btn-hover: #4d4d4d;
-  --color-bg-btn-active: #5a5a5a;
+  --color-bg-btn: #3a3a3a;
+  --color-bg-btn-hover: #4c4c4c;
+  --color-bg-btn-active: #575757;
   color: var(--color-text);
+  background: var(--color-bg-base);
+}
+
+body.theme-type-dark #app {
   background: var(--color-bg-base);
 }
 
@@ -42,27 +46,14 @@ body.theme-type-dark .selection-status,
 body.theme-type-dark .panel-section,
 body.theme-type-dark .input-wrap,
 body.theme-type-dark .unit,
-body.theme-type-dark .icon-btn,
-body.theme-type-dark .checkbox-field,
-body.theme-type-dark .radio-field,
-body.theme-type-dark .label-text,
-body.theme-type-dark .section-title {
+body.theme-type-dark .icon-btn {
+  background-color: var(--color-bg-panel);
+  border-color: var(--color-border);
   color: var(--color-text);
 }
 
-body.theme-type-dark .selection-status,
-body.theme-type-dark .panel-section,
-body.theme-type-dark .input-wrap,
-body.theme-type-dark .unit,
-body.theme-type-dark .icon-btn,
-body.theme-type-dark .radio-field,
-body.theme-type-dark .checkbox-field {
-  border-color: var(--color-border);
-  background: var(--color-bg-panel);
-}
-
 body.theme-type-dark .input-wrap {
-  background: var(--color-bg-input);
+  background-color: var(--color-bg-input);
 }
 
 body.theme-type-dark .input-wrap input[type="number"],
@@ -86,17 +77,17 @@ body.theme-type-dark .label-text {
 }
 
 body.theme-type-dark .icon-btn {
-  background: var(--color-bg-btn);
+  background-color: var(--color-bg-btn);
 }
 
 body.theme-type-dark .icon-btn:hover {
-  background: var(--color-bg-btn-hover);
+  background-color: var(--color-bg-btn-hover);
   border-color: var(--color-accent);
 }
 
 body.theme-type-dark .icon-btn:active,
 body.theme-type-dark .icon-btn:focus-visible {
-  background: var(--color-bg-btn-active);
+  background-color: var(--color-bg-btn-active);
 }
 
 body.theme-type-dark .icon-btn:disabled {
