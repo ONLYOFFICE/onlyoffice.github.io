@@ -76,22 +76,23 @@
 		developerMarketplaceUrl = '';
 	}
 
-	// with the developer mode off the button stays while an address is still stored, so it can always be cleared
 	function applyDevModeButton() {
-		const isVisible = isDevModeAllowed || !!developerMarketplaceUrl;
-		window.Asc.plugin.executeMethod('ShowButton', ['developer', isVisible, 'right']);
+		window.Asc.plugin.executeMethod('ShowButton', ['developer', isDevModeAllowed, 'right']);
 	}
 
-	// the developer address is a local override, it works only while the developer mode is allowed
+	function forgetDeveloperMarketplaceUrl() {
+		developerMarketplaceUrl = '';
+		try {
+			// for incognito mode
+			localStorage.removeItem('DeveloperMarketplaceUrl');
+		} catch (err) {
+		}
+	}
+
 	function applyMarketplaceUrl() {
 		const expectedUrl = adminMarketplaceUrl || OOMarketplaceUrl;
-		if (adminMarketplaceUrl && !isDevModeAllowed) {
-			marketplaceURl = adminMarketplaceUrl;
-			developerMarketplaceUrl = '';
-		} else {
-			marketplaceURl = developerMarketplaceUrl || expectedUrl;
-		}
-		
+		marketplaceURl = developerMarketplaceUrl || expectedUrl;
+
 		if (adminMarketplaceUrl && adminMarketplaceUrl === marketplaceURl) {
 			isDeveloperMarketplace = false;
 		} else {
@@ -104,6 +105,10 @@
 		isDevModeAllowed = options.developerMode !== false;
 		
 		adminMarketplaceUrl = typeof options.marketplaceUrl === 'string' ? options.marketplaceUrl : '';
+
+		// the ban applies to everyone: an address stored earlier must not outlive it
+		if (!isDevModeAllowed)
+			forgetDeveloperMarketplaceUrl();
 
 		applyMarketplaceUrl();
 		applyDevModeButton();
