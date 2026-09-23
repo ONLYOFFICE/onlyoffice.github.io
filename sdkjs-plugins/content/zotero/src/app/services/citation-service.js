@@ -41,6 +41,7 @@
  * @typedef {import('../csl/locales').LocalesManager} LocalesManager
  * @typedef {import('../csl/abbreviations').AbbreviationsManager} AbbreviationsManager
  * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
+ * @typedef {(progress: {phase: "fetch"|"apply", completed: number, total: number}) => void} RefreshProgressCallback
  */
 
 import { CitationDocService } from "./citation-doc-service";
@@ -157,19 +158,24 @@ class CitationService {
     }
 
     /**
+     * Works out which Zotero library an item belongs to and under which key
+     * it has to be fetched. fetchKey can differ from the stored id: a
+     * citation written by the Word Zotero plugin, or by this plugin against
+     * a local library, is identified by a CSL citation key (a Better BibTeX
+     * key, say) and carries the real Zotero item key only inside its URIs.
      * @param {CitationItem} item
      * @param {string} id
-     * @returns {{id: string, userID?: string|number, groupID?: string|number}|null}
+     * @returns {{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}|null}
      */
     #getLibraryContext(item, id) {
         const userID = item.getProperty("userID");
         const groupID = item.getProperty("groupID");
 
         if (userID) {
-            return { id: id, userID: userID };
+            return { id: id, fetchKey: id, userID: userID };
         }
         if (groupID) {
-            return { id: id, groupID: groupID };
+            return { id: id, fetchKey: id, groupID: groupID };
         }
 
         const itemObject = item.toJSON();
@@ -177,77 +183,265 @@ class CitationService {
             return null;
         }
 
+        /** @type {{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}|null} */
+        let fallback = null;
+
         for (let i = 0; i < itemObject.uris.length; i++) {
             const uri = itemObject.uris[i];
-            const match = uri.match(
-                /zotero\.org\/(users|groups)\/([^/]+)\/items\/([^/?#]+)/i,
+
+            /** @type {{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}|null} */
+            let context = null;
+
+            const remote = uri.match(
+                /zotero\.org\/(users|groups)\/(\d+)\/items\/([^/?#]+)/i,
+            );
+            // A "users/local/<id>" URI comes from a library that was never
+            // synced, so the item lives only in the local Zotero.
+            const local = uri.match(
+                /zotero\.org\/users\/local\/[^/]+\/items\/([^/?#]+)/i,
             );
 
-            if (!match || match[3] !== id) {
+            if (remote) {
+                context =
+                    remote[1] === "users"
+                        ? { id: id, fetchKey: remote[3], userID: remote[2] }
+                        : { id: id, fetchKey: remote[3], groupID: remote[2] };
+            } else if (local) {
+                context = { id: id, fetchKey: local[1], userID: "local" };
+            }
+
+            if (!context) {
+                continue;
+            }
+            // A URI whose key equals the stored id is the certain match;
+            // otherwise keep the first parseable one as a fallback.
+            if (context.fetchKey === id) {
+                return context;
+            }
+            if (!fallback) {
+                fallback = context;
+            }
+        }
+
+        return fallback;
+    }
+
+    /**
+     * A single-item answer is a one-element array in csljson format but a
+     * bare object in json format.
+     * @param {any} res
+     * @returns {Array<any>}
+     */
+    #normalizeSingleItemResponse(res) {
+        const items = res && res.items;
+        if (Array.isArray(items)) {
+            return items;
+        }
+        return items ? [items] : [];
+    }
+
+    /**
+     * Re-reads stored items from Zotero, one request per item key.
+     * @param {(item: CitationItem, id: string) => boolean} shouldRefreshItem
+     * @param {"csljson"|"json"} format
+     * @param {RefreshProgressCallback} [onProgress]
+     * @returns {Promise<boolean>} whether anything was fetched
+     */
+    async #refreshStoredItems(shouldRefreshItem, format, onProgress) {
+        /** @type {Array<{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}>} */
+        const itemsToRefresh = [];
+        /** @type {Array<string>} */
+        const unresolvedIds = [];
+
+        this._storage.forEachItem((item, id) => {
+            if (!shouldRefreshItem(item, id)) {
+                return;
+            }
+            const libraryContext = this.#getLibraryContext(item, id);
+            if (libraryContext) {
+                itemsToRefresh.push(libraryContext);
+            } else {
+                unresolvedIds.push(id);
+            }
+        });
+
+        const total = itemsToRefresh.length + unresolvedIds.length;
+        if (total === 0) {
+            return false;
+        }
+
+        let completed = 0;
+        const reportProgress = () => {
+            completed++;
+            if (onProgress) {
+                onProgress({ phase: "fetch", completed, total });
+            }
+        };
+
+        // One request per key, through the single-item endpoint: the csljson
+        // format identifies items by CSL citation key rather than by item
+        // key, so a batched answer cannot be matched back to what was asked
+        // for. A single-item request maps unambiguously and leaves out the
+        // child notes and attachments.
+        const keyedRequests = itemsToRefresh.map((context) => {
+            const requestPromise = context.groupID
+                ? this._sdk.getGroupItemByKey(
+                      context.groupID,
+                      context.fetchKey,
+                      format,
+                  )
+                : this._sdk.getItemByKey(context.fetchKey, format);
+
+            return requestPromise
+                .then((res) => {
+                    const items = this.#normalizeSingleItemResponse(res);
+                    if (items.length !== 1) {
+                        console.warn(
+                            "Zotero returned " +
+                                items.length +
+                                " items for key " +
+                                context.fetchKey,
+                        );
+                        return;
+                    }
+
+                    const storedItem = this._storage.getItem(context.id);
+                    if (!storedItem) {
+                        return;
+                    }
+                    if (format === "csljson") {
+                        // A full refresh replaces the data, so a field
+                        // deleted in Zotero disappears here too. The json
+                        // format is only used to backfill single fields.
+                        storedItem.replaceItemDataFromCsl(items[0]);
+                    } else {
+                        storedItem.fillFromObject(items[0]);
+                    }
+                })
+                .catch((error) => {
+                    // One item that cannot be resolved - deleted in Zotero,
+                    // stale key, library unavailable - must not abort the
+                    // rest of the refresh.
+                    console.warn(
+                        "Failed to refresh item " +
+                            context.id +
+                            " (Zotero key " +
+                            context.fetchKey +
+                            "):",
+                        error,
+                    );
+                })
+                .finally(reportProgress);
+        });
+
+        const citationKeyRequests = unresolvedIds.map((id) =>
+            this.#refreshItemByCitationKey(id)
+                .catch((error) => {
+                    console.warn("Failed to re-link item " + id + ":", error);
+                })
+                .finally(reportProgress),
+        );
+
+        await Promise.all(keyedRequests.concat(citationKeyRequests));
+        return true;
+    }
+
+    /**
+     * Last resort for a citation that carries no library information at all:
+     * its stored id is then typically a CSL citation key. Searches the
+     * library for that key, confirms each candidate by comparing its own
+     * csljson citation key, and on a match also records the canonical URI of
+     * the item so that the next refresh can resolve it directly.
+     * @param {string} storedId
+     * @returns {Promise<void>}
+     */
+    async #refreshItemByCitationKey(storedId) {
+        const searchResult = await this._sdk.searchUserItemsEverything(storedId);
+        const candidates = (searchResult && searchResult.items) || [];
+
+        for (const candidate of candidates) {
+            const candidateKey =
+                candidate.key || (candidate.data && candidate.data.key);
+            if (!candidateKey) {
                 continue;
             }
 
-            if (match[1] === "users") {
-                return { id: id, userID: match[2] };
+            const res = await this._sdk.getItemByKey(candidateKey, "csljson");
+            const cslItem = this.#normalizeSingleItemResponse(res)[0];
+            if (!cslItem) {
+                continue;
+            }
+            if (
+                cslItem["citation-key"] !== storedId &&
+                cslItem.id !== storedId
+            ) {
+                continue;
             }
 
-            return { id: id, groupID: match[2] };
+            const storedItem = this._storage.getItem(storedId);
+            if (!storedItem) {
+                return;
+            }
+            storedItem.replaceItemDataFromCsl(cslItem);
+
+            const library = candidate.library;
+            if (library && library.id !== undefined && library.id !== null) {
+                const libraryPath =
+                    library.type === "group" ? "groups" : "users";
+                storedItem.addUri(
+                    "http://zotero.org/" +
+                        libraryPath +
+                        "/" +
+                        library.id +
+                        "/items/" +
+                        candidateKey,
+                );
+            }
+            return;
         }
 
-        return null;
+        console.warn(
+            "Could not locate item " +
+                storedId +
+                " in the Zotero library; it will not be refreshed.",
+        );
     }
 
-    /** @returns {Promise<void>} */
+    /** @returns {Promise<boolean>} whether anything was fetched */
     async #hydrateMissingAbstracts() {
         if (!this.#shouldPersistAbstract()) {
-            return;
+            return false;
         }
 
-        /** @type {Record<string, {id: string, userID?: string|number, groupID?: string|number}>} */
-        const itemsToRefresh = {};
-
-        this._storage.forEachItem((item, id) => {
+        return this.#refreshStoredItems((item, id) => {
             const flatItem = item.toFlatJSON(this._storage.getItemIndex(id));
-            if (
+            return !(
                 Object.hasOwnProperty.call(flatItem, "abstract") &&
                 flatItem.abstract !== ""
-            ) {
-                return;
-            }
-
-            const libraryContext = this.#getLibraryContext(item, id);
-            if (libraryContext) {
-                itemsToRefresh[id] = libraryContext;
-            }
-        });
-
-        if (Object.keys(itemsToRefresh).length === 0) {
-            return;
-        }
-
-        const refreshedItems = await this.#getSelectedInJsonFormat(itemsToRefresh);
-
-        // citeproc keeps item data in its own registry and updateItems() does
-        // not re-read items it already knows, so an engine built before this
-        // backfill would go on formatting the stale copies.
-        this.#formatterCacheKey = null;
-
-        refreshedItems.forEach((item) => {
-            const itemId = item.key || (item.data && item.data.key) || item.id;
-            if (!itemId) {
-                return;
-            }
-
-            const storedItem = this._storage.getItem(itemId);
-            if (storedItem) {
-                storedItem.fillFromObject(item);
-            }
-        });
+            );
+        }, "json");
     }
 
-    /** @returns {Promise<void>} */
-    async #prepareStorageForCurrentStyle() {
-        await this.#hydrateMissingAbstracts();
+    /**
+     * @param {{refreshItems?: boolean, onProgress?: RefreshProgressCallback}} [options]
+     * @returns {Promise<void>}
+     */
+    async #prepareStorageForCurrentStyle(options) {
+        const bChanged = (options && options.refreshItems)
+            ? await this.#refreshStoredItems(
+                  () => true,
+                  "csljson",
+                  options.onProgress,
+              )
+            : await this.#hydrateMissingAbstracts();
+
+        if (bChanged) {
+            // citeproc keeps item data in its own registry and updateItems()
+            // does not re-read items it already knows, so an engine built
+            // before this would go on formatting the stale copies.
+            this.#formatterCacheKey = null;
+        }
+
         this.#updateFormatter();
     }
 

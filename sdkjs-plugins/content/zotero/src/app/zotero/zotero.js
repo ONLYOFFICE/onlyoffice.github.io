@@ -289,6 +289,13 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     if (search) {
         queryParams.q = search;
         queryParams.itemType = "-attachment"; // skip attachments (pdf, docx, etc.)
+        if (!this._isOnlineAvailable) {
+            // The local API labels csljson items with CSL citation keys and
+            // gives them no URIs, so a citation inserted from such a result
+            // cannot be traced back to its library item afterwards. The json
+            // format carries the real item key and links.
+            queryParams.format = "json";
+        }
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
         // No itemType filter here on purpose: a negated itemType makes the
@@ -337,6 +344,11 @@ ZoteroSdk.prototype.getGroupItems = function (
 
     if (search) {
         queryParams.q = search;
+        if (!this._isOnlineAvailable) {
+            // See getItems: local csljson results cannot be traced back to
+            // the library, json results carry real keys and links.
+            queryParams.format = "json";
+        }
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
     }
@@ -346,6 +358,73 @@ ZoteroSdk.prototype.getGroupItems = function (
     var request = self._buildGetRequest(path, queryParams);
     return self._parseResponse(request, groupId);
 
+};
+
+/**
+ * Searches the user library across all fields, which also matches CSL
+ * citation keys such as the ones Better BibTeX pins. Used to re-link a
+ * citation whose stored id is a citation key rather than a Zotero item key.
+ * @param {string} query
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.searchUserItemsEverything = function (query) {
+    var path =
+        this.API_PATHS.USERS + "/" + this._userId + "/" + this.API_PATHS.ITEMS;
+    var request = this._buildGetRequest(path, {
+        format: "json",
+        q: query,
+        qmode: "everything",
+        itemType: "-attachment",
+        limit: 10,
+    });
+    return this._parseResponse(request, this._userId);
+};
+
+/**
+ * Gets one item of the user library by key. Uses the single-item endpoint
+ * rather than the list endpoint with itemKey, because the list also returns
+ * the item's child notes and attachments, and in csljson format entries are
+ * identified by CSL citation key, so a multi-entry answer cannot be matched
+ * back to what was asked for.
+ * @param {string} itemKey
+ * @param {"csljson"|"json"} [format]
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.getItemByKey = function (itemKey, format) {
+    var path =
+        this.API_PATHS.USERS +
+        "/" +
+        this._userId +
+        "/" +
+        this.API_PATHS.ITEMS +
+        "/" +
+        itemKey;
+    var request = this._buildGetRequest(path, {
+        format: format || this.DEFAULT_FORMAT,
+    });
+    return this._parseResponse(request, this._userId);
+};
+
+/**
+ * Gets one item of a group library by key. See getItemByKey.
+ * @param {number|string} groupId
+ * @param {string} itemKey
+ * @param {"csljson"|"json"} [format]
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.getGroupItemByKey = function (groupId, itemKey, format) {
+    var path =
+        this.API_PATHS.GROUPS +
+        "/" +
+        groupId +
+        "/" +
+        this.API_PATHS.ITEMS +
+        "/" +
+        itemKey;
+    var request = this._buildGetRequest(path, {
+        format: format || this.DEFAULT_FORMAT,
+    });
+    return this._parseResponse(request, groupId);
 };
 
 /**
