@@ -162,14 +162,19 @@ import "../styles.css";
                 settings.setRestApiAvailable(apis.online);
             })
             .onAuthorized(function (apis) {
-                if (isInit) return;
-                isInit = true;
                 Loader.show();
 
                 let loadGroupsPromise = loadGroups().catch((e) => {
                     console.error(e);
                     showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
                 });
+
+                if (isInit) {
+                    return loadGroupsPromise.finally(function () {
+                        Loader.hide();
+                    });
+                }
+
                 let initSettingsPromise = citationService.loadStyleFromDocument(settings.getStyleManager())
                     .catch((e) => console.error("Failed to read document prefs:", e))
                     .then(() => settings.init())
@@ -181,6 +186,7 @@ import "../styles.css";
 
                 Promise.all([loadGroupsPromise, initSettingsPromise]).then(function () {
                     Loader.hide();
+                    isInit = true;
                     return showCitationsAtTheStartFromMyLibrary();
                 }).finally(function () {
                     Loader.hide();
@@ -226,6 +232,7 @@ import "../styles.css";
         return sdk
             .getUserGroups()
             .then(function (/** @type {Array<UserGroupInfo>} */ groups) {
+                searchFilter.clearGroups();
                 searchFilter.addGroups(groups);
                 return groups;
             });

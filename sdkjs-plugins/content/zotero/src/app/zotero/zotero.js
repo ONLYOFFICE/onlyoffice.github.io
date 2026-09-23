@@ -148,7 +148,7 @@ ZoteroSdk.prototype._getRequestWithOfflineSupport = function (url) {
 /**
  * Build URL and make GET request
  * @param {string} path
- * @param {*} [queryParams]
+ * @param {Object<string, string>} [queryParams]
  * @returns {Promise<AscSimpleResponse | FetchResponse>}
  */
 ZoteroSdk.prototype._buildGetRequest = function (path, queryParams) {
@@ -400,7 +400,9 @@ ZoteroSdk.prototype.setApiKey = function (key) {
     var self = this;
     var path = this.API_PATHS.KEYS + "/" + key;
 
-    return this._buildGetRequest(path)
+    var url = new URL(path, zoteroEnvironment.restApiUrl);
+
+    return this._getOnlineRequest(url)
         .then(function (response) {
             var fetchResponse = /** @type {FetchResponse} */ (response);
             if (!fetchResponse.ok) {

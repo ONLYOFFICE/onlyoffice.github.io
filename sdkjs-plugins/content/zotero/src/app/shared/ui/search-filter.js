@@ -81,6 +81,10 @@ SearchFilterComponents.prototype._addEventListeners = function () {
     });
 };
 
+SearchFilterComponents.prototype.clearGroups = function () {
+    this._librarySelectList.clearItems();
+};
+
 /**
  * @param {Array<UserGroupInfo>} groups
  */

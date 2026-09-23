@@ -563,8 +563,8 @@ O.prototype.ZOTERO_API_VERSION = "3", O.prototype.USER_AGENT = "AscDesktopEditor
 		}).catch(n);
 	});
 }, O.prototype.setApiKey = function(e) {
-	var t = this, n = this.API_PATHS.KEYS + "/" + e;
-	return this._buildGetRequest(n).then(function(e) {
+	var t = this, n = this.API_PATHS.KEYS + "/" + e, r = new URL(n, te.restApiUrl);
+	return this._getOnlineRequest(r).then(function(e) {
 		var t = e;
 		if (!t.ok) throw Error(t.status + " " + t.statusText);
 		return t.json();
@@ -1433,6 +1433,9 @@ var I = /*#__PURE__*/ new WeakSet(), De = class {
 		}), this._customItems = this._customItems.filter(function(t) {
 			return t === null || t.value !== e;
 		}), this._selectedValues.delete(e), r(I, this, Ie).call(this);
+	}
+	clearItems() {
+		this._items = [], this._customItems = [], this._selectedValues.clear(), r(I, this, Ie).call(this), r(I, this, Pe).call(this);
 	}
 	getSelectedValue() {
 		if (this._options.multiple) return console.error("Method getSelectedValue is only available for single-select boxes."), null;
@@ -4257,7 +4260,7 @@ Q.prototype.init = function() {
 			return;
 		}
 		if (n.desktop && n.hasPermission) {
-			e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages(), e._onAuthorized(n);
+			e._sdk.setIsOnlineAvailable(!1), e._hide(!0), e._hideAllMessages(), e._onAuthorized(n);
 			return;
 		}
 	});
@@ -4285,7 +4288,7 @@ Q.prototype.init = function() {
 		t.type === "button:click" && e._tryToApplyKey();
 	}), this._connectToLocalZotero.subscribe(function(t) {
 		t.type === "button:click" && (e._showLoader(), ne.checkStatus(e._sdk).then(function(t) {
-			t.desktop && t.hasPermission ? (e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages()) : t.desktop && !t.hasPermission ? e._useDesktopMessage.show(R("Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"")) : t.desktop || e._useDesktopMessage.show(R("Connection to Zotero failed. Make sure Zotero is running."));
+			t.desktop && t.hasPermission ? (e._sdk.setIsOnlineAvailable(!1), e._hide(!0), e._hideAllMessages()) : t.desktop && !t.hasPermission ? e._useDesktopMessage.show(R("Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"")) : t.desktop || e._useDesktopMessage.show(R("Connection to Zotero failed. Make sure Zotero is running."));
 		}).finally(function() {
 			e._hideLoader();
 		}));
@@ -4340,6 +4343,8 @@ bn.prototype._addEventListeners = function() {
 	}), this._filterButton.subscribe(function(t) {
 		t.type === "button:click" && (e._librarySelectList.isOpen || (t.detail.originalEvent && t.detail.originalEvent.stopPropagation(), e._librarySelectList.openDropdown()));
 	});
+}, bn.prototype.clearGroups = function() {
+	this._librarySelectList.clearItems();
 }, bn.prototype.addGroups = function(e) {
 	var t = this, n = localStorage.getItem("selectedGroups"), r = n ? JSON.parse(n).map(function(e) {
 		return e.toString();
@@ -4653,19 +4658,21 @@ $.prototype._init = function() {
 		}).onChangeState(function(e) {
 			r.setDesktopApiAvailable(e.desktop), r.setRestApiAvailable(e.online);
 		}).onAuthorized(function(e) {
-			if (!s) {
-				s = !0, We.show();
-				var t = b().catch((e) => {
-					console.error(e), S(R("An error occurred while loading library groups. Try restarting the plugin."));
-				}), n = o.loadStyleFromDocument(r.getStyleManager()).catch((e) => console.error("Failed to read document prefs:", e)).then(() => r.init()).catch((e) => {
-					console.error(e), S(R("An error occurred while loading settings. Try restarting the plugin.")), r.show();
-				});
-				Promise.all([t, n]).then(function() {
-					return We.hide(), y();
-				}).finally(function() {
-					We.hide();
-				});
-			}
+			We.show();
+			var t = b().catch((e) => {
+				console.error(e), S(R("An error occurred while loading library groups. Try restarting the plugin."));
+			});
+			if (s) return t.finally(function() {
+				We.hide();
+			});
+			var n = o.loadStyleFromDocument(r.getStyleManager()).catch((e) => console.error("Failed to read document prefs:", e)).then(() => r.init()).catch((e) => {
+				console.error(e), S(R("An error occurred while loading settings. Try restarting the plugin.")), r.show();
+			});
+			Promise.all([t, n]).then(function() {
+				return We.hide(), s = !0, y();
+			}).finally(function() {
+				We.hide();
+			});
 		}), window.Asc.plugin.onTranslate = ne, ue().then((e) => {
 			window.Asc.scope.editorVersion = e, fe();
 		}).catch((e) => {
@@ -4683,7 +4690,7 @@ $.prototype._init = function() {
 	}
 	function b() {
 		return n.getUserGroups().then(function(e) {
-			return l.addGroups(e), e;
+			return l.clearGroups(), l.addGroups(e), e;
 		});
 	}
 	function te() {

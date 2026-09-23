@@ -867,6 +867,13 @@ class SelectBox {
         this._selectedValues.delete(value);
         this.#updateSelectedText();
     }
+    clearItems() {
+        this._items = [];
+        this._customItems = [];
+        this._selectedValues.clear();
+        this.#updateSelectedText();
+        this.#renderOptions();
+    }
     /**
      * @return {null | string}
      */

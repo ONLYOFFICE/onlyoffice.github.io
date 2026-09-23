@@ -110,7 +110,7 @@ LoginPage.prototype.init = function () {
             return;
         } else if (apis.desktop && apis.hasPermission) {
             self._sdk.setIsOnlineAvailable(false);
-            self._hide();
+            self._hide(true);
             self._hideAllMessages();
             self._onAuthorized(apis);
             return;
@@ -184,7 +184,7 @@ LoginPage.prototype._addEventListeners = function () {
             .then(function (/** @type {AvailableApis} */ apis) {
                 if (apis.desktop && apis.hasPermission) {
                     self._sdk.setIsOnlineAvailable(false);
-                    self._hide();
+                    self._hide(true);
                     self._hideAllMessages();
                 } else if (apis.desktop && !apis.hasPermission) {
                     const errorMessage =
