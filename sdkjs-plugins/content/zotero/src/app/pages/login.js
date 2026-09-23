@@ -220,12 +220,23 @@ LoginPage.prototype._tryToApplyKey = function () {
         self._sdk
             .setApiKey(apiKey)
             .then(function () {
+                self._sdk.setIsOnlineAvailable(true);
                 ZoteroApiChecker.successfullyLoggedInUsingApiKey();
                 self._hide(true);
             })
             .catch(function (err) {
                 console.error(err);
-                self._apiKeyMessage.show(translate("Invalid API key"));
+                return ZoteroApiChecker.checkStatus(self._sdk).then(function (
+                    /** @type {AvailableApis} */ apis
+                ) {
+                    self._apiKeyMessage.show(
+                        translate(
+                            apis.online
+                                ? "Invalid API key"
+                                : "Connection to Zotero failed"
+                        )
+                    );
+                });
             })
             .finally(function () {
                 self._hideLoader();
