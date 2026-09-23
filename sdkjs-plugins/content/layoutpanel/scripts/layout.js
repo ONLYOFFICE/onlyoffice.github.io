@@ -82,6 +82,139 @@
     el.value = value !== null && value !== undefined ? value : "";
   }
 
+  function clearThemeClasses(root) {
+    if (!root || !root.classList) {
+      return;
+    }
+
+    Array.prototype.forEach.call(root.classList, function (className) {
+      if (className.indexOf("theme-") === 0) {
+        root.classList.remove(className);
+      }
+    });
+  }
+
+  function getThemeType(theme) {
+    var explicitType = theme && (theme.Type || theme.type);
+    if (explicitType === "dark" || explicitType === "light") {
+      return explicitType;
+    }
+
+    var rawName = theme && (theme.Name || theme.name);
+    if (typeof rawName === "string") {
+      if (rawName.indexOf("dark") !== -1 || rawName.indexOf("night") !== -1 || rawName.indexOf("contrast") !== -1) {
+        return "dark";
+      }
+      if (rawName.indexOf("light") !== -1 || rawName.indexOf("white") !== -1 || rawName.indexOf("gray") !== -1) {
+        return "light";
+      }
+    }
+
+    return "light";
+  }
+
+  function resolveThemeName(theme, themeType) {
+    var validThemeNames = [
+      "theme-classic-light",
+      "theme-classic-dark",
+      "theme-light",
+      "theme-dark",
+      "theme-contrast-dark",
+      "theme-gray",
+      "theme-night",
+      "theme-white"
+    ];
+
+    var rawName = theme && (theme.Name || theme.name);
+    if (typeof rawName !== "string") {
+      return themeType === "dark" ? "theme-dark" : "theme-light";
+    }
+
+    if (validThemeNames.indexOf(rawName) === -1) {
+      return themeType === "dark" ? "theme-dark" : "theme-light";
+    }
+
+    var isDarkName = /dark|night|contrast|classic-dark/.test(rawName);
+    var isLightName = /light|white|gray|classic-light/.test(rawName);
+
+    if (themeType === "dark" && isDarkName) {
+      return rawName;
+    }
+    if (themeType === "light" && isLightName) {
+      return rawName;
+    }
+    if (themeType === "dark") {
+      return "theme-dark";
+    }
+    return "theme-light";
+  }
+
+  function applyThemeClasses(theme) {
+    var body = document.body;
+    var root = document.documentElement || body;
+
+    if (!body) {
+      return;
+    }
+
+    clearThemeClasses(body);
+    clearThemeClasses(root);
+
+    if (!theme) {
+      return;
+    }
+
+    var themeType = getThemeType(theme);
+    var resolvedThemeName = resolveThemeName(theme, themeType);
+
+    if (resolvedThemeName) {
+      body.classList.add(resolvedThemeName);
+      if (root && root !== body) {
+        root.classList.add(resolvedThemeName);
+      }
+    }
+
+    body.classList.add("theme-type-" + themeType);
+    if (root && root !== body) {
+      root.classList.add("theme-type-" + themeType);
+    }
+  }
+
+  function applyPluginTheme(theme) {
+    if (!theme || !window.Asc || !window.Asc.plugin) {
+      return;
+    }
+
+    if (typeof window.Asc.plugin.onThemeChangedBase === "function") {
+      window.Asc.plugin.onThemeChangedBase(theme);
+    }
+
+    applyThemeClasses(theme);
+  }
+
+  function attachThemeHandler() {
+    if (!window.Asc || !window.Asc.plugin) {
+      return;
+    }
+
+    var plugin = window.Asc.plugin;
+    var handler = function (theme) {
+      applyPluginTheme(theme || plugin.theme || (plugin.info && plugin.info.theme));
+    };
+
+    plugin.onThemeChanged = handler;
+
+    if (plugin.attachEvent) {
+      plugin.attachEvent("onThemeChanged", handler);
+    }
+
+    if (plugin.theme) {
+      applyPluginTheme(plugin.theme);
+    } else if (plugin.info && plugin.info.theme) {
+      applyPluginTheme(plugin.info.theme);
+    }
+  }
+
   function normalizeKeyName(key) {
     return String(key || "").toLowerCase();
   }
@@ -1223,6 +1356,7 @@ var x = getMethodNumericPropertyLocal(drawing, ["GetPosX", "GetX", "GetLeft", "G
   // ─── OnlyOffice Plugin lifecycle ───────────────────────────────────────────
 
   window.Asc.plugin.init = function () {
+    attachThemeHandler();
     updateUiFromSelection([]);
 
     if (window.Asc.plugin.attachEditorEvent) {

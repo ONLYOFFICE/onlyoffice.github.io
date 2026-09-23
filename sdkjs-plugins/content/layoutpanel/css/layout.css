@@ -22,82 +22,437 @@ html, body {
   overflow-x: hidden;
 }
 
-body.theme-type-dark {
-  --color-text: #1d2127;
-  --color-text-secondary: #3a3d42;
-  --color-bg-base: #2c3136;
-  --color-bg-panel: #e5e5e5;
-  --color-bg-input: #f6f6f6;
-  --color-bg-unit: #eeeeee;
-  --color-border: #8b9198;
-  --color-accent: #4d8df7;
-  --color-bg-btn: #ebebeb;
-  --color-bg-btn-hover: #dfe5ef;
-  --color-bg-btn-active: #d1dae9;
+body.theme-dark,
+body.theme-type-dark,
+body.theme-night.theme-type-dark,
+body.theme-contrast-dark.theme-type-dark,
+body.theme-classic-dark.theme-type-dark,
+html.theme-dark,
+html.theme-type-dark,
+html.theme-night.theme-type-dark,
+html.theme-contrast-dark.theme-type-dark,
+html.theme-classic-dark.theme-type-dark {
+  --color-text: #ffffff;
+  --color-text-secondary: #d9d9d9;
+  --color-bg-base: #2d2d2d;
+  --color-bg-panel: #3d3d3d;
+  --color-bg-input: #2a2a2a;
+  --color-bg-unit: #2a2a2a;
+  --color-border: #5f5f5f;
+  --color-accent: #6e9fec;
+  --color-bg-btn: #3a3a3a;
+  --color-bg-btn-hover: #4d4d4d;
+  --color-bg-btn-active: #5a5a5a;
   color: var(--color-text);
   background: var(--color-bg-base);
 }
 
-body.theme-type-dark #app {
+body.theme-dark #app,
+body.theme-type-dark #app,
+body.theme-night.theme-type-dark #app,
+body.theme-contrast-dark.theme-type-dark #app,
+body.theme-classic-dark.theme-type-dark #app,
+html.theme-dark #app,
+html.theme-type-dark #app,
+html.theme-night.theme-type-dark #app,
+html.theme-contrast-dark.theme-type-dark #app,
+html.theme-classic-dark.theme-type-dark #app {
   background: var(--color-bg-base);
 }
 
+/* Runtime override guard: keep the plugin panel inside the OnlyOffice iframe on the dark palette even if the host defines generic body/panel rules afterwards. */
+body.theme-dark #app .panel-section,
+body.theme-type-dark #app .panel-section,
+body.theme-night.theme-type-dark #app .panel-section,
+body.theme-contrast-dark.theme-type-dark #app .panel-section,
+body.theme-classic-dark.theme-type-dark #app .panel-section,
+body.theme-dark #app .selection-status,
+body.theme-type-dark #app .selection-status,
+body.theme-night.theme-type-dark #app .selection-status,
+body.theme-contrast-dark.theme-type-dark #app .selection-status,
+body.theme-classic-dark.theme-type-dark #app .selection-status,
+body.theme-dark #app .input-wrap,
+body.theme-type-dark #app .input-wrap,
+body.theme-night.theme-type-dark #app .input-wrap,
+body.theme-contrast-dark.theme-type-dark #app .input-wrap,
+body.theme-classic-dark.theme-type-dark #app .input-wrap,
+body.theme-dark #app .unit,
+body.theme-type-dark #app .unit,
+body.theme-night.theme-type-dark #app .unit,
+body.theme-contrast-dark.theme-type-dark #app .unit,
+body.theme-classic-dark.theme-type-dark #app .unit,
+body.theme-dark #app .icon-btn,
+body.theme-type-dark #app .icon-btn,
+body.theme-night.theme-type-dark #app .icon-btn,
+body.theme-contrast-dark.theme-type-dark #app .icon-btn,
+body.theme-classic-dark.theme-type-dark #app .icon-btn {
+  background: var(--color-bg-panel) !important;
+  border-color: var(--color-border) !important;
+}
+
+body.theme-dark #app .label-text,
+body.theme-type-dark #app .label-text,
+body.theme-night.theme-type-dark #app .label-text,
+body.theme-contrast-dark.theme-type-dark #app .label-text,
+body.theme-classic-dark.theme-type-dark #app .label-text,
+body.theme-dark #app .section-title,
+body.theme-type-dark #app .section-title,
+body.theme-night.theme-type-dark #app .section-title,
+body.theme-contrast-dark.theme-type-dark #app .section-title,
+body.theme-classic-dark.theme-type-dark #app .section-title,
+body.theme-dark #app .checkbox-field span,
+body.theme-type-dark #app .checkbox-field span,
+body.theme-night.theme-type-dark #app .checkbox-field span,
+body.theme-contrast-dark.theme-type-dark #app .checkbox-field span,
+body.theme-classic-dark.theme-type-dark #app .checkbox-field span,
+body.theme-dark #app .radio-field span,
+body.theme-type-dark #app .radio-field span,
+body.theme-night.theme-type-dark #app .radio-field span,
+body.theme-contrast-dark.theme-type-dark #app .radio-field span,
+body.theme-classic-dark.theme-type-dark #app .radio-field span,
+body.theme-dark #app .selection-status,
+body.theme-type-dark #app .selection-status,
+body.theme-night.theme-type-dark #app .selection-status,
+body.theme-contrast-dark.theme-type-dark #app .selection-status,
+body.theme-classic-dark.theme-type-dark #app .selection-status,
+body.theme-dark #app .input-wrap input[type="number"],
+body.theme-type-dark #app .input-wrap input[type="number"],
+body.theme-night.theme-type-dark #app .input-wrap input[type="number"],
+body.theme-contrast-dark.theme-type-dark #app .input-wrap input[type="number"],
+body.theme-classic-dark.theme-type-dark #app .input-wrap input[type="number"] {
+  color: var(--color-text) !important;
+}
+
+body.theme-dark #app .label-text,
+body.theme-type-dark #app .label-text,
+body.theme-night.theme-type-dark #app .label-text,
+body.theme-contrast-dark.theme-type-dark #app .label-text,
+body.theme-classic-dark.theme-type-dark #app .label-text,
+body.theme-dark #app .checkbox-field span,
+body.theme-type-dark #app .checkbox-field span,
+body.theme-night.theme-type-dark #app .checkbox-field span,
+body.theme-contrast-dark.theme-type-dark #app .checkbox-field span,
+body.theme-classic-dark.theme-type-dark #app .checkbox-field span,
+body.theme-dark #app .radio-field span,
+body.theme-type-dark #app .radio-field span,
+body.theme-night.theme-type-dark #app .radio-field span,
+body.theme-contrast-dark.theme-type-dark #app .radio-field span,
+body.theme-classic-dark.theme-type-dark #app .radio-field span {
+  color: var(--color-text) !important;
+}
+
+body.theme-dark #app .icon-btn .icon-svg,
+body.theme-type-dark #app .icon-btn .icon-svg,
+body.theme-night.theme-type-dark #app .icon-btn .icon-svg,
+body.theme-contrast-dark.theme-type-dark #app .icon-btn .icon-svg,
+body.theme-classic-dark.theme-type-dark #app .icon-btn .icon-svg {
+  filter: brightness(0) invert(1) !important;
+}
+
+body.theme-dark .selection-status,
 body.theme-type-dark .selection-status,
+body.theme-night.theme-type-dark .selection-status,
+body.theme-contrast-dark.theme-type-dark .selection-status,
+body.theme-classic-dark.theme-type-dark .selection-status,
+body.theme-dark .panel-section,
 body.theme-type-dark .panel-section,
+body.theme-night.theme-type-dark .panel-section,
+body.theme-contrast-dark.theme-type-dark .panel-section,
+body.theme-classic-dark.theme-type-dark .panel-section,
+body.theme-dark .input-wrap,
 body.theme-type-dark .input-wrap,
+body.theme-night.theme-type-dark .input-wrap,
+body.theme-contrast-dark.theme-type-dark .input-wrap,
+body.theme-classic-dark.theme-type-dark .input-wrap,
+body.theme-dark .unit,
 body.theme-type-dark .unit,
-body.theme-type-dark .icon-btn {
+body.theme-night.theme-type-dark .unit,
+body.theme-contrast-dark.theme-type-dark .unit,
+body.theme-classic-dark.theme-type-dark .unit,
+body.theme-dark .icon-btn,
+body.theme-type-dark .icon-btn,
+body.theme-night.theme-type-dark .icon-btn,
+body.theme-contrast-dark.theme-type-dark .icon-btn,
+body.theme-classic-dark.theme-type-dark .icon-btn,
+html.theme-dark .selection-status,
+html.theme-type-dark .selection-status,
+html.theme-night.theme-type-dark .selection-status,
+html.theme-contrast-dark.theme-type-dark .selection-status,
+html.theme-classic-dark.theme-type-dark .selection-status,
+html.theme-dark .panel-section,
+html.theme-type-dark .panel-section,
+html.theme-night.theme-type-dark .panel-section,
+html.theme-contrast-dark.theme-type-dark .panel-section,
+html.theme-classic-dark.theme-type-dark .panel-section,
+html.theme-dark .input-wrap,
+html.theme-type-dark .input-wrap,
+html.theme-night.theme-type-dark .input-wrap,
+html.theme-contrast-dark.theme-type-dark .input-wrap,
+html.theme-classic-dark.theme-type-dark .input-wrap,
+html.theme-dark .unit,
+html.theme-type-dark .unit,
+html.theme-night.theme-type-dark .unit,
+html.theme-contrast-dark.theme-type-dark .unit,
+html.theme-classic-dark.theme-type-dark .unit,
+html.theme-dark .icon-btn,
+html.theme-type-dark .icon-btn,
+html.theme-night.theme-type-dark .icon-btn,
+html.theme-contrast-dark.theme-type-dark .icon-btn,
+html.theme-classic-dark.theme-type-dark .icon-btn {
   border-color: var(--color-border);
   background: var(--color-bg-panel);
 }
 
+body.theme-dark .selection-status,
 body.theme-type-dark .selection-status,
+body.theme-night.theme-type-dark .selection-status,
+body.theme-contrast-dark.theme-type-dark .selection-status,
+body.theme-classic-dark.theme-type-dark .selection-status,
+body.theme-dark .panel-section,
 body.theme-type-dark .panel-section,
+body.theme-night.theme-type-dark .panel-section,
+body.theme-contrast-dark.theme-type-dark .panel-section,
+body.theme-classic-dark.theme-type-dark .panel-section,
+body.theme-dark .input-wrap,
 body.theme-type-dark .input-wrap,
+body.theme-night.theme-type-dark .input-wrap,
+body.theme-contrast-dark.theme-type-dark .input-wrap,
+body.theme-classic-dark.theme-type-dark .input-wrap,
+body.theme-dark .unit,
 body.theme-type-dark .unit,
+body.theme-night.theme-type-dark .unit,
+body.theme-contrast-dark.theme-type-dark .unit,
+body.theme-classic-dark.theme-type-dark .unit,
+body.theme-dark .icon-btn,
 body.theme-type-dark .icon-btn,
+body.theme-night.theme-type-dark .icon-btn,
+body.theme-contrast-dark.theme-type-dark .icon-btn,
+body.theme-classic-dark.theme-type-dark .icon-btn,
+body.theme-dark .checkbox-field,
 body.theme-type-dark .checkbox-field,
+body.theme-night.theme-type-dark .checkbox-field,
+body.theme-contrast-dark.theme-type-dark .checkbox-field,
+body.theme-classic-dark.theme-type-dark .checkbox-field,
+body.theme-dark .label-text,
 body.theme-type-dark .label-text,
-body.theme-type-dark .section-title {
+body.theme-night.theme-type-dark .label-text,
+body.theme-contrast-dark.theme-type-dark .label-text,
+body.theme-classic-dark.theme-type-dark .label-text,
+body.theme-dark .section-title,
+body.theme-type-dark .section-title,
+body.theme-night.theme-type-dark .section-title,
+body.theme-contrast-dark.theme-type-dark .section-title,
+body.theme-classic-dark.theme-type-dark .section-title,
+html.theme-dark .selection-status,
+html.theme-type-dark .selection-status,
+html.theme-night.theme-type-dark .selection-status,
+html.theme-contrast-dark.theme-type-dark .selection-status,
+html.theme-classic-dark.theme-type-dark .selection-status,
+html.theme-dark .panel-section,
+html.theme-type-dark .panel-section,
+html.theme-night.theme-type-dark .panel-section,
+html.theme-contrast-dark.theme-type-dark .panel-section,
+html.theme-classic-dark.theme-type-dark .panel-section,
+html.theme-dark .input-wrap,
+html.theme-type-dark .input-wrap,
+html.theme-night.theme-type-dark .input-wrap,
+html.theme-contrast-dark.theme-type-dark .input-wrap,
+html.theme-classic-dark.theme-type-dark .input-wrap,
+html.theme-dark .unit,
+html.theme-type-dark .unit,
+html.theme-night.theme-type-dark .unit,
+html.theme-contrast-dark.theme-type-dark .unit,
+html.theme-classic-dark.theme-type-dark .unit,
+html.theme-dark .icon-btn,
+html.theme-type-dark .icon-btn,
+html.theme-night.theme-type-dark .icon-btn,
+html.theme-contrast-dark.theme-type-dark .icon-btn,
+html.theme-classic-dark.theme-type-dark .icon-btn,
+html.theme-dark .checkbox-field,
+html.theme-type-dark .checkbox-field,
+html.theme-night.theme-type-dark .checkbox-field,
+html.theme-contrast-dark.theme-type-dark .checkbox-field,
+html.theme-classic-dark.theme-type-dark .checkbox-field,
+html.theme-dark .label-text,
+html.theme-type-dark .label-text,
+html.theme-night.theme-type-dark .label-text,
+html.theme-contrast-dark.theme-type-dark .label-text,
+html.theme-classic-dark.theme-type-dark .label-text,
+html.theme-dark .section-title,
+html.theme-type-dark .section-title,
+html.theme-night.theme-type-dark .section-title,
+html.theme-contrast-dark.theme-type-dark .section-title,
+html.theme-classic-dark.theme-type-dark .section-title {
   color: var(--color-text);
 }
 
-body.theme-type-dark .input-wrap {
+body.theme-dark .input-wrap,
+body.theme-type-dark .input-wrap,
+body.theme-night.theme-type-dark .input-wrap,
+body.theme-contrast-dark.theme-type-dark .input-wrap,
+body.theme-classic-dark.theme-type-dark .input-wrap,
+html.theme-dark .input-wrap,
+html.theme-type-dark .input-wrap,
+html.theme-night.theme-type-dark .input-wrap,
+html.theme-contrast-dark.theme-type-dark .input-wrap,
+html.theme-classic-dark.theme-type-dark .input-wrap {
   background: var(--color-bg-input);
 }
 
+body.theme-dark .input-wrap input[type="number"],
 body.theme-type-dark .input-wrap input[type="number"],
+body.theme-night.theme-type-dark .input-wrap input[type="number"],
+body.theme-contrast-dark.theme-type-dark .input-wrap input[type="number"],
+body.theme-classic-dark.theme-type-dark .input-wrap input[type="number"],
+body.theme-dark .input-wrap input[type="number"]:disabled,
 body.theme-type-dark .input-wrap input[type="number"]:disabled,
+body.theme-night.theme-type-dark .input-wrap input[type="number"]:disabled,
+body.theme-contrast-dark.theme-type-dark .input-wrap input[type="number"]:disabled,
+body.theme-classic-dark.theme-type-dark .input-wrap input[type="number"]:disabled,
+body.theme-dark .checkbox-field span,
 body.theme-type-dark .checkbox-field span,
-body.theme-type-dark .selection-status {
+body.theme-night.theme-type-dark .checkbox-field span,
+body.theme-contrast-dark.theme-type-dark .checkbox-field span,
+body.theme-classic-dark.theme-type-dark .checkbox-field span,
+body.theme-dark .selection-status,
+body.theme-type-dark .selection-status,
+body.theme-night.theme-type-dark .selection-status,
+body.theme-contrast-dark.theme-type-dark .selection-status,
+body.theme-classic-dark.theme-type-dark .selection-status,
+html.theme-dark .input-wrap input[type="number"],
+html.theme-type-dark .input-wrap input[type="number"],
+html.theme-night.theme-type-dark .input-wrap input[type="number"],
+html.theme-contrast-dark.theme-type-dark .input-wrap input[type="number"],
+html.theme-classic-dark.theme-type-dark .input-wrap input[type="number"],
+html.theme-dark .input-wrap input[type="number"]:disabled,
+html.theme-type-dark .input-wrap input[type="number"]:disabled,
+html.theme-night.theme-type-dark .input-wrap input[type="number"]:disabled,
+html.theme-contrast-dark.theme-type-dark .input-wrap input[type="number"]:disabled,
+html.theme-classic-dark.theme-type-dark .input-wrap input[type="number"]:disabled,
+html.theme-dark .checkbox-field span,
+html.theme-type-dark .checkbox-field span,
+html.theme-night.theme-type-dark .checkbox-field span,
+html.theme-contrast-dark.theme-type-dark .checkbox-field span,
+html.theme-classic-dark.theme-type-dark .checkbox-field span,
+html.theme-dark .selection-status,
+html.theme-type-dark .selection-status,
+html.theme-night.theme-type-dark .selection-status,
+html.theme-contrast-dark.theme-type-dark .selection-status,
+html.theme-classic-dark.theme-type-dark .selection-status {
   color: var(--color-text);
 }
 
-body.theme-type-dark .unit {
+body.theme-dark .unit,
+body.theme-type-dark .unit,
+body.theme-night.theme-type-dark .unit,
+body.theme-contrast-dark.theme-type-dark .unit,
+body.theme-classic-dark.theme-type-dark .unit,
+html.theme-dark .unit,
+html.theme-type-dark .unit,
+html.theme-night.theme-type-dark .unit,
+html.theme-contrast-dark.theme-type-dark .unit,
+html.theme-classic-dark.theme-type-dark .unit {
   background: var(--color-bg-unit);
   color: var(--color-text-secondary);
 }
 
-body.theme-type-dark .section-title {
+body.theme-dark .section-title,
+body.theme-type-dark .section-title,
+body.theme-night.theme-type-dark .section-title,
+body.theme-contrast-dark.theme-type-dark .section-title,
+body.theme-classic-dark.theme-type-dark .section-title,
+body.theme-dark .label-text,
+body.theme-type-dark .label-text,
+body.theme-night.theme-type-dark .label-text,
+body.theme-contrast-dark.theme-type-dark .label-text,
+body.theme-classic-dark.theme-type-dark .label-text,
+html.theme-dark .section-title,
+html.theme-type-dark .section-title,
+html.theme-night.theme-type-dark .section-title,
+html.theme-contrast-dark.theme-type-dark .section-title,
+html.theme-classic-dark.theme-type-dark .section-title,
+html.theme-dark .label-text,
+html.theme-type-dark .label-text,
+html.theme-night.theme-type-dark .label-text,
+html.theme-contrast-dark.theme-type-dark .label-text,
+html.theme-classic-dark.theme-type-dark .label-text {
   color: var(--color-text-secondary);
 }
 
-body.theme-type-dark .icon-btn:hover {
+body.theme-dark .icon-btn,
+body.theme-type-dark .icon-btn,
+body.theme-night.theme-type-dark .icon-btn,
+body.theme-contrast-dark.theme-type-dark .icon-btn,
+body.theme-classic-dark.theme-type-dark .icon-btn,
+html.theme-dark .icon-btn,
+html.theme-type-dark .icon-btn,
+html.theme-night.theme-type-dark .icon-btn,
+html.theme-contrast-dark.theme-type-dark .icon-btn,
+html.theme-classic-dark.theme-type-dark .icon-btn {
+  background: var(--color-bg-btn);
+}
+
+body.theme-dark .icon-btn:hover,
+body.theme-type-dark .icon-btn:hover,
+body.theme-night.theme-type-dark .icon-btn:hover,
+body.theme-contrast-dark.theme-type-dark .icon-btn:hover,
+body.theme-classic-dark.theme-type-dark .icon-btn:hover,
+html.theme-dark .icon-btn:hover,
+html.theme-type-dark .icon-btn:hover,
+html.theme-night.theme-type-dark .icon-btn:hover,
+html.theme-contrast-dark.theme-type-dark .icon-btn:hover,
+html.theme-classic-dark.theme-type-dark .icon-btn:hover {
   background: var(--color-bg-btn-hover);
   border-color: var(--color-accent);
 }
 
+body.theme-dark .icon-btn:active,
 body.theme-type-dark .icon-btn:active,
-body.theme-type-dark .icon-btn:focus-visible {
+body.theme-night.theme-type-dark .icon-btn:active,
+body.theme-contrast-dark.theme-type-dark .icon-btn:active,
+body.theme-classic-dark.theme-type-dark .icon-btn:active,
+body.theme-dark .icon-btn:focus-visible,
+body.theme-type-dark .icon-btn:focus-visible,
+body.theme-night.theme-type-dark .icon-btn:focus-visible,
+body.theme-contrast-dark.theme-type-dark .icon-btn:focus-visible,
+body.theme-classic-dark.theme-type-dark .icon-btn:focus-visible,
+html.theme-dark .icon-btn:active,
+html.theme-type-dark .icon-btn:active,
+html.theme-night.theme-type-dark .icon-btn:active,
+html.theme-contrast-dark.theme-type-dark .icon-btn:active,
+html.theme-classic-dark.theme-type-dark .icon-btn:active,
+html.theme-dark .icon-btn:focus-visible,
+html.theme-type-dark .icon-btn:focus-visible,
+html.theme-night.theme-type-dark .icon-btn:focus-visible,
+html.theme-contrast-dark.theme-type-dark .icon-btn:focus-visible,
+html.theme-classic-dark.theme-type-dark .icon-btn:focus-visible {
   background: var(--color-bg-btn-active);
 }
 
-body.theme-type-dark .icon-btn:disabled {
+body.theme-dark .icon-btn:disabled,
+body.theme-type-dark .icon-btn:disabled,
+body.theme-night.theme-type-dark .icon-btn:disabled,
+body.theme-contrast-dark.theme-type-dark .icon-btn:disabled,
+body.theme-classic-dark.theme-type-dark .icon-btn:disabled,
+html.theme-dark .icon-btn:disabled,
+html.theme-type-dark .icon-btn:disabled,
+html.theme-night.theme-type-dark .icon-btn:disabled,
+html.theme-contrast-dark.theme-type-dark .icon-btn:disabled,
+html.theme-classic-dark.theme-type-dark .icon-btn:disabled {
   opacity: 0.5;
 }
 
-body.theme-type-dark .icon-btn .icon-svg {
-  filter: none;
+body.theme-dark .icon-btn .icon-svg,
+body.theme-type-dark .icon-btn .icon-svg,
+body.theme-night.theme-type-dark .icon-btn .icon-svg,
+body.theme-contrast-dark.theme-type-dark .icon-btn .icon-svg,
+body.theme-classic-dark.theme-type-dark .icon-btn .icon-svg,
+html.theme-dark .icon-btn .icon-svg,
+html.theme-type-dark .icon-btn .icon-svg,
+html.theme-night.theme-type-dark .icon-btn .icon-svg,
+html.theme-contrast-dark.theme-type-dark .icon-btn .icon-svg,
+html.theme-classic-dark.theme-type-dark .icon-btn .icon-svg {
+  filter: brightness(0) invert(1);
 }
 
 /* ── App wrapper ─────────────────────────────────────────────────────────── */
@@ -247,9 +602,10 @@ body.theme-type-dark .icon-btn .icon-svg {
   user-select: none;
 }
 
-/* ── Checkbox ────────────────────────────────────────────────────────────── */
+/* ── Checkbox / radio ────────────────────────────────────────────────────── */
 
-.checkbox-field {
+.checkbox-field,
+.radio-field {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -258,16 +614,114 @@ body.theme-type-dark .icon-btn .icon-svg {
   color: var(--color-text-secondary, #888);
 }
 
-.checkbox-field input[type="checkbox"] {
+body.theme-dark .checkbox-field input[type="checkbox"],
+body.theme-type-dark .checkbox-field input[type="checkbox"],
+body.theme-night.theme-type-dark .checkbox-field input[type="checkbox"],
+body.theme-contrast-dark.theme-type-dark .checkbox-field input[type="checkbox"],
+body.theme-classic-dark.theme-type-dark .checkbox-field input[type="checkbox"],
+body.theme-dark .radio-field input[type="radio"],
+body.theme-type-dark .radio-field input[type="radio"],
+body.theme-night.theme-type-dark .radio-field input[type="radio"],
+body.theme-contrast-dark.theme-type-dark .radio-field input[type="radio"],
+body.theme-classic-dark.theme-type-dark .radio-field input[type="radio"] {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--color-text-muted, #8c8c8c);
+  background: var(--color-bg, #2d2d2d);
   cursor: pointer;
-  accent-color: var(--color-accent, #446ceb);
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-.checkbox-field input[type="checkbox"]:disabled {
+body.theme-dark .checkbox-field input[type="checkbox"],
+body.theme-type-dark .checkbox-field input[type="checkbox"],
+body.theme-night.theme-type-dark .checkbox-field input[type="checkbox"],
+body.theme-contrast-dark.theme-type-dark .checkbox-field input[type="checkbox"],
+body.theme-classic-dark.theme-type-dark .checkbox-field input[type="checkbox"] {
+  border-radius: 3px;
+}
+
+body.theme-dark .radio-field input[type="radio"],
+body.theme-type-dark .radio-field input[type="radio"],
+body.theme-night.theme-type-dark .radio-field input[type="radio"],
+body.theme-contrast-dark.theme-type-dark .radio-field input[type="radio"],
+body.theme-classic-dark.theme-type-dark .radio-field input[type="radio"] {
+  border-radius: 50%;
+}
+
+body.theme-dark .checkbox-field input[type="checkbox"]:checked,
+body.theme-type-dark .checkbox-field input[type="checkbox"]:checked,
+body.theme-night.theme-type-dark .checkbox-field input[type="checkbox"]:checked,
+body.theme-contrast-dark.theme-type-dark .checkbox-field input[type="checkbox"]:checked,
+body.theme-classic-dark.theme-type-dark .checkbox-field input[type="checkbox"]:checked,
+body.theme-dark .radio-field input[type="radio"]:checked,
+body.theme-type-dark .radio-field input[type="radio"]:checked,
+body.theme-night.theme-type-dark .radio-field input[type="radio"]:checked,
+body.theme-contrast-dark.theme-type-dark .radio-field input[type="radio"]:checked,
+body.theme-classic-dark.theme-type-dark .radio-field input[type="radio"]:checked {
+  background-color: var(--color-accent, #6e9fec);
+  border-color: var(--color-accent, #6e9fec);
+}
+
+body.theme-dark .checkbox-field input[type="checkbox"]:checked::after,
+body.theme-type-dark .checkbox-field input[type="checkbox"]:checked::after,
+body.theme-night.theme-type-dark .checkbox-field input[type="checkbox"]:checked::after,
+body.theme-contrast-dark.theme-type-dark .checkbox-field input[type="checkbox"]:checked::after,
+body.theme-classic-dark.theme-type-dark .checkbox-field input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+body.theme-dark .radio-field input[type="radio"]:checked::after,
+body.theme-type-dark .radio-field input[type="radio"]:checked::after,
+body.theme-night.theme-type-dark .radio-field input[type="radio"]:checked::after,
+body.theme-contrast-dark.theme-type-dark .radio-field input[type="radio"]:checked::after,
+body.theme-classic-dark.theme-type-dark .radio-field input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+body.theme-dark .checkbox-field input[type="checkbox"]:disabled,
+body.theme-type-dark .checkbox-field input[type="checkbox"]:disabled,
+body.theme-night.theme-type-dark .checkbox-field input[type="checkbox"]:disabled,
+body.theme-contrast-dark.theme-type-dark .checkbox-field input[type="checkbox"]:disabled,
+body.theme-classic-dark.theme-type-dark .checkbox-field input[type="checkbox"]:disabled,
+body.theme-dark .radio-field input[type="radio"]:disabled,
+body.theme-type-dark .radio-field input[type="radio"]:disabled,
+body.theme-night.theme-type-dark .radio-field input[type="radio"]:disabled,
+body.theme-contrast-dark.theme-type-dark .radio-field input[type="radio"]:disabled,
+body.theme-classic-dark.theme-type-dark .radio-field input[type="radio"]:disabled {
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
-.checkbox-field input[type="checkbox"]:disabled + span {
+body.theme-dark .checkbox-field input[type="checkbox"]:disabled + span,
+body.theme-type-dark .checkbox-field input[type="checkbox"]:disabled + span,
+body.theme-night.theme-type-dark .checkbox-field input[type="checkbox"]:disabled + span,
+body.theme-contrast-dark.theme-type-dark .checkbox-field input[type="checkbox"]:disabled + span,
+body.theme-classic-dark.theme-type-dark .checkbox-field input[type="checkbox"]:disabled + span,
+body.theme-dark .radio-field input[type="radio"]:disabled + span,
+body.theme-type-dark .radio-field input[type="radio"]:disabled + span,
+body.theme-night.theme-type-dark .radio-field input[type="radio"]:disabled + span,
+body.theme-contrast-dark.theme-type-dark .radio-field input[type="radio"]:disabled + span,
+body.theme-classic-dark.theme-type-dark .radio-field input[type="radio"]:disabled + span {
   color: var(--color-text-secondary, #888);
 }
 
