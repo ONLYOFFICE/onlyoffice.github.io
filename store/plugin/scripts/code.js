@@ -60,8 +60,7 @@
 	let removeGuid = '';
 	let editorVersion = '';
 	let marketplaceURl = '';
-	// address set through the developer window, it lives in this browser only
-	let developerMarketplaceUrl = '';
+	let pluginOptions = {};
 	// address set by the administrator in editorConfig.plugins.options
 	let adminMarketplaceUrl = '';
 	// true when the current address is not the one this installation expects (we warn the user about it)
@@ -69,29 +68,13 @@
 	// false when the administrator turned the developer mode off in editorConfig.plugins.options
 	let isDevModeAllowed = true;
 	const OOMarketplaceUrl = isLocal ? './store/index.html' : 'https://onlyoffice.github.io/store/index.html';
-	try {
-		// for incognito mode
-		developerMarketplaceUrl = localStorage.getItem('DeveloperMarketplaceUrl') || '';
-	} catch (err) {
-		developerMarketplaceUrl = '';
-	}
 
 	function applyDevModeButton() {
 		window.Asc.plugin.executeMethod('ShowButton', ['developer', isDevModeAllowed, 'right']);
 	}
 
-	function forgetDeveloperMarketplaceUrl() {
-		developerMarketplaceUrl = '';
-		try {
-			// for incognito mode
-			localStorage.removeItem('DeveloperMarketplaceUrl');
-		} catch (err) {
-		}
-	}
-
 	function applyMarketplaceUrl() {
-		const expectedUrl = adminMarketplaceUrl || OOMarketplaceUrl;
-		marketplaceURl = developerMarketplaceUrl || expectedUrl;
+		marketplaceURl = MarketplaceUrlManager.resolve(pluginOptions, OOMarketplaceUrl);
 
 		if (adminMarketplaceUrl && adminMarketplaceUrl === marketplaceURl) {
 			isDeveloperMarketplace = false;
@@ -101,14 +84,13 @@
 	}
 
 	window.Asc.plugin.init = function() {
-		const options = this.info.options || {};
-		isDevModeAllowed = options.developerMode !== false;
-		
-		adminMarketplaceUrl = typeof options.marketplaceUrl === 'string' ? options.marketplaceUrl : '';
+		pluginOptions = this.info.options || {};
+		isDevModeAllowed = MarketplaceUrlManager.isDevModeAllowed(pluginOptions);
+		adminMarketplaceUrl = MarketplaceUrlManager.getAdminUrl(pluginOptions);
 
 		// the ban applies to everyone: an address stored earlier must not outlive it
 		if (!isDevModeAllowed)
-			forgetDeveloperMarketplaceUrl();
+			MarketplaceUrlManager.setDeveloperUrl('');
 
 		applyMarketplaceUrl();
 		applyDevModeButton();
@@ -499,13 +481,7 @@
 						if (!notificationElement) {
 							return;
 						}
-						if (message.url.length) {
-							developerMarketplaceUrl = message.url;
-							localStorage.setItem('DeveloperMarketplaceUrl', developerMarketplaceUrl);
-						} else {
-							developerMarketplaceUrl = '';
-							localStorage.removeItem('DeveloperMarketplaceUrl');
-						}
+						MarketplaceUrlManager.setDeveloperUrl(message.url);
 						applyMarketplaceUrl();
 						if (isDeveloperMarketplace)
 							notificationElement.classList.remove('hidden');
