@@ -23,17 +23,17 @@ html, body {
 }
 
 body.theme-type-dark {
-  --color-text: #1d2127;
-  --color-text-secondary: #3a3d42;
-  --color-bg-base: #2c3136;
-  --color-bg-panel: #e5e5e5;
-  --color-bg-input: #f6f6f6;
-  --color-bg-unit: #eeeeee;
-  --color-border: #8b9198;
-  --color-accent: #4d8df7;
-  --color-bg-btn: #ebebeb;
-  --color-bg-btn-hover: #dfe5ef;
-  --color-bg-btn-active: #d1dae9;
+  --color-text: #ffffff;
+  --color-text-secondary: #d4d4d4;
+  --color-bg-base: #2f2f2f;
+  --color-bg-panel: #404040;
+  --color-bg-input: #333333;
+  --color-bg-unit: #2a2a2a;
+  --color-border: #686868;
+  --color-accent: #6e9fec;
+  --color-bg-btn: #3a3a3a;
+  --color-bg-btn-hover: #505050;
+  --color-bg-btn-active: #585858;
   color: var(--color-text);
   background: var(--color-bg-base);
 }
@@ -58,16 +58,6 @@ body.theme-type-dark .icon-btn {
   background: var(--color-bg-panel);
 }
 
-body.theme-type-dark .selection-status,
-body.theme-type-dark .panel-section,
-body.theme-type-dark .input-wrap,
-body.theme-type-dark .unit,
-body.theme-type-dark .icon-btn,
-body.theme-type-dark .checkbox-field,
-body.theme-type-dark .section-title {
-  color: var(--color-text);
-}
-
 body.theme-type-dark .input-wrap {
   background: var(--color-bg-input);
 }
@@ -75,7 +65,9 @@ body.theme-type-dark .input-wrap {
 body.theme-type-dark .input-wrap input[type="number"],
 body.theme-type-dark .input-wrap input[type="number"]:disabled,
 body.theme-type-dark .checkbox-field span,
-body.theme-type-dark .selection-status {
+body.theme-type-dark .selection-status,
+body.theme-type-dark .label-text,
+body.theme-type-dark .section-title {
   color: var(--color-text);
 }
 
@@ -84,8 +76,14 @@ body.theme-type-dark .unit {
   color: var(--color-text-secondary);
 }
 
-body.theme-type-dark .section-title {
+body.theme-type-dark .section-title,
+body.theme-type-dark .label-text,
+body.theme-type-dark .checkbox-field span {
   color: var(--color-text-secondary);
+}
+
+body.theme-type-dark .icon-btn {
+  background: var(--color-bg-btn);
 }
 
 body.theme-type-dark .icon-btn:hover {
@@ -103,7 +101,7 @@ body.theme-type-dark .icon-btn:disabled {
 }
 
 body.theme-type-dark .icon-btn .icon-svg {
-  filter: none;
+  filter: brightness(0) invert(1);
 }
 
 /* ── App wrapper ─────────────────────────────────────────────────────────── */
