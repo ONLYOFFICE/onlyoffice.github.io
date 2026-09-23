@@ -23,27 +23,19 @@ html, body {
 }
 
 body.theme-type-dark {
-  --color-text: #f3f5f7;
-  --color-text-secondary: #b8c4d0;
-  --color-bg-base: #1f2328;
-  --color-bg-panel: #2b3038;
-  --color-bg-input: #20262d;
-  --color-bg-unit: #1a1e24;
-  --color-border: #495662;
-  --color-accent: #7da9ff;
-  --color-bg-btn: #2e343b;
-  --color-bg-btn-hover: #3c4653;
-  --color-bg-btn-active: #455a74;
+  --color-text: #1d2127;
+  --color-text-secondary: #3a3d42;
+  --color-bg-base: #2c3136;
+  --color-bg-panel: #e5e5e5;
+  --color-bg-input: #f6f6f6;
+  --color-bg-unit: #eeeeee;
+  --color-border: #8b9198;
+  --color-accent: #4d8df7;
+  --color-bg-btn: #ebebeb;
+  --color-bg-btn-hover: #dfe5ef;
+  --color-bg-btn-active: #d1dae9;
   color: var(--color-text);
   background: var(--color-bg-base);
-}
-
-body.theme-type-dark .selection-status,
-body.theme-type-dark .panel-section,
-body.theme-type-dark .input-wrap,
-body.theme-type-dark .unit,
-body.theme-type-dark .icon-btn {
-  border-color: var(--color-border);
 }
 
 body.theme-type-dark .selection-status,
@@ -62,7 +54,18 @@ body.theme-type-dark .panel-section,
 body.theme-type-dark .input-wrap,
 body.theme-type-dark .unit,
 body.theme-type-dark .icon-btn {
+  border-color: var(--color-border);
   background: var(--color-bg-panel);
+}
+
+body.theme-type-dark .selection-status,
+body.theme-type-dark .panel-section,
+body.theme-type-dark .input-wrap,
+body.theme-type-dark .unit,
+body.theme-type-dark .icon-btn,
+body.theme-type-dark .checkbox-field,
+body.theme-type-dark .section-title {
+  color: var(--color-text);
 }
 
 body.theme-type-dark .input-wrap {
@@ -81,6 +84,10 @@ body.theme-type-dark .unit {
   color: var(--color-text-secondary);
 }
 
+body.theme-type-dark .section-title {
+  color: var(--color-text-secondary);
+}
+
 body.theme-type-dark .icon-btn:hover {
   background: var(--color-bg-btn-hover);
   border-color: var(--color-accent);
@@ -95,8 +102,8 @@ body.theme-type-dark .icon-btn:disabled {
   opacity: 0.5;
 }
 
-body.theme-type-dark .icon-svg {
-  filter: invert(1) brightness(1.45) contrast(1.2);
+body.theme-type-dark .icon-btn .icon-svg {
+  filter: none;
 }
 
 /* ── App wrapper ─────────────────────────────────────────────────────────── */
