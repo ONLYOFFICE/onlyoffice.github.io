@@ -15,7 +15,7 @@
 		"it": "IA",
 		"ar-SA": "AI"
 	},
-
+	"offered": "Ascensio System SIA",
 	"guid" : "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
 	"version": "3.2.3",
 	"minVersion" : "8.2.0",

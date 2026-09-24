@@ -278,21 +278,24 @@ const PluginCard = {
             PluginCardUI.imgIcon.removeAttribute("srcset");
         }
         PluginCardUI.spanName.textContent = data.pluginName;
+        PluginCardUI.spanName.title = data.pluginName;
         
         if (this.config.local || (this.available && this.available.obj && this.available.obj.local)) {
             PluginCardUI.defaultPluginIcon.classList.remove("hidden");
         } else {
             PluginCardUI.defaultPluginIcon.classList.add("hidden");
         }
-        if (this.config.offered) {
-            PluginCardUI.spanOffered.textContent = this.config.offered;
-            PluginCardUI.spanOnlyOfficeBadge.classList.add("hidden");
-        } else {
+        let offered = String(this.config.offered || "").trim();
+        let isOfficial = offered.toUpperCase() === "ASCENSIO SYSTEM SIA";
+        PluginCardUI.spanOffered.textContent = isOfficial ? "" : (offered || Utils.getTranslated("Unknown publisher"));
+        if (isOfficial) {
             PluginCardUI.spanOnlyOfficeBadge.classList.remove("hidden");
-            PluginCardUI.spanOffered.textContent = "Ascensio System SIA";
+        } else {
+            PluginCardUI.spanOnlyOfficeBadge.classList.add("hidden");
         }
         const version = this.installed && this.installed.version || this.config.version;
         if (version) {
+            PluginCardUI.version.classList.remove('hidden');
             PluginCardUI.version.textContent = "· v" + version;
             PluginCardUI.version.title = Utils.getTranslated("Version") + ": " + String(version);
         } else {

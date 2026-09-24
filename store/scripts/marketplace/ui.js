@@ -485,7 +485,13 @@ const UI = {
         const name = Utils.getTranslatedName(config);
         const description = Utils.getTranslatedDescription(variation);
         const bg = variation.store && variation.store.background ? variation.store.background[Utils.themeType] : defaultBG;
-        const offered = config.offered || 'ONLYOFFICE';
+        let offered = String(config.offered || '').trim();
+        const isOfficial = offered.toUpperCase() === 'ASCENSIO SYSTEM SIA';
+        if (isOfficial) {
+            offered = Utils.getTranslated('By ONLYOFFICE');
+        } else if (!offered) {
+            offered = Utils.getTranslated('Unknown publisher');
+        }
         const imgSrc = PluginIcons.getImageUrl(guid, isLocal);
 
         let intro = '<div class="introduction">' +
@@ -494,9 +500,9 @@ const UI = {
             '</div>' +
             '<div class="name">' +
                 '<div class="plugin-name">' + name + '</div>' +
-                '<div class="manufacturer">' +
+                '<div class="manufacturer' + (isOfficial ? ' official' : '') + '">' +
+                    (isOfficial ? '<span class="by-onlyoffice">✓</span>' : '') +
                     offered +
-                    (!config.offered ? '<span class="by-onlyoffice">✓</span>' : '') +
                 '</div>' +
             '</div>' +
             '</div>' +

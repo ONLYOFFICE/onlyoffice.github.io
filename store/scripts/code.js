@@ -142,8 +142,7 @@ const Marketplace = {
 		const self = this;
 		return DataFetcher.makeRequest(configUrl, 'GET', null, null)
 			.then(function(/** @type {string} */response) {
-				return JSON.parse(response);
-			}).then(function(plugins) {
+				const plugins = JSON.parse(response);
 				return self._loadPluginsData(plugins);
 			})
 	},
@@ -649,9 +648,8 @@ function _onMessageRemoved(message) {
 		// need to update the list of installed plugins so that resource links are correct
 		updateAvailablePlugins();
 	}
-	changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);
-
 	updateListOfPlugins();
+	changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);
 
 	UI.toggleLoader(false);
 }
@@ -754,6 +752,7 @@ function _showEmptyNotification(bDirectLoad) {
  * @returns {number}
  */
 function updateListOfPlugins(bDirectLoad) {
+	MarketplaceStorage.excludeAiPluginIfNeeded();
 	let arr = MarketplaceStorage.getFilteredPlugins(Utils.getTranslatedName.bind(Utils));
 	if (arr.length && Utils.isSamePlugins(founded, arr) && !bDirectLoad) {
 		UI.toggleLoader(false);

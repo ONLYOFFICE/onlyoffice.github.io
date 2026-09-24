@@ -65,3 +65,106 @@
 .tui-image-editor-container .tui-image-editor-range-wrap label {
 	color: #000;
 }
+
+/** checkbox — editor theme style **/
+.tui-image-editor-container .tui-image-editor-checkbox input + label::before,
+.tui-image-editor-container .tui-image-editor-checkbox > label > span::before {
+    background-color: #fff !important;
+    border: 1px solid #c0c0c0 !important;
+}
+.tui-image-editor-container .tui-image-editor-checkbox input[type='checkbox']:checked + span::before {
+    background-image: none !important;
+}
+.tui-image-editor-container .tui-image-editor-checkbox > label > span::after {
+    content: '';
+    position: absolute;
+    display: none;
+    width: 3px;
+    height: 7px;
+    left: -14px;
+    top: 8px;
+    box-sizing: content-box;
+    border: solid rgba(0, 0, 0, 0.8);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.tui-image-editor-container .tui-image-editor-checkbox input[type='checkbox']:checked + span::after {
+    display: block;
+}
+.tui-image-editor-container .filter-color-item .tui-image-editor-checkbox > label > span::after {
+    left: -13px;
+}
+
+/** disabled / inactive elements — better contrast **/
+.tui-image-editor-container .tui-image-editor-range-wrap.tui-image-editor-newline.short label {
+    color: #646464;
+}
+
+/** hover **/
+.tui-image-editor-container .tui-image-editor-checkbox label {
+    cursor: pointer;
+}
+.tui-image-editor-container .tui-image-editor-checkbox label:hover > span::before {
+    border-color: #a0a0a0 !important;
+}
+.tui-image-editor-container .tui-image-editor-range {
+    cursor: pointer;
+}
+.tui-image-editor-container .tui-image-editor-range:hover .tui-image-editor-virtual-range-pointer {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+}
+.tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-range {
+    cursor: default;
+}
+.tui-image-editor-container .tui-image-editor-disabled .tui-image-editor-range:hover .tui-image-editor-virtual-range-pointer {
+    box-shadow: none;
+}
+.tui-colorpicker-palette-button:hover {
+    outline: 2px solid #a0a0a0 !important;
+    outline-offset: -2px !important;
+    cursor: pointer;
+}
+select:hover {
+    outline: 1px solid #a0a0a0 !important;
+    outline-offset: -1px !important;
+}
+.tui-colorpicker-palette-hex:hover {
+    outline: 1px solid #a0a0a0 !important;
+    outline-offset: 2px !important;
+}
+.tui-image-editor-container .tui-image-editor-submenu .tui-image-editor-button:hover {
+    cursor: pointer;
+}
+label:hover input[type="file"] + svg {
+    color: #444;
+    cursor: pointer;
+}
+
+/** focus **/
+.tui-image-editor-item:focus-visible,
+.tui-image-editor-button:focus-visible {
+    box-shadow: inset 0 -0 0 1px #848484;
+    outline: none;
+}
+input:not(:checked):focus-visible + span::before {
+    border: 2px solid #848484 !important;
+    background-color: #fff !important;
+}
+input:checked:focus-visible + span::before {
+    border: 2px solid #848484 !important;
+}
+.tui-colorpicker-palette-button:focus-visible {
+    outline: 2px solid #848484 !important;
+    outline-offset: -2px !important;
+}
+select:focus-visible {
+    outline: 1px solid #848484 !important;
+    outline-offset: -1px !important;
+}
+.tui-colorpicker-palette-hex:focus-visible {
+    outline: 1px solid #848484 !important;
+    outline-offset: 2px !important;
+}
+input[type="file"]:focus-visible + svg {
+    filter: brightness(0.6) !important;
+}

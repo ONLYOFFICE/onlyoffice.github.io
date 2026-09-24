@@ -35,13 +35,13 @@ var whiteTheme = {
     'submenu.partition.color': '#e5e5e5',
 
     // submenu labels
-    'submenu.normalLabel.color': '#858585',
+    'submenu.normalLabel.color': '#646464',
     'submenu.normalLabel.fontWeight': 'normal',
     'submenu.activeLabel.color': '#000',
     'submenu.activeLabel.fontWeight': 'normal',
 
     // checkbox style
-    'checkbox.border': '1px solid #ccc',
+    'checkbox.border': '1px solid #c0c0c0',
     'checkbox.backgroundColor': '#fff',
 
     // rango style
@@ -49,9 +49,9 @@ var whiteTheme = {
     'range.bar.color': '#ccc',
     'range.subbar.color': '#606060',
 
-    'range.disabledPointer.color': '#d3d3d3',
-    'range.disabledBar.color': 'rgba(85,85,85,0.06)',
-    'range.disabledSubbar.color': 'rgba(51,51,51,0.2)',
+    'range.disabledPointer.color': '#828282',
+    'range.disabledBar.color': '#c4c4c4',
+    'range.disabledSubbar.color': '#a0a0a0',
 
     'range.value.color': '#000',
     'range.value.fontWeight': 'normal',
