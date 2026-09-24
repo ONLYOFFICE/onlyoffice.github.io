@@ -70,6 +70,8 @@ class CitationDocService {
      * @returns {Promise<string>}
      */
     async addBibliography(text, value) {
+        await this.#addParagraphIfNeeded();
+
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9004000) {
             const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
@@ -375,6 +377,43 @@ class CitationDocService {
     #addAddinField(field) {
         return new Promise(function (resolve) {
             window.Asc.plugin.executeMethod("AddAddinField", [field], resolve);
+        });
+    }
+
+    /**
+     * @returns {Promise<void>}
+     */
+    #addParagraphIfNeeded() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const oDocument = Api.GetDocument();
+                    const oParagraph = oDocument.GetCurrentParagraph();
+                    if (!oParagraph) {
+                        return;
+                    }
+                    if (oParagraph.GetText() === "") {
+                        return;
+                    }
+
+                    const oNewParagraph = oParagraph.InsertParagraph(
+                        "",
+                        "after",
+                        true,
+                    );
+                    if (!oNewParagraph) {
+                        return;
+                    }
+
+                    const oRange = oNewParagraph.GetRange();
+                    if (oRange) {
+                        oRange.MoveCursorToPos(0);
+                    }
+                },
+                false,
+                false,
+                resolve,
+            );
         });
     }
 
