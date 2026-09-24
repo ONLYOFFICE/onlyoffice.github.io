@@ -70,6 +70,7 @@ import "../edit-window.css";
             this.citationObject = null;
             /** @type {Array<{omitAuthorInput: Checkbox, prefixInput: InputField, suffixInput: InputField, locatorInput: InputField, locatorSelectbox: SelectBox}>} */
             this.forms = [];
+            this.bItemsRemoved = false;
         }
 
         /**
@@ -193,7 +194,15 @@ import "../edit-window.css";
             if (!this.citationObject) {
                 return;
             }
-            this.citationObject.citationItems = this.citationObject.citationItems.filter(item => item.id !== id);
+            const index = this.citationObject.citationItems.findIndex(
+                item => item.id === id
+            );
+            if (index === -1) {
+                return;
+            }
+            this.citationObject.citationItems.splice(index, 1);
+            this.forms.splice(index, 1);
+            this.bItemsRemoved = true;
             this._container.removeChild(form);
 
             this.updateRemoveButtonsVisibility();
@@ -304,7 +313,7 @@ import "../edit-window.css";
                     bHasChanges = true;
                 }
             }
-            return bHasChanges;
+            return bHasChanges || this.bItemsRemoved;
         }
     }
 
