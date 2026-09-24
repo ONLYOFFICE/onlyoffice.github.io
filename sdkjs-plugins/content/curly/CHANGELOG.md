@@ -8,7 +8,6 @@
 * New: the pane greets you once per release with a small "What's new?" strip — one tap reads the changelog, one tap waves it away, then it stays quiet until the next release.
 * New: signing in now survives bad moments. A network blip, a server hiccup or a slow connection at startup no longer signs you out — only a genuine "this device is no longer authorized" does. Sign in once, stay signed in.
 * New: fullwidth punctuation from Chinese and Japanese keyboards now works inside the grammar itself: ｛日期：date｝ gets the date picker, ｛部门：销售｜市场｝ becomes a dropdown, and a trailing ＊ marks a field mandatory — the fullwidth colon, pipe and star are read exactly like their ASCII twins. (Fullwidth ｛braces｝ were already detected.)
-* Changed: Euro-Office builds carrying the new "Nextcloud Office" name are recognized correctly.
 * Changed: the pin icons in the field rail sit properly centered.
 
 ## 1.5.0
