@@ -29,94 +29,8 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-//#region \0rollupPluginBabelHelpers.js
-function e(e, t) {
-	this.v = e, this.k = t;
-}
-function t(e, t, n) {
-	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-	throw TypeError("Private element is not present on this object");
-}
-function n(e, t, n, r, i, a, o) {
-	try {
-		var s = e[a](o), c = s.value;
-	} catch (e) {
-		n(e);
-		return;
-	}
-	s.done ? t(c) : Promise.resolve(c).then(r, i);
-}
-function r(e) {
-	return function() {
-		var t = this, r = arguments;
-		return new Promise(function(i, a) {
-			var o = e.apply(t, r);
-			function s(e) {
-				n(o, i, a, s, c, "next", e);
-			}
-			function c(e) {
-				n(o, i, a, s, c, "throw", e);
-			}
-			s(void 0);
-		});
-	};
-}
-function i(e, t) {
-	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
-}
-function a(e, t) {
-	i(e, t), t.add(e);
-}
-function o(t) {
-	var n, r;
-	function i(n, r) {
-		try {
-			var o = t[n](r), s = o.value, c = s instanceof e;
-			Promise.resolve(c ? s.v : s).then(function(e) {
-				if (c) {
-					var r = n === "return" && s.k ? n : "next";
-					if (!s.k || e.done) return i(r, e);
-					e = t[r](e).value;
-				}
-				a(!!o.done, e);
-			}, function(e) {
-				i("throw", e);
-			});
-		} catch (e) {
-			a(2, e);
-		}
-	}
-	function a(e, t) {
-		e === 2 ? n.reject(t) : n.resolve({
-			value: t,
-			done: e
-		}), (n = n.next) ? i(n.key, n.arg) : r = null;
-	}
-	this._invoke = function(e, t) {
-		return new Promise(function(a, o) {
-			var s = {
-				key: e,
-				arg: t,
-				resolve: a,
-				reject: o,
-				next: null
-			};
-			r ? r = r.next = s : (n = r = s, i(e, t));
-		});
-	}, typeof t.return != "function" && (this.return = void 0);
-}
-o.prototype[typeof Symbol == "function" && Symbol.asyncIterator || "@@asyncIterator"] = function() {
-	return this;
-}, o.prototype.next = function(e) {
-	return this._invoke("next", e);
-}, o.prototype.throw = function(e) {
-	return this._invoke("throw", e);
-}, o.prototype.return = function(e) {
-	return this._invoke("return", e);
-};
-//#endregion
 //#region src/app/shared/components/input.js
-function s(e, t) {
+function e(e, t) {
 	var n = this;
 	if (t ||= {}, typeof e == "string") {
 		var r = document.getElementById(e);
@@ -161,8 +75,8 @@ function s(e, t) {
 		};
 	}(this), 100);
 }
-s.prototype = {
-	constructor: s,
+e.prototype = {
+	constructor: e,
 	input: null,
 	_container: null,
 	_options: {},
@@ -367,7 +281,7 @@ s.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/message.js
-function c(e, t) {
+function t(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLElement && (e = n);
@@ -376,8 +290,8 @@ function c(e, t) {
 	else throw Error("Invalid container element");
 	this._options = Object.assign(this._options, t), this._isShow = !1;
 }
-c.prototype = {
-	constructor: c,
+t.prototype = {
+	constructor: t,
 	_options: {
 		type: "info",
 		text: "",
@@ -393,7 +307,7 @@ c.prototype = {
 	_create: function() {
 		var e = document.createElement("div");
 		e.className = "message message-" + this._options.type, e.setAttribute("role", "alert");
-		var t = this._options.title;
+		let t = this._options.title;
 		if (!t) switch (t = "Error", this._options.type) {
 			case "success":
 				t = "Success";
@@ -403,7 +317,7 @@ c.prototype = {
 				break;
 			case "info": t = "Information";
 		}
-		var n = this._options.text;
+		let n = this._options.text;
 		if (!n) switch (n = "", this._options.type) {
 			case "success":
 				n = "Operation completed successfully.";
@@ -421,7 +335,7 @@ c.prototype = {
 	},
 	addOutsideClickListener: function() {
 		this._outsideClickListener && document.removeEventListener("click", this._outsideClickListener);
-		var e = this;
+		let e = this;
 		this._outsideClickListener = function(t) {
 			t.target instanceof HTMLElement && e._element && !e._element.contains(t.target) && e.close();
 		}, setTimeout(function() {
@@ -440,7 +354,7 @@ c.prototype = {
 		}, 10), this._options.autoClose && Number(this._options.duration) > 0 && (this._timeoutId = setTimeout(this.close.bind(this), this._options.duration)), this._options.closeOnClickOutside && this.addOutsideClickListener(), this;
 	},
 	close: function() {
-		if (this._isShow = !1, !(!this._element || !this._element.parentNode)) {
+		if (this._isShow = !1, this._element && this._element.parentNode) {
 			this._timeoutId &&= (clearTimeout(this._timeoutId), null), this.removeOutsideClickListener();
 			var e = this._element;
 			e.style.opacity = "0", e.style.transform = "translateY(-20px)", setTimeout(function() {
@@ -451,8 +365,8 @@ c.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/button.js
-function l(e, t) {
-	var n = this;
+function n(e, t) {
+	let n = this;
 	if (typeof e == "string") {
 		var r = document.getElementById(e);
 		r instanceof HTMLButtonElement && (e = r);
@@ -480,8 +394,8 @@ function l(e, t) {
 		}
 	}, this._createDOM(), this._bindEvents(), this.updateState();
 }
-l.prototype = {
-	constructor: l,
+n.prototype = {
+	constructor: n,
 	_button: null,
 	_buttonText: null,
 	_spinner: null,
@@ -616,7 +530,7 @@ l.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/checkbox.js
-function u(e, t) {
+function r(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLInputElement && (e = n);
@@ -632,8 +546,8 @@ function u(e, t) {
 		value: "on"
 	}, t), this._options.disabled = t.disabled || !1, this._handlers = /* @__PURE__ */ new Map(), this._createDOM(e), this._setupEventListeners(), this._updateVisualState(), this._subscribers = [];
 }
-u.prototype = {
-	constructor: u,
+r.prototype = {
+	constructor: r,
 	_container: null,
 	_input: null,
 	_visualCheckbox: null,
@@ -641,49 +555,48 @@ u.prototype = {
 	_createDOM: function(e) {
 		var t = e.parentNode, n = document.createDocumentFragment();
 		this._container = document.createElement("div"), n.appendChild(this._container), this._container.classList.add("checkbox-container"), this._container.setAttribute("role", "checkbox"), this._container.setAttribute("aria-checked", this._options.checked ? "true" : "false"), this._container.setAttribute("aria-disabled", this._options.disabled ? "true" : "false"), this._container.tabIndex = this._options.disabled ? -1 : 0, this._input = e;
-		var r = this._input.getAttribute("id");
+		let r = this._input.getAttribute("id");
 		r === null ? this._options.id && this._input.setAttribute("id", this._options.id) : this._options.id = r, this._input.type = "checkbox", this._options.name && (this._input.name = this._options.name), this._options.value && (this._input.value = this._options.value), this._input.checked = !!this._options.checked, this._options.disabled && (this._input.disabled = !0), this._options.indeterminate && (this._input.indeterminate = !0), this._visualCheckbox = document.createElement("span"), this._visualCheckbox.className = "checkbox-visual", this._visualCheckbox.setAttribute("aria-hidden", "true");
-		var i = "http://www.w3.org/2000/svg", a = document.createElementNS(i, "svg");
+		let i = "http://www.w3.org/2000/svg", a = document.createElementNS(i, "svg");
 		a.setAttribute("viewBox", "0 0 10 8"), a.setAttribute("class", "checkbox-checkmark");
-		var o = document.createElementNS(i, "path");
+		let o = document.createElementNS(i, "path");
 		o.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), o.setAttribute("fill", "none"), o.setAttribute("stroke", "currentColor"), o.setAttribute("stroke-width", "2"), a.appendChild(o), this._visualCheckbox.appendChild(a);
-		var s = document.createElement("span");
+		let s = document.createElement("span");
 		if (s.className = "checkbox-indeterminate", this._visualCheckbox.appendChild(s), this._options.label) this._labelElement = document.createElement("label"), this._labelElement.className = "checkbox-label i18n", this._options.id && (this._labelElement.htmlFor = this._options.id), this._labelElement.textContent = this._options.label, this._options.title && this._labelElement.setAttribute("title", this._options.label);
 		else {
-			var c = document.querySelector("label[for='" + this._options.id + "']");
-			c instanceof HTMLLabelElement && (this._labelElement = c);
+			let e = document.querySelector("label[for='" + this._options.id + "']");
+			e instanceof HTMLLabelElement && (this._labelElement = e);
 		}
 		this._options.disabled && this._container.classList.add("checkbox--disabled"), t && t.insertBefore(n, e), this._container.appendChild(this._input), this._container.appendChild(this._visualCheckbox), this._labelElement && this._container.appendChild(this._labelElement);
 	},
 	_setupEventListeners: function() {
-		var e = this;
-		if (this._container) {
-			var t = function(t) {
-				t.preventDefault(), !e._options.disabled && e._container && (e.toggle(), e._container.focus());
-			}, n = function(t) {
-				if (!e._options.disabled) switch (t.key) {
-					case " ":
-					case "Spacebar":
-					case "Enter":
-						t.preventDefault(), e.toggle();
-						break;
-					case "ArrowRight":
-					case "ArrowDown":
-						t.preventDefault(), !e._options.checked && !e._options.indeterminate && (e._options.checked ? e.setIndeterminate() : e.check());
-						break;
-					case "ArrowLeft":
-					case "ArrowUp": t.preventDefault(), (e._options.checked || e._options.indeterminate) && (e._options.indeterminate ? e.uncheck() : e.setIndeterminate());
-				}
-			}, r = function() {
-				e._container && e._container.classList.add("checkbox--focused");
-			}, i = function() {
-				e._container && e._container.classList.remove("checkbox--focused");
-			};
-			this._handlers.set("click", t), this._handlers.set("keydown", n), this._handlers.set("focus", r), this._handlers.set("blur", i), this._container.addEventListener("click", t), this._container.addEventListener("keydown", n), this._container.addEventListener("focus", r), this._container.addEventListener("blur", i);
-		}
+		let e = this;
+		if (!this._container) return;
+		let t = function(t) {
+			t.preventDefault(), !e._options.disabled && e._container && (e.toggle(), e._container.focus());
+		}, n = function(t) {
+			if (!e._options.disabled) switch (t.key) {
+				case " ":
+				case "Spacebar":
+				case "Enter":
+					t.preventDefault(), e.toggle();
+					break;
+				case "ArrowRight":
+				case "ArrowDown":
+					t.preventDefault(), !e._options.checked && !e._options.indeterminate && (e._options.checked ? e.setIndeterminate() : e.check());
+					break;
+				case "ArrowLeft":
+				case "ArrowUp": t.preventDefault(), (e._options.checked || e._options.indeterminate) && (e._options.indeterminate ? e.uncheck() : e.setIndeterminate());
+			}
+		}, r = function() {
+			e._container && e._container.classList.add("checkbox--focused");
+		}, i = function() {
+			e._container && e._container.classList.remove("checkbox--focused");
+		};
+		this._handlers.set("click", t), this._handlers.set("keydown", n), this._handlers.set("focus", r), this._handlers.set("blur", i), this._container.addEventListener("click", t), this._container.addEventListener("keydown", n), this._container.addEventListener("focus", r), this._container.addEventListener("blur", i);
 	},
 	_updateVisualState: function() {
-		!this._container || !this._input || (this._container.setAttribute("aria-checked", this._options.indeterminate ? "mixed" : String(this._options.checked)), this._container.classList.toggle("checkbox--checked", this._options.checked), this._container.classList.toggle("checkbox--indeterminate", this._options.indeterminate), this._input.checked = !!this._options.checked, this._input.indeterminate = !!this._options.indeterminate);
+		this._container && this._input && (this._container.setAttribute("aria-checked", this._options.indeterminate ? "mixed" : String(this._options.checked)), this._container.classList.toggle("checkbox--checked", this._options.checked), this._container.classList.toggle("checkbox--indeterminate", this._options.indeterminate), this._input.checked = !!this._options.checked, this._input.indeterminate = !!this._options.indeterminate);
 	},
 	toggle: function() {
 		return this._options.disabled ? !!this._options.checked : (this._options.indeterminate ? (this._options.indeterminate = !1, this._options.checked = !0) : this._options.checked = !this._options.checked, this._updateVisualState(), this._triggerChange(), this._options.checked);
@@ -698,10 +611,10 @@ u.prototype = {
 		this._options.disabled || this._options.indeterminate || (this._options.indeterminate = !0, this._updateVisualState(), this._triggerChange());
 	},
 	enable: function() {
-		!this._options.disabled || !this._container || !this._input || (this._options.disabled = !1, this._input.disabled = !1, this._container.setAttribute("aria-disabled", "false"), this._container.tabIndex = 0, this._container.classList.remove("checkbox--disabled"));
+		this._options.disabled && this._container && this._input && (this._options.disabled = !1, this._input.disabled = !1, this._container.setAttribute("aria-disabled", "false"), this._container.tabIndex = 0, this._container.classList.remove("checkbox--disabled"));
 	},
 	disable: function() {
-		this._options.disabled || !this._container || !this._input || (this._options.disabled = !0, this._input.disabled = !0, this._container.setAttribute("aria-disabled", "true"), this._container.tabIndex = -1, this._container.classList.add("checkbox--disabled"));
+		!this._options.disabled && this._container && this._input && (this._options.disabled = !0, this._input.disabled = !0, this._container.setAttribute("aria-disabled", "true"), this._container.tabIndex = -1, this._container.classList.add("checkbox--disabled"));
 	},
 	setLabel: function(e) {
 		this._options.label = e, this._labelElement ? this._labelElement.textContent = e : e && this._container && (this._labelElement = document.createElement("label"), this._labelElement.className = "checkbox-label", this._options.id && (this._labelElement.htmlFor = this._options.id), this._labelElement.textContent = e, this._container.appendChild(this._labelElement)), this._options.title && this._labelElement && this._labelElement.setAttribute("title", e);
@@ -726,7 +639,7 @@ u.prototype = {
 		} };
 	},
 	_triggerChange: function(e) {
-		var t = {
+		let t = {
 			type: "checkbox:change",
 			detail: this.getState()
 		};
@@ -742,15 +655,16 @@ u.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/selectbox.js
-var d = /*#__PURE__*/ new WeakSet(), f = class {
-	constructor(e, n) {
-		if (a(this, d), typeof e == "string") {
-			var r = document.getElementById(e);
-			if (r instanceof HTMLSelectElement) e = r;
-			else if (r instanceof HTMLElement) this._container = r;
+var i = class e {
+	static #e = /* @__PURE__ */ new Set();
+	constructor(t, n) {
+		if (typeof t == "string") {
+			let e = document.getElementById(t);
+			if (e instanceof HTMLSelectElement) t = e;
+			else if (e instanceof HTMLElement) this._container = e;
 			else throw Error("Invalid selectbox");
-		} else e instanceof HTMLElement && (this._container = e);
-		if (e instanceof HTMLSelectElement) this._selectbox = e, this._container = document.createElement("div");
+		} else t instanceof HTMLElement && (this._container = t);
+		if (t instanceof HTMLSelectElement) this._selectbox = t, this._container = document.createElement("div");
 		else if (!(this._container instanceof HTMLElement)) throw Error("Invalid container");
 		this._options = Object.assign(n, {
 			placeholder: n.placeholder || "Select...",
@@ -762,34 +676,276 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 			description: n.description || ""
 		}), this._selectedValues = /* @__PURE__ */ new Set(), this.isOpen = !1, this._items = [], this._customItems = [], this._subscribers = [], this._boundHandles = {
 			toggle: (e) => {
-				t(d, this, h).call(this, e);
+				this.#r(e);
 			},
 			search: (e) => {
-				t(d, this, _).call(this, e);
+				this.#a(e);
 			},
 			close: (e) => {
-				e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option") && t(d, this, g).call(this);
+				e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option") && this.#i();
 			},
 			keydown: (e) => {
-				t(d, this, y).call(this, e);
+				this.#s(e);
 			},
 			dropdownClick: (e) => {
-				t(d, this, x).call(this, e);
+				this.#l(e);
 			},
 			scrollCheck: () => {
-				if (this._headerRectOnOpen) {
-					var e = this._header.getBoundingClientRect();
-					Math.abs(e.top - this._headerRectOnOpen.top) > 1 && t(d, this, g).call(this);
-				}
+				if (!this._headerRectOnOpen) return;
+				let e = this._header.getBoundingClientRect();
+				Math.abs(e.top - this._headerRectOnOpen.top) > 1 && this.#i();
 			}
-		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), t(d, this, p).call(this), t(d, this, m).call(this), t(d, this, b).call(this), D._.add(this);
+		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), this.#t(), this.#n(), this.#c(), e.#e.add(this);
+	}
+	#t() {
+		this._container.innerHTML = "", this._container.className += " selectbox-container";
+		var e = document.createDocumentFragment();
+		if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), e.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text i18n", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._options.usePortal && (this._dropdown.className += " selectbox-fixed"), this._select.appendChild(this._dropdown), this._options.description) {
+			var t = document.createElement("div");
+			t.className += " i18n selectbox-description", t.textContent = this._options.description, this._dropdown.appendChild(t);
+		}
+		if (this._options.searchable) {
+			var n = document.createElement("div");
+			n.className += " selectbox-search", this._dropdown.appendChild(n), this.searchInput = document.createElement("input"), this.searchInput.className += " selectbox-search-input", this.searchInput.type = "text", this.searchInput.placeholder = "Search...", n.appendChild(this.searchInput);
+		}
+		if (this._optionsContainer = document.createElement("div"), this._optionsContainer.className += " selectbox-options", this._dropdown.appendChild(this._optionsContainer), this._container.appendChild(e), this._selectbox) {
+			let e = this._selectbox.parentNode;
+			if (e) {
+				e.insertBefore(this._container, this._selectbox);
+				let t = this.#m(this._selectbox);
+				this.addItems(t.values, t.selectedValue), this._selectbox.remove();
+			}
+		}
+	}
+	#n() {
+		this._header.addEventListener("click", this._boundHandles.toggle), this.searchInput && this.searchInput.addEventListener("input", this._boundHandles.search), this._dropdown.addEventListener("click", this._boundHandles.dropdownClick), this._dropdown.addEventListener("wheel", function(e) {
+			e.stopPropagation();
+		}), this._header.addEventListener("keydown", this._boundHandles.keydown), this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
+	}
+	#r(t) {
+		if (t && t.stopPropagation(), this.isOpen ? this.#i() : this.openDropdown(), t && t.type === "click") for (let t of e.#e) t.isOpen && t !== this && t.#i();
 	}
 	openDropdown() {
 		this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = !0, this._dropdown.style.display = "block", this._headerRectOnOpen = this._header.getBoundingClientRect(), document.addEventListener("scroll", this._boundHandles.scrollCheck, !0), this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout(function(e) {
 			return function() {
 				e.searchInput && e.searchInput.focus();
 			};
-		}(this), 100), t(d, this, b).call(this), t(d, this, C).call(this);
+		}(this), 100), this.#c(), this.#d();
+	}
+	#i() {
+		this.isOpen && document && this._boundHandles && (document.removeEventListener("click", this._boundHandles.close), document.removeEventListener("scroll", this._boundHandles.scrollCheck, !0)), this.isOpen = !1, this._dropdown.style.display = "none", this._options.usePortal ? (this._dropdown.style.left = "", this._dropdown.style.width = "", this._dropdown.style.top = "") : this._dropdown.classList.remove("selectbox-dropdown-top");
+		for (var e = this._arrow.className.split(" "), t = [], n = 0; n < e.length; n++) e[n] !== "selectbox-arrow-open" && t.push(e[n]);
+		this._arrow.className = t.join(" ");
+		for (var r = this._header.className.split(" "), i = [], n = 0; n < r.length; n++) r[n] !== "selectbox-header-open" && i.push(r[n]);
+		this._header.className = i.join(" "), this.searchInput && (this.searchInput.value = "");
+	}
+	#a(e) {
+		var t = e.target;
+		if (t instanceof HTMLInputElement) {
+			var n = t.value.toLowerCase();
+			this.#c(n);
+		}
+	}
+	#o(e) {
+		let t = this.searchInput ? this.searchInput.value.toLowerCase() : "", n, r = this._items.filter(function(e) {
+			return e !== null;
+		});
+		if (t && (r = r.filter(function(e) {
+			return e.text.toLowerCase().indexOf(t) !== -1;
+		})), r.length !== 0) {
+			if (e === "up") {
+				if (this._selectedValues.size === 0 && r.length > 0) n = r[r.length - 1], this._selectedValues.add(n.value);
+				else {
+					for (var i = Array.from(this._selectedValues), a = -1, o = 0; o < r.length; o++) if (r[o].value === i[0]) {
+						a = o;
+						break;
+					}
+					var s = (a - 1 + r.length) % r.length;
+					this._selectedValues.clear(), n = r[s], this._selectedValues.add(n.value);
+				}
+			} else if (this._selectedValues.size === 0 && r.length > 0) n = r[0], this._selectedValues.add(n.value);
+			else {
+				for (var i = Array.from(this._selectedValues), a = -1, o = 0; o < r.length; o++) if (r[o].value === i[0]) {
+					a = o;
+					break;
+				}
+				var c = (a + 1) % r.length;
+				c === r.length && (c = 0), this._selectedValues.clear(), n = r[c], this._selectedValues.add(n.value);
+			}
+			this.#u(), this.#c(t, !0), this.#f(n.value, !0);
+		}
+	}
+	#s(e) {
+		switch (e.key || e.keyCode) {
+			case "Enter":
+			case 13:
+				e.preventDefault(), this.#r(e);
+				break;
+			case "Escape":
+			case 27:
+				this.#i();
+				break;
+			case "ArrowDown":
+			case 40:
+				e.preventDefault(), this.#o("down");
+				break;
+			case "ArrowUp":
+			case 38:
+				e.preventDefault(), this.#o("up");
+				break;
+			case "Tab":
+			case 9: this.#i();
+		}
+	}
+	#c(e, t) {
+		if (e ||= "", this._optionsContainer) {
+			this._optionsContainer.innerHTML = "";
+			var n = null, r = this._items;
+			e && (r = r.filter(function(t) {
+				return t !== null && t.text.toLowerCase().indexOf(e) !== -1;
+			}));
+			for (var i = document.createDocumentFragment(), a = 0; a < r.length; a++) {
+				let e = r[a];
+				if (!e) {
+					let e = document.createElement("hr");
+					e.className += " selectbox-option-divider", i.appendChild(e);
+					continue;
+				}
+				let t = document.createElement("div");
+				t.className += " selectbox-option", this._selectedValues.has(e.value) && (t.className += " selectbox-option-selected checkbox--checked", n = t), t.setAttribute("data-value", e.value);
+				let o = document.createElement("label");
+				if (o.className += " selectbox-option-text i18n", this._options.translate && (e.text = this._options.translate(e.text)), o.textContent = e.text, this._options.multiple) {
+					t.className += " selectbox-option-checkbox";
+					let n = document.createElement("input");
+					n.type = "checkbox", n.id = "checkbox-" + e.value, n.className += " selectbox-checkbox", n.checked = this._selectedValues.has(e.value), t.appendChild(n);
+					let r = document.createElement("span");
+					r.className = "checkbox-visual", r.setAttribute("aria-hidden", "true");
+					let i = "http://www.w3.org/2000/svg", a = document.createElementNS(i, "svg");
+					a.setAttribute("viewBox", "0 0 10 8"), a.setAttribute("class", "checkbox-checkmark");
+					let o = document.createElementNS(i, "path");
+					o.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), o.setAttribute("fill", "none"), o.setAttribute("stroke", "currentColor"), o.setAttribute("stroke-width", "2"), a.appendChild(o), r.appendChild(a), t.appendChild(r);
+				}
+				t.appendChild(o), i.appendChild(t);
+			}
+			if (this._customItems.length) {
+				let e = document.createElement("hr");
+				e.className += " selectbox-option-divider", i.appendChild(e);
+			}
+			for (var a = 0; a < this._customItems.length; a++) {
+				let e = this._customItems[a], t = document.createElement("label");
+				t.className += " selectbox-custom-option", t.setAttribute("data-value", e.value), t.setAttribute("for", e.value);
+				var o = document.createElement("span");
+				o.className += " selectbox-option-text i18n", this._options.translate && (e.text = this._options.translate(e.text)), o.textContent = e.text, t.appendChild(o), i.appendChild(t);
+			}
+			if (this._optionsContainer.appendChild(i), t && this.isOpen && this._optionsContainer && n) try {
+				n.scrollIntoView && n.scrollIntoView({ block: "nearest" });
+			} catch (e) {
+				console.error(e);
+			}
+		}
+	}
+	#l(e) {
+		var t = e.target || e.srcElement, n = null;
+		if (t && t instanceof HTMLElement) {
+			for (var r = null, i = t.className.split(" "), a = !1, o = 0; o < i.length; o++) if (i[o] === "selectbox-option") {
+				a = !0;
+				break;
+			} else if (i[o] === "selectbox-custom-option") {
+				let n = t.getAttribute("data-value");
+				if (n) {
+					e.stopPropagation(), this.#p(n), this.#i();
+					return;
+				}
+				break;
+			}
+			if (a) r = t;
+			else if (t.parentNode && t.parentNode instanceof HTMLElement) {
+				for (var s = t.parentNode.className.split(" "), c = !1, o = 0; o < s.length; o++) if (s[o] === "selectbox-option") {
+					c = !0;
+					break;
+				} else if (s[o] === "selectbox-custom-option") {
+					let n = t.parentNode.getAttribute("data-value");
+					if (n) {
+						e.stopPropagation(), this.#p(n), this.#i();
+						return;
+					}
+					break;
+				}
+				c && (r = t.parentNode);
+			}
+			if (r instanceof HTMLDivElement) n = r;
+			else return;
+		} else return;
+		var l = n.getAttribute("data-value");
+		if (l === null) return;
+		let u = !0;
+		this._options.multiple ? this._selectedValues.has(l) ? (this.unselectItems(l, !0), u = !1) : this.selectItems(l, !0) : (this.selectItems(l, !0), this.#i()), this.#u(), this.#f(l, u);
+	}
+	#u() {
+		if (this._selectedValues.size === 0) {
+			this._selectedText.textContent = this._options.placeholder;
+			return;
+		}
+		if (this._options.multiple) {
+			for (var e = [], t = 0; t < this._items.length; t++) {
+				var n = this._items[t];
+				n && this._selectedValues.has(n.value) && e.push(n);
+			}
+			e.length === 0 ? this._selectedText.textContent = this._options.placeholder : e.length === 1 ? this._selectedText.textContent = e[0].text : this._selectedText.textContent = e.length + " items selected";
+		} else {
+			for (var r = null, t = 0; t < this._items.length; t++) {
+				var n = this._items[t];
+				if (n && this._selectedValues.has(n.value)) {
+					r = n;
+					break;
+				}
+			}
+			this._selectedText.textContent = r ? r.text : this._options.placeholder;
+		}
+	}
+	#d() {
+		let e = window.innerHeight;
+		if (this._options.usePortal) {
+			let t = this._header.getBoundingClientRect(), n = this._dropdown.offsetHeight;
+			this._dropdown.style.left = t.left + "px", this._dropdown.style.width = t.width - 2 + "px";
+			let r = e - t.bottom;
+			r < n && t.top > r ? this._dropdown.style.top = t.top - n - 2 + "px" : this._dropdown.style.top = t.bottom + 2 + "px";
+		} else this._dropdown.getBoundingClientRect().bottom > e && this._dropdown.classList.add("selectbox-dropdown-top");
+	}
+	#f(e, t) {
+		for (var n = Array.from(this._selectedValues), r = [], i = 0; i < this._items.length; i++) {
+			var a = this._items[i];
+			a && this._selectedValues.has(a.value) && r.push(a);
+		}
+		var o = {
+			values: n,
+			items: r,
+			current: e,
+			enabled: t
+		};
+		this._subscribers.forEach(function(e) {
+			e({
+				type: "selectbox:change",
+				detail: o
+			});
+		});
+	}
+	#p(e) {
+		var t = {
+			values: [],
+			current: e,
+			enabled: !1
+		};
+		this._subscribers.forEach(function(e) {
+			e({
+				type: "selectbox:custom",
+				detail: t
+			});
+		});
+	}
+	#m(e) {
+		let t = { values: Array.from(e.options).map((e) => [e.value, e.text]) }, n = e.value;
+		return n && (t.selectedValue = n), t;
 	}
 	subscribe(e) {
 		var t = this;
@@ -799,29 +955,28 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 			});
 		} };
 	}
-	addItem(e, n, r) {
-		if (r ||= !1, this._items.some((t) => t && t.value === e)) {
-			var i = this._items.find((t) => t && t.value === e);
-			i && (i.selected = r);
+	addItem(e, t, n) {
+		if (n ||= !1, this._items.some((t) => t && t.value === e)) {
+			let t = this._items.find((t) => t && t.value === e);
+			t && (t.selected = n);
 		} else this._items.push({
 			value: e,
-			text: n,
-			selected: r
+			text: t,
+			selected: n
 		}), this._options.sortable && this._items.sort((e, t) => e && t ? e.text.localeCompare(t.text) : e ? -1 : +!!t);
-		r && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(e)), t(d, this, S).call(this);
+		n && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(e)), this.#u();
 	}
-	addItems(e, n) {
-		var r = this;
-		e.forEach(function(e, t) {
-			if (!r._items.some((t) => t && t.value === e[0])) {
-				var i = n ? e[0] === n : t === 0;
-				i && (r._options.multiple || r._selectedValues.clear(), r._selectedValues.add(e[0])), r._items.push({
-					value: e[0],
-					text: e[1],
-					selected: i
-				});
-			}
-		}, this), this.isOpen && t(d, this, b).call(this), t(d, this, S).call(this);
+	addItems(e, t) {
+		let n = this;
+		e.forEach(function(e, r) {
+			if (n._items.some((t) => t && t.value === e[0])) return;
+			let i = t ? e[0] === t : r === 0;
+			i && (n._options.multiple || n._selectedValues.clear(), n._selectedValues.add(e[0])), n._items.push({
+				value: e[0],
+				text: e[1],
+				selected: i
+			});
+		}, this), this.isOpen && this.#c(), this.#u();
 	}
 	addCustomItem(e, t) {
 		this._customItems.push({
@@ -838,7 +993,7 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 			return t === null || t.value !== e;
 		}), this._customItems = this._customItems.filter(function(t) {
 			return t === null || t.value !== e;
-		}), this._selectedValues.delete(e), t(d, this, S).call(this);
+		}), this._selectedValues.delete(e), this.#u();
 	}
 	getSelectedValue() {
 		if (this._options.multiple) return console.error("Method getSelectedValue is only available for single-select boxes."), null;
@@ -850,55 +1005,55 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 		var e = Array.from(this._selectedValues);
 		return e.length > 0 ? e[0] : null;
 	}
-	selectItems(e, n) {
-		var r = this;
+	selectItems(e, t) {
+		let n = this;
 		if (!this._options.multiple && Array.isArray(e)) {
 			console.error("Method selectItem is only available for multi-select boxes.");
 			return;
 		}
-		var i = "";
+		let r = "";
 		if (this._options.multiple) {
-			var a = function(e) {
-				if (r._optionsContainer) {
-					var t = r._optionsContainer.querySelector("[data-value=\"" + e + "\"]");
+			let t = function(e) {
+				if (n._optionsContainer) {
+					let t = n._optionsContainer.querySelector("[data-value=\"" + e + "\"]");
 					if (t) {
-						var n = t.querySelector("input[type=\"checkbox\"]");
-						n && n instanceof HTMLInputElement && (n.checked = !0), t.classList.add("selectbox-option-selected"), t.classList.add("checkbox--checked");
+						let e = t.querySelector("input[type=\"checkbox\"]");
+						e && e instanceof HTMLInputElement && (e.checked = !0), t.classList.add("selectbox-option-selected"), t.classList.add("checkbox--checked");
 					}
 				}
 			};
-			if (Array.isArray(e)) for (var o = 0; o < e.length; o++) i = e[o], this._selectedValues.has(i) || (this._selectedValues.add(i), a(i));
-			else i = e, this._selectedValues.has(i) || (this._selectedValues.add(i), a(i));
+			if (Array.isArray(e)) for (var i = 0; i < e.length; i++) r = e[i], this._selectedValues.has(r) || (this._selectedValues.add(r), t(r));
+			else r = e, this._selectedValues.has(r) || (this._selectedValues.add(r), t(r));
 		} else if (!Array.isArray(e)) {
-			if (i = e, this._selectedValues.clear(), this._selectedValues.add(i), this._optionsContainer) {
-				this._optionsContainer.querySelectorAll(".selectbox-option-selected[data-value=\"" + i + "\"]").forEach(function(e) {
+			if (r = e, this._selectedValues.clear(), this._selectedValues.add(r), this._optionsContainer) {
+				this._optionsContainer.querySelectorAll(".selectbox-option-selected[data-value=\"" + r + "\"]").forEach(function(e) {
 					e.classList.remove("selectbox-option-selected"), e.classList.remove("checkbox--checked");
 				});
-				var s = this._optionsContainer.querySelector("[data-value=\"" + i + "\"]");
-				s && (s.classList.add("selectbox-option-selected"), s.classList.add("checkbox--checked"));
+				let e = this._optionsContainer.querySelector("[data-value=\"" + r + "\"]");
+				e && (e.classList.add("selectbox-option-selected"), e.classList.add("checkbox--checked"));
 			}
-			t(d, this, g).call(this);
+			this.#i();
 		}
-		t(d, this, S).call(this), !n && t(d, this, w).call(this, i, !0);
+		this.#u(), !t && this.#f(r, !0);
 	}
-	unselectItems(e, n) {
-		var r = this;
+	unselectItems(e, t) {
+		let n = this;
 		if (!this._options.multiple) {
 			console.error("Method unselectItem is only available for multi-select boxes.");
 			return;
 		}
-		var i = "", a = function(e) {
-			if (r._optionsContainer) {
-				var t = r._optionsContainer.querySelector("[data-value=\"" + e + "\"]");
+		let r = "", i = function(e) {
+			if (n._optionsContainer) {
+				let t = n._optionsContainer.querySelector("[data-value=\"" + e + "\"]");
 				if (t) {
-					var n = t.querySelector("input[type=\"checkbox\"]");
-					n && n instanceof HTMLInputElement && (n.checked = !1), t.classList.remove("selectbox-option-selected"), t.classList.remove("checkbox--checked");
+					let e = t.querySelector("input[type=\"checkbox\"]");
+					e && e instanceof HTMLInputElement && (e.checked = !1), t.classList.remove("selectbox-option-selected"), t.classList.remove("checkbox--checked");
 				}
 			}
 		};
-		if (Array.isArray(e)) for (var o = 0; o < e.length; o++) i = e[o], this._selectedValues.has(i) && (this._selectedValues.delete(i), a(i));
-		else i = e, this._selectedValues.has(i) && (this._selectedValues.delete(i), a(i));
-		t(d, this, S).call(this), !n && t(d, this, w).call(this, i, !0);
+		if (Array.isArray(e)) for (var a = 0; a < e.length; a++) r = e[a], this._selectedValues.has(r) && (this._selectedValues.delete(r), i(r));
+		else r = e, this._selectedValues.has(r) && (this._selectedValues.delete(r), i(r));
+		this.#u(), !t && this.#f(r, !0);
 	}
 	disable() {
 		this._select.classList.add("selectbox-disabled");
@@ -908,272 +1063,56 @@ var d = /*#__PURE__*/ new WeakSet(), f = class {
 	}
 	clear(e) {
 		if (e ||= !1, this._selectedValues.clear(), e && this._items.length > 0) {
-			var n = this._items[0];
-			n && this._selectedValues.add(n.value);
+			var t = this._items[0];
+			t && this._selectedValues.add(t.value);
 		}
-		t(d, this, S).call(this), t(d, this, b).call(this);
+		this.#u(), this.#c();
 	}
 	destroy() {
-		this._subscribers = [], D._.delete(this);
+		this._subscribers = [], e.#e.delete(this);
 		try {
 			this._header && this._boundHandles && this._header.removeEventListener("click", this._boundHandles.toggle), this.searchInput && this._boundHandles && this.searchInput.removeEventListener("input", this._boundHandles.search), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("click", this._boundHandles.dropdownClick), document && this._boundHandles && document.removeEventListener("click", this._boundHandles.close), this._header && this._boundHandles && this._header.removeEventListener("keydown", this._boundHandles.keydown), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("keydown", this._boundHandles.keydown);
 		} catch (e) {
 			console.error(e);
 		}
 		this._container.innerHTML = "";
-		for (var e = this._container.className.split(" "), t = [], n = 0; n < e.length; n++) e[n] !== "selectbox-container" && t.push(e[n]);
-		this._container.className = t.join(" ");
+		for (var t = this._container.className.split(" "), n = [], r = 0; r < t.length; r++) t[r] !== "selectbox-container" && n.push(t[r]);
+		this._container.className = n.join(" ");
 	}
 };
-function p() {
-	this._container.innerHTML = "", this._container.className += " selectbox-container";
-	var e = document.createDocumentFragment();
-	if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), e.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text i18n", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._options.usePortal && (this._dropdown.className += " selectbox-fixed"), this._select.appendChild(this._dropdown), this._options.description) {
-		var n = document.createElement("div");
-		n.className += " i18n selectbox-description", n.textContent = this._options.description, this._dropdown.appendChild(n);
+(class {
+	static #e = document.getElementById("loader");
+	#t;
+	constructor(e, t) {
+		let n = document.getElementById(e);
+		if (!(n instanceof HTMLElement)) throw Error("Invalid container");
+		this.#t = n, this.#n(t);
 	}
-	if (this._options.searchable) {
-		var r = document.createElement("div");
-		r.className += " selectbox-search", this._dropdown.appendChild(r), this.searchInput = document.createElement("input"), this.searchInput.className += " selectbox-search-input", this.searchInput.type = "text", this.searchInput.placeholder = "Search...", r.appendChild(this.searchInput);
+	#n(e) {
+		this.#t.classList.add("loader-container");
+		let t = "http://www.w3.org/2000/svg", n = document.createElementNS(t, "svg");
+		n.classList.add("loader-image"), n.setAttribute("viewBox", "0 0 20 20");
+		let r = document.createElementNS(t, "circle");
+		r.setAttribute("cx", "10"), r.setAttribute("cy", "10"), r.setAttribute("fill", "none"), r.setAttribute("stroke", "currentColor"), r.setAttribute("stroke-width", "1.5"), r.setAttribute("r", "7.25"), r.setAttribute("stroke-dasharray", "160%, 40%"), n.appendChild(r), this.#t.appendChild(n);
+		let i = document.createElement("div");
+		i.classList.add("loader-title"), i.classList.add("i18n"), i.innerText = e, this.#t.appendChild(i);
 	}
-	if (this._optionsContainer = document.createElement("div"), this._optionsContainer.className += " selectbox-options", this._dropdown.appendChild(this._optionsContainer), this._container.appendChild(e), this._selectbox) {
-		var i = this._selectbox.parentNode;
-		if (i) {
-			i.insertBefore(this._container, this._selectbox);
-			var a = t(d, this, E).call(this, this._selectbox);
-			this.addItems(a.values, a.selectedValue), this._selectbox.remove();
-		}
+	show() {
+		this.#t?.classList.remove("hidden");
 	}
-}
-function m() {
-	this._header.addEventListener("click", this._boundHandles.toggle), this.searchInput && this.searchInput.addEventListener("input", this._boundHandles.search), this._dropdown.addEventListener("click", this._boundHandles.dropdownClick), this._dropdown.addEventListener("wheel", function(e) {
-		e.stopPropagation();
-	}), this._header.addEventListener("keydown", this._boundHandles.keydown), this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
-}
-function h(e) {
-	if (e && e.stopPropagation(), this.isOpen ? t(d, this, g).call(this) : this.openDropdown(), e && e.type === "click") for (var n of D._) n.isOpen && n !== this && t(d, n, g).call(n);
-}
-function g() {
-	this.isOpen && document && this._boundHandles && (document.removeEventListener("click", this._boundHandles.close), document.removeEventListener("scroll", this._boundHandles.scrollCheck, !0)), this.isOpen = !1, this._dropdown.style.display = "none", this._options.usePortal ? (this._dropdown.style.left = "", this._dropdown.style.width = "", this._dropdown.style.top = "") : this._dropdown.classList.remove("selectbox-dropdown-top");
-	for (var e = this._arrow.className.split(" "), t = [], n = 0; n < e.length; n++) e[n] !== "selectbox-arrow-open" && t.push(e[n]);
-	this._arrow.className = t.join(" ");
-	for (var r = this._header.className.split(" "), i = [], n = 0; n < r.length; n++) r[n] !== "selectbox-header-open" && i.push(r[n]);
-	this._header.className = i.join(" "), this.searchInput && (this.searchInput.value = "");
-}
-function _(e) {
-	var n = e.target;
-	if (n instanceof HTMLInputElement) {
-		var r = n.value.toLowerCase();
-		t(d, this, b).call(this, r);
+	hide() {
+		this.#t?.classList.add("hidden");
 	}
-}
-function v(e) {
-	var n = this.searchInput ? this.searchInput.value.toLowerCase() : "", r, i = this._items.filter(function(e) {
-		return e !== null;
-	});
-	if (n && (i = i.filter(function(e) {
-		return e.text.toLowerCase().indexOf(n) !== -1;
-	})), i.length !== 0) {
-		if (e === "up") {
-			if (this._selectedValues.size === 0 && i.length > 0) r = i[i.length - 1], this._selectedValues.add(r.value);
-			else {
-				for (var a = Array.from(this._selectedValues), o = -1, s = 0; s < i.length; s++) if (i[s].value === a[0]) {
-					o = s;
-					break;
-				}
-				var c = (o - 1 + i.length) % i.length;
-				this._selectedValues.clear(), r = i[c], this._selectedValues.add(r.value);
-			}
-		} else if (this._selectedValues.size === 0 && i.length > 0) r = i[0], this._selectedValues.add(r.value);
-		else {
-			for (var a = Array.from(this._selectedValues), o = -1, s = 0; s < i.length; s++) if (i[s].value === a[0]) {
-				o = s;
-				break;
-			}
-			var l = (o + 1) % i.length;
-			l === i.length && (l = 0), this._selectedValues.clear(), r = i[l], this._selectedValues.add(r.value);
-		}
-		t(d, this, S).call(this), t(d, this, b).call(this, n, !0), t(d, this, w).call(this, r.value, !0);
+	static show() {
+		this.#e?.classList.remove("hidden");
 	}
-}
-function y(e) {
-	switch (e.key || e.keyCode) {
-		case "Enter":
-		case 13:
-			e.preventDefault(), t(d, this, h).call(this, e);
-			break;
-		case "Escape":
-		case 27:
-			t(d, this, g).call(this);
-			break;
-		case "ArrowDown":
-		case 40:
-			e.preventDefault(), t(d, this, v).call(this, "down");
-			break;
-		case "ArrowUp":
-		case 38:
-			e.preventDefault(), t(d, this, v).call(this, "up");
-			break;
-		case "Tab":
-		case 9: t(d, this, g).call(this);
+	static hide() {
+		this.#e?.classList.add("hidden");
 	}
-}
-function b(e, t) {
-	if (e ||= "", this._optionsContainer) {
-		this._optionsContainer.innerHTML = "";
-		var n = null, r = this._items;
-		e && (r = r.filter(function(t) {
-			return t !== null && t.text.toLowerCase().indexOf(e) !== -1;
-		}));
-		for (var i = document.createDocumentFragment(), a = 0; a < r.length; a++) {
-			var o = r[a];
-			if (!o) {
-				var s = document.createElement("hr");
-				s.className += " selectbox-option-divider", i.appendChild(s);
-				continue;
-			}
-			var c = document.createElement("div");
-			c.className += " selectbox-option", this._selectedValues.has(o.value) && (c.className += " selectbox-option-selected checkbox--checked", n = c), c.setAttribute("data-value", o.value);
-			var l = document.createElement("label");
-			if (l.className += " selectbox-option-text i18n", this._options.translate && (o.text = this._options.translate(o.text)), l.textContent = o.text, this._options.multiple) {
-				c.className += " selectbox-option-checkbox";
-				var u = document.createElement("input");
-				u.type = "checkbox", u.id = "checkbox-" + o.value, u.className += " selectbox-checkbox", u.checked = this._selectedValues.has(o.value), c.appendChild(u);
-				var d = document.createElement("span");
-				d.className = "checkbox-visual", d.setAttribute("aria-hidden", "true");
-				var f = "http://www.w3.org/2000/svg", p = document.createElementNS(f, "svg");
-				p.setAttribute("viewBox", "0 0 10 8"), p.setAttribute("class", "checkbox-checkmark");
-				var m = document.createElementNS(f, "path");
-				m.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), m.setAttribute("fill", "none"), m.setAttribute("stroke", "currentColor"), m.setAttribute("stroke-width", "2"), p.appendChild(m), d.appendChild(p), c.appendChild(d);
-			}
-			c.appendChild(l), i.appendChild(c);
-		}
-		if (this._customItems.length) {
-			var h = document.createElement("hr");
-			h.className += " selectbox-option-divider", i.appendChild(h);
-		}
-		for (var a = 0; a < this._customItems.length; a++) {
-			var g = this._customItems[a], _ = document.createElement("label");
-			_.className += " selectbox-custom-option", _.setAttribute("data-value", g.value), _.setAttribute("for", g.value);
-			var v = document.createElement("span");
-			v.className += " selectbox-option-text i18n", this._options.translate && (g.text = this._options.translate(g.text)), v.textContent = g.text, _.appendChild(v), i.appendChild(_);
-		}
-		if (this._optionsContainer.appendChild(i), t && this.isOpen && this._optionsContainer && n) try {
-			n.scrollIntoView && n.scrollIntoView({ block: "nearest" });
-		} catch (e) {
-			console.error(e);
-		}
-	}
-}
-function x(e) {
-	var n = e.target || e.srcElement, r = null;
-	if (n && n instanceof HTMLElement) {
-		for (var i = null, a = n.className.split(" "), o = !1, s = 0; s < a.length; s++) if (a[s] === "selectbox-option") {
-			o = !0;
-			break;
-		} else if (a[s] === "selectbox-custom-option") {
-			var c = n.getAttribute("data-value");
-			if (c) {
-				e.stopPropagation(), t(d, this, T).call(this, c), t(d, this, g).call(this);
-				return;
-			}
-			break;
-		}
-		if (o) i = n;
-		else if (n.parentNode && n.parentNode instanceof HTMLElement) {
-			for (var l = n.parentNode.className.split(" "), u = !1, s = 0; s < l.length; s++) if (l[s] === "selectbox-option") {
-				u = !0;
-				break;
-			} else if (l[s] === "selectbox-custom-option") {
-				var f = n.parentNode.getAttribute("data-value");
-				if (f) {
-					e.stopPropagation(), t(d, this, T).call(this, f), t(d, this, g).call(this);
-					return;
-				}
-				break;
-			}
-			u && (i = n.parentNode);
-		}
-		if (i instanceof HTMLDivElement) r = i;
-		else return;
-	} else return;
-	var p = r.getAttribute("data-value");
-	if (p !== null) {
-		var m = !0;
-		this._options.multiple ? this._selectedValues.has(p) ? (this.unselectItems(p, !0), m = !1) : this.selectItems(p, !0) : (this.selectItems(p, !0), t(d, this, g).call(this)), t(d, this, S).call(this), t(d, this, w).call(this, p, m);
-	}
-}
-function S() {
-	if (this._selectedValues.size === 0) {
-		this._selectedText.textContent = this._options.placeholder;
-		return;
-	}
-	if (this._options.multiple) {
-		for (var e = [], t = 0; t < this._items.length; t++) {
-			var n = this._items[t];
-			n && this._selectedValues.has(n.value) && e.push(n);
-		}
-		e.length === 0 ? this._selectedText.textContent = this._options.placeholder : e.length === 1 ? this._selectedText.textContent = e[0].text : this._selectedText.textContent = e.length + " items selected";
-	} else {
-		for (var r = null, t = 0; t < this._items.length; t++) {
-			var n = this._items[t];
-			if (n && this._selectedValues.has(n.value)) {
-				r = n;
-				break;
-			}
-		}
-		this._selectedText.textContent = r ? r.text : this._options.placeholder;
-	}
-}
-function C() {
-	var e = window.innerHeight;
-	if (this._options.usePortal) {
-		var t = this._header.getBoundingClientRect(), n = this._dropdown.offsetHeight;
-		this._dropdown.style.left = t.left + "px", this._dropdown.style.width = t.width - 2 + "px";
-		var r = e - t.bottom;
-		r < n && t.top > r ? this._dropdown.style.top = t.top - n - 2 + "px" : this._dropdown.style.top = t.bottom + 2 + "px";
-	} else this._dropdown.getBoundingClientRect().bottom > e && this._dropdown.classList.add("selectbox-dropdown-top");
-}
-function w(e, t) {
-	for (var n = Array.from(this._selectedValues), r = [], i = 0; i < this._items.length; i++) {
-		var a = this._items[i];
-		a && this._selectedValues.has(a.value) && r.push(a);
-	}
-	var o = {
-		values: n,
-		items: r,
-		current: e,
-		enabled: t
-	};
-	this._subscribers.forEach(function(e) {
-		e({
-			type: "selectbox:change",
-			detail: o
-		});
-	});
-}
-function T(e) {
-	var t = {
-		values: [],
-		current: e,
-		enabled: !1
-	};
-	this._subscribers.forEach(function(e) {
-		e({
-			type: "selectbox:custom",
-			detail: t
-		});
-	});
-}
-function E(e) {
-	var t = { values: Array.from(e.options).map((e) => [e.value, e.text]) }, n = e.value;
-	return n && (t.selectedValue = n), t;
-}
-var D = { _: /* @__PURE__ */ new Set() };
-document.getElementById("loader");
+});
 //#endregion
 //#region src/app/shared/constants/locator-values.js
-var O = [
+var a = [
 	["appendix", "Appendix"],
 	["article", "Article"],
 	["book", "Book"],
@@ -1195,13 +1134,13 @@ var O = [
 	["title", "Title"],
 	["verses", "Verses"],
 	["volume", "Volume"]
-], k = {
+], o = {
 	addStylesForComponents: function(e) {
-		var t = "";
+		let t = "";
 		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus:not(:active):not(:hover),\n.custom-button-secondary-icon:focus:not(:active):not(:hover),\n.custom-button-secondary:focus:not(:active):not(:hover),\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
-		var n = "11px";
+		let n = "11px";
 		["theme-white", "theme-night"].indexOf(e.name) !== -1 || ["theme-white", "theme-night"].indexOf(e.Name) !== -1 ? (n = "12px", t += ".message,\n#previewWrapper,\n.custom-button,\n.selectbox-header,\n.input-field-element { border-radius: 4px; }\n", t += ".radio--checked .radio-visual { border-width: 4px; }\n", t += ".checkbox-checkmark { color: " + e["text-inverse"] + "; }\n", t += ".checkbox--checked .checkbox-visual { background-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio--checked .radio-visual,\n.checkbox--checked .checkbox-visual { border-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + e["highlight-button-hover"] + "; }\n", t += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; background-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += "body { font-size: 12px; }\n") : (t += ".checkbox-checkmark { color: " + e["text-normal"] + "; }\n", t += ".radio--checked .radio-visual { background-color: " + e["text-normal"] + ";\n box-shadow: 0 0 0 2px" + e["background-normal"] + " inset; }\n", t += ".radio-button-container:hover .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["border-control-focus"] + "; }\n"), t += "body, input, textarea, select, button { font-size: " + n + "; }\n";
-		var r = document.getElementById("componentsStyles");
+		let r = document.getElementById("componentsStyles");
 		return r ? (r.innerHTML = t, t) : (r = document.createElement("style"), r.id = "componentsStyles", r.innerHTML = t, document.getElementsByTagName("head")[0].appendChild(r), t);
 	},
 	fixThemeForIE: function(e) {
@@ -1211,125 +1150,123 @@ var O = [
 //#endregion
 //#region src/app/edit-window.js
 (function() {
-	class e {
+	class t {
 		constructor() {
-			var e = document.querySelector(".container");
+			let e = document.querySelector(".container");
 			if (!(e instanceof HTMLElement)) throw Error("container is not initialized");
-			this._container = e, this.citationObject = null, this.forms = [];
+			this._container = e, this.citationObject = null, this.forms = [], this.bItemsRemoved = !1;
 		}
-		createForm(e) {
-			var t = document.createElement("form");
-			t.classList.add("form"), t.classList.add("message-container"), this._container.appendChild(t);
-			var n = document.createElement("button");
-			n.className = "message-close i18n", n.textContent = "×", n.setAttribute("aria-label", "Close"), n.setAttribute("title", "Remove"), n.setAttribute("type", "button"), n.onclick = this.removeItem.bind(this, t, e.id), t.appendChild(n);
-			var r = document.createElement("div");
-			r.classList.add("title"), r.textContent = e.itemData.title, t.appendChild(r);
-			var i = document.createDocumentFragment(), a = document.createElement("div"), o = document.createElement("input"), c = document.createElement("input"), l = document.createElement("div"), d = document.createElement("div"), p = document.createElement("input"), m = document.createElement("div"), h = document.createElement("input");
-			i.appendChild(l), l.appendChild(d), l.appendChild(p);
-			var g = "";
-			i.appendChild(a), a.appendChild(o), a.appendChild(c), i.appendChild(m), m.appendChild(h);
-			var _ = new s(o, {
+		createForm(t) {
+			let n = document.createElement("form");
+			n.classList.add("form"), n.classList.add("message-container"), this._container.appendChild(n);
+			var o = document.createElement("button");
+			o.className = "message-close i18n", o.textContent = "×", o.setAttribute("aria-label", "Close"), o.setAttribute("title", "Remove"), o.setAttribute("type", "button"), o.onclick = this.removeItem.bind(this, n, t.id), n.appendChild(o);
+			let s = document.createElement("div");
+			s.classList.add("title"), s.textContent = t.itemData.title, n.appendChild(s);
+			let c = document.createDocumentFragment(), l = document.createElement("div"), u = document.createElement("input"), d = document.createElement("input"), f = document.createElement("div"), p = document.createElement("div"), m = document.createElement("input"), h = document.createElement("div"), g = document.createElement("input");
+			c.appendChild(f), f.appendChild(p), f.appendChild(m);
+			let _ = "";
+			c.appendChild(l), l.appendChild(u), l.appendChild(d), c.appendChild(h), h.appendChild(g);
+			let v = new e(u, {
 				type: "text",
 				placeholder: "Prefix",
-				value: e.prefix,
+				value: t.prefix,
 				showClear: !1
-			}), v = new s(c, {
+			}), y = new e(d, {
 				type: "text",
 				placeholder: "Suffix",
-				value: e.suffix,
+				value: t.suffix,
 				showClear: !1
-			}), y = new f(d, {
+			}), b = new i(p, {
 				placeholder: "Locator",
 				translate: Asc.plugin.tr
-			}), b = e.label || "page";
-			O.forEach(function(e) {
-				var t = e[0] === b;
-				y.addItem(e[0], e[1], t), t && (g = e[1]);
+			}), x = t.label || "page";
+			a.forEach(function(e) {
+				let t = e[0] === x;
+				b.addItem(e[0], e[1], t), t && (_ = e[1]);
 			});
-			var x = new s(p, {
+			let S = new e(m, {
 				type: "text",
-				placeholder: g,
-				value: e.locator,
+				placeholder: _,
+				value: t.locator,
 				showClear: !1
-			}), S = new u(h, {
+			}), C = new r(g, {
 				label: "Omit Author",
-				checked: !!e["suppress-author"]
+				checked: !!t["suppress-author"]
 			});
-			y.subscribe(function(e) {
-				if (!(e.type !== "selectbox:change" || !e.detail.items)) {
-					var t = e.detail.items[0];
-					x.setPlaceholder(t.text);
-				}
+			b.subscribe(function(e) {
+				if (e.type !== "selectbox:change" || !e.detail.items) return;
+				let t = e.detail.items[0];
+				S.setPlaceholder(t.text);
 			}), this.forms.push({
-				omitAuthorInput: S,
-				prefixInput: _,
-				suffixInput: v,
-				locatorInput: x,
-				locatorSelectbox: y
-			}), t.appendChild(i);
+				omitAuthorInput: C,
+				prefixInput: v,
+				suffixInput: y,
+				locatorInput: S,
+				locatorSelectbox: b
+			}), n.appendChild(c);
 		}
 		updateRemoveButtonsVisibility() {
-			if (this.citationObject) {
-				var e = this.citationObject.citationItems.length;
-				e > 1 ? this._container.classList.remove("hide-remove-button") : this._container.classList.add("hide-remove-button");
-				var t = document.querySelector("form")?.offsetHeight || 134, n = e === 1 ? t + 16 : 2 * t;
-				window.Asc.plugin.sendToPlugin("onUpdateHeight", n);
-			}
+			if (!this.citationObject) return;
+			let e = this.citationObject.citationItems.length;
+			e > 1 ? this._container.classList.remove("hide-remove-button") : this._container.classList.add("hide-remove-button");
+			let t = document.querySelector("form")?.offsetHeight || 134, n = e === 1 ? t + 16 : 2 * t;
+			window.Asc.plugin.sendToPlugin("onUpdateHeight", n);
 		}
 		removeItem(e, t) {
-			this.citationObject && (this.citationObject.citationItems = this.citationObject.citationItems.filter((e) => e.id !== t), this._container.removeChild(e), this.updateRemoveButtonsVisibility());
+			if (!this.citationObject) return;
+			let n = this.citationObject.citationItems.findIndex((e) => e.id === t);
+			n !== -1 && (this.citationObject.citationItems.splice(n, 1), this.forms.splice(n, 1), this.bItemsRemoved = !0, this._container.removeChild(e), this.updateRemoveButtonsVisibility());
 		}
 		onTranslate() {
-			for (var e = document.getElementsByClassName("i18n"), t = function() {
-				var t = e[n];
-				if (!(t instanceof HTMLElement)) return 1;
+			let e = document.getElementsByClassName("i18n");
+			for (let t = 0; t < e.length; t++) {
+				let n = e[t];
+				if (!(n instanceof HTMLElement)) continue;
 				["placeholder", "title"].forEach((e) => {
-					t.hasAttribute(e) && t.setAttribute(e, window.Asc.plugin.tr(t.getAttribute(e) || ""));
+					n.hasAttribute(e) && n.setAttribute(e, window.Asc.plugin.tr(n.getAttribute(e) || ""));
 				});
-				var r = window.Asc.plugin.tr(t.innerText.trim().replace(/\s+/g, " "));
-				r && (t.innerText = r);
-			}, n = 0; n < e.length; n++) if (t()) continue;
+				let r = window.Asc.plugin.tr(n.innerText.trim().replace(/\s+/g, " "));
+				r && (n.innerText = r);
+			}
 		}
 		onThemeChanged(e) {
-			window.Asc.plugin.onThemeChangedBase(e), k.fixThemeForIE(e), k.addStylesForComponents(e);
-			var t = "";
+			window.Asc.plugin.onThemeChangedBase(e), o.fixThemeForIE(e), o.addStylesForComponents(e);
+			let t = "";
 			t += "body { background-color: " + e["background-normal"] + " !important;}\n";
-			var n = document.getElementById("pluginStyles");
+			let n = document.getElementById("pluginStyles");
 			n ? n.innerHTML = t : (n = document.createElement("style"), n.id = "pluginStyles", n.innerHTML = t, document.getElementsByTagName("head")[0].appendChild(n));
 		}
-		onAttachedContent(e) {
-			var t = this;
-			return r(function* () {
-				if (t.citationObject = e, t.citationObject) {
-					t.citationObject.citationItems.forEach((e) => {
-						t.createForm(e);
-					}), t.updateRemoveButtonsVisibility();
-					for (var n = 0; n < 10; n++) {
-						if (window.Asc.plugin.translateManager) {
-							t.onTranslate(), n = 2 ** 53 - 1;
-							break;
-						}
-						yield new Promise((e) => setTimeout(() => e(!0), 100));
+		async onAttachedContent(e) {
+			if (this.citationObject = e, this.citationObject) {
+				this.citationObject.citationItems.forEach((e) => {
+					this.createForm(e);
+				}), this.updateRemoveButtonsVisibility();
+				for (let e = 0; e < 10; e++) {
+					if (window.Asc.plugin.translateManager) {
+						this.onTranslate(), e = 2 ** 53 - 1;
+						break;
 					}
-				}
-			})();
-		}
-		onClickSave() {
-			for (var e = !1, t = 0; t < this.forms.length; t++) {
-				var n = this.forms[t], r = this.citationObject?.citationItems[t];
-				if (r) {
-					var i = n.prefixInput.getValue(), a = n.suffixInput.getValue(), o = n.locatorSelectbox.getSelectedValue(), s = n.locatorInput.getValue(), c = n.omitAuthorInput.getState().checked;
-					(r.prefix || i) && r.prefix !== i && (r.prefix = i, e = !0), (r.suffix || a) && r.suffix !== a && (r.suffix = a, e = !0), (r.label || o) && r.label !== o && o && (r.label = o, e = !0), (r.locator || s) && r.locator !== s && (r.locator = s, e = !0), !!r["suppress-author"] !== c && (r["suppress-author"] = c, e = !0);
+					await new Promise((e) => setTimeout(() => e(!0), 100));
 				}
 			}
-			return e;
+		}
+		onClickSave() {
+			let e = !1;
+			for (let t = 0; t < this.forms.length; t++) {
+				let n = this.forms[t], r = this.citationObject?.citationItems[t];
+				if (!r) continue;
+				let i = n.prefixInput.getValue(), a = n.suffixInput.getValue(), o = n.locatorSelectbox.getSelectedValue(), s = n.locatorInput.getValue(), c = n.omitAuthorInput.getState().checked;
+				(r.prefix || i) && r.prefix !== i && (r.prefix = i, e = !0), (r.suffix || a) && r.suffix !== a && (r.suffix = a, e = !0), (r.label || o) && r.label !== o && o && (r.label = o, e = !0), (r.locator || s) && r.locator !== s && (r.locator = s, e = !0), !!r["suppress-author"] !== c && (r["suppress-author"] = c, e = !0);
+			}
+			return e || this.bItemsRemoved;
 		}
 	}
-	var t = new e();
+	let n = new t();
 	window.Asc.plugin.init = function() {
 		window.Asc.plugin.sendToPlugin("onWindowReady", {});
-	}, window.Asc.plugin.onThemeChanged = t.onThemeChanged.bind(t), window.Asc.plugin.attachEvent("onThemeChanged", t.onThemeChanged.bind(t)), window.Asc.plugin.attachEvent("onAttachedContent", t.onAttachedContent.bind(t)), window.Asc.plugin.attachEvent("onClickSave", () => {
-		t.onClickSave() ? window.Asc.plugin.sendToPlugin("onSaveFields", t.citationObject) : window.Asc.plugin.sendToPlugin("onSaveFields", null);
+	}, window.Asc.plugin.onThemeChanged = n.onThemeChanged.bind(n), window.Asc.plugin.attachEvent("onThemeChanged", n.onThemeChanged.bind(n)), window.Asc.plugin.attachEvent("onAttachedContent", n.onAttachedContent.bind(n)), window.Asc.plugin.attachEvent("onClickSave", () => {
+		n.onClickSave() ? window.Asc.plugin.sendToPlugin("onSaveFields", n.citationObject) : window.Asc.plugin.sendToPlugin("onSaveFields", null);
 	});
 })();
 //#endregion

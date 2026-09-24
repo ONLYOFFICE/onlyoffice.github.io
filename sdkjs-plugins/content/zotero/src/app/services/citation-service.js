@@ -929,7 +929,20 @@ class CitationService {
 
     /**
      * @param {AddinFieldData} field
-     * @returns {Promise<Object & {citationID: string} | null>}
+     * @returns {Array<string>}
+     */
+    getCitationItemIds(field) {
+        const citationObject = this.#extractField(field);
+        const items =
+            (citationObject && citationObject.citationItems) || [];
+        return items.map(function (/** @type {{id: string|number}} */ item) {
+            return String(item.id);
+        });
+    }
+
+    /**
+     * @param {AddinFieldData} field
+     * @returns {Promise<Object & {citationID: string, citationItems?: CitationItem[]} | null>}
      */
     async showEditCitationWindow(field) {
         if (!field) return null;
