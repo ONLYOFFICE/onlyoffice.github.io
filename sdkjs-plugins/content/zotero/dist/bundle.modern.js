@@ -529,16 +529,31 @@ D.prototype.ZOTERO_API_VERSION = "3", D.prototype.USER_AGENT = "AscDesktopEditor
 	var r = this;
 	n ||= r.DEFAULT_FORMAT;
 	var i = { format: n };
-	e ? (i.q = e, i.itemType = "-attachment") : t ? i.itemKey = t.join(",") : (i.limit = 20, i.itemType = "-attachment", this._isOnlineAvailable || (i.format = "json"));
+	e ? (i.q = e, i.itemType = "-attachment", this._isOnlineAvailable || (i.format = "json")) : t ? i.itemKey = t.join(",") : (i.limit = 20, i.itemType = "-attachment", this._isOnlineAvailable || (i.format = "json"));
 	var a = r.API_PATHS.USERS + "/" + r._userId + "/" + r.API_PATHS.ITEMS, o = r._buildGetRequest(a, i);
 	return r._parseResponse(o, r._userId);
 }, D.prototype.getGroupItems = function(e, t, n, r) {
 	var i = this;
 	r ||= i.DEFAULT_FORMAT;
 	var a = { format: r };
-	e ? a.q = e : n && (a.itemKey = n.join(","));
+	e ? (a.q = e, this._isOnlineAvailable || (a.format = "json")) : n && (a.itemKey = n.join(","));
 	var o = i.API_PATHS.GROUPS + "/" + t + "/" + i.API_PATHS.ITEMS, s = i._buildGetRequest(o, a);
 	return i._parseResponse(s, t);
+}, D.prototype.searchUserItemsEverything = function(e) {
+	var t = this.API_PATHS.USERS + "/" + this._userId + "/" + this.API_PATHS.ITEMS, n = this._buildGetRequest(t, {
+		format: "json",
+		q: e,
+		qmode: "everything",
+		itemType: "-attachment",
+		limit: 10
+	});
+	return this._parseResponse(n, this._userId);
+}, D.prototype.getItemByKey = function(e, t) {
+	var n = this.API_PATHS.USERS + "/" + this._userId + "/" + this.API_PATHS.ITEMS + "/" + e, r = this._buildGetRequest(n, { format: t || this.DEFAULT_FORMAT });
+	return this._parseResponse(r, this._userId);
+}, D.prototype.getGroupItemByKey = function(e, t, n) {
+	var r = this.API_PATHS.GROUPS + "/" + e + "/" + this.API_PATHS.ITEMS + "/" + t, i = this._buildGetRequest(r, { format: n || this.DEFAULT_FORMAT });
+	return this._parseResponse(i, e);
 }, D.prototype.getUserGroups = function() {
 	var e = this;
 	return new Promise(function(t, n) {
@@ -2220,9 +2235,7 @@ var Ye = { _: /* @__PURE__ */ new Set([
 			return new Promise(function(t) {
 				Asc.scope.prefChunks = e, Asc.plugin.callCommand(function() {
 					for (var e = Api.GetDocument().GetCustomProperties(), t = Asc.scope.prefChunks, n = Math.max(t.length, 10), r = 0; r < n; r++) e.Add("ZOTERO_PREF_" + (r + 1), r < t.length ? t[r] : "");
-				}, !1, !1, function() {
-					lastSavedPrefXml = prefXml, t();
-				});
+				}, !1, !1, t);
 			});
 		})();
 	}
@@ -2733,6 +2746,11 @@ G.prototype.fillFromObject = function(e) {
 	Object.hasOwnProperty.call(e, "version") && Object.hasOwnProperty.call(e, "library") ? (this._itemData.fillFromObject(e.data), Object.hasOwnProperty.call(e, "links") && (Object.hasOwnProperty.call(e.links, "self") && this.addUri(e.links.self.href), Object.hasOwnProperty.call(e.links, "alternate") && this.addUri(e.links.alternate.href))) : Object.hasOwnProperty.call(e, "itemData") ? this._itemData.fillFromObject(e.itemData) : this._itemData.fillFromObject(e), Object.hasOwnProperty.call(e, "prefix") && (this._prefix = e.prefix), Object.hasOwnProperty.call(e, "suffix") && (this._suffix = e.suffix), Object.hasOwnProperty.call(e, "locator") && (this._locator = e.locator), Object.hasOwnProperty.call(e, "label") && (this._label = e.label), Object.hasOwnProperty.call(e, "suppress-author") && (this._suppressAuthor = e["suppress-author"]), Object.hasOwnProperty.call(e, "author-only") && (this._authorOnly = e["author-only"]), Object.hasOwnProperty.call(e, "uris") && e.uris.forEach(function(e) {
 		t.addUri(e);
 	}, this);
+}, G.prototype.replaceItemDataFromCsl = function(e) {
+	var t = this._itemData;
+	this._itemData = new W(this.id);
+	var n = t.getCustomProperty("userID"), r = t.getCustomProperty("groupID");
+	n !== null && this._itemData._addCustomProperty("userID", n), r !== null && this._itemData._addCustomProperty("groupID", r), this._itemData.fillFromObject(e);
 }, G.prototype.getInfoForCitationCluster = function() {
 	var e = {
 		id: this.id,
@@ -3039,45 +3057,45 @@ var Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), zt = /*#
 		var t = this;
 		return a(function* () {
 			var n = t;
-			yield r(Y, t, an).call(t), yield r(Y, t, Xt).call(t);
+			yield r(Y, t, un).call(t), yield r(Y, t, tn).call(t);
 			var i = new xt("");
 			for (var a in e) {
 				var o = e[a];
 				i.fillFromObject(o);
 			}
-			return r(Y, t, en).call(t, e).then((e) => (e.forEach(function(e) {
+			return r(Y, t, on).call(t, e).then((e) => (e.forEach(function(e) {
 				i.fillFromObject(e);
-			}), t._storage.addCslCitation(i), r(Y, n, Qt).call(n, i)));
+			}), t._storage.addCslCitation(i), r(Y, n, rn).call(n, i)));
 		})();
 	}
 	insertSelectedCitationsToCurrentField(e, t) {
 		var n = this;
 		return a(function* () {
-			var i = r(Y, n, rn).call(n, t), a = i.citationID, o = new xt("");
+			var i = r(Y, n, ln).call(n, t), a = i.citationID, o = new xt("");
 			for (var s in o.fillFromObject(i), e) {
 				var c = e[s];
 				o.fillFromObject(c);
 			}
-			(yield r(Y, n, en).call(n, e)).forEach(function(e) {
+			(yield r(Y, n, on).call(n, e)).forEach(function(e) {
 				o.fillFromObject(e);
 			});
-			var l = (yield r(Y, n, an).call(n, o.toJSON(), a)).fieldsWithCitations;
-			yield r(Y, n, Xt).call(n);
+			var l = (yield r(Y, n, un).call(n, o.toJSON(), a)).fieldsWithCitations;
+			yield r(Y, n, tn).call(n);
 			var u = l.find((e) => e.cslCitation.citationID === a)?.cslCitation;
 			if (!u) throw Error("Citation not found");
-			return r(Y, n, $t).call(n, u).then((e) => (t.Content = e, t.Value = n._citPrefixNew + " " + n._citSuffixNew + " " + JSON.stringify(r(Y, n, Kt).call(n, u)), t));
+			return r(Y, n, an).call(n, u).then((e) => (t.Content = e, t.Value = n._citPrefixNew + " " + n._citSuffixNew + " " + JSON.stringify(r(Y, n, Kt).call(n, u)), t));
 		})();
 	}
 	insertBibliography() {
 		var e = this;
 		return a(function* () {
 			try {
-				var t = yield r(Y, e, an).call(e), n = t.fieldsWithCitations, i = t.bibFieldValue, a = t.bibField, o = n.length === 0;
-				if (yield r(Y, e, Xt).call(e), a) {
-					var s = [yield r(Y, e, sn).call(e, o, a)];
+				var t = yield r(Y, e, un).call(e), n = t.fieldsWithCitations, i = t.bibFieldValue, a = t.bibField, o = n.length === 0;
+				if (yield r(Y, e, tn).call(e), a) {
+					var s = [yield r(Y, e, fn).call(e, o, a)];
 					return e.citationDocService.updateAddinFields(s).then((e) => e ? e[0] : "");
 				}
-				return r(Y, e, on).call(e, o, i);
+				return r(Y, e, dn).call(e, o, i);
 			} catch (e) {
 				throw e;
 			}
@@ -3105,27 +3123,27 @@ var Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), zt = /*#
 		var n = this;
 		return a(function* () {
 			try {
-				var i = yield r(Y, n, an).call(n), a = i.fieldsWithCitations, o = i.bibField, s = a.length === 0;
-				yield r(Y, n, Xt).call(n);
+				var i = yield r(Y, n, un).call(n), a = i.fieldsWithCitations, o = i.bibField, s = a.length === 0;
+				yield r(Y, n, tn).call(n, t);
 				var c = [];
 				e === void 0 && n._cslStylesManager.getLastUsedFormat() === "numeric" && (e = !0);
 				var l = !!(t && t.skipCitations), u = !!(t && t.skipBibliography);
-				return !l && typeof e == "boolean" && (c = yield r(Y, n, cn).call(n, a, e)), !u && o && c.push(yield r(Y, n, sn).call(n, s, o)), c && c.length ? n.citationDocService.updateAddinFields(c) : [];
+				return !l && typeof e == "boolean" && (c = yield r(Y, n, pn).call(n, a, e)), !u && o && c.push(yield r(Y, n, fn).call(n, s, o)), c && c.length ? n.citationDocService.updateAddinFields(c) : [];
 			} catch (e) {
 				throw e;
 			}
 		})();
 	}
-	updateCslItemsInNotes(e) {
-		var t = this;
+	updateCslItemsInNotes(e, t) {
+		var n = this;
 		return a(function* () {
 			try {
-				var n = yield r(Y, t, an).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
-				yield r(Y, t, Xt).call(t);
-				var s = yield r(Y, t, cn).call(t, i, !1);
-				if (s && s.length && (yield t.citationDocService.convertNotesStyle(s, e)), a) {
-					var c = [yield r(Y, t, sn).call(t, o, a)];
-					yield t.citationDocService.updateAddinFields(c);
+				var i = yield r(Y, n, un).call(n), a = i.fieldsWithCitations, o = i.bibField, s = a.length === 0;
+				yield r(Y, n, tn).call(n, t);
+				var c = yield r(Y, n, pn).call(n, a, !1);
+				if (c && c.length && (yield n.citationDocService.convertNotesStyle(c, e)), o) {
+					var l = [yield r(Y, n, fn).call(n, s, o)];
+					yield n.citationDocService.updateAddinFields(l);
 				}
 			} catch (e) {
 				throw e;
@@ -3136,11 +3154,11 @@ var Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), zt = /*#
 		var n = this;
 		return a(function* () {
 			try {
-				var i = yield r(Y, n, an).call(n, e, e.citationID), a = i.fieldsWithCitations;
-				i.bibField, a.length, yield r(Y, n, Xt).call(n), e && (a = a.filter(function(t) {
+				var i = yield r(Y, n, un).call(n, e, e.citationID), a = i.fieldsWithCitations;
+				i.bibField, a.length, yield r(Y, n, tn).call(n), e && (a = a.filter(function(t) {
 					return t.cslCitation.citationID === e.citationID;
 				}));
-				var o = yield r(Y, n, cn).call(n, a, !0);
+				var o = yield r(Y, n, pn).call(n, a, !0);
 				return t && o && o.length && (yield n.citationDocService.convertNotesStyle(o, t), o = []), o && o.length ? n.citationDocService.updateAddinFields(o) : [];
 			} catch (e) {
 				throw e;
@@ -3151,11 +3169,11 @@ var Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), zt = /*#
 		var t = this;
 		return a(function* () {
 			try {
-				var n = yield r(Y, t, an).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
-				yield r(Y, t, Xt).call(t);
-				var s = yield r(Y, t, cn).call(t, i, !0);
+				var n = yield r(Y, t, un).call(t), i = n.fieldsWithCitations, a = n.bibField, o = i.length === 0;
+				yield r(Y, t, tn).call(t);
+				var s = yield r(Y, t, pn).call(t, i, !0);
 				if (s && s.length && (e ? yield t.citationDocService.convertTextToNotes(s, e) : yield t.citationDocService.convertNotesToText(s)), a) {
-					var c = [yield r(Y, t, sn).call(t, o, a)];
+					var c = [yield r(Y, t, fn).call(t, o, a)];
 					yield t.citationDocService.updateAddinFields(c);
 				}
 			} catch (e) {
@@ -3167,9 +3185,9 @@ var Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), zt = /*#
 		var t = this;
 		return a(function* () {
 			try {
-				var n = (yield r(Y, t, an).call(t)).fieldsWithCitations;
-				yield r(Y, t, Xt).call(t);
-				var i = yield r(Y, t, cn).call(t, n, !1, !0);
+				var n = (yield r(Y, t, un).call(t)).fieldsWithCitations;
+				yield r(Y, t, tn).call(t);
+				var i = yield r(Y, t, pn).call(t, n, !1, !0);
 				if (!i || !i.length) return;
 				yield t.citationDocService.convertNotesStyle(i, e);
 			} catch (e) {
@@ -3181,7 +3199,7 @@ var Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), zt = /*#
 		var t = this;
 		return a(function* () {
 			if (!e) return null;
-			var n = r(Y, t, rn).call(t, e);
+			var n = r(Y, t, ln).call(t, e);
 			return (yield s(Lt, t).showEditWindow(n)) || null;
 		})();
 	}
@@ -3195,7 +3213,7 @@ var Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), zt = /*#
 			for (var a of t) {
 				var o = void 0;
 				try {
-					o = r(Y, e, rn).call(e, {
+					o = r(Y, e, ln).call(e, {
 						Value: a.rawValue,
 						FieldId: "",
 						Content: ""
@@ -3289,61 +3307,123 @@ function qt(e, t) {
 	var n = e.getProperty("userID"), r = e.getProperty("groupID");
 	if (n) return {
 		id: t,
+		fetchKey: t,
 		userID: n
 	};
 	if (r) return {
 		id: t,
+		fetchKey: t,
 		groupID: r
 	};
 	var i = e.toJSON();
 	if (!Array.isArray(i.uris)) return null;
-	for (var a = 0; a < i.uris.length; a++) {
-		var o = i.uris[a].match(/zotero\.org\/(users|groups)\/([^/]+)\/items\/([^/?#]+)/i);
-		if (!(!o || o[3] !== t)) return o[1] === "users" ? {
+	for (var a = null, o = 0; o < i.uris.length; o++) {
+		var s = i.uris[o], c = null, l = s.match(/zotero\.org\/(users|groups)\/(\d+)\/items\/([^/?#]+)/i), u = s.match(/zotero\.org\/users\/local\/[^/]+\/items\/([^/?#]+)/i);
+		if (l ? c = l[1] === "users" ? {
 			id: t,
-			userID: o[2]
+			fetchKey: l[3],
+			userID: l[2]
 		} : {
 			id: t,
-			groupID: o[2]
-		};
-	}
-	return null;
-}
-function Jt() {
-	return Yt.apply(this, arguments);
-}
-function Yt() {
-	return Yt = a(function* () {
-		if (r(Y, this, Wt).call(this)) {
-			var e = {};
-			if (this._storage.forEachItem((t, n) => {
-				var i = t.toFlatJSON(this._storage.getItemIndex(n));
-				if (!(Object.hasOwnProperty.call(i, "abstract") && i.abstract !== "")) {
-					var a = r(Y, this, qt).call(this, t, n);
-					a && (e[n] = a);
-				}
-			}), Object.keys(e).length !== 0) {
-				var t = yield r(Y, this, en).call(this, e);
-				l(zt, this, null), t.forEach((e) => {
-					var t = e.key || e.data && e.data.key || e.id;
-					if (t) {
-						var n = this._storage.getItem(t);
-						n && n.fillFromObject(e);
-					}
-				});
-			}
+			fetchKey: l[3],
+			groupID: l[2]
+		} : u && (c = {
+			id: t,
+			fetchKey: u[1],
+			userID: "local"
+		}), c) {
+			if (c.fetchKey === t) return c;
+			a ||= c;
 		}
-	}), Yt.apply(this, arguments);
+	}
+	return a;
+}
+function Jt(e) {
+	var t = e && e.items;
+	return Array.isArray(t) ? t : t ? [t] : [];
+}
+function Yt(e, t, n) {
+	return Xt.apply(this, arguments);
 }
 function Xt() {
-	return Zt.apply(this, arguments);
+	return Xt = a(function* (e, t, n) {
+		var i = [], a = [];
+		this._storage.forEachItem((t, n) => {
+			if (e(t, n)) {
+				var o = r(Y, this, qt).call(this, t, n);
+				o ? i.push(o) : a.push(n);
+			}
+		});
+		var o = i.length + a.length;
+		if (o === 0) return !1;
+		var s = 0, c = () => {
+			s++, n && n({
+				phase: "fetch",
+				completed: s,
+				total: o
+			});
+		}, l = i.map((e) => (e.groupID ? this._sdk.getGroupItemByKey(e.groupID, e.fetchKey, t) : this._sdk.getItemByKey(e.fetchKey, t)).then((n) => {
+			var i = r(Y, this, Jt).call(this, n);
+			if (i.length !== 1) {
+				console.warn("Zotero returned " + i.length + " items for key " + e.fetchKey);
+				return;
+			}
+			var a = this._storage.getItem(e.id);
+			a && (t === "csljson" ? a.replaceItemDataFromCsl(i[0]) : a.fillFromObject(i[0]));
+		}).catch((t) => {
+			console.warn("Failed to refresh item " + e.id + " (Zotero key " + e.fetchKey + "):", t);
+		}).finally(c)), u = a.map((e) => r(Y, this, Zt).call(this, e).catch((t) => {
+			console.warn("Failed to re-link item " + e + ":", t);
+		}).finally(c));
+		return yield Promise.all(l.concat(u)), !0;
+	}), Xt.apply(this, arguments);
 }
-function Zt() {
-	return Zt = a(function* () {
-		yield r(Y, this, Jt).call(this), r(Y, this, dn).call(this);
-	}), Zt.apply(this, arguments);
+function Zt(e) {
+	return Qt.apply(this, arguments);
 }
-function Qt(e) {
+function Qt() {
+	return Qt = a(function* (e) {
+		var t = yield this._sdk.searchUserItemsEverything(e);
+		for (var n of t && t.items || []) {
+			var i = n.key || n.data && n.data.key;
+			if (i) {
+				var a = yield this._sdk.getItemByKey(i, "csljson"), o = r(Y, this, Jt).call(this, a)[0];
+				if (o && (o["citation-key"] === e || o.id === e)) {
+					var s = this._storage.getItem(e);
+					if (!s) return;
+					s.replaceItemDataFromCsl(o);
+					var c = n.library;
+					if (c && c.id !== void 0 && c.id !== null) {
+						var l = c.type === "group" ? "groups" : "users";
+						s.addUri("http://zotero.org/" + l + "/" + c.id + "/items/" + i);
+					}
+					return;
+				}
+			}
+		}
+		console.warn("Could not locate item " + e + " in the Zotero library; it will not be refreshed.");
+	}), Qt.apply(this, arguments);
+}
+function $t() {
+	return en.apply(this, arguments);
+}
+function en() {
+	return en = a(function* () {
+		return r(Y, this, Wt).call(this) ? r(Y, this, Yt).call(this, (e, t) => {
+			var n = e.toFlatJSON(this._storage.getItemIndex(t));
+			return !(Object.hasOwnProperty.call(n, "abstract") && n.abstract !== "");
+		}, "json") : !1;
+	}), en.apply(this, arguments);
+}
+function tn(e) {
+	return nn.apply(this, arguments);
+}
+function nn() {
+	return nn = a(function* (e) {
+		(e && e.refreshItems ? yield r(Y, this, Yt).call(this, () => !0, "csljson", e.onProgress) : yield r(Y, this, $t).call(this)) && l(zt, this, null), r(Y, this, gn).call(this);
+	}), nn.apply(this, arguments);
+}
+function rn(e) {
 	var t = this, n = !1;
 	return Promise.resolve().then(function() {
 		if (e.getCitationItems().forEach(function(e) {
@@ -3354,14 +3434,14 @@ function Qt(e) {
 				r.push(t);
 			}), t._formatter.updateItems(r);
 		}
-	}).then(() => r(Y, this, nn).call(this, e)).then((n) => {
+	}).then(() => r(Y, this, cn).call(this, e)).then((n) => {
 		var i = null;
 		t._cslStylesManager.getLastUsedFormat() === "note" && (i = t._cslStylesManager.getLastUsedNotesStyle());
 		var a = r(Y, t, Kt).call(t, e);
 		return t.citationDocService.addCitation(n, JSON.stringify(a), i);
 	});
 }
-function $t(e) {
+function an(e) {
 	var t = this, n = !1;
 	return Promise.resolve().then(function() {
 		if (e.getCitationItems().forEach(function(e) {
@@ -3372,9 +3452,9 @@ function $t(e) {
 				r.push(t);
 			}), t._formatter.updateItems(r);
 		}
-	}).then(() => r(Y, this, nn).call(this, e));
+	}).then(() => r(Y, this, cn).call(this, e));
 }
-function en(e) {
+function on(e) {
 	var t = [], n = {};
 	for (var r in e) {
 		var i = e[r], a = i.userID, o = i.groupID;
@@ -3390,14 +3470,14 @@ function en(e) {
 		return e.reduce((e, t) => e.concat(t), []);
 	});
 }
-function tn() {
+function sn() {
 	try {
 		var e = [];
-		l(Bt, this, !this._cslStylesManager.getIncludeUrlForPaperArticles()), s(Bt, this) && r(Y, this, dn).call(this);
+		l(Bt, this, !this._cslStylesManager.getIncludeUrlForPaperArticles()), s(Bt, this) && r(Y, this, gn).call(this);
 		var t = this._formatter.makeBibliography();
-		s(Bt, this) && (l(Bt, this, !1), r(Y, this, dn).call(this));
+		s(Bt, this) && (l(Bt, this, !1), r(Y, this, gn).call(this));
 		for (var n = 0; n < t[1].length; n++) {
-			var i = r(Y, this, fn).call(this, t[1][n]).replaceAll("\n", "").replaceAll("\r", "").replace(/\s+/g, " ").trim(), a = "<div class=\"csl-entry\">", o = "</div>";
+			var i = r(Y, this, _n).call(this, t[1][n]).replaceAll("\n", "").replaceAll("\r", "").replace(/\s+/g, " ").trim(), a = "<div class=\"csl-entry\">", o = "</div>";
 			i.indexOf(a) === 0 && i.endsWith(o) && (i = a + i.substring(a.length, i.length - o.length).trim() + o), t[0]["second-field-align"] || (i = i.replace(/<div class=\"csl-left-margin\">([\s\S]*?)<\/div>/, "$1	"), i = i.replace(/<div class=\"csl-block\">([\s\S]*?)<\/div>/, "$1\n\r"), i = i.replace(/<\/?div[^>]*>/g, " "), i = "<p>" + i.trim() + "</p>"), i = i.split("\n").map((e) => e.replace(/[ ]{2,}/g, " ").trim()).join("\n"), window.Asc.scope.editorVersion < 9004e3 && (i += "\n"), e.push(i);
 		}
 		var c = e.join("").trim();
@@ -3408,13 +3488,13 @@ function tn() {
 		return "";
 	}
 }
-function nn(e) {
+function cn(e) {
 	var t = document.createDocumentFragment(), n = document.createElement("div"), i = this._storage.getCitationsPre(e.citationID), a = this._storage.getCitationsPost(e.citationID), o = this._storage.getAllCitationsInJson();
 	this._formatter.rebuildProcessorState(o);
-	var s = this._formatter.processCitationCluster(e.toJSON(), i, a), c = r(Y, this, fn).call(this, s[1][0][1]);
+	var s = this._formatter.processCitationCluster(e.toJSON(), i, a), c = r(Y, this, _n).call(this, s[1][0][1]);
 	return t.appendChild(n), n.innerHTML = c, e.setPlainCitation(n.innerText), c;
 }
-function rn(e) {
+function ln(e) {
 	var t, n = e.Value.indexOf("{"), r = e.Value.lastIndexOf("}");
 	if (n !== -1) {
 		var i = e.Value.slice(n, r + 1);
@@ -3422,20 +3502,20 @@ function rn(e) {
 	}
 	return t;
 }
-function an(e, t) {
+function un(e, t) {
 	var n = this;
 	return this._storage.clear(), xt.resetUsedIDs(), this.citationDocService.getAddinZoteroFields().then(function(i) {
 		var a = 0, o = " ", s = i.find(function(e) {
 			return e.Value.indexOf(n._bibPrefixNew) !== -1 || e.Value.indexOf(n._bibPrefix) !== -1;
 		});
 		if (s) {
-			var c = r(Y, n, rn).call(n, s);
+			var c = r(Y, n, ln).call(n, s);
 			typeof c == "object" && Object.keys(c).length > 0 && (o = JSON.stringify(c));
 		}
 		var l = i.filter(function(e) {
 			return e.Value.indexOf(n._citPrefixNew) !== -1 || e.Value.indexOf(n._citPrefix) !== -1;
 		}).map(function(i) {
-			var o = r(Y, n, rn).call(n, i), s = "";
+			var o = r(Y, n, ln).call(n, i), s = "";
 			i.Value.indexOf(n._citPrefix) === -1 && (s = o.citationID);
 			var c = new xt(s);
 			return a += e && t === s ? c.fillFromObject(e) : c.fillFromObject(o), n._storage.addCslCitation(c), {
@@ -3450,25 +3530,25 @@ function an(e, t) {
 		};
 	});
 }
-function on(e, t) {
-	var n = r(Y, this, tn).call(this);
+function dn(e, t) {
+	var n = r(Y, this, sn).call(this);
 	if (e && (n = R(this._bibPlaceholderIfEmpty)), this._cslStylesManager.isLastUsedStyleContainBibliography()) return this.citationDocService.addBibliography(n, t);
 	throw "The current bibliographic style does not describe the bibliography";
 }
-function sn(e, t) {
-	return t.Content = e ? R(this._bibPlaceholderIfEmpty) : r(Y, this, tn).call(this), t;
+function fn(e, t) {
+	return t.Content = e ? R(this._bibPlaceholderIfEmpty) : r(Y, this, sn).call(this), t;
 }
-function cn(e, t, n) {
-	return ln.apply(this, arguments);
+function pn(e, t, n) {
+	return mn.apply(this, arguments);
 }
-function ln() {
-	return ln = a(function* (e, t, n) {
+function mn() {
+	return mn = a(function* (e, t, n) {
 		var i = document.createDocumentFragment(), a = document.createElement("div");
 		i.appendChild(a);
 		for (var o = [], c = e.length - 1; c >= 0; c--) {
 			var l = !!n, u = e[c], d = u.field, f = u.cslCitation, p = this._storage.getCitationsPre(f.citationID), m = this._storage.getCitationsPost(f.citationID), h = this._storage.getAllCitationsInJson();
 			this._formatter.rebuildProcessorState(h);
-			var g = this._formatter.processCitationCluster(f.toJSON(), p, m), _ = r(Y, this, fn).call(this, g[1][0][1]);
+			var g = this._formatter.processCitationCluster(f.toJSON(), p, m), _ = r(Y, this, _n).call(this, g[1][0][1]);
 			a.innerHTML = _;
 			var v = f.getPlainCitation(), y = d.Content;
 			v === "" && (v = y);
@@ -3486,9 +3566,9 @@ function ln() {
 			}
 		}
 		return o;
-	}), ln.apply(this, arguments);
+	}), mn.apply(this, arguments);
 }
-function un(e) {
+function hn(e) {
 	var t = s(Rt, this).get(e);
 	if (t) return t;
 	var n = e;
@@ -3500,7 +3580,7 @@ function un(e) {
 	}
 	return s(Rt, this).set(e, n), n;
 }
-function dn() {
+function gn() {
 	var e = this, t = [];
 	this._storage.forEachItem(function(e, n) {
 		t.push(n);
@@ -3513,21 +3593,21 @@ function dn() {
 	var u = {
 		retrieveLocale: function(t) {
 			var n = e._localesManager.getLocale(t) || e._localesManager.getLocale();
-			return n && r(Y, e, un).call(e, n);
+			return n && r(Y, e, hn).call(e, n);
 		},
 		retrieveItem: function(t) {
 			var n = e._storage.getItem(t), r = e._storage.getItemIndex(t);
 			return n ? n.toFlatJSON(r, s(Bt, e)) : null;
 		}
 	};
-	o && (u.getAbbreviation = s(Vt, this).createCiteprocHook()), this._formatter = new CSL.Engine(u, a && r(Y, this, un).call(this, a), i, !0), l(zt, this, c), t.length && this._formatter.updateItems(t);
+	o && (u.getAbbreviation = s(Vt, this).createCiteprocHook()), this._formatter = new CSL.Engine(u, a && r(Y, this, hn).call(this, a), i, !0), l(zt, this, c), t.length && this._formatter.updateItems(t);
 }
-function fn(e) {
+function _n(e) {
 	return e.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
 }
 //#endregion
 //#region src/app/services/cursor-service.js
-var pn = class {
+var vn = class {
 	static getCursorPosition() {
 		return new Promise(function(e) {
 			Asc.plugin.callCommand(() => {
@@ -3548,7 +3628,7 @@ var pn = class {
 			}, r, n, t);
 		});
 	}
-}, mn = {
+}, yn = {
 	getStyleInfo: function(e, t) {
 		var n = {
 			categories: {
@@ -3615,35 +3695,35 @@ var pn = class {
 };
 //#endregion
 //#region src/app/csl/styles/storage.js
-function hn() {
+function bn() {
 	this._customStyleNamesKey = "zoteroCustomStyleNames", this._customStylesKey = "zoteroCustomStyles";
 }
-hn.prototype.getStyleNames = function() {
+bn.prototype.getStyleNames = function() {
 	var e = localStorage.getItem(this._customStyleNamesKey);
 	return e ? JSON.parse(e) : [];
-}, hn.prototype._getStyles = function() {
+}, bn.prototype._getStyles = function() {
 	var e = localStorage.getItem(this._customStylesKey);
 	return e ? JSON.parse(e) : [];
-}, hn.prototype.getStyle = function(e) {
+}, bn.prototype.getStyle = function(e) {
 	var t = this.getStyleNames().indexOf(e);
 	return t === -1 ? null : this._getStyles()[t];
-}, hn.prototype.getStylesInfo = function() {
+}, bn.prototype.getStylesInfo = function() {
 	for (var e = this.getStyleNames(), t = this._getStyles(), n = [], r = 0; r < e.length; r++) {
-		var i = mn.getStyleInfo(e[r], t[r]);
+		var i = yn.getStyleInfo(e[r], t[r]);
 		n.push(i);
 	}
 	return n;
-}, hn.prototype.setStyle = function(e, t) {
+}, bn.prototype.setStyle = function(e, t) {
 	var n = this.getStyleNames(), r = this._getStyles(), i = n.indexOf(e);
-	return i === -1 && (i = n.length), n[i] = e, r[i] = t, localStorage.setItem(this._customStyleNamesKey, JSON.stringify(n)), localStorage.setItem(this._customStylesKey, JSON.stringify(r)), mn.getStyleInfo(e, t);
-}, hn.prototype.deleteStyle = function(e) {
+	return i === -1 && (i = n.length), n[i] = e, r[i] = t, localStorage.setItem(this._customStyleNamesKey, JSON.stringify(n)), localStorage.setItem(this._customStylesKey, JSON.stringify(r)), yn.getStyleInfo(e, t);
+}, bn.prototype.deleteStyle = function(e) {
 	var t = this.getStyleNames(), n = this._getStyles(), r = t.indexOf(e);
 	return r === -1 ? e : (t.splice(r, 1), n.splice(r, 1), localStorage.setItem(this._customStyleNamesKey, JSON.stringify(t)), localStorage.setItem(this._customStylesKey, JSON.stringify(n)), e);
 };
 //#endregion
 //#region src/app/csl/styles/styles-manager.js
 function X(e) {
-	this._isOnlineAvailable = !1, this._isDesktopAvailable = !1, this._customStylesStorage = new hn(), this._STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json", this._STYLES_JSON_LOCAL = "./resources/csl/styles.json", this._STYLES_URL = "https://www.zotero.org/styles/", this._STYLES_LOCAL = "./resources/csl/styles/", this._lastStyleKey = e, this._lastNotesStyleKey = "zoteroNotesStyleId", this._lastFormatKey = "zoteroFormatId", this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography", this._lastIncludeUrlForPaperArticlesKey = "zoteroIncludeUrlForPaperArticles", this._lastAbbreviateJournalTitlesKey = "zoteroAbbreviateJournalTitles", this._defaultStyles = [
+	this._isOnlineAvailable = !1, this._isDesktopAvailable = !1, this._customStylesStorage = new bn(), this._STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json", this._STYLES_JSON_LOCAL = "./resources/csl/styles.json", this._STYLES_URL = "https://www.zotero.org/styles/", this._STYLES_LOCAL = "./resources/csl/styles/", this._lastStyleKey = e, this._lastNotesStyleKey = "zoteroNotesStyleId", this._lastFormatKey = "zoteroFormatId", this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography", this._lastIncludeUrlForPaperArticlesKey = "zoteroIncludeUrlForPaperArticles", this._lastAbbreviateJournalTitlesKey = "zoteroAbbreviateJournalTitles", this._defaultStyles = [
 		"american-anthropological-association",
 		"american-medical-association",
 		"american-political-science-association",
@@ -3697,14 +3777,14 @@ X.prototype.addCustomStyle = function(e) {
 		});
 	}).then(function(t) {
 		if (t && !n._isValidCSL(t) && n._isOnlineAvailable) {
-			var r = mn.getStyleInfo(e, t);
+			var r = yn.getStyleInfo(e, t);
 			if (r && r.dependent > 0 && r.parent) return fetch(r.parent).then(function(e) {
 				return e.text();
 			});
 		}
 		return t;
 	}).then(function(r) {
-		var i = r && mn.getCitationFormat(r) || "numeric", a = {
+		var i = r && yn.getCitationFormat(r) || "numeric", a = {
 			content: r,
 			styleFormat: i
 		};
@@ -3756,7 +3836,7 @@ X.prototype.addCustomStyle = function(e) {
 	});
 }, X.prototype._saveLastUsedStyle = function(e, t, n) {
 	this._cache[e] = t, localStorage.setItem(this._lastStyleKey, e), localStorage.setItem(this._lastFormatKey, n);
-	var r = mn.isStyleContainBibliography(t);
+	var r = yn.isStyleContainBibliography(t);
 	localStorage.setItem(this._lastUsedStyleContainBibliographyKey, r.toString());
 }, X.prototype.saveLastUsedNotesStyle = function(e) {
 	localStorage.setItem(this._lastNotesStyleKey, e);
@@ -3775,10 +3855,10 @@ X.prototype.addCustomStyle = function(e) {
 };
 //#endregion
 //#region src/app/csl/locales/locales-manager.js
-function gn() {
+function xn() {
 	this._isOnlineAvailable = !1, this._isDesktopAvailable = !1, this._LOCALES_URL = "https://raw.githubusercontent.com/citation-style-language/locales/master/", this._LOCALES_PATH = "./resources/csl/locales/", this._lastLanguageKey = "zoteroLang", this._selectedLanguage = null, this._cache = {};
 }
-gn.prototype.loadLocale = function(e) {
+xn.prototype.loadLocale = function(e) {
 	var t = this;
 	if (this._selectedLanguage = e, this._cache[e]) return Promise.resolve(this._cache[e]);
 	var n = this._getLocalesUrl() + "locales-" + e + ".xml";
@@ -3789,25 +3869,25 @@ gn.prototype.loadLocale = function(e) {
 	}).then(function(n) {
 		return t._cache[e] = n, n;
 	});
-}, gn.prototype.getLastUsedLanguage = function() {
+}, xn.prototype.getLastUsedLanguage = function() {
 	return this._selectedLanguage = this._selectedLanguage || localStorage.getItem(this._lastLanguageKey) || "en-US", this._selectedLanguage;
-}, gn.prototype.getLocale = function(e) {
+}, xn.prototype.getLocale = function(e) {
 	return e ? this._cache[e] ? this._cache[e] : null : this._selectedLanguage && this._cache[this._selectedLanguage] ? this._cache[this._selectedLanguage] : null;
-}, gn.prototype.saveLastUsedLanguage = function(e) {
+}, xn.prototype.saveLastUsedLanguage = function(e) {
 	this._selectedLanguage = e, localStorage.setItem(this._lastLanguageKey, e);
-}, gn.prototype._getLocalesUrl = function() {
+}, xn.prototype._getLocalesUrl = function() {
 	return this._isOnlineAvailable ? this._LOCALES_URL : this._LOCALES_PATH;
-}, gn.prototype.setDesktopApiAvailable = function(e) {
+}, xn.prototype.setDesktopApiAvailable = function(e) {
 	this._isDesktopAvailable = e;
-}, gn.prototype.setRestApiAvailable = function(e) {
+}, xn.prototype.setRestApiAvailable = function(e) {
 	this._isOnlineAvailable = e;
 };
 //#endregion
 //#region src/app/csl/abbreviations/abbreviations-manager.js
-function _n() {
+function Sn() {
 	this._ABBREVIATIONS_PATH = "./resources/csl/abbreviations/medline-abbreviations.json", this._map = null, this._loadingPromise = null;
 }
-_n.prototype.load = function() {
+Sn.prototype.load = function() {
 	if (this._map) return Promise.resolve();
 	if (this._loadingPromise) return this._loadingPromise;
 	var e = this;
@@ -3818,11 +3898,11 @@ _n.prototype.load = function() {
 	}).catch(function(t) {
 		console.error("Failed to load MEDLINE journal abbreviations:", t), e._map = {};
 	}), this._loadingPromise;
-}, _n.prototype.isLoaded = function() {
+}, Sn.prototype.isLoaded = function() {
 	return this._map !== null;
-}, _n.prototype.getJournalAbbreviation = function(e) {
+}, Sn.prototype.getJournalAbbreviation = function(e) {
 	return !this._map || !e ? null : this._map[e.trim().toLowerCase()] || null;
-}, _n.prototype.createCiteprocHook = function() {
+}, Sn.prototype.createCiteprocHook = function() {
 	var e = this;
 	return function(t, n, r, i, a) {
 		if (i === "container-title") {
@@ -3834,20 +3914,20 @@ _n.prototype.load = function() {
 };
 //#endregion
 //#region src/app/auto-update-preferences.js
-var vn = "zoteroAutoUpdateCitations", yn = "zoteroAutoUpdateBibliography", bn = {
+var Cn = "zoteroAutoUpdateCitations", wn = "zoteroAutoUpdateBibliography", Tn = {
 	shouldUpdateCitations: function() {
-		return localStorage.getItem(vn) !== "false";
+		return localStorage.getItem(Cn) !== "false";
 	},
 	setShouldUpdateCitations: function(e) {
-		localStorage.setItem(vn, e ? "true" : "false");
+		localStorage.setItem(Cn, e ? "true" : "false");
 	},
 	shouldUpdateBibliography: function() {
-		return localStorage.getItem(yn) !== "false";
+		return localStorage.getItem(wn) !== "false";
 	},
 	setShouldUpdateBibliography: function(e) {
-		localStorage.setItem(yn, e ? "true" : "false");
+		localStorage.setItem(wn, e ? "true" : "false");
 	}
-}, xn = [{
+}, En = [{
 	id: "preview-book",
 	type: "book",
 	title: "The Art of Scientific Writing",
@@ -3906,7 +3986,7 @@ function Z(e, t) {
 	if (this._includeUrlCheckbox = new De("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._abbreviateJournalTitlesWrapper = document.getElementById("abbreviateJournalTitlesWrapper"), !this._abbreviateJournalTitlesWrapper) throw Error("abbreviateJournalTitlesWrapper not found");
 	if (this._abbreviateJournalTitlesCheckbox = new De("abbreviateJournalTitles", { label: "Use MEDLINE journal abbreviations" }), this._autoUpdateCitationsCheckbox = new De("autoUpdateCitations", { label: "Update other citations when inserting a new one" }), this._autoUpdateBibliographyCheckbox = new De("autoUpdateBibliography", { label: "Update the bibliography when inserting a citation" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
 	if (this._languageSelect = new Oe("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
-	this._cslStylesManager = new X("zoteroStyleId"), this._localesManager = new gn(), this._abbreviationsManager = new _n(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new he("styleMessage", { type: "error" }), this._langMessage = new he("langMessage", { type: "error" }), this._LANGUAGES = [
+	this._cslStylesManager = new X("zoteroStyleId"), this._localesManager = new xn(), this._abbreviationsManager = new Sn(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new he("styleMessage", { type: "error" }), this._langMessage = new he("langMessage", { type: "error" }), this._LANGUAGES = [
 		["af-ZA", "Afrikaans"],
 		["ar", "Arabic"],
 		["bg-BG", "Bulgarian"],
@@ -4015,9 +4095,9 @@ Z.prototype.getLocalesManager = function() {
 			var c = e._abbreviateJournalTitlesCheckbox.getState().checked;
 			e._stateSettings.abbreviateJournalTitles !== c && (e._cslStylesManager.saveAbbreviateJournalTitles(c), i.push(Promise.resolve()));
 			var l = e._autoUpdateCitationsCheckbox.getState().checked;
-			e._stateSettings.autoUpdateCitations !== l && (bn.setShouldUpdateCitations(l), i.push(Promise.resolve()));
+			e._stateSettings.autoUpdateCitations !== l && (Tn.setShouldUpdateCitations(l), i.push(Promise.resolve()));
 			var u = e._autoUpdateBibliographyCheckbox.getState().checked;
-			e._stateSettings.autoUpdateBibliography !== u && (bn.setShouldUpdateBibliography(u), i.push(Promise.resolve())), i.length ? (e._showLoader(), Promise.all(i).then(function() {
+			e._stateSettings.autoUpdateBibliography !== u && (Tn.setShouldUpdateBibliography(u), i.push(Promise.resolve())), i.length ? (e._showLoader(), Promise.all(i).then(function() {
 				e._hide(), e._hideLoader();
 				var t = {
 					language: n,
@@ -4099,8 +4179,8 @@ Z.prototype.getLocalesManager = function() {
 		styleFormat: this._cslStylesManager.getLastUsedFormat(),
 		includeUrlForPaperArticles: this._cslStylesManager.getIncludeUrlForPaperArticles(),
 		abbreviateJournalTitles: this._cslStylesManager.getAbbreviateJournalTitles(),
-		autoUpdateCitations: bn.shouldUpdateCitations(),
-		autoUpdateBibliography: bn.shouldUpdateBibliography()
+		autoUpdateCitations: Tn.shouldUpdateCitations(),
+		autoUpdateBibliography: Tn.shouldUpdateBibliography()
 	}, this._saveBtn.disable(), this._router.openSettings(), this._stateSettings.notesStyle === this._endNotes.getState().value ? this._endNotes.check(!0) : this._footNotes.check(!0), this._stateSettings.includeUrlForPaperArticles ? this._includeUrlCheckbox.check(!0) : this._includeUrlCheckbox.uncheck(!0), this._stateSettings.abbreviateJournalTitles ? this._abbreviateJournalTitlesCheckbox.check(!0) : this._abbreviateJournalTitlesCheckbox.uncheck(!0), this._stateSettings.autoUpdateCitations ? this._autoUpdateCitationsCheckbox.check(!0) : this._autoUpdateCitationsCheckbox.uncheck(!0), this._stateSettings.autoUpdateBibliography ? this._autoUpdateBibliographyCheckbox.check(!0) : this._autoUpdateBibliographyCheckbox.uncheck(!0), this._currentStyleContent && this._showPreview(this._currentStyleContent, this._stateSettings.language || this._localesManager.getLastUsedLanguage());
 }, Z.prototype._loadStyles = function() {
 	var e = this;
@@ -4124,7 +4204,7 @@ Z.prototype.getLocalesManager = function() {
 		return;
 	}
 	try {
-		var n = !this._includeUrlCheckbox.getState().checked, r = Object.fromEntries(xn.map(function(e) {
+		var n = !this._includeUrlCheckbox.getState().checked, r = Object.fromEntries(En.map(function(e) {
 			return [e.id, e];
 		})), i = this._localesManager, a = {
 			retrieveLocale: function(e) {
@@ -4139,7 +4219,7 @@ Z.prototype.getLocalesManager = function() {
 		};
 		this._abbreviationsManager.isLoaded() && this._abbreviateJournalTitlesCheckbox.getState().checked && (a.getAbbreviation = this._abbreviationsManager.createCiteprocHook());
 		var o = new CSL.Engine(a, e, t, !0);
-		o.updateItems(xn.map((e) => e.id));
+		o.updateItems(En.map((e) => e.id));
 		var s = o.makeBibliography(), c = s && s[0], l = s && s[1];
 		if (!l || !l.length) {
 			this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
@@ -4170,7 +4250,7 @@ Z.prototype.getLocalesManager = function() {
 		}
 	}
 }, Z.prototype._styleRespondsToIncludeUrlToggle = function(e, t) {
-	var n = this._localesManager, r = Object.fromEntries(xn.map(function(e) {
+	var n = this._localesManager, r = Object.fromEntries(En.map(function(e) {
 		return [e.id, e];
 	}));
 	function i(i) {
@@ -4185,7 +4265,7 @@ Z.prototype.getLocalesManager = function() {
 				return n.fillFromObject(t), n.toJSON(i);
 			}
 		}, e, t, !0);
-		a.updateItems(xn.map((e) => e.id));
+		a.updateItems(En.map((e) => e.id));
 		var o = a.makeBibliography(), s = o && o[1];
 		return s ? s.join("") : "";
 	}
@@ -4197,7 +4277,7 @@ Z.prototype.getLocalesManager = function() {
 	}
 }, Z.prototype._styleRespondsToAbbreviateJournalTitles = function(e, t) {
 	if (!this._abbreviationsManager.isLoaded()) return !0;
-	var n = this._abbreviationsManager, r = this._localesManager, i = !this._includeUrlCheckbox.getState().checked, a = Object.fromEntries(xn.map(function(e) {
+	var n = this._abbreviationsManager, r = this._localesManager, i = !this._includeUrlCheckbox.getState().checked, a = Object.fromEntries(En.map(function(e) {
 		return [e.id, e];
 	}));
 	function o(o) {
@@ -4214,7 +4294,7 @@ Z.prototype.getLocalesManager = function() {
 		};
 		o && (s.getAbbreviation = n.createCiteprocHook());
 		var c = new CSL.Engine(s, e, t, !0);
-		c.updateItems(xn.map((e) => e.id));
+		c.updateItems(En.map((e) => e.id));
 		var l = c.makeBibliography(), u = l && l[1];
 		return u ? u.join("") : "";
 	}
@@ -4238,14 +4318,14 @@ Z.prototype.getLocalesManager = function() {
 };
 //#endregion
 //#region src/app/pages/advanced.js
-function Sn(e, t) {
+function Dn(e, t) {
 	this._router = e, this._displayNoneClass = t, this._citationService = null, this._backBtn = new k("backToSettingsBtn", { variant: "secondary" }), this._repairBrokenFieldsBtn = new k("repairBrokenFieldsBtn", { variant: "secondary" }), this._addEventListeners();
 }
-Sn.prototype.setCitationService = function(e) {
+Dn.prototype.setCitationService = function(e) {
 	this._citationService = e;
-}, Sn.prototype.show = function() {
+}, Dn.prototype.show = function() {
 	this._router.openAdvanced();
-}, Sn.prototype._addEventListeners = function() {
+}, Dn.prototype._addEventListeners = function() {
 	var e = this;
 	this._backBtn.subscribe(function(t) {
 		t.type === "button:click" && e._router.openSettings();
@@ -4341,7 +4421,7 @@ Q.prototype.init = function() {
 };
 //#endregion
 //#region src/app/shared/ui/search-filter.js
-function Cn() {
+function On() {
 	this._searchField = new O("searchField", {
 		type: "text",
 		autofocus: !0,
@@ -4355,7 +4435,7 @@ function Cn() {
 		description: R("Search in:")
 	}), this._subscribers = [], this._addEventListeners();
 }
-Cn.prototype._addEventListeners = function() {
+On.prototype._addEventListeners = function() {
 	var e = this;
 	this._searchField.subscribe(function(t) {
 		if (t.type === "inputfield:blur" || t.type === "inputfield:submit") {
@@ -4367,9 +4447,9 @@ Cn.prototype._addEventListeners = function() {
 	}), this._filterButton.subscribe(function(t) {
 		t.type === "button:click" && (e._librarySelectList.isOpen || (t.detail.originalEvent && t.detail.originalEvent.stopPropagation(), e._librarySelectList.openDropdown()));
 	});
-}, Cn.prototype.clearGroups = function() {
+}, On.prototype.clearGroups = function() {
 	this._librarySelectList.clearItems();
-}, Cn.prototype.addGroups = function(e) {
+}, On.prototype.addGroups = function(e) {
 	var t = this, n = localStorage.getItem("selectedGroups"), r = n ? JSON.parse(n).map(function(e) {
 		return e.toString();
 	}) : ["my_library", "group_libraries"], i = !1;
@@ -4402,19 +4482,19 @@ Cn.prototype._addEventListeners = function() {
 		}
 		this._selectedGroupsWatcher(a, e);
 	}
-}, Cn.prototype._getSelectedGroups = function() {
+}, On.prototype._getSelectedGroups = function() {
 	var e = this, t = this._librarySelectList.getSelectedValues();
 	return (Array.isArray(t) === !1 || t.length === 0) && setTimeout(function() {
 		e._librarySelectList.openDropdown();
 	}, 500), t === null || typeof t == "string" ? [] : t;
-}, Cn.prototype.subscribe = function(e) {
+}, On.prototype.subscribe = function(e) {
 	var t = this;
 	return this._subscribers.push(e), { unsubscribe: function() {
 		t._subscribers = t._subscribers.filter(function(t) {
 			return t !== e;
 		});
 	} };
-}, Cn.prototype._selectedGroupsWatcher = function(e, t) {
+}, On.prototype._selectedGroupsWatcher = function(e, t) {
 	var n = this;
 	this._librarySelectList instanceof Oe && this._librarySelectList.subscribe(function(r) {
 		if (r.type === "selectbox:change") {
@@ -4433,7 +4513,7 @@ Cn.prototype._addEventListeners = function() {
 };
 //#endregion
 //#region src/app/shared/constants/locator-values.js
-var wn = [
+var kn = [
 	["appendix", "Appendix"],
 	["article", "Article"],
 	["book", "Book"],
@@ -4563,7 +4643,7 @@ $.prototype._init = function() {
 		usePortal: !0,
 		translate: R
 	});
-	wn.forEach(function(e) {
+	kn.forEach(function(e) {
 		var n = e[0] === t;
 		m.addItem(e[0], e[1], n), n && (d = e[1]);
 	});
@@ -4664,7 +4744,7 @@ $.prototype._init = function() {
 		if (!t) throw Error("errorWrapper not found");
 		var n = document.getElementById("mainState");
 		if (!n) throw Error("mainState not found");
-		l = new Cn(), u = new $(e, se, w), d = new k("saveAsTextBtn", { variant: "secondary" }), f = new k("insertLinkBtn", { disabled: !0 }), p = new k("settingsBtn", {
+		l = new On(), u = new $(e, se, w), d = new k("saveAsTextBtn", { variant: "secondary" }), f = new k("insertLinkBtn", { disabled: !0 }), p = new k("settingsBtn", {
 			variant: "icon-only",
 			size: "small"
 		}), m = new k("insertBibBtn", { variant: "secondary" }), h = new k("refreshBtn", { variant: "secondary" }), _ = {
@@ -4675,7 +4755,7 @@ $.prototype._init = function() {
 	window.Asc.plugin.init = function() {
 		We.show(), v(), t = new x(), n = new D();
 		var a = new Q(t, n);
-		r = new Z(t, e), i = new Sn(t, e), o = new Ut(r.getLocalesManager(), r.getStyleManager(), n, r.getAbbreviationsManager()), i.setCitationService(o);
+		r = new Z(t, e), i = new Dn(t, e), o = new Ut(r.getLocalesManager(), r.getStyleManager(), n, r.getAbbreviationsManager()), i.setCitationService(o);
 		var s = !1;
 		te(), a.init().onOpen(function() {
 			We.hide();
@@ -4758,8 +4838,8 @@ $.prototype._init = function() {
 						return;
 					}
 					yield re(!0, "Zotero (" + R("Updating citations") + ")");
-					var t = o.updateCslItems.bind(o, !1), n = r.getStyleManager();
-					n.getLastUsedFormat() === "note" && (t = o.updateCslItemsInNotes.bind(o, n.getLastUsedNotesStyle())), t().catch(function(e) {
+					var t = o.updateCslItems.bind(o, !1, { refreshItems: !0 }), n = r.getStyleManager();
+					n.getLastUsedFormat() === "note" && (t = o.updateCslItemsInNotes.bind(o, n.getLastUsedNotesStyle(), { refreshItems: !0 })), t().catch(function(e) {
 						console.error(e);
 						var t = R("Failed to refresh");
 						typeof e == "string" && (t += ". " + R(e)), S(t);
@@ -4818,8 +4898,8 @@ $.prototype._init = function() {
 					}).then(function(e) {
 						i = e;
 						var t = {
-							skipCitations: !bn.shouldUpdateCitations(),
-							skipBibliography: !bn.shouldUpdateBibliography()
+							skipCitations: !Tn.shouldUpdateCitations(),
+							skipBibliography: !Tn.shouldUpdateBibliography()
 						};
 						return n ? o.updateCslItems(!1, t) : o.updateCslItems(void 0, t);
 					}).then(() => {
@@ -4852,17 +4932,19 @@ $.prototype._init = function() {
 			};
 		}()), r.onChangeState(/*#__PURE__*/ function() {
 			var e = a(function* (e, t) {
-				yield re(!0, "Zotero (" + R("Updating citations") + ")");
-				var n = o.updateCslItems.bind(o, !0);
-				[e.styleFormat, t.styleFormat].includes("note") && (n = e.styleFormat === t.styleFormat ? e.notesStyle === t.notesStyle ? o.updateCslItems.bind(o, !0) : o.convertNotesStyle.bind(o, e.notesStyle) : e.styleFormat === "note" ? o.switchingBetweenNotesAndText.bind(o, e.notesStyle) : o.switchingBetweenNotesAndText.bind(o)), n().catch(function(e) {
-					console.error(e);
-					var t = R("Failed to refresh");
-					typeof e == "string" && (t += ". " + R(e)), S(t);
-				}).finally(function() {
-					C(!1, "Zotero (" + R("Updating citations") + ")");
-					var e = r.getLocalesManager().getLastUsedLanguage() || "en-US";
-					o.saveStyleToDocument(r.getStyleManager(), e);
-				});
+				if (e.language !== t.language || e.style !== t.style || e.notesStyle !== t.notesStyle || e.styleFormat !== t.styleFormat || e.includeUrlForPaperArticles !== t.includeUrlForPaperArticles || e.abbreviateJournalTitles !== t.abbreviateJournalTitles) {
+					yield re(!0, "Zotero (" + R("Updating citations") + ")");
+					var n = o.updateCslItems.bind(o, !0);
+					[e.styleFormat, t.styleFormat].includes("note") && (n = e.styleFormat === t.styleFormat ? e.notesStyle === t.notesStyle ? o.updateCslItems.bind(o, !0) : o.convertNotesStyle.bind(o, e.notesStyle) : e.styleFormat === "note" ? o.switchingBetweenNotesAndText.bind(o, e.notesStyle) : o.switchingBetweenNotesAndText.bind(o)), n().catch(function(e) {
+						console.error(e);
+						var t = R("Failed to refresh");
+						typeof e == "string" && (t += ". " + R(e)), S(t);
+					}).finally(function() {
+						C(!1, "Zotero (" + R("Updating citations") + ")");
+						var e = r.getLocalesManager().getLastUsedLanguage() || "en-US";
+						o.saveStyleToDocument(r.getStyleManager(), e);
+					});
+				}
 			});
 			return function(t, n) {
 				return e.apply(this, arguments);
@@ -4903,7 +4985,7 @@ $.prototype._init = function() {
 		return ie = a(function* (e, t) {
 			c = !0, m.disable(), h.disable(), f.disable();
 			var n = window.Asc.scope.editorVersion;
-			n && n < 9004e3 ? window._cursorPosition = yield pn.getCursorPosition() : yield new Promise((t) => {
+			n && n < 9004e3 ? window._cursorPosition = yield vn.getCursorPosition() : yield new Promise((t) => {
 				Asc.plugin.executeMethod("StartAction", ["GroupActions", {
 					lockScroll: !0,
 					keepSelection: e
@@ -4918,7 +5000,7 @@ $.prototype._init = function() {
 		return ae = a(function* (e, t) {
 			c = !1, m.enable(), h.enable(), ue();
 			var n = window.Asc.scope.editorVersion;
-			n && n < 9004e3 ? pn.setCursorPosition(window._cursorPosition || 0) : yield new Promise((t) => {
+			n && n < 9004e3 ? vn.setCursorPosition(window._cursorPosition || 0) : yield new Promise((t) => {
 				Asc.plugin.executeMethod("EndAction", ["GroupActions", { scrollToTarget: e }], t);
 			});
 		}), ae.apply(this, arguments);

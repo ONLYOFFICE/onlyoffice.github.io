@@ -781,11 +781,11 @@ class CitationService {
 
     /**
      * @param {{field: AddinFieldData, cslCitation: CSLCitation}[]} fieldsWithCitations
-     * @param {boolean} bHardRefresh
+     * @param {boolean} bOverwriteManualEdits
      * @param {boolean} [bChangePosition]
      * @returns {Promise<AddinFieldData[]>}
      */
-    async #getUpdatedFields(fieldsWithCitations, bHardRefresh, bChangePosition) {
+    async #getUpdatedFields(fieldsWithCitations, bOverwriteManualEdits, bChangePosition) {
         const fragment = document.createDocumentFragment();
         const tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
@@ -826,7 +826,7 @@ class CitationService {
                 continue;
             }*/
 
-            if (oldContentInCit !== oldContentInDoc && !bHardRefresh) {
+            if (oldContentInCit !== oldContentInDoc && !bOverwriteManualEdits) {
                 // content was changed by user, but not saved in citation object
                 let text =
                     "<p>" +
@@ -1149,36 +1149,39 @@ class CitationService {
     }
 
     /**
-     * @param {boolean} [bHardRefresh]
-     * @param {{skipCitations?: boolean, skipBibliography?: boolean}} [skipOptions]
+     * Rewrites the document's citations. By default it reformats the data the
+     * document already stores; with refreshItems it first re-reads every cited
+     * item from Zotero and replaces that data.
+     * @param {boolean|undefined} bOverwriteManualEdits
+     * @param {{skipCitations?: boolean, skipBibliography?: boolean, refreshItems?: boolean, onProgress?: RefreshProgressCallback}} [options]
      * @returns {Promise<Array<string>>}
      */
-    async updateCslItems(bHardRefresh, skipOptions) {
+    async updateCslItems(bOverwriteManualEdits, options) {
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            await this.#prepareStorageForCurrentStyle();
+            await this.#prepareStorageForCurrentStyle(options);
 
             /** @type {AddinFieldData[]} */
             let updatedFields = [];
 
-            if (typeof bHardRefresh === "undefined") {
+            if (typeof bOverwriteManualEdits === "undefined") {
                 const format = this._cslStylesManager.getLastUsedFormat();
                 if (format === "numeric") {
-                    bHardRefresh = true;
+                    bOverwriteManualEdits = true;
                 }
             }
-            const bSkipCitations = !!(skipOptions && skipOptions.skipCitations);
+            const bSkipCitations = !!(options && options.skipCitations);
             const bSkipBibliography = !!(
-                skipOptions && skipOptions.skipBibliography
+                options && options.skipBibliography
             );
 
-            if (!bSkipCitations && typeof bHardRefresh === "boolean") {
+            if (!bSkipCitations && typeof bOverwriteManualEdits === "boolean") {
                 updatedFields = await this.#getUpdatedFields(
                     fieldsWithCitations,
-                    bHardRefresh,
+                    bOverwriteManualEdits,
                 );
             }
 
@@ -1199,15 +1202,16 @@ class CitationService {
     /**
      * // it is a crutch, because "SelectAddinField" does not work with notes
      * @param {"footnotes" | "endnotes"} notesStyle
+     * @param {{skipCitations?: boolean, skipBibliography?: boolean, refreshItems?: boolean, onProgress?: RefreshProgressCallback}} [options]
      * @returns {Promise<void>}
      */
-    async updateCslItemsInNotes(notesStyle) {
+    async updateCslItemsInNotes(notesStyle, options) {
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            await this.#prepareStorageForCurrentStyle();
+            await this.#prepareStorageForCurrentStyle(options);
 
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(

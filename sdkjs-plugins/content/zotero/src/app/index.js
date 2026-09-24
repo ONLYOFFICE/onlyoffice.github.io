@@ -350,7 +350,8 @@ import "../styles.css";
 
             let updateFn = citationService.updateCslItems.bind(
                 citationService,
-                false
+                false,
+                { refreshItems: true }
             );
             
             const styleManager = settings.getStyleManager();
@@ -358,7 +359,8 @@ import "../styles.css";
                 // this way, because "SelectAddinField" does not work with notes
                 updateFn = citationService.updateCslItemsInNotes.bind(
                     citationService,
-                    styleManager.getLastUsedNotesStyle()
+                    styleManager.getLastUsedNotesStyle(),
+                    { refreshItems: true }
                 );
             }
 
@@ -456,16 +458,16 @@ import "../styles.css";
                 })
                 .then(function (field) {
                     currentField = field;
-                    const skipOptions = {
+                    const updateOptions = {
                         skipCitations:
                             !AutoUpdatePreferences.shouldUpdateCitations(),
                         skipBibliography:
                             !AutoUpdatePreferences.shouldUpdateBibliography(),
                     };
                     if (bHasNotes) {
-                        return citationService.updateCslItems(false, skipOptions);
+                        return citationService.updateCslItems(false, updateOptions);
                     }
-                    return citationService.updateCslItems(undefined, skipOptions);
+                    return citationService.updateCslItems(undefined, updateOptions);
                 })
                 .then(() => {
                     if (bHasNotes) {
@@ -507,6 +509,19 @@ import "../styles.css";
         });
 
         settings.onChangeState(async function (newState, oldState) {
+            const bAffectsRendering =
+                newState.language !== oldState.language ||
+                newState.style !== oldState.style ||
+                newState.notesStyle !== oldState.notesStyle ||
+                newState.styleFormat !== oldState.styleFormat ||
+                newState.includeUrlForPaperArticles !==
+                    oldState.includeUrlForPaperArticles ||
+                newState.abbreviateJournalTitles !==
+                    oldState.abbreviateJournalTitles;
+            if (!bAffectsRendering) {
+                return;
+            }
+
             await onStartAction(
                 true,
                 "Zotero (" + translate("Updating citations") + ")",
