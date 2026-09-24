@@ -109,20 +109,49 @@
       </div>
     </section>
 
-    <!-- Action Button: Translate -->
-    <div class="action-row">
+    <!-- Engine / Service Selection & Translate Action in Same Row -->
+    <section class="engine-translate-row">
+      <div class="engine-select-group">
+        <select id="serviceSelect" class="engine-select" aria-label="Translation Engine">
+          <option value="google" selected>Google Translate</option>
+          <option value="libre">LibreTranslate</option>
+          <option value="deepl">DeepL API</option>
+        </select>
+      </div>
       <button id="translateBtn" class="btn-translate" type="button">
         <span class="btn-spinner" id="btnSpinner" style="display: none;"></span>
         <span id="translateBtnText">Translate</span>
       </button>
+    </section>
+
+    <!-- Dynamic API Key Row (when DeepL or Libre chosen) -->
+    <div id="apiKeyGroup" class="api-key-group" style="display: none;">
+      <div class="api-key-header-row">
+        <label for="apiKeyInput" id="apiKeyLabel" class="field-label">API Key</label>
+        <span id="apiKeyHint" class="field-hint">Required for DeepL</span>
+      </div>
+      <div class="api-key-wrapper">
+        <input
+          type="password"
+          id="apiKeyInput"
+          class="api-key-input"
+          placeholder="Enter API Key..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button type="button" id="toggleApiKeyBtn" class="btn-toggle-key" title="Toggle visibility">👁</button>
+      </div>
     </div>
 
-    <!-- Source Text Area -->
+    <!-- Fallback / Switch Notice Banner -->
+    <div id="fallbackNotice" class="fallback-notice" style="display: none;"></div>
+
+    <!-- Source Text Area (Responsive Flex) -->
     <section class="text-section">
       <div class="section-top">
         <label for="sourceText" class="section-label">Source Text</label>
         <div class="section-actions">
-          <button id="syncSelectionBtn" class="btn-text-action btn-sync-action" type="button" title="Capture selected text from document">🔄 Capture Selection</button>
+          <button id="syncSelectionBtn" class="btn-text-action btn-sync-action" type="button" title="Capture selected text from document">🔄 Capture</button>
           <span id="sourceCharCount" class="char-count">0 chars</span>
           <button id="clearSourceBtn" class="btn-text-action" type="button" title="Clear text">Clear</button>
         </div>
@@ -131,12 +160,11 @@
         id="sourceText"
         class="text-box"
         placeholder="Type, paste, or select text in the document..."
-        rows="6"
         spellcheck="false"
       ></textarea>
     </section>
 
-    <!-- Translated Text Area -->
+    <!-- Translated Text Area (Responsive Flex) -->
     <section class="text-section">
       <div class="section-top">
         <label for="targetText" class="section-label">Translated Text</label>
@@ -144,13 +172,14 @@
           <button id="copyTargetBtn" class="btn-text-action" type="button" title="Copy to clipboard">Copy</button>
         </div>
       </div>
-      <textarea
-        id="targetText"
-        class="text-box target-box"
-        placeholder="Translation will appear here automatically..."
-        rows="6"
-        readonly
-      ></textarea>
+      <div class="target-textarea-wrapper">
+        <textarea
+          id="targetText"
+          class="text-box target-box"
+          placeholder="Translation will appear here automatically..."
+          readonly
+        ></textarea>
+      </div>
       <div id="errorAlert" class="error-alert" style="display: none;"></div>
     </section>
 
@@ -162,6 +191,9 @@
         </svg>
         <span>Insert into Document</span>
       </button>
+      <div class="plugin-credit">
+        <a href="https://github.com/thorthello/OnlyOffice_QuickTranslator" target="_blank" rel="noopener noreferrer" class="credit-link">Credits: ThorThello</a>
+      </div>
     </footer>
   </div>
 </body>

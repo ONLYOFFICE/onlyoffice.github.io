@@ -9,7 +9,10 @@
   'use strict';
 
   var STORAGE_KEY_TARGET_LANG = 'quicktranslator_target_lang';
+  var STORAGE_KEY_SERVICE = 'quicktranslator_service';
+  var STORAGE_KEY_APIKEY_PREFIX = 'quicktranslator_apikey_';
   var DEFAULT_TARGET_LANG = 'it';
+  var DEFAULT_SERVICE = 'google';
 
   // DOM Elements cache
   var elements = {};
@@ -17,6 +20,7 @@
   var isInitialized = false;
   var lastTranslatedSource = '';
   var lastTranslatedPair = '';
+  var lastTranslatedService = '';
   var currentRequestId = 0;
   var currentAbortController = null;
   var selectionDebounceTimer = null;
@@ -90,6 +94,13 @@
 
   function getElements() {
     return {
+      serviceSelect: document.getElementById('serviceSelect'),
+      apiKeyGroup: document.getElementById('apiKeyGroup'),
+      apiKeyInput: document.getElementById('apiKeyInput'),
+      apiKeyLabel: document.getElementById('apiKeyLabel'),
+      apiKeyHint: document.getElementById('apiKeyHint'),
+      toggleApiKeyBtn: document.getElementById('toggleApiKeyBtn'),
+      fallbackNotice: document.getElementById('fallbackNotice'),
       sourceLangSelect: document.getElementById('sourceLangSelect'),
       targetLangSelect: document.getElementById('targetLangSelect'),
       swapBtn: document.getElementById('swapBtn'),
@@ -116,19 +127,102 @@
     }
     isInitialized = true;
 
-    // Load saved target language preference
+    // 1. Load saved service engine
     try {
-      var saved = localStorage.getItem(STORAGE_KEY_TARGET_LANG);
-      if (saved && elements.targetLangSelect.querySelector('option[value="' + saved + '"]')) {
-        elements.targetLangSelect.value = saved;
+      var savedService = localStorage.getItem(STORAGE_KEY_SERVICE);
+      if (savedService && ['google', 'libre', 'deepl'].indexOf(savedService) !== -1) {
+        if (elements.serviceSelect) elements.serviceSelect.value = savedService;
       }
     } catch (e) {}
+
+    // 2. Load saved API key for current service
+    updateApiKeyVisibility();
+
+    // 3. Load saved target language preference
+    try {
+      var savedLang = localStorage.getItem(STORAGE_KEY_TARGET_LANG);
+      if (savedLang && elements.targetLangSelect.querySelector('option[value="' + savedLang + '"]')) {
+        elements.targetLangSelect.value = savedLang;
+      }
+    } catch (e2) {}
 
     bindEventListeners();
     return true;
   }
 
+  function updateApiKeyVisibility() {
+    if (!elements.serviceSelect || !elements.apiKeyGroup || !elements.apiKeyInput) return;
+    var service = elements.serviceSelect.value;
+
+    // Retrieve saved key for this service
+    var savedKey = '';
+    try {
+      savedKey = localStorage.getItem(STORAGE_KEY_APIKEY_PREFIX + service) || '';
+    } catch (e) {}
+    elements.apiKeyInput.value = savedKey;
+
+    if (service === 'google') {
+      elements.apiKeyGroup.style.display = 'none';
+      elements.apiKeyInput.classList.remove('api-key-highlight');
+    } else if (service === 'libre') {
+      elements.apiKeyGroup.style.display = 'flex';
+      elements.apiKeyInput.classList.remove('api-key-highlight');
+      elements.apiKeyInput.placeholder = 'Enter custom LibreTranslate key (optional)...';
+      if (elements.apiKeyHint) {
+        elements.apiKeyHint.textContent = 'Optional for custom instances';
+        elements.apiKeyHint.className = 'field-hint';
+      }
+    } else if (service === 'deepl') {
+      elements.apiKeyGroup.style.display = 'flex';
+      elements.apiKeyInput.classList.add('api-key-highlight');
+      elements.apiKeyInput.placeholder = 'Enter DeepL Auth Key (...:fx)...';
+      if (elements.apiKeyHint) {
+        elements.apiKeyHint.textContent = 'Required for DeepL API (Free / Pro)';
+        elements.apiKeyHint.className = 'field-hint hint-required';
+      }
+    }
+  }
+
   function bindEventListeners() {
+    // Engine Service change
+    if (elements.serviceSelect) {
+      elements.serviceSelect.addEventListener('change', function () {
+        var service = elements.serviceSelect.value;
+        try {
+          localStorage.setItem(STORAGE_KEY_SERVICE, service);
+        } catch (e) {}
+        updateApiKeyVisibility();
+        hideFallbackNotice();
+        if (elements.sourceText.value.trim().length > 0) {
+          performTranslation(true);
+        }
+      });
+    }
+
+    // API Key input change & persistence
+    if (elements.apiKeyInput) {
+      elements.apiKeyInput.addEventListener('input', function () {
+        var service = elements.serviceSelect ? elements.serviceSelect.value : 'google';
+        var key = elements.apiKeyInput.value;
+        try {
+          localStorage.setItem(STORAGE_KEY_APIKEY_PREFIX + service, key);
+        } catch (e) {}
+      });
+    }
+
+    // Toggle API Key visibility
+    if (elements.toggleApiKeyBtn && elements.apiKeyInput) {
+      elements.toggleApiKeyBtn.addEventListener('click', function () {
+        if (elements.apiKeyInput.type === 'password') {
+          elements.apiKeyInput.type = 'text';
+          elements.toggleApiKeyBtn.textContent = '🔒';
+        } else {
+          elements.apiKeyInput.type = 'password';
+          elements.toggleApiKeyBtn.textContent = '👁';
+        }
+      });
+    }
+
     // Target Language changed
     elements.targetLangSelect.addEventListener('change', function () {
       try {
@@ -206,8 +300,10 @@
       elements.targetText.value = '';
       lastTranslatedSource = '';
       lastTranslatedPair = '';
+      lastTranslatedService = '';
       updateCharCount();
       hideError();
+      hideFallbackNotice();
       setStatus('ready', 'Ready');
     });
 
@@ -255,7 +351,35 @@
     elements.errorAlert.style.display = 'none';
   }
 
+  function showFallbackNotice(msg) {
+    if (!elements.fallbackNotice) return;
+    elements.fallbackNotice.textContent = msg;
+    elements.fallbackNotice.style.display = 'block';
+  }
+
+  function hideFallbackNotice() {
+    if (!elements.fallbackNotice) return;
+    elements.fallbackNotice.style.display = 'none';
+  }
+
   // Core Translation Method with Sequential Request ID & Abort Support
+  function isHtmlOrCaptivePortal(text) {
+    if (!text || typeof text !== 'string') return false;
+    var lower = text.trim().toLowerCase();
+    return (
+      lower.indexOf('<!doctype') === 0 ||
+      lower.indexOf('<html') === 0 ||
+      lower.indexOf('<head') === 0 ||
+      lower.indexOf('<body') !== -1 ||
+      lower.indexOf('access denied') !== -1 ||
+      lower.indexOf('captive portal') !== -1 ||
+      lower.indexOf('fortinet') !== -1 ||
+      lower.indexOf('sophos') !== -1 ||
+      lower.indexOf('palo alto') !== -1 ||
+      lower.indexOf('autenticazione') !== -1
+    );
+  }
+
   function performTranslation(force) {
     if (!elements.sourceText) return;
     var text = cleanAndNormalizeText(elements.sourceText.value);
@@ -263,15 +387,19 @@
       elements.targetText.value = '';
       lastTranslatedSource = '';
       lastTranslatedPair = '';
+      lastTranslatedService = '';
+      hideFallbackNotice();
       return;
     }
 
     var sourceLang = elements.sourceLangSelect.value;
     var targetLang = elements.targetLangSelect.value;
+    var service = elements.serviceSelect ? elements.serviceSelect.value : 'google';
+    var apiKey = elements.apiKeyInput ? elements.apiKeyInput.value.trim() : '';
     var langPair = sourceLang + '->' + targetLang;
 
-    // Prevent redundant requests if already translated
-    if (!force && text === lastTranslatedSource && langPair === lastTranslatedPair && elements.targetText.value.trim().length > 0) {
+    // Prevent redundant requests if already translated with identical text, pair and engine
+    if (!force && text === lastTranslatedSource && langPair === lastTranslatedPair && service === lastTranslatedService && elements.targetText.value.trim().length > 0) {
       return;
     }
 
@@ -279,6 +407,8 @@
       elements.targetText.value = text;
       lastTranslatedSource = text;
       lastTranslatedPair = langPair;
+      lastTranslatedService = service;
+      hideFallbackNotice();
       setStatus('ready', 'Identical');
       return;
     }
@@ -300,23 +430,35 @@
     if (elements.translateBtnText) elements.translateBtnText.textContent = 'Translating...';
     setStatus('busy', 'Translating');
     hideError();
+    hideFallbackNotice();
 
     var currentReqText = text;
     var currentReqPair = langPair;
+    var currentReqService = service;
 
-    translateRequest(text, sourceLang, targetLang, currentAbortController ? currentAbortController.signal : null)
+    translateRequest(text, sourceLang, targetLang, service, apiKey, currentAbortController ? currentAbortController.signal : null)
       .then(function (result) {
-        if (myReqId !== currentRequestId) return; // Discard superseded result
+        if (myReqId !== currentRequestId) return;
         elements.targetText.value = result;
         lastTranslatedSource = currentReqText;
         lastTranslatedPair = currentReqPair;
+        lastTranslatedService = currentReqService;
+        hideFallbackNotice();
         setStatus('ready', 'Translated');
       })
       .catch(function (err) {
-        if (err && err.name === 'AbortError') return; // Deliberately superseded
+        if (err && err.name === 'AbortError') return;
         if (myReqId === currentRequestId) {
           console.error('QuickTranslator error:', err);
-          showError('Translation failed. Please check network connection.');
+          var errMsg = 'Connessione ai server di traduzione non riuscita. Verificare il filtro di rete o il login Wi-Fi.';
+          if (err && err.message) {
+            if (err.message.indexOf('captive') !== -1 || err.message.indexOf('firewall') !== -1 || err.message.indexOf('Failed to fetch') !== -1) {
+              errMsg = 'Bloccato dal firewall di rete/scuola o richiesta pagina di login Wi-Fi.';
+            } else if (err.message.indexOf('DeepL') !== -1 || err.message.indexOf('API Key') !== -1) {
+              errMsg = err.message;
+            }
+          }
+          showError(errMsg);
         }
       })
       .finally(function () {
@@ -326,30 +468,55 @@
           if (elements.btnSpinner) elements.btnSpinner.style.display = 'none';
           if (elements.translateBtnText) elements.translateBtnText.textContent = 'Translate';
 
-          // If text changed in the textarea while the request was in flight, translate newest content
+          // If user typed new characters while request was in-flight, translate the new content (never loop on identical text)
           var latestText = cleanAndNormalizeText(elements.sourceText.value);
-          if (latestText && latestText !== lastTranslatedSource) {
+          if (latestText && latestText !== currentReqText) {
             performTranslation(false);
           }
         }
       });
   }
 
-  // Multi-Engine Translation Service (Google Translate primary + MyMemory fallback)
-  function translateRequest(text, sourceLang, targetLang, signal) {
-    var src = sourceLang === 'auto' ? 'auto' : sourceLang;
-    var tgt = targetLang;
+  // Fast Fetch Wrapper with AbortController (default 2800ms)
+  function fetchWithTimeout(url, options, timeoutMs, externalSignal) {
+    timeoutMs = timeoutMs || 2800;
+    var controller = new AbortController();
+    var timer = setTimeout(function () {
+      controller.abort();
+    }, timeoutMs);
 
+    if (externalSignal) {
+      if (externalSignal.aborted) {
+        clearTimeout(timer);
+        controller.abort();
+      } else {
+        externalSignal.addEventListener('abort', function () {
+          clearTimeout(timer);
+          controller.abort();
+        });
+      }
+    }
+
+    var opts = Object.assign({}, options, { signal: controller.signal });
+    return fetch(url, opts).finally(function () {
+      clearTimeout(timer);
+    });
+  }
+
+  // Engine: Google Translate
+  function callGoogleTranslate(text, src, tgt, signal, timeoutMs) {
+    timeoutMs = timeoutMs || 2800;
     var googleUrl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=' + encodeURIComponent(src) + '&tl=' + encodeURIComponent(tgt) + '&dt=t&q=' + encodeURIComponent(text);
-
-    var fetchOptions = signal ? { signal: signal } : {};
-
-    return fetch(googleUrl, fetchOptions)
+    return fetchWithTimeout(googleUrl, { method: 'GET' }, timeoutMs, signal)
       .then(function (res) {
         if (!res.ok) throw new Error('Google Translate HTTP ' + res.status);
-        return res.json();
+        return res.text();
       })
-      .then(function (data) {
+      .then(function (rawText) {
+        if (isHtmlOrCaptivePortal(rawText)) {
+          throw new Error('Rilevata pagina di login/firewall scolastico');
+        }
+        var data = JSON.parse(rawText);
         if (data && Array.isArray(data[0])) {
           var translatedParts = data[0].map(function (segment) {
             return segment[0] || '';
@@ -359,28 +526,161 @@
             return translatedParts;
           }
         }
-        throw new Error('Empty translation output');
+        throw new Error('Empty Google translation output');
       })
       .catch(function (err) {
-        if (err && err.name === 'AbortError') throw err;
+        if (signal && signal.aborted) throw err;
+        var altGoogleUrl = 'https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=' + encodeURIComponent(src) + '&tl=' + encodeURIComponent(tgt) + '&q=' + encodeURIComponent(text);
+        return fetchWithTimeout(altGoogleUrl, { method: 'GET' }, timeoutMs, signal)
+          .then(function (res) {
+            if (!res.ok) throw new Error('Google Translate alt HTTP ' + res.status);
+            return res.text();
+          })
+          .then(function (rawText) {
+            if (isHtmlOrCaptivePortal(rawText)) {
+              throw new Error('Rilevata pagina di login/firewall scolastico');
+            }
+            var data = JSON.parse(rawText);
+            if (Array.isArray(data) && typeof data[0] === 'string' && data[0].trim().length > 0) {
+              return data[0];
+            } else if (typeof data === 'string' && data.trim().length > 0) {
+              return data;
+            }
+            throw new Error('Empty Google alt output');
+          });
+      });
+  }
 
-        // Fallback: MyMemory API
+  // Engine: LibreTranslate
+  function callLibreTranslate(text, src, tgt, apiKey, signal, timeoutMs) {
+    timeoutMs = timeoutMs || 2800;
+    var payload = {
+      q: text,
+      source: src,
+      target: tgt,
+      format: 'text'
+    };
+    if (apiKey && apiKey.length > 0) {
+      payload.api_key = apiKey;
+    }
+
+    var endpoint = 'https://translate.argosopentech.com/translate';
+    return fetchWithTimeout(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }, timeoutMs, signal)
+      .then(function (res) {
+        if (!res.ok) throw new Error('LibreTranslate HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function (rawText) {
+        if (isHtmlOrCaptivePortal(rawText)) {
+          throw new Error('Rilevata pagina di login/firewall scolastico');
+        }
+        var data = JSON.parse(rawText);
+        if (data && data.translatedText) {
+          return decodeHTMLEntities(data.translatedText);
+        }
+        throw new Error('Empty LibreTranslate output');
+      });
+  }
+
+  // Engine: DeepL
+  function callDeepLTranslate(text, src, tgt, apiKey, signal, timeoutMs) {
+    timeoutMs = timeoutMs || 3000;
+    if (!apiKey || apiKey.length === 0) {
+      throw new Error('DeepL API Key is required. Please enter your API key in the field above.');
+    }
+    var isFree = apiKey.indexOf(':fx') !== -1;
+    var endpoint = isFree ? 'https://api-free.deepl.com/v2/translate' : 'https://api.deepl.com/v2/translate';
+
+    var params = new URLSearchParams();
+    params.append('text', text);
+    params.append('target_lang', tgt.toUpperCase());
+    if (src !== 'auto') {
+      params.append('source_lang', src.toUpperCase());
+    }
+
+    return fetchWithTimeout(endpoint, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'DeepL-Auth-Key ' + apiKey,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: params.toString()
+    }, timeoutMs, signal)
+      .then(function (res) {
+        if (!res.ok) throw new Error('DeepL API HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        if (data && Array.isArray(data.translations) && data.translations.length > 0) {
+          return data.translations[0].text;
+        }
+        throw new Error('Empty DeepL output');
+      });
+  }
+
+  // Multi-Engine Translation Service with Fast Timeout & Resilient Fallback
+  function translateRequest(text, sourceLang, targetLang, service, apiKey, signal) {
+    var src = sourceLang === 'auto' ? 'auto' : sourceLang;
+    var tgt = targetLang;
+    var primaryPromise;
+
+    if (service === 'deepl') {
+      primaryPromise = callDeepLTranslate(text, src, tgt, apiKey, signal, 3000);
+    } else if (service === 'libre') {
+      primaryPromise = callLibreTranslate(text, src, tgt, apiKey, signal, 2800);
+    } else {
+      primaryPromise = callGoogleTranslate(text, src, tgt, signal, 2800);
+    }
+
+    return primaryPromise.catch(function (primaryErr) {
+      if (signal && signal.aborted) throw primaryErr;
+
+      // Fallback 1: Switch to secondary engine
+      var fallbackNoticeText = service === 'google'
+        ? 'Google non raggiungibile, tentativo con LibreTranslate...'
+        : service === 'deepl'
+        ? 'DeepL non disponibile, tentativo con Google Translate...'
+        : 'LibreTranslate non raggiungibile, tentativo con Google Translate...';
+
+      showFallbackNotice(fallbackNoticeText);
+
+      var fallbackPromise = (service === 'google')
+        ? callLibreTranslate(text, src, tgt, undefined, signal, 2800)
+        : callGoogleTranslate(text, src, tgt, signal, 2800);
+
+      return fallbackPromise.catch(function (fallbackErr) {
+        if (signal && signal.aborted) throw fallbackErr;
+
+        // Fallback 2: MyMemory API
         var langPair = (src === 'auto' ? 'autodetect' : src) + '|' + tgt;
         var myMemoryUrl = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + encodeURIComponent(langPair);
 
-        return fetch(myMemoryUrl, fetchOptions)
+        showFallbackNotice('Tentativo con server alternativo...');
+
+        return fetchWithTimeout(myMemoryUrl, { method: 'GET' }, 2800, signal)
           .then(function (res) {
             if (!res.ok) throw new Error('MyMemory HTTP ' + res.status);
-            return res.json();
+            return res.text();
           })
-          .then(function (data) {
+          .then(function (rawText) {
+            if (isHtmlOrCaptivePortal(rawText)) {
+              throw new Error('Firewall scolastico o pagina di blocco rilevata');
+            }
+            var data = JSON.parse(rawText);
             if (data && data.responseData && data.responseData.translatedText) {
               var decoded = decodeHTMLEntities(data.responseData.translatedText);
-              if (decoded) return decoded;
+              if (decoded && decoded !== text && !isHtmlOrCaptivePortal(decoded)) {
+                return decoded;
+              }
             }
-            throw new Error('MyMemory fallback failed');
+            throw new Error('Nessun server di traduzione disponibile');
           });
       });
+    });
   }
 
   function decodeHTMLEntities(text) {

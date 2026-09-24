@@ -22,55 +22,9 @@ Compatible with:
 
 ## 📦 Installation Guide
 
-### Option 1: OnlyOffice Desktop Editors (GUI)
 1. Download `QuickTranslator.plugin` or `QuickTranslator.zip`.
 2. Open OnlyOffice Desktop Editors.
 3. Go to the **Plugins** tab on the top ribbon.
 4. Click **Settings** > **Add Plugin**.
 5. Select the `QuickTranslator.plugin` file (or extract the zip into `sdkjs-plugins/quicktranslator`).
 6. The **QuickTranslator** button will appear on your Plugins tab!
-
-### Option 2: Desktop Editors Directory
-- **Windows**: `%LocalAppData%\ONLYOFFICE\DesktopEditors\data\sdkjs-plugins\quicktranslator`
-- **Linux**: `/opt/onlyoffice/desktopeditors/editors/sdkjs-plugins/quicktranslator`
-- **macOS**: `~/Library/Application Support/asc.onlyoffice.DesktopEditors/data/sdkjs-plugins/quicktranslator`
-
-### Option 3: OnlyOffice Docs / Workspace Server
-1. Copy the plugin folder to the `sdkjs-plugins/` directory on your Document Server:
-   ```bash
-   cp -r quicktranslator /var/www/onlyoffice/documentserver/sdkjs-plugins/
-   ```
-2. Restart the document server services if required.
-
----
-
-## 📄 File Structure
-
-```
-QuickTranslator/
-├── config.json                # OnlyOffice Manifest configuration
-├── index.html                 # Side panel HTML markup
-├── plugin.js                  # Core logic & OnlyOffice Asc.plugin bridge
-├── style.css                  # Responsive stylesheet with Light & Dark theme support
-├── CHANGELOG.md               # Version history for OnlyOffice Marketplace
-├── LICENSE                    # GNU General Public License v3
-├── README.md                  # Documentation & installation instructions
-├── translations/
-│   ├── langs.json             # Marketplace language index
-│   └── it-IT.json             # Italian translations
-└── resources/
-    ├── img/
-    │   ├── icon.png           # 48x48 ribbon icon
-    │   ├── icon@1.25x.png     # 125% DPI ribbon icon
-    │   ├── icon@1.5x.png      # 150% DPI ribbon icon
-    │   ├── icon@1.75x.png     # 175% DPI ribbon icon
-    │   └── icon@2x.png        # 96x96 High-DPI ribbon icon
-    └── store/
-        ├── screenshots/
-        │   ├── screen_1.png   # Store screenshot 1 (Document overview & Italian translation)
-        │   ├── screen_2.png   # Store screenshot 2 (Auto-detect to German translation)
-        │   └── screen_3.png   # Store screenshot 3 (Italian to Danish translation)
-        └── icons/
-            ├── icon.png       # 120x60 1x Store card banner
-            └── icon@2x.png    # 240x120 2x Retina Store card banner
-```
