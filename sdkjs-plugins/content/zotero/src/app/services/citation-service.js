@@ -415,6 +415,7 @@ class CitationService {
     #updateBibliography(bNoHaveFields, bibField) {
         if (bNoHaveFields) {
             bibField["Content"] = translate(this._bibPlaceholderIfEmpty);
+            Asc.scope.bibStyle = {};
         } else {
             let bibliography = this.#makeBibliography();
             bibField["Content"] = bibliography;
