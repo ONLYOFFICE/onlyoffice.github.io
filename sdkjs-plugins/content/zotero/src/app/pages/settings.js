@@ -605,11 +605,11 @@ SettingsPage.prototype._loadStyles = function () {
                 self._addStylesToList(stylesInfo);
                 self._styleSelect.addCustomItem(
                     "more_styles",
-                    "More Styles..."
+                    translate("More Styles...")
                 );
                 self._styleSelect.addCustomItem(
                     "cslFileInput",
-                    "Add custom style..."
+                    translate("Add custom style...")
                 );
             }
         )
