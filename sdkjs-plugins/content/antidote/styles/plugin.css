@@ -1,3 +1,17 @@
+/* Couleurs des boutons selon le thème de l'éditeur; la classe mode-sombre est
+   basculée par onThemeChanged (scripts/plugin.ts). */
+:root {
+  --fond-bouton: rgb(240, 244, 245);
+  --fond-bouton-survol: #cccccc;
+  --texte-bouton: black;
+}
+
+body.mode-sombre {
+  --fond-bouton: rgb(45, 45, 45);
+  --fond-bouton-survol: rgb(53, 53, 55);
+  --texte-bouton: rgb(212, 216, 217);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -16,10 +30,8 @@ body {
     Cantarell,
     Fira Sans,
     sans-serif;
-  background-color: #ffffff;
-  color: #333;
-  height: 100vh;
-  overflow-y: auto;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 #plugin-container {
@@ -51,7 +63,7 @@ body {
 }
 
 .plugin-content {
-  background: #f8f9fa;
+
   padding: 20px;
   border-radius: 6px;
   flex: 1;
@@ -81,8 +93,8 @@ body {
   padding: 14px 20px;
   font-size: 15px;
   /*font-weight: 600;*/
-  color: black;
-  background: rgb(240, 244, 245);
+  color: var(--texte-bouton);
+  background: var(--fond-bouton);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -106,7 +118,7 @@ body {
 }*/
 
 .btn-antidote:hover {
-  background: #cccccc;
+  background: var(--fond-bouton-survol);
 
   /*transform: translateY(-2px);*/
 }
