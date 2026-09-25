@@ -19,6 +19,8 @@
     "Display citations as:": "Zobrazit citace jako:",
     "Footnotes": "Poznámky pod čarou",
     "Endnotes": "Koncové poznamky",
+    "Include URLs of paper articles": "Zahrnout URL adresy článků",
+    "Use MEDLINE journal abbreviations": "Použít zkrácené názvy časopisů MEDLINE",
     "Reconfigure": "Přenastavit",
     "Learn more here.": "Více informací se dozvíte zde.",
     "Save": "Uložit",
@@ -94,5 +96,22 @@
     "Section": "Oddíl",
     "Timestamp": "Časová značka",
     "Verse": "Verš",
-    "Volume": "Svazek"
+    "Volume": "Svazek",
+    "Bibliography preview": "Náhled bibliografie",
+    "Locator": "Lokátor",
+    "selected": "vybráno",
+    "No items selected": "Nejsou vybrány žádné položky",
+    "Failed to load language": "Nepodařilo se načíst jazyk",
+    "Invalid CSL style file": "Neplatný soubor stylu CSL",
+    "More Styles...": "Další styly...",
+    "Add custom style...": "Přidat vlastní styl...",
+    "Select language": "Vyberte jazyk",
+    "Warning!": "Varování!",
+    "Error": "Chyba",
+    "Success": "Úspěch",
+    "Warning": "Varování",
+    "Information": "Informace",
+    "Operation completed successfully": "Operace byla úspěšně dokončena",
+    "Please be cautious": "Buďte prosím opatrní"
+
 }

@@ -122,7 +122,6 @@ Checkbox.prototype = {
             "aria-disabled",
             this._options.disabled ? "true" : "false"
         );
-        this._container.tabIndex = this._options.disabled ? -1 : 0;
 
         this._input = checkbox;
         const elId = this._input.getAttribute("id");

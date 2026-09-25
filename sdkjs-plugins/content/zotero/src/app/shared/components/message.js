@@ -34,6 +34,8 @@
 
 /// <reference path="./types.js" />
 
+import { translate } from "../../services/translate-service";
+
 /**
  * @constructor
  * @param {string | HTMLElement} container
@@ -99,16 +101,16 @@ Message.prototype = {
 
         let title = this._options.title;
         if (!title) {
-            title = "Error";
+            title = translate("Error");
             switch (this._options.type) {
                 case "success":
-                    title = "Success";
+                    title = translate("Success");
                     break;
                 case "warning":
-                    title = "Warning";
+                    title = translate("Warning");
                     break;
                 case "info":
-                    title = "Information";
+                    title = translate("Information");
                     break;
             }
         }
@@ -117,13 +119,13 @@ Message.prototype = {
             text = "";
             switch (this._options.type) {
                 case "success":
-                    text = "Operation completed successfully.";
+                    text = translate("Operation completed successfully");
                     break;
                 case "warning":
-                    text = "Please be cautious.";
+                    text = translate("Please be cautious");
                     break;
                 case "error":
-                    text = "Something went wrong.";
+                    text = translate("Something went wrong");
                     break;
             }
         }

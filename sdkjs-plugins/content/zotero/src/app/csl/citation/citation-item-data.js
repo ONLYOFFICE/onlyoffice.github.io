@@ -460,8 +460,8 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "URL")) {
         this._URL = itemDataObject.URL;
     }
-    if (Object.hasOwnProperty.call(itemDataObject, "version")) {
-        this._version = itemDataObject.version;
+    if (Object.hasOwnProperty.call(itemDataObject, "versionNumber")) {
+        this._version = itemDataObject.versionNumber;
     }
     if (Object.hasOwnProperty.call(itemDataObject, "volume")) {
         this._volume = itemDataObject.volume;
@@ -1385,10 +1385,10 @@ CitationItemData.prototype.setCustom = function (custom) {
     return this;
 };
 /**
- * @param {boolean} [bCompressed]
+ * @param {boolean} [skipUrlForPaperArticles]
  * @returns 
  */
-CitationItemData.prototype.toJSON = function (bCompressed) {
+CitationItemData.prototype.toJSON = function (skipUrlForPaperArticles) {
     var result = {};
     result.id = this._id;
 
@@ -1582,6 +1582,16 @@ CitationItemData.prototype.toJSON = function (bCompressed) {
     if (Object.keys(this._custom).length !== 0) result.custom = this._custom;
     if (this._license !== undefined && this._license !== "")
         result.license = this._license;
+
+    if (
+        skipUrlForPaperArticles &&
+        result.page &&
+        (result.type === "article-journal" ||
+            result.type === "article-magazine" ||
+            result.type === "article-newspaper")
+    ) {
+        delete result.URL;
+    }
 
     return result;
 };

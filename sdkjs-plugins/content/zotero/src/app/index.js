@@ -138,7 +138,8 @@ import "../styles.css";
         citationService = new CitationService(
             settings.getLocalesManager(),
             settings.getStyleManager(),
-            sdk
+            sdk,
+            settings.getAbbreviationsManager()
         );
         let isInit = false;
 
@@ -545,7 +546,7 @@ import "../styles.css";
         Theme.addStylesForComponents(theme);
         let rules = "";
         rules +=
-            ".link, .link:visited, .link:hover { color : " +
+            ".link:not(:focus-visible), .link:visited:not(:focus-visible), .link:hover:not(:focus-visible) { color : " +
             window.Asc.plugin.theme["text-normal"] +
             " !important;}\n";
         rules +=
@@ -833,7 +834,6 @@ import "../styles.css";
         };
         if (res && res.items && res.items.length > 0) {
             res.items = res.items.map(item => {
-                item = convertJsonToCsl(item);
                 item[isGroup ? "groupID" : "userID"] = res.id;
                 fillUrisFromId(item);
                 return item;
@@ -841,52 +841,6 @@ import "../styles.css";
         }
 
         return selectCitation.displaySearchItems(res, err, lastSearch);
-    }
-
-    /**
-     * @param {any} item 
-     * @returns {SearchResultItem}
-     */
-    function convertJsonToCsl(item) {
-        if (item.id || !item.key) return item;
-        /** @type {SearchResultItem} */
-        const res = {
-            id: item.key,
-            title: item.data.title,
-            type: item.data.itemType,
-        };
-        if (Object.hasOwnProperty.call(item, "url")) {
-            res.URL = item.data.url;
-        }
-        if (Object.hasOwnProperty.call(item, "volume")) {
-            res.volume = item.data.volume;
-        }
-        if (Object.hasOwnProperty.call(item, "language")) {
-            res.language = item.data.language;
-        }
-        if (Object.hasOwnProperty.call(item, "abstract")) {
-            res.abstract = item.data.abstract;
-        }
-        if (Object.hasOwnProperty.call(item, "note")) {
-            res.note = item.data.note;
-        }
-        if (Object.hasOwnProperty.call(item, "page")) {
-            res.page = item.data.page;
-        }
-        if (Object.hasOwnProperty.call(item, "shortTitle")) {
-            res.shortTitle = item.data.shortTitle;
-        }
-        if (Object.hasOwnProperty.call(item, "links")) {
-            res.uris = [];
-            if (Object.hasOwnProperty.call(item.links, "self")) {
-                res.uris.push(item.links.self.href)
-            }
-            if (Object.hasOwnProperty.call(item.links, "alternate")) {
-                res.uris.push(item.links.alternate.href)
-            }
-        }
-
-        return res;
     }
 
     /**
@@ -969,10 +923,17 @@ import "../styles.css";
             citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
             return false;
         }
+        const idsBeforeEdit = citationService.getCitationItemIds(field);
         const updatedField = await citationService.showEditCitationWindow(field);
         if (!updatedField) {
             return false;
         }
+        const idsAfterEdit = (updatedField.citationItems || []).map(
+            (/** @type {{id: string|number}} */ item) => String(item.id)
+        );
+        const bItemsChanged =
+            idsBeforeEdit.slice().sort().join("\u0000") !==
+            idsAfterEdit.slice().sort().join("\u0000");
 
         let updateFn = citationService.updateItem.bind(
             citationService,
@@ -980,7 +941,8 @@ import "../styles.css";
         );
 
         const styleManager = settings.getStyleManager();
-        if (styleManager.getLastUsedFormat() === "note") {
+        const bIsNotesFormat = styleManager.getLastUsedFormat() === "note";
+        if (bIsNotesFormat) {
             // this way, because "SelectAddinField" does not work with notes
             updateFn = citationService.updateItem.bind(
                 citationService,
@@ -990,6 +952,21 @@ import "../styles.css";
         }
 
         return updateFn()
+            .then(() => {
+                if (!bItemsChanged) {
+                    return;
+                }
+                /*const updateOptions = {
+                    skipCitations:
+                        !AutoUpdatePreferences.shouldUpdateCitations(),
+                    skipBibliography:
+                        !AutoUpdatePreferences.shouldUpdateBibliography(),
+                };*/
+                return citationService.updateCslItems(
+                    bIsNotesFormat ? false : undefined,
+                    //updateOptions
+                );
+            })
             .then(() => {
                 if (field) {
                     citationService.moveCursorOutsideField(field.FieldId);

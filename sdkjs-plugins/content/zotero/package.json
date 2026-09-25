@@ -15,18 +15,18 @@
         "es-check": "npx es-check es5 dist/bundle.es5.js"
     },
     "devDependencies": {
-        "@babel/core": "^7.29.6",
-        "@babel/plugin-transform-class-properties": "^7.27.1",
-        "@babel/preset-env": "^7.28.3",
-        "@rollup/plugin-babel": "^6.0.4",
-        "autoprefixer": "^10.4.22",
-        "cross-env": "^7.0.3",
-        "cssnano": "^7.1.2",
-        "postcss-import": "^16.1.1",
-        "postcss-nested": "^7.0.2",
-        "vite": "^8.0.16"
+        "@babel/core": "^8.0.6",
+        "@babel/plugin-transform-class-properties": "^8.0.1",
+        "@babel/preset-env": "^8.0.6",
+        "@rollup/plugin-babel": "^7.1.0",
+        "autoprefixer": "^10.6.1",
+        "cross-env": "^10.1.0",
+        "cssnano": "^9.0.5",
+        "postcss-import": "^17.0.0",
+        "postcss-nested": "^8.0.1",
+        "vite": "^8.3.0"
     },
     "dependencies": {
-        "core-js": "^3.45.1"
+        "core-js": "^3.50.0"
     }
 }
