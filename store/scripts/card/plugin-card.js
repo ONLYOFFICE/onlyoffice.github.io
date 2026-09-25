@@ -56,6 +56,8 @@ const PluginCard = {
     slideIndex: 1,  // index for slides
     backup: false,
     LANGUAGES: [
+        ['ar-Sa', 'ar', 'Arabic'],
+        ['cs-CS', 'cs', 'Czech'],
         ['cs-CZ', 'cs', 'Czech'],
         ['de-DE', 'de', 'German'],
         ['es-ES', 'es', 'Spanish'],
@@ -67,6 +69,9 @@ const PluginCard = {
         ['pt-BR', 'pt', 'Brazilian'],
         ['ru-RU', 'ru', 'Russian'],
         ['si-SI', 'si', 'Sinhala'],
+        ['sq-AL', 'sq', 'Albanian'],
+        ['sr-Cyrl-RS', 'sr', 'Serbian'],
+        ['sr-Latn-RS', 'sr', 'Serbian'],
         ['uk-UA', 'uk', 'Ukrainian'],
         ['zh-ZH', 'zh', 'Chinese']
     ],
@@ -76,8 +81,8 @@ const PluginCard = {
         const self = this;
         window.onresize = function() {
             self.setDivHeight();
-            if (typeof _syncPluginCardModalState === 'function') {
-                _syncPluginCardModalState(data.independentMode);
+            if (typeof PluginCardController !== 'undefined') {
+                PluginCardController.syncPluginCardModalState(data.independentMode);
             }
         };
         this._resetDom();
@@ -720,3 +725,14 @@ window.addEventListener('message', function(event) {
 			break;
 	};
 }, false);
+
+if (typeof PluginCardController === 'undefined') {
+	window.addEventListener('keydown', function(e) {
+		if (!e || e.key !== 'Escape')
+			return;
+		if (!PluginCard.config)
+			return;
+
+		PluginCard.onClickClose();
+	});
+}

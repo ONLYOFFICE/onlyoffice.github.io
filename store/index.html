@@ -46,6 +46,7 @@
 	<script src="scripts/marketplace/service.js" defer></script>
 	<script src="scripts/marketplace/scale.js" defer></script>
 	<script src="scripts/marketplace/plugin-icons.js" defer></script>
+	<script src="scripts/plugin-card-controller.js" defer></script>
 	<script src="scripts/code.js" defer></script>
 </head>
 	<body class="noselect">
@@ -162,9 +163,9 @@
 			</main>
 
 		</div>
-		<div id="plugin_card_overlay" class="hidden" onclick="_onClickBackToMarketplace()"></div>
+		<div id="plugin_card_overlay" class="hidden" onclick="PluginCardController.goBackToMarketplace()"></div>
 		<div id="plugin_card_panel" class="pc hidden">
-			<button id="btn_close_card" class="pc-close btn-text-default i18n" type="button" title="Close" onclick="_onClickBackToMarketplace()">&times;</button>
+			<button id="btn_close_card" class="pc-close btn-text-default i18n" type="button" title="Close" onclick="PluginCardController.goBackToMarketplace()">&times;</button>
 			<div class="pc-header">
 				<div class="pc-title-row">
 				<div id="div_icon_info" class="pc-icon">
