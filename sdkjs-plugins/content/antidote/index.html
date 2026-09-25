@@ -1,62 +1,75 @@
-<!--
- (c) Copyright Ascensio System SIA 2010-2026
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Antidote Corrector</title>
 
- This program is a free software product. You can redistribute it and/or
- modify it under the terms of the GNU Affero General Public License (AGPL)
- version 3 as published by the Free Software Foundation. In accordance with
- Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
- that Ascensio System SIA expressly excludes the warranty of non-infringement
- of any third-party rights.
+    <!-- OnlyOffice Plugin SDK -->
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
+    />
 
- This program is distributed WITHOUT ANY WARRANTY; without even the implied
- warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
- details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+    <!-- Plugin Styles -->
+    <link rel="stylesheet" href="styles/plugin.css" />
+  </head>
 
- You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
- street, Riga, Latvia, EU, LV-1050.
+  <body>
+    <div id="plugin-container">
+      <div class="plugin-content">
+        <!--<button id="btn-assistant" class="btn-antidote btn-assistant">
+                <img src="resources/img/panneau/icone-assistant.svg" alt="Assistant">
+                <span id="label-assistant">Assitant</span>
+            </button>-->
 
- The  interactive user interfaces in modified source and object code versions
- of the Program must display Appropriate Legal Notices, as required under
- Section 5 of the GNU AGPL version 3.
+        <button id="btn-correcteur" class="btn-antidote">
+          <img
+            src="resources/img/panneau/icone-correction-antidote.svg"
+            alt="Correcteur"
+          />
+          <span id="label-correcteur">Correcteur</span>
+        </button>
 
- Pursuant to Section 7(b) of the License you must retain the original Product
- logo when distributing the program. Pursuant to Section 7(e) we decline to
- grant you any rights under trademark law for use of our trademarks.
+        <button
+          id="btn-dictionnaires"
+          class="btn-antidote btn-dictionnaires"
+          title="Sélectionnez d'abord un mot dans le document"
+        >
+          <img
+            src="resources/img/panneau/icone-dicos.svg"
+            alt="Dictionnaires"
+          />
+          <span id="label-dictionnaires">Dictionnaires</span>
+        </button>
 
- All the Product's GUI elements, including illustrations and icon sets, as
- well as technical writing content are licensed under the terms of the
- Creative Commons Attribution-ShareAlike 4.0 International. See the License
- terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+        <button
+          id="btn-guides"
+          class="btn-antidote btn-guides"
+          title="Sélectionnez d'abord un mot dans le document"
+        >
+          <img src="resources/img/panneau/icone-guides.svg" alt="Guides" />
+          <span id="label-guides">Guides</span>
+        </button>
 
--->
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Antidote</title>
-		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-		<script type="text/javascript">
-			(function() {
-				if (!window.Asc || !window.Asc.plugin) return;
+        <div id="message_patience" style="display:none" align="center">
+        	<img id="patience" atl="patience"
+         		src="data:image/svg+xml;base64,ICAgICAgPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCAxNTAgNDAiIHRleHQtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iIHNoYXBlLXJlbmRlcmluZz0iZ2VvbWV0cmljUHJlY2lzaW9uIiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiPgogICAgICAgIDxzdHlsZT4KICAgICAgICAgIEBrZXlmcmFtZXMgYTBfdCB7IDAlIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGUoMzYuNXB4LDgyLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllcigwLjM3ODEwOSwwLDAuNTgsMSk7IH0gNC4xNjY2JSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKDM2LjVweCw4NC41cHgpIHRyYW5zbGF0ZVkoLTYwcHgpOyBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBjdWJpYy1iZXppZXIoMC40MiwwLDAuNTgsMSk7IH0gMTYuNjY2NiUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgzNi41cHgsNzMuNXB4KSB0cmFuc2xhdGVZKC02MHB4KTsgYW5pbWF0aW9uLXRpbWluZy1mdW5jdGlvbjogY3ViaWMtYmV6aWVyKDAuNDIsMCwwLjU4LDEpOyB9IDM3LjUlIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGUoMzYuNXB4LDczLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllcigwLjM2ODcxOSwwLDAuNjk3MzYxLDAuMzc3NTI0KTsgfSA0NS44MzMzJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKDM2LjVweCw3My41cHgpIHRyYW5zbGF0ZVkoLTYwcHgpOyBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBjdWJpYy1iZXppZXIoMC40MiwwLDAuNTgsMSk7IH0gNjIuNSUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgzNi41cHgsODIuNXB4KSB0cmFuc2xhdGVZKC02MHB4KTsgfSA5NS44MzMzJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKDM2LjVweCw4Mi41cHgpIHRyYW5zbGF0ZVkoLTYwcHgpOyB9IDEwMCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgzNi41cHgsODIuNXB4KSB0cmFuc2xhdGVZKC02MHB4KTsgfSB9CiAgICAgICAgICBAa2V5ZnJhbWVzIGEwX2ZvIHsgMCUgeyBmaWxsLW9wYWNpdHk6IDE7IH0gNC4xNjY3JSB7IGZpbGwtb3BhY2l0eTogMTsgfSAxNi42NjY3JSB7IGZpbGwtb3BhY2l0eTogMDsgfSAzNy41JSB7IGZpbGwtb3BhY2l0eTogMDsgfSA0NS44MzMzJSB7IGZpbGwtb3BhY2l0eTogMDsgfSA2Mi41JSB7IGZpbGwtb3BhY2l0eTogMTsgfSA5NS44MzMzJSB7IGZpbGwtb3BhY2l0eTogMTsgfSAxMDAlIHsgZmlsbC1vcGFjaXR5OiAxOyB9IH0KICAgICAgICAgIEBrZXlmcmFtZXMgYTFfdCB7IDAlIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGUoNzYuNXB4LDgyLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IH0gMTYuNjY2NiUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSg3Ni41cHgsODIuNXB4KSB0cmFuc2xhdGVZKC02MHB4KTsgYW5pbWF0aW9uLXRpbWluZy1mdW5jdGlvbjogY3ViaWMtYmV6aWVyKDAuMzc4MTA5LDAsMC41OCwxKTsgfSAyMC44MzMzJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKDc2LjVweCw4NS41cHgpIHRyYW5zbGF0ZVkoLTYwcHgpOyBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBjdWJpYy1iZXppZXIoMC40MiwwLDAuNTgsMSk7IH0gMzMuMzMzMyUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSg3Ni41cHgsNzMuNXB4KSB0cmFuc2xhdGVZKC02MHB4KTsgYW5pbWF0aW9uLXRpbWluZy1mdW5jdGlvbjogY3ViaWMtYmV6aWVyKDAuNDIsMCwwLjU4LDEpOyB9IDYyLjUlIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGUoNzYuNXB4LDczLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllcigwLjQyLDAsMC41OCwxKTsgfSA3OS4xNjY2JSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKDc2LjVweCw4Mi41cHgpIHRyYW5zbGF0ZVkoLTYwcHgpOyBhbmltYXRpb24tdGltaW5nLWZ1bmN0aW9uOiBjdWJpYy1iZXppZXIoMC40MiwwLDEsMSk7IH0gOTUuODMzMyUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSg3Ni41cHgsODIuNXB4KSB0cmFuc2xhdGVZKC02MHB4KTsgfSAxMDAlIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGUoNzYuNXB4LDgyLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IH0gfQogICAgICAgICAgQGtleWZyYW1lcyBhMV9mbyB7IDAlIHsgZmlsbC1vcGFjaXR5OiAxOyB9IDE2LjY2NjclIHsgZmlsbC1vcGFjaXR5OiAxOyB9IDIwLjgzMzMlIHsgZmlsbC1vcGFjaXR5OiAxOyB9IDMzLjMzMzMlIHsgZmlsbC1vcGFjaXR5OiAwOyB9IDYyLjUlIHsgZmlsbC1vcGFjaXR5OiAwOyB9IDc5LjE2NjclIHsgZmlsbC1vcGFjaXR5OiAxOyB9IDk1LjgzMzMlIHsgZmlsbC1vcGFjaXR5OiAxOyB9IDEwMCUgeyBmaWxsLW9wYWNpdHk6IDE7IH0gfQogICAgICAgICAgQGtleWZyYW1lcyBhMl90IHsgMCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgxMTYuNXB4LDgxLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IH0gMzMuMzMzMyUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgxMTYuNXB4LDgxLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllcigwLjM2MjUyMSwwLDAuNTgsMSk7IH0gMzcuNSUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgxMTYuNXB4LDg0LjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllcigwLjQyLDAsMC41OCwxKTsgfSA1MCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgxMTYuNXB4LDczLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IGFuaW1hdGlvbi10aW1pbmctZnVuY3Rpb246IGN1YmljLWJlemllcigwLjQyLDAsMC41OCwxKTsgfSA3OS4xNjY2JSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlKDExNi41cHgsNzMuNXB4KSB0cmFuc2xhdGVZKC02MHB4KTsgYW5pbWF0aW9uLXRpbWluZy1mdW5jdGlvbjogY3ViaWMtYmV6aWVyKDAuNDIsMCwwLjU4LDEpOyB9IDk1LjgzMzMlIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGUoMTE2LjVweCw4MS41cHgpIHRyYW5zbGF0ZVkoLTYwcHgpOyB9IDEwMCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgxMTYuNXB4LDgxLjVweCkgdHJhbnNsYXRlWSgtNjBweCk7IH0gfQogICAgICAgICAgQGtleWZyYW1lcyBhMl9mbyB7IDAlIHsgZmlsbC1vcGFjaXR5OiAxOyB9IDMzLjMzMzMlIHsgZmlsbC1vcGFjaXR5OiAxOyB9IDM3LjUlIHsgZmlsbC1vcGFjaXR5OiAxOyB9IDUwJSB7IGZpbGwtb3BhY2l0eTogMDsgfSA3OS4xNjY3JSB7IGZpbGwtb3BhY2l0eTogMDsgfSA5NS44MzMzJSB7IGZpbGwtb3BhY2l0eTogMTsgfSAxMDAlIHsgZmlsbC1vcGFjaXR5OiAxOyB9IH0KICAgICAgICA8L3N0eWxlPgogICAgICAgIDxlbGxpcHNlIHJ4PSIxMy41IiByeT0iMTMuNSIgc3Ryb2tlPSJub25lIiBmaWxsPSIjMWUzMDU3IiBzdHJva2Utd2lkdGg9IjYiIGZpbGwtb3BhY2l0eT0iMSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzYuNSw4Mi41KSB0cmFuc2xhdGUoMCwtNjApIiBzdHlsZT0iYW5pbWF0aW9uOiAyLjRzIGxpbmVhciBpbmZpbml0ZSBib3RoIGEwX3QsIDIuNHMgbGluZWFyIGluZmluaXRlIGJvdGggYTBfZm87Ii8+CiAgICAgICAgPGVsbGlwc2Ugcng9IjEzLjUiIHJ5PSIxMy41IiBzdHJva2U9Im5vbmUiIGZpbGw9IiMzYzU0ODIiIHN0cm9rZS13aWR0aD0iNiIgZmlsbC1vcGFjaXR5PSIxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3Ni41LDgyLjUpIHRyYW5zbGF0ZSgwLC02MCkiIHN0eWxlPSJhbmltYXRpb246IDIuNHMgbGluZWFyIGluZmluaXRlIGJvdGggYTFfdCwgMi40cyBsaW5lYXIgaW5maW5pdGUgYm90aCBhMV9mbzsiLz4KICAgICAgICA8ZWxsaXBzZSByeD0iMTMuNSIgcnk9IjEzLjUiIHN0cm9rZT0ibm9uZSIgZmlsbD0iIzFjNWNhMSIgc3Ryb2tlLXdpZHRoPSI2IiBmaWxsLW9wYWNpdHk9IjEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDExNi41LDgxLjUpIHRyYW5zbGF0ZSgwLC02MCkiIHN0eWxlPSJhbmltYXRpb246IDIuNHMgbGluZWFyIGluZmluaXRlIGJvdGggYTJfdCwgMi40cyBsaW5lYXIgaW5maW5pdGUgYm90aCBhMl9mbzsiLz4KICAgICA8L3N2Zz4=">
+        </div>
+        <div id="status" class="status-message"></div>
+      </div>
+      <div class="version">version : <span id="connecteur_version"></span></div>
+    </div>
 
-				window.Asc.plugin.init = function() {};
-
-				window.Asc.plugin.button = function(id, windowId) {
-					window.dispatchEvent(new CustomEvent('plugin:button', { detail: { id: id } }));
-					let isMainFrame = !windowId || String(windowId).indexOf('iframe_asc.') === 0;
-					if (isMainFrame && (id === -1 || id === '-1')) {
-						this.executeCommand('close', '');
-					}
-				};
-			})();
-		</script>
-		<link rel="stylesheet" href="./dist/index.css">
-		<script type="module" src="./dist/index.js"></script>
-	</head>
-	<body class="theme-white theme-type-light noselect">
-		<div id="app"></div>
-	</body>
+    <!-- Plugin Script -->
+    <script type="module" src="dist/bundle.js"></script>
+  </body>
 </html>
