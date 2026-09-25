@@ -37,6 +37,7 @@
 
 import { zoteroEnvironment } from "./zotero-environment";
 import { RateLimitedFetcher } from "./zotero-api-fetcher";
+import { ZOTERO_TYPE_TO_CSL } from "../csl/zotero-type-map";
 
 const ZoteroSdk = function () {
     this._apiKey = null;
@@ -50,6 +51,40 @@ const ZoteroSdk = function () {
         maxRetries: 5,
         initialDelay: 5000,
     });
+    
+    // Zotero creatorType -> CSL name variable. Only maps to variables this
+    // plugin's own CitationItemData actually recognizes (see its
+    // fillFromObject); anything not listed here falls back to "author".
+    this._zoteroCreatorTypeToCsl = {
+        "author": "author",
+        "bookAuthor": "container-author",
+        "castMember": "performer",
+        "chair": "chair",
+        "compiler": "compiler",
+        "composer": "composer",
+        "contributor": "contributor",
+        "curator": "curator",
+        "director": "director",
+        "editor": "editor",
+        "editorialDirector": "editorial-director",
+        "executiveProducer": "executive-producer",
+        "guest": "guest",
+        "host": "host",
+        "illustrator": "illustrator",
+        "interviewee": "author",
+        "narrator": "narrator",
+        "organizer": "organizer",
+        "originalAuthor": "original-author",
+        "performer": "performer",
+        "podcaster": "host",
+        "producer": "producer",
+        "recipient": "recipient",
+        "reviewedAuthor": "reviewed-author",
+        "seriesCreator": "series-creator",
+        "seriesEditor": "collection-editor",
+        "translator": "translator",
+    };
+
 };
 
 // Constants
@@ -514,42 +549,77 @@ ZoteroSdk.prototype._addJsonToClsJsonItemsResponse = function (response, path, q
  * @returns {SearchResultItem}
  */
 ZoteroSdk.prototype._convertJsonToCsl = function (item) {
+    const self = this;
     if (item.id || !item.key) return item;
+    var d = item.data || {};
     /** @type {SearchResultItem} */
     const res = {
         id: item.key,
-        title: item.data.title,
-        type: item.data.itemType,
+        title: d.title || "",
+        type: ZOTERO_TYPE_TO_CSL[d.itemType] || d.itemType || "",
     };
-    if (Object.hasOwnProperty.call(item, "url")) {
-        res.URL = item.data.url;
+
+    // creators → CSL name variables. Zotero's creatorType values don't
+    // match CSL's variable names 1:1 (e.g. "seriesEditor" -> "collection-editor",
+    // "bookAuthor" -> "container-author") - unmapped/unrecognized types
+    // fall back to "author" so the person isn't silently dropped.
+    if (Array.isArray(d.creators)) {
+        d.creators.forEach(function (/** @type {any} */ c) {
+            var name = {};
+            if (c.firstName) name.given = c.firstName;
+            if (c.lastName) name.family = c.lastName;
+            if (c.name) name.literal = c.name;
+            var cslRole = self._zoteroCreatorTypeToCsl[c.creatorType] || "author";
+            if (!res[cslRole]) res[cslRole] = [];
+            if (Object.keys(name).length > 0) {
+                res[cslRole].push(name);
+            }
+        });
     }
-    if (Object.hasOwnProperty.call(item, "volume")) {
-        res.volume = item.data.volume;
+
+    // date → issued. Zotero's "date" is free text; only a plain
+    // "YYYY", "YYYY-MM" or "YYYY-MM-DD" (or "/"-separated) shape can be
+    // safely turned into date-parts here - year ranges ("2019-2020"),
+    // circa dates, season names etc. are left unset rather than
+    // mangled (the old `.split("-").map(Number)` read "2019-2020" as
+    // year 2019/month 2020, and dropped the sign off BCE dates like "-0099").
+    if (d.date) {
+        var dateMatch = /^(-?\d{1,4})(?:[-/](\d{1,2}))?(?:[-/](\d{1,2}))?$/.exec(d.date.trim());
+        if (dateMatch) {
+            var parts = [Number(dateMatch[1])];
+            if (dateMatch[2]) parts.push(Number(dateMatch[2]));
+            if (dateMatch[3]) parts.push(Number(dateMatch[3]));
+            res.issued = { "date-parts": [parts] };
+        }
     }
-    if (Object.hasOwnProperty.call(item, "language")) {
-        res.language = item.data.language;
-    }
-    if (Object.hasOwnProperty.call(item, "abstract")) {
-        res.abstract = item.data.abstract;
-    }
-    if (Object.hasOwnProperty.call(item, "note")) {
-        res.note = item.data.note;
-    }
-    if (Object.hasOwnProperty.call(item, "page")) {
-        res.page = item.data.page;
-    }
-    if (Object.hasOwnProperty.call(item, "shortTitle")) {
-        res.shortTitle = item.data.shortTitle;
-    }
-    if (Object.hasOwnProperty.call(item, "links")) {
+
+    // simple 1-to-1 fields (Zotero name → CSL name)
+    if (d.url) res.URL = d.url;
+    if (d.volume) res.volume = d.volume;
+    if (d.issue) res.issue = d.issue;
+    if (d.pages) res.page = d.pages;
+    if (d.edition) res.edition = d.edition;
+    if (d.language) res.language = d.language;
+    if (d.abstractNote) res.abstract = d.abstractNote;
+    if (d.note) res.note = d.note;
+    if (d.shortTitle) res.shortTitle = d.shortTitle;
+    if (d.publisher) res.publisher = d.publisher;
+    if (d.place) res["publisher-place"] = d.place;
+    if (d.DOI) res.DOI = d.DOI;
+    if (d.ISBN) res.ISBN = d.ISBN;
+    if (d.ISSN) res.ISSN = d.ISSN;
+    if (d.publicationTitle) res["container-title"] = d.publicationTitle;
+    if (d.bookTitle) res["container-title"] = d.bookTitle;
+    if (d.series) res["collection-title"] = d.series;
+    if (d.seriesNumber) res["collection-number"] = d.seriesNumber;
+    if (d.numberOfVolumes) res["number-of-volumes"] = d.numberOfVolumes;
+    if (d.numPages) res["number-of-pages"] = d.numPages;
+
+    // uris from links
+    if (item.links) {
         res.uris = [];
-        if (Object.hasOwnProperty.call(item.links, "self")) {
-            res.uris.push(item.links.self.href)
-        }
-        if (Object.hasOwnProperty.call(item.links, "alternate")) {
-            res.uris.push(item.links.alternate.href)
-        }
+        if (item.links.self) res.uris.push(item.links.self.href);
+        if (item.links.alternate) res.uris.push(item.links.alternate.href);
     }
 
     return res;
