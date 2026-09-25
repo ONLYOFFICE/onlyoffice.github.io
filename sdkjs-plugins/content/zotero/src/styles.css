@@ -63,7 +63,7 @@ div::-moz-selection {
     flex-direction: column;
     flex: 1;
     overflow-y: hidden;
-    padding: 14px 12px 10px 12px;
+    padding: 14px 0 10px 0;
     overflow-y: auto;
 }
 
@@ -72,6 +72,7 @@ div::-moz-selection {
     overflow-y: auto;
     & > div {
         overflow-y: auto;
+        padding: 0 12px;
     }
 }
 
@@ -349,6 +350,7 @@ div::-moz-selection {
     display: flex;
     flex-direction: row;
     margin-top: 12px;
+    padding: 0 12px;
 }
 
 #footerCont > span:first-of-type {

@@ -280,8 +280,17 @@ e.prototype = {
 	}
 };
 //#endregion
+//#region src/app/services/translate-service.js
+function t(e) {
+	try {
+		return window.Asc.plugin.tr(e);
+	} catch (t) {
+		return console.error(t), e;
+	}
+}
+//#endregion
 //#region src/app/shared/components/message.js
-function t(e, t) {
+function n(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLElement && (e = n);
@@ -290,8 +299,8 @@ function t(e, t) {
 	else throw Error("Invalid container element");
 	this._options = Object.assign(this._options, t), this._isShow = !1;
 }
-t.prototype = {
-	constructor: t,
+n.prototype = {
+	constructor: n,
 	_options: {
 		type: "info",
 		text: "",
@@ -307,29 +316,29 @@ t.prototype = {
 	_create: function() {
 		var e = document.createElement("div");
 		e.className = "message message-" + this._options.type, e.setAttribute("role", "alert");
-		let t = this._options.title;
-		if (!t) switch (t = "Error", this._options.type) {
+		let n = this._options.title;
+		if (!n) switch (n = t("Error"), this._options.type) {
 			case "success":
-				t = "Success";
+				n = t("Success");
 				break;
 			case "warning":
-				t = "Warning";
+				n = t("Warning");
 				break;
-			case "info": t = "Information";
+			case "info": n = t("Information");
 		}
-		let n = this._options.text;
-		if (!n) switch (n = "", this._options.type) {
+		let r = this._options.text;
+		if (!r) switch (r = "", this._options.type) {
 			case "success":
-				n = "Operation completed successfully.";
+				r = t("Operation completed successfully");
 				break;
 			case "warning":
-				n = "Please be cautious.";
+				r = t("Please be cautious");
 				break;
-			case "error": n = "Something went wrong.";
+			case "error": r = t("Something went wrong");
 		}
-		if (e.innerHTML = "<div class=\"message-content\"><span class=\"message-title\">" + t + "</span><span class=\"message-text\">" + n + "</span></div>", this._options.closeButton) {
-			var r = document.createElement("button");
-			r.className = "message-close", r.textContent = "×", r.setAttribute("aria-label", "Close"), r.onclick = this.close.bind(this), e.appendChild(r);
+		if (e.innerHTML = "<div class=\"message-content\"><span class=\"message-title\">" + n + "</span><span class=\"message-text\">" + r + "</span></div>", this._options.closeButton) {
+			var i = document.createElement("button");
+			i.className = "message-close", i.textContent = "×", i.setAttribute("aria-label", "Close"), i.onclick = this.close.bind(this), e.appendChild(i);
 		}
 		return e;
 	},
@@ -365,7 +374,7 @@ t.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/button.js
-function n(e, t) {
+function r(e, t) {
 	let n = this;
 	if (typeof e == "string") {
 		var r = document.getElementById(e);
@@ -394,8 +403,8 @@ function n(e, t) {
 		}
 	}, this._createDOM(), this._bindEvents(), this.updateState();
 }
-n.prototype = {
-	constructor: n,
+r.prototype = {
+	constructor: r,
 	_button: null,
 	_buttonText: null,
 	_spinner: null,
@@ -530,7 +539,7 @@ n.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/checkbox.js
-function r(e, t) {
+function i(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLInputElement && (e = n);
@@ -546,8 +555,8 @@ function r(e, t) {
 		value: "on"
 	}, t), this._options.disabled = t.disabled || !1, this._handlers = /* @__PURE__ */ new Map(), this._createDOM(e), this._setupEventListeners(), this._updateVisualState(), this._subscribers = [];
 }
-r.prototype = {
-	constructor: r,
+i.prototype = {
+	constructor: i,
 	_container: null,
 	_input: null,
 	_visualCheckbox: null,
@@ -655,7 +664,7 @@ r.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/selectbox.js
-var i = class e {
+var a = class e {
 	static #e = /* @__PURE__ */ new Set();
 	constructor(t, n) {
 		if (typeof t == "string") {
@@ -1112,7 +1121,7 @@ var i = class e {
 });
 //#endregion
 //#region src/app/shared/constants/locator-values.js
-var a = [
+var o = [
 	["appendix", "Appendix"],
 	["article", "Article"],
 	["book", "Book"],
@@ -1134,10 +1143,10 @@ var a = [
 	["title", "Title"],
 	["verses", "Verses"],
 	["volume", "Volume"]
-], o = {
+], s = {
 	addStylesForComponents: function(e) {
 		let t = "";
-		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus:not(:active):not(:hover),\n.custom-button-secondary-icon:focus:not(:active):not(:hover),\n.custom-button-secondary:focus:not(:active):not(:hover),\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
+		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n", t += ".custom-button-primary:focus-visible { box-shadow: 0 0 0 1px inset " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus-visible,\n.custom-button-secondary-icon:focus-visible,\n.custom-button-secondary:focus-visible,\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
 		let n = "11px";
 		["theme-white", "theme-night"].indexOf(e.name) !== -1 || ["theme-white", "theme-night"].indexOf(e.Name) !== -1 ? (n = "12px", t += ".message,\n#previewWrapper,\n.custom-button,\n.selectbox-header,\n.input-field-element { border-radius: 4px; }\n", t += ".radio--checked .radio-visual { border-width: 4px; }\n", t += ".checkbox-checkmark { color: " + e["text-inverse"] + "; }\n", t += ".checkbox--checked .checkbox-visual { background-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio--checked .radio-visual,\n.checkbox--checked .checkbox-visual { border-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + e["highlight-button-hover"] + "; }\n", t += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; background-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += "body { font-size: 12px; }\n") : (t += ".checkbox-checkmark { color: " + e["text-normal"] + "; }\n", t += ".radio--checked .radio-visual { background-color: " + e["text-normal"] + ";\n box-shadow: 0 0 0 2px" + e["background-normal"] + " inset; }\n", t += ".radio-button-container:hover .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["border-control-focus"] + "; }\n"), t += "body, input, textarea, select, button { font-size: " + n + "; }\n";
 		let r = document.getElementById("componentsStyles");
@@ -1159,8 +1168,8 @@ var a = [
 		createForm(t) {
 			let n = document.createElement("form");
 			n.classList.add("form"), n.classList.add("message-container"), this._container.appendChild(n);
-			var o = document.createElement("button");
-			o.className = "message-close i18n", o.textContent = "×", o.setAttribute("aria-label", "Close"), o.setAttribute("title", "Remove"), o.setAttribute("type", "button"), o.onclick = this.removeItem.bind(this, n, t.id), n.appendChild(o);
+			var r = document.createElement("button");
+			r.className = "message-close i18n", r.textContent = "×", r.setAttribute("aria-label", "Close"), r.setAttribute("title", "Remove"), r.setAttribute("type", "button"), r.onclick = this.removeItem.bind(this, n, t.id), n.appendChild(r);
 			let s = document.createElement("div");
 			s.classList.add("title"), s.textContent = t.itemData.title, n.appendChild(s);
 			let c = document.createDocumentFragment(), l = document.createElement("div"), u = document.createElement("input"), d = document.createElement("input"), f = document.createElement("div"), p = document.createElement("div"), m = document.createElement("input"), h = document.createElement("div"), g = document.createElement("input");
@@ -1177,11 +1186,11 @@ var a = [
 				placeholder: "Suffix",
 				value: t.suffix,
 				showClear: !1
-			}), b = new i(p, {
+			}), b = new a(p, {
 				placeholder: "Locator",
 				translate: Asc.plugin.tr
 			}), x = t.label || "page";
-			a.forEach(function(e) {
+			o.forEach(function(e) {
 				let t = e[0] === x;
 				b.addItem(e[0], e[1], t), t && (_ = e[1]);
 			});
@@ -1190,7 +1199,7 @@ var a = [
 				placeholder: _,
 				value: t.locator,
 				showClear: !1
-			}), C = new r(g, {
+			}), C = new i(g, {
 				label: "Omit Author",
 				checked: !!t["suppress-author"]
 			});
@@ -1231,7 +1240,7 @@ var a = [
 			}
 		}
 		onThemeChanged(e) {
-			window.Asc.plugin.onThemeChangedBase(e), o.fixThemeForIE(e), o.addStylesForComponents(e);
+			window.Asc.plugin.onThemeChangedBase(e), s.fixThemeForIE(e), s.addStylesForComponents(e);
 			let t = "";
 			t += "body { background-color: " + e["background-normal"] + " !important;}\n";
 			let n = document.getElementById("pluginStyles");

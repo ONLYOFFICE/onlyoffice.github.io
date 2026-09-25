@@ -33,7 +33,7 @@
 var e = {
 	addStylesForComponents: function(e) {
 		let t = "";
-		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus:not(:active):not(:hover),\n.custom-button-secondary-icon:focus:not(:active):not(:hover),\n.custom-button-secondary:focus:not(:active):not(:hover),\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
+		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n", t += ".custom-button-primary:focus-visible { box-shadow: 0 0 0 1px inset " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus-visible,\n.custom-button-secondary-icon:focus-visible,\n.custom-button-secondary:focus-visible,\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus-visible,\n.link:focus-visible,\n.selectbox-arrow:focus-visible b,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n", t += ".link:focus-visible { color: " + e["border-control-focus"] + "; }\n", t += "input:focus-visible + .checkbox-visual,\ninput:focus-visible + .radio-visual { outline: 1px solid " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
 		let n = "11px";
 		["theme-white", "theme-night"].indexOf(e.name) !== -1 || ["theme-white", "theme-night"].indexOf(e.Name) !== -1 ? (n = "12px", t += ".message,\n#previewWrapper,\n.custom-button,\n.selectbox-header,\n.input-field-element { border-radius: 4px; }\n", t += ".radio--checked .radio-visual { border-width: 4px; }\n", t += ".checkbox-checkmark { color: " + e["text-inverse"] + "; }\n", t += ".checkbox--checked .checkbox-visual { background-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio--checked .radio-visual,\n.checkbox--checked .checkbox-visual { border-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + e["highlight-button-hover"] + "; }\n", t += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; background-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += "body { font-size: 12px; }\n") : (t += ".checkbox-checkmark { color: " + e["text-normal"] + "; }\n", t += ".radio--checked .radio-visual { background-color: " + e["text-normal"] + ";\n box-shadow: 0 0 0 2px" + e["background-normal"] + " inset; }\n", t += ".radio-button-container:hover .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["border-control-focus"] + "; }\n"), t += "body, input, textarea, select, button { font-size: " + n + "; }\n";
 		let r = document.getElementById("componentsStyles");
@@ -474,7 +474,7 @@ o.prototype = {
 			var i = document.createElement("span");
 			i.textContent = "/", this._counter.appendChild(i), this._counterMax = document.createElement("span"), this._counterMax.className += " input-field-counter-max", this._counterMax.textContent = String(this._options.maxLength) || "∞", this._counter.appendChild(this._counterMax);
 		}
-		n.appendChild(this._validationElement), this._validationElement.className += " input-field-validation", this._validationElement.style.display = "none", this._options.showClear && (this.input.className += " input-field-clearable", this._clearButton = document.createElement("button"), n.appendChild(this._clearButton), this._clearButton.className += " input-field-clear", this._clearButton.style.display = "none", this._clearButton.textContent = "×"), this._options.showSearchIcon && (this._searchIcon.classList.add("input-field-search-icon"), this._searchIcon.innerHTML = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z\" fill=\"currentColor\"/></svg>", r.appendChild(this._searchIcon)), e && e.insertBefore(t, this.input), r.appendChild(this.input);
+		n.appendChild(this._validationElement), this._validationElement.className += " input-field-validation", this._validationElement.style.display = "none", this._options.showClear && (this.input.className += " input-field-clearable", this._clearButton = document.createElement("button"), n.appendChild(this._clearButton), this._clearButton.className += " input-field-clear", this._clearButton.tabIndex = -1, this._clearButton.style.display = "none", this._clearButton.textContent = "×"), this._options.showSearchIcon && (this._searchIcon.classList.add("input-field-search-icon"), this._searchIcon.innerHTML = "<svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z\" fill=\"currentColor\"/></svg>", r.appendChild(this._searchIcon)), e && e.insertBefore(t, this.input), r.appendChild(this.input);
 	},
 	_bindEvents: function() {
 		this.input.addEventListener("focus", this._boundHandles.focus), this.input.addEventListener("blur", this._boundHandles.blur), this.input.addEventListener("input", this._boundHandles.input), this.input.addEventListener("keydown", this._boundHandles.keydown), this._clearButton && this._clearButton.addEventListener("click", this._boundHandles.clear), this._options.showSearchIcon && this._boundHandles.search && this._searchIcon.addEventListener("click", this._boundHandles.search), this.input.addEventListener("change", this._boundHandles.validate);
@@ -495,10 +495,7 @@ o.prototype = {
 		(t === "Escape" || t === 27) && this._options.showClear && (this.clear(), e.preventDefault()), (t === "Enter" || t === 13) && this._triggerSubmit();
 	},
 	_updateClearButton: function() {
-		if (this._clearButton) {
-			var e = this.input.value.length > 0;
-			this._clearButton.style.display = e ? "block" : "none";
-		}
+		this._clearButton && (this.input.value.length > 0 ? (this._clearButton.style.display = "block", this._clearButton.tabIndex = 0) : (this._clearButton.style.display = "none", this._clearButton.tabIndex = -1));
 	},
 	_updateCounter: function() {
 		if (this._counter && this._options.maxLength) {
@@ -646,14 +643,23 @@ o.prototype = {
 		} catch (e) {
 			console.error(e);
 		}
-		this._container.innerHTML = "", this._container.className = this._container.className.split(" ").filter(function(e) {
+		this._container.textContent = "", this._container.className = this._container.className.split(" ").filter(function(e) {
 			return e !== "input-field-container";
 		}).join(" ");
 	}
 };
 //#endregion
+//#region src/app/services/translate-service.js
+function s(e) {
+	try {
+		return window.Asc.plugin.tr(e);
+	} catch (t) {
+		return console.error(t), e;
+	}
+}
+//#endregion
 //#region src/app/shared/components/message.js
-function s(e, t) {
+function c(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLElement && (e = n);
@@ -662,8 +668,8 @@ function s(e, t) {
 	else throw Error("Invalid container element");
 	this._options = Object.assign(this._options, t), this._isShow = !1;
 }
-s.prototype = {
-	constructor: s,
+c.prototype = {
+	constructor: c,
 	_options: {
 		type: "info",
 		text: "",
@@ -680,24 +686,24 @@ s.prototype = {
 		var e = document.createElement("div");
 		e.className = "message message-" + this._options.type, e.setAttribute("role", "alert");
 		let t = this._options.title;
-		if (!t) switch (t = "Error", this._options.type) {
+		if (!t) switch (t = s("Error"), this._options.type) {
 			case "success":
-				t = "Success";
+				t = s("Success");
 				break;
 			case "warning":
-				t = "Warning";
+				t = s("Warning");
 				break;
-			case "info": t = "Information";
+			case "info": t = s("Information");
 		}
 		let n = this._options.text;
 		if (!n) switch (n = "", this._options.type) {
 			case "success":
-				n = "Operation completed successfully.";
+				n = s("Operation completed successfully");
 				break;
 			case "warning":
-				n = "Please be cautious.";
+				n = s("Please be cautious");
 				break;
-			case "error": n = "Something went wrong.";
+			case "error": n = s("Something went wrong");
 		}
 		if (e.innerHTML = "<div class=\"message-content\"><span class=\"message-title\">" + t + "</span><span class=\"message-text\">" + n + "</span></div>", this._options.closeButton) {
 			var r = document.createElement("button");
@@ -737,7 +743,7 @@ s.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/button.js
-function c(e, t) {
+function l(e, t) {
 	let n = this;
 	if (typeof e == "string") {
 		var r = document.getElementById(e);
@@ -766,8 +772,8 @@ function c(e, t) {
 		}
 	}, this._createDOM(), this._bindEvents(), this.updateState();
 }
-c.prototype = {
-	constructor: c,
+l.prototype = {
+	constructor: l,
 	_button: null,
 	_buttonText: null,
 	_spinner: null,
@@ -893,7 +899,7 @@ c.prototype = {
 		} catch (e) {
 			console.error(e);
 		}
-		this._container.innerHTML = "";
+		this._container.textContent = "";
 		var e = this._container.className.split(" ").filter(function(e) {
 			return e !== "custom-button-container";
 		}).join(" ");
@@ -902,7 +908,7 @@ c.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/radio.js
-var l = class e {
+var u = class e {
 	static #e = /* @__PURE__ */ new Map();
 	#t;
 	#n;
@@ -925,7 +931,7 @@ var l = class e {
 			label: "",
 			name: "",
 			value: "on"
-		}, n), this.#c(), this.#t = document.createElement("div"), this.#r = document.createElement("span"), this.#l(), this.#d(), this.#f(), !this.#a.name) throw Error("Name attribute is required");
+		}, n), this.#c(), this.#t = document.createElement("div"), this.#r = document.createElement("span"), this.#l(), this.#u(), this.#d(), !this.#a.name) throw Error("Name attribute is required");
 		let r = e.#e.get(this.#a.name);
 		r || (r = [], e.#e.set(this.#a.name, r)), r.push(this);
 	}
@@ -936,18 +942,9 @@ var l = class e {
 	}
 	#l() {
 		let e = this.#n.parentNode, t = document.createDocumentFragment();
-		t.appendChild(this.#t), this.#t.classList.add("radio-button-container"), this.#t.setAttribute("role", "radio"), this.#t.setAttribute("aria-checked", String(!!this.#a.checked)), this.#t.setAttribute("aria-disabled", String(!!this.#a.disabled)), this.#t.tabIndex = this.#a.disabled ? -1 : 0, this.#r.className = "radio-visual", this.#r.setAttribute("aria-hidden", "true"), this.#a.label && (this.#i = document.createElement("label"), this.#i.className = "i18n radio-label", this.#i.htmlFor = String(this.#a.id), this.#i.textContent = this.#a.label), this.#a.disabled && this.#t.classList.add("radio--disabled"), e && e.insertBefore(t, this.#n), this.#t.appendChild(this.#n), this.#t.appendChild(this.#r), this.#i && this.#t.appendChild(this.#i), this.#u();
+		t.appendChild(this.#t), this.#t.classList.add("radio-button-container"), this.#t.setAttribute("role", "radio"), this.#t.setAttribute("aria-checked", String(!!this.#a.checked)), this.#t.setAttribute("aria-disabled", String(!!this.#a.disabled)), this.#r.className = "radio-visual", this.#r.setAttribute("aria-hidden", "true"), this.#a.label && (this.#i = document.createElement("label"), this.#i.className = "i18n radio-label", this.#i.htmlFor = String(this.#a.id), this.#i.textContent = this.#a.label), this.#a.disabled && this.#t.classList.add("radio--disabled"), e && e.insertBefore(t, this.#n), this.#t.appendChild(this.#n), this.#t.appendChild(this.#r), this.#i && this.#t.appendChild(this.#i);
 	}
 	#u() {
-		if (this.#a.checked) this.#t.tabIndex = this.#a.disabled ? -1 : 0;
-		else if (this.#a.name && e.#e.has(this.#a.name)) {
-			let t = e.#e.get(this.#a.name), n = !1;
-			t && t.forEach((e) => {
-				e.#a.checked && e !== this && (n = !0);
-			}), !n && !this.#a.checked && !this.#a.disabled ? this.#t.tabIndex = 0 : this.#t.tabIndex = -1;
-		}
-	}
-	#d() {
 		let e = (e) => {
 			e.preventDefault(), !this.#a.disabled && !this.#a.checked && (this.check(), this.#t.focus());
 		}, t = (e) => {
@@ -963,10 +960,10 @@ var l = class e {
 		};
 		this.#o.set("click", e), this.#o.set("keydown", t), this.#o.set("focus", n), this.#o.set("blur", r), this.#t.addEventListener("click", e), this.#t.addEventListener("keydown", t), this.#t.addEventListener("focus", n), this.#t.addEventListener("blur", r);
 	}
-	#f() {
-		this.#t.setAttribute("aria-checked", String(!!this.#a.checked)), this.#t.classList.toggle("radio--checked", this.#a.checked), this.#n.checked = !!this.#a.checked, this.#u();
+	#d() {
+		this.#t.setAttribute("aria-checked", String(!!this.#a.checked)), this.#t.classList.toggle("radio--checked", this.#a.checked), this.#n.checked = !!this.#a.checked;
 	}
-	#p(e) {
+	#f(e) {
 		let t = {
 			type: "radio:change",
 			detail: this.getState()
@@ -994,17 +991,17 @@ var l = class e {
 					e !== this && e.#a.checked && e.uncheck();
 				});
 			}
-			this.#a.checked = !0, this.#f(), !t && this.#p();
+			this.#a.checked = !0, this.#d(), !t && this.#f();
 		}
 	}
 	uncheck(e) {
-		!this.#a.disabled && this.#a.checked && (this.#a.checked = !1, this.#f(), !e && this.#p());
+		!this.#a.disabled && this.#a.checked && (this.#a.checked = !1, this.#d(), !e && this.#f());
 	}
 	enable() {
-		this.#a.disabled && (this.#a.disabled = !1, this.#n.disabled = !1, this.#t.setAttribute("aria-disabled", "false"), this.#a.checked ? this.#t.tabIndex = 0 : this.#u(), this.#t.classList.remove("radio--disabled"));
+		this.#a.disabled && (this.#a.disabled = !1, this.#n.disabled = !1, this.#t.setAttribute("aria-disabled", "false"), this.#t.classList.remove("radio--disabled"));
 	}
 	disable() {
-		this.#a.disabled || (this.#a.disabled = !0, this.#n.disabled = !0, this.#t.setAttribute("aria-disabled", "true"), this.#t.tabIndex = -1, this.#t.classList.add("radio--disabled"));
+		this.#a.disabled || (this.#a.disabled = !0, this.#n.disabled = !0, this.#t.setAttribute("aria-disabled", "true"), this.#t.classList.add("radio--disabled"));
 	}
 	setLabel(e) {
 		this.#a.label = e, this.#i ? this.#i.textContent = e : e && (this.#i = document.createElement("label"), this.#i.className = "radio-label", this.#i.htmlFor = String(this.#a.id), this.#i.textContent = e, this.#t.appendChild(this.#i));
@@ -1031,7 +1028,7 @@ var l = class e {
 };
 //#endregion
 //#region src/app/shared/components/checkbox.js
-function u(e, t) {
+function d(e, t) {
 	if (typeof e == "string") {
 		var n = document.getElementById(e);
 		n instanceof HTMLInputElement && (e = n);
@@ -1047,15 +1044,15 @@ function u(e, t) {
 		value: "on"
 	}, t), this._options.disabled = t.disabled || !1, this._handlers = /* @__PURE__ */ new Map(), this._createDOM(e), this._setupEventListeners(), this._updateVisualState(), this._subscribers = [];
 }
-u.prototype = {
-	constructor: u,
+d.prototype = {
+	constructor: d,
 	_container: null,
 	_input: null,
 	_visualCheckbox: null,
 	_labelElement: null,
 	_createDOM: function(e) {
 		var t = e.parentNode, n = document.createDocumentFragment();
-		this._container = document.createElement("div"), n.appendChild(this._container), this._container.classList.add("checkbox-container"), this._container.setAttribute("role", "checkbox"), this._container.setAttribute("aria-checked", this._options.checked ? "true" : "false"), this._container.setAttribute("aria-disabled", this._options.disabled ? "true" : "false"), this._container.tabIndex = this._options.disabled ? -1 : 0, this._input = e;
+		this._container = document.createElement("div"), n.appendChild(this._container), this._container.classList.add("checkbox-container"), this._container.setAttribute("role", "checkbox"), this._container.setAttribute("aria-checked", this._options.checked ? "true" : "false"), this._container.setAttribute("aria-disabled", this._options.disabled ? "true" : "false"), this._input = e;
 		let r = this._input.getAttribute("id");
 		r === null ? this._options.id && this._input.setAttribute("id", this._options.id) : this._options.id = r, this._input.type = "checkbox", this._options.name && (this._input.name = this._options.name), this._options.value && (this._input.value = this._options.value), this._input.checked = !!this._options.checked, this._options.disabled && (this._input.disabled = !0), this._options.indeterminate && (this._input.indeterminate = !0), this._visualCheckbox = document.createElement("span"), this._visualCheckbox.className = "checkbox-visual", this._visualCheckbox.setAttribute("aria-hidden", "true");
 		let i = "http://www.w3.org/2000/svg", a = document.createElementNS(i, "svg");
@@ -1156,7 +1153,7 @@ u.prototype = {
 };
 //#endregion
 //#region src/app/shared/components/selectbox.js
-var d = class e {
+var f = class e {
 	static #e = /* @__PURE__ */ new Set();
 	constructor(t, n) {
 		if (typeof t == "string") {
@@ -1199,7 +1196,7 @@ var d = class e {
 		}, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), this.#t(), this.#n(), this.#c(), e.#e.add(this);
 	}
 	#t() {
-		this._container.innerHTML = "", this._container.className += " selectbox-container";
+		this._container.textContent = "", this._container.className += " selectbox-container";
 		var e = document.createDocumentFragment();
 		if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), e.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text i18n", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._options.usePortal && (this._dropdown.className += " selectbox-fixed"), this._select.appendChild(this._dropdown), this._options.description) {
 			var t = document.createElement("div");
@@ -1300,7 +1297,7 @@ var d = class e {
 	}
 	#c(e, t) {
 		if (e ||= "", this._optionsContainer) {
-			this._optionsContainer.innerHTML = "";
+			this._optionsContainer.textContent = "";
 			var n = null, r = this._items;
 			e && (r = r.filter(function(t) {
 				return t !== null && t.text.toLowerCase().indexOf(e) !== -1;
@@ -1576,11 +1573,11 @@ var d = class e {
 		} catch (e) {
 			console.error(e);
 		}
-		this._container.innerHTML = "";
+		this._container.textContent = "";
 		for (var t = this._container.className.split(" "), n = [], r = 0; r < t.length; r++) t[r] !== "selectbox-container" && n.push(t[r]);
 		this._container.className = n.join(" ");
 	}
-}, f = class {
+}, p = class {
 	static #e = document.getElementById("loader");
 	#t;
 	constructor(e, t) {
@@ -1609,19 +1606,7 @@ var d = class e {
 	static hide() {
 		this.#e?.classList.add("hidden");
 	}
-};
-//#endregion
-//#region src/app/services/translate-service.js
-function p(e) {
-	try {
-		return window.Asc.plugin.tr(e);
-	} catch (t) {
-		return console.error(t), e;
-	}
-}
-//#endregion
-//#region src/app/services/csl-html-parser.js
-var m = class e {
+}, m = class e {
 	static #e = /* @__PURE__ */ new Set([
 		"i",
 		"u",
@@ -2664,7 +2649,7 @@ var b = class e {
 		let t = document.createDocumentFragment(), n = document.createElement("div"), r = this._storage.getCitationsPre(e.citationID), i = this._storage.getCitationsPost(e.citationID), a = this._storage.getAllCitationsInJson();
 		this._formatter.rebuildProcessorState(a);
 		let o = this._formatter.processCitationCluster(e.toJSON(), r, i), s = this.#m(o[1][0][1]);
-		return t.appendChild(n), n.innerHTML = s, e.setPlainCitation(n.innerText), s;
+		return t.appendChild(n), n.innerHTML = m.purifyHtml(s), e.setPlainCitation(n.innerText), s;
 	}
 	#c(e) {
 		let t, n = e.Value.indexOf("{"), r = e.Value.lastIndexOf("}");
@@ -2704,34 +2689,34 @@ var b = class e {
 	}
 	#u(e, t) {
 		let n = this.#o();
-		if (e && (n = p(this._bibPlaceholderIfEmpty)), this._cslStylesManager.isLastUsedStyleContainBibliography()) return this.citationDocService.addBibliography(n, t);
+		if (e && (n = s(this._bibPlaceholderIfEmpty)), this._cslStylesManager.isLastUsedStyleContainBibliography()) return this.citationDocService.addBibliography(n, t);
 		throw "The current bibliographic style does not describe the bibliography";
 	}
 	#d(e, t) {
-		return e ? (t.Content = p(this._bibPlaceholderIfEmpty), Asc.scope.bibStyle = {}) : t.Content = this.#o(), t;
+		return e ? (t.Content = s(this._bibPlaceholderIfEmpty), Asc.scope.bibStyle = {}) : t.Content = this.#o(), t;
 	}
 	async #f(e, t, n) {
 		let r = document.createDocumentFragment(), i = document.createElement("div");
 		r.appendChild(i);
 		let a = [];
 		for (let r = e.length - 1; r >= 0; r--) {
-			let o = !!n, { field: s, cslCitation: c } = e[r], l = this._storage.getCitationsPre(c.citationID), u = this._storage.getCitationsPost(c.citationID), d = this._storage.getAllCitationsInJson();
-			this._formatter.rebuildProcessorState(d);
-			let f = this._formatter.processCitationCluster(c.toJSON(), l, u), m = this.#m(f[1][0][1]);
-			i.innerHTML = m;
-			let h = c.getPlainCitation(), g = s.Content;
-			h === "" && (h = g);
-			let _ = i.innerText;
-			if (!c.getDoNotUpdate()) {
-				if (h !== g && !t) {
-					let e = "<p>" + p("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + p("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + p("Original:") + " " + _ + "</p><p>" + p("Modified:") + " " + g + "</p>";
-					await this.#e.show("Saving custom edits", e) ? (c.setDoNotUpdate(), delete s.Content) : (s.Content = m, c.setPlainCitation(_)), o = !0;
-				} else (_ !== g || h !== g || h !== _) && (o = !0), s.Content = m, c.setPlainCitation(_);
-				if (c) {
-					let e = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(c.toJSON());
-					s.Value !== e && (o = !0), s.Value = e;
+			let o = !!n, { field: c, cslCitation: l } = e[r], u = this._storage.getCitationsPre(l.citationID), d = this._storage.getCitationsPost(l.citationID), f = this._storage.getAllCitationsInJson();
+			this._formatter.rebuildProcessorState(f);
+			let p = this._formatter.processCitationCluster(l.toJSON(), u, d), h = this.#m(p[1][0][1]);
+			i.innerHTML = m.purifyHtml(h);
+			let g = l.getPlainCitation(), _ = c.Content;
+			g === "" && (g = _);
+			let v = i.innerText;
+			if (!l.getDoNotUpdate()) {
+				if (g !== _ && !t) {
+					let e = "<p>" + s("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + s("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + s("Original:") + " " + v + "</p><p>" + s("Modified:") + " " + _ + "</p>";
+					await this.#e.show("Saving custom edits", e) ? (l.setDoNotUpdate(), delete c.Content) : (c.Content = h, l.setPlainCitation(v)), o = !0;
+				} else (v !== _ || g !== _ || g !== v) && (o = !0), c.Content = h, l.setPlainCitation(v);
+				if (l) {
+					let e = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(l.toJSON());
+					c.Value !== e && (o = !0), c.Value = e;
 				}
-				o && a.push(s);
+				o && a.push(c);
 			}
 		}
 		return a;
@@ -3239,18 +3224,18 @@ var k = [{
 	]] }
 }];
 function A(e, t) {
-	if (this._router = e, this._displayNoneClass = t, this._saveBtn = new c("saveSettingsBtn", { variant: "primary" }), this._cancelBtn = new c("cancelBtn", { variant: "secondary" }), this._styleSelect = new d("styleSelectList", {
+	if (this._router = e, this._displayNoneClass = t, this._saveBtn = new l("saveSettingsBtn", { variant: "primary" }), this._cancelBtn = new l("cancelBtn", { variant: "secondary" }), this._styleSelect = new f("styleSelectList", {
 		placeholder: "Enter style name",
 		sortable: !0
-	}), this._styleSelectListOther = new d("styleSelectedListOther", {
+	}), this._styleSelectListOther = new f("styleSelectedListOther", {
 		placeholder: "Enter style name",
 		searchable: !0
 	}), this._notesStyleWrapper = document.getElementById("notesStyle"), !this._notesStyleWrapper) throw Error("notesStyleWrapper not found");
-	if (this._footNotes = new l("footNotes", { label: "Footnotes" }), this._endNotes = new l("endNotes", { label: "Endnotes" }), this._includeUrlWrapper = document.getElementById("includeUrlWrapper"), !this._includeUrlWrapper) throw Error("includeUrlWrapper not found");
-	if (this._includeUrlCheckbox = new u("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._abbreviateJournalTitlesWrapper = document.getElementById("abbreviateJournalTitlesWrapper"), !this._abbreviateJournalTitlesWrapper) throw Error("abbreviateJournalTitlesWrapper not found");
-	if (this._abbreviateJournalTitlesCheckbox = new u("abbreviateJournalTitles", { label: "Use MEDLINE journal abbreviations" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
-	if (this._languageSelect = new d("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
-	this._cslStylesManager = new E("zoteroStyleId"), this._localesManager = new D(), this._abbreviationsManager = new O(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new s("styleMessage", { type: "error" }), this._langMessage = new s("langMessage", { type: "error" }), this._LANGUAGES = [
+	if (this._footNotes = new u("footNotes", { label: "Footnotes" }), this._endNotes = new u("endNotes", { label: "Endnotes" }), this._includeUrlWrapper = document.getElementById("includeUrlWrapper"), !this._includeUrlWrapper) throw Error("includeUrlWrapper not found");
+	if (this._includeUrlCheckbox = new d("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._abbreviateJournalTitlesWrapper = document.getElementById("abbreviateJournalTitlesWrapper"), !this._abbreviateJournalTitlesWrapper) throw Error("abbreviateJournalTitlesWrapper not found");
+	if (this._abbreviateJournalTitlesCheckbox = new d("abbreviateJournalTitles", { label: "Use MEDLINE journal abbreviations" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
+	if (this._languageSelect = new f("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
+	this._cslStylesManager = new E("zoteroStyleId"), this._localesManager = new D(), this._abbreviationsManager = new O(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new c("styleMessage", { type: "error" }), this._langMessage = new c("langMessage", { type: "error" }), this._LANGUAGES = [
 		["af-ZA", "Afrikaans"],
 		["ar", "Arabic"],
 		["bg-BG", "Bulgarian"],
@@ -3348,24 +3333,24 @@ A.prototype.getLocalesManager = function() {
 		}
 		let r = { ...e._stateSettings }, i = [];
 		e._stateSettings.language !== n && (e._localesManager.saveLastUsedLanguage(n), i.push(e._localesManager.loadLocale(n).catch(function(t) {
-			throw console.error(t), e._langMessage.show(p("Failed to load language")), t;
+			throw console.error(t), e._langMessage.show(s("Failed to load language")), t;
 		})));
 		let a = "footnotes";
 		e._endNotes.getState().checked && (a = "endnotes"), e._stateSettings.notesStyle !== a && (e._cslStylesManager.saveLastUsedNotesStyle(a), e._cslStylesManager.getLastUsedFormat() === "note" && i.push(Promise.resolve()));
 		let o = e._styleSelect.getSelectedValue();
 		e._stateSettings.style !== o && o !== null && i.push(e._onStyleChange(o));
-		let s = e._includeUrlCheckbox.getState().checked;
-		e._stateSettings.includeUrlForPaperArticles !== s && (e._cslStylesManager.saveIncludeUrlForPaperArticles(s), i.push(Promise.resolve()));
-		let c = e._abbreviateJournalTitlesCheckbox.getState().checked;
-		e._stateSettings.abbreviateJournalTitles !== c && (e._cslStylesManager.saveAbbreviateJournalTitles(c), i.push(Promise.resolve())), i.length ? (e._showLoader(), Promise.all(i).then(function() {
+		let c = e._includeUrlCheckbox.getState().checked;
+		e._stateSettings.includeUrlForPaperArticles !== c && (e._cslStylesManager.saveIncludeUrlForPaperArticles(c), i.push(Promise.resolve()));
+		let l = e._abbreviateJournalTitlesCheckbox.getState().checked;
+		e._stateSettings.abbreviateJournalTitles !== l && (e._cslStylesManager.saveAbbreviateJournalTitles(l), i.push(Promise.resolve())), i.length ? (e._showLoader(), Promise.all(i).then(function() {
 			e._hide(), e._hideLoader();
 			let t = {
 				language: n,
 				style: o || "ieee",
 				notesStyle: a,
 				styleFormat: e._cslStylesManager.getLastUsedFormat(),
-				includeUrlForPaperArticles: s,
-				abbreviateJournalTitles: c
+				includeUrlForPaperArticles: c,
+				abbreviateJournalTitles: l
 			};
 			e._onChangeState(t, r);
 		}).catch(function(t) {
@@ -3389,7 +3374,7 @@ A.prototype.getLocalesManager = function() {
 			e._cslStylesManager.addCustomStyle(r).then(function(t) {
 				e._addStylesToList([t]);
 			}).catch(function(t) {
-				console.error(t), e._styleMessage.show(p("Invalid CSL style file"));
+				console.error(t), e._styleMessage.show(s("Invalid CSL style file"));
 			}).finally(function() {
 				e._hideLoader();
 			});
@@ -3431,7 +3416,7 @@ A.prototype.getLocalesManager = function() {
 }, A.prototype._loadStyles = function() {
 	let e = this;
 	return this._cslStylesManager.getStylesInfo().then(function(t) {
-		e._addStylesToList(t), e._styleSelect.addCustomItem("more_styles", "More Styles..."), e._styleSelect.addCustomItem("cslFileInput", "Add custom style...");
+		e._addStylesToList(t), e._styleSelect.addCustomItem("more_styles", s("More Styles...")), e._styleSelect.addCustomItem("cslFileInput", s("Add custom style..."));
 	}).catch(function(e) {
 		console.error(e);
 	});
@@ -3448,7 +3433,7 @@ A.prototype.getLocalesManager = function() {
 	this._saveBtn.enable();
 }, A.prototype._showPreview = function(e, t) {
 	if (!e) {
-		this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
+		this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.textContent = "";
 		return;
 	}
 	try {
@@ -3468,17 +3453,17 @@ A.prototype.getLocalesManager = function() {
 		this._abbreviationsManager.isLoaded() && this._abbreviateJournalTitlesCheckbox.getState().checked && (a.getAbbreviation = this._abbreviationsManager.createCiteprocHook());
 		let o = new CSL.Engine(a, e, t, !0);
 		o.updateItems(k.map((e) => e.id));
-		let s = o.makeBibliography(), c = s && s[0], l = s && s[1];
-		if (!l || !l.length) {
-			this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
+		let c = o.makeBibliography(), l = c && c[0], u = c && c[1];
+		if (!u || !u.length) {
+			this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.textContent = "";
 			return;
 		}
-		let u = document.createElement("div");
-		u.className = "preview-title", u.textContent = p("Bibliography preview");
 		let d = document.createElement("div");
-		d.className = "preview-content", d.innerHTML = m.purifyHtml(l.join("")), this._applyBibliographyStyles(d, c), this._previewWrapper.innerHTML = "", this._previewWrapper.appendChild(u), this._previewWrapper.appendChild(d), this._previewWrapper.classList.remove(this._displayNoneClass);
+		d.className = "preview-title", d.textContent = s("Bibliography preview");
+		let f = document.createElement("div");
+		f.className = "preview-content", f.innerHTML = m.purifyHtml(u.join("")), this._applyBibliographyStyles(f, l), this._previewWrapper.textContent = "", this._previewWrapper.appendChild(d), this._previewWrapper.appendChild(f), this._previewWrapper.classList.remove(this._displayNoneClass);
 	} catch (e) {
-		console.error("Failed to render bibliography preview:", e), this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
+		console.error("Failed to render bibliography preview:", e), this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.textContent = "";
 	}
 }, A.prototype._applyBibliographyStyles = function(e, t) {
 	if (!t) return;
@@ -3559,7 +3544,7 @@ A.prototype.getLocalesManager = function() {
 		let r = e.styleFormat;
 		n._bNumFormat = r == "numeric", r === "note" ? n._notesStyleWrapper.classList.remove(n._displayNoneClass) : n._notesStyleWrapper.classList.add(n._displayNoneClass), n._currentStyleContent = e.content, n._showPreview(e.content, n._localesManager.getLastUsedLanguage()), e.content && n._styleRespondsToIncludeUrlToggle(e.content, n._localesManager.getLastUsedLanguage()) ? n._includeUrlWrapper.classList.remove(n._displayNoneClass) : n._includeUrlWrapper.classList.add(n._displayNoneClass), e.content && n._styleRespondsToAbbreviateJournalTitles(e.content, n._localesManager.getLastUsedLanguage()) ? n._abbreviateJournalTitlesWrapper.classList.remove(n._displayNoneClass) : n._abbreviateJournalTitlesWrapper.classList.add(n._displayNoneClass), t && n._hideLoader();
 	}).catch(function(e) {
-		throw console.error(e), typeof e == "string" && n._styleMessage.show(p(e)), t && n._hideLoader(), e;
+		throw console.error(e), typeof e == "string" && n._styleMessage.show(s(e)), t && n._hideLoader(), e;
 	});
 }, A.prototype._showLoader = function() {
 	this._cancelBtn.disable(), this._saveBtn.disable(), this._styleSelect.disable(), this._languageSelect.disable();
@@ -3572,7 +3557,7 @@ function j(e, t) {
 	if (this._router = e, this._sdk = t, this._apiKeyLoginField = new o("apiKeyField", {
 		autofocus: !0,
 		autocomplete: "on"
-	}), this._saveApiKeyBtn = new c("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new s("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new s("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new c("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
+	}), this._saveApiKeyBtn = new l("saveApiKeyBtn", { disabled: !0 }), this._apiKeyMessage = new c("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new c("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new l("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw Error("useDesktopApp not found");
 	if (this._logoutLink = document.getElementById("logoutLink"), !this._logoutLink) throw Error("logoutLink not found");
 	this._onAuthorized = function(e) {}, this._onChangeState = function(e) {}, this._onOpen = function() {};
 }
@@ -3614,7 +3599,7 @@ j.prototype.init = function() {
 		t.type === "button:click" && e._tryToApplyKey();
 	}), this._connectToLocalZotero.subscribe(function(t) {
 		t.type === "button:click" && (e._showLoader(), r.checkStatus(e._sdk).then(function(t) {
-			t.desktop && t.hasPermission ? (e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages()) : t.desktop && !t.hasPermission ? e._useDesktopMessage.show(p("Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"")) : t.desktop || e._useDesktopMessage.show(p("Connection to Zotero failed. Make sure Zotero is running."));
+			t.desktop && t.hasPermission ? (e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages()) : t.desktop && !t.hasPermission ? e._useDesktopMessage.show(s("Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"")) : t.desktop || e._useDesktopMessage.show(s("Connection to Zotero failed. Make sure Zotero is running"));
 		}).finally(function() {
 			e._hideLoader();
 		}));
@@ -3626,7 +3611,7 @@ j.prototype.init = function() {
 	t && (e._showLoader(), e._sdk.setApiKey(t).then(function() {
 		r.successfullyLoggedInUsingApiKey(), e._hide(!0);
 	}).catch(function(t) {
-		console.error(t), e._apiKeyMessage.show(p("Invalid API key"));
+		console.error(t), e._apiKeyMessage.show(s("Invalid API key"));
 	}).finally(function() {
 		e._hideLoader();
 	}));
@@ -3648,13 +3633,13 @@ function M() {
 		type: "text",
 		autofocus: !0,
 		showClear: !1
-	}), this._filterButton = new c("filterButton", {
+	}), this._filterButton = new l("filterButton", {
 		variant: "secondary-icon",
 		size: "small"
-	}), this._librarySelectList = new d("librarySelectList", {
-		placeholder: p("No items selected"),
+	}), this._librarySelectList = new f("librarySelectList", {
+		placeholder: s("No items selected"),
 		multiple: !0,
-		description: p("Search in:")
+		description: s("Search in:")
 	}), this._subscribers = [], this._addEventListeners();
 }
 M.prototype._addEventListeners = function() {
@@ -3678,10 +3663,10 @@ M.prototype._addEventListeners = function() {
 	});
 	let a = [{
 		id: "my_library",
-		name: p("My Library")
+		name: s("My Library")
 	}, {
 		id: "group_libraries",
-		name: p("Group Libraries")
+		name: s("Group Libraries")
 	}];
 	!i && a.forEach(function(e) {
 		r.indexOf(e.id) !== -1 && (i = !0);
@@ -3689,18 +3674,18 @@ M.prototype._addEventListeners = function() {
 		r.indexOf(e.id.toString()) !== -1 && (i = !0);
 	}), i || (r = ["my_library", "group_libraries"]);
 	let o = function(e, n, r) {
-		typeof e == "number" && (e = e.toString()), t._librarySelectList instanceof d && t._librarySelectList.addItem(e, n, r);
+		typeof e == "number" && (e = e.toString()), t._librarySelectList instanceof f && t._librarySelectList.addItem(e, n, r);
 	};
-	for (var s = 0; s < a.length; s++) {
-		let e = a[s].id, t = a[s].name;
+	for (var c = 0; c < a.length; c++) {
+		let e = a[c].id, t = a[c].name;
 		o(e, t, r.indexOf(e) !== -1);
 	}
 	if (e.length === 0) return;
 	this._librarySelectList.addSeparator();
-	let c = r.indexOf("group_libraries") !== -1;
-	for (var s = 0; s < e.length; s++) {
-		let t = e[s].id, n = e[s].name;
-		o(t, n, c || r.indexOf(t.toString()) !== -1);
+	let l = r.indexOf("group_libraries") !== -1;
+	for (var c = 0; c < e.length; c++) {
+		let t = e[c].id, n = e[c].name;
+		o(t, n, l || r.indexOf(t.toString()) !== -1);
 	}
 	this._selectedGroupsWatcher(a, e);
 }, M.prototype._getSelectedGroups = function() {
@@ -3717,7 +3702,7 @@ M.prototype._addEventListeners = function() {
 	} };
 }, M.prototype._selectedGroupsWatcher = function(e, t) {
 	let n = this;
-	this._librarySelectList instanceof d && this._librarySelectList.subscribe(function(r) {
+	this._librarySelectList instanceof f && this._librarySelectList.subscribe(function(r) {
 		if (r.type !== "selectbox:change") return;
 		let i = [], a = r.detail.values, o = r.detail.current, s = r.detail.enabled, c = e.map(function(e) {
 			return e.id;
@@ -3765,11 +3750,17 @@ function P(e, t, n) {
 //#region src/app/index.js
 P.prototype._init = function() {
 	let e = this;
-	this._cancelSelectBtn && (this._cancelSelectBtn.onclick = function(t) {
-		var n = [];
-		for (var r in e._items) n.push(r);
-		for (var i = 0; i < n.length; i++) e._removeSelected(n[i]);
-	}), this._docsHolder && this._docsHolder.addEventListener("keydown", function(t) {
+	if (this._cancelSelectBtn) {
+		let t = function() {
+			var t = [];
+			for (var n in e._items) t.push(n);
+			for (var r = 0; r < t.length; r++) e._removeSelected(t[r]);
+		};
+		this._cancelSelectBtn.onclick = t, this._cancelSelectBtn.onkeydown = function(e) {
+			(e.key === "Enter" || e.key === " ") && (e.preventDefault(), t());
+		};
+	}
+	this._docsHolder && this._docsHolder.addEventListener("keydown", function(t) {
 		(t.ctrlKey || t.metaKey) && t.key === "a" && (t.preventDefault(), (e._docsHolder?.querySelectorAll(".checkbox-container:not(.checkbox--checked)"))?.forEach(function(e) {
 			e.click();
 		}));
@@ -3823,7 +3814,7 @@ P.prototype._init = function() {
 		return e.family && e.given ? e.family.trim() + ", " + e.given.trim() : e.family ? e.family.trim() : e.given ? e.given.trim() : "";
 	}).join("; "));
 	let o = document.createElement("div");
-	o.classList.add("selectbox-arrow"), o.innerHTML = "<b></b>";
+	o.classList.add("selectbox-arrow"), o.setAttribute("tabindex", "0"), o.innerHTML = "<b></b>";
 	var s = document.createElement("div");
 	if (s.textContent = e.title.trim(), s.classList.add("truncate-text"), s.classList.add("secondary-text"), (e.publisher || e["publisher-place"]) && (s.textContent += " · " + (e.publisher || e["publisher-place"] || "")), e.issued && e.issued["date-parts"]) {
 		var c = e.issued["date-parts"][0];
@@ -3832,46 +3823,48 @@ P.prototype._init = function() {
 	a.length === 0 && (a = s.textContent), s.setAttribute("title", s.textContent), r.appendChild(s);
 	let l = document.createElement("input");
 	i.appendChild(l);
-	let d = new u(l, {
+	let u = new d(l, {
 		checked: !!this._items[e.id],
 		label: a,
 		title: !0,
 		id: e.id
 	});
-	this._items[e.id] && (this._checks[e.id] = d), i.appendChild(o), n.appendChild(i), n.appendChild(r);
+	this._items[e.id] && (this._checks[e.id] = u), i.appendChild(o), n.appendChild(i), n.appendChild(r);
 	let f;
 	function p() {
 		n.classList.toggle("doc-open"), f || (f = t._buildCitationParams(e), n.appendChild(f));
 	}
-	return o.onclick = p, d.subscribe(function(n) {
-		n.type === "checkbox:change" && (n.detail.checked ? t._addSelected(e, d) : t._removeSelected(e.id));
+	return o.onclick = p, o.onkeydown = function(e) {
+		(e.key === "Enter" || e.key === " ") && (e.preventDefault(), p());
+	}, u.subscribe(function(n) {
+		n.type === "checkbox:change" && (n.detail.checked ? t._addSelected(e, u) : t._removeSelected(e.id));
 	}), n;
 }, P.prototype._buildCitationParams = function(e) {
 	let t = localStorage.getItem("selectedLocator") || "page";
 	e.label = t;
-	let n = document.createDocumentFragment(), r = document.createElement("div"), i = document.createElement("input"), a = document.createElement("input"), s = document.createElement("div"), c = document.createElement("div"), l = document.createElement("input"), f = document.createElement("div"), m = document.createElement("input");
-	n.appendChild(r), r.appendChild(i), r.appendChild(a), n.appendChild(s), s.appendChild(c), s.appendChild(l);
+	let n = document.createDocumentFragment(), r = document.createElement("div"), i = document.createElement("input"), a = document.createElement("input"), c = document.createElement("div"), l = document.createElement("div"), u = document.createElement("input"), p = document.createElement("div"), m = document.createElement("input");
+	n.appendChild(r), r.appendChild(i), r.appendChild(a), n.appendChild(c), c.appendChild(l), c.appendChild(u);
 	let h = "";
-	n.appendChild(f), f.appendChild(m);
+	n.appendChild(p), p.appendChild(m);
 	let g = new o(i, {
 		type: "text",
-		placeholder: p("Prefix")
+		placeholder: s("Prefix")
 	}), _ = new o(a, {
 		type: "text",
-		placeholder: p("Suffix")
-	}), v = new d(c, {
-		placeholder: p("Locator"),
+		placeholder: s("Suffix")
+	}), v = new f(l, {
+		placeholder: s("Locator"),
 		usePortal: !0,
-		translate: p
+		translate: s
 	});
 	N.forEach(function(e) {
 		let n = e[0] === t;
 		v.addItem(e[0], e[1], n), n && (h = e[1]);
 	});
-	let y = new o(l, {
+	let y = new o(u, {
 		type: "text",
-		placeholder: p(h)
-	}), b = new u(m, { label: p("Omit Author") });
+		placeholder: s(h)
+	}), b = new d(m, { label: s("Omit Author") });
 	return g.subscribe(function(t) {
 		t.type === "inputfield:input" && (e.prefix = t.detail.value);
 	}), _.subscribe(function(t) {
@@ -3942,7 +3935,7 @@ P.prototype._init = function() {
 	this._selectedHolder && this._selectedHolder.removeChild(t), delete this._items[e], delete this._html[e], this._checks[e] && (this._checks[e].uncheck(!0), delete this._checks[e]), this._docsScroller.onscroll(), this._selectedScroller.onscroll(), this._checkSelected();
 }, P.prototype._checkSelected = function() {
 	let e = this.count();
-	this._selectedInfo && this._selectedCount && this._selectedWrapper && (e <= 0 ? (this._selectedWrapper.classList.add(this._displayNoneClass), this._selectedInfo.classList.add(this._displayNoneClass)) : (this._selectedWrapper.classList.remove(this._displayNoneClass), this._selectedInfo.classList.remove(this._displayNoneClass), this._selectedCount.textContent = e + " " + p("selected")), this._subscribers.forEach(function(t) {
+	this._selectedInfo && this._selectedCount && this._selectedWrapper && (e <= 0 ? (this._selectedWrapper.classList.add(this._displayNoneClass), this._selectedInfo.classList.add(this._displayNoneClass)) : (this._selectedWrapper.classList.remove(this._displayNoneClass), this._selectedInfo.classList.remove(this._displayNoneClass), this._selectedCount.textContent = e + " " + s("selected")), this._subscribers.forEach(function(t) {
 		t(e);
 	}));
 }, P.prototype.count = function() {
@@ -3950,46 +3943,46 @@ P.prototype._init = function() {
 	for (var t in this._items) e++;
 	return e;
 }, (function() {
-	let n = "hidden", r, i, o, s, l = {
+	let n = "hidden", r, i, o, c, u = {
 		text: "",
 		obj: null,
 		groups: [],
 		groupsHash: ""
-	}, u = !1, d, m, h, g, _, v, y, b = new f("libLoader", p("Loading...")), x = {};
+	}, d = !1, f, m, h, g, _, v, y, b = new p("libLoader", s("Loading...")), x = {};
 	function w() {
 		let e = document.getElementById("errorWrapper");
 		if (!e) throw Error("errorWrapper not found");
 		let t = document.getElementById("mainState");
 		if (!t) throw Error("mainState not found");
-		d = new M(), m = new P(n, L, R), h = new c("saveAsTextBtn", { variant: "secondary" }), g = new c("insertLinkBtn", { disabled: !0 }), _ = new c("settingsBtn", {
+		f = new M(), m = new P(n, L, R), h = new l("saveAsTextBtn", { variant: "secondary" }), g = new l("insertLinkBtn", { disabled: !0 }), _ = new l("settingsBtn", {
 			variant: "icon-only",
 			size: "small"
-		}), v = new c("insertBibBtn", { variant: "secondary" }), y = new c("refreshBtn", { variant: "secondary" }), x = {
+		}), v = new l("insertBibBtn", { variant: "secondary" }), y = new l("refreshBtn", { variant: "secondary" }), x = {
 			error: e,
 			mainState: t
 		};
 	}
 	window.Asc.plugin.init = function() {
-		f.show(), w(), r = new t(), i = new a();
+		p.show(), w(), r = new t(), i = new a();
 		let e = new j(r, i);
-		o = new A(r, n), s = new S(o.getLocalesManager(), o.getStyleManager(), i, o.getAbbreviationsManager());
-		let c = !1;
+		o = new A(r, n), c = new S(o.getLocalesManager(), o.getStyleManager(), i, o.getAbbreviationsManager());
+		let l = !1;
 		D(), e.init().onOpen(function() {
-			f.hide();
+			p.hide();
 		}).onChangeState(function(e) {
 			o.setDesktopApiAvailable(e.desktop), o.setRestApiAvailable(e.online);
 		}).onAuthorized(function(e) {
-			if (c) return;
-			c = !0, f.show();
+			if (l) return;
+			l = !0, p.show();
 			let t = E().catch((e) => {
-				console.error(e), k(p("An error occurred while loading library groups. Try restarting the plugin."));
+				console.error(e), k(s("An error occurred while loading library groups. Try restarting the plugin."));
 			}), n = o.init().catch((e) => {
-				console.error(e), k(p("An error occurred while loading settings. Try restarting the plugin.")), o.show();
+				console.error(e), k(s("An error occurred while loading settings. Try restarting the plugin.")), o.show();
 			});
 			Promise.all([t, n]).then(function() {
-				return f.hide(), T();
+				return p.hide(), T();
 			}).finally(function() {
-				f.hide();
+				p.hide();
 			});
 		}), window.Asc.plugin.onTranslate = O, U().then((e) => {
 			window.Asc.scope.editorVersion = e, W();
@@ -4008,7 +4001,7 @@ P.prototype._init = function() {
 	}
 	function E() {
 		return i.getUserGroups().then(function(e) {
-			return d.addGroups(e), e;
+			return f.addGroups(e), e;
 		});
 	}
 	function D() {
@@ -4022,13 +4015,13 @@ P.prototype._init = function() {
 				});
 				t.indexOf("my_library") !== -1 && r.push(z(i.getItems(e), !1));
 				for (var s = 0; s < o.length; s++) r.push(z(i.getGroupItems(e, o[s]), !0));
-				return l.text = e, l.obj = null, l.groups = [], l.groupsHash = n, r;
+				return u.text = e, u.obj = null, u.groups = [], u.groupsHash = n, r;
 			});
 		}
-		d.subscribe(function(t, r) {
+		f.subscribe(function(t, r) {
 			t = t.trim();
 			let i = r.join(",");
-			x.mainState.classList.contains(n) || !t || t == l.text && i === l.groupsHash || r.length === 0 || e(t, r, i).catch(() => []).then(function(e) {
+			x.mainState.classList.contains(n) || !t || t == u.text && i === u.groupsHash || r.length === 0 || e(t, r, i).catch(() => []).then(function(e) {
 				return e.length && (b.show(), Promise.any(e).then(function() {
 					b.hide();
 				}).finally(function() {
@@ -4043,93 +4036,93 @@ P.prototype._init = function() {
 		}), y.subscribe(async function(e) {
 			if (e.type !== "button:click") return;
 			if (!o.getLastUsedStyleId()) {
-				k(p("Style is not selected"));
+				k(s("Style is not selected"));
 				return;
 			}
 			if (!o.getLocale()) {
-				k(p("Language is not selected"));
+				k(s("Language is not selected"));
 				return;
 			}
-			await N(!0, "Zotero (" + p("Updating citations") + ")");
-			let t = s.updateCslItems.bind(s, !1), n = o.getStyleManager();
-			n.getLastUsedFormat() === "note" && (t = s.updateCslItemsInNotes.bind(s, n.getLastUsedNotesStyle())), t().catch(function(e) {
+			await N(!0, "Zotero (" + s("Updating citations") + ")");
+			let t = c.updateCslItems.bind(c, !1), n = o.getStyleManager();
+			n.getLastUsedFormat() === "note" && (t = c.updateCslItemsInNotes.bind(c, n.getLastUsedNotesStyle())), t().catch(function(e) {
 				console.error(e);
-				let t = p("Failed to refresh");
-				typeof e == "string" && (t += ". " + p(e)), k(t);
+				let t = s("Failed to refresh");
+				typeof e == "string" && (t += ". " + s(e)), k(t);
 			}).finally(function() {
-				F(!1, "Zotero (" + p("Updating citations") + ")");
+				F(!1, "Zotero (" + s("Updating citations") + ")");
 			});
 		}), v.subscribe(async (e) => {
 			if (e.type !== "button:click") return;
 			if (!o.getLastUsedStyleId()) {
-				k(p("Style is not selected"));
+				k(s("Style is not selected"));
 				return;
 			}
 			if (!o.getLocale()) {
-				k(p("Language is not selected"));
+				k(s("Language is not selected"));
 				return;
 			}
-			await N(!1, "Zotero (" + p("Inserting bibliography") + ")");
+			await N(!1, "Zotero (" + s("Inserting bibliography") + ")");
 			let t = "";
-			s.insertBibliography().then(function(e) {
+			c.insertBibliography().then(function(e) {
 				t = e;
 			}).catch(function(e) {
-				console.error(e), s.showWarningMessage("Failed to insert bibliography"), typeof e == "string" && k(p(e));
+				console.error(e), c.showWarningMessage("Failed to insert bibliography"), typeof e == "string" && k(s(e));
 			}).finally(function() {
-				F(!1, "Zotero (" + p("Inserting bibliography") + ")"), t && s.moveCursorOutsideField(t);
+				F(!1, "Zotero (" + s("Inserting bibliography") + ")"), t && c.moveCursorOutsideField(t);
 			});
 		}), g.subscribe(async (e) => {
 			if (e.type !== "button:click") return;
 			if (!o.getLastUsedStyleId()) {
-				k(p("Style is not selected"));
+				k(s("Style is not selected"));
 				return;
 			}
 			if (!o.getLocale()) {
-				k(p("Language is not selected"));
+				k(s("Language is not selected"));
 				return;
 			}
-			await N(!0, "Zotero (" + p("Inserting citation") + ")");
-			let t = m.getSelectedItems(), n = !1, r = await s.getCurrentField();
-			return r ? s.insertSelectedCitationsToCurrentField(t, r).then((e) => (m.removeItems(Object.keys(t)), G(e))).then((e) => {
-				e && r && s.showSuccessMessage("Citation has been updated successfully");
+			await N(!0, "Zotero (" + s("Inserting citation") + ")");
+			let t = m.getSelectedItems(), n = !1, r = await c.getCurrentField();
+			return r ? c.insertSelectedCitationsToCurrentField(t, r).then((e) => (m.removeItems(Object.keys(t)), G(e))).then((e) => {
+				e && r && c.showSuccessMessage("Citation has been updated successfully");
 			}).finally(async () => {
-				F(!1, "Zotero (" + p("Inserting citation") + ")");
-			}) : s.insertSelectedCitations(t).then(function(e) {
-				return n = e, m.removeItems(Object.keys(t)), s.getCurrentField();
+				F(!1, "Zotero (" + s("Inserting citation") + ")");
+			}) : c.insertSelectedCitations(t).then(function(e) {
+				return n = e, m.removeItems(Object.keys(t)), c.getCurrentField();
 			}).then(function(e) {
-				return r = e, n ? s.updateCslItems(!1) : s.updateCslItems();
+				return r = e, n ? c.updateCslItems(!1) : c.updateCslItems();
 			}).then(() => {
-				if (n) return s.moveCursorRight();
-				if (r) return s.moveCursorOutsideField(r.FieldId);
+				if (n) return c.moveCursorRight();
+				if (r) return c.moveCursorOutsideField(r.FieldId);
 			}).catch(function(e) {
 				console.error(e);
-				let t = p("Failed to insert citation");
-				typeof e == "string" && (t += ". " + p(e)), k(t);
+				let t = s("Failed to insert citation");
+				typeof e == "string" && (t += ". " + s(e)), k(t);
 			}).finally(async () => {
-				F(!1, "Zotero (" + p("Inserting citation") + ")");
+				F(!1, "Zotero (" + s("Inserting citation") + ")");
 			});
 		}), _.subscribe(function(e) {
 			e.type === "button:click" && o.show();
 		}), h.subscribe(async (e) => {
-			e.type === "button:click" && (await N(!1, "Zotero (" + p("Saving as text") + ")"), s.saveAsText().then(function() {
-				F(!1, "Zotero (" + p("Saving as text") + ")");
+			e.type === "button:click" && (await N(!1, "Zotero (" + s("Saving as text") + ")"), c.saveAsText().then(function() {
+				F(!1, "Zotero (" + s("Saving as text") + ")");
 			}));
 		}), o.onChangeState(async function(e, t) {
-			await N(!0, "Zotero (" + p("Updating citations") + ")");
-			let n = s.updateCslItems.bind(s, !0);
-			[e.styleFormat, t.styleFormat].includes("note") && (n = e.styleFormat === t.styleFormat ? e.notesStyle === t.notesStyle ? s.updateCslItems.bind(s, !0) : s.convertNotesStyle.bind(s, e.notesStyle) : e.styleFormat === "note" ? s.switchingBetweenNotesAndText.bind(s, e.notesStyle) : s.switchingBetweenNotesAndText.bind(s)), n().catch(function(e) {
+			await N(!0, "Zotero (" + s("Updating citations") + ")");
+			let n = c.updateCslItems.bind(c, !0);
+			[e.styleFormat, t.styleFormat].includes("note") && (n = e.styleFormat === t.styleFormat ? e.notesStyle === t.notesStyle ? c.updateCslItems.bind(c, !0) : c.convertNotesStyle.bind(c, e.notesStyle) : e.styleFormat === "note" ? c.switchingBetweenNotesAndText.bind(c, e.notesStyle) : c.switchingBetweenNotesAndText.bind(c)), n().catch(function(e) {
 				console.error(e);
-				let t = p("Failed to refresh");
-				typeof e == "string" && (t += ". " + p(e)), k(t);
+				let t = s("Failed to refresh");
+				typeof e == "string" && (t += ". " + s(e)), k(t);
 			}).finally(function() {
-				F(!1, "Zotero (" + p("Updating citations") + ")");
+				F(!1, "Zotero (" + s("Updating citations") + ")");
 			});
 		});
 	}
 	Asc.plugin.onThemeChanged = function(t) {
 		window.Asc.plugin.onThemeChangedBase(t), e.fixThemeForIE(t), e.addStylesForComponents(t);
 		let n = "";
-		n += ".link, .link:visited, .link:hover { color : " + window.Asc.plugin.theme["text-normal"] + " !important;}\n", n += ".doc { border-color: " + t["border-regular-control"] + "; background-color: " + t["background-normal"] + "; }\n", n += ".scrollThumb { box-shadow: 0 0 8px 8px " + t["highlight-button-hover"] + " inset; }\n", n += ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " + t["canvas-scroll-thumb-pressed"] + " inset; }\n", n += ".scrollThumb:hover { box-shadow: 0 0 8px 8px " + t["canvas-scroll-thumb-hover"] + " inset; }\n", (["theme-white", "theme-night"].indexOf(t.name) !== -1 || ["theme-white", "theme-night"].indexOf(t.Name) !== -1) && (n += ".doc { border-radius: 4px; }\n");
+		n += ".link:not(:focus-visible), .link:visited:not(:focus-visible), .link:hover:not(:focus-visible) { color : " + window.Asc.plugin.theme["text-normal"] + " !important;}\n", n += ".doc { border-color: " + t["border-regular-control"] + "; background-color: " + t["background-normal"] + "; }\n", n += ".scrollThumb { box-shadow: 0 0 8px 8px " + t["highlight-button-hover"] + " inset; }\n", n += ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " + t["canvas-scroll-thumb-pressed"] + " inset; }\n", n += ".scrollThumb:hover { box-shadow: 0 0 8px 8px " + t["canvas-scroll-thumb-hover"] + " inset; }\n", (["theme-white", "theme-night"].indexOf(t.name) !== -1 || ["theme-white", "theme-night"].indexOf(t.Name) !== -1) && (n += ".doc { border-radius: 4px; }\n");
 		let r = document.getElementById("pluginStyles");
 		r ? r.innerHTML = n : (r = document.createElement("style"), r.id = "pluginStyles", r.innerHTML = n, document.getElementsByTagName("head")[0].appendChild(r));
 		let i = t.type || "light", a = document.body;
@@ -4141,21 +4134,21 @@ P.prototype._init = function() {
 			let n = e[t];
 			if (!(n instanceof HTMLElement)) continue;
 			["placeholder", "title"].forEach((e) => {
-				n.hasAttribute(e) && n.setAttribute(e, p(n.getAttribute(e) || ""));
+				n.hasAttribute(e) && n.setAttribute(e, s(n.getAttribute(e) || ""));
 			});
-			let r = p(n.innerText.trim().replace(/\s+/g, " "));
+			let r = s(n.innerText.trim().replace(/\s+/g, " "));
 			r && (n.innerText = r);
 		}
 	}
 	function k(e) {
-		e && typeof e == "string" ? (p(""), x.error.classList.remove(n), x.error.textContent = e, setTimeout(function() {
+		e && typeof e == "string" ? (s(""), x.error.classList.remove(n), x.error.textContent = e, setTimeout(function() {
 			window.onclick = function() {
 				k(!1);
 			};
 		}, 100)) : (x.error.classList.add(n), x.error.textContent = "", window.onclick = null);
 	}
 	async function N(e, t) {
-		u = !0, v.disable(), y.disable(), g.disable();
+		d = !0, v.disable(), y.disable(), g.disable();
 		let n = window.Asc.scope.editorVersion;
 		n && n < 9004e3 ? window._cursorPosition = await C.getCursorPosition() : await new Promise((t) => {
 			Asc.plugin.executeMethod("StartAction", ["GroupActions", {
@@ -4165,7 +4158,7 @@ P.prototype._init = function() {
 		});
 	}
 	async function F(e, t) {
-		u = !1, v.enable(), y.enable(), H();
+		d = !1, v.enable(), y.enable(), H();
 		let n = window.Asc.scope.editorVersion;
 		n && n < 9004e3 ? C.setCursorPosition(window._cursorPosition || 0) : await new Promise((t) => {
 			Asc.plugin.executeMethod("EndAction", ["GroupActions", { scrollToTarget: e }], t);
@@ -4193,34 +4186,34 @@ P.prototype._init = function() {
 		}
 	}
 	function L() {
-		console.warn("Loading more..."), l.obj && l.obj.next && z(l.obj.next(), !1);
-		for (let e = 0; e < l.groups.length && l.groups[e].next; e++) z(i.getGroupItems(l.groups[e].next(), l.groups[e].id), !0);
+		console.warn("Loading more..."), u.obj && u.obj.next && z(u.obj.next(), !1);
+		for (let e = 0; e < u.groups.length && u.groups[e].next; e++) z(i.getGroupItems(u.groups[e].next(), u.groups[e].id), !0);
 	}
 	function R(e) {
 		if (r.getRoute() != "main" || e.scrollTop + e.clientHeight < e.scrollHeight) return !1;
 		let t = !0;
-		return l.groups.forEach(function(e) {
+		return u.groups.forEach(function(e) {
 			e.next && (t = !1);
-		}), !(!l.obj || !l.obj.next || !t || !l.obj && !l.text.trim() && !l.groups.length);
+		}), !(!u.obj || !u.obj.next || !t || !u.obj && !u.text.trim() && !u.groups.length);
 	}
 	function z(e, t) {
 		return e.then(function(e) {
 			return B(e, null, t);
 		}).catch(function(e) {
-			return console.error(e), e.message && k(p(e.message)), B(null, e, t);
+			return console.error(e), e.message && k(s(e.message)), B(null, e, t);
 		}).then(function(e) {
 			return e;
 		});
 	}
 	function B(e, t, n) {
 		let r = !1;
-		!l.obj && e && e.items && !e.items.length && (r = !0), t ? (r && (l.obj = null, l.groups = []), l && l.obj && delete l.obj.next) : n && e && e.next ? l.groups.push(e) : l.obj = e && e.items.length ? e : null;
+		!u.obj && e && e.items && !e.items.length && (r = !0), t ? (r && (u.obj = null, u.groups = []), u && u.obj && delete u.obj.next) : n && e && e.next ? u.groups.push(e) : u.obj = e && e.items.length ? e : null;
 		let i = function(e) {
 			if (!e.id) return e;
 			let t = e.id.indexOf("/") + 1, n = e.id.lastIndexOf("/") + 1, r = e.id.indexOf("http");
 			return t !== n && r === 0 && (e.uris ||= [], e.uris.push(e.id)), n && (e.id = e.id.substring(n)), e;
 		};
-		return e && e.items && e.items.length > 0 && (e.items = e.items.map((t) => (t = V(t), t[n ? "groupID" : "userID"] = e.id, i(t), t))), m.displaySearchItems(e, t, l);
+		return e && e.items && e.items.length > 0 && (e.items = e.items.map((t) => (t = V(t), t[n ? "groupID" : "userID"] = e.id, i(t), t))), m.displaySearchItems(e, t, u);
 	}
 	function V(e) {
 		if (e.id || !e.key) return e;
@@ -4232,7 +4225,7 @@ P.prototype._init = function() {
 		return Object.hasOwnProperty.call(e, "url") && (t.URL = e.data.url), Object.hasOwnProperty.call(e, "volume") && (t.volume = e.data.volume), Object.hasOwnProperty.call(e, "language") && (t.language = e.data.language), Object.hasOwnProperty.call(e, "abstract") && (t.abstract = e.data.abstract), Object.hasOwnProperty.call(e, "note") && (t.note = e.data.note), Object.hasOwnProperty.call(e, "page") && (t.page = e.data.page), Object.hasOwnProperty.call(e, "shortTitle") && (t.shortTitle = e.data.shortTitle), Object.hasOwnProperty.call(e, "links") && (t.uris = [], Object.hasOwnProperty.call(e.links, "self") && t.uris.push(e.links.self.href), Object.hasOwnProperty.call(e.links, "alternate") && t.uris.push(e.links.alternate.href)), t;
 	}
 	function H(e) {
-		e === void 0 && (e = m.count()), e <= 0 ? (g.disable(), g.setText(p("Insert/Edit Citation"))) : (!u && g.enable(), e > 1 ? g.setText(p("Insert " + e + " Citations")) : g.setText(p("Insert/Edit Citation")));
+		e === void 0 && (e = m.count()), e <= 0 ? (g.disable(), g.setText(s("Insert/Edit Citation"))) : (!d && g.enable(), e > 1 ? g.setText(s("Insert " + e + " Citations")) : g.setText(s("Insert/Edit Citation")));
 	}
 	async function U() {
 		try {
@@ -4253,20 +4246,20 @@ P.prototype._init = function() {
 			let e = await new Promise((e) => {
 				window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, e);
 			});
-			await N(!1, "Zotero (" + p("Updating citations") + ")"), await G(e), await F(!1, "Zotero (" + p("Updating citations") + ")");
+			await N(!1, "Zotero (" + s("Updating citations") + ")"), await G(e), await F(!1, "Zotero (" + s("Updating citations") + ")");
 		}), Asc.Buttons.registerContextMenu();
 	}
 	async function G(e) {
-		if (!e || !e.Value || e.Value.toLowerCase().indexOf("zotero_item") === -1) return s.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it."), !1;
-		let t = s.getCitationItemIds(e), n = await s.showEditCitationWindow(e);
+		if (!e || !e.Value || e.Value.toLowerCase().indexOf("zotero_item") === -1) return c.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it."), !1;
+		let t = c.getCitationItemIds(e), n = await c.showEditCitationWindow(e);
 		if (!n) return !1;
-		let r = (n.citationItems || []).map((e) => String(e.id)), i = t.slice().sort().join("\0") !== r.slice().sort().join("\0"), a = s.updateItem.bind(s, n), c = o.getStyleManager(), l = c.getLastUsedFormat() === "note";
-		return l && (a = s.updateItem.bind(s, n, c.getLastUsedNotesStyle())), a().then(() => {
-			if (i) return s.updateCslItems(!l && void 0);
-		}).then(() => (e && s.moveCursorOutsideField(e.FieldId), !0)).catch(function(e) {
+		let r = (n.citationItems || []).map((e) => String(e.id)), i = t.slice().sort().join("\0") !== r.slice().sort().join("\0"), a = c.updateItem.bind(c, n), l = o.getStyleManager(), u = l.getLastUsedFormat() === "note";
+		return u && (a = c.updateItem.bind(c, n, l.getLastUsedNotesStyle())), a().then(() => {
+			if (i) return c.updateCslItems(!u && void 0);
+		}).then(() => (e && c.moveCursorOutsideField(e.FieldId), !0)).catch(function(e) {
 			console.error(e);
-			let t = p("Failed to insert citation");
-			return typeof e == "string" && (t += ". " + p(e)), k(t), !1;
+			let t = s("Failed to insert citation");
+			return typeof e == "string" && (t += ". " + s(e)), k(t), !1;
 		});
 	}
 })();
