@@ -39,12 +39,16 @@ function getBabelConfig() {
                             browsers: ["> 0.5%", "last 2 versions", "IE 11"],
                         },
                         modules: false,
-                        useBuiltIns: "usage",
-                        corejs: 3,
                     },
                 ],
             ],
-            plugins: ["@babel/plugin-transform-class-properties"],
+            plugins: [
+                [
+                    "polyfill-corejs3",
+                    { method: "usage-global", version: "3.50" },
+                ],
+                "@babel/plugin-transform-class-properties",
+            ],
         };
     }
 
