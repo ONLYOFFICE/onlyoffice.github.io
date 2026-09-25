@@ -96,6 +96,22 @@
     "Section": "Раздел",
     "Timestamp": "Временная отметка",
     "Verse": "Стих",
-    "Volume": "Том"
+    "Volume": "Том",
+    "Bibliography preview": "Предварительный просмотр библиографии",
+    "Locator": "Локатор",
+    "selected": "выбрано",
+    "No items selected": "Ничего не выбрано",
+    "Failed to load language": "Не удалось загрузить язык",
+    "Invalid CSL style file": "Недопустимый файл стиля CSL",
+    "More Styles...": "Другие стили...",
+    "Add custom style...": "Добавить свой стиль...",
+    "Select language": "Выберите язык",
+    "Warning!": "Предупреждение!",
+    "Error": "Ошибка",
+    "Success": "Успех",
+    "Warning": "Предупреждение",
+    "Information": "Информация",
+    "Operation completed successfully": "Операция успешно завершена",
+    "Please be cautious": "Будьте внимательны"
 
 }

@@ -96,5 +96,22 @@
     "Section": "Odeljak",
     "Timestamp": "Vremenska oznaka",
     "Verse": "Stih",
-    "Volume": "Tom"
+    "Volume": "Tom",
+    "Bibliography preview": "Pregled bibliografije",
+    "Locator": "Lokator",
+    "selected": "izabrano",
+    "No items selected": "Nema izabranih stavki",
+    "Failed to load language": "Učitavanje jezika nije uspelo",
+    "Invalid CSL style file": "Neispravna CSL datoteka stila",
+    "More Styles...": "Još stilova...",
+    "Add custom style...": "Dodaj prilagođeni stil...",
+    "Select language": "Izaberite jezik",
+    "Warning!": "Upozorenje!",
+    "Error": "Greška",
+    "Success": "Uspeh",
+    "Warning": "Upozorenje",
+    "Information": "Informacija",
+    "Operation completed successfully": "Radnja je uspešno završena",
+    "Please be cautious": "Budite oprezni"
+
 }

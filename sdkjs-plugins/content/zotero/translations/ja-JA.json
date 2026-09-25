@@ -96,5 +96,22 @@
     "Section": "節",
     "Timestamp": "タイムスタンプ",
     "Verse": "節",
-    "Volume": "巻"
+    "Volume": "巻",
+    "Bibliography preview": "参考文献のプレビュー",
+    "Locator": "位置指定",
+    "selected": "選択済み",
+    "No items selected": "項目が選択されていません",
+    "Failed to load language": "言語の読み込みに失敗しました",
+    "Invalid CSL style file": "無効なCSLスタイルファイル",
+    "More Styles...": "その他のスタイル...",
+    "Add custom style...": "カスタムスタイルを追加...",
+    "Select language": "言語を選択",
+    "Warning!": "警告!",
+    "Error": "エラー",
+    "Success": "成功",
+    "Warning": "警告",
+    "Information": "情報",
+    "Operation completed successfully": "操作が正常に完了しました",
+    "Please be cautious": "ご注意ください"
+
 }

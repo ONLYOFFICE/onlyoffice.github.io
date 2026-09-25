@@ -96,5 +96,22 @@
     "Section": "Одељак",
     "Timestamp": "Временска ознака",
     "Verse": "Стих",
-    "Volume": "Том"
+    "Volume": "Том",
+    "Bibliography preview": "Преглед библиографије",
+    "Locator": "Локатор",
+    "selected": "изабрано",
+    "No items selected": "Нема изабраних ставки",
+    "Failed to load language": "Учитавање језика није успело",
+    "Invalid CSL style file": "Неисправна CSL датотека стила",
+    "More Styles...": "Још стилова...",
+    "Add custom style...": "Додај прилагођени стил...",
+    "Select language": "Изаберите језик",
+    "Warning!": "Упозорење!",
+    "Error": "Грешка",
+    "Success": "Успех",
+    "Warning": "Упозорење",
+    "Information": "Информација",
+    "Operation completed successfully": "Радња је успешно завршена",
+    "Please be cautious": "Будите опрезни"
+
 }

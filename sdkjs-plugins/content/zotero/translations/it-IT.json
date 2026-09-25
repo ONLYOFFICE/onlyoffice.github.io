@@ -96,5 +96,22 @@
     "Section": "Sezione",
     "Timestamp": "Marca temporale",
     "Verse": "Verso",
-    "Volume": "Volume"
+    "Volume": "Volume",
+    "Bibliography preview": "Anteprima della bibliografia",
+    "Locator": "Localizzatore",
+    "selected": "selezionati",
+    "No items selected": "Nessun elemento selezionato",
+    "Failed to load language": "Impossibile caricare la lingua",
+    "Invalid CSL style file": "File di stile CSL non valido",
+    "More Styles...": "Altri stili...",
+    "Add custom style...": "Aggiungi stile personalizzato...",
+    "Select language": "Seleziona la lingua",
+    "Warning!": "Attenzione!",
+    "Error": "Errore",
+    "Success": "Successo",
+    "Warning": "Attenzione",
+    "Information": "Informazione",
+    "Operation completed successfully": "Operazione completata con successo",
+    "Please be cautious": "Procedere con cautela"
+
 }

@@ -96,5 +96,22 @@
     "Section": "节",
     "Timestamp": "时间戳",
     "Verse": "诗节",
-    "Volume": "卷"
+    "Volume": "卷",
+    "Bibliography preview": "参考文献预览",
+    "Locator": "定位器",
+    "selected": "已选择",
+    "No items selected": "未选择任何项目",
+    "Failed to load language": "加载语言失败",
+    "Invalid CSL style file": "无效的 CSL 样式文件",
+    "More Styles...": "更多样式...",
+    "Add custom style...": "添加自定义样式...",
+    "Select language": "选择语言",
+    "Warning!": "警告！",
+    "Error": "错误",
+    "Success": "成功",
+    "Warning": "警告",
+    "Information": "信息",
+    "Operation completed successfully": "操作已成功完成",
+    "Please be cautious": "请谨慎操作"
+
 }
