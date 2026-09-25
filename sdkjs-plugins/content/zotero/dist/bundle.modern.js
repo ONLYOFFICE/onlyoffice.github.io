@@ -2594,8 +2594,7 @@ var b = class e {
 		}, window.Asc.plugin.onTranslate = () => {
 			this.#e?.command("onTranslate"), this.#r();
 		}, this.#e.attachEvent("onWindowReady", () => {
-			let e = m.purifyHtml(t);
-			n === "warning" ? this.#e?.command("onWarning", e) : n === "success" ? this.#e?.command("onSuccess", e) : this.#e?.command("onAttachedContent", e);
+			n === "warning" ? this.#e?.command("onWarning", t) : n === "success" ? this.#e?.command("onSuccess", t) : this.#e?.command("onAttachedContent", t);
 		}), this.#e.attachEvent("onUpdateHeight", (t) => {
 			Asc.plugin.executeMethod("ResizeWindow", [this.#e?.id, [e.size[0] - 2, t]], () => {});
 		}));
@@ -2739,7 +2738,7 @@ var b = class e {
 			if (!l.getDoNotUpdate()) {
 				if (g !== _ && !t) {
 					let e = "<p>" + s("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + s("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + s("Original:") + " " + v + "</p><p>" + s("Modified:") + " " + _ + "</p>";
-					await this.#e.show("Saving custom edits", e) ? (l.setDoNotUpdate(), delete c.Content) : (c.Content = h, l.setPlainCitation(v)), o = !0;
+					await this.#e.show("Saving custom edits", m.purifyHtml(e)) ? (l.setDoNotUpdate(), delete c.Content) : (c.Content = h, l.setPlainCitation(v)), o = !0;
 				} else (v !== _ || g !== _ || g !== v) && (o = !0), c.Content = h, l.setPlainCitation(v);
 				if (l) {
 					let e = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(l.toJSON());
