@@ -141,7 +141,7 @@ class SelectBox {
     }
 
     #createDOM() {
-        this._container.innerHTML = "";
+        this._container.textContent = "";
         this._container.className += " selectbox-container";
 
         var fragment = document.createDocumentFragment();
@@ -422,7 +422,7 @@ class SelectBox {
     #renderOptions(searchTerm, scrollIntoView) {
         searchTerm = searchTerm || "";
         if (!this._optionsContainer) return;
-        this._optionsContainer.innerHTML = "";
+        this._optionsContainer.textContent = "";
 
         /** @type {HTMLDivElement | null} */
         var selectedOption = null;
@@ -1098,7 +1098,7 @@ class SelectBox {
             console.error(error);
         }
 
-        this._container.innerHTML = "";
+        this._container.textContent = "";
 
         var containerClasses = this._container.className.split(" ");
         var newClasses = [];

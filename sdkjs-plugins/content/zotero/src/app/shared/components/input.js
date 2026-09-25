@@ -720,7 +720,7 @@ InputField.prototype = {
             }
         }
 
-        this._container.innerHTML = "";
+        this._container.textContent = "";
 
         this._container.className = this._container.className
             .split(" ")

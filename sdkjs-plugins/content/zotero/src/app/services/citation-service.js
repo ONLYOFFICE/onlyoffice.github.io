@@ -44,6 +44,7 @@
  */
 
 import { CitationDocService } from "./citation-doc-service";
+import { CslHtmlParser } from "./csl-html-parser";
 import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { AdditionalWindow } from "../pages/additional-window";
@@ -301,7 +302,7 @@ class CitationService {
 
         let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
         fragment.appendChild(tempElement);
-        tempElement.innerHTML = htmlCitation;
+        tempElement.innerHTML = CslHtmlParser.purifyHtml(htmlCitation);
         cslCitation.setPlainCitation(tempElement.innerText);
         
         return htmlCitation;
@@ -455,7 +456,7 @@ class CitationService {
             );
 
             let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
-            tempElement.innerHTML = htmlCitation;
+            tempElement.innerHTML = CslHtmlParser.purifyHtml(htmlCitation);
             let oldContentInCit = cslCitation.getPlainCitation();
             const oldContentInDoc = field["Content"];
             if (oldContentInCit === "") {
