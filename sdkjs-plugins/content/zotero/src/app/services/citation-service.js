@@ -45,6 +45,7 @@
  */
 
 import { CitationDocService } from "./citation-doc-service";
+import { CslHtmlParser } from "./csl-html-parser";
 import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { AdditionalWindow } from "../pages/additional-window";
@@ -657,7 +658,7 @@ class CitationService {
 
         let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
         fragment.appendChild(tempElement);
-        tempElement.innerHTML = htmlCitation;
+        tempElement.innerHTML = CslHtmlParser.purifyHtml(htmlCitation);
         cslCitation.setPlainCitation(tempElement.innerText);
         
         return htmlCitation;
@@ -771,6 +772,7 @@ class CitationService {
     #updateBibliography(bNoHaveFields, bibField) {
         if (bNoHaveFields) {
             bibField["Content"] = translate(this._bibPlaceholderIfEmpty);
+            Asc.scope.bibStyle = {};
         } else {
             let bibliography = this.#makeBibliography();
             bibField["Content"] = bibliography;
@@ -810,7 +812,7 @@ class CitationService {
             );
 
             let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
-            tempElement.innerHTML = htmlCitation;
+            tempElement.innerHTML = CslHtmlParser.purifyHtml(htmlCitation);
             let oldContentInCit = cslCitation.getPlainCitation();
             const oldContentInDoc = field["Content"];
             if (oldContentInCit === "") {
@@ -1365,7 +1367,20 @@ class CitationService {
 
     /**
      * @param {AddinFieldData} field
-     * @returns {Promise<Object & {citationID: string} | null>}
+     * @returns {Array<string>}
+     */
+    getCitationItemIds(field) {
+        const citationObject = this.#extractField(field);
+        const items =
+            (citationObject && citationObject.citationItems) || [];
+        return items.map(function (/** @type {{id: string|number}} */ item) {
+            return String(item.id);
+        });
+    }
+
+    /**
+     * @param {AddinFieldData} field
+     * @returns {Promise<Object & {citationID: string, citationItems?: CitationItem[]} | null>}
      */
     async showEditCitationWindow(field) {
         if (!field) return null;

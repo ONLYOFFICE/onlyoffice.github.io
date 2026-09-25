@@ -588,7 +588,7 @@ import "../styles.css";
         Theme.addStylesForComponents(theme);
         let rules = "";
         rules +=
-            ".link, .link:visited, .link:hover { color : " +
+            ".link:not(:focus-visible), .link:visited:not(:focus-visible), .link:hover:not(:focus-visible) { color : " +
             window.Asc.plugin.theme["text-normal"] +
             " !important;}\n";
         rules +=
@@ -1077,10 +1077,17 @@ import "../styles.css";
             citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
             return false;
         }
+        const idsBeforeEdit = citationService.getCitationItemIds(field);
         const updatedField = await citationService.showEditCitationWindow(field);
         if (!updatedField) {
             return false;
         }
+        const idsAfterEdit = (updatedField.citationItems || []).map(
+            (/** @type {{id: string|number}} */ item) => String(item.id)
+        );
+        const bItemsChanged =
+            idsBeforeEdit.slice().sort().join("\u0000") !==
+            idsAfterEdit.slice().sort().join("\u0000");
 
         let updateFn = citationService.updateItem.bind(
             citationService,
@@ -1088,7 +1095,8 @@ import "../styles.css";
         );
 
         const styleManager = settings.getStyleManager();
-        if (styleManager.getLastUsedFormat() === "note") {
+        const bIsNotesFormat = styleManager.getLastUsedFormat() === "note";
+        if (bIsNotesFormat) {
             // this way, because "SelectAddinField" does not work with notes
             updateFn = citationService.updateItem.bind(
                 citationService,
@@ -1098,6 +1106,21 @@ import "../styles.css";
         }
 
         return updateFn()
+            .then(() => {
+                if (!bItemsChanged) {
+                    return;
+                }
+                /*const updateOptions = {
+                    skipCitations:
+                        !AutoUpdatePreferences.shouldUpdateCitations(),
+                    skipBibliography:
+                        !AutoUpdatePreferences.shouldUpdateBibliography(),
+                };*/
+                return citationService.updateCslItems(
+                    bIsNotesFormat ? false : undefined,
+                    //updateOptions
+                );
+            })
             .then(() => {
                 if (field) {
                     citationService.moveCursorOutsideField(field.FieldId);

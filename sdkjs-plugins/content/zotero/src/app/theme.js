@@ -357,6 +357,10 @@ const Theme = {
                 ".message { background-color: " +
                 theme["background-normal"] +
                 "; }\n";
+            styles +=
+                ".custom-button-primary:focus-visible { box-shadow: 0 0 0 1px inset " +
+                theme["background-normal"] +
+                "; }\n";    
         }
         if (theme["text-inverse"]) {
             styles +=
@@ -398,16 +402,27 @@ const Theme = {
         }
         if (theme["border-control-focus"]) {
             styles +=
-                ".custom-button-icon-only:focus:not(:active):not(:hover),\n" +
-                ".custom-button-secondary-icon:focus:not(:active):not(:hover),\n" +
-                ".custom-button-secondary:focus:not(:active):not(:hover),\n" +
+                ".custom-button-icon-only:focus-visible,\n" +
+                ".custom-button-secondary-icon:focus-visible,\n" +
+                ".custom-button-secondary:focus-visible,\n" +
                 ".input-field-element:focus,\n" +
                 ".input-field-focused .input-field-element,\n" +
                 ".selectbox-header:active,\n" +
-                ".selectbox-header:focus,\n" +
+                ".selectbox-header:focus-visible,\n" +
+                ".link:focus-visible,\n" +
+                ".selectbox-arrow:focus-visible b,\n" +
                 ".selectbox-header-open { border-color: " +
                 theme["border-control-focus"] +
                 "; }\n";
+            styles +=
+                ".link:focus-visible { color: " +
+                theme["border-control-focus"] +
+                "; }\n";    
+            styles +=
+                "input:focus-visible + .checkbox-visual,\n" +
+                "input:focus-visible + .radio-visual { outline: 1px solid " +
+                theme["border-control-focus"] +
+                "; }\n";    
         }
         if (theme["highlight-button-hover"]) {
             styles +=

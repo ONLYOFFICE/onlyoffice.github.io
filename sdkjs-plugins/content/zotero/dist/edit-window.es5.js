@@ -48,6 +48,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 .checkbox-visual, 
 #previewWrapper, 
 .message { background-color: `+e[`background-normal`]+`; }
+`,t+=`.custom-button-primary:focus-visible { box-shadow: 0 0 0 1px inset `+e[`background-normal`]+`; }
 `),e[`text-inverse`]&&(t+=`.custom-button-primary { color: `+e[`text-inverse`]+`; }
 `),e[`border-regular-control`]&&(t+=`.custom-button-icon-only:active:not(.custom-button-disabled),
 .custom-button-secondary-icon:active:not(.custom-button-disabled),
@@ -68,14 +69,19 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 `,t+=`.selectbox-search,
 .selectbox-option-divider { border-color: `+e[`border-regular-control`]+` !important; }
 `),e[`border-error`]&&(t+=`.input-field-invalid .input-field-element { border-color: `+e[`border-error`]+`; }
-`),e[`border-control-focus`]&&(t+=`.custom-button-icon-only:focus:not(:active):not(:hover),
-.custom-button-secondary-icon:focus:not(:active):not(:hover),
-.custom-button-secondary:focus:not(:active):not(:hover),
+`),e[`border-control-focus`]&&(t+=`.custom-button-icon-only:focus-visible,
+.custom-button-secondary-icon:focus-visible,
+.custom-button-secondary:focus-visible,
 .input-field-element:focus,
 .input-field-focused .input-field-element,
 .selectbox-header:active,
-.selectbox-header:focus,
+.selectbox-header:focus-visible,
+.link:focus-visible,
+.selectbox-arrow:focus-visible b,
 .selectbox-header-open { border-color: `+e[`border-control-focus`]+`; }
+`,t+=`.link:focus-visible { color: `+e[`border-control-focus`]+`; }
+`,t+=`input:focus-visible + .checkbox-visual,
+input:focus-visible + .radio-visual { outline: 1px solid `+e[`border-control-focus`]+`; }
 `),e[`highlight-button-hover`]&&(t+=`.custom-button-icon-only:hover:not(.custom-button-disabled),
 .custom-button-secondary-icon:hover:not(.custom-button-disabled),
 .custom-button-secondary:hover:not(.custom-button-disabled),

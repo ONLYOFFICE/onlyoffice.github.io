@@ -511,7 +511,7 @@ Button.prototype = /** @lends Button.prototype */ {
             }
         }
 
-        this._container.innerHTML = "";
+        this._container.textContent = "";
 
         var containerClasses = this._container.className
             .split(" ")

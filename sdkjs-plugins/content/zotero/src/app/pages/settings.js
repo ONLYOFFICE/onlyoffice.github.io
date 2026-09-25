@@ -675,11 +675,11 @@ SettingsPage.prototype._loadStyles = function () {
                 self._addStylesToList(stylesInfo);
                 self._styleSelect.addCustomItem(
                     "more_styles",
-                    "More Styles..."
+                    translate("More Styles...")
                 );
                 self._styleSelect.addCustomItem(
                     "cslFileInput",
-                    "Add custom style..."
+                    translate("Add custom style...")
                 );
             }
         )
@@ -720,7 +720,7 @@ SettingsPage.prototype._somethingWasChanged = function () {
 SettingsPage.prototype._showPreview = function (styleContent, language) {
     if (!styleContent) {
         this._previewWrapper.classList.add(this._displayNoneClass);
-        this._previewWrapper.innerHTML = "";
+        this._previewWrapper.textContent = "";
         return;
     }
 
@@ -766,7 +766,7 @@ SettingsPage.prototype._showPreview = function (styleContent, language) {
 
         if (!entries || !entries.length) {
             this._previewWrapper.classList.add(this._displayNoneClass);
-            this._previewWrapper.innerHTML = "";
+            this._previewWrapper.textContent = "";
             return;
         }
 
@@ -777,14 +777,14 @@ SettingsPage.prototype._showPreview = function (styleContent, language) {
         content.className = "preview-content";
         content.innerHTML = CslHtmlParser.purifyHtml(entries.join(""));
         this._applyBibliographyStyles(content, bibMeta);
-        this._previewWrapper.innerHTML = "";
+        this._previewWrapper.textContent = "";
         this._previewWrapper.appendChild(title);
         this._previewWrapper.appendChild(content);
         this._previewWrapper.classList.remove(this._displayNoneClass);
     } catch (error) {
         console.error("Failed to render bibliography preview:", error);
         this._previewWrapper.classList.add(this._displayNoneClass);
-        this._previewWrapper.innerHTML = "";
+        this._previewWrapper.textContent = "";
     }
 };
 

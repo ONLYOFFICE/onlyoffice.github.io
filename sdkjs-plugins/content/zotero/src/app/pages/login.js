@@ -196,7 +196,7 @@ LoginPage.prototype._addEventListeners = function () {
                 } else if (!apis.desktop) {
                     self._useDesktopMessage.show(
                         translate(
-                            "Connection to Zotero failed. Make sure Zotero is running."
+                            "Connection to Zotero failed. Make sure Zotero is running"
                         )
                     );
                 }

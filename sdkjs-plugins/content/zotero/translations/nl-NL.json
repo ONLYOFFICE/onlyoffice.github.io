@@ -96,5 +96,22 @@
     "Section": "Sectie",
     "Timestamp": "Tijdstempel",
     "Verse": "Vers",
-    "Volume": "Deel"
+    "Volume": "Deel",
+    "Bibliography preview": "Voorbeeld van bibliografie",
+    "Locator": "Locator",
+    "selected": "geselecteerd",
+    "No items selected": "Geen items geselecteerd",
+    "Failed to load language": "Kan de taal niet laden",
+    "Invalid CSL style file": "Ongeldig CSL-stijlbestand",
+    "More Styles...": "Meer stijlen...",
+    "Add custom style...": "Aangepaste stijl toevoegen...",
+    "Select language": "Selecteer taal",
+    "Warning!": "Waarschuwing!",
+    "Error": "Fout",
+    "Success": "Gelukt",
+    "Warning": "Waarschuwing",
+    "Information": "Informatie",
+    "Operation completed successfully": "Bewerking voltooid",
+    "Please be cautious": "Wees voorzichtig"
+
 }

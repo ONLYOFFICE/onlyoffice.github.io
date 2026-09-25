@@ -3,6 +3,8 @@
 /// <reference path="../types-global.js" />
 /// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" /> 
 
+import { CslHtmlParser } from "../services/csl-html-parser";
+
 /** @typedef {import("../../../../../v1/onlyoffice-types").PluginWindow} PluginWindow */
 /** @typedef {import("../../../../../v1/onlyoffice-types").VariationConfig} VariationConfig */
 
@@ -190,12 +192,13 @@ class AdditionalWindow {
         };
 
         this.#window.attachEvent("onWindowReady", () => {
+            const purifiedContent = CslHtmlParser.purifyHtml(content);
             if (type === "warning") {
-                this.#window?.command("onWarning", content);
+                this.#window?.command("onWarning", purifiedContent);
             } else if (type === "success") {
-                this.#window?.command("onSuccess", content);
+                this.#window?.command("onSuccess", purifiedContent);
             } else {
-                this.#window?.command("onAttachedContent", content);
+                this.#window?.command("onAttachedContent", purifiedContent);
             }
         });
 
