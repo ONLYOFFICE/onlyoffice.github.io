@@ -56,6 +56,7 @@ const PluginCard = {
     slideIndex: 1,  // index for slides
     backup: false,
     LANGUAGES: [
+        ['cs-CS', 'cs', 'Czech'],
         ['cs-CZ', 'cs', 'Czech'],
         ['de-DE', 'de', 'German'],
         ['es-ES', 'es', 'Spanish'],
@@ -67,6 +68,9 @@ const PluginCard = {
         ['pt-BR', 'pt', 'Brazilian'],
         ['ru-RU', 'ru', 'Russian'],
         ['si-SI', 'si', 'Sinhala'],
+        ['sq-AL', 'sq', 'Albanian'],
+        ['sr-Cyrl-RS', 'sr', 'Serbian'],
+        ['sr-Latn-RS', 'sr', 'Serbian'],
         ['uk-UA', 'uk', 'Ukrainian'],
         ['zh-ZH', 'zh', 'Chinese']
     ],
