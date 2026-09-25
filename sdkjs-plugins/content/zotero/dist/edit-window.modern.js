@@ -807,20 +807,27 @@ var a = class e {
 		if (e ||= "", this._optionsContainer) {
 			this._optionsContainer.textContent = "";
 			var n = null, r = this._items;
-			e && (r = r.filter(function(t) {
-				return t !== null && t.text.toLowerCase().indexOf(e) !== -1;
-			}));
-			for (var i = document.createDocumentFragment(), a = 0; a < r.length; a++) {
-				let e = r[a];
+			if (e) {
+				var i = e.split(/\s+/).filter(Boolean);
+				r = r.filter(function(e) {
+					if (e === null) return !1;
+					var t = e.text.toLowerCase();
+					return i.every(function(e) {
+						return t.indexOf(e) !== -1;
+					});
+				});
+			}
+			for (var a = document.createDocumentFragment(), o = 0; o < r.length; o++) {
+				let e = r[o];
 				if (!e) {
 					let e = document.createElement("hr");
-					e.className += " selectbox-option-divider", i.appendChild(e);
+					e.className += " selectbox-option-divider", a.appendChild(e);
 					continue;
 				}
 				let t = document.createElement("div");
 				t.className += " selectbox-option", this._selectedValues.has(e.value) && (t.className += " selectbox-option-selected checkbox--checked", n = t), t.setAttribute("data-value", e.value);
-				let o = document.createElement("label");
-				if (o.className += " selectbox-option-text i18n", this._options.translate && (e.text = this._options.translate(e.text)), o.textContent = e.text, this._options.multiple) {
+				let i = document.createElement("label");
+				if (i.className += " selectbox-option-text i18n", this._options.translate && (e.text = this._options.translate(e.text)), i.textContent = e.text, this._options.multiple) {
 					t.className += " selectbox-option-checkbox";
 					let n = document.createElement("input");
 					n.type = "checkbox", n.id = "checkbox-" + e.value, n.className += " selectbox-checkbox", n.checked = this._selectedValues.has(e.value), t.appendChild(n);
@@ -831,19 +838,19 @@ var a = class e {
 					let o = document.createElementNS(i, "path");
 					o.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), o.setAttribute("fill", "none"), o.setAttribute("stroke", "currentColor"), o.setAttribute("stroke-width", "2"), a.appendChild(o), r.appendChild(a), t.appendChild(r);
 				}
-				t.appendChild(o), i.appendChild(t);
+				t.appendChild(i), a.appendChild(t);
 			}
 			if (this._customItems.length) {
 				let e = document.createElement("hr");
-				e.className += " selectbox-option-divider", i.appendChild(e);
+				e.className += " selectbox-option-divider", a.appendChild(e);
 			}
-			for (var a = 0; a < this._customItems.length; a++) {
-				let e = this._customItems[a], t = document.createElement("label");
+			for (var o = 0; o < this._customItems.length; o++) {
+				let e = this._customItems[o], t = document.createElement("label");
 				t.className += " selectbox-custom-option", t.setAttribute("data-value", e.value), t.setAttribute("for", e.value);
-				var o = document.createElement("span");
-				o.className += " selectbox-option-text i18n", this._options.translate && (e.text = this._options.translate(e.text)), o.textContent = e.text, t.appendChild(o), i.appendChild(t);
+				var s = document.createElement("span");
+				s.className += " selectbox-option-text i18n", this._options.translate && (e.text = this._options.translate(e.text)), s.textContent = e.text, t.appendChild(s), a.appendChild(t);
 			}
-			if (this._optionsContainer.appendChild(i), t && this.isOpen && this._optionsContainer && n) try {
+			if (this._optionsContainer.appendChild(a), t && this.isOpen && this._optionsContainer && n) try {
 				n.scrollIntoView && n.scrollIntoView({ block: "nearest" });
 			} catch (e) {
 				console.error(e);
@@ -1001,6 +1008,9 @@ var a = class e {
 			return t === null || t.value !== e;
 		}), this._selectedValues.delete(e), this.#u();
 	}
+	clearItems() {
+		this._items = [], this._customItems = [], this._selectedValues.clear(), this.#u(), this.#c();
+	}
 	getSelectedValue() {
 		if (this._options.multiple) return console.error("Method getSelectedValue is only available for single-select boxes."), null;
 		var e = Array.from(this._selectedValues);
@@ -1115,167 +1125,7 @@ var a = class e {
 	static hide() {
 		this.#e?.classList.add("hidden");
 	}
-}
-function b(e, t) {
-	if (e ||= "", this._optionsContainer) {
-		this._optionsContainer.innerHTML = "";
-		var n = null, r = this._items;
-		if (e) {
-			var i = e.split(/\s+/).filter(Boolean);
-			r = r.filter(function(e) {
-				if (e === null) return !1;
-				var t = e.text.toLowerCase();
-				return i.every(function(e) {
-					return t.indexOf(e) !== -1;
-				});
-			});
-		}
-		for (var a = document.createDocumentFragment(), o = 0; o < r.length; o++) {
-			var s = r[o];
-			if (!s) {
-				var c = document.createElement("hr");
-				c.className += " selectbox-option-divider", a.appendChild(c);
-				continue;
-			}
-			var l = document.createElement("div");
-			l.className += " selectbox-option", this._selectedValues.has(s.value) && (l.className += " selectbox-option-selected checkbox--checked", n = l), l.setAttribute("data-value", s.value);
-			var u = document.createElement("label");
-			if (u.className += " selectbox-option-text i18n", this._options.translate && (s.text = this._options.translate(s.text)), u.textContent = s.text, this._options.multiple) {
-				l.className += " selectbox-option-checkbox";
-				var d = document.createElement("input");
-				d.type = "checkbox", d.id = "checkbox-" + s.value, d.className += " selectbox-checkbox", d.checked = this._selectedValues.has(s.value), l.appendChild(d);
-				var f = document.createElement("span");
-				f.className = "checkbox-visual", f.setAttribute("aria-hidden", "true");
-				var p = "http://www.w3.org/2000/svg", m = document.createElementNS(p, "svg");
-				m.setAttribute("viewBox", "0 0 10 8"), m.setAttribute("class", "checkbox-checkmark");
-				var h = document.createElementNS(p, "path");
-				h.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), h.setAttribute("fill", "none"), h.setAttribute("stroke", "currentColor"), h.setAttribute("stroke-width", "2"), m.appendChild(h), f.appendChild(m), l.appendChild(f);
-			}
-			l.appendChild(u), a.appendChild(l);
-		}
-		if (this._customItems.length) {
-			var g = document.createElement("hr");
-			g.className += " selectbox-option-divider", a.appendChild(g);
-		}
-		for (var o = 0; o < this._customItems.length; o++) {
-			var _ = this._customItems[o], v = document.createElement("label");
-			v.className += " selectbox-custom-option", v.setAttribute("data-value", _.value), v.setAttribute("for", _.value);
-			var y = document.createElement("span");
-			y.className += " selectbox-option-text i18n", this._options.translate && (_.text = this._options.translate(_.text)), y.textContent = _.text, v.appendChild(y), a.appendChild(v);
-		}
-		if (this._optionsContainer.appendChild(a), t && this.isOpen && this._optionsContainer && n) try {
-			n.scrollIntoView && n.scrollIntoView({ block: "nearest" });
-		} catch (e) {
-			console.error(e);
-		}
-	}
-}
-function x(e) {
-	var n = e.target || e.srcElement, r = null;
-	if (n && n instanceof HTMLElement) {
-		for (var i = null, a = n.className.split(" "), o = !1, s = 0; s < a.length; s++) if (a[s] === "selectbox-option") {
-			o = !0;
-			break;
-		} else if (a[s] === "selectbox-custom-option") {
-			var c = n.getAttribute("data-value");
-			if (c) {
-				e.stopPropagation(), t(d, this, T).call(this, c), t(d, this, g).call(this);
-				return;
-			}
-			break;
-		}
-		if (o) i = n;
-		else if (n.parentNode && n.parentNode instanceof HTMLElement) {
-			for (var l = n.parentNode.className.split(" "), u = !1, s = 0; s < l.length; s++) if (l[s] === "selectbox-option") {
-				u = !0;
-				break;
-			} else if (l[s] === "selectbox-custom-option") {
-				var f = n.parentNode.getAttribute("data-value");
-				if (f) {
-					e.stopPropagation(), t(d, this, T).call(this, f), t(d, this, g).call(this);
-					return;
-				}
-				break;
-			}
-			u && (i = n.parentNode);
-		}
-		if (i instanceof HTMLDivElement) r = i;
-		else return;
-	} else return;
-	var p = r.getAttribute("data-value");
-	if (p !== null) {
-		var m = !0;
-		this._options.multiple ? this._selectedValues.has(p) ? (this.unselectItems(p, !0), m = !1) : this.selectItems(p, !0) : (this.selectItems(p, !0), t(d, this, g).call(this)), t(d, this, S).call(this), t(d, this, w).call(this, p, m);
-	}
-}
-function S() {
-	if (this._selectedValues.size === 0) {
-		this._selectedText.textContent = this._options.placeholder;
-		return;
-	}
-	if (this._options.multiple) {
-		for (var e = [], t = 0; t < this._items.length; t++) {
-			var n = this._items[t];
-			n && this._selectedValues.has(n.value) && e.push(n);
-		}
-		e.length === 0 ? this._selectedText.textContent = this._options.placeholder : e.length === 1 ? this._selectedText.textContent = e[0].text : this._selectedText.textContent = e.length + " items selected";
-	} else {
-		for (var r = null, t = 0; t < this._items.length; t++) {
-			var n = this._items[t];
-			if (n && this._selectedValues.has(n.value)) {
-				r = n;
-				break;
-			}
-		}
-		this._selectedText.textContent = r ? r.text : this._options.placeholder;
-	}
-}
-function C() {
-	var e = window.innerHeight;
-	if (this._options.usePortal) {
-		var t = this._header.getBoundingClientRect(), n = this._dropdown.offsetHeight;
-		this._dropdown.style.left = t.left + "px", this._dropdown.style.width = t.width - 2 + "px";
-		var r = e - t.bottom;
-		r < n && t.top > r ? this._dropdown.style.top = t.top - n - 2 + "px" : this._dropdown.style.top = t.bottom + 2 + "px";
-	} else this._dropdown.getBoundingClientRect().bottom > e && this._dropdown.classList.add("selectbox-dropdown-top");
-}
-function w(e, t) {
-	for (var n = Array.from(this._selectedValues), r = [], i = 0; i < this._items.length; i++) {
-		var a = this._items[i];
-		a && this._selectedValues.has(a.value) && r.push(a);
-	}
-	var o = {
-		values: n,
-		items: r,
-		current: e,
-		enabled: t
-	};
-	this._subscribers.forEach(function(e) {
-		e({
-			type: "selectbox:change",
-			detail: o
-		});
-	});
-}
-function T(e) {
-	var t = {
-		values: [],
-		current: e,
-		enabled: !1
-	};
-	this._subscribers.forEach(function(e) {
-		e({
-			type: "selectbox:custom",
-			detail: t
-		});
-	});
-}
-function E(e) {
-	var t = { values: Array.from(e.options).map((e) => [e.value, e.text]) }, n = e.value;
-	return n && (t.selectedValue = n), t;
-}
-var D = { _: /* @__PURE__ */ new Set() };
-document.getElementById("loader");
+});
 //#endregion
 //#region src/app/shared/constants/locator-values.js
 var o = [
@@ -1365,13 +1215,13 @@ var o = [
 				let t = e.detail.items[0];
 				S.setPlaceholder(t.text);
 			}), this.forms.push({
-				id: e.id,
-				omitAuthorInput: S,
-				prefixInput: _,
-				suffixInput: v,
-				locatorInput: x,
-				locatorSelectbox: y
-			}), t.appendChild(i);
+				id: t.id,
+				omitAuthorInput: C,
+				prefixInput: v,
+				suffixInput: y,
+				locatorInput: S,
+				locatorSelectbox: b
+			}), n.appendChild(c);
 		}
 		updateRemoveButtonsVisibility() {
 			if (!this.citationObject) return;
@@ -1381,7 +1231,9 @@ var o = [
 			window.Asc.plugin.sendToPlugin("onUpdateHeight", n);
 		}
 		removeItem(e, t) {
-			this.citationObject && (this.citationObject.citationItems = this.citationObject.citationItems.filter((e) => e.id !== t), this.forms = this.forms.filter((e) => e.id !== t), this._hasRemovedItems = !0, this._container.removeChild(e), this.updateRemoveButtonsVisibility());
+			if (!this.citationObject) return;
+			let n = this.citationObject.citationItems.findIndex((e) => e.id === t);
+			n !== -1 && (this.citationObject.citationItems.splice(n, 1), this.forms.splice(n, 1), this._hasRemovedItems = !0, this._container.removeChild(e), this.updateRemoveButtonsVisibility());
 		}
 		onTranslate() {
 			let e = document.getElementsByClassName("i18n");
@@ -1412,17 +1264,19 @@ var o = [
 						this.onTranslate(), e = 2 ** 53 - 1;
 						break;
 					}
+					await new Promise((e) => setTimeout(() => e(!0), 100));
 				}
-			})();
+			}
 		}
 		onClickSave() {
-			for (var e = this, t = this._hasRemovedItems, n = function() {
-				var n = e.forms[r], i = e.citationObject?.citationItems.find((e) => e.id === n.id);
-				if (!i) return 1;
-				var a = n.prefixInput.getValue(), o = n.suffixInput.getValue(), s = n.locatorSelectbox.getSelectedValue(), c = n.locatorInput.getValue(), l = n.omitAuthorInput.getState().checked;
-				(i.prefix || a) && i.prefix !== a && (i.prefix = a, t = !0), (i.suffix || o) && i.suffix !== o && (i.suffix = o, t = !0), (i.label || s) && i.label !== s && s && (i.label = s, t = !0), (i.locator || c) && i.locator !== c && (i.locator = c, t = !0), !!i["suppress-author"] !== l && (i["suppress-author"] = l, t = !0);
-			}, r = 0; r < this.forms.length; r++) if (n()) continue;
-			return t;
+			let e = this._hasRemovedItems;
+			for (let t = 0; t < this.forms.length; t++) {
+				let n = this.forms[t], r = this.citationObject?.citationItems.find((e) => e.id === n.id);
+				if (!r) continue;
+				let i = n.prefixInput.getValue(), a = n.suffixInput.getValue(), o = n.locatorSelectbox.getSelectedValue(), s = n.locatorInput.getValue(), c = n.omitAuthorInput.getState().checked;
+				(r.prefix || i) && r.prefix !== i && (r.prefix = i, e = !0), (r.suffix || a) && r.suffix !== a && (r.suffix = a, e = !0), (r.label || o) && r.label !== o && o && (r.label = o, e = !0), (r.locator || s) && r.locator !== s && (r.locator = s, e = !0), !!r["suppress-author"] !== c && (r["suppress-author"] = c, e = !0);
+			}
+			return e || this._hasRemovedItems;
 		}
 	}
 	let n = new t();
