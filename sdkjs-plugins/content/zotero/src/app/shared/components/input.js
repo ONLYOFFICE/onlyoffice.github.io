@@ -236,6 +236,7 @@ InputField.prototype = {
             this._clearButton = document.createElement("button");
             inputField.appendChild(this._clearButton);
             this._clearButton.className += " input-field-clear";
+            this._clearButton.tabIndex = -1;
             this._clearButton.style.display = "none";
             this._clearButton.textContent = "×";
         }
@@ -344,7 +345,13 @@ InputField.prototype = {
     _updateClearButton: function () {
         if (this._clearButton) {
             var hasValue = this.input.value.length > 0;
-            this._clearButton.style.display = hasValue ? "block" : "none";
+            if (hasValue) {
+                this._clearButton.style.display = "block";
+                this._clearButton.tabIndex = 0;
+            } else {
+                this._clearButton.style.display = "none";
+                this._clearButton.tabIndex = -1;
+            }
         }
     },
 

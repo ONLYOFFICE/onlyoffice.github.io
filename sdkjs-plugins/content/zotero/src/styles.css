@@ -31,6 +31,9 @@ div::-moz-selection {
     text-decoration: underline dotted;
     cursor: pointer;
 }
+.link:focus-visible {
+    outline: none;
+}
 
 .flex {
     display: flex;
@@ -286,6 +289,9 @@ div::-moz-selection {
             position: absolute;
             top: 10px;
             right: 9px;
+        }
+        &:focus-visible {
+            outline: none;
         }
     }
     & .selectbox-arrow::after {

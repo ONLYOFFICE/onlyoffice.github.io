@@ -546,7 +546,7 @@ import "../styles.css";
         Theme.addStylesForComponents(theme);
         let rules = "";
         rules +=
-            ".link, .link:visited, .link:hover { color : " +
+            ".link:not(:focus-visible), .link:visited:not(:focus-visible), .link:hover:not(:focus-visible) { color : " +
             window.Asc.plugin.theme["text-normal"] +
             " !important;}\n";
         rules +=
