@@ -45,7 +45,6 @@ import { LoginPage } from "./pages/login";
 import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "./shared/components";
-import { ZOTERO_TYPE_TO_CSL } from "./csl/zotero-type-map";
 import { AutoUpdatePreferences } from "./auto-update-preferences";
 
 import "../components.css";
@@ -876,7 +875,6 @@ import "../styles.css";
         };
         if (res && res.items && res.items.length > 0) {
             res.items = res.items.map(item => {
-                item = convertJsonToCsl(item);
                 item[isGroup ? "groupID" : "userID"] = res.id;
                 fillUrisFromId(item);
                 return item;
@@ -884,120 +882,6 @@ import "../styles.css";
         }
 
         return selectCitation.displaySearchItems(res, err, lastSearch);
-    }
-
-
-    // Zotero creatorType -> CSL name variable. Only maps to variables this
-    // plugin's own CitationItemData actually recognizes (see its
-    // fillFromObject); anything not listed here falls back to "author".
-    const zoteroCreatorTypeToCsl = {
-        "author": "author",
-        "bookAuthor": "container-author",
-        "castMember": "performer",
-        "chair": "chair",
-        "compiler": "compiler",
-        "composer": "composer",
-        "contributor": "contributor",
-        "curator": "curator",
-        "director": "director",
-        "editor": "editor",
-        "editorialDirector": "editorial-director",
-        "executiveProducer": "executive-producer",
-        "guest": "guest",
-        "host": "host",
-        "illustrator": "illustrator",
-        "interviewee": "author",
-        "narrator": "narrator",
-        "organizer": "organizer",
-        "originalAuthor": "original-author",
-        "performer": "performer",
-        "podcaster": "host",
-        "producer": "producer",
-        "recipient": "recipient",
-        "reviewedAuthor": "reviewed-author",
-        "seriesCreator": "series-creator",
-        "seriesEditor": "collection-editor",
-        "translator": "translator",
-    };
-
-    /**
-     * @param {any} item
-     * @returns {SearchResultItem}
-     */
-    function convertJsonToCsl(item) {
-        if (item.id || !item.key) return item;
-        var d = item.data || {};
-        /** @type {SearchResultItem} */
-        const res = {
-            id: item.key,
-            title: d.title || "",
-            type: ZOTERO_TYPE_TO_CSL[d.itemType] || d.itemType || "",
-        };
-
-        // creators → CSL name variables. Zotero's creatorType values don't
-        // match CSL's variable names 1:1 (e.g. "seriesEditor" -> "collection-editor",
-        // "bookAuthor" -> "container-author") - unmapped/unrecognized types
-        // fall back to "author" so the person isn't silently dropped.
-        if (Array.isArray(d.creators)) {
-            d.creators.forEach(function (/** @type {any} */ c) {
-                var name = {};
-                if (c.firstName) name.given = c.firstName;
-                if (c.lastName) name.family = c.lastName;
-                if (c.name) name.literal = c.name;
-                var cslRole = zoteroCreatorTypeToCsl[c.creatorType] || "author";
-                if (!res[cslRole]) res[cslRole] = [];
-                if (Object.keys(name).length > 0) {
-                    res[cslRole].push(name);
-                }
-            });
-        }
-
-        // date → issued. Zotero's "date" is free text; only a plain
-        // "YYYY", "YYYY-MM" or "YYYY-MM-DD" (or "/"-separated) shape can be
-        // safely turned into date-parts here - year ranges ("2019-2020"),
-        // circa dates, season names etc. are left unset rather than
-        // mangled (the old `.split("-").map(Number)` read "2019-2020" as
-        // year 2019/month 2020, and dropped the sign off BCE dates like "-0099").
-        if (d.date) {
-            var dateMatch = /^(-?\d{1,4})(?:[-/](\d{1,2}))?(?:[-/](\d{1,2}))?$/.exec(d.date.trim());
-            if (dateMatch) {
-                var parts = [Number(dateMatch[1])];
-                if (dateMatch[2]) parts.push(Number(dateMatch[2]));
-                if (dateMatch[3]) parts.push(Number(dateMatch[3]));
-                res.issued = { "date-parts": [parts] };
-            }
-        }
-
-        // simple 1-to-1 fields (Zotero name → CSL name)
-        if (d.url) res.URL = d.url;
-        if (d.volume) res.volume = d.volume;
-        if (d.issue) res.issue = d.issue;
-        if (d.pages) res.page = d.pages;
-        if (d.edition) res.edition = d.edition;
-        if (d.language) res.language = d.language;
-        if (d.abstractNote) res.abstract = d.abstractNote;
-        if (d.note) res.note = d.note;
-        if (d.shortTitle) res.shortTitle = d.shortTitle;
-        if (d.publisher) res.publisher = d.publisher;
-        if (d.place) res["publisher-place"] = d.place;
-        if (d.DOI) res.DOI = d.DOI;
-        if (d.ISBN) res.ISBN = d.ISBN;
-        if (d.ISSN) res.ISSN = d.ISSN;
-        if (d.publicationTitle) res["container-title"] = d.publicationTitle;
-        if (d.bookTitle) res["container-title"] = d.bookTitle;
-        if (d.series) res["collection-title"] = d.series;
-        if (d.seriesNumber) res["collection-number"] = d.seriesNumber;
-        if (d.numberOfVolumes) res["number-of-volumes"] = d.numberOfVolumes;
-        if (d.numPages) res["number-of-pages"] = d.numPages;
-
-        // uris from links
-        if (item.links) {
-            res.uris = [];
-            if (item.links.self) res.uris.push(item.links.self.href);
-            if (item.links.alternate) res.uris.push(item.links.alternate.href);
-        }
-
-        return res;
     }
 
     /**

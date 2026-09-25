@@ -192,13 +192,12 @@ class AdditionalWindow {
         };
 
         this.#window.attachEvent("onWindowReady", () => {
-            const purifiedContent = CslHtmlParser.purifyHtml(content);
             if (type === "warning") {
-                this.#window?.command("onWarning", purifiedContent);
+                this.#window?.command("onWarning", content);
             } else if (type === "success") {
-                this.#window?.command("onSuccess", purifiedContent);
+                this.#window?.command("onSuccess", content);
             } else {
-                this.#window?.command("onAttachedContent", purifiedContent);
+                this.#window?.command("onAttachedContent", content);
             }
         });
 

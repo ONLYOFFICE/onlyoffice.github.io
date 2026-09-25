@@ -854,7 +854,7 @@ class CitationService {
                 const bNeedSaveUserInput =
                     await this.#additionalWindow.show(
                         "Saving custom edits",
-                        text,
+                        CslHtmlParser.purifyHtml(text),
                     );
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();

@@ -336,14 +336,18 @@ a.prototype.ZOTERO_API_VERSION = "3", a.prototype.USER_AGENT = "AscDesktopEditor
 		}), o;
 	});
 }, a.prototype._parseResponse = function(e, t) {
+	let n = Promise.resolve({
+		items: [],
+		id: 0
+	});
 	if (this._isOnlineAvailable) {
-		let n = e;
-		return this._parseItemsResponse(n, t);
+		let r = e;
+		n = this._parseItemsResponse(r, t);
+	} else {
+		let r = e;
+		n = this._parseDesktopItemsResponse(r, t);
 	}
-	{
-		let n = e;
-		return this._parseDesktopItemsResponse(n, t);
-	}
+	return n.then((e) => (e.items = e.items.map((e) => this._convertJsonToCsl(e)), e));
 }, a.prototype.getItems = function(e, t, n) {
 	var r = this;
 	n ||= r.DEFAULT_FORMAT;
@@ -397,6 +401,29 @@ a.prototype.ZOTERO_API_VERSION = "3", a.prototype.USER_AGENT = "AscDesktopEditor
 			}), e._userGroupsLoaded = !0, t(e._userGroups);
 		}).catch(n);
 	});
+}, a.prototype._addJsonToClsJsonItemsResponse = function(e, t, n) {
+	n.format = "json";
+	let r = this._buildGetRequest(t, n), i = this._parseResponse(r, this._userId);
+	return Promise.all([e, i]).then(([e, t]) => {
+		let n = t.items;
+		return e.items = e.items.map((e) => {
+			let t = e.id, r = t.indexOf("/");
+			r !== -1 && (t = t.substring(r + 1));
+			let i = n.find((e) => t === e.id);
+			return {
+				...e,
+				...i
+			};
+		}), e;
+	});
+}, a.prototype._convertJsonToCsl = function(e) {
+	if (e.id || !e.key) return e;
+	let t = {
+		id: e.key,
+		title: e.data.title,
+		type: e.data.itemType
+	};
+	return Object.hasOwnProperty.call(e, "url") && (t.URL = e.data.url), Object.hasOwnProperty.call(e, "volume") && (t.volume = e.data.volume), Object.hasOwnProperty.call(e, "language") && (t.language = e.data.language), Object.hasOwnProperty.call(e, "abstract") && (t.abstract = e.data.abstract), Object.hasOwnProperty.call(e, "note") && (t.note = e.data.note), Object.hasOwnProperty.call(e, "page") && (t.page = e.data.page), Object.hasOwnProperty.call(e, "shortTitle") && (t.shortTitle = e.data.shortTitle), Object.hasOwnProperty.call(e, "links") && (t.uris = [], Object.hasOwnProperty.call(e.links, "self") && t.uris.push(e.links.self.href), Object.hasOwnProperty.call(e.links, "alternate") && t.uris.push(e.links.alternate.href)), t;
 }, a.prototype.setApiKey = function(e) {
 	var t = this, r = this.API_PATHS.KEYS + "/" + e, i = new URL(r, n.restApiUrl);
 	return this._getOnlineRequest(i).then(function(e) {
@@ -2795,8 +2822,7 @@ var x = class e {
 		}, window.Asc.plugin.onTranslate = () => {
 			this.#e?.command("onTranslate"), this.#r();
 		}, this.#e.attachEvent("onWindowReady", () => {
-			let e = m.purifyHtml(t);
-			n === "warning" ? this.#e?.command("onWarning", e) : n === "success" ? this.#e?.command("onSuccess", e) : this.#e?.command("onAttachedContent", e);
+			n === "warning" ? this.#e?.command("onWarning", t) : n === "success" ? this.#e?.command("onSuccess", t) : this.#e?.command("onAttachedContent", t);
 		}), this.#e.attachEvent("onUpdateHeight", (t) => {
 			Asc.plugin.executeMethod("ResizeWindow", [this.#e?.id, [e.size[0] - 2, t]], () => {});
 		}));
@@ -3056,7 +3082,7 @@ var x = class e {
 			if (!l.getDoNotUpdate()) {
 				if (g !== _ && !t) {
 					let e = "<p>" + s("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + s("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + s("Original:") + " " + v + "</p><p>" + s("Modified:") + " " + _ + "</p>";
-					await this.#e.show("Saving custom edits", e) ? (l.setDoNotUpdate(), delete c.Content) : (c.Content = h, l.setPlainCitation(v)), o = !0;
+					await this.#e.show("Saving custom edits", m.purifyHtml(e)) ? (l.setDoNotUpdate(), delete c.Content) : (c.Content = h, l.setPlainCitation(v)), o = !0;
 				} else (v !== _ || g !== _ || g !== v) && (o = !0), c.Content = h, l.setPlainCitation(v);
 				if (l) {
 					let e = this._citPrefixNew + " " + this._citSuffixNew + " " + JSON.stringify(this.#c(l));
