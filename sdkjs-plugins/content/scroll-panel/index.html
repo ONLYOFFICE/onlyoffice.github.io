@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Scroll Panel</title>
+
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+
+    <script type="text/javascript" src="./../v1/plugins.js"></script>
+    <script type="module" src="scripts/plugin.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <!-- Informer (Clickable only if the item is available) -->
+        <div id="viewCard" class="info-card disabled" role="button" tabindex="0">
+            <div class="info-card-content">
+                <div id="text_viewCard" class="info-text">
+                    Document opened for the first time, saved position not found
+                </div>
+            </div>
+            <!-- SVG: Shortcut / Arrow Icon -->
+            <svg class="icon action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="actions-group">
+            <button id="clearPositionBtn" class="btn btn-danger-outline">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M16.24 3.56L21.19 8.5c.78.78.78 2.05 0 2.83l-8.2 8.2h8.01v2H9.41c-.53 0-1.04-.21-1.41-.59l-4.95-4.95c-.78-.78-.78-2.05 0-2.83l9.19-9.19c.78-.78 2.05-.78 2.83 0M6.46 14.88l3.54 3.54l3.53-3.53l-3.53-3.54l-3.54 3.53Z" />
+                </svg>
+                <span id="text_clearPositionBtn">Clear position</span>
+            </button>
+
+            <button id="savePositionBtn" class="btn btn-primary">
+                <!-- SVG: Save Icon -->
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3s3 1.34 3 3s-1.34 3-3 3zm3-10H5V5h10v4z" />
+                </svg>
+                <span id="text_savePositionBtn">Save position</span>
+            </button>
+        </div>
+
+        <!-- Plugin Settings -->
+        <div class="settings-section">
+            <h3 class="section-title" id="text_pluginSettings">PLUGIN SETTINGS</h3>
+            <label class="checkbox-label">
+                <input type="checkbox" id="moveOnOpenCheckbox">
+                <span id="text_moveOnOpenCheckbox">Go to saved position on open</span>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="saveOnCloseCheckbox">
+                <span id="text_saveOnCloseCheckbox">Save position on closing</span>
+            </label>
+
+            <!-- Clear All saved data button -->
+            <button id="clearAllBtn" class="btn btn-danger-outline">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12z" />
+                </svg>
+                <span id="text_clearAllBtn">Clear all</span>
+            </button>
+        </div>
+    </div>
+</body>
+
+</html>

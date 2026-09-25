@@ -50,5 +50,7 @@
 	{ "name": "salesforce", "discussion": "" },
 	{ "name": "curly", "discussion": "" },
 	{ "name": "onlymath", "discussion": "" },
-	{ "name": "pdf-bookmarks", "discussion": "" }
+	{ "name": "pdf-bookmarks", "discussion": "" },
+	{ "name": "scroll-panel", "discussion": "" },
+	{ "name": "scroll-back", "discussion": "" }
 ]

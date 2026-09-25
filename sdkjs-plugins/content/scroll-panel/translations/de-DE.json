@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "Dokument zum ersten Mal geöffnet, gespeicherte Position nicht gefunden",
+  "text_clearPositionBtn": "Position löschen",
+  "text_savePositionBtn": "Position speichern",
+  "text_pluginSettings": "PLUGIN-EINSTELLUNGEN",
+  "text_moveOnOpenCheckbox": "Beim Öffnen zur gespeicherten Position springen",
+  "text_saveOnCloseCheckbox": "Position beim Schließen speichern",
+  "text_clearAllBtn": "Alles löschen"
+}
