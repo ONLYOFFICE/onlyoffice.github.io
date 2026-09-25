@@ -328,14 +328,18 @@ a.prototype.ZOTERO_API_VERSION = "3", a.prototype.USER_AGENT = "AscDesktopEditor
 		}), o;
 	});
 }, a.prototype._parseResponse = function(e, t) {
+	let n = Promise.resolve({
+		items: [],
+		id: 0
+	});
 	if (this._isOnlineAvailable) {
-		let n = e;
-		return this._parseItemsResponse(n, t);
+		let r = e;
+		n = this._parseItemsResponse(r, t);
+	} else {
+		let r = e;
+		n = this._parseDesktopItemsResponse(r, t);
 	}
-	{
-		let n = e;
-		return this._parseDesktopItemsResponse(n, t);
-	}
+	return n.then((e) => (e.items = e.items.map((e) => this._convertJsonToCsl(e)), e));
 }, a.prototype.getItems = function(e, t, n) {
 	var r = this;
 	n ||= r.DEFAULT_FORMAT;
@@ -343,9 +347,10 @@ a.prototype.ZOTERO_API_VERSION = "3", a.prototype.USER_AGENT = "AscDesktopEditor
 		format: n,
 		itemType: "-attachment"
 	};
-	e ? i.q = e : t ? i.itemKey = t.join(",") : (i.limit = 20, this._isOnlineAvailable || (i.format = "json"));
-	var a = r.API_PATHS.USERS + "/" + r._userId + "/" + r.API_PATHS.ITEMS, o = r._buildGetRequest(a, i);
-	return r._parseResponse(o, r._userId);
+	e ? i.q = e : t ? i.itemKey = t.join(",") : i.limit = 20;
+	var a = r.API_PATHS.USERS + "/" + r._userId + "/" + r.API_PATHS.ITEMS;
+	let o = r._buildGetRequest(a, i), s = r._parseResponse(o, r._userId);
+	return !this._isOnlineAvailable && n === "csljson" ? this._addJsonToClsJsonItemsResponse(s, a, i) : s;
 }, a.prototype.getGroupItems = function(e, t, n, r) {
 	var i = this;
 	r ||= i.DEFAULT_FORMAT;
@@ -377,6 +382,29 @@ a.prototype.ZOTERO_API_VERSION = "3", a.prototype.USER_AGENT = "AscDesktopEditor
 			}), t(e._userGroups);
 		}).catch(n);
 	});
+}, a.prototype._addJsonToClsJsonItemsResponse = function(e, t, n) {
+	n.format = "json";
+	let r = this._buildGetRequest(t, n), i = this._parseResponse(r, this._userId);
+	return Promise.all([e, i]).then(([e, t]) => {
+		let n = t.items;
+		return e.items = e.items.map((e) => {
+			let t = e.id, r = t.indexOf("/");
+			r !== -1 && (t = t.substring(r + 1));
+			let i = n.find((e) => t === e.id);
+			return {
+				...e,
+				...i
+			};
+		}), e;
+	});
+}, a.prototype._convertJsonToCsl = function(e) {
+	if (e.id || !e.key) return e;
+	let t = {
+		id: e.key,
+		title: e.data.title,
+		type: e.data.itemType
+	};
+	return Object.hasOwnProperty.call(e, "url") && (t.URL = e.data.url), Object.hasOwnProperty.call(e, "volume") && (t.volume = e.data.volume), Object.hasOwnProperty.call(e, "language") && (t.language = e.data.language), Object.hasOwnProperty.call(e, "abstract") && (t.abstract = e.data.abstract), Object.hasOwnProperty.call(e, "note") && (t.note = e.data.note), Object.hasOwnProperty.call(e, "page") && (t.page = e.data.page), Object.hasOwnProperty.call(e, "shortTitle") && (t.shortTitle = e.data.shortTitle), Object.hasOwnProperty.call(e, "links") && (t.uris = [], Object.hasOwnProperty.call(e.links, "self") && t.uris.push(e.links.self.href), Object.hasOwnProperty.call(e.links, "alternate") && t.uris.push(e.links.alternate.href)), t;
 }, a.prototype.setApiKey = function(e) {
 	var t = this, n = this.API_PATHS.KEYS + "/" + e;
 	return this._buildGetRequest(n).then(function(e) {
@@ -3985,8 +4013,8 @@ P.prototype._init = function() {
 			}).finally(function() {
 				p.hide();
 			});
-		}), window.Asc.plugin.onTranslate = O, U().then((e) => {
-			window.Asc.scope.editorVersion = e, W();
+		}), window.Asc.plugin.onTranslate = O, H().then((e) => {
+			window.Asc.scope.editorVersion = e, U();
 		}).catch((e) => {
 			console.error(e);
 		});
@@ -4006,7 +4034,7 @@ P.prototype._init = function() {
 		});
 	}
 	function D() {
-		m.subscribe(H);
+		m.subscribe(V);
 		function e(e, t, n) {
 			m.clearLibrary();
 			let r = [];
@@ -4084,7 +4112,7 @@ P.prototype._init = function() {
 			}
 			await N(!0, "Zotero (" + s("Inserting citation") + ")");
 			let t = m.getSelectedItems(), n = !1, r = await c.getCurrentField();
-			return r ? c.insertSelectedCitationsToCurrentField(t, r).then((e) => (m.removeItems(Object.keys(t)), G(e))).then((e) => {
+			return r ? c.insertSelectedCitationsToCurrentField(t, r).then((e) => (m.removeItems(Object.keys(t)), W(e))).then((e) => {
 				e && r && c.showSuccessMessage("Citation has been updated successfully");
 			}).finally(async () => {
 				F(!1, "Zotero (" + s("Inserting citation") + ")");
@@ -4159,7 +4187,7 @@ P.prototype._init = function() {
 		});
 	}
 	async function F(e, t) {
-		d = !1, v.enable(), y.enable(), H();
+		d = !1, v.enable(), y.enable(), V();
 		let n = window.Asc.scope.editorVersion;
 		n && n < 9004e3 ? C.setCursorPosition(window._cursorPosition || 0) : await new Promise((t) => {
 			Asc.plugin.executeMethod("EndAction", ["GroupActions", { scrollToTarget: e }], t);
@@ -4214,21 +4242,12 @@ P.prototype._init = function() {
 			let t = e.id.indexOf("/") + 1, n = e.id.lastIndexOf("/") + 1, r = e.id.indexOf("http");
 			return t !== n && r === 0 && (e.uris ||= [], e.uris.push(e.id)), n && (e.id = e.id.substring(n)), e;
 		};
-		return e && e.items && e.items.length > 0 && (e.items = e.items.map((t) => (t = V(t), t[n ? "groupID" : "userID"] = e.id, i(t), t))), m.displaySearchItems(e, t, u);
+		return e && e.items && e.items.length > 0 && (e.items = e.items.map((t) => (t[n ? "groupID" : "userID"] = e.id, i(t), t))), m.displaySearchItems(e, t, u);
 	}
 	function V(e) {
-		if (e.id || !e.key) return e;
-		let t = {
-			id: e.key,
-			title: e.data.title,
-			type: e.data.itemType
-		};
-		return Object.hasOwnProperty.call(e, "url") && (t.URL = e.data.url), Object.hasOwnProperty.call(e, "volume") && (t.volume = e.data.volume), Object.hasOwnProperty.call(e, "language") && (t.language = e.data.language), Object.hasOwnProperty.call(e, "abstract") && (t.abstract = e.data.abstract), Object.hasOwnProperty.call(e, "note") && (t.note = e.data.note), Object.hasOwnProperty.call(e, "page") && (t.page = e.data.page), Object.hasOwnProperty.call(e, "shortTitle") && (t.shortTitle = e.data.shortTitle), Object.hasOwnProperty.call(e, "links") && (t.uris = [], Object.hasOwnProperty.call(e.links, "self") && t.uris.push(e.links.self.href), Object.hasOwnProperty.call(e.links, "alternate") && t.uris.push(e.links.alternate.href)), t;
-	}
-	function H(e) {
 		e === void 0 && (e = m.count()), e <= 0 ? (g.disable(), g.setText(s("Insert/Edit Citation"))) : (!d && g.enable(), e > 1 ? g.setText(s("Insert " + e + " Citations")) : g.setText(s("Insert/Edit Citation")));
 	}
-	async function U() {
+	async function H() {
 		try {
 			let e = await new Promise((e) => {
 				Asc.plugin.executeMethod("GetVersion", [], e);
@@ -4241,16 +4260,16 @@ P.prototype._init = function() {
 			return console.error(e), 99999999;
 		}
 	}
-	function W() {
+	function U() {
 		let e = new Asc.ButtonContextMenu();
 		e.text = "Edit citation", e.addCheckers("Target", "Selection"), e.attachOnClick(async function() {
 			let e = await new Promise((e) => {
 				window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, e);
 			});
-			await N(!1, "Zotero (" + s("Updating citations") + ")"), await G(e), await F(!1, "Zotero (" + s("Updating citations") + ")");
+			await N(!1, "Zotero (" + s("Updating citations") + ")"), await W(e), await F(!1, "Zotero (" + s("Updating citations") + ")");
 		}), Asc.Buttons.registerContextMenu();
 	}
-	async function G(e) {
+	async function W(e) {
 		if (!e || !e.Value || e.Value.toLowerCase().indexOf("zotero_item") === -1) return c.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it."), !1;
 		let t = c.getCitationItemIds(e), n = await c.showEditCitationWindow(e);
 		if (!n) return !1;

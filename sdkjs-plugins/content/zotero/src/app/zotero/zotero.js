@@ -254,18 +254,24 @@ ZoteroSdk.prototype._parseItemsResponse = function (
  * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype._parseResponse = function (promise, id) {
+    /** @type {Promise<SearchResult>} */
+    let result = Promise.resolve({items:[], id: 0});
     if (this._isOnlineAvailable) {
         const fetchPromise = /** @type {Promise<FetchResponse>} */ (promise);
-        return this._parseItemsResponse(fetchPromise, id);
+        result = this._parseItemsResponse(fetchPromise, id);
     } else {
         const ascSimplePromise = /** @type {Promise<AscSimpleResponse>} */ (
             promise
         );
-        return this._parseDesktopItemsResponse(
+        result = this._parseDesktopItemsResponse(
             /** @type {Promise<AscSimpleResponse>} */ ascSimplePromise,
             id
         );
     }
+    return result.then((res) => {
+        res.items = res.items.map((item) => this._convertJsonToCsl(item));
+        return res;
+    });
 };
 
 /**
@@ -291,9 +297,6 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
         queryParams.itemKey = itemsID.join(",");
     } else {
         queryParams.limit = 20;
-        if (!this._isOnlineAvailable) {
-            queryParams.format = "json";
-        }
     }
 
     var path =
@@ -302,9 +305,13 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
         self._userId +
         "/" +
         self.API_PATHS.ITEMS;
-    var request = self._buildGetRequest(path, queryParams);
-
-    return self._parseResponse(request, self._userId);
+    const request = self._buildGetRequest(path, queryParams);
+    const response = self._parseResponse(request, self._userId);
+    
+    if (!this._isOnlineAvailable && format === "csljson") {
+        return this._addJsonToClsJsonItemsResponse(response, path, queryParams);
+    }
+    return response;
 };
 
 /**
@@ -391,6 +398,84 @@ ZoteroSdk.prototype.getUserGroups = function () {
             .catch(reject);
     });
 };
+
+/**
+ * @param {Promise<SearchResult>} response 
+ * @param {string} path 
+ * @param {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} queryParams 
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype._addJsonToClsJsonItemsResponse = function (response, path, queryParams) {
+    queryParams.format = "json";
+    const requestJson = this._buildGetRequest(path, queryParams);
+    const responseJson = this._parseResponse(requestJson, this._userId);
+    return Promise.all([response, responseJson])
+            .then(([csljsonResult, jsonResult]) => {
+                const jsonItems = jsonResult.items;
+                csljsonResult.items = csljsonResult.items.map((cslItem) => {
+                    let key = cslItem.id;
+                    const slashIndex = key.indexOf("/");
+                    if (slashIndex !== -1) {
+                        key = key.substring(slashIndex + 1);
+                    }
+                    const jsonItem = jsonItems.find(
+                        (item) => key === item.id
+                    );
+                    return {
+                        ...cslItem,
+                        ...jsonItem,
+                    };
+                });
+                return csljsonResult;
+            });
+}
+
+/**
+ * @param {any} item 
+ * @returns {SearchResultItem}
+ */
+ZoteroSdk.prototype._convertJsonToCsl = function (item) {
+    if (item.id || !item.key) return item;
+    /** @type {SearchResultItem} */
+    const res = {
+        id: item.key,
+        title: item.data.title,
+        type: item.data.itemType,
+    };
+    if (Object.hasOwnProperty.call(item, "url")) {
+        res.URL = item.data.url;
+    }
+    if (Object.hasOwnProperty.call(item, "volume")) {
+        res.volume = item.data.volume;
+    }
+    if (Object.hasOwnProperty.call(item, "language")) {
+        res.language = item.data.language;
+    }
+    if (Object.hasOwnProperty.call(item, "abstract")) {
+        res.abstract = item.data.abstract;
+    }
+    if (Object.hasOwnProperty.call(item, "note")) {
+        res.note = item.data.note;
+    }
+    if (Object.hasOwnProperty.call(item, "page")) {
+        res.page = item.data.page;
+    }
+    if (Object.hasOwnProperty.call(item, "shortTitle")) {
+        res.shortTitle = item.data.shortTitle;
+    }
+    if (Object.hasOwnProperty.call(item, "links")) {
+        res.uris = [];
+        if (Object.hasOwnProperty.call(item.links, "self")) {
+            res.uris.push(item.links.self.href)
+        }
+        if (Object.hasOwnProperty.call(item.links, "alternate")) {
+            res.uris.push(item.links.alternate.href)
+        }
+    }
+
+    return res;
+}
+
 
 /**
  * Set API key and validate it

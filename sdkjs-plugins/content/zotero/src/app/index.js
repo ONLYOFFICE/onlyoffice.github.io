@@ -834,7 +834,6 @@ import "../styles.css";
         };
         if (res && res.items && res.items.length > 0) {
             res.items = res.items.map(item => {
-                item = convertJsonToCsl(item);
                 item[isGroup ? "groupID" : "userID"] = res.id;
                 fillUrisFromId(item);
                 return item;
@@ -842,52 +841,6 @@ import "../styles.css";
         }
 
         return selectCitation.displaySearchItems(res, err, lastSearch);
-    }
-
-    /**
-     * @param {any} item 
-     * @returns {SearchResultItem}
-     */
-    function convertJsonToCsl(item) {
-        if (item.id || !item.key) return item;
-        /** @type {SearchResultItem} */
-        const res = {
-            id: item.key,
-            title: item.data.title,
-            type: item.data.itemType,
-        };
-        if (Object.hasOwnProperty.call(item, "url")) {
-            res.URL = item.data.url;
-        }
-        if (Object.hasOwnProperty.call(item, "volume")) {
-            res.volume = item.data.volume;
-        }
-        if (Object.hasOwnProperty.call(item, "language")) {
-            res.language = item.data.language;
-        }
-        if (Object.hasOwnProperty.call(item, "abstract")) {
-            res.abstract = item.data.abstract;
-        }
-        if (Object.hasOwnProperty.call(item, "note")) {
-            res.note = item.data.note;
-        }
-        if (Object.hasOwnProperty.call(item, "page")) {
-            res.page = item.data.page;
-        }
-        if (Object.hasOwnProperty.call(item, "shortTitle")) {
-            res.shortTitle = item.data.shortTitle;
-        }
-        if (Object.hasOwnProperty.call(item, "links")) {
-            res.uris = [];
-            if (Object.hasOwnProperty.call(item.links, "self")) {
-                res.uris.push(item.links.self.href)
-            }
-            if (Object.hasOwnProperty.call(item.links, "alternate")) {
-                res.uris.push(item.links.alternate.href)
-            }
-        }
-
-        return res;
     }
 
     /**
