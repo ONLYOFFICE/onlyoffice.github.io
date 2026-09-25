@@ -56,6 +56,7 @@ const PluginCard = {
     slideIndex: 1,  // index for slides
     backup: false,
     LANGUAGES: [
+        ['ar-Sa', 'ar', 'Arabic'],
         ['cs-CS', 'cs', 'Czech'],
         ['cs-CZ', 'cs', 'Czech'],
         ['de-DE', 'de', 'German'],
