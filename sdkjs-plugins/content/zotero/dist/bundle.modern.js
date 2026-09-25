@@ -2566,7 +2566,8 @@ var b = class e {
 		}, window.Asc.plugin.onTranslate = () => {
 			this.#e?.command("onTranslate"), this.#r();
 		}, this.#e.attachEvent("onWindowReady", () => {
-			n === "warning" ? this.#e?.command("onWarning", t) : n === "success" ? this.#e?.command("onSuccess", t) : this.#e?.command("onAttachedContent", t);
+			let e = m.purifyHtml(t);
+			n === "warning" ? this.#e?.command("onWarning", e) : n === "success" ? this.#e?.command("onSuccess", e) : this.#e?.command("onAttachedContent", e);
 		}), this.#e.attachEvent("onUpdateHeight", (t) => {
 			Asc.plugin.executeMethod("ResizeWindow", [this.#e?.id, [e.size[0] - 2, t]], () => {});
 		}));
