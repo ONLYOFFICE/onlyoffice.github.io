@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "Documento aberto pela primeira vez, posição salva não encontrada",
+  "text_clearPositionBtn": "Limpar posição",
+  "text_savePositionBtn": "Salvar posição",
+  "text_pluginSettings": "CONFIGURAÇÕES DO PLUGIN",
+  "text_moveOnOpenCheckbox": "Ir para a posição salva ao abrir",
+  "text_saveOnCloseCheckbox": "Salvar posição ao fechar",
+  "text_clearAllBtn": "Limpar tudo"
+}
