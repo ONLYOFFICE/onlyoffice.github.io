@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.6.0
+
+* New: the first-run demo finally performs the trick. The sample template is now a project kickoff letter where the client's name appears four times, the project name three times, the start date and contact email twice — fill each value once, click Replace, and watch every copy update together.
+* New: the empty pane became a small learn area. "How placeholders work" is a one-line-per-form manual of the placeholder language — the example labels appear in your language, because labels can be in any language; only the four type words are fixed. "Pin the values you reuse" explains pins. Each is one collapsed line until you open it.
+* New: a ? button next to Replace opens the same explanations as a Help page from any document, mid-fill included, with a back arrow that returns you to your fields exactly as you left them.
+* New: the pane greets you once per release with a small "What's new?" strip — one tap reads the changelog, one tap waves it away, then it stays quiet until the next release.
+* New: signing in now survives bad moments. A network blip, a server hiccup or a slow connection at startup no longer signs you out — only a genuine "this device is no longer authorized" does. Sign in once, stay signed in.
+* New: fullwidth punctuation from Chinese and Japanese keyboards now works inside the grammar itself: ｛日期：date｝ gets the date picker, ｛部门：销售｜市场｝ becomes a dropdown, and a trailing ＊ marks a field mandatory — the fullwidth colon, pipe and star are read exactly like their ASCII twins. (Fullwidth ｛braces｝ were already detected.)
+* Changed: the pin icons in the field rail sit properly centered.
+
 ## 1.5.0
 
 * New: pinned values. Type a value you enter every day — your name, your department, the mailbox people should reply to — and tap the pin that appears next to the field. From then on, every document with a field of that name shows a filled pin: tap it and the value drops in. Tap it again while the field holds that value to forget it. One pin per field name, stored on this device only, and nothing is ever written without a tap — not into the pane, and certainly not into the document.
