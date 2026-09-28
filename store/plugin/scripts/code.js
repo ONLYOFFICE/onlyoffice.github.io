@@ -60,16 +60,41 @@
 	let removeGuid = '';
 	let editorVersion = '';
 	let marketplaceURl = '';
+	let pluginOptions = {};
+	// address set by the administrator in editorConfig.plugins.options
+	let adminMarketplaceUrl = '';
+	// true when the current address is not the one this installation expects (we warn the user about it)
+	let isDeveloperMarketplace = false;
+	// false when the administrator turned the developer mode off in editorConfig.plugins.options
+	let isDevModeAllowed = true;
 	const OOMarketplaceUrl = isLocal ? './store/index.html' : 'https://onlyoffice.github.io/store/index.html';
-	try {
-		// for incognito mode
-		marketplaceURl = localStorage.getItem('DeveloperMarketplaceUrl') || OOMarketplaceUrl;
-	} catch (err) {
-		marketplaceURl = OOMarketplaceUrl;
+
+	function applyDevModeButton() {
+		window.Asc.plugin.executeMethod('ShowButton', ['developer', isDevModeAllowed, 'right']);
 	}
-	
+
+	function applyMarketplaceUrl() {
+		marketplaceURl = MarketplaceUrlManager.resolve(pluginOptions, OOMarketplaceUrl);
+
+		if (adminMarketplaceUrl && adminMarketplaceUrl === marketplaceURl) {
+			isDeveloperMarketplace = false;
+		} else {
+			isDeveloperMarketplace = marketplaceURl !== OOMarketplaceUrl;
+		}
+	}
+
 	window.Asc.plugin.init = function() {
-		window.Asc.plugin.executeMethod('ShowButton',['developer', true, 'right']);
+		pluginOptions = this.info.options || {};
+		isDevModeAllowed = MarketplaceUrlManager.isDevModeAllowed(pluginOptions);
+		adminMarketplaceUrl = MarketplaceUrlManager.getAdminUrl(pluginOptions);
+
+		// the ban applies to everyone: an address stored earlier must not outlive it
+		if (!isDevModeAllowed)
+			MarketplaceUrlManager.setDeveloperUrl('');
+
+		applyMarketplaceUrl();
+		applyDevModeButton();
+
 		// resize window
 		window.Asc.plugin.resizeWindow(winSizes.width, winSizes.height, winSizes.minWidth, winSizes.minHeight, 0, 0);
 		if (!isLocal) {
@@ -188,7 +213,8 @@
 
 	function initPlugin() {
 		document.body.appendChild(iframe);
-		if (marketplaceURl !== OOMarketplaceUrl)
+
+		if (isDeveloperMarketplace)
 			document.getElementById('notification').classList.remove('hidden');
 
 		// send message that plugin is ready
@@ -248,7 +274,7 @@
 			else
 				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (PluginCard.window && PluginCard.window.id == windowID) {
-			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+			PluginCard.hide();
 		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
 			if (iframe && iframe.contentWindow)
@@ -295,6 +321,12 @@
 				break;
 			case 'hidePluginCard':
 				PluginCard.hide();
+				break;
+			case 'closeMarketplace':
+				if (PluginCard.window)
+					PluginCard.hide();
+				else
+					window.Asc.plugin.executeCommand('close', '');
 				break;
 			case 'resize':
 				if (!data.width || !data.height) {
@@ -377,7 +409,7 @@
 		} else {
 			const noInternetElement = document.getElementById('div_noIternet');
 			if (!noInternetElement) {
-				console.error('div_noIternet element not found');
+				console.error('noInternetElement element not found');
 				return;
 			}
 			noInternetElement.classList.remove('hidden');
@@ -449,15 +481,13 @@
 						if (!notificationElement) {
 							return;
 						}
-						if (message.url.length) {
-							marketplaceURl = message.url;
-							localStorage.setItem('DeveloperMarketplaceUrl', marketplaceURl);
+						MarketplaceUrlManager.setDeveloperUrl(message.url);
+						applyMarketplaceUrl();
+						if (isDeveloperMarketplace)
 							notificationElement.classList.remove('hidden');
-						} else {
-							marketplaceURl = OOMarketplaceUrl;
-							localStorage.removeItem('DeveloperMarketplaceUrl');
+						else
 							notificationElement.classList.add('hidden');
-						}
+						applyDevModeButton();
 						iframe.src = marketplaceURl + window.location.search;
 					}
 					if (developerWindow) {

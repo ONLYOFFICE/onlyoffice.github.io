@@ -39,7 +39,7 @@
 /// <reference path="./marketplace/service.js" />
 /// <reference path="./marketplace/scale.js" />
 /// <reference path="./marketplace/plugin-icons.js" />
-/// <reference path="./card/plugin-card.js" />
+/// <reference path="./plugin-card-controller.js" />
 
 // #region Constants
 
@@ -65,9 +65,6 @@ let editorVersion;       // editor current version
 let pluginVersion;       // marketplace plugin version
 let defaultBG = Utils.themeType == 'light' ? '#F5F5F5' : '#555555'; // default background color for plugin header
 
-let isPluginCardHistoryPushed = false;
-
-
 // #endregion
 
 // #region Initialization
@@ -78,6 +75,9 @@ Utils.init();
 // it's necessary for loader (because it detects theme by this object)
 window.Asc = /** @type {Asc} */ (/** @type {unknown} */ ({ plugin: { theme: { type: Utils.themeType } } }));
 
+// it's necessary for keydown handlers (Escape) - they don't fire until this frame has focus
+if (!independentMode)
+	window.focus();
 
 
 /**
@@ -377,46 +377,13 @@ const Marketplace = {
 
 };
 
-/**
- * for v1.0.5
- * Dynamically loads CSS and JS assets needed for the inline plugin card.
- * @returns {Promise<void>}
- */
-function loadPluginCardAssets() {
-	return new Promise(function(resolve) {
-		var loaded = 0;
-		var scripts = [
-			'vendor/marked/marked.min.js',
-			'scripts/card/plugin-card-ui.js',
-			'scripts/card/plugin-card.js'
-		];
-
-		var link = document.createElement('link');
-		link.rel = 'stylesheet';
-		link.href = 'resources/css/plugin-card.css';
-		document.head.appendChild(link);
-
-		function onScriptLoad() {
-			loaded++;
-			if (loaded === scripts.length) resolve();
-		}
-
-		scripts.forEach(function(src) {
-			var s = document.createElement('script');
-			s.src = src;
-			s.onload = onScriptLoad;
-			s.onerror = onScriptLoad;
-			document.head.appendChild(s);
-		});
-	});
-}
-
 const versionsPromise = Marketplace.getEditorAndPluginVersions().then(function(versions) {
 	editorVersion = versions.editorVersion;
 	pluginVersion = versions.pluginVersion;
 	if (pluginVersion <= 1000005) {
 		UI.makeSidebarToggleButton();
-		return loadPluginCardAssets().then(function() { return versions; });
+		return PluginCardController.loadPluginCardAssets()
+			.then(function() { return versions; });
 	}
 	if (versions.editorType) {
 		MarketplaceStorage.editorType = versions.editorType;
@@ -551,7 +518,7 @@ window.addEventListener('message', function(event) {
 		case 'Error':             _onMessageError(message);     break;
 		case 'Theme':             _onMessageTheme(message);     break;
 		case 'onExternalMouseUp': _onMessageMouseUp();          break;
-		case 'onClickBack':       _onClickBackToMarketplace();  break;
+		case 'onClickBack':       PluginCardController.goBackToMarketplace();  break;
 	}
 }, false);
 
@@ -992,88 +959,10 @@ function onClickPluginPlate(guid) {
 	if (pluginVersion > 1000005) {
 		return MarketplacePluginService.openPluginCard(message);
 	}
-	showPluginCard(message);
+	PluginCardController.showPluginCard(message);
 	MarketplacePluginService.showBackButton(true);
 	return Promise.resolve(true);
 }
-
-/** @returns {boolean} whether the plugin card should render as a centered popup instead of taking over the full page */
-function _isPluginCardModalMode() {
-	const documentElement = document.documentElement;
-	const width = window.innerWidth || documentElement.clientWidth || document.body.clientWidth;
-	const height = window.innerHeight || documentElement.clientHeight || document.body.clientHeight;
-	return width >= 721 && height >= 601;
-}
-
-/** @param {boolean} independentMode */
-function _syncPluginCardModalState(independentMode) {
-	let pluginCardDiv = document.getElementById('plugin_card_panel');
-	let marketplaceDiv = document.getElementById('plugins');
-	let overlayDiv = document.getElementById('plugin_card_overlay');
-	if (!pluginCardDiv || !marketplaceDiv || !overlayDiv || pluginCardDiv.classList.contains('hidden')) {
-		return;
-	}
-	const needModal = _isPluginCardModalMode() && independentMode;
-	if (needModal) {
-		marketplaceDiv.classList.remove('hidden');
-		overlayDiv.classList.remove('hidden');
-	} else {
-		marketplaceDiv.classList.add('hidden');
-		overlayDiv.classList.add('hidden');
-	}
-}
-
-/**
- * @param {PluginCardWindowParams} data
- */
-function showPluginCard(data) {
-	let pluginCardDiv = document.getElementById('plugin_card_panel');
-	let marketplaceDiv = document.getElementById('plugins');
-	if (pluginCardDiv && marketplaceDiv) {
-		pluginCardDiv.classList.remove('hidden');
-	}
-	_syncPluginCardModalState(data.independentMode);
-
-	PluginCard.init(data);
-
-	isPluginCardHistoryPushed = true;
-	history.pushState({ pluginCardOpen: true }, '');
-}
-// for v1.0.5
-/** @param {boolean} [blockForwardHistory] - discard the forward history entry left by history.back(), so the user can't navigate forward to reopen the card */
-function hidePluginCard(blockForwardHistory) {
-	let pluginCardDiv = document.getElementById('plugin_card_panel');
-	let marketplaceDiv = document.getElementById('plugins');
-	let overlayDiv = document.getElementById('plugin_card_overlay');
-	if (pluginCardDiv && marketplaceDiv) {
-		pluginCardDiv.classList.add('hidden');
-		marketplaceDiv.classList.remove('hidden');
-		if (overlayDiv) {
-			overlayDiv.classList.add('hidden');
-		}
-	}
-	window.onresize = Scale.onResize.bind(Scale, false);
-	if (blockForwardHistory) {
-		history.pushState(null, '');
-	}
-}
-
-function _onClickBackToMarketplace() {
-	if (isPluginCardHistoryPushed) {
-		// consume the history entry pushed by showPluginCard,
-		// the actual hiding is done by the popstate handler
-		history.back();
-	} else {
-		hidePluginCard();
-	}
-}
-
-window.addEventListener('popstate', function() {
-	if (isPluginCardHistoryPushed) {
-		isPluginCardHistoryPushed = false;
-		hidePluginCard(true);
-	}
-});
 
 function installPluginManually() {
 	if (!window["AscDesktopEditor"]) {
