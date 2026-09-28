@@ -162,14 +162,17 @@ CslStylesManager.prototype.getLastUsedStyleIdOrDefault = function () {
 /**
  * @param {string} styleName
  * @param {boolean} saveToLocalStorage
+ * @param {Array<string>} [seen]
  * @returns {Promise<{content: string|null, styleFormat: StyleFormat}>} - csl file content
  */
 CslStylesManager.prototype.getStyle = function (
     styleName,
-    saveToLocalStorage = true
+    saveToLocalStorage = true,
+    seen
 ) {
     const self = this;
 
+    if (!seen) seen = [];
     return Promise.resolve(styleName)
         .then(function (styleName) {
             if (self._cache[styleName]) {
@@ -201,9 +204,18 @@ CslStylesManager.prototype.getStyle = function (
                     content
                 );
                 if (styleInfo && styleInfo.dependent > 0 && styleInfo.parent) {
-                    return fetch(styleInfo.parent).then(function (resp) {
-                        return resp.text();
-                    });
+                    const parentId = self._styleIdFromUri(styleInfo.parent);
+                    if (parentId && seen.indexOf(parentId) === -1) {
+                        return self
+                            .getStyle(
+                                parentId,
+                                false,
+                                seen.concat([styleName])
+                            )
+                            .then(function (parentStyle) {
+                                return parentStyle.content;
+                            });
+                    } 
                 }
             }
 
@@ -314,6 +326,20 @@ CslStylesManager.prototype.isLastUsedStyleContainBibliography = function () {
  */
 CslStylesManager.prototype.isStyleDefault = function (styleName) {
     return this._defaultStyles.indexOf(styleName) >= 0;
+};
+
+/**
+ * Extracts the style id from a CSL identifier such as
+ * "http://www.zotero.org/styles/institute-of-physics-numeric".
+ * @param {string} uri
+ * @returns {string}
+ */
+CslStylesManager.prototype._styleIdFromUri = function (uri) {
+    return String(uri)
+        .split(/[#?]/)[0]
+        .replace(/\/+$/, "")
+        .split("/")
+        .pop() || "";
 };
 
 /**

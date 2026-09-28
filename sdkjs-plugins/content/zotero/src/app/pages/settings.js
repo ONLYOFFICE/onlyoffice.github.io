@@ -422,6 +422,7 @@ SettingsPage.prototype._addEventListeners = function () {
                     self._onChangeState(newState, oldState);
                 })
                 .catch(function (err) {
+                    console.error(err);
                     self._hideLoader();
                 });
         } else {

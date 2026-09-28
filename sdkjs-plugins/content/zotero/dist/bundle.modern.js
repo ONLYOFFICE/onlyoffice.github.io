@@ -3057,31 +3057,34 @@ E.prototype.addCustomStyle = function(e) {
 	return localStorage.getItem(this._lastStyleKey) || null;
 }, E.prototype.getLastUsedStyleIdOrDefault = function() {
 	return localStorage.getItem(this._lastStyleKey) || "ieee";
-}, E.prototype.getStyle = function(e, t = !0) {
-	let n = this;
-	return Promise.resolve(e).then(function(e) {
-		if (n._cache[e]) return n._cache[e];
-		if (n._customStylesStorage.getStyleNames().indexOf(e) !== -1) return n._customStylesStorage.getStyle(e);
-		let t = n._STYLES_LOCAL + e + ".csl";
-		if (n._isOnlineAvailable) t = n._STYLES_URL + e;
-		else if (n._defaultStyles.indexOf(e) === -1) throw "The style is not available in the local version of the plugin.";
+}, E.prototype.getStyle = function(e, t = !0, n) {
+	let r = this;
+	return n ||= [], Promise.resolve(e).then(function(e) {
+		if (r._cache[e]) return r._cache[e];
+		if (r._customStylesStorage.getStyleNames().indexOf(e) !== -1) return r._customStylesStorage.getStyle(e);
+		let t = r._STYLES_LOCAL + e + ".csl";
+		if (r._isOnlineAvailable) t = r._STYLES_URL + e;
+		else if (r._defaultStyles.indexOf(e) === -1) throw "The style is not available in the local version of the plugin.";
 		return fetch(t).then(function(e) {
 			return e.text();
 		});
 	}).then(function(t) {
-		if (t && !n._isValidCSL(t) && n._isOnlineAvailable) {
-			let n = w.getStyleInfo(e, t);
-			if (n && n.dependent > 0 && n.parent) return fetch(n.parent).then(function(e) {
-				return e.text();
-			});
+		if (t && !r._isValidCSL(t) && r._isOnlineAvailable) {
+			let i = w.getStyleInfo(e, t);
+			if (i && i.dependent > 0 && i.parent) {
+				let t = r._styleIdFromUri(i.parent);
+				if (t && n.indexOf(t) === -1) return r.getStyle(t, !1, n.concat([e])).then(function(e) {
+					return e.content;
+				});
+			}
 		}
 		return t;
-	}).then(function(r) {
-		let i = r && w.getCitationFormat(r) || "numeric", a = {
-			content: r,
+	}).then(function(n) {
+		let i = n && w.getCitationFormat(n) || "numeric", a = {
+			content: n,
 			styleFormat: i
 		};
-		return r && t && n._saveLastUsedStyle(e, r, i), a;
+		return n && t && r._saveLastUsedStyle(e, n, i), a;
 	});
 }, E.prototype.getStylesInfo = function() {
 	let e = this;
@@ -3110,6 +3113,8 @@ E.prototype.addCustomStyle = function(e) {
 	return localStorage.getItem(this._lastUsedStyleContainBibliographyKey) !== "false";
 }, E.prototype.isStyleDefault = function(e) {
 	return this._defaultStyles.indexOf(e) >= 0;
+}, E.prototype._styleIdFromUri = function(e) {
+	return String(e).split(/[#?]/)[0].replace(/\/+$/, "").split("/").pop() || "";
 }, E.prototype._isValidCSL = function(e) {
 	return e.indexOf("<?xml") > -1 && e.indexOf("<style") > -1 && e.indexOf("<macro") > -1 && e.indexOf("citation") > -1;
 }, E.prototype._readCSLFile = function(e) {
@@ -3382,7 +3387,7 @@ A.prototype.getLocalesManager = function() {
 			};
 			e._onChangeState(t, r);
 		}).catch(function(t) {
-			e._hideLoader();
+			console.error(t), e._hideLoader();
 		})) : e._hide();
 	}), this._cancelBtn.subscribe(function(t) {
 		if (t.type !== "button:click") return;
