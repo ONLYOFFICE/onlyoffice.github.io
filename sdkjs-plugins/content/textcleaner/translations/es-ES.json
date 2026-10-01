@@ -42,11 +42,11 @@
     "OperationsApplied": "operación aplicada",
     "RevertToOriginal": "Revertir al original",
     "NewClean": "Nueva limpieza",
-    "DoNotClosePanel": "Por favor, no cierre el panel del complemento.",
+    "DoNotClosePanel": "Por favor, no cierre el panel del plugin.",
     "AboutTitle": "Limpiador de texto",
     "AboutVersion": "Versión 1.0.0",
-    "AboutDescription": "Este complemento le ayuda a limpiar y formatear el texto en su documento con varias opciones. Puede eliminar fácilmente espacios adicionales, corregir la puntuación y realizar muchas otras funciones.",
-    "AboutCopyright": "© 2025 Complemento ONLYOFFICE",
+    "AboutDescription": "Este plugin le ayuda a limpiar y formatear el texto en su documento con varias opciones. Puede eliminar fácilmente espacios adicionales, corregir la puntuación y realizar muchas otras funciones.",
+    "AboutCopyright": "© 2025 Plugin ONLYOFFICE",
     "Loading": "Cargando...",
     "About": "Acerca de"
   }
