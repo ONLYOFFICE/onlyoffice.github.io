@@ -1,5 +1,6 @@
 {
-	"name": "Zotero",
+	"$schema": "https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/refs/heads/master/schemas/config.schema.json",
+    "name": "Zotero",
 	"nameLocale": {
 		"ru": "Zotero",
 		"fr": "Zotero",
