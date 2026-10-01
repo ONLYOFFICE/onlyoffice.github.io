@@ -178,7 +178,7 @@ const PluginCard = {
                 } else {
                     PluginCardUI.divRatingLink.setAttribute(
                         "title",
-                        Utils.getTranslated("No disscussion page for this plugin.")
+                        Utils.getTranslated("No discussion page for this plugin.")
                     );
                     PluginCardUI.discussionLink.classList.add("hidden");
                 }
