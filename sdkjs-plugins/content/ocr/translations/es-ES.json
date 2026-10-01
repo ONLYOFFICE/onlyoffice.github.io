@@ -1,5 +1,5 @@
 {
-	"Tesseract.js lets you recognize text in pictures (bmp, jpg, png, webp, gif)": "Complemento Tesseract.js permite reconocer texto en imágenes (bmp, jpg, png, webp, gif)",
+	"Tesseract.js lets you recognize text in pictures (bmp, jpg, png, webp, gif)": "Extensión de Tesseract.js permite reconocer texto en imágenes (bmp, jpg, png, webp, gif)",
 	"Choose language": "Seleccionar idioma",
 	"Load File": "Cargar el archivo",
 	"English": "Inglés",
@@ -63,7 +63,7 @@
 	"Serbian (Latin)": "Serbio (latino)",
 	"Slovak": "Eslovaco",
 	"Recognize": "Reconocer",
-	"Tesseract.js Add-on": "Complemento Tesseract.js",
+	"Tesseract.js Add-on": "Extensión de Tesseract.js",
 	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian and 60 other languages.": "Tesseract.js es una versión pura de javascript del <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> que reconoce Inglés, Chino, Ruso y 60 otros idiomas.",
 	"Source code": "Código fuente"
 }
