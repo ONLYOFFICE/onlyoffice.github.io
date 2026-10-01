@@ -1,13 +1,13 @@
 {
   "name": "OnlyMath",
   "guid": "asc.{F9C32B4D-7A18-4E5F-B02D-9C6E15A3D847}",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "offered": "OpenMath",
   "minVersion": "7.2.0",
   "baseUrl": "",
   "variations": [
     {
-      "description": "Calculate, solve, differentiate and integrate directly in your document's equation fields. Built-in computer algebra, Danish notation, works fully offline.",
+      "description": "Calculate, solve, differentiate and integrate directly in your document's equation fields. Built-in computer algebra, Danish notation, works fully offline. Video tutorials: youtube.com/@OnlyMathPlugin",
       "url": "index.html",
       "icons": [
         "resources/light/icon.png",
