@@ -323,6 +323,27 @@
     }
   }
 
+  /**
+   * Make the worker unable to reach the network after start-up.
+   * XMLHttpRequest becomes a stub whose send() never answers (so Giac's read(url)
+   * ends in an ordinary Giac error instead of a request) and fetch rejects.
+   * Ordinary calculations are unaffected (verified: identical results).
+   */
+  function disableNetwork() {
+    function InertXHR() {}
+    InertXHR.prototype.open = function () {};
+    InertXHR.prototype.overrideMimeType = function () {};
+    InertXHR.prototype.setRequestHeader = function () {};
+    InertXHR.prototype.send = function () {
+      this.status = 0; this.statusText = ""; this.responseText = "";
+    };
+    function blockedFetch() {
+      return Promise.reject(new Error("Network access is disabled in the OnlyMath worker."));
+    }
+    try { self.XMLHttpRequest = InertXHR; } catch (_) { /* best effort */ }
+    try { self.fetch = blockedFetch; } catch (_) { /* best effort */ }
+  }
+
   // Emscripten Module overrides must be defined before importScripts.
   self.Module = {
     noInitialRun: true,
@@ -335,6 +356,11 @@
         // sets the unit explicitly via angleRadianFor(), so calculus runs in
         // radians while numeric/solve runs in degrees; this is just a safe default.
         try { caseval("angle_radian:=0"); } catch (_) { /* keep init resilient */ }
+        // The engine never needs the network once it is running. Giac's own
+        // `read("https://...")` would otherwise do a synchronous XMLHttpRequest GET
+        // for any text typed into a math field, so cut the worker off from the
+        // network now (the engine itself is already loaded at this point).
+        disableNetwork();
         // Notify the main thread via a one-shot READY message instead of
         // requiring repeated PING polling.
         postMessage({ type: "READY" });

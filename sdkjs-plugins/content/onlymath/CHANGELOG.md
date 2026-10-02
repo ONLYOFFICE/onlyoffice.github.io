@@ -3,6 +3,17 @@
 All notable changes to the OnlyMath plugin are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.1.1
+
+- Security hardening, following a review of 1.1.0:
+  - The engine can no longer use the network. Once it has started, web requests from the
+    calculation worker are switched off, so text such as `read("https://…")` in a math
+    field cannot make the plugin contact a web address. Ordinary calculations are unchanged.
+  - The "Defined" list in Settings now shows function definitions as plain text, so text
+    in a document can never be interpreted as page markup.
+  - Alt+M (empty math field) uses only the plugin API and no longer reaches into the
+    editor's own window.
+
 ## 1.1.0
 
 - Fixed a wrong answer for roots with an index. A root written with the index
