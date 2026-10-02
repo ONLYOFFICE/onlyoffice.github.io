@@ -55,6 +55,7 @@ function CslStylesManager(lastStyleKey) {
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
+    this._cachedStylePrefix = "zoteroCachedStyle_";
 
     this._defaultStyles = [
         "american-anthropological-association",
@@ -181,7 +182,13 @@ CslStylesManager.prototype.getStyle = function (
             if (self._isOnlineAvailable) {
                 url = self._STYLES_URL + styleName;
             } else if (self._defaultStyles.indexOf(styleName) === -1) {
-                throw "The style is not available in the local version of the plugin.";
+                // Offline, non-default style: try a previously cached copy
+                // before failing so styles used while online still work.
+                const cached = self._getCachedStyle(styleName);
+                if (!cached) {
+                    throw "The style is not available in the local version of the plugin.";
+                }
+                return cached;
             }
             return fetch(url).then(function (resp) {
                 return resp.text();
@@ -219,6 +226,17 @@ CslStylesManager.prototype.getStyle = function (
                 self._saveLastUsedStyle(styleName, content, styleFormat);
             }
 
+            // Cache the fully resolved content (including dependent-style
+            // parents) so non-default styles fetched online are available
+            // offline later.
+            if (
+                content &&
+                self._isOnlineAvailable &&
+                self._defaultStyles.indexOf(styleName) === -1
+            ) {
+                self._saveCachedStyle(styleName, content);
+            }
+
             return result;
         });
 };
@@ -241,11 +259,13 @@ CslStylesManager.prototype.getStylesInfo = function () {
         /** @type {Array<StyleInfo>} */
         var customStyles = styles[1];
 
-        if (self._isDesktopAvailable && !self._isOnlineAvailable) {
+        if (!self._isOnlineAvailable) {
+            var cachedStyleNames = self._getCachedStyleNames();
             loadedStyles = loadedStyles.filter(function (style) {
                 return (
                     self._defaultStyles.indexOf(style.name) >= 0 ||
-                    style.name == lastStyle
+                    style.name == lastStyle ||
+                    cachedStyleNames.indexOf(style.name) >= 0
                 );
             });
         }
@@ -351,6 +371,52 @@ CslStylesManager.prototype._readCSLFile = function (file) {
 
         reader.readAsText(file);
     });
+};
+
+/**
+ * Save a fetched style to localStorage for offline use.
+ * @param {string} id - The style name.
+ * @param {string} content - The CSL XML content of the style.
+ */
+CslStylesManager.prototype._saveCachedStyle = function (id, content) {
+    this._cache[id] = content;
+    try {
+        localStorage.setItem(this._cachedStylePrefix + id, content);
+    } catch (e) {
+        // localStorage may be full (QuotaExceededError); the in-memory
+        // cache still serves this session, so ignore persistence failures.
+    }
+};
+
+/**
+ * Load a previously cached style from localStorage.
+ * @param {string} id - The style name.
+ * @returns {string|null} The cached style content, or null if not found.
+ */
+CslStylesManager.prototype._getCachedStyle = function (id) {
+    if (this._cache[id]) {
+        return this._cache[id];
+    }
+    const cached = localStorage.getItem(this._cachedStylePrefix + id);
+    if (cached) {
+        this._cache[id] = cached;
+    }
+    return cached;
+};
+
+/**
+ * List the names of all styles cached in localStorage for offline use.
+ * @returns {Array<string>}
+ */
+CslStylesManager.prototype._getCachedStyleNames = function () {
+    const names = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.indexOf(this._cachedStylePrefix) === 0) {
+            names.push(key.substring(this._cachedStylePrefix.length));
+        }
+    }
+    return names;
 };
 
 /**

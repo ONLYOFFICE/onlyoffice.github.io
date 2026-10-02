@@ -34,7 +34,16 @@
 
 class Loader {
     static #mainLoaderContainer = document.getElementById("loader");
+    static #mainLoaderCircle = document.querySelector("#loader .loader-image circle");
+    static #mainLoaderTitle = document.querySelector("#loader .loader-title");
+    /** Circumference of the loader ring, in the same user units as its r=7.25 viewBox. */
+    static #circumference = 2 * Math.PI * 7.25;
+
     #container;
+    /** @type {SVGCircleElement|null} */
+    #circle = null;
+    /** @type {HTMLElement|null} */
+    #title = null;
 
     /**
      * @param {string} containerId
@@ -74,6 +83,9 @@ class Loader {
         title.classList.add("i18n");
         title.innerText = text;
         this.#container.appendChild(title);
+
+        this.#circle = circle;
+        this.#title = title;
     }
 
     show() {
@@ -84,12 +96,63 @@ class Loader {
         this.#container?.classList.add("hidden");
     }
 
+    /** @param {string} text */
+    setText(text) {
+        if (this.#title) {
+            this.#title.innerText = text;
+        }
+    }
+
+    /**
+     * Switches the ring from an indeterminate spin to a determinate progress
+     * arc, or back to indeterminate when called with null/undefined.
+     * @param {number|null} [fraction] value from 0 to 1
+     */
+    setProgress(fraction) {
+        Loader.#applyProgress(this.#container, this.#circle, fraction);
+    }
+
     static show() {
         this.#mainLoaderContainer?.classList.remove("hidden");
     }
 
     static hide() {
         this.#mainLoaderContainer?.classList.add("hidden");
+    }
+
+    /** @param {string} text */
+    static setText(text) {
+        if (this.#mainLoaderTitle) {
+            this.#mainLoaderTitle.innerText = text;
+        }
+    }
+
+    /** @param {number|null} [fraction] value from 0 to 1 */
+    static setProgress(fraction) {
+        this.#applyProgress(this.#mainLoaderContainer, this.#mainLoaderCircle, fraction);
+    }
+
+    /**
+     * @param {HTMLElement|null} [container]
+     * @param {SVGCircleElement|null} [circle]
+     * @param {number|null} [fraction]
+     */
+    static #applyProgress(container, circle, fraction) {
+        if (!container || !circle) {
+            return;
+        }
+        if (fraction === null || fraction === undefined) {
+            container.classList.remove("loader-determinate");
+            circle.style.strokeDasharray = "";
+            circle.style.strokeDashoffset = "";
+            return;
+        }
+        const clamped = Math.max(0, Math.min(1, fraction));
+        container.classList.add("loader-determinate");
+        circle.style.strokeDasharray = String(this.#circumference);
+        circle.style.strokeDashoffset = String(
+            this.#circumference * (1 - clamped),
+        );
     }
 }
 

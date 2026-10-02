@@ -121,6 +121,16 @@ LoginPage.prototype.init = function () {
             self._hideAllMessages();
             self._onAuthorized(apis);
             return;
+        } else if (apis.hasKey && !apis.online && !apis.desktop) {
+            // Offline with a previously stored API key: enter the main UI in
+            // offline mode so cached styles and existing citations stay usable.
+            // The checker keeps polling, so we reconnect automatically once the
+            // network (or local Zotero) becomes available again.
+            self._sdk.setIsOnlineAvailable(false);
+            self._hide(true);
+            self._hideAllMessages();
+            self._onAuthorized(apis);
+            return;
         }
     });
 
