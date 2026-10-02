@@ -1,0 +1,77 @@
+{
+	"name": "Image Addon",
+	"nameLocale": {
+		"ru": "Image Addon",
+		"fr": "Image Addon",
+		"es": "Image Addon",
+		"de": "Image Addon"
+	},
+	"guid": "asc.{87C8E477-6FE7-4900-AB67-B786D7012115}",
+	"version": "1.1.0",
+	"variations": [
+		{
+			"description": "Generate images with Cloudflare AI and insert free stock photos from Unsplash, Wallhaven and more.",
+			"descriptionLocale": {
+				"ru": "Генерация изображений Cloudflare AI и бесплатные стоковые фото.",
+				"fr": "Générez des images avec Cloudflare AI et photos stock gratuites.",
+				"es": "Genere imágenes con Cloudflare AI y fotos de stock gratuitas.",
+				"de": "Bilder mit Cloudflare AI und kostenlosen Stockfotos generieren."
+			},
+			"url": "index.html",
+			"icons": [
+				"resources/light/icon.png",
+				"resources/light/icon.png"
+			],
+			"icons2": [
+				{
+					"style": "light",
+					"100%": {"normal": "resources/light/icon.png"},
+					"125%": {"normal": "resources/light/icon.png"},
+					"150%": {"normal": "resources/light/icon.png"},
+					"175%": {"normal": "resources/light/icon.png"},
+					"200%": {"normal": "resources/light/icon.png"}
+				},
+				{
+					"style": "dark",
+					"100%": {"normal": "resources/dark/icon.png"},
+					"125%": {"normal": "resources/dark/icon.png"},
+					"150%": {"normal": "resources/dark/icon.png"},
+					"175%": {"normal": "resources/dark/icon.png"},
+					"200%": {"normal": "resources/dark/icon.png"}
+				}
+			],
+			"isViewer": false,
+			"EditorsSupport": ["word", "cell", "slide"],
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+			"isUpdateOleOnResize": false,
+			"initDataType": "none",
+			"buttons": [
+				{
+					"text": "Close",
+					"primary": true,
+					"textLocale": {
+						"ru": "Закрыть",
+						"fr": "Fermer",
+						"es": "Cerrar",
+						"de": "Schließen"
+					}
+				}
+			],
+			"size": [460, 640],
+			"store": {
+				"background": {
+					"light": "#F38020",
+					"dark": "#F38020"
+				},
+				"screenshots": ["resources/store/screenshots/screen_1.png"],
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work"]
+			}
+		}
+	]
+}
