@@ -1,0 +1,114 @@
+{
+  "name": "Scroll Panel",
+  "nameLocale": {
+    "ru": "Scroll Panel",
+    "fr": "Scroll Panel",
+    "es": "Scroll Panel",
+    "de": "Scroll Panel",
+    "cs": "Scroll Panel",
+    "zh": "Scroll Panel",
+    "pt-BR": "Scroll Panel",
+    "sr-Cyrl-RS": "Scroll Panel",
+    "sr-Latn-RS": "Scroll Panel",
+    "ja-JA": "Scroll Panel",
+    "sq-AL": "Scroll Panel",
+    "it": "Scroll Panel",
+    "ar-SA": "Scroll Panel"
+  },
+  "offered": "Jhon Titor",
+  "guid": "asc.{ca39b178-83ef-4074-b248-108d0634a4db}",
+  "version": "1.0.0",
+  "minVersion": "9.3.0",
+  "variations": [
+    {
+      "description": "The PDF document scrolling control panel. Provides navigation to the required position by the visibility area coordinates and scale. Also provides additional settings for the Scroll Back plugin.",
+      "descriptionLocale": {
+        "ru": "Панель управления прокруткой PDF-документов. Предоставляет навигацию к нужной позиции через координаты области видимости и масштаб. Также предоставляет дополнительные настройки для плагина Scroll Back.",
+        "fr": "Panneau de commande du défilement des documents PDF. Permet de naviguer vers la position souhaitée grâce aux coordonnées de la zone d'affichage et au zoom. Propose également des paramètres supplémentaires pour le plugin Scroll Back.",
+        "es": "Panel de control del desplazamiento de documentos PDF. Permite navegar a la posición deseada mediante las coordenadas del área visible y el zoom. También ofrece ajustes adicionales para el complemento Scroll Back.",
+        "pt-BR": "Painel de controle de rolagem de documentos PDF. Permite navegar para a posição desejada pelas coordenadas da área visível e escala. Também oferece configurações adicionais para o plugin Scroll Back.",
+        "de": "Bedienfeld für das Scrollen von PDF-Dokumenten. Ermöglicht die Navigation zur gewünschten Position über die Koordinaten des Sichtbereichs und den Zoom. Bietet zudem zusätzliche Einstellungen für das Plugin Scroll Back.",
+        "cs": "Ovládací panel posunu PDF dokumentů. Umožňuje navigaci na požadovanou pozici pomocí souřadnic viditelné oblasti a měřítka. Nabízí také dodatečná nastavení pro zásuvný modul Scroll Back.",
+        "zh": "PDF文档滚动控制面板。通过可见区域坐标和缩放比例导航至所需位置。还为 Scroll Back 插件提供附加设置。",
+        "sr-Cyrl-RS": "Панел за контролу скроловања PDF докумената. Омогућава навигацију до жељене позиције помоћу координата видљиве области и размера. Такође пружа додатна подешавања за прикључак Scroll Back.",
+        "sr-Latn-RS": "Panel za kontrolu skrolovanja PDF dokumenata. Omogućava navigaciju do željene pozicije pomoću koordinata vidljive oblasti i razmera. Takođe pruža dodatna podešavanja za priključak Scroll Back.",
+        "ja-JA": "PDFドキュメントのスクロール制御パネル。表示領域の座標とスケールによって目的の位置へ移動できます。Scroll Backプラグイン用の追加設定も提供します。",
+        "sq-AL": "Paneli i kontrollit të lëvizjes së dokumenteve PDF. Mundëson navigimin në pozicionin e dëshiruar përmes koordinatave të zonës së dukshme dhe shkallëzimit. Gjithashtu ofron cilësime shtesë për shtojcën Scroll Back.",
+        "it": "Pannello di controllo dello scorrimento dei documenti PDF. Consente la navigazione verso la posizione desiderata tramite le coordinate dell'area visibile e lo zoom. Offre inoltre impostazioni aggiuntive per il plugin Scroll Back.",
+        "ar-SA": "لوحة التحكم في التمرير لمستندات PDF. تتيح التنقل إلى الموضع المطلوب باستخدام إحداثيات المنطقة المرئية ونسبة التكبير. كما توفر إعدادات إضافية للملحق Scroll Back."
+      },
+      "url": "index.html",
+      "icons": [
+        "resources/icons/icon%scale%(default).%extension%(png|svg)"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/icons/icon.png"
+          },
+          "125%": {
+            "normal": "resources/icons/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/icons/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/icons/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/icons/icon@2x.png"
+          },
+          "*": {
+            "normal": "resources/icons/icon.svg"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/icons/icon.png"
+          },
+          "125%": {
+            "normal": "resources/icons/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/icons/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/icons/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/icons/icon@2x.png"
+          },
+          "*": {
+            "normal": "resources/icons/icon.svg"
+          }
+        }
+      ],
+      "isViewer": true,
+      "EditorsSupport": [
+        "pdf"
+      ],
+      "type": "panel",
+      "store": {
+        "background": {
+          "light": "#726868",
+          "dark": "#726868"
+        },
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "screenshots": [
+          "resources/store/screenshots/short_description.png",
+          "resources/store/screenshots/screen_light.png",
+          "resources/store/screenshots/screen_dark.png"
+        ],
+        "categories": [
+          "work",
+          "specAbilities"
+        ]
+      }
+    }
+  ]
+}

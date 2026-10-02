@@ -1,0 +1,109 @@
+{
+  "name": "Scroll Back",
+  "nameLocale": {
+    "ru": "Scroll Back",
+    "fr": "Scroll Back",
+    "es": "Scroll Back",
+    "de": "Scroll Back",
+    "cs": "Scroll Back",
+    "zh": "Scroll Back",
+    "pt-BR": "Scroll Back",
+    "sr-Cyrl-RS": "Scroll Back",
+    "sr-Latn-RS": "Scroll Back",
+    "ja-JA": "Scroll Back",
+    "sq-AL": "Scroll Back",
+    "it": "Scroll Back",
+    "ar-SA": "Scroll Back"
+  },
+  "offered": "Jhon Titor",
+  "guid": "asc.{2c3dfbcf-c7b2-48e5-befa-8843d04437a5}",
+  "version": "1.0.0",
+  "minVersion": "9.3.0",
+  "variations": [
+    {
+      "description": "Background plugin automatically saves the scroll position in a PDF and restores it when opening the document. Settings are managed via the Scroll Panel plugin.",
+      "descriptionLocale": {
+        "ru": "Фоновый плагин автоматически сохраняет место прокрутки в PDF и восстанавливает его при открытии документа. Управление настройками доступно в плагине Scroll Panel.",
+        "fr": "Le plugin en arrière-plan enregistre automatiquement la position de défilement dans un PDF et la restaure à l'ouverture du document. Les paramètres peuvent être gérés via le plugin Scroll Panel.",
+        "es": "El complemento en segundo plano guarda automáticamente la posición de desplazamiento en un PDF y la restaura al abrir el documento. La configuración se gestiona a través del complemento Scroll Panel.",
+        "pt-BR": "O plugin em segundo plano salva automaticamente a posição de rolagem em um PDF e a restaura ao abrir o documento. As configurações podem ser gerenciadas através do plugin Scroll Panel.",
+        "de": "Das Hintergrund-Plugin speichert automatisch die Scroll-Position in einer PDF-Datei und stellt sie beim Öffnen des Dokuments wieder her. Die Einstellungen können über das Scroll Panel-Plugin verwaltet werden.",
+        "cs": "Doplněk na pozadí automaticky ukládá pozici posunu v PDF a při otevření dokumentu ji obnoví. Nastavení lze spravovat prostřednictvím doplňku Scroll Panel.",
+        "zh": "后台插件可自动保存 PDF 中的滚动位置，并在打开文档时恢复该位置。可在 Scroll Panel 插件中管理相关设置。",
+        "sr-Cyrl-RS": "Позадински додатак аутоматски чува позицију померања у PDF-у и обнавља је приликом отварања документа. Подешавања су доступна у додатку Scroll Panel.",
+        "sr-Latn-RS": "Pozadinski dodatak automatski čuva poziciju pomeranja u PDF-u i obnavlja je prilikom otvaranja dokumenta. Podešavanja su dostupna u dodatku Scroll Panel.",
+        "ja-JA": "バックグラウンドプラグインがPDFのスクロール位置を自動保存し、ドキュメントを開いたときに復元します。設定はScroll Panelプラグインから管理できます。",
+        "sq-AL": "Shtojca në prapaskenë ruan automatikisht pozicionin e lëvizjes në një PDF dhe e rikthen atë kur hapni dokumentin. Cilësimet mund të menaxhohen përmes shtojcës Scroll Panel.",
+        "it": "Il plugin in background salva automaticamente la posizione di scorrimento in un PDF e la ripristina all'apertura del documento. Le impostazioni sono gestibili tramite il plugin Scroll Panel.",
+        "ar-SA": "تتيح الإضافة في الخلفية حفظ موضع التمرير في ملف PDF تلقائيًا واستعادته عند فتح المستند. يمكن إدارة الإعدادات عبر إضافة Scroll Panel."
+      },
+      "url": "index.html",
+      "icons": [
+        "resources/icons/icon%scale%(default).%extension%(png|svg)"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/icons/icon.png"
+          },
+          "125%": {
+            "normal": "resources/icons/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/icons/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/icons/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/icons/icon@2x.png"
+          },
+          "*": {
+            "normal": "resources/icons/icon.svg"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/icons/icon.png"
+          },
+          "125%": {
+            "normal": "resources/icons/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/icons/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/icons/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/icons/icon@2x.png"
+          },
+          "*": {
+            "normal": "resources/icons/icon.svg"
+          }
+        }
+      ],
+      "isViewer": true,
+      "EditorsSupport": [
+        "pdf"
+      ],
+      "type": "background",
+      "store": {
+        "background": {
+          "light": "#530A0A",
+          "dark": "#530A0A"
+        },
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": [
+          "work",
+          "specAbilities"
+        ]
+      }
+    }
+  ]
+}
