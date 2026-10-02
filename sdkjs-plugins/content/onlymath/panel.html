@@ -191,6 +191,18 @@
         border-top: 1px solid var(--om-divider);
       }
 
+      #help {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid var(--om-divider);
+        color: var(--om-text-2);
+      }
+      #help a {
+        color: var(--om-accent);
+        text-decoration: none;
+      }
+      #help a:hover { text-decoration: underline; }
+
       #status {
         margin-top: 10px;
         font-size: 11px;
@@ -199,8 +211,8 @@
         word-break: break-word;
       }
     </style>
-    <script type="module" crossorigin src="./assets/panel-uYnpexzV.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/shared-A4jcIUWF.js">
+    <script type="module" crossorigin src="./assets/panel-CVwpisup.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-CyxI--io.js">
   </head>
   <body>
     <div id="var-picker"></div>
@@ -213,5 +225,12 @@
     <div id="fn-list"></div>
     <div id="status"></div>
     <div id="precision-picker"></div>
+    <!-- Plain anchor, no script: ONLYOFFICE's own side-panel plugins (Mendeley, Zotero) open
+         links this way. The address is shown as the link text so it can still be read and
+         copied if a host blocks the click. -->
+    <div id="help">
+      Video tutorials:
+      <a href="https://www.youtube.com/@OnlyMathPlugin" target="_blank" rel="noopener noreferrer">youtube.com/@OnlyMathPlugin</a>
+    </div>
   </body>
 </html>
