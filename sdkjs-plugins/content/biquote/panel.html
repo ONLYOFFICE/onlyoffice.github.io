@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>biquote</title>
+  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+  <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+  <link rel="stylesheet" href="styles/panel.css">
+</head>
+<body>
+  <section>
+    <h2 data-i18n="Find a symbol">Find a symbol</h2>
+    <input id="q" class="form-control" type="text" autocomplete="off" data-i18n-placeholder="EUR, gold, BTC, Apple, çeyrek…" placeholder="EUR, gold, BTC, Apple, çeyrek…">
+    <select id="cat" class="form-control">
+      <option value="" data-i18n="All markets">All markets</option>
+      <option value="forex" data-i18n="Forex">Forex</option>
+      <option value="crypto" data-i18n="Crypto">Crypto</option>
+      <option value="stock" data-i18n="Stocks">Stocks</option>
+      <option value="commodity" data-i18n="Commodities">Commodities</option>
+      <option value="index" data-i18n="Indices">Indices</option>
+      <option value="kapalicarsi" data-i18n="Grand Bazaar (Kapalıçarşı)">Grand Bazaar (Kapalıçarşı)</option>
+    </select>
+    <ul id="results"></ul>
+    <div class="row">
+      <select id="field" class="form-control">
+        <option value="mid" data-i18n="Price (mid)">Price (mid)</option>
+        <option value="bid" data-i18n="Bid">Bid</option>
+        <option value="ask" data-i18n="Ask">Ask</option>
+        <option value="change" data-i18n="Daily change %">Daily change %</option>
+        <option value="high" data-i18n="Day high">Day high</option>
+        <option value="low" data-i18n="Day low">Day low</option>
+        <option value="time" data-i18n="Quote time">Quote time</option>
+      </select>
+      <button id="insertPrice" class="btn-text-default" disabled data-i18n="Insert">Insert</button>
+    </div>
+    <div id="m1" class="msg"></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="Convert">Convert</h2>
+    <div class="row">
+      <input id="amt" class="form-control" type="number" value="100" step="any">
+      <input id="from" class="form-control" type="text" value="USD">
+      <input id="to" class="form-control" type="text" value="EUR">
+    </div>
+    <div class="row">
+      <select id="mkt" class="form-control">
+        <option value="market" data-i18n="Market rates">Market rates</option>
+        <option value="kapalicarsi" data-i18n="Grand Bazaar rates">Grand Bazaar rates</option>
+      </select>
+      <button id="insertConv" class="btn-text-default" data-i18n="Insert">Insert</button>
+    </div>
+    <p class="hint" data-i18n="Currencies (USD, EUR, XAU, BTC…) or gold products: gram altın, çeyrek, yarım, tam, ata.">Currencies (USD, EUR, XAU, BTC…) or gold products: gram altın, çeyrek, yarım, tam, ata.</p>
+    <div id="m2" class="msg"></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="Refresh">Refresh</h2>
+    <div class="row">
+      <select id="live" class="form-control">
+        <option value="0" data-i18n="Manual only">Manual only</option>
+        <option value="1" data-i18n="Every minute while open">Every minute while open</option>
+        <option value="5" data-i18n="Every 5 minutes while open">Every 5 minutes while open</option>
+        <option value="15" data-i18n="Every 15 minutes while open">Every 15 minutes while open</option>
+      </select>
+      <button id="now" class="btn-text-default" data-i18n="Refresh now">Refresh now</button>
+    </div>
+    <div id="m3" class="msg"></div>
+  </section>
+
+  <footer>
+    <span data-i18n="Market data by">Market data by</span> <a href="https://biquote.io" target="_blank" rel="noopener">biquote</a>.
+    <span data-i18n="Prices are indicative.">Prices are indicative.</span>
+  </footer>
+
+  <script type="text/javascript" src="scripts/panel.js"></script>
+</body>
+</html>
