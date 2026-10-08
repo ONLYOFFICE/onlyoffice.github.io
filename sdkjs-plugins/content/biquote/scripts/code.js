@@ -85,12 +85,13 @@
   function toolbarItems() {
     return {
       guid: window.Asc.plugin.guid,
+      // Lives in the existing Plugins tab: one button does not warrant a tab
+      // of its own (review feedback on ONLYOFFICE/onlyoffice.github.io#700).
       tabs: [{
-        id: "biquote_tab",
-        text: "biquote",
+        id: "plugins",
         items: [{
           id: "biquote_open",
-          type: "button",
+          type: "big-button",
           text: tr("Market data"),
           hint: tr("Live prices and currency conversion"),
           icons: "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
@@ -158,6 +159,13 @@
   // Translations can arrive after init; relabel the button when they do.
   window.Asc.plugin.onTranslate = function () {
     if (toolbarAdded) window.Asc.plugin.executeMethod("UpdateToolbarMenuItem", [toolbarItems()]);
+  };
+
+  // The panel is a separate PluginWindow and does not get theme events on
+  // its own: forward them so an open panel follows a theme switch.
+  window.Asc.plugin.onThemeChanged = function (theme) {
+    if (window.Asc.plugin.onThemeChangedBase) window.Asc.plugin.onThemeChangedBase(theme);
+    if (panel) panel.command("onThemeChanged", theme);
   };
 
   // The panel's own close (X) arrives here with its window id. Only that

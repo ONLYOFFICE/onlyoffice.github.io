@@ -151,6 +151,10 @@
     window.Asc.plugin.attachEvent("onInserted", function (address) {
       say(window.__bqLastMsg || "m1", address ? tr("Inserted in") + " " + address + "." : tr("Inserted."));
     });
+    // Theme switches while the panel is open, forwarded by scripts/code.js.
+    window.Asc.plugin.attachEvent("onThemeChanged", function (theme) {
+      if (window.Asc.plugin.onThemeChangedBase) window.Asc.plugin.onThemeChangedBase(theme);
+    });
     window.Asc.plugin.attachEvent("onRefreshed", function (time) {
       say("m3", tr("Refreshed at") + " " + time + ".");
     });

@@ -34,7 +34,7 @@ Recognised names: gram altın, has altın, çeyrek, yarım, tam, ata, ata beşli
 
 ## Panel
 
-Open it from the **biquote** toolbar tab → **Market data**. You can:
+Open it from the **Plugins** tab → **Market data**. You can:
 
 - search symbols with live prices and insert a `BIQUOTE` formula into the selected cell;
 - build a `BIQUOTE_CONVERT` formula;
