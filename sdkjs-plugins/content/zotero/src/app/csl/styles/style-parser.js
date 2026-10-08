@@ -42,9 +42,6 @@ const CslStylesParser = {
      * @returns {StyleInfo} An object containing the parsed style information.
      */
     getStyleInfo: function (name, style) {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(style, "text/xml");
-
         /** @type {StyleInfo} */
         const styleInfo = {
             categories: {
@@ -58,43 +55,50 @@ const CslStylesParser = {
             updated: "",
         };
 
-        const title = xmlDoc.querySelector("info title");
-        if (title) styleInfo.title = title.textContent;
+        try {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(style, "text/xml");
 
-        const href = xmlDoc.querySelector('info link[rel="self"]');
-        if (href) {
-            let attribute = href.getAttribute("href");
-            if (attribute) styleInfo.href = attribute;
+            const title = xmlDoc.querySelector("info title");
+            if (title) styleInfo.title = title.textContent;
+
+            const href = xmlDoc.querySelector('info link[rel="self"]');
+            if (href) {
+                let attribute = href.getAttribute("href");
+                if (attribute) styleInfo.href = attribute;
+            }
+
+            const parent = xmlDoc.querySelector(
+                'info link[rel="independent-parent"]'
+            );
+            if (parent) {
+                let attribute = parent.getAttribute("href");
+                if (attribute) styleInfo.parent = attribute;
+                styleInfo.dependent = 1;
+            }
+
+            const updated = xmlDoc.querySelector("info updated");
+            if (updated) styleInfo.updated = updated.textContent;
+
+            const categoryFormat = xmlDoc.querySelector(
+                "info category[citation-format]"
+            );
+            if (categoryFormat) {
+                let attribute = categoryFormat.getAttribute("citation-format");
+                if (attribute) styleInfo.categories.format = attribute;
+            }
+
+            const categoryFields = xmlDoc.querySelectorAll("info category[field]");
+            if (categoryFields) {
+                categoryFields.forEach(function (category) {
+                    let attribute = category.getAttribute("field");
+                    if (attribute) styleInfo.categories.fields.push(attribute);
+                });
+            }
+        } catch (e) {
+            console.error('Invalid style format');
+            console.error(e);
         }
-
-        const parent = xmlDoc.querySelector(
-            'info link[rel="independent-parent"]'
-        );
-        if (parent) {
-            let attribute = parent.getAttribute("href");
-            if (attribute) styleInfo.parent = attribute;
-            styleInfo.dependent = 1;
-        }
-
-        const updated = xmlDoc.querySelector("info updated");
-        if (updated) styleInfo.updated = updated.textContent;
-
-        const categoryFormat = xmlDoc.querySelector(
-            "info category[citation-format]"
-        );
-        if (categoryFormat) {
-            let attribute = categoryFormat.getAttribute("citation-format");
-            if (attribute) styleInfo.categories.format = attribute;
-        }
-
-        const categoryFields = xmlDoc.querySelectorAll("info category[field]");
-        if (categoryFields) {
-            categoryFields.forEach(function (category) {
-                let attribute = category.getAttribute("field");
-                if (attribute) styleInfo.categories.fields.push(attribute);
-            });
-        }
-
         return styleInfo;
     },
     /**
@@ -102,20 +106,26 @@ const CslStylesParser = {
      * @returns {StyleFormat}
      */
     getCitationFormat: function (styleContent) {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(styleContent, "text/xml");
-        const format = xmlDoc.querySelector("info category[citation-format]");
-        if (!format) throw new Error("Citation format not found");
-        const type = format.getAttribute("citation-format");
-        if (!type) throw new Error("Citation format not found");
-        switch (type) {
-            case "note":
-            case "numeric":
-            case "author":
-            case "author-date":
-            case "label":
-                return type;
+        try {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(styleContent, "text/xml");
+            const format = xmlDoc.querySelector("info category[citation-format]");
+            if (!format) throw new Error("Citation format not found");
+            const type = format.getAttribute("citation-format");
+            if (!type) throw new Error("Citation format not found");
+            switch (type) {
+                case "note":
+                case "numeric":
+                case "author":
+                case "author-date":
+                case "label":
+                    return type;
+            }
+        } catch (e) {
+            console.error('Invalid citation format');
+            console.error(e);
         }
+        
 
         throw new Error("Invalid citation format");
     },

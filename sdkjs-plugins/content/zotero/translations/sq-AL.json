@@ -19,6 +19,8 @@
     "Display citations as:": "Shfaq citimet si:",
     "Footnotes": "Poznamet",
     "Endnotes": "Poznamet e fundit",
+    "Include URLs of paper articles": "Përfshini URL-të e artikujve të detyrimit",
+    "Use MEDLINE journal abbreviations": "Përdorni shkurtimet e gazetave MEDLINE",
     "Reconfigure": "Rikonfiguroni",
     "Learn more here.": "Mësoni më shumë këtu",
     "Save": "Ruani",
@@ -94,5 +96,22 @@
     "Section": "Seksion",
     "Timestamp": "Vulë kohore",
     "Verse": "Varg",
-    "Volume": "Vëllim"
+    "Volume": "Vëllim",
+    "Bibliography preview": "Pamja paraprake e bibliografisë",
+    "Locator": "Lokalizuesi",
+    "selected": "të zgjedhura",
+    "No items selected": "Asnjë element i zgjedhur",
+    "Failed to load language": "Ngarkimi i gjuhës dështoi",
+    "Invalid CSL style file": "Skedar i pavlefshëm i stilit CSL",
+    "More Styles...": "Më shumë stile...",
+    "Add custom style...": "Shto stil të personalizuar...",
+    "Select language": "Zgjidh gjuhën",
+    "Warning!": "Kujdes!",
+    "Error": "Gabim",
+    "Success": "Sukses",
+    "Warning": "Kujdes",
+    "Information": "Informacion",
+    "Operation completed successfully": "Veprimi përfundoi me sukses",
+    "Please be cautious": "Ju lutemi bëni kujdes"
+
 }
