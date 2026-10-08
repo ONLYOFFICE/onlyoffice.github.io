@@ -375,7 +375,23 @@
 						let parts = candidates[0].content.parts;
 						for (let i = 0, len = parts.length; i < len; i++) {
 							if (parts[i].inlineData) {
-								imageUrl = parts[i].inlineData.data;
+								let mime = parts[i].inlineData.mimeType || parts[i].inlineData.mime_type || "image/png";
+								let data = parts[i].inlineData.data;
+								if (data && !data.startsWith("data:")) {
+									imageUrl = "data:" + mime + ";base64," + data;
+								} else {
+									imageUrl = data;
+								}
+								break;
+							}
+							if (parts[i].inline_data) {
+								let mime = parts[i].inline_data.mime_type || "image/png";
+								let data = parts[i].inline_data.data;
+								if (data && !data.startsWith("data:")) {
+									imageUrl = "data:" + mime + ";base64," + data;
+								} else {
+									imageUrl = data;
+								}
 								break;
 							}
 						}
