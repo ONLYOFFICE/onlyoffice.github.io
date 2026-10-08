@@ -339,7 +339,7 @@ a.prototype.ZOTERO_API_VERSION = "3", a.prototype.USER_AGENT = "AscDesktopEditor
 		let r = e;
 		n = this._parseDesktopItemsResponse(r, t);
 	}
-	return n.then((e) => (e.items = e.items.map((e) => this._convertJsonToCsl(e)), e));
+	return n;
 }, a.prototype.getItems = function(e, t, n) {
 	var r = this;
 	n ||= r.DEFAULT_FORMAT;
@@ -384,17 +384,21 @@ a.prototype.ZOTERO_API_VERSION = "3", a.prototype.USER_AGENT = "AscDesktopEditor
 	});
 }, a.prototype._addJsonToClsJsonItemsResponse = function(e, t, n) {
 	n.format = "json";
-	let r = this._buildGetRequest(t, n), i = this._parseResponse(r, this._userId);
+	let r = this._buildGetRequest(t, n), i = this._parseResponse(r, this._userId).then((e) => (e.items = e.items.map((e) => this._convertJsonToCsl(e)), e));
 	return Promise.all([e, i]).then(([e, t]) => {
 		let n = t.items;
 		return e.items = e.items.map((e) => {
 			let t = e.id, r = t.indexOf("/");
 			r !== -1 && (t = t.substring(r + 1));
 			let i = n.find((e) => t === e.id);
-			return {
+			if (!i) return e;
+			let a = {
 				...e,
-				...i
-			};
+				id: i.id
+			}, o = (e.uris || []).concat(i.uris || []);
+			return o.length && (a.uris = o.filter(function(e, t) {
+				return o.indexOf(e) === t;
+			})), a;
 		}), e;
 	});
 }, a.prototype._convertJsonToCsl = function(e) {

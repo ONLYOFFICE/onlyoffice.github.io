@@ -268,10 +268,7 @@ ZoteroSdk.prototype._parseResponse = function (promise, id) {
             id
         );
     }
-    return result.then((res) => {
-        res.items = res.items.map((item) => this._convertJsonToCsl(item));
-        return res;
-    });
+    return result;
 };
 
 /**
@@ -408,7 +405,12 @@ ZoteroSdk.prototype.getUserGroups = function () {
 ZoteroSdk.prototype._addJsonToClsJsonItemsResponse = function (response, path, queryParams) {
     queryParams.format = "json";
     const requestJson = this._buildGetRequest(path, queryParams);
-    const responseJson = this._parseResponse(requestJson, this._userId);
+    const responseJson = this._parseResponse(requestJson, this._userId).then(
+        (res) => {
+            res.items = res.items.map((item) => this._convertJsonToCsl(item));
+            return res;
+        }
+    );
     return Promise.all([response, responseJson])
             .then(([csljsonResult, jsonResult]) => {
                 const jsonItems = jsonResult.items;
@@ -421,10 +423,23 @@ ZoteroSdk.prototype._addJsonToClsJsonItemsResponse = function (response, path, q
                     const jsonItem = jsonItems.find(
                         (item) => key === item.id
                     );
-                    return {
-                        ...cslItem,
-                        ...jsonItem,
-                    };
+                    
+                    if (!jsonItem) {
+                        return cslItem;
+                    }
+                    const merged = { ...cslItem, id: jsonItem.id };
+                    // Union, not replacement: the two answers describe the
+                    // same item through different links, and either side may
+                    // know a uri the other does not.
+                    const uris = (cslItem.uris || []).concat(
+                        jsonItem.uris || []
+                    );
+                    if (uris.length) {
+                        merged.uris = uris.filter(function (uri, i) {
+                            return uris.indexOf(uri) === i;
+                        });
+                    }
+                    return merged;
                 });
                 return csljsonResult;
             });
