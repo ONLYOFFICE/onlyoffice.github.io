@@ -255,6 +255,9 @@ const MarketplacePluginService = {
     closePluginCard: function() {
         this._sendMessage({type: 'hidePluginCard'});
     },
+    closeMarketplace: function() {
+        this._sendMessage({type: 'closeMarketplace'});
+    },
     /** @param {boolean} bShow */
     showBackButton: function(bShow) {
         this._sendMessage({ type: "showButton", show: bShow });
