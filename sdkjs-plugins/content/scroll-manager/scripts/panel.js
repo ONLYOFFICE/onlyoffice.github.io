@@ -8,6 +8,10 @@ const uiCtrl = new PanelUIController(window, plugStore, editorCtrl);
 
 window.Asc.plugin.init = function () {
     uiCtrl.initUI();
+    
+    window.Asc.plugin.attachEvent("onThemeChanged", function (theme) {
+        window.Asc.plugin.onThemeChanged(theme);
+    });
 };
 
 // 2. Global interception of theme changes from the ONLYOFFICE editor
@@ -30,6 +34,6 @@ window.Asc.plugin.onThemeChanged = function (theme) {
     }
 };
 
-window.Asc.plugin.onTranslate = () => {
+window.Asc.plugin.onTranslate = function(){
     uiCtrl.translate();
 };

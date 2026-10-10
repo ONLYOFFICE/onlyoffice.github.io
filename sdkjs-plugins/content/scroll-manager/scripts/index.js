@@ -115,3 +115,10 @@ window.Asc.plugin.button = function (id) {
         panelWindow = null;
     }
 };
+
+// 2. Global interception of theme changes from the ONLYOFFICE editor
+window.Asc.plugin.onThemeChanged = function (theme) {
+    if (panelWindow) {
+        panelWindow.command("onThemeChanged", theme);
+    }
+}
