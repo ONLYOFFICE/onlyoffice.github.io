@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "Documento abierto por primera vez, no se encontró la posición guardada",
+  "text_clearPositionBtn": "Borrar posición",
+  "text_savePositionBtn": "Guardar posición",
+  "text_pluginSettings": "AJUSTES DEL COMPLEMENTO",
+  "text_moveOnOpenCheckbox": "Ir a la posición guardada al abrir",
+  "text_saveOnCloseCheckbox": "Guardar posición al cerrar",
+  "text_clearAllBtn": "Borrar todo"
+}
