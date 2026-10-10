@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "Dokument otevřen poprvé, uložená pozice nenalezena",
+  "text_clearPositionBtn": "Smazat pozici",
+  "text_savePositionBtn": "Uložit pozici",
+  "text_pluginSettings": "NASTAVENÍ ZÁSUVNÉHO MODULU",
+  "text_moveOnOpenCheckbox": "Při otevření přejít na uloženou pozici",
+  "text_saveOnCloseCheckbox": "Uložit pozici při zavření",
+  "text_clearAllBtn": "Smazat vše"
+}
