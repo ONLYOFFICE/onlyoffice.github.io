@@ -10,6 +10,12 @@ No runtime plugin files, provider defaults, model assignments, installer, or
 user settings are changed by adding this directory. Maintainers can adopt the
 example, adapt it into a native integration, or prefer a maintained gateway.
 
+The follow-up deployment replaced this custom bridge with CLIProxyAPI 8.0.23.
+See [the maintained gateway migration](MAINTAINED-GATEWAY-MIGRATION.md) for the
+measured results, provider limitations, configuration template, and portable
+start/stop helpers. The custom bridge below remains an explicitly optional
+reference implementation; the migrated deployment no longer requires it.
+
 ## Why this exists
 
 The desktop provider interface accepts HTTP model-list/chat requests. The
