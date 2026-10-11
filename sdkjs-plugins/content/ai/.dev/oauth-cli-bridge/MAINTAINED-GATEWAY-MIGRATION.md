@@ -10,7 +10,7 @@ CLIProxyAPI 8.0.23 now serves the maintained OpenAI-compatible gateway at `http:
 
 ONLYOFFICE's home AI agent uses its built-in OpenAI Compatible provider, named `CLIProxyAPI (OAuth + local models)`. The old home-agent Codex/Claude and LM Studio providers pointing to port 18741 were removed. The existing direct Ollama provider remains available.
 
-The document AI plugin uses its built-in OpenAI provider with the gateway URL and local client key. Models configured are `codex-oauth-gpt-6.1-sol`, `claude-oauth-sonnet-5-5`, `gemini-3.8-flash-high`, and `onlyoffice-lmstudio-qwen`, plus the existing direct Ollama `deepseek-v4.1-flash:cloud`. The two custom Codex/Claude JavaScript provider imports and unused LM Studio relay override were removed. The four text-task defaults use local Qwen through the gateway. OCR, vision, and image generation are unassigned; the added gateway models are configured for text.
+The document AI plugin uses its built-in OpenAI provider with the gateway URL and local client key. Models configured are `codex-oauth-gpt-6.1-sol`, `claude-oauth-sonnet-5-5`, `gemini-3.8-flash-high`, `grok-4.7`, and `onlyoffice-lmstudio-qwen`, plus the existing direct Ollama `deepseek-v4.1-flash:cloud`. The two custom Codex/Claude JavaScript provider imports and unused LM Studio relay override were removed. The four text-task defaults use local Qwen through the gateway. OCR, vision, and image generation are unassigned; the added gateway models are configured for text.
 
 The old adapter source and helpers are retained as historical evidence and rollback material, but port 18741 is no longer required by the migrated settings. Do not run the old Start-ONLYOFFICE-Adapter helper for normal operation.
 
@@ -24,7 +24,7 @@ The old adapter source and helpers are retained as historical evidence and rollb
 | LM Studio | Gateway forwards to existing `http://127.0.0.1:1234/v1`. Alias `onlyoffice-lmstudio-qwen` returned `halo/qwen3.8-27b-q6-fast`. Document generation, Insert result, save, and reopen passed. |
 | Ollama paid account | Gateway forwards to the existing authenticated Ollama server at `http://127.0.0.1:11434/v1`. `ollama/deepseek-v4.1-flash:cloud` returned `deepseek-v4.1-flash` and `CONNECTOR_OK`. No Ollama token was copied into the gateway. |
 | Muse / Meta | OAuth completed and models are listed. Generation returned HTTP 402 `billing_not_configured`. Authentication success does not establish usable generation. Billing was not changed. |
-| Grok / xAI | Built-in `--xai-login` exists, but the earlier device flow did not produce an xAI credential. Website sign-in alone did not complete the proxy authorization. No working-generation claim. Grok Bot remains untouched. |
+| Grok / xAI | Device OAuth approval completed. `grok-4.7` returned actual model `grok-4.7-build` and `GROK_CONNECTOR_OK`. Document Chatbot returned `GROK_DOCUMENT_OK`; a streaming API request completed successfully. Added to the document picker and restored local Qwen as the task default. Grok Bot remains untouched. |
 | Bionic | Bionic uses an account login. No native Bionic OAuth provider/login command was found in this CLIProxyAPI release. It was not substituted with an API key or modified. |
 | Kimi.com, Kimi.ai, Devin | Built-in OAuth login commands exist. No accounts were configured or tested. |
 
