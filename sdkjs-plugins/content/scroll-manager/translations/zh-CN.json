@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "首次打开文档，未找到保存的位置",
+  "text_clearPositionBtn": "清除位置",
+  "text_savePositionBtn": "保存位置",
+  "text_pluginSettings": "插件设置",
+  "text_moveOnOpenCheckbox": "打开时跳转至保存的位置",
+  "text_saveOnCloseCheckbox": "关闭时保存位置",
+  "text_clearAllBtn": "清除全部"
+}

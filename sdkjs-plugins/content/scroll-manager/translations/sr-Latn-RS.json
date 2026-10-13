@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "Dokument je otvoren prvi put, sačuvana pozicija nije pronađena",
+  "text_clearPositionBtn": "Obriši poziciju",
+  "text_savePositionBtn": "Sačuvaj poziciju",
+  "text_pluginSettings": "PODEŠAVANJA PRIKLJUČKA",
+  "text_moveOnOpenCheckbox": "Idi na sačuvanu poziciju pri otvaranju",
+  "text_saveOnCloseCheckbox": "Sačuvaj poziciju pri zatvaranju",
+  "text_clearAllBtn": "Obriši sve"
+}
