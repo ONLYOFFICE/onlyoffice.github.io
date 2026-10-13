@@ -1,27 +1,30 @@
-[![License](https://img.shields.io/badge/License-GNU_AGPL_v3-green.svg)](https://www.gnu.org/licenses/agpl-3.0)
+# QuickTranslator - OnlyOffice Plugin
 
-## Overview
+**QuickTranslator** is a lightweight, universal translation extension for **OnlyOffice Workspace**, **OnlyOffice Desktop Editors**, and **OnlyOffice Docs Server**.
 
-Welcome to the onlyoffice.github.io repository! This repository contains the necessary files and resources to set up and manage plugins for ONLYOFFICE.
+Compatible with:
+- 📄 **Document Editor** (`word`)
+- 📊 **Spreadsheet Editor** (`cell`)
+- 📑 **Presentation Editor** (`slide`)
 
-## Repository Structure
+---
 
-* [**sdkjs-plugins**](sdkjs-plugins): This directory contains the stylesheets and CSS files used for plugin customization and styling. Also it contains the code and resourses of all plugins in store.
-* [**store**](store): This directory contains the code and resources for the Plugins Manager. It includes the necessary scripts and configurations to manage plugins within ONLYOFFICE.
+## ✨ Features
 
-## Contributing
+- ⚡ **Auto-Translation on Open/Selection**: Instantly detects and translates selected text as soon as the panel opens.
+- 💾 **Smart Target Language Memory**: Remembers your preferred target language across sessions using `localStorage`.
+- ⇄ **One-Click Language Swap**: Swaps source and target with smart fallback rules (AUTO -> IT & DA).
+- 📥 **One-Click Document Insertion**: Inserts translated text directly at current selection/cursor in Docs, Sheets, and Slides.
+- 🌍 **Comprehensive Language Support**: European, Nordic, and Asian languages sorted alphabetically.
+- 🛡️ **GPL v3 Open Source**: Free and open source license.
 
-If you would like to contribute to the ONLYOFFICE Plugin Marketplace, we welcome your contributions. To contribute, please follow these [guidelines](https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/store#how-to-build-and-add-your-own-plugin). We appreciate your contributions and will review them as soon as possible.
+---
 
-## License
+## 📦 Installation Guide
 
-onlyoffice.github.io is licensed under the GNU Affero General Public License v3.0. See [LICENSE.txt](LICENSE.txt) for more information.
-
-## User Feedback and Support
-
-If you have any problems with or questions about ONLYOFFICE Plugins and Plugin Marketplace, please visit our official forum to find answers to your questions: [forum.onlyoffice.com](https://forum.onlyoffice.com) or you can ask and answer ONLYOFFICE development questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/onlyoffice).
-If you encounter any issues or have any questions regarding the ONLYOFFICE Plugins and Plugin Marketplace, please open an issue in the repository. We'll be glad to assist you.
-
-## Acknowledgments
-
-We would like to thank all the contributors and developers who have worked on the ONLYOFFICE Plugin Marketplace.
+1. Download `QuickTranslator.plugin` or `QuickTranslator.zip`.
+2. Open OnlyOffice Desktop Editors.
+3. Go to the **Plugins** tab on the top ribbon.
+4. Click **Settings** > **Add Plugin**.
+5. Select the `QuickTranslator.plugin` file (or extract the zip into `sdkjs-plugins/quicktranslator`).
+6. The **QuickTranslator** button will appear on your Plugins tab!
