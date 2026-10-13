@@ -1,0 +1,71 @@
+{
+	"name": "Asyntai AI Assistant",
+	"nameLocale": {
+		"en": "Asyntai AI Assistant"
+	},
+	"offered": "Asyntai",
+	"guid": "asc.{D9CF45A4-5734-4BA5-8BDD-42411F47E5DC}",
+	"version": "1.0.0",
+	"minVersion": "8.0.0",
+
+	"variations": [
+		{
+			"description": "Ask your business knowledge base from the editor, insert the answer, and add documents to the knowledge base.",
+			"descriptionLocale": {
+				"en": "Ask your business knowledge base from the editor, insert the answer, and add documents to the knowledge base."
+			},
+			"url": "index.html",
+			"icons": "resources/%theme-type%(dark|light)/%scale%(default).%extension%(png)",
+			"icons2": [
+				{
+					"style": "light",
+					"100%": { "normal": "resources/light/icon.png" },
+					"125%": { "normal": "resources/light/icon@1.25x.png" },
+					"150%": { "normal": "resources/light/icon@1.5x.png" },
+					"175%": { "normal": "resources/light/icon@1.75x.png" },
+					"200%": { "normal": "resources/light/icon@2x.png" }
+				},
+				{
+					"style": "dark",
+					"100%": { "normal": "resources/dark/icon.png" },
+					"125%": { "normal": "resources/dark/icon@1.25x.png" },
+					"150%": { "normal": "resources/dark/icon@1.5x.png" },
+					"175%": { "normal": "resources/dark/icon@1.75x.png" },
+					"200%": { "normal": "resources/dark/icon@2x.png" }
+				}
+			],
+			"isViewer": true,
+			"EditorsSupport": [ "word", "slide", "cell", "pdf" ],
+
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+
+			"initDataType": "text",
+			"initData": "",
+			"isUpdateOleOnResize": false,
+			"initOnSelectionChanged": true,
+
+			"buttons": [],
+
+			"store": {
+				"background": {
+					"light": "#0B0D12",
+					"dark": "#0B0D12"
+				},
+				"screenshots": [
+					"resources/store/screenshots/screenshot1.png",
+					"resources/store/screenshots/screenshot2.png",
+					"resources/store/screenshots/screenshot3.png"
+				],
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
+				},
+				"categories": [ "specAbilities", "work" ]
+			}
+		}
+	],
+
+	"onlyofficeScheme": true
+}
