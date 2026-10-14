@@ -30,6 +30,9 @@
 				<button type="button" id="clear-highlights" data-i18n="Clear marks">Clear marks</button>
 			</div>
 			<div id="scan-result"></div>
+			<div class="actions">
+				<button type="button" id="export-report-scan" data-i18n="Export report">Export report</button>
+			</div>
 		</section>
 
 		<section class="section" data-section="writing" role="tabpanel" hidden>
@@ -41,6 +44,7 @@
 			<p class="field__hint recording__note" data-i18n="Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.">Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.</p>
 			<div class="actions">
 				<button type="button" id="open-replay" data-i18n="Watch replay">Watch replay</button>
+				<button type="button" id="export-report-writing" data-i18n="Export report">Export report</button>
 			</div>
 			<div id="writing-writers" class="field hidden">
 				<label class="field__label" data-i18n="Writer">Writer</label>
@@ -120,6 +124,7 @@
 	<script type="text/javascript" src="scripts/domain/session-text.js"></script>
 	<script type="text/javascript" src="scripts/domain/history-codec.js"></script>
 	<script type="text/javascript" src="scripts/domain/writers.js"></script>
+	<script type="text/javascript" src="scripts/domain/tracked-changes.js"></script>
 	<script type="text/javascript" src="scripts/editor/document-reader.js"></script>
 	<script type="text/javascript" src="scripts/editor/paragraph-texts.js"></script>
 	<script type="text/javascript" src="scripts/editor/annotation-renderer.js"></script>
@@ -128,6 +133,7 @@
 	<script type="text/javascript" src="scripts/editor/keystroke-source.js"></script>
 	<script type="text/javascript" src="scripts/editor/document-structure.js"></script>
 	<script type="text/javascript" src="scripts/editor/custom-xml-parts.js"></script>
+	<script type="text/javascript" src="scripts/editor/review-reader.js"></script>
 	<script type="text/javascript" src="scripts/storage/text-compression.js"></script>
 	<script type="text/javascript" src="scripts/storage/history-store.js"></script>
 	<script type="text/javascript" src="scripts/app/scan-service.js"></script>
@@ -136,12 +142,17 @@
 	<script type="text/javascript" src="scripts/app/writing-history-service.js"></script>
 	<script type="text/javascript" src="scripts/app/replay-protocol.js"></script>
 	<script type="text/javascript" src="scripts/app/replay-window.js"></script>
+	<script type="text/javascript" src="scripts/app/review-watcher.js"></script>
+	<script type="text/javascript" src="scripts/report/report-document.js"></script>
+	<script type="text/javascript" src="scripts/report/report-download.js"></script>
+	<script type="text/javascript" src="scripts/app/report-service.js"></script>
 
 	<script type="text/javascript" src="scripts/ui/page-translator.js"></script>
 	<script type="text/javascript" src="scripts/ui/theme-variables.js"></script>
 	<script type="text/javascript" src="scripts/ui/tab-view.js"></script>
 	<script type="text/javascript" src="scripts/ui/notice.js"></script>
 	<script type="text/javascript" src="scripts/ui/cards.js"></script>
+	<script type="text/javascript" src="scripts/ui/format.js"></script>
 	<script type="text/javascript" src="scripts/ui/settings-view.js"></script>
 	<script type="text/javascript" src="scripts/ui/scan-result-view.js"></script>
 	<script type="text/javascript" src="scripts/ui/scan-view.js"></script>
