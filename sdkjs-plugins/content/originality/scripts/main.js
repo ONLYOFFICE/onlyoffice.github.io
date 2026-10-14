@@ -42,12 +42,15 @@
 /// <reference path="./editor/keystroke-source.js" />
 /// <reference path="./editor/document-structure.js" />
 /// <reference path="./editor/custom-xml-parts.js" />
+/// <reference path="./editor/review-reader.js" />
 /// <reference path="./storage/history-store.js" />
 /// <reference path="./app/scan-service.js" />
 /// <reference path="./app/highlight-service.js" />
 /// <reference path="./app/recording-service.js" />
 /// <reference path="./app/writing-history-service.js" />
 /// <reference path="./app/replay-window.js" />
+/// <reference path="./app/review-watcher.js" />
+/// <reference path="./app/report-service.js" />
 /// <reference path="./ui/page-translator.js" />
 /// <reference path="./ui/theme-variables.js" />
 /// <reference path="./ui/tab-view.js" />
@@ -80,6 +83,8 @@
 	const recording = new RecordingService(reader, keystrokes, structure, paragraphTexts);
 	const history = new WritingHistoryService(new HistoryStore(new CustomXmlParts()), recording);
 	const replayWindow = new ReplayWindow();
+	const reviews = new ReviewWatcher(new ReviewReader());
+	const reports = new ReportService(history, reviews);
 
 	/** @type {ScanView | null} */
 	let scanView = null;
@@ -89,7 +94,14 @@
 	 * once the plugin's dictionary is in: `onTranslate` comes after `init`, even for English.
 	 */
 	function buildViews() {
-		scanView = new ScanView(scanService, highlights);
+		/** @type {WritingView | null} */
+		let writingView = null;
+
+		scanView = new ScanView(scanService, highlights, {
+			onScanned      : (scope, result, findings) => reports.rememberScan(scope, result, findings),
+			// the report covers the writer the Writing tab shows
+			onExportReport : () => reports.export(writingView ? writingView.writerId : null),
+		});
 		const view = scanView;
 		new SettingsView(settingsStore, {
 			checkBalance : (apiKey) => client.getBalance(apiKey),
@@ -97,17 +109,25 @@
 		});
 		view.onSettingsChanged(settingsStore.load());
 
-		const writingView = new WritingView({
-			onSelectText : (text) => selector.select(text),
-			onOpenReplay : (writerId) => replayWindow.show(history.sessions, writerId),
+		const writing = new WritingView({
+			onSelectText   : (text) => selector.select(text),
+			onOpenReplay   : (writerId) => replayWindow.show(history.sessions, writerId),
+			onExportReport : (writerId) => reports.export(writerId),
 		});
-		const showHistory = () => writingView.update({
+		writingView = writing;
+		const showHistory = () => writing.update({
 			sessions       : history.sessions,
 			recordingSince : recording.session ? recording.session.startedAt : null,
 			savedAt        : history.savedAt,
 			canSave        : history.canSave,
+			reviewRecords  : reviews.records,
 		});
-		history.onChange(showHistory);
+		// tracked changes come and go with the text, so the review is read again as the text changes
+		history.onChange(() => {
+			showHistory();
+			reviews.refreshSoon();
+		});
+		reviews.onChange(showHistory);
 		showHistory();
 	}
 
@@ -117,6 +137,7 @@
 		structure.attach();
 		paragraphTexts.attach();
 		history.start({ id: info.userId || "", name: info.userName || "" }, !info.isViewMode);
+		reviews.refresh();
 
 		new AnnotationClicks().attach((name, paragraphId, rangeIds) => {
 			const findingId = highlights.findingAt(name, paragraphId, rangeIds);

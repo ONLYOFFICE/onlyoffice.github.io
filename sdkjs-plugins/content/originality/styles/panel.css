@@ -435,6 +435,15 @@ a {
 	color: var(--text-secondary);
 }
 
+.paste-item__flag {
+	color: #8e5bd6;
+}
+
+.result-subtitle {
+	margin: 10px 0 4px;
+	font-weight: 700;
+}
+
 /* ---- settings ---- */
 .field {
 	margin-bottom: 14px;

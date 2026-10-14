@@ -48,10 +48,15 @@ class ScanView {
 	/**
 	 * @param {ScanService} service
 	 * @param {HighlightService} highlights
+	 * @param {{
+	 *   onScanned: (scope: ScanScope, result: ScanResult, findings: ScanFindings) => void,
+	 *   onExportReport: () => void,
+	 * }} callbacks
 	 */
-	constructor(service, highlights) {
+	constructor(service, highlights, callbacks) {
 		this._service = service;
 		this._highlights = highlights;
+		this._onScanned = callbacks.onScanned;
 		const tr = window.Asc.plugin.tr;
 
 		this._documentButton = new Button("scan-document", { variant: "primary", text: tr("Scan document") });
@@ -70,6 +75,9 @@ class ScanView {
 		this._highlightStatus = /** @type {HTMLElement} */ (document.getElementById("highlights-status"));
 		this._clearButton = new Button("clear-highlights", { variant: "secondary", text: tr("Clear marks") });
 		this._clearButton.subscribe(() => this._clearHighlights());
+
+		const exportButton = new Button("export-report-scan", { variant: "secondary", text: tr("Export report") });
+		exportButton.subscribe(() => callbacks.onExportReport());
 
 		this._isScanning = false;
 	}
@@ -113,6 +121,7 @@ class ScanView {
 			const result = await this._service.scan(scope);
 			const findings = ScanFindings.fromResult(result);
 			this._result.show(result, findings);
+			this._onScanned(scope, result, findings);
 			await this._showHighlights(findings);
 		} catch (e) {
 			this._showError(e);

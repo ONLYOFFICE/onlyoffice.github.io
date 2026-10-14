@@ -35,13 +35,16 @@
 /// <reference path="../domain/writing-recorder.js" />
 /// <reference path="../domain/typing-analysis.js" />
 /// <reference path="../domain/writers.js" />
+/// <reference path="../domain/tracked-changes.js" />
+/// <reference path="./format.js" />
 /// <reference path="./cards.js" />
 
 /**
  * The Writing tab: how the text recorded so far was written — the typing score with its reasons,
  * where the text came from, typing activity, and the pastes — for one writer at a time, chosen
- * when several recorded (see {@link Writers}). Redraws at most once a second, since the record
- * changes on every key.
+ * when several recorded (see {@link Writers}); and, for the whole document, the changes the editor
+ * tracks in review mode (see {@link TrackedChanges}). Redraws at most once a second, since the
+ * record changes on every key.
  */
 class WritingView {
 
@@ -49,14 +52,22 @@ class WritingView {
 	static _redrawMs = 1000;
 	/** how much of a pasted text the list shows */
 	static _previewLength = 140;
+	/** how many of the longest tracked insertions the tab lists */
+	static _trackedInsertions = 5;
 
 	/**
-	 * @param {{ onSelectText: (text: string) => void, onOpenReplay: (writerId: string | null) => void }} callbacks
+	 * @param {{
+	 *   onSelectText: (text: string) => void,
+	 *   onOpenReplay: (writerId: string | null) => void,
+	 *   onExportReport: (writerId: string | null) => void,
+	 * }} callbacks
 	 */
 	constructor(callbacks) {
 		this._onSelectText = callbacks.onSelectText;
 		const replayButton = new Button("open-replay", { variant: "primary", text: window.Asc.plugin.tr("Watch replay") });
 		replayButton.subscribe(() => callbacks.onOpenReplay(this._writerId));
+		const exportButton = new Button("export-report-writing", { variant: "secondary", text: window.Asc.plugin.tr("Export report") });
+		exportButton.subscribe(() => callbacks.onExportReport(this._writerId));
 
 		this._writersBox = /** @type {HTMLElement} */ (document.getElementById("writing-writers"));
 		this._writerSelect = /** @type {HTMLElement} */ (document.getElementById("writing-writer"));
@@ -81,7 +92,15 @@ class WritingView {
 	 * @property {number | null} recordingSince
 	 * @property {number | null} savedAt
 	 * @property {boolean} canSave
+	 * @property {ReviewRecord[]} reviewRecords - the document's tracked changes
 	 */
+
+	/**
+	 * @returns {string | null} the writer the tab shows
+	 */
+	get writerId() {
+		return this._writerId;
+	}
 
 	/**
 	 * @param {WritingViewState} state
@@ -113,6 +132,10 @@ class WritingView {
 		this._root.appendChild(this._activityCard(summary));
 		if (summary.pastes.length)
 			this._root.appendChild(this._pastesCard(summary));
+
+		const tracked = TrackedChanges.summarize(state.reviewRecords, state.sessions);
+		if (tracked.changes)
+			this._root.appendChild(this._trackedCard(tracked));
 	}
 
 	/**
@@ -158,11 +181,11 @@ class WritingView {
 		const tr = window.Asc.plugin.tr;
 		const parts = [];
 		if (state.recordingSince !== null)
-			parts.push(tr("Recording since") + " " + WritingView._time(state.recordingSince));
+			parts.push(tr("Recording since") + " " + Format.time(state.recordingSince));
 		if (!state.canSave)
 			parts.push(tr("view only: nothing is saved"));
 		else if (state.savedAt !== null)
-			parts.push(tr("saved to the document at") + " " + WritingView._time(state.savedAt));
+			parts.push(tr("saved to the document at") + " " + Format.time(state.savedAt));
 		return parts.join(" · ");
 	}
 
@@ -181,7 +204,7 @@ class WritingView {
 		} else {
 			const score = Cards.element("div", "typing-score");
 			score.appendChild(Cards.element("span", "typing-score__value typing-score__value--" + result.verdict, Math.round(result.score * 100) + "%"));
-			score.appendChild(Cards.element("span", "typing-score__verdict", tr(WritingView._verdictText(result.verdict))));
+			score.appendChild(Cards.element("span", "typing-score__verdict", tr(Format.verdict(result.verdict))));
 			card.appendChild(score);
 		}
 
@@ -244,8 +267,8 @@ class WritingView {
 		const tr = window.Asc.plugin.tr;
 		const card = Cards.card(tr("Activity"));
 		if (summary.firstSessionAt !== null)
-			card.appendChild(Cards.row(tr("Sessions recorded"), summary.sessions + " " + tr("since") + " " + WritingView._date(summary.firstSessionAt)));
-		card.appendChild(Cards.row(tr("Time spent writing"), WritingView._duration(summary.activeMs)));
+			card.appendChild(Cards.row(tr("Sessions recorded"), summary.sessions + " " + tr("since") + " " + Format.date(summary.firstSessionAt)));
+		card.appendChild(Cards.row(tr("Time spent writing"), Format.duration(summary.activeMs)));
 		card.appendChild(Cards.row(tr("Keystrokes"), summary.keystrokes.toLocaleString()));
 		card.appendChild(Cards.row(tr("Corrections"), summary.corrections.toLocaleString()));
 		card.appendChild(Cards.row(tr("Characters deleted"), summary.deletedChars.toLocaleString()));
@@ -265,7 +288,7 @@ class WritingView {
 		summary.pastes.forEach((paste) => {
 			const item = Cards.element("li", "finding-list__item paste-item");
 			const meta = Cards.element("span", "paste-item__meta",
-				WritingView._moment(paste.time) + " · " + paste.length.toLocaleString() + " " + tr("chars"));
+				Format.moment(paste.time) + " · " + paste.length.toLocaleString() + " " + tr("chars"));
 			const preview = paste.text.trim().slice(0, WritingView._previewLength);
 			item.appendChild(meta);
 			item.appendChild(Cards.element("span", "finding-list__text", preview + (paste.text.trim().length > preview.length ? "…" : "")));
@@ -278,58 +301,52 @@ class WritingView {
 	}
 
 	/**
-	 * @param {TypingVerdict} verdict
-	 * @returns {string} untranslated
+	 * @param {TrackedChangesSummary} tracked
+	 * @returns {HTMLElement}
 	 * @private
 	 */
-	static _verdictText(verdict) {
-		switch (verdict) {
-			case "natural": return "Natural typing";
-			case "robotic": return "Looks auto-typed";
-			case "mixed": return "Mixed signals";
-			default: return "";
+	_trackedCard(tracked) {
+		const tr = window.Asc.plugin.tr;
+		const chars = " " + tr("chars");
+		const card = Cards.card(tr("Tracked changes") + " (" + tracked.changes + ")");
+		card.appendChild(Cards.note(tr("Changes kept in review mode show who changed how much and when, not whether the text was typed or pasted.")));
+
+		tracked.authors.forEach((author) => {
+			const parts = ["+" + author.insertedChars.toLocaleString() + chars, "−" + author.deletedChars.toLocaleString() + chars];
+			if (author.formatting)
+				parts.push(tr("formatting") + ": " + author.formatting);
+			card.appendChild(Cards.row(author.name || tr("Unknown author"), parts.join(" · ")));
+		});
+
+		if (tracked.unrecordedChanges) {
+			const row = Cards.row(tr("Made while nothing was recording"),
+				tracked.unrecordedChanges + " · +" + tracked.unrecordedChars.toLocaleString() + chars);
+			row.classList.add("result-row--unrecorded");
+			card.appendChild(row);
 		}
-	}
 
-	/**
-	 * @param {number} time
-	 * @returns {string}
-	 * @private
-	 */
-	static _time(time) {
-		return new Date(time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-	}
-
-	/**
-	 * The time, with the date when it is not today.
-	 * @param {number} time
-	 * @returns {string}
-	 * @private
-	 */
-	static _moment(time) {
-		const isToday = new Date(time).toDateString() === new Date().toDateString();
-		return isToday ? WritingView._time(time) : WritingView._date(time) + ", " + WritingView._time(time);
-	}
-
-	/**
-	 * @param {number} time
-	 * @returns {string}
-	 * @private
-	 */
-	static _date(time) {
-		return new Date(time).toLocaleDateString([], { day: "numeric", month: "short", year: "numeric" });
-	}
-
-	/**
-	 * @param {number} ms
-	 * @returns {string}
-	 * @private
-	 */
-	static _duration(ms) {
-		const minutes = Math.floor(ms / 60000);
-		const seconds = Math.floor((ms % 60000) / 1000);
-		const hours = Math.floor(minutes / 60);
-		const pad = (/** @type {number} */ n) => (n < 10 ? "0" : "") + n;
-		return hours ? hours + ":" + pad(minutes % 60) + ":" + pad(seconds) : minutes + ":" + pad(seconds);
+		const longest = tracked.insertions.slice(0, WritingView._trackedInsertions);
+		if (longest.length) {
+			card.appendChild(Cards.element("div", "result-subtitle", tr("Longest insertions")));
+			const list = Cards.element("ul", "finding-list");
+			longest.forEach((insertion) => {
+				const item = Cards.element("li", "finding-list__item paste-item");
+				const meta = Cards.element("span", "paste-item__meta", [
+					insertion.time ? Format.moment(insertion.time) : "",
+					insertion.text.length.toLocaleString() + chars,
+					insertion.author,
+				].filter(Boolean).join(" · "));
+				if (insertion.unrecorded)
+					meta.appendChild(Cards.element("span", "paste-item__flag", " · " + tr("while nothing was recording")));
+				item.appendChild(meta);
+				const text = insertion.text.trim();
+				const preview = text.slice(0, WritingView._previewLength);
+				item.appendChild(Cards.element("span", "finding-list__text", preview + (text.length > preview.length ? "…" : "")));
+				Cards.clickable(item, () => this._onSelectText(insertion.text));
+				list.appendChild(item);
+			});
+			card.appendChild(list);
+		}
+		return card;
 	}
 }

@@ -35,6 +35,7 @@
 /// <reference path="../domain/scan-result.js" />
 /// <reference path="../domain/scan-findings.js" />
 /// <reference path="./cards.js" />
+/// <reference path="./format.js" />
 
 /**
  * Draws a {@link ScanResult} as a column of cards: AI detection, plagiarism, readability, fact
@@ -193,7 +194,7 @@ class ScanResultView {
 
 		if (readability.fleschReadingEase !== null) {
 			card.appendChild(Cards.row(tr("Flesch reading ease"),
-				readability.fleschReadingEase + " — " + tr(ScanResultView._easeLevel(readability.fleschReadingEase))));
+				readability.fleschReadingEase + " — " + tr(Format.readingEase(readability.fleschReadingEase))));
 		}
 		if (readability.fleschGradeLevel !== null)
 			card.appendChild(Cards.row(tr("Grade level"), String(readability.fleschGradeLevel)));
@@ -251,22 +252,6 @@ class ScanResultView {
 			footer.appendChild(link);
 		}
 		return footer;
-	}
-
-	/**
-	 * The usual bands of the Flesch reading-ease score.
-	 * @param {number} score
-	 * @returns {string} untranslated
-	 * @private
-	 */
-	static _easeLevel(score) {
-		if (score >= 90) return "very easy";
-		if (score >= 80) return "easy";
-		if (score >= 70) return "fairly easy";
-		if (score >= 60) return "standard";
-		if (score >= 50) return "fairly difficult";
-		if (score >= 30) return "difficult";
-		return "very difficult";
 	}
 
 	/**
