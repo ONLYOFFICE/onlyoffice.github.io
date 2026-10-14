@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@onlyoffice/doceditor-plugin-types": "github:ONLYOFFICE/doceditor-plugin-types"
+  }
+}

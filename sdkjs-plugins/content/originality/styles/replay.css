@@ -1,0 +1,187 @@
+/* The Writer Replay window. Colours of the marks match the "Where the text came from" bar of
+   the panel (panel.css). Theme variables come from theme-variables.js. */
+:root {
+	--background-normal: #ffffff;
+	--background-toolbar: #f7f7f7;
+	--text-normal: #383838;
+	--text-secondary: rgba(0, 0, 0, 0.6);
+	--border-divider: #EAEAEA;
+	--border-regular-control: #E1E1E1;
+	--border-control-focus: #306AD9;
+	--canvas-background: #eeeeee;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+body.replay {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: var(--background-toolbar);
+	color: var(--text-normal);
+	font-size: 11px;
+}
+
+body.theme-white,
+body.theme-night {
+	font-size: 12px;
+}
+
+.hidden {
+	display: none !important;
+}
+
+/* ---- top bar ---- */
+.replay__bar {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 8px 12px;
+	border-bottom: 1px solid var(--border-divider);
+}
+
+.replay__writer {
+	flex: 0 0 200px;
+}
+
+.replay__stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	color: var(--text-secondary);
+}
+
+.replay__stats b {
+	color: var(--text-normal);
+}
+
+/* ---- the page ---- */
+.replay__page {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	padding: 16px;
+	background: var(--canvas-background);
+}
+
+.replay__document {
+	max-width: 640px;
+	min-height: 100%;
+	box-sizing: border-box;
+	margin: 0 auto;
+	padding: 32px 40px;
+	background: var(--background-normal);
+	box-shadow: 0 0 0 1px var(--border-divider);
+	font-family: "Times New Roman", Georgia, serif;
+	font-size: 14px;
+	line-height: 1.6;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.replay__empty {
+	margin: 32px auto;
+	text-align: center;
+	color: var(--text-secondary);
+}
+
+.replay__caret {
+	display: inline-block;
+	width: 0;
+	height: 1.1em;
+	margin-right: -1px;
+	border-left: 2px solid var(--border-control-focus);
+	vertical-align: text-bottom;
+	animation: replay-blink 1s step-end infinite;
+}
+
+@keyframes replay-blink {
+	50% { border-left-color: transparent; }
+}
+
+.replay__mark--pasted { background: rgba(217, 83, 79, 0.3); }
+.replay__mark--other { background: rgba(217, 139, 31, 0.3); }
+.replay__mark--moved { background: rgba(91, 141, 239, 0.3); }
+.replay__mark--restored { background: rgba(154, 154, 154, 0.3); }
+.replay__mark--jump { background: rgba(142, 91, 214, 0.3); }
+
+/* ---- controls ---- */
+.replay__controls {
+	padding: 8px 12px 10px;
+	border-top: 1px solid var(--border-divider);
+}
+
+.replay__timeline {
+	position: relative;
+	margin-bottom: 8px;
+}
+
+.replay__timeline input[type="range"] {
+	width: 100%;
+	margin: 0;
+	accent-color: var(--border-control-focus);
+}
+
+.replay__markers {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: -4px;
+	height: 4px;
+	pointer-events: none;
+}
+
+.replay__marker {
+	position: absolute;
+	width: 2px;
+	height: 6px;
+	margin-left: -1px;
+}
+
+.replay__marker--pasted { background: #d9534f; }
+.replay__marker--jump { background: #8e5bd6; }
+
+.replay__buttons {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.replay__time {
+	color: var(--text-secondary);
+}
+
+.replay__spacer {
+	flex: 1 1 auto;
+}
+
+.replay__speed {
+	flex: 0 0 64px;
+}
+
+.replay__legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 8px;
+	color: var(--text-secondary);
+}
+
+.replay__legend-item::before {
+	content: "";
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	margin-right: 4px;
+	border-radius: 2px;
+	vertical-align: -1px;
+}
+
+.replay__legend-item--pasted::before { background: rgba(217, 83, 79, 0.5); }
+.replay__legend-item--other::before { background: rgba(217, 139, 31, 0.5); }
+.replay__legend-item--moved::before { background: rgba(91, 141, 239, 0.5); }
+.replay__legend-item--jump::before { background: rgba(142, 91, 214, 0.5); }

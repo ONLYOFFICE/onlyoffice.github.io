@@ -1,0 +1,44 @@
+{
+	"$schema": "https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/refs/heads/master/schemas/config.schema.json",
+	"name" : "Originality.ai",
+	"nameLocale": {
+		"ru": "Originality.ai"
+	},
+	"guid" : "asc.{CF9942BA-02C3-4AB7-B88E-77C26000E93A}",
+	"version" : "1.0.0",
+	"minVersion" : "9.2.0",
+	"offered" : "Ascensio System SIA",
+
+	"variations" : [
+		{
+			"description" : "Check documents for AI-generated text and plagiarism with Originality.ai, watch a replay of how the document was written and detect pasted or auto-typed text.",
+			"descriptionLocale": {
+				"ru": "Проверка документа на сгенерированный ИИ текст и плагиат через Originality.ai, воспроизведение процесса написания и выявление вставленного или автоматически набранного текста."
+			},
+			"url" : "index.html",
+
+			"icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
+			"isViewer"            : true,
+			"EditorsSupport"      : ["word"],
+			"isVisual"            : true,
+			"isModal"             : false,
+			"isInsideMode"        : true,
+			"isUpdateOleOnResize" : false,
+			"initDataType"        : "none",
+			"initData"            : "",
+			"buttons"             : [],
+
+			"store" : {
+				"background" : {
+					"light" : "#8760FB",
+					"dark"  : "#8760FB"
+				},
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories" : ["specAbilities", "work"]
+			}
+		}
+	]
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Originality.ai</title>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<link rel="stylesheet" href="styles/components.css">
+	<link rel="stylesheet" href="styles/panel.css">
+</head>
+<body class="panel">
+	<nav class="tabs" role="tablist">
+		<button type="button" class="tabs__tab" role="tab" data-tab="scan" data-i18n="Scan">Scan</button>
+		<button type="button" class="tabs__tab" role="tab" data-tab="writing" data-i18n="Writing">Writing</button>
+		<button type="button" class="tabs__tab" role="tab" data-tab="settings" data-i18n="Settings">Settings</button>
+	</nav>
+
+	<main class="sections">
+		<section class="section" data-section="scan" role="tabpanel">
+			<p class="hint" data-i18n="Check the document for AI-generated text and plagiarism.">Check the document for AI-generated text and plagiarism.</p>
+			<div class="actions">
+				<button type="button" id="scan-document" data-i18n="Scan document">Scan document</button>
+				<button type="button" id="scan-selection" data-i18n="Scan selection">Scan selection</button>
+			</div>
+			<div id="scan-message"></div>
+			<div id="scan-loader" class="hidden"></div>
+			<div id="scan-highlights" class="highlights hidden">
+				<span id="highlights-status" class="highlights__status"></span>
+				<button type="button" id="clear-highlights" data-i18n="Clear marks">Clear marks</button>
+			</div>
+			<div id="scan-result"></div>
+		</section>
+
+		<section class="section" data-section="writing" role="tabpanel" hidden>
+			<p class="hint" data-i18n="How the document was written: typed, pasted and auto-typed text.">How the document was written: typed, pasted and auto-typed text.</p>
+			<div class="recording">
+				<span class="recording__dot"></span>
+				<span id="recording-status" class="recording__text"></span>
+			</div>
+			<p class="field__hint recording__note" data-i18n="Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.">Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.</p>
+			<div class="actions">
+				<button type="button" id="open-replay" data-i18n="Watch replay">Watch replay</button>
+			</div>
+			<div id="writing-writers" class="field hidden">
+				<label class="field__label" data-i18n="Writer">Writer</label>
+				<div id="writing-writer"></div>
+				<p id="writing-others" class="field__hint"></p>
+			</div>
+			<div id="writing-result"></div>
+		</section>
+
+		<section class="section" data-section="settings" role="tabpanel" hidden>
+			<div id="settings-notice"></div>
+
+			<div class="field">
+				<label class="field__label" for="api-key" data-i18n="API key">API key</label>
+				<input type="password" id="api-key" autocomplete="off" spellcheck="false">
+				<p class="field__hint">
+					<a href="https://app.originality.ai/home/api-token-dashboard" target="_blank" rel="noopener noreferrer" data-i18n="Get your API key">Get your API key</a>
+				</p>
+			</div>
+
+			<div class="field field--row">
+				<button type="button" id="check-balance" data-i18n="Check balance">Check balance</button>
+				<span id="balance" class="field__value"></span>
+			</div>
+
+			<div class="field">
+				<label class="field__label" data-i18n="AI detection model">AI detection model</label>
+				<div id="ai-model"></div>
+			</div>
+
+			<div class="field">
+				<label class="field__label" data-i18n="AI allowance">AI allowance</label>
+				<div id="ai-allowance"></div>
+				<p class="field__hint" data-i18n="How much AI-assisted writing is acceptable before text counts as AI-generated.">How much AI-assisted writing is acceptable before text counts as AI-generated.</p>
+			</div>
+
+			<div class="field">
+				<span class="field__label" data-i18n="Checks">Checks</span>
+				<div class="field__options">
+					<input type="checkbox" id="check-ai">
+					<input type="checkbox" id="check-plagiarism">
+					<input type="checkbox" id="check-readability">
+					<input type="checkbox" id="check-facts">
+				</div>
+			</div>
+
+			<div class="field">
+				<div class="field__options">
+					<input type="checkbox" id="store-scan">
+				</div>
+				<p class="field__hint" data-i18n="Stored scans can be opened on Originality.ai and shared with a link.">Stored scans can be opened on Originality.ai and shared with a link.</p>
+			</div>
+
+			<div class="field">
+				<label class="field__label" for="excluded-urls" data-i18n="Sources to ignore in the plagiarism check">Sources to ignore in the plagiarism check</label>
+				<textarea id="excluded-urls" class="textarea" rows="3" spellcheck="false" placeholder="https://example.com"></textarea>
+				<p class="field__hint" data-i18n="One address per line.">One address per line.</p>
+			</div>
+		</section>
+	</main>
+
+	<script type="text/javascript" src="scripts/ui/components/button.js"></script>
+	<script type="text/javascript" src="scripts/ui/components/input.js"></script>
+	<script type="text/javascript" src="scripts/ui/components/checkbox.js"></script>
+	<script type="text/javascript" src="scripts/ui/components/message.js"></script>
+	<script type="text/javascript" src="scripts/ui/components/loader.js"></script>
+	<script type="text/javascript" src="scripts/ui/components/selectBox.js"></script>
+
+	<script type="text/javascript" src="scripts/settings/settings-store.js"></script>
+	<script type="text/javascript" src="scripts/service/originality-client.js"></script>
+	<script type="text/javascript" src="scripts/domain/scan-result.js"></script>
+	<script type="text/javascript" src="scripts/domain/scan-findings.js"></script>
+	<script type="text/javascript" src="scripts/domain/text-locator.js"></script>
+	<script type="text/javascript" src="scripts/domain/text-diff.js"></script>
+	<script type="text/javascript" src="scripts/domain/writing-recorder.js"></script>
+	<script type="text/javascript" src="scripts/domain/typing-analysis.js"></script>
+	<script type="text/javascript" src="scripts/domain/session-text.js"></script>
+	<script type="text/javascript" src="scripts/domain/history-codec.js"></script>
+	<script type="text/javascript" src="scripts/domain/writers.js"></script>
+	<script type="text/javascript" src="scripts/editor/document-reader.js"></script>
+	<script type="text/javascript" src="scripts/editor/paragraph-texts.js"></script>
+	<script type="text/javascript" src="scripts/editor/annotation-renderer.js"></script>
+	<script type="text/javascript" src="scripts/editor/annotation-clicks.js"></script>
+	<script type="text/javascript" src="scripts/editor/text-selector.js"></script>
+	<script type="text/javascript" src="scripts/editor/keystroke-source.js"></script>
+	<script type="text/javascript" src="scripts/editor/document-structure.js"></script>
+	<script type="text/javascript" src="scripts/editor/custom-xml-parts.js"></script>
+	<script type="text/javascript" src="scripts/storage/text-compression.js"></script>
+	<script type="text/javascript" src="scripts/storage/history-store.js"></script>
+	<script type="text/javascript" src="scripts/app/scan-service.js"></script>
+	<script type="text/javascript" src="scripts/app/highlight-service.js"></script>
+	<script type="text/javascript" src="scripts/app/recording-service.js"></script>
+	<script type="text/javascript" src="scripts/app/writing-history-service.js"></script>
+	<script type="text/javascript" src="scripts/app/replay-protocol.js"></script>
+	<script type="text/javascript" src="scripts/app/replay-window.js"></script>
+
+	<script type="text/javascript" src="scripts/ui/page-translator.js"></script>
+	<script type="text/javascript" src="scripts/ui/theme-variables.js"></script>
+	<script type="text/javascript" src="scripts/ui/tab-view.js"></script>
+	<script type="text/javascript" src="scripts/ui/notice.js"></script>
+	<script type="text/javascript" src="scripts/ui/cards.js"></script>
+	<script type="text/javascript" src="scripts/ui/settings-view.js"></script>
+	<script type="text/javascript" src="scripts/ui/scan-result-view.js"></script>
+	<script type="text/javascript" src="scripts/ui/scan-view.js"></script>
+	<script type="text/javascript" src="scripts/ui/writing-view.js"></script>
+	<script type="text/javascript" src="scripts/main.js"></script>
+</body>
+</html>

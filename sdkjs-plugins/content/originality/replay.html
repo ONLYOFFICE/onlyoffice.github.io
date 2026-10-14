@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Writer Replay</title>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<link rel="stylesheet" href="styles/components.css">
+	<link rel="stylesheet" href="styles/replay.css">
+</head>
+<body class="replay">
+	<header class="replay__bar">
+		<div id="replay-writer" class="replay__writer"></div>
+		<div class="replay__stats">
+			<span><span data-i18n="Characters">Characters</span>: <b id="replay-chars">0</b></span>
+			<span><span data-i18n="Words">Words</span>: <b id="replay-words">0</b></span>
+			<span><span data-i18n="Pastes">Pastes</span>: <b id="replay-pastes">0</b></span>
+			<span><span data-i18n="Session">Session</span>: <b id="replay-session">0</b></span>
+		</div>
+	</header>
+
+	<main class="replay__page">
+		<div id="replay-document" class="replay__document"></div>
+		<p id="replay-empty" class="replay__empty hidden" data-i18n="Nothing has been recorded in this document yet.">Nothing has been recorded in this document yet.</p>
+	</main>
+
+	<footer class="replay__controls">
+		<div class="replay__timeline">
+			<input type="range" id="replay-position" min="0" max="1000" value="0">
+			<div id="replay-markers" class="replay__markers"></div>
+		</div>
+		<div class="replay__buttons">
+			<button type="button" id="replay-play" data-i18n="Play">Play</button>
+			<button type="button" id="replay-prev-paste" data-i18n="Previous paste">Previous paste</button>
+			<button type="button" id="replay-next-paste" data-i18n="Next paste">Next paste</button>
+			<span id="replay-time" class="replay__time"></span>
+			<span class="replay__spacer"></span>
+			<input type="checkbox" id="replay-skip-pauses">
+			<div id="replay-speed" class="replay__speed"></div>
+		</div>
+		<div class="replay__legend">
+			<span class="replay__legend-item replay__legend-item--pasted" data-i18n="Pasted">Pasted</span>
+			<span class="replay__legend-item replay__legend-item--other" data-i18n="Without the writer's typing">Without the writer's typing</span>
+			<span class="replay__legend-item replay__legend-item--moved" data-i18n="Moved within the document">Moved within the document</span>
+			<span class="replay__legend-item replay__legend-item--jump" data-i18n="Changed while nothing was recording">Changed while nothing was recording</span>
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="scripts/ui/components/button.js"></script>
+	<script type="text/javascript" src="scripts/ui/components/checkbox.js"></script>
+	<script type="text/javascript" src="scripts/ui/components/selectBox.js"></script>
+
+	<script type="text/javascript" src="scripts/app/replay-protocol.js"></script>
+	<script type="text/javascript" src="scripts/domain/text-diff.js"></script>
+	<script type="text/javascript" src="scripts/domain/writing-recorder.js"></script>
+	<script type="text/javascript" src="scripts/domain/session-text.js"></script>
+	<script type="text/javascript" src="scripts/domain/writers.js"></script>
+	<script type="text/javascript" src="scripts/domain/replay-timeline.js"></script>
+
+	<script type="text/javascript" src="scripts/ui/page-translator.js"></script>
+	<script type="text/javascript" src="scripts/ui/theme-variables.js"></script>
+	<script type="text/javascript" src="scripts/ui/replay-document-view.js"></script>
+	<script type="text/javascript" src="scripts/ui/replay-player.js"></script>
+	<script type="text/javascript" src="scripts/replay-main.js"></script>
+</body>
+</html>

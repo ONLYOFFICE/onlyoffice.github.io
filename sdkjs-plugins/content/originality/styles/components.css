@@ -1,0 +1,559 @@
+/* Styles of the components in scripts/ui/components.
+   Button, input, checkbox, message and loader come from the zotero plugin (src/components.css with
+   the colours its src/app/theme.js injects); selectbox comes from the AI plugin
+   (resources/styles/customAssistant.css). Flattened from zotero's nested CSS, and every colour
+   reads a theme variable (see theme-variables.js) instead of being injected per theme. */
+
+/* ---- button ---- */
+.custom-button-container {
+	display: inline-block;
+	position: relative;
+}
+.custom-button {
+	position: relative;
+	display: inline-flex;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 1px;
+	font-weight: bold;
+	text-decoration: none;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	outline: none;
+	user-select: none;
+	white-space: nowrap;
+	vertical-align: middle;
+	box-sizing: border-box;
+	font-family: inherit;
+	font-size: inherit;
+}
+.custom-button:focus {
+	outline: none;
+}
+.custom-button > svg,
+.custom-button > img {
+	pointer-events: none;
+}
+.custom-button-small {
+	height: 24px;
+	padding: 0;
+}
+.custom-button-medium {
+	padding: 3px 16px;
+	line-height: 17px;
+}
+.custom-button-primary {
+	background-color: var(--background-primary-dialog-button);
+	border-color: var(--background-primary-dialog-button);
+	color: var(--text-inverse);
+}
+.custom-button-primary:hover:not(.custom-button-disabled) {
+	background-color: var(--highlight-primary-dialog-button-hover);
+	border-color: var(--highlight-primary-dialog-button-hover);
+}
+.custom-button-primary:focus-visible {
+	box-shadow: 0 0 0 1px inset var(--background-normal);
+}
+.custom-button-secondary,
+.custom-button-secondary-icon {
+	background-color: var(--background-normal);
+	border-color: var(--border-regular-control);
+	color: var(--text-normal);
+}
+.custom-button-secondary-icon {
+	width: 24px;
+}
+.custom-button-icon-only {
+	width: 24px;
+	border-color: transparent;
+	background: transparent;
+	color: var(--text-normal);
+}
+.custom-button-secondary:hover:not(.custom-button-disabled),
+.custom-button-secondary-icon:hover:not(.custom-button-disabled),
+.custom-button-icon-only:hover:not(.custom-button-disabled) {
+	background-color: var(--highlight-button-hover);
+	border-color: var(--border-regular-control);
+}
+.custom-button-secondary:active:not(.custom-button-disabled),
+.custom-button-secondary-icon:active:not(.custom-button-disabled),
+.custom-button-icon-only:active:not(.custom-button-disabled) {
+	background-color: var(--highlight-button-pressed);
+	border-color: var(--border-regular-control);
+}
+.custom-button-secondary:focus-visible,
+.custom-button-secondary-icon:focus-visible,
+.custom-button-icon-only:focus-visible {
+	border-color: var(--border-control-focus);
+}
+.custom-button-secondary:disabled,
+.custom-button-secondary.custom-button-disabled,
+.custom-button-secondary-icon:disabled,
+.custom-button-secondary-icon.custom-button-disabled {
+	background-color: var(--background-toolbar-additional);
+	border-color: var(--background-toolbar-additional);
+	color: var(--text-tertiary);
+}
+.custom-button-disabled,
+.custom-button:disabled {
+	pointer-events: none;
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+.custom-button-loading {
+	cursor: wait;
+}
+.custom-button-spinner {
+	display: none;
+	width: 12px;
+	height: 12px;
+	border: 2px solid transparent;
+	border-top: 2px solid currentColor;
+	border-radius: 50%;
+	animation: oai-spin 1s linear infinite;
+}
+.custom-button-loading .custom-button-spinner {
+	display: inline-block;
+}
+.custom-button-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.custom-button-icon-left {
+	order: -1;
+}
+.custom-button-icon-right {
+	order: 1;
+}
+
+/* ---- input field ---- */
+.input-field-container {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+}
+.input-field {
+	position: relative;
+}
+.input-field-main {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+.input-field-element {
+	width: 100%;
+	height: 24px;
+	padding: 0 8px 0 7px;
+	line-height: 22px;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 1px;
+	transition: all 0.3s ease;
+	box-sizing: border-box;
+	font-family: inherit;
+	font-size: inherit;
+	background-color: var(--background-normal);
+	border-color: var(--border-regular-control);
+	color: var(--text-normal);
+}
+.input-field-element:focus,
+.input-field-focused .input-field-element {
+	outline: none;
+	border-color: var(--border-control-focus);
+}
+.input-field-element::placeholder {
+	color: var(--text-tertiary);
+}
+.input-field-element[type="search"]::-webkit-search-cancel-button {
+	-webkit-appearance: none;
+}
+.input-field-clearable {
+	padding-right: 22px;
+}
+.input-field-disabled .input-field-element {
+	pointer-events: none;
+	opacity: 0.65;
+}
+.input-field-clear {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 12px 6px;
+	background: none;
+	border: none;
+	font-size: 22px;
+	line-height: 0;
+	transition: all 0.2s ease;
+	outline: none;
+	color: var(--text-tertiary);
+}
+.input-field-clear:hover {
+	color: var(--text-secondary);
+}
+.input-field-validation {
+	margin-top: 4px;
+	color: var(--text-error, #f56c6c);
+	text-align: left;
+}
+.input-field-invalid .input-field-element {
+	border-color: var(--border-error, #f56c6c);
+}
+
+/* ---- checkbox ---- */
+.checkbox-container {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+	outline: none;
+	user-select: none;
+	position: relative;
+	transition: background-color 0.2s;
+}
+.checkbox-container input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+	margin: 0;
+}
+.checkbox--disabled {
+	opacity: 0.5;
+}
+.checkbox-visual {
+	width: 14px;
+	height: 14px;
+	box-sizing: border-box;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 2px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s;
+	position: relative;
+	flex-shrink: 0;
+	background-color: var(--background-normal);
+	border-color: var(--border-regular-control);
+}
+.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual {
+	border-color: var(--border-control-focus);
+}
+input:focus-visible + .checkbox-visual {
+	outline: 1px solid var(--border-control-focus);
+}
+.checkbox-checkmark {
+	width: 10px;
+	height: 8px;
+	opacity: 0;
+	transform: scale(0);
+	transition: all 0.2s;
+	color: var(--text-normal);
+}
+.checkbox--checked .checkbox-checkmark {
+	opacity: 1;
+	transform: scale(1);
+}
+.checkbox-indeterminate {
+	width: 10px;
+	height: 2px;
+	border-radius: 1px;
+	opacity: 0;
+	transform: scale(0);
+	transition: all 0.2s;
+	position: absolute;
+	background-color: var(--background-primary-dialog-button);
+}
+.checkbox--indeterminate .checkbox-indeterminate {
+	opacity: 1;
+	transform: scale(1);
+}
+.checkbox-label {
+	margin-top: 3px;
+}
+
+/* ---- message ---- */
+.message-container {
+	box-sizing: border-box;
+	position: relative;
+}
+.message {
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 1px;
+	padding: 9px 6px 6px 6px;
+	margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	opacity: 0;
+	transform: translateY(-20px);
+	transition: opacity 0.3s, transform 0.3s;
+	background-color: var(--background-normal);
+	border-color: var(--border-regular-control);
+}
+.message-error:before {
+	content: "";
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	left: 6px;
+	top: 9px;
+	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%23F62211"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
+}
+.message-warning {
+	background-color: #fff3cd;
+	border-color: #ffeaa7;
+	color: #383838;
+}
+.message-info {
+	background-color: #d1ecf1;
+	border-color: #bee5eb;
+	color: #383838;
+}
+.message-success {
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+	color: #383838;
+}
+.message-content {
+	display: flex;
+	gap: 8px;
+	flex-direction: column;
+	flex-grow: 1;
+}
+.message-title {
+	flex-grow: 1;
+	text-indent: 20px;
+	font-weight: bold;
+}
+.message-text {
+	flex-grow: 1;
+	line-height: 1.4;
+}
+.message-close {
+	background: none;
+	border: none;
+	font-size: 18px;
+	line-height: 1;
+	cursor: pointer;
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	padding: 0 4px;
+	color: transparent;
+	transition: color 0.2s;
+}
+.message-close:focus {
+	outline: none;
+}
+.message-container:hover .message-close {
+	color: var(--text-tertiary);
+}
+.message-close:hover {
+	color: var(--text-secondary);
+}
+
+/* ---- loader ---- */
+.loader-container .loader-image {
+	animation: oai-spin 0.8s linear infinite;
+	height: 17px;
+	width: 17px;
+	float: left;
+	margin-right: 6px;
+	color: var(--text-normal);
+}
+.loader-container .loader-title {
+	white-space: pre-wrap;
+	height: 17px;
+	line-height: 17px;
+}
+
+/* ---- selectbox (from the AI plugin) ---- */
+.selectbox-container {
+	width: 100%;
+	display: inline-block;
+	position: relative;
+}
+.selectbox-container .selectbox {
+	position: relative;
+}
+.selectbox-container .selectbox-header {
+	cursor: pointer;
+	user-select: none;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 2px;
+	justify-content: space-between;
+	align-items: center;
+	transition: all .3s;
+	display: flex;
+	overflow: hidden;
+	background-color: var(--background-normal);
+	border-color: var(--border-regular-control);
+	color: var(--text-normal);
+}
+.selectbox-container .selectbox-header:focus {
+	outline: none;
+}
+.selectbox-container .selectbox-header:focus-visible,
+.selectbox-container .selectbox-header:active,
+.selectbox-container .selectbox-header-open {
+	border-color: var(--border-control-focus);
+}
+.selectbox-container .selectbox-header > * {
+	pointer-events: none;
+}
+.selectbox-container .selectbox-header-open {
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+.selectbox-container .selectbox-selected-text {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	flex: 1;
+	padding-left: 7px;
+	overflow: hidden;
+}
+.selectbox-container .selectbox-arrow {
+	text-align: center;
+	width: 24px;
+	height: 22px;
+	line-height: 20px;
+	transition: transform .3s;
+	position: relative;
+}
+.selectbox-container .selectbox-arrow b {
+	box-sizing: border-box;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-color: var(--text-normal);
+	width: 4px;
+	height: 4px;
+	margin: -1px 1px;
+	display: inline-block;
+	position: absolute;
+	top: 10px;
+	right: 9px;
+	transform: rotate(-135deg) translate(1px, 1px);
+}
+.selectbox-container .selectbox-arrow-open {
+	transform: rotate(180deg);
+}
+.selectbox-container .selectbox-dropdown {
+	z-index: 1000;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 4px;
+	max-height: 200px;
+	padding: 3px 0;
+	display: none;
+	position: absolute;
+	top: calc(100% + 2px);
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	background-color: var(--background-normal);
+	border-color: var(--border-regular-control);
+	box-shadow: 1px 1px 4px -1px var(--highlight-button-pressed);
+}
+.selectbox-container .selectbox-dropdown.selectbox-dropdown-top {
+	top: auto;
+	bottom: calc(100% + 2px);
+}
+.selectbox-container .selectbox-dropdown.selectbox-fixed {
+	position: fixed;
+}
+.selectbox-container .selectbox-options {
+	max-height: 157px;
+	overflow: hidden auto;
+}
+.selectbox-container .selectbox-custom-option,
+.selectbox-container .selectbox-option {
+	cursor: pointer;
+	align-items: center;
+	gap: 8px;
+	padding: 5.7px 12px 5.7px 12px;
+	transition: background-color .2s;
+	display: flex;
+}
+.selectbox-container .selectbox-custom-option *,
+.selectbox-container .selectbox-option * {
+	pointer-events: none;
+}
+.selectbox-container .selectbox-custom-option:hover,
+.selectbox-container .selectbox-option:hover {
+	background-color: var(--highlight-button-hover);
+}
+.selectbox-container .selectbox-option-selected,
+.selectbox-container .selectbox-option-selected:hover {
+	background-color: var(--highlight-button-pressed);
+}
+.selectbox-container .selectbox-option-disabled,
+.selectbox-container .selectbox-option-disabled:hover {
+	opacity: .6;
+	cursor: default;
+	background-color: transparent;
+}
+.selectbox-container .selectbox-description {
+	padding: 5.7px 12px 5.7px 6px;
+	font-weight: 700;
+	display: flex;
+}
+.selectbox-container .selectbox-option-divider {
+	border: none;
+	border-bottom: 1px solid;
+	border-color: var(--border-regular-control) !important;
+	margin: 4px 0;
+}
+.selectbox-container .selectbox-option-text {
+	flex: 1;
+}
+.selectbox-container .selectbox-disabled {
+	pointer-events: none;
+}
+.selectbox-container .selectbox-disabled .selectbox-header {
+	opacity: .5;
+}
+
+/* ---- the newer themes (zotero's theme.js does the same per theme) ---- */
+.theme-white .custom-button,
+.theme-night .custom-button,
+.theme-white .input-field-element,
+.theme-night .input-field-element,
+.theme-white .selectbox-header,
+.theme-night .selectbox-header,
+.theme-white .message,
+.theme-night .message {
+	border-radius: 4px;
+}
+.theme-white .checkbox--checked .checkbox-visual,
+.theme-night .checkbox--checked .checkbox-visual {
+	background-color: var(--background-primary-dialog-button);
+	border-color: var(--background-primary-dialog-button);
+}
+.theme-white .checkbox-checkmark,
+.theme-night .checkbox-checkmark {
+	color: var(--text-inverse);
+}
+.theme-white .checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual,
+.theme-night .checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual {
+	border-color: var(--border-regular-control);
+	background-color: var(--highlight-button-hover);
+}
+.theme-white .checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual,
+.theme-night .checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual {
+	border-color: var(--highlight-primary-dialog-button-hover);
+	background-color: var(--highlight-primary-dialog-button-hover);
+}
+
+@keyframes oai-spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
