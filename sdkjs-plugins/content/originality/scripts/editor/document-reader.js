@@ -32,6 +32,8 @@
 
 // @ts-check
 
+/// <reference path="./editor-commands.js" />
+
 /**
  * Reads the text of the open document out of the editor. Read-only: nothing here changes the
  * document or its undo history.
@@ -43,13 +45,11 @@ class DocumentReader {
 	 * @returns {Promise<string>}
 	 */
 	readDocument() {
-		return new Promise((resolve) => {
-			window.Asc.plugin.callCommand(function() {
-				return Api.GetDocument().GetAllParagraphs().map(function(paragraph) {
-					return paragraph.GetText({ "Numbering": false, "Math": false });
-				}).join("\n");
-			}, false, false, (text) => resolve(typeof text === "string" ? text : ""));
-		});
+		return EditorCommands.run(function() {
+			return Api.GetDocument().GetAllParagraphs().map(function(paragraph) {
+				return paragraph.GetText({ "Numbering": false, "Math": false });
+			}).join("\n");
+		}).then((text) => (typeof text === "string" ? text : ""));
 	}
 
 	/**
@@ -58,13 +58,11 @@ class DocumentReader {
 	 * @returns {Promise<string[]>}
 	 */
 	readParagraphIds() {
-		return new Promise((resolve) => {
-			window.Asc.plugin.callCommand(function() {
-				return Api.GetDocument().GetAllParagraphs().map(function(paragraph) {
-					return paragraph.GetInternalId();
-				});
-			}, false, false, (ids) => resolve(Array.isArray(ids) ? ids : []));
-		});
+		return EditorCommands.run(function() {
+			return Api.GetDocument().GetAllParagraphs().map(function(paragraph) {
+				return paragraph.GetInternalId();
+			});
+		}).then((ids) => (Array.isArray(ids) ? ids : []));
 	}
 
 	/**

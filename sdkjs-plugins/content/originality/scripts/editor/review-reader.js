@@ -32,6 +32,7 @@
 
 // @ts-check
 
+/// <reference path="./editor-commands.js" />
 /// <reference path="../domain/tracked-changes.js" />
 
 /**
@@ -44,31 +45,29 @@ class ReviewReader {
 	 * @returns {Promise<ReviewRecord[]>}
 	 */
 	read() {
-		return new Promise((resolve) => {
-			window.Asc.plugin.callCommand(function() {
-				// the report holds the reviewed paragraphs as API objects, which cannot leave the
-				// command; only plain values go back. It maps author names straight to arrays of
-				// records (sdkjs apiBuilder.js), not to `{ reviews }` as its JSDoc and the types say.
-				var report = /** @type {Record<string, unknown>} */ (/** @type {unknown} */ (Api.GetDocument().GetReviewReport()));
-				var records = [];
-				for (var author in report) {
-					var changes = report[author];
-					if (!Array.isArray(changes))
-						continue;
-					for (var i = 0; i < changes.length; i++) {
-						var change = changes[i];
-						records.push({
-							"author" : author,
-							"type"   : String(change["Type"]),
-							// an image or a chart comes as a number
-							"text"   : typeof change["Value"] === "string" ? change["Value"] : "",
-							"date"   : change["Date"],
-						});
-					}
+		return EditorCommands.run(function() {
+			// the report holds the reviewed paragraphs as API objects, which cannot leave the
+			// command; only plain values go back. It maps author names straight to arrays of
+			// records (sdkjs apiBuilder.js), not to `{ reviews }` as its JSDoc and the types say.
+			var report = /** @type {Record<string, unknown>} */ (/** @type {unknown} */ (Api.GetDocument().GetReviewReport()));
+			var records = [];
+			for (var author in report) {
+				var changes = report[author];
+				if (!Array.isArray(changes))
+					continue;
+				for (var i = 0; i < changes.length; i++) {
+					var change = changes[i];
+					records.push({
+						"author" : author,
+						"type"   : String(change["Type"]),
+						// an image or a chart comes as a number
+						"text"   : typeof change["Value"] === "string" ? change["Value"] : "",
+						"date"   : change["Date"],
+					});
 				}
-				return records;
-			}, false, false, (records) => resolve(ReviewReader._records(records)));
-		});
+			}
+			return records;
+		}).then((records) => ReviewReader._records(records));
 	}
 
 	/**

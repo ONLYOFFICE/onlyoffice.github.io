@@ -89,10 +89,6 @@
 	/** @type {ScanView | null} */
 	let scanView = null;
 
-	/**
-	 * The views put translated text into their controls when they are built, so they are built
-	 * once the plugin's dictionary is in: `onTranslate` comes after `init`, even for English.
-	 */
 	function buildViews() {
 		/** @type {WritingView | null} */
 		let writingView = null;

@@ -32,6 +32,8 @@
 
 // @ts-check
 
+/// <reference path="./editor-commands.js" />
+
 /**
  * The document's custom XML parts — data stored in the file next to its text, kept with the
  * document through saving and co-editing. Reads them and replaces them, nothing else.
@@ -43,18 +45,15 @@ class CustomXmlParts {
 	 * @returns {Promise<string[]>} the XML of each such part
 	 */
 	read(marker) {
-		window.Asc.scope.originalityMarker = marker;
-		return new Promise((resolve) => {
-			window.Asc.plugin.callCommand(function() {
-				const parts = Api.GetDocument().GetCustomXmlParts();
-				if (!parts)
-					return [];
-				const marker = String(Asc.scope.originalityMarker);
-				return parts.GetAll()
-					.map(function(part) { return part.GetXml(); })
-					.filter(function(xml) { return xml.indexOf(marker) !== -1; });
-			}, false, false, (xmls) => resolve(Array.isArray(xmls) ? xmls : []));
-		});
+		return EditorCommands.run(function() {
+			const parts = Api.GetDocument().GetCustomXmlParts();
+			if (!parts)
+				return [];
+			const marker = String(Asc.scope.originalityMarker);
+			return parts.GetAll()
+				.map(function(part) { return part.GetXml(); })
+				.filter(function(xml) { return xml.indexOf(marker) !== -1; });
+		}, { originalityMarker: marker }).then((xmls) => (Array.isArray(xmls) ? xmls : []));
 	}
 
 	/**
@@ -66,20 +65,16 @@ class CustomXmlParts {
 	 *   the editor discards changes
 	 */
 	write(key, xml) {
-		window.Asc.scope.originalityKey = key;
-		window.Asc.scope.originalityXml = xml;
-		return new Promise((resolve) => {
-			window.Asc.plugin.callCommand(function() {
-				const parts = Api.GetDocument().GetCustomXmlParts();
-				if (!parts)
-					return false;
-				const key = String(Asc.scope.originalityKey);
-				parts.GetAll().forEach(function(part) {
-					if (part.GetXml().indexOf(key) !== -1)
-						part.Delete();
-				});
-				return !!parts.Add(String(Asc.scope.originalityXml));
-			}, false, false, (written) => resolve(written === true));
-		});
+		return EditorCommands.run(function() {
+			const parts = Api.GetDocument().GetCustomXmlParts();
+			if (!parts)
+				return false;
+			const key = String(Asc.scope.originalityKey);
+			parts.GetAll().forEach(function(part) {
+				if (part.GetXml().indexOf(key) !== -1)
+					part.Delete();
+			});
+			return !!parts.Add(String(Asc.scope.originalityXml));
+		}, { originalityKey: key, originalityXml: xml }).then((written) => written === true);
 	}
 }

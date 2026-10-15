@@ -300,17 +300,7 @@ input:focus-visible + .checkbox-visual {
 	background-color: var(--background-normal);
 	border-color: var(--border-regular-control);
 }
-.message-error:before {
-	content: "";
-	position: absolute;
-	width: 12px;
-	height: 12px;
-	left: 6px;
-	top: 9px;
-	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%23F62211"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
-}
-/* zotero draws an icon for errors only; the others take theirs from the editor's own alert icons
-   (web-apps apps/common/main/resources/img/controls/warnings_s.svg) */
+.message-error:before,
 .message-warning:before,
 .message-info:before,
 .message-success:before {
@@ -322,14 +312,21 @@ input:focus-visible + .checkbox-visual {
 	top: 9px;
 	background-size: 12px 12px;
 }
+.message-error:before {
+	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%23F62211"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
+}
 .message-warning:before {
-	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.25245 31.1904L18.366 4.94276C19.0898 3.68575 20.9102 3.68575 21.634 4.94275L36.7475 31.1904C37.4678 32.4412 36.5612 34 35.1136 34H4.88642C3.43881 34 2.53225 32.4412 3.25245 31.1904Z" fill="%23FFD112"/><path fill-rule="evenodd" clip-rule="evenodd" d="M21 25H19L18 18V12H22V18L21 25ZM22 31H18V27H22V31Z" fill="white"/></svg>');
+	background-size: 15px 13px;
+    width: 15px;
+    height: 13px;
+	top: 8px;
+	background-image: url('data:image/svg+xml,<svg width="44" height="39" viewBox="0 0 44 39" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.5201 0.853631C21.1693 -0.284655 22.8103 -0.284653 23.4594 0.853633L43.7548 36.4414C44.398 37.5693 43.5835 38.9714 42.2851 38.9714H1.69445C0.396056 38.9714 -0.418416 37.5693 0.224796 36.4414L20.5201 0.853631Z" fill="%23F2BE08"/><circle cx="21.99" cy="32.4614" r="2.51612" fill="white"/><path d="M25.3447 12.3324C25.3447 13.1968 24.33 17.5992 23.6672 21.5581C23.0761 25.0894 22.8285 28.2678 22.8285 28.2678C22.4092 28.2678 21.7103 28.2678 21.1511 28.2678C21.1511 28.2678 20.9036 25.0894 20.3124 21.5581C19.6496 17.5992 18.635 13.1968 18.635 12.3324C18.635 10.4795 20.137 8.97754 21.9898 8.97754C23.8427 8.97754 25.3447 10.4795 25.3447 12.3324Z" fill="white"/></svg>');
 }
 .message-info:before {
-	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%234E8AFB"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="16" fill="%23007DF1"/><path fill-rule="evenodd" clip-rule="evenodd" d="M22 10H18V14H22V10ZM22 17H18V30H22V17Z" fill="white"/></svg>');
+	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%234E8AFB"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
 }
 .message-success:before {
-	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%2300AB62"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
+	background-image: url('data:image/svg+xml,<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="22" cy="22" r="22" fill="%239EBA3D"/><path d="M12.9162 23.331L10 26.2472L17.4987 36.2455L34.1625 12.9162L31.2463 10L17.4987 27.497L12.9162 23.331Z" fill="white"/></svg>');
 }
 .message-content {
 	display: flex;

@@ -32,6 +32,8 @@
 
 // @ts-check
 
+/// <reference path="./editor-commands.js" />
+
 /**
  * Selects a piece of text in the document by searching for it. Works in every edition of the
  * editor; where text annotations exist, selecting an annotation is more exact (see
@@ -60,18 +62,15 @@ class TextSelector {
 		const quote = firstLine.search(/['"‘’“”]/);
 		const prefix = quote >= TextSelector._minPrefix ? firstLine.slice(0, quote) : "";
 
-		window.Asc.scope.originalitySearch = prefix ? [firstLine, prefix] : [firstLine];
-		return new Promise((resolve) => {
-			window.Asc.plugin.callCommand(function() {
-				const document = Api.GetDocument();
-				const candidates = /** @type {string[]} */ (Asc.scope.originalitySearch);
-				for (let i = 0; i < candidates.length; ++i) {
-					const found = document.Search(candidates[i], true);
-					if (found.length > 0)
-						return found[0].Select();
-				}
-				return false;
-			}, false, false, (selected) => resolve(selected === true));
-		});
+		return EditorCommands.run(function() {
+			const document = Api.GetDocument();
+			const candidates = /** @type {string[]} */ (Asc.scope.originalitySearch);
+			for (let i = 0; i < candidates.length; ++i) {
+				const found = document.Search(candidates[i], true);
+				if (found.length > 0)
+					return found[0].Select();
+			}
+			return false;
+		}, { originalitySearch: prefix ? [firstLine, prefix] : [firstLine] }).then((selected) => selected === true);
 	}
 }
