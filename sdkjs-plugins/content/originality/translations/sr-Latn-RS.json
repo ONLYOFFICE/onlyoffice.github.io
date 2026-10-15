@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "Provera je možda ipak završena i potrošila kredite.",
 	"If it did, you will find it in your Originality.ai account.": "Ako jeste, naći ćete je na svom Originality.ai nalogu.",
 	"Try again with a shorter selection.": "Pokušajte ponovo sa kraćim izborom.",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Urednik čuva praćene promene samo dok se ne prihvate ili odbace, i mogu se uređivati kao bilo koji tekst."
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Urednik čuva praćene promene samo dok se ne prihvate ili odbace, i mogu se uređivati kao bilo koji tekst.",
+	"Record my writing": "Snimaj moje pisanje",
+	"Recording is off": "Snimanje je isključeno",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "Zapis se čuva u datoteci dokumenta i ide svuda sa njom, uključujući obrisane nacrte.",
+	"Delete record…": "Obriši zapis…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "Zapis će biti uklonjen iz dokumenta sa svim što sadrži: kucanjem, lepljenjima, obrisanim tekstom. Dodatak to ne može da poništi; ako vam treba izveštaj, prvo ga izvezite.",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "Oni koji trenutno pišu u dokumentu sa otvorenim dodatkom zadržavaju svoj zapis i ponovo ga čuvaju.",
+	"Delete my record": "Obriši moj zapis",
+	"Delete all records": "Obriši sve zapise",
+	"Cancel": "Otkaži"
 }

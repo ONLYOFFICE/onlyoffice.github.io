@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "L'analyse a peut-être quand même abouti et consommé des crédits.",
 	"If it did, you will find it in your Originality.ai account.": "Si c'est le cas, vous la trouverez dans votre compte Originality.ai.",
 	"Try again with a shorter selection.": "Réessayez avec une sélection plus courte.",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "L'éditeur ne conserve les modifications suivies que jusqu'à ce qu'elles soient acceptées ou rejetées, et elles peuvent être modifiées comme n'importe quel texte."
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "L'éditeur ne conserve les modifications suivies que jusqu'à ce qu'elles soient acceptées ou rejetées, et elles peuvent être modifiées comme n'importe quel texte.",
+	"Record my writing": "Enregistrer ma saisie",
+	"Recording is off": "L'enregistrement est désactivé",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "L'enregistrement est conservé dans le fichier du document et le suit partout, brouillons supprimés compris.",
+	"Delete record…": "Supprimer l'enregistrement…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "L'enregistrement sera supprimé du document avec tout ce qu'il contient : saisie, collages, texte supprimé. Le plugin ne peut pas l'annuler ; exportez d'abord le rapport si vous en avez besoin.",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "Les personnes qui écrivent en ce moment dans le document avec le plugin ouvert gardent leur enregistrement et le sauvegardent de nouveau.",
+	"Delete my record": "Supprimer mon enregistrement",
+	"Delete all records": "Supprimer tous les enregistrements",
+	"Cancel": "Annuler"
 }

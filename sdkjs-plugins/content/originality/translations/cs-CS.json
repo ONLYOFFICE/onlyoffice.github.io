@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "Kontrola se přesto mohla dokončit a spotřebovat kredity.",
 	"If it did, you will find it in your Originality.ai account.": "Pokud ano, najdete ji ve svém účtu Originality.ai.",
 	"Try again with a shorter selection.": "Zkuste to znovu s kratším výběrem.",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Sledované změny editor uchovává, jen dokud nejsou přijaty nebo odmítnuty, a lze je upravovat jako jakýkoli text."
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Sledované změny editor uchovává, jen dokud nejsou přijaty nebo odmítnuty, a lze je upravovat jako jakýkoli text.",
+	"Record my writing": "Zaznamenávat moje psaní",
+	"Recording is off": "Záznam je vypnutý",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "Záznam je uložen v souboru dokumentu a putuje všude s ním, včetně smazaných konceptů.",
+	"Delete record…": "Smazat záznam…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "Záznam bude z dokumentu odstraněn se vším, co obsahuje: psaním, vloženími, smazaným textem. Plugin to nedokáže vrátit; pokud zprávu potřebujete, nejprve ji exportujte.",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "Kdo v dokumentu právě píše s otevřeným pluginem, svůj záznam si ponechá a znovu ho uloží.",
+	"Delete my record": "Smazat můj záznam",
+	"Delete all records": "Smazat všechny záznamy",
+	"Cancel": "Zrušit"
 }

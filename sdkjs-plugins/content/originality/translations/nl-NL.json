@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "De scan is mogelijk toch voltooid en heeft credits verbruikt.",
 	"If it did, you will find it in your Originality.ai account.": "Als dat zo is, vindt u deze in uw Originality.ai-account.",
 	"Try again with a shorter selection.": "Probeer het opnieuw met een kortere selectie.",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Bijgehouden wijzigingen worden door de editor alleen bewaard totdat ze worden geaccepteerd of geweigerd, en kunnen worden bewerkt zoals elke tekst."
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Bijgehouden wijzigingen worden door de editor alleen bewaard totdat ze worden geaccepteerd of geweigerd, en kunnen worden bewerkt zoals elke tekst.",
+	"Record my writing": "Mijn schrijven vastleggen",
+	"Recording is off": "Vastleggen staat uit",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "De registratie wordt in het documentbestand bewaard en gaat overal mee naartoe, inclusief verwijderde concepten.",
+	"Delete record…": "Registratie verwijderen…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "De registratie wordt uit het document verwijderd met alles wat erin staat: typen, plakacties, verwijderde tekst. De plug-in kan dit niet ongedaan maken; exporteer eerst het rapport als u het nodig hebt.",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "Wie nu met de plug-in geopend in het document schrijft, houdt de eigen registratie en slaat die opnieuw op.",
+	"Delete my record": "Mijn registratie verwijderen",
+	"Delete all records": "Alle registraties verwijderen",
+	"Cancel": "Annuleren"
 }

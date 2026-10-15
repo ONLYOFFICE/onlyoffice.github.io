@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "扫描可能仍已完成并消耗了积分。",
 	"If it did, you will find it in your Originality.ai account.": "如果是这样，您可以在Originality.ai帐户中找到它。",
 	"Try again with a shorter selection.": "请选择较短的文本后重试。",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "修订仅在被接受或拒绝之前由编辑器保留，并且可以像任何文本一样进行编辑。"
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "修订仅在被接受或拒绝之前由编辑器保留，并且可以像任何文本一样进行编辑。",
+	"Record my writing": "记录我的输入",
+	"Recording is off": "记录已关闭",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "记录保存在文档文件中，会随文件一起传到任何地方，包括已删除的草稿。",
+	"Delete record…": "删除记录…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "记录将连同其中的所有内容（输入、粘贴、已删除的文本）一起从文档中删除。插件无法撤销此操作；如需报告，请先导出。",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "当前打开插件并在文档中写作的人会保留自己的记录并再次保存。",
+	"Delete my record": "删除我的记录",
+	"Delete all records": "删除所有记录",
+	"Cancel": "取消"
 }

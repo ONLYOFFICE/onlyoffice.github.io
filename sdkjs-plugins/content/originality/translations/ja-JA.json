@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "スキャンは完了してクレジットを消費した可能性があります。",
 	"If it did, you will find it in your Originality.ai account.": "その場合は、Originality.aiのアカウントで確認できます。",
 	"Try again with a shorter selection.": "選択範囲を短くしてもう一度お試しください。",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "変更履歴は承諾または拒否されるまでエディターに保持されるだけで、通常のテキストと同様に編集できます。"
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "変更履歴は承諾または拒否されるまでエディターに保持されるだけで、通常のテキストと同様に編集できます。",
+	"Record my writing": "自分の入力を記録する",
+	"Recording is off": "記録はオフです",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "記録は文書ファイル内に保存され、削除した下書きも含めてファイルと一緒に移動します。",
+	"Delete record…": "記録を削除…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "記録は入力、貼り付け、削除したテキストなど、含まれるすべての内容とともに文書から削除されます。プラグインでは元に戻せません。レポートが必要な場合は先にエクスポートしてください。",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "現在プラグインを開いて文書に書き込んでいる人は、自分の記録を保持し、再び保存します。",
+	"Delete my record": "自分の記録を削除",
+	"Delete all records": "すべての記録を削除",
+	"Cancel": "キャンセル"
 }

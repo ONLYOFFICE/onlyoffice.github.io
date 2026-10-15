@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "A verificação pode ter terminado na mesma e gasto créditos.",
 	"If it did, you will find it in your Originality.ai account.": "Se for o caso, encontrá-la-á na sua conta Originality.ai.",
 	"Try again with a shorter selection.": "Tente novamente com uma seleção mais curta.",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "As alterações controladas só são mantidas pelo editor até serem aceites ou rejeitadas e podem ser editadas como qualquer texto."
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "As alterações controladas só são mantidas pelo editor até serem aceites ou rejeitadas e podem ser editadas como qualquer texto.",
+	"Record my writing": "Registar a minha escrita",
+	"Recording is off": "O registo está desativado",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "O registo é guardado no ficheiro do documento e acompanha-o para todo o lado, incluindo rascunhos eliminados.",
+	"Delete record…": "Eliminar registo…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "O registo será removido do documento com tudo o que contém: escrita, colagens, texto eliminado. O plugin não pode anular esta ação; exporte primeiro o relatório se precisar dele.",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "Quem está a escrever no documento neste momento com o plugin aberto mantém o seu registo e volta a guardá-lo.",
+	"Delete my record": "Eliminar o meu registo",
+	"Delete all records": "Eliminar todos os registos",
+	"Cancel": "Cancelar"
 }

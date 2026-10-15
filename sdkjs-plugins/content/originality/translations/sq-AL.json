@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "Kontrolli mund të ketë përfunduar gjithsesi dhe të ketë shpenzuar kredite.",
 	"If it did, you will find it in your Originality.ai account.": "Nëse po, do ta gjeni në llogarinë tuaj Originality.ai.",
 	"Try again with a shorter selection.": "Provoni sërish me një përzgjedhje më të shkurtër.",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Ndryshimet e gjurmuara mbahen nga redaktori vetëm derisa të pranohen ose të refuzohen dhe mund të redaktohen si çdo tekst."
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Ndryshimet e gjurmuara mbahen nga redaktori vetëm derisa të pranohen ose të refuzohen dhe mund të redaktohen si çdo tekst.",
+	"Record my writing": "Regjistro shkrimin tim",
+	"Recording is off": "Regjistrimi është i çaktivizuar",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "Regjistrimi ruhet në skedarin e dokumentit dhe shkon kudo me të, përfshirë draftet e fshira.",
+	"Delete record…": "Fshi regjistrimin…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "Regjistrimi do të hiqet nga dokumenti me gjithçka që përmban: shkrimin, ngjitjet, tekstin e fshirë. Shtojca nuk mund ta zhbëjë këtë; eksportoni më parë raportin nëse ju duhet.",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "Ata që po shkruajnë tani në dokument me shtojcën të hapur e mbajnë regjistrimin e tyre dhe e ruajnë përsëri.",
+	"Delete my record": "Fshi regjistrimin tim",
+	"Delete all records": "Fshi të gjitha regjistrimet",
+	"Cancel": "Anulo"
 }

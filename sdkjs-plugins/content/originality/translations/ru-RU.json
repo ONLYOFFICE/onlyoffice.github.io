@@ -158,5 +158,14 @@
 	"The scan may still have finished and used credits.": "Проверка могла всё же завершиться и списать кредиты.",
 	"If it did, you will find it in your Originality.ai account.": "Если так, она есть в вашем кабинете Originality.ai.",
 	"Try again with a shorter selection.": "Попробуйте ещё раз, выделив текст покороче.",
-	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Изменения в режиме рецензирования хранятся в редакторе, только пока их не приняли или не отклонили, и их можно править, как любой текст."
+	"Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.": "Изменения в режиме рецензирования хранятся в редакторе, только пока их не приняли или не отклонили, и их можно править, как любой текст.",
+	"Record my writing": "Записывать мой набор",
+	"Recording is off": "Запись выключена",
+	"The record is kept in the document file and goes wherever the file goes, deleted drafts included.": "Запись хранится в файле документа и уходит вместе с ним, включая удалённые черновики.",
+	"Delete record…": "Удалить запись…",
+	"The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.": "Запись будет удалена из документа вместе со всем, что в ней есть: набором, вставками, удалённым текстом. Плагин не сможет её восстановить — если отчёт нужен, выгрузите его заранее.",
+	"People writing in the document right now with the plugin open keep their records and save them again.": "Те, кто сейчас пишет в документе с открытым плагином, сохранят свои записи снова.",
+	"Delete my record": "Удалить мою запись",
+	"Delete all records": "Удалить все записи",
+	"Cancel": "Отмена"
 }
