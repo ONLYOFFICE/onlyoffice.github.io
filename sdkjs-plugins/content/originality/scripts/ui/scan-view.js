@@ -146,7 +146,7 @@ class ScanView {
 
 	/**
 	 * Without an API key there is nothing to scan with; say so up front.
-	 * @param {ScanSettings} settings
+	 * @param {PluginSettings} settings
 	 */
 	onSettingsChanged(settings) {
 		this._storeScan = settings.storeScan;

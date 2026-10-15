@@ -56,14 +56,53 @@ class WritingView {
 	static _trackedInsertions = 5;
 
 	/**
+	 * @param {boolean} recording - whether the user's writing is to be recorded, as set
 	 * @param {{
 	 *   onSelectText: (text: string) => void,
 	 *   onOpenReplay: (writerId: string | null) => void,
 	 *   onExportReport: (writerId: string | null) => void,
+	 *   onRecordingChange: (on: boolean) => void,
+	 *   onDeleteRecord: (everyone: boolean) => Promise<boolean>,
 	 * }} callbacks
 	 */
-	constructor(callbacks) {
+	constructor(recording, callbacks) {
 		this._onSelectText = callbacks.onSelectText;
+		const tr = window.Asc.plugin.tr;
+
+		const recordBox = new Checkbox("record-writing", { label: tr("Record my writing"), checked: recording });
+		recordBox.subscribe((event) => {
+			if (event.type === "checkbox:change")
+				callbacks.onRecordingChange(event.detail.checked);
+		});
+
+		this._deleteBox = /** @type {HTMLElement} */ (document.getElementById("delete-confirm"));
+		this._deleteOthersNote = /** @type {HTMLElement} */ (document.getElementById("delete-others-note"));
+		this._deleteButton = new Button("delete-record", { variant: "secondary", text: tr("Delete record…"), disabled: true });
+		this._deleteButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._deleteBox.classList.remove("hidden");
+		});
+		const deleteMine = new Button("delete-mine", { variant: "primary", text: tr("Delete my record") });
+		const deleteAll = new Button("delete-all", { variant: "secondary", text: tr("Delete all records") });
+		const cancel = new Button("delete-cancel", { variant: "secondary", text: tr("Cancel") });
+		const remove = async (/** @type {boolean} */ everyone) => {
+			this._deleteBox.classList.add("hidden");
+			this._deleteButton.disable();
+			await callbacks.onDeleteRecord(everyone);
+		};
+		deleteMine.subscribe((event) => {
+			if (event.type === "button:click")
+				remove(false);
+		});
+		deleteAll.subscribe((event) => {
+			if (event.type === "button:click")
+				remove(true);
+		});
+		cancel.subscribe((event) => {
+			if (event.type === "button:click")
+				this._deleteBox.classList.add("hidden");
+		});
+
 		const replayButton = new Button("open-replay", { variant: "primary", text: window.Asc.plugin.tr("Watch replay") });
 		replayButton.subscribe((event) => {
 			if (event.type === "button:click")
@@ -100,6 +139,7 @@ class WritingView {
 	 * @property {number | null} recordingSince
 	 * @property {number | null} savedAt
 	 * @property {boolean} canSave
+	 * @property {boolean} isRecording
 	 * @property {ReviewRecord[]} reviewRecords - the document's tracked changes
 	 */
 
@@ -137,11 +177,15 @@ class WritingView {
 			return;
 
 		this._status.textContent = this._statusText(state);
+		const indicator = this._status.parentElement;
+		if (indicator)
+			indicator.classList.toggle("recording--off", !state.isRecording);
 
 		const writers = Writers.of(state.sessions);
 		const writer = writers.find((w) => w.id === this._writerId) || writers[0] || null;
 		this._writerId = writer ? writer.id : null;
 		this._showWriters(writers, writer);
+		this._showDelete(state, writers);
 
 		const summary = TypingAnalysis.summarize(writer ? writer.sessions : []);
 		this._root.textContent = "";
@@ -192,6 +236,24 @@ class WritingView {
 	}
 
 	/**
+	 * Deleting is offered where the document can be changed and there is something to delete;
+	 * everyone's records only when someone else has one.
+	 * @param {WritingViewState} state
+	 * @param {Writer[]} writers
+	 * @private
+	 */
+	_showDelete(state, writers) {
+		if (state.canSave && state.sessions.length)
+			this._deleteButton.enable();
+		else
+			this._deleteButton.disable();
+		const others = writers.length > 1;
+		const allButton = /** @type {HTMLElement} */ (document.getElementById("delete-all"));
+		(allButton.closest(".custom-button-container") || allButton).classList.toggle("hidden", !others);
+		this._deleteOthersNote.classList.toggle("hidden", !others);
+	}
+
+	/**
 	 * @param {WritingViewState} state
 	 * @returns {string}
 	 * @private
@@ -199,7 +261,9 @@ class WritingView {
 	_statusText(state) {
 		const tr = window.Asc.plugin.tr;
 		const parts = [];
-		if (state.recordingSince !== null)
+		if (!state.isRecording)
+			parts.push(tr("Recording is off"));
+		else if (state.recordingSince !== null)
 			parts.push(tr("Recording since") + " " + Format.time(state.recordingSince));
 		if (!state.canSave)
 			parts.push(tr("view only: nothing is saved"));

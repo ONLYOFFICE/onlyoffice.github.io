@@ -46,6 +46,7 @@
 /// <reference path="./storage/history-store.js" />
 /// <reference path="./app/scan-service.js" />
 /// <reference path="./app/highlight-service.js" />
+/// <reference path="./app/snapshot-reader.js" />
 /// <reference path="./app/recording-service.js" />
 /// <reference path="./app/writing-history-service.js" />
 /// <reference path="./app/replay-window.js" />
@@ -80,7 +81,7 @@
 
 	const keystrokes = new KeystrokeSource();
 	const structure = new DocumentStructure();
-	const recording = new RecordingService(reader, keystrokes, structure, paragraphTexts);
+	const recording = new RecordingService(new SnapshotReader(reader), keystrokes, structure, paragraphTexts);
 	const history = new WritingHistoryService(new HistoryStore(new CustomXmlParts()), recording);
 	const replayWindow = new ReplayWindow();
 	const reviews = new ReviewWatcher(new ReviewReader());
@@ -117,10 +118,15 @@
 		});
 		view.onSettingsChanged(settingsStore.load());
 
-		const writing = new WritingView({
-			onSelectText   : (text) => selector.select(text),
-			onOpenReplay   : (writerId) => replayWindow.show(history.sessions, writerId),
-			onExportReport : (writerId) => reports.export(writerId),
+		const writing = new WritingView(settingsStore.load().recordWriting, {
+			onSelectText      : (text) => selector.select(text),
+			onOpenReplay      : (writerId) => replayWindow.show(history.sessions, writerId),
+			onExportReport    : (writerId) => reports.export(writerId),
+			onRecordingChange : (on) => {
+				settingsStore.update({ recordWriting: on });
+				history.setRecording(on);
+			},
+			onDeleteRecord    : (everyone) => history.remove(everyone),
 		});
 		writingView = writing;
 		const showHistory = () => writing.update({
@@ -128,6 +134,7 @@
 			recordingSince : recording.session ? recording.session.startedAt : null,
 			savedAt        : history.savedAt,
 			canSave        : history.canSave,
+			isRecording    : history.isRecording,
 			reviewRecords  : reviews.records,
 		});
 		// tracked changes come and go with the text, so the review is read again as the text changes
@@ -151,7 +158,7 @@
 		keystrokes.attach();
 		structure.attach();
 		paragraphTexts.attach();
-		history.start({ id: info.userId || "", name: info.userName || "" }, !info.isViewMode);
+		history.start({ id: info.userId || "", name: info.userName || "" }, !info.isViewMode, settingsStore.load().recordWriting);
 		reviews.refresh();
 
 		new AnnotationClicks().attach((name, paragraphId, rangeIds) => {
@@ -171,8 +178,8 @@
 
 	/**
 	 * A close cross. With a window id it is the replay window's, which the plugin closes itself.
-	 * Without, it is the panel's: try to write the history before the panel goes. Only a try — the
-	 * editor closes the panel without waiting (sdkjs `plugins.js`, `buttonClick`), so the regular
+	 * Without, it is the panel's: the history is written, then the panel closed. Not every host
+	 * gets here — sdkjs `plugin_base.js` closes the panel itself on its cross — so the regular
 	 * write after a quiet spell is what keeps the history.
 	 * @param {number} id
 	 * @param {string} [windowId]
@@ -181,10 +188,9 @@
 		if (windowId && windowId === replayWindow.id) {
 			replayWindow.onButton(windowId);
 		} else if (id === -1) {
-			history.flush();
-			this.executeCommand('close', '');
+			// close once the history is written: closing first would drop the write
+			history.flush().finally(() => this.executeCommand("close", ""));
 		}
-		
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme) {

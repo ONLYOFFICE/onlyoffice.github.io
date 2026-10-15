@@ -39,7 +39,7 @@
  */
 
 /**
- * @typedef {Object} ScanSettings
+ * @typedef {Object} PluginSettings
  * @property {string} apiKey
  * @property {AiModel} aiModel
  * @property {number} aiAllowance - per cent of AI-assisted text tolerated: 0, 5, 15, 25 or 40
@@ -49,6 +49,7 @@
  * @property {boolean} checkFacts
  * @property {boolean} storeScan - keep the scan on Originality.ai, which the shareable link needs
  * @property {string[]} excludedUrls - sources the plagiarism check ignores
+ * @property {boolean} recordWriting - record the user's writing into the documents they open
  */
 
 /**
@@ -60,7 +61,7 @@ class SettingsStore {
 	/** the AI allowance levels Originality.ai documents */
 	static allowanceLevels = Object.freeze([0, 5, 15, 25, 40]);
 
-	/** @type {Readonly<ScanSettings>} */
+	/** @type {Readonly<PluginSettings>} */
 	static defaults = Object.freeze({
 		apiKey           : "",
 		aiModel          : /** @type {AiModel} */ ("standard"),
@@ -71,16 +72,17 @@ class SettingsStore {
 		checkFacts       : false,
 		storeScan        : true,
 		excludedUrls     : [],
+		recordWriting    : true,
 	});
 
 	/** @private */
 	static _key = "onlyoffice_originality_settings";
 
 	/**
-	 * @returns {ScanSettings}
+	 * @returns {PluginSettings}
 	 */
 	load() {
-		/** @type {Partial<ScanSettings>} */
+		/** @type {Partial<PluginSettings>} */
 		let stored = {};
 		try {
 			const raw = window.localStorage.getItem(SettingsStore._key);
@@ -93,7 +95,7 @@ class SettingsStore {
 	}
 
 	/**
-	 * @param {ScanSettings} settings
+	 * @param {PluginSettings} settings
 	 */
 	save(settings) {
 		try {
@@ -104,8 +106,19 @@ class SettingsStore {
 	}
 
 	/**
-	 * @param {Partial<ScanSettings>} value
-	 * @returns {ScanSettings}
+	 * Changes some settings and keeps the rest as stored — not as a caller last read them, since
+	 * another part of the panel may have changed them since.
+	 * @param {Partial<PluginSettings>} change
+	 * @returns {PluginSettings} all the settings now
+	 */
+	update(change) {
+		this.save(Object.assign(this.load(), change));
+		return this.load();
+	}
+
+	/**
+	 * @param {Partial<PluginSettings>} value
+	 * @returns {PluginSettings}
 	 * @private
 	 */
 	_normalize(value) {
@@ -126,6 +139,7 @@ class SettingsStore {
 			excludedUrls     : Array.isArray(value.excludedUrls)
 				? value.excludedUrls.filter((url) => typeof url === "string" && url.trim() !== "").map((url) => url.trim())
 				: [],
+			recordWriting    : bool(value.recordWriting, d.recordWriting),
 		};
 	}
 }

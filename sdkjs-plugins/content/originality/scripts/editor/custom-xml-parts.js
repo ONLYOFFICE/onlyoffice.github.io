@@ -36,7 +36,7 @@
 
 /**
  * The document's custom XML parts — data stored in the file next to its text, kept with the
- * document through saving and co-editing. Reads them and replaces them, nothing else.
+ * document through saving and co-editing. Reads, replaces and removes them, nothing else.
  */
 class CustomXmlParts {
 
@@ -76,5 +76,25 @@ class CustomXmlParts {
 			});
 			return !!parts.Add(String(Asc.scope.originalityXml));
 		}, { originalityKey: key, originalityXml: xml }).then((written) => written === true);
+	}
+
+	/**
+	 * Removes the parts that contain `marker` — one change in the document's undo history.
+	 * @param {string} marker
+	 * @returns {Promise<boolean>} whether they are gone; false in a viewer, where the editor
+	 *   discards changes
+	 */
+	remove(marker) {
+		return EditorCommands.run(function() {
+			const parts = Api.GetDocument().GetCustomXmlParts();
+			if (!parts)
+				return true;
+			const marker = String(Asc.scope.originalityMarker);
+			parts.GetAll().forEach(function(part) {
+				if (part.GetXml().indexOf(marker) !== -1)
+					part.Delete();
+			});
+			return true;
+		}, { originalityMarker: marker }).then((removed) => removed === true);
 	}
 }

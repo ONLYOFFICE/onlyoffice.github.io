@@ -98,6 +98,24 @@ a {
 	margin-bottom: 12px;
 }
 
+.confirm {
+	margin-bottom: 12px;
+	padding: 10px;
+	border: 1px solid var(--border-regular-control);
+	border-radius: 2px;
+}
+
+.confirm__text {
+	margin: 0 0 8px;
+	line-height: 1.4;
+}
+
+.confirm__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
 .actions .custom-button-container {
 	flex: 1 1 0;
 	min-width: 0;
@@ -318,6 +336,11 @@ a {
 	animation: oai-recording 1.6s ease-in-out infinite;
 }
 
+.recording--off .recording__dot {
+	background: var(--text-tertiary);
+	animation: none;
+}
+
 .recording__note {
 	margin-bottom: 12px;
 }
@@ -492,6 +515,8 @@ body.theme-night {
 .theme-white .textarea,
 .theme-night .textarea,
 .theme-white .result-card,
+.theme-white .confirm,
+.theme-night .confirm,
 .theme-night .result-card {
 	border-radius: 4px;
 }

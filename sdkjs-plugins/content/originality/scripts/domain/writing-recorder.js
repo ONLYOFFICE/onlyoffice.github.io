@@ -94,6 +94,11 @@
  * as they happen, and snapshots of the document text taken now and then. Each snapshot is compared
  * with the previous one; the difference becomes insert and delete events, and the keys pressed in
  * between tell where the inserted text came from.
+ *
+ * With co-authors the text can change in several places between two snapshots. Only one of those
+ * edits is the user's — the keys explain one edit — and the others are recorded as made without
+ * them. The user's edit is the one nearest to where they last edited, or, before they have, the
+ * one the keys fit best.
  */
 class WritingRecorder {
 
@@ -126,6 +131,8 @@ class WritingRecorder {
 		this._lastSnapshotAt = time;
 		/** @type {string[]} */
 		this._removed = [];
+		/** @type {number | null} where in the text the user last edited; null until they have */
+		this._caret = null;
 	}
 
 	/** @returns {WritingSession} */
@@ -152,31 +159,89 @@ class WritingRecorder {
 	 * @returns {WritingEvent[]} the events this snapshot added
 	 */
 	addSnapshot(text, time) {
-		const change = TextDiff.between(this._text, text);
+		const edits = TextDiff.edits(this._text, text);
 		const keys = this._keysBetween(this._lastSnapshotAt, time);
 		this._lastSnapshotAt = time;
-		if (!change)
+		if (!edits.length)
 			return [];
 
-		const isOwn = keys.length > 0;
-		const eventTime = isOwn ? keys[keys.length - 1].time : time;
+		const own = keys.length ? this._ownEdit(edits, keys) : null;
+		// one moment for the whole snapshot, so that events stay in time order
+		const eventTime = own ? keys[keys.length - 1].time : time;
 
 		/** @type {WritingEvent[]} */
 		const added = [];
-		if (change.deleted) {
-			added.push({ type: "delete", time: eventTime, index: change.index, text: change.deleted, source: isOwn ? "own" : "other" });
-			if (isOwn)
-				this._remember(change.deleted);
-		}
-		if (change.inserted) {
-			added.push({ type: "insert", time: eventTime, index: change.index, text: change.inserted,
-				source: this._sourceOf(change.inserted, keys) });
-		}
+		edits.forEach((edit) => {
+			const isOwn = edit === own;
+			if (edit.deleted) {
+				added.push({ type: "delete", time: eventTime, index: edit.index, text: edit.deleted, source: isOwn ? "own" : "other" });
+				if (isOwn)
+					this._remember(edit.deleted);
+			}
+			if (edit.inserted) {
+				added.push({ type: "insert", time: eventTime, index: edit.index, text: edit.inserted,
+					source: isOwn ? this._sourceOf(edit.inserted, keys) : "other" });
+			}
+		});
 
+		this._caret = WritingRecorder._caretAfter(this._caret, edits, own);
 		this._text = text;
 		this._session.events.push(...added);
 		this._session.endedAt = Math.max(this._session.endedAt, eventTime);
 		return added;
+	}
+
+	/**
+	 * Which of the edits between two snapshots the keys pressed in between made.
+	 * @param {TextEdit[]} edits
+	 * @param {Keystroke[]} keys - at least one
+	 * @returns {TextEdit}
+	 * @private
+	 */
+	_ownEdit(edits, keys) {
+		if (edits.length === 1)
+			return edits[0];
+
+		const caret = this._caret;
+		if (caret !== null) {
+			const distance = (/** @type {TextEdit} */ e) =>
+				(caret < e.at ? e.at - caret : caret > e.at + e.deleted.length ? caret - e.at - e.deleted.length : 0);
+			return edits.reduce((best, e) => (distance(e) < distance(best) ? e : best));
+		}
+
+		// no earlier edit to go by: the edit the keys fit best
+		const bulk = keys.some((k) => k.kind === "paste" || k.kind === "undo" || k.kind === "redo");
+		const typed = keys.filter((k) => k.kind === "char" || k.kind === "enter").length;
+		const erased = keys.filter((k) => k.kind === "backspace" || k.kind === "delete" || k.kind === "cut").length;
+		const misfit = (/** @type {TextEdit} */ e) => (bulk
+			? -(e.inserted.length + e.deleted.length)
+			: Math.abs(e.inserted.length - typed) + Math.abs(Math.min(e.deleted.length, 1) - Math.min(erased, 1)));
+		return edits.reduce((best, e) => (misfit(e) < misfit(best) ? e : best));
+	}
+
+	/**
+	 * Where the user's place in the text is after a snapshot: right after their own edit, or
+	 * where it was, moved along by the edits of others before it.
+	 * @param {number | null} caret
+	 * @param {TextEdit[]} edits
+	 * @param {TextEdit | null} own
+	 * @returns {number | null}
+	 * @private
+	 */
+	static _caretAfter(caret, edits, own) {
+		if (own)
+			return own.index + own.inserted.length;
+		if (caret === null)
+			return null;
+
+		let shift = 0;
+		for (const e of edits) {
+			if (e.at + e.deleted.length <= caret)
+				shift += e.inserted.length - e.deleted.length;
+			else if (e.at < caret)
+				return e.index + e.inserted.length;
+		}
+		return caret + shift;
 	}
 
 	/**

@@ -53,6 +53,38 @@ class DocumentReader {
 	}
 
 	/**
+	 * The paragraphs of the document body, tables included: the ids of all of them in document
+	 * order, and the text of the ones asked for — the same text {@link DocumentReader.readDocument}
+	 * joins, so the two can be mixed.
+	 * @param {string[] | null} ids - whose text to read; null for every paragraph
+	 * @returns {Promise<{ ids: string[], texts: Record<string, string> }>}
+	 */
+	readParagraphs(ids) {
+		return EditorCommands.run(function() {
+			const wanted = /** @type {string[] | null} */ (Asc.scope.originalityIds);
+			/** @type {Record<string, boolean>} */
+			const asked = {};
+			if (wanted)
+				wanted.forEach(function(id) { asked[id] = true; });
+			/** @type {{ ids: string[], texts: Record<string, string> }} */
+			const result = { ids: [], texts: {} };
+			Api.GetDocument().GetAllParagraphs().forEach(function(paragraph) {
+				const id = paragraph.GetInternalId();
+				result.ids.push(id);
+				if (!wanted || asked[id])
+					result.texts[id] = paragraph.GetText({ "Numbering": false, "Math": false });
+			});
+			return result;
+		}, { originalityIds: ids }).then((read) => {
+			const r = /** @type {{ ids?: unknown, texts?: unknown }} */ (read || {});
+			return {
+				ids   : Array.isArray(r.ids) ? r.ids.map(String) : [],
+				texts : r.texts && typeof r.texts === "object" ? /** @type {Record<string, string>} */ (r.texts) : {},
+			};
+		});
+	}
+
+	/**
 	 * The ids of every paragraph of the document body, tables included, in document order — the
 	 * ids `onParagraphText` reports paragraphs by.
 	 * @returns {Promise<string[]>}

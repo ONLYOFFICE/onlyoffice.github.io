@@ -41,10 +41,26 @@
 				<span class="recording__dot"></span>
 				<span id="recording-status" class="recording__text"></span>
 			</div>
+			<div class="field">
+				<input type="checkbox" id="record-writing">
+			</div>
 			<p class="field__hint recording__note" data-i18n="Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.">Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.</p>
+			<p class="field__hint recording__note" data-i18n="The record is kept in the document file and goes wherever the file goes, deleted drafts included.">The record is kept in the document file and goes wherever the file goes, deleted drafts included.</p>
 			<div class="actions">
 				<button type="button" id="open-replay" data-i18n="Watch replay">Watch replay</button>
 				<button type="button" id="export-report-writing" data-i18n="Export report">Export report</button>
+			</div>
+			<div class="actions">
+				<button type="button" id="delete-record" data-i18n="Delete record…">Delete record…</button>
+			</div>
+			<div id="delete-confirm" class="confirm hidden">
+				<p class="confirm__text" data-i18n="The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.">The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin; export the report first if you need it.</p>
+				<p id="delete-others-note" class="field__hint hidden" data-i18n="People writing in the document right now with the plugin open keep their records and save them again.">People writing in the document right now with the plugin open keep their records and save them again.</p>
+				<div class="confirm__actions">
+					<button type="button" id="delete-mine" data-i18n="Delete my record">Delete my record</button>
+					<button type="button" id="delete-all" data-i18n="Delete all records">Delete all records</button>
+					<button type="button" id="delete-cancel" data-i18n="Cancel">Cancel</button>
+				</div>
 			</div>
 			<div id="writing-writers" class="field hidden">
 				<label class="field__label" data-i18n="Writer">Writer</label>
@@ -123,6 +139,7 @@
 	<script type="text/javascript" src="scripts/domain/typing-analysis.js"></script>
 	<script type="text/javascript" src="scripts/domain/session-text.js"></script>
 	<script type="text/javascript" src="scripts/domain/history-codec.js"></script>
+	<script type="text/javascript" src="scripts/domain/session-list.js"></script>
 	<script type="text/javascript" src="scripts/domain/writers.js"></script>
 	<script type="text/javascript" src="scripts/domain/tracked-changes.js"></script>
 	<script type="text/javascript" src="scripts/editor/editor-commands.js"></script>
@@ -139,6 +156,7 @@
 	<script type="text/javascript" src="scripts/storage/history-store.js"></script>
 	<script type="text/javascript" src="scripts/app/scan-service.js"></script>
 	<script type="text/javascript" src="scripts/app/highlight-service.js"></script>
+	<script type="text/javascript" src="scripts/app/snapshot-reader.js"></script>
 	<script type="text/javascript" src="scripts/app/recording-service.js"></script>
 	<script type="text/javascript" src="scripts/app/writing-history-service.js"></script>
 	<script type="text/javascript" src="scripts/app/replay-protocol.js"></script>

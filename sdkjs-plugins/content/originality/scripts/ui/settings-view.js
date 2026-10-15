@@ -45,7 +45,7 @@ class SettingsView {
 	 * @param {SettingsStore} store
 	 * @param {{
 	 *   checkBalance: (apiKey: string) => Promise<CreditBalance>,
-	 *   onChange: (settings: ScanSettings) => void,
+	 *   onChange: (settings: PluginSettings) => void,
 	 * }} callbacks
 	 */
 	constructor(store, callbacks) {
@@ -130,12 +130,11 @@ class SettingsView {
 	}
 
 	/**
-	 * @param {Partial<ScanSettings>} change
+	 * @param {Partial<PluginSettings>} change
 	 * @private
 	 */
 	_update(change) {
-		this._store.save(Object.assign({}, this._settings, change));
-		this._settings = this._store.load();
+		this._settings = this._store.update(change);
 		this._syncAvailability();
 		this._onChange(this._settings);
 	}

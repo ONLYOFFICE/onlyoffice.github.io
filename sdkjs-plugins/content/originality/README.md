@@ -37,6 +37,7 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 * The text you scan is sent to `api.originality.ai`. With **Store scans on Originality.ai** on, Originality.ai keeps the scan in your account, and it can be shared with a link.
 * The API key and the settings are kept in the browser's local storage. They are not stored in the document.
 * The writing record is stored in the document itself, as one custom XML part per writer. It holds the text changes and when keys were pressed, with the kind of key (a character, Backspace, Delete, Enter, a paste or an undo), but not which character was typed. Anyone who has the file can read the record.
+* The record goes wherever the file goes — deleted drafts and pasted text included. Turn **Record my writing** off on the **Writing** tab to stop recording, and use **Delete record…** there to remove your record, or everyone's, before you send the file on.
 
 ## Limitations
 
@@ -44,6 +45,7 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 * The record is part of the document, so the document's editors can remove or alter it. Treat it, and the auto-typing score, as an indication, not proof.
 * The record is kept in DOCX files. Other formats may drop it on save.
 * Saving the record adds a step to the undo history.
+* When several people write at once, the plugin tells the user's edits from the others' by the keys they pressed and where they last edited. Two people editing the same paragraph within the same second cannot be told apart.
 * Tracked changes tell who changed the text and when, not whether it was typed or pasted. They disappear once accepted or rejected.
 
 ## How to install

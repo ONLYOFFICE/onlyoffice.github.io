@@ -74,6 +74,21 @@ class HistoryStore {
 	}
 
 	/**
+	 * One user's history in the document.
+	 * @param {string} userId
+	 * @returns {Promise<WritingHistory | null>} null when there is none, or it cannot be read
+	 */
+	async load(userId) {
+		const xmls = await this._parts.read(HistoryStore._rootName(userId));
+		for (const xml of xmls) {
+			const history = await this._parse(xml);
+			if (history && history.userId === userId)
+				return history;
+		}
+		return null;
+	}
+
+	/**
 	 * Writes the user's history, replacing what was stored for them.
 	 * @param {WritingHistory} history
 	 * @returns {Promise<boolean>} whether it is in the document now
@@ -91,6 +106,15 @@ class HistoryStore {
 			+ "</" + root + ">";
 		// the bare name, without "<": a re-serialised root may come back with a namespace prefix
 		return this._parts.write(root, xml);
+	}
+
+	/**
+	 * Removes a user's history from the document, or everyone's.
+	 * @param {string | null} userId - null for every user
+	 * @returns {Promise<boolean>} whether it is gone
+	 */
+	remove(userId) {
+		return this._parts.remove(userId === null ? HistoryStore.namespace : HistoryStore._rootName(userId));
 	}
 
 	/**

@@ -40,13 +40,26 @@
  */
 
 /**
- * The difference between two versions of a text as one changed stretch: everything before
- * `index` and everything after the changed stretch is the same in both.
+ * @typedef {Object} TextEdit
+ * @property {number} index - where it applies once the edits before it are applied, i.e. its
+ *   place in the text after all of them
+ * @property {number} at - where it is in the text before any of them
+ * @property {string} deleted
+ * @property {string} inserted
+ */
+
+/**
+ * The difference between two versions of a text: as one changed stretch ({@link TextDiff.between}),
+ * or as separate edits in separate places ({@link TextDiff.edits}).
  *
- * Two snapshots taken a moment apart nearly always differ by one edit, which this describes
- * exactly; edits in two places between snapshots come out as one change spanning both.
+ * Two snapshots taken a moment apart by one writer nearly always differ by one edit. When several
+ * people write at once they differ in several places, and one stretch spanning all of them would
+ * hand everyone's text to whoever typed last.
  */
 const TextDiff = Object.freeze({
+
+	/** past this many differing paragraphs the comparison stops and reports one stretch */
+	maxParagraphEdits: 500,
 
 	/**
 	 * @param {string} before
@@ -74,6 +87,156 @@ const TextDiff = Object.freeze({
 			deleted  : before.slice(start, endBefore),
 			inserted : after.slice(start, endAfter),
 		};
+	},
+
+	/**
+	 * The edits that turn one text into the other, each in a place of its own, in text order.
+	 * Paragraphs (lines) are compared first, so edits in different paragraphs stay apart; within
+	 * a run of changed paragraphs the edit is narrowed to the characters that differ. Two edits in
+	 * one paragraph come out as one.
+	 * @param {string} before
+	 * @param {string} after
+	 * @returns {TextEdit[]} empty when the texts are equal
+	 */
+	edits(before, after) {
+		if (before === after)
+			return [];
+
+		const a = TextDiff._paragraphs(before);
+		const b = TextDiff._paragraphs(after);
+		const runs = TextDiff._changedRuns(a, b);
+		if (!runs) {
+			const change = /** @type {TextChange} */ (TextDiff.between(before, after));
+			return [{ index: change.index, at: change.index, deleted: change.deleted, inserted: change.inserted }];
+		}
+
+		const startsA = TextDiff._starts(a);
+		const startsB = TextDiff._starts(b);
+		return runs.map((run) => {
+			const fromA = startsA[run.a0];
+			const fromB = startsB[run.b0];
+			const change = /** @type {TextChange} */ (TextDiff.between(
+				before.slice(fromA, startsA[run.a1]),
+				after.slice(fromB, startsB[run.b1])));
+			return {
+				index    : fromB + change.index,
+				at       : fromA + change.index,
+				deleted  : change.deleted,
+				inserted : change.inserted,
+			};
+		}).filter((edit) => edit.deleted !== "" || edit.inserted !== "");
+	},
+
+	/**
+	 * Paragraphs with the line break that ends them, so that joined they are the text again.
+	 * @param {string} text
+	 * @returns {string[]}
+	 * @private
+	 */
+	_paragraphs(text) {
+		const lines = text.split("\n");
+		return lines.map((line, i) => (i < lines.length - 1 ? line + "\n" : line));
+	},
+
+	/**
+	 * @param {string[]} parts
+	 * @returns {number[]} where each part starts, and one more entry for the end of the text
+	 * @private
+	 */
+	_starts(parts) {
+		const starts = [0];
+		parts.forEach((part, i) => starts.push(starts[i] + part.length));
+		return starts;
+	},
+
+	/**
+	 * The runs of paragraphs that differ, by Myers' diff over the paragraphs.
+	 * @param {string[]} a
+	 * @param {string[]} b
+	 * @returns {Array<{ a0: number, a1: number, b0: number, b1: number }> | null} each run as
+	 *   `a[a0..a1)` replaced by `b[b0..b1)`; null when the texts differ in too many places
+	 * @private
+	 */
+	_changedRuns(a, b) {
+		// paragraphs as numbers, so that comparing them is cheap
+		/** @type {Map<string, number>} */
+		const codes = new Map();
+		const code = (/** @type {string} */ s) => {
+			let c = codes.get(s);
+			if (c === undefined) {
+				c = codes.size;
+				codes.set(s, c);
+			}
+			return c;
+		};
+		const x = a.map(code);
+		const y = b.map(code);
+
+		const n = x.length;
+		const m = y.length;
+		const max = Math.min(n + m, TextDiff.maxParagraphEdits);
+		const offset = max + 1;
+		const v = new Int32Array(2 * max + 3);
+		/** @type {Int32Array[]} */
+		const trace = [];
+
+		let found = false;
+		for (let d = 0; d <= max && !found; d++) {
+			trace.push(v.slice());
+			for (let k = -d; k <= d; k += 2) {
+				let i = k === -d || (k !== d && v[offset + k - 1] < v[offset + k + 1])
+					? v[offset + k + 1]
+					: v[offset + k - 1] + 1;
+				let j = i - k;
+				while (i < n && j < m && x[i] === y[j]) {
+					i++;
+					j++;
+				}
+				v[offset + k] = i;
+				if (i >= n && j >= m) {
+					found = true;
+					break;
+				}
+			}
+		}
+		if (!found)
+			return null;
+
+		// walk back through the trace, collecting the paragraphs that are kept
+		/** @type {Array<[number, number]>} */
+		const kept = [];
+		let i = n;
+		let j = m;
+		for (let d = trace.length - 1; d >= 0 && (i > 0 || j > 0); d--) {
+			const vd = trace[d];
+			const k = i - j;
+			const prevK = k === -d || (k !== d && vd[offset + k - 1] < vd[offset + k + 1]) ? k + 1 : k - 1;
+			const prevI = d === 0 ? 0 : vd[offset + prevK];
+			const prevJ = prevI - prevK;
+			while (i > prevI && j > prevJ) {
+				kept.push([i - 1, j - 1]);
+				i--;
+				j--;
+			}
+			if (d > 0) {
+				i = prevI;
+				j = prevJ;
+			}
+		}
+		kept.reverse();
+
+		// what lies between two kept paragraphs is a changed run
+		/** @type {Array<{ a0: number, a1: number, b0: number, b1: number }>} */
+		const runs = [];
+		let lastA = 0;
+		let lastB = 0;
+		kept.concat([[n, m]]).forEach(([ka, kb]) => {
+			if (ka > lastA || kb > lastB)
+				runs.push({ a0: lastA, a1: ka, b0: lastB, b1: kb });
+			lastA = ka + 1;
+			lastB = kb + 1;
+		});
+		return runs;
 	},
 
 	/**

@@ -34,16 +34,18 @@
 
 /// <reference path="../domain/history-codec.js" />
 /// <reference path="../domain/session-text.js" />
+/// <reference path="../domain/session-list.js" />
 /// <reference path="../storage/history-store.js" />
 /// <reference path="./recording-service.js" />
 
 /**
  * The writing history of the document: the sessions stored in it by everyone, plus the one being
- * recorded now. Loads them when the panel opens, starts the recording where the last session
- * left off, and writes the user's history back into the document.
+ * recorded now. Loads them when the panel opens, starts and stops the recording where the last
+ * session left off, writes the user's history back into the document, and removes it from there.
  *
  * Every write is a change to the document and a step in its undo history, so writes are rare:
- * after a quiet spell, and at most once a minute while the user keeps working.
+ * after a quiet spell, and at most once a minute while the user keeps working. A write merges
+ * with what is stored, since the same user may be writing in another tab.
  */
 class WritingHistoryService {
 
@@ -65,6 +67,9 @@ class WritingHistoryService {
 		/** @type {WritingSession[]} everyone else's sessions */
 		this._others = [];
 		this._canSave = false;
+		/** @type {{ id: string, name: string } | null} */
+		this._user = null;
+		this._recordingOn = false;
 
 		/** @type {number | null} */
 		this._savedAt = null;
@@ -80,10 +85,13 @@ class WritingHistoryService {
 	/**
 	 * @param {{ id: string, name: string }} user
 	 * @param {boolean} canSave - false in a viewer, where the editor would discard the write
+	 * @param {boolean} record - whether to record the user's writing
 	 * @returns {Promise<void>}
 	 */
-	async start(user, canSave) {
+	async start(user, canSave, record) {
 		this._canSave = canSave;
+		this._user = user;
+		this._recordingOn = record;
 		const histories = await this._store.loadAll();
 		this._mine = histories.find((h) => h.userId === user.id) || { userId: user.id, userName: user.name, sessions: [] };
 		this._mine.userName = user.name;
@@ -91,9 +99,77 @@ class WritingHistoryService {
 			.filter((h) => h.userId !== user.id)
 			.reduce((all, h) => all.concat(h.sessions), /** @type {WritingSession[]} */ ([]));
 
-		const last = this._stored().reduce((latest, s) => (!latest || s.endedAt > latest.endedAt ? s : latest), /** @type {WritingSession | null} */ (null));
-		await this._recording.start(user, last ? SessionText.final(last) : null);
+		if (record)
+			await this._startRecording();
 		this._notify();
+	}
+
+	/**
+	 * Starts or stops recording. What was recorded so far is written into the document first.
+	 * @param {boolean} on
+	 * @returns {Promise<void>}
+	 */
+	async setRecording(on) {
+		if (on === this._recordingOn || !this._user)
+			return;
+		if (on) {
+			await this._startRecording();
+		} else {
+			this._recordingOn = false;
+			await this.flush();
+			const current = this._recording.session;
+			if (this._mine && current && WritingHistoryService._hasActivity(current))
+				this._mine.sessions = SessionList.merge(this._mine.sessions, [current]);
+			this._recording.stop();
+		}
+		this._notify();
+	}
+
+	/**
+	 * @returns {boolean} whether the user's writing is being recorded
+	 */
+	get isRecording() {
+		return this._recordingOn;
+	}
+
+	/**
+	 * Removes the history from the document: the user's, or everyone's. The current session
+	 * goes with it; if recording is on, a new one starts from here.
+	 *
+	 * Someone recording in the document right now keeps their history in their panel and writes
+	 * it back on their next save — the same user in another tab included.
+	 * @param {boolean} everyone
+	 * @returns {Promise<boolean>} whether it is gone; false in a viewer
+	 */
+	async remove(everyone) {
+		if (!this._canSave || !this._mine)
+			return false;
+
+		if (this._timer)
+			clearTimeout(this._timer);
+		this._timer = null;
+		this._dirtySince = 0;
+		if (!(await this._store.remove(everyone ? null : this._mine.userId)))
+			return false;
+
+		this._mine.sessions = [];
+		if (everyone)
+			this._others = [];
+		this._savedAt = null;
+		if (this._recordingOn)
+			await this._startRecording();
+		this._notify();
+		return true;
+	}
+
+	/**
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	async _startRecording() {
+		this._recordingOn = true;
+		const last = this._stored().reduce((latest, s) => (!latest || s.endedAt > latest.endedAt ? s : latest), /** @type {WritingSession | null} */ (null));
+		await this._recording.start(/** @type {{ id: string, name: string }} */ (this._user), last ? SessionText.final(last) : null);
 	}
 
 	/**
@@ -162,7 +238,12 @@ class WritingHistoryService {
 			return;
 
 		this._dirtySince = 0;
-		const history = { userId: this._mine.userId, userName: this._mine.userName, sessions: this._mine.sessions.concat([current]) };
+		const mine = this._mine;
+		// what another tab of the same user stored since stays
+		const stored = await this._store.load(mine.userId);
+		const sessions = SessionList.merge(stored ? stored.sessions : [], mine.sessions, [current]);
+		mine.sessions = sessions.filter((s) => s.startedAt !== current.startedAt);
+		const history = { userId: mine.userId, userName: mine.userName, sessions: sessions };
 		if (await this._store.save(history)) {
 			this._savedAt = Date.now();
 			this._notify();
