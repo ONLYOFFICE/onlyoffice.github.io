@@ -72,7 +72,7 @@ class SettingsStore {
 		checkFacts       : false,
 		storeScan        : true,
 		excludedUrls     : [],
-		recordWriting    : true,
+		recordWriting    : false,
 	});
 
 	/** @private */

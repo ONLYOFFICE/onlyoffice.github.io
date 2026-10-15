@@ -312,7 +312,7 @@ class WritingView {
 			{ key: "pasted", label: tr("Pasted"), chars: summary.pastedChars },
 			{ key: "moved", label: tr("Moved within the document"), chars: summary.movedChars },
 			{ key: "restored", label: tr("Restored by undo"), chars: summary.restoredChars },
-			{ key: "other", label: tr("Without the writer's typing"), chars: summary.otherChars },
+			{ key: "other", label: tr("Not from the writer's keyboard"), chars: summary.otherChars },
 			{ key: "unrecorded", label: tr("Changed while nothing was recording"), chars: summary.unrecordedInserted },
 		];
 		const total = parts.reduce((sum, part) => sum + part.chars, 0);
@@ -338,6 +338,8 @@ class WritingView {
 			row.classList.add("result-row--" + part.key);
 			card.appendChild(row);
 		});
+		if (summary.otherChars)
+			card.appendChild(Cards.note(tr("Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.")));
 		return card;
 	}
 

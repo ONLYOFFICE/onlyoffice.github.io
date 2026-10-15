@@ -106,7 +106,7 @@
 	"Typing speed": "Velocidad de escritura",
 	"words/min": "palabras/min",
 	"Pastes": "Pegados",
-	"Without the writer's typing": "Sin escritura del autor",
+	"Not from the writer's keyboard": "No desde el teclado del autor",
 	"Changed while nothing was recording": "Cambiado sin grabación",
 	"view only: nothing is saved": "solo lectura: no se guarda nada",
 	"saved to the document at": "guardado en el documento a las",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "Quienes escriben ahora en el documento con el plugin abierto conservan su registro y lo vuelven a guardar.",
 	"Delete my record": "Eliminar mi registro",
 	"Delete all records": "Eliminar todos los registros",
-	"Cancel": "Cancelar"
+	"Cancel": "Cancelar",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "No desde el teclado del autor: un coautor, otro plugin, una macro o el dictado."
 }

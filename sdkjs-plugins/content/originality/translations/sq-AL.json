@@ -106,7 +106,7 @@
 	"Typing speed": "Shpejtësia e shtypjes",
 	"words/min": "fjalë/min",
 	"Pastes": "Ngjitje",
-	"Without the writer's typing": "Pa shtypjen e autorit",
+	"Not from the writer's keyboard": "Jo nga tastiera e autorit",
 	"Changed while nothing was recording": "Ndryshuar pa regjistrim",
 	"view only: nothing is saved": "vetëm shikim: asgjë nuk ruhet",
 	"saved to the document at": "ruajtur në dokument në",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "Ata që po shkruajnë tani në dokument me shtojcën të hapur e mbajnë regjistrimin e tyre dhe e ruajnë përsëri.",
 	"Delete my record": "Fshi regjistrimin tim",
 	"Delete all records": "Fshi të gjitha regjistrimet",
-	"Cancel": "Anulo"
+	"Cancel": "Anulo",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "Jo nga tastiera e autorit: një bashkautor, një shtojcë tjetër, një makro ose diktim."
 }

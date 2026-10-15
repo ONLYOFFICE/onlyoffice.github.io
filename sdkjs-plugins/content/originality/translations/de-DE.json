@@ -106,7 +106,7 @@
 	"Typing speed": "Tippgeschwindigkeit",
 	"words/min": "Wörter/Min.",
 	"Pastes": "Einfügungen",
-	"Without the writer's typing": "Ohne Tippen des Autors",
+	"Not from the writer's keyboard": "Nicht von der Tastatur des Autors",
 	"Changed while nothing was recording": "Geändert, während nichts aufgezeichnet wurde",
 	"view only: nothing is saved": "nur Ansicht: es wird nichts gespeichert",
 	"saved to the document at": "im Dokument gespeichert um",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "Wer gerade mit geöffnetem Plugin im Dokument schreibt, behält seine Aufzeichnung und speichert sie erneut.",
 	"Delete my record": "Meine Aufzeichnung löschen",
 	"Delete all records": "Alle Aufzeichnungen löschen",
-	"Cancel": "Abbrechen"
+	"Cancel": "Abbrechen",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "Nicht von der Tastatur des Autors: ein Mitautor, ein anderes Plugin, ein Makro oder Diktieren."
 }

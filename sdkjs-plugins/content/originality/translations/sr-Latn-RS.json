@@ -106,7 +106,7 @@
 	"Typing speed": "Brzina kucanja",
 	"words/min": "reči/min",
 	"Pastes": "Lepljenja",
-	"Without the writer's typing": "Bez kucanja autora",
+	"Not from the writer's keyboard": "Nije sa tastature autora",
 	"Changed while nothing was recording": "Izmenjeno dok ništa nije snimano",
 	"view only: nothing is saved": "samo pregled: ništa se ne čuva",
 	"saved to the document at": "sačuvano u dokument u",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "Oni koji trenutno pišu u dokumentu sa otvorenim dodatkom zadržavaju svoj zapis i ponovo ga čuvaju.",
 	"Delete my record": "Obriši moj zapis",
 	"Delete all records": "Obriši sve zapise",
-	"Cancel": "Otkaži"
+	"Cancel": "Otkaži",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "Nije sa tastature autora: koautor, drugi dodatak, makro ili diktiranje."
 }

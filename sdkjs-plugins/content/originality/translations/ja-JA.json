@@ -106,7 +106,7 @@
 	"Typing speed": "入力速度",
 	"words/min": "語/分",
 	"Pastes": "貼り付け",
-	"Without the writer's typing": "執筆者の入力なし",
+	"Not from the writer's keyboard": "執筆者のキーボード以外",
 	"Changed while nothing was recording": "記録されていない間に変更",
 	"view only: nothing is saved": "表示のみ：何も保存されません",
 	"saved to the document at": "文書に保存した時刻：",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "現在プラグインを開いて文書に書き込んでいる人は、自分の記録を保持し、再び保存します。",
 	"Delete my record": "自分の記録を削除",
 	"Delete all records": "すべての記録を削除",
-	"Cancel": "キャンセル"
+	"Cancel": "キャンセル",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "執筆者のキーボード以外：共同編集者、他のプラグイン、マクロ、または音声入力。"
 }

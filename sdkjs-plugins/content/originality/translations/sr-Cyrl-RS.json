@@ -106,7 +106,7 @@
 	"Typing speed": "Брзина куцања",
 	"words/min": "речи/мин",
 	"Pastes": "Лепљења",
-	"Without the writer's typing": "Без куцања аутора",
+	"Not from the writer's keyboard": "Није са тастатуре аутора",
 	"Changed while nothing was recording": "Измењено док ништа није снимано",
 	"view only: nothing is saved": "само преглед: ништа се не чува",
 	"saved to the document at": "сачувано у документ у",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "Они који тренутно пишу у документу са отвореним додатком задржавају свој запис и поново га чувају.",
 	"Delete my record": "Обриши мој запис",
 	"Delete all records": "Обриши све записе",
-	"Cancel": "Откажи"
+	"Cancel": "Откажи",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "Није са тастатуре аутора: коаутор, други додатак, макро или диктирање."
 }

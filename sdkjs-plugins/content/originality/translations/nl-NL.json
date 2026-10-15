@@ -106,7 +106,7 @@
 	"Typing speed": "Typesnelheid",
 	"words/min": "woorden/min",
 	"Pastes": "Plakacties",
-	"Without the writer's typing": "Zonder typen van de schrijver",
+	"Not from the writer's keyboard": "Niet van het toetsenbord van de schrijver",
 	"Changed while nothing was recording": "Gewijzigd terwijl er niets werd opgenomen",
 	"view only: nothing is saved": "alleen bekijken: er wordt niets opgeslagen",
 	"saved to the document at": "opgeslagen in het document om",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "Wie nu met de plug-in geopend in het document schrijft, houdt de eigen registratie en slaat die opnieuw op.",
 	"Delete my record": "Mijn registratie verwijderen",
 	"Delete all records": "Alle registraties verwijderen",
-	"Cancel": "Annuleren"
+	"Cancel": "Annuleren",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "Niet van het toetsenbord van de schrijver: een medeauteur, een andere plug-in, een macro of dicteren."
 }

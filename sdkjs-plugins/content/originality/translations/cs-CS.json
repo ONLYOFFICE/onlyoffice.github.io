@@ -106,7 +106,7 @@
 	"Typing speed": "Rychlost psaní",
 	"words/min": "slov/min",
 	"Pastes": "Vložení",
-	"Without the writer's typing": "Bez psaní autora",
+	"Not from the writer's keyboard": "Ne z klávesnice autora",
 	"Changed while nothing was recording": "Změněno, když se nic nezaznamenávalo",
 	"view only: nothing is saved": "pouze zobrazení: nic se neukládá",
 	"saved to the document at": "uloženo do dokumentu v",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "Kdo v dokumentu právě píše s otevřeným pluginem, svůj záznam si ponechá a znovu ho uloží.",
 	"Delete my record": "Smazat můj záznam",
 	"Delete all records": "Smazat všechny záznamy",
-	"Cancel": "Zrušit"
+	"Cancel": "Zrušit",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "Ne z klávesnice autora: spoluautor, jiný plugin, makro nebo diktování."
 }

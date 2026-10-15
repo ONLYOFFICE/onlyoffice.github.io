@@ -10,7 +10,7 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 * **Plagiarism check.** The share of text found elsewhere and the sources, with the matching phrases.
 * **Readability and fact checking**, if you turn them on.
 * **Marks in the document.** Click a finding to go to its text. The ONLYOFFICE Docs Developer Edition and the desktop editors also highlight the findings in the text.
-* **Writing record.** While the panel is open, the plugin records how the text changes and when keys are pressed. It shows:
+* **Writing record.** Off by default. Once turned on, the plugin records how the text changes and when keys are pressed, while the panel is open. It shows:
   * how much text was typed and how much was pasted;
   * every paste;
   * whether the typing rhythm looks natural or auto-typed.
@@ -29,7 +29,7 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 1. Open the **Plugins** tab and click **Originality.ai**.
 2. On the **Settings** tab, enter your API key and choose the checks.
 3. On the **Scan** tab, click **Scan document**, or select some text and click **Scan selection**. The text needs at least 50 words.
-4. Keep the panel open while you write. The **Writing** tab shows the record of the selected writer; click **Watch replay** to replay it.
+4. To record your writing, turn on **Record my writing** on the **Writing** tab and keep the panel open while you write. The tab shows the record of the selected writer; click **Watch replay** to replay it.
 5. Click **Export report** to save the report.
 
 ## Data and privacy
@@ -37,7 +37,7 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 * The text you scan is sent to `api.originality.ai`. With **Store scans on Originality.ai** on, Originality.ai keeps the scan in your account, and it can be shared with a link.
 * The API key and the settings are kept in the browser's local storage. They are not stored in the document.
 * The writing record is stored in the document itself, as one custom XML part per writer. It holds the text changes and when keys were pressed, with the kind of key (a character, Backspace, Delete, Enter, a paste or an undo), but not which character was typed. Anyone who has the file can read the record.
-* The record goes wherever the file goes — deleted drafts and pasted text included. Turn **Record my writing** off on the **Writing** tab to stop recording, and use **Delete record…** there to remove your record, or everyone's, before you send the file on.
+* The record goes wherever the file goes — deleted drafts and pasted text included. Recording is off until you turn on **Record my writing** on the **Writing** tab; use **Delete record…** there to remove your record, or everyone's, before you send the file on.
 
 ## Limitations
 

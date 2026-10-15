@@ -106,7 +106,7 @@
 	"Typing speed": "Скорость набора",
 	"words/min": "слов/мин",
 	"Pastes": "Вставки",
-	"Without the writer's typing": "Без набора автора",
+	"Not from the writer's keyboard": "Не с клавиатуры автора",
 	"Changed while nothing was recording": "Изменено без записи",
 	"view only: nothing is saved": "только просмотр: ничего не сохраняется",
 	"saved to the document at": "сохранено в документ в",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "Те, кто сейчас пишет в документе с открытым плагином, сохранят свои записи снова.",
 	"Delete my record": "Удалить мою запись",
 	"Delete all records": "Удалить все записи",
-	"Cancel": "Отмена"
+	"Cancel": "Отмена",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "Не с клавиатуры автора: соавтор, другой плагин, макрос или диктовка."
 }

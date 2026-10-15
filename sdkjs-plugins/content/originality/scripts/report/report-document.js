@@ -177,7 +177,7 @@ const ReportDocument = Object.freeze({
 			[tr("Pasted"), summary.pastedChars],
 			[tr("Moved within the document"), summary.movedChars],
 			[tr("Restored by undo"), summary.restoredChars],
-			[tr("Without the writer's typing"), summary.otherChars],
+			[tr("Not from the writer's keyboard"), summary.otherChars],
 			[tr("Changed while nothing was recording"), summary.unrecordedInserted],
 		].filter((row) => Number(row[1]) > 0);
 		const total = origin.reduce((sum, row) => sum + Number(row[1]), 0);
@@ -186,6 +186,8 @@ const ReportDocument = Object.freeze({
 			? "<table>" + origin.map((row) => ReportDocument._row(String(row[0]),
 				Math.round(Number(row[1]) / total * 100) + "% · " + Number(row[1]).toLocaleString() + " " + tr("chars"))).join("") + "</table>"
 			: "<p class=\"muted\">" + e(tr("Nothing has been added to the document yet.")) + "</p>";
+		if (summary.otherChars)
+			html += "<p class=\"muted\">" + e(tr("Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.")) + "</p>";
 		if (summary.unrecordedDeleted)
 			html += "<p class=\"muted\">" + e(tr("Removed while nothing was recording")) + ": " + summary.unrecordedDeleted.toLocaleString() + " " + e(tr("chars")) + "</p>";
 

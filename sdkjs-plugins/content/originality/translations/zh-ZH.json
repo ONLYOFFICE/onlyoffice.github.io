@@ -106,7 +106,7 @@
 	"Typing speed": "输入速度",
 	"words/min": "词/分钟",
 	"Pastes": "粘贴次数",
-	"Without the writer's typing": "不含作者输入",
+	"Not from the writer's keyboard": "非作者键盘输入",
 	"Changed while nothing was recording": "在未记录时更改",
 	"view only: nothing is saved": "仅查看：不会保存任何内容",
 	"saved to the document at": "保存到文档的时间：",
@@ -167,5 +167,6 @@
 	"People writing in the document right now with the plugin open keep their records and save them again.": "当前打开插件并在文档中写作的人会保留自己的记录并再次保存。",
 	"Delete my record": "删除我的记录",
 	"Delete all records": "删除所有记录",
-	"Cancel": "取消"
+	"Cancel": "取消",
+	"Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.": "非作者键盘输入：合著者、其他插件、宏或语音输入。"
 }
