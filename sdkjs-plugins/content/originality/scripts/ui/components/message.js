@@ -30,12 +30,6 @@
  *
  */
 
-// A copy of zotero/src/app/shared/components/message.js, kept as close to it as possible so the plugins look and behave alike.
-// Changes: a classic script instead of an ES module (no import/export); `translate` is `Asc.plugin.tr`.
-// Not type-checked here: types/components.d.ts declares what the plugin uses of it.
-
-
-
 /**
  * @constructor
  * @param {string | HTMLElement} container
@@ -58,7 +52,7 @@ function Message(container, options) {
      * @type {MessageOptionsType}
      * @private
      */
-    this._options = Object.assign(this._options, options);
+    this._options = Object.assign({}, Message.prototype._options, options);
     this._isShow = false;
 }
 
@@ -130,15 +124,17 @@ Message.prototype = {
             }
         }
 
-        messageEl.innerHTML =
-            '<div class="message-content">' +
-            '<span class="message-title">' +
-            title +
-            "</span>" +
-            '<span class="message-text">' +
-            text +
-            "</span>" +
-            "</div>";
+        var contentEl = document.createElement("div");
+        contentEl.className = "message-content";
+        var titleEl = document.createElement("span");
+        titleEl.className = "message-title";
+        titleEl.textContent = title;
+        var textEl = document.createElement("span");
+        textEl.className = "message-text";
+        textEl.textContent = text;
+        contentEl.appendChild(titleEl);
+        contentEl.appendChild(textEl);
+        messageEl.appendChild(contentEl);
 
         if (this._options.closeButton) {
             var closeBtn = document.createElement("button");
@@ -205,14 +201,28 @@ Message.prototype = {
             this._options.text = text;
         }
 
+        var previous = this.container.querySelectorAll(".message");
+        for (var i = 0; i < previous.length; i++) {
+            previous[i].remove();
+        }
+
         var messageEl = this._create();
         this._element = messageEl;
         this.container.appendChild(messageEl);
 
-        setTimeout(function () {
+        if (previous.length) {
+            // in the place of another: no entrance, the end state at once
+            messageEl.style.transition = "none";
             messageEl.style.opacity = "1";
             messageEl.style.transform = "translateY(0)";
-        }, 10);
+            void messageEl.offsetHeight;
+            messageEl.style.transition = "";
+        } else {
+            setTimeout(function () {
+                messageEl.style.opacity = "1";
+                messageEl.style.transform = "translateY(0)";
+            }, 10);
+        }
 
         if (this._options.autoClose && Number(this._options.duration) > 0) {
             this._timeoutId = setTimeout(
@@ -241,16 +251,7 @@ Message.prototype = {
         }
 
         this.removeOutsideClickListener();
-
-        var _element = this._element;
-        _element.style.opacity = "0";
-        _element.style.transform = "translateY(-20px)";
-
-        setTimeout(function () {
-            if (_element.parentNode) {
-                _element.parentNode.removeChild(_element);
-            }
-        }, 300);
+        this._element.parentNode.removeChild(this._element);
     },
 };
 

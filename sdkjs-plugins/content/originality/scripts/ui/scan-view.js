@@ -35,7 +35,6 @@
 /// <reference path="../app/scan-service.js" />
 /// <reference path="../app/highlight-service.js" />
 /// <reference path="../domain/scan-findings.js" />
-/// <reference path="./notice.js" />
 /// <reference path="./scan-result-view.js" />
 
 /**
@@ -70,8 +69,9 @@ class ScanView {
 				this._scan("selection");
 		});
 
-		this._notice = new Notice("scan-message");
-		/** whether the notice shown is the one about a missing API key */
+		/** @type {Message | null} */
+		this._message = null;
+		/** whether the message shown is the one about a missing API key */
 		this._showsNoKey = false;
 		/** whether scans are kept on Originality.ai, as the settings last said */
 		this._storeScan = true;
@@ -116,14 +116,23 @@ class ScanView {
 	 * @param {string} text
 	 * @private
 	 */
-	_showNotice(type, title, text) {
-		this._notice.show(type, title, text);
+	_showMessage(type, title, text) {
+		// a message shown where one already is takes its place
+		this._message = new Message("scan-message", {
+			type                : type,
+			title               : title,
+			text                : text,
+			closeButton         : true,
+			closeOnClickOutside : false,
+		}).show();
 		this._showsNoKey = false;
 	}
 
 	/** @private */
-	_hideNotice() {
-		this._notice.hide();
+	_hideMessage() {
+		if (this._message)
+			this._message.close();
+		this._message = null;
 		this._showsNoKey = false;
 	}
 
@@ -144,13 +153,13 @@ class ScanView {
 		if (this._isScanning)
 			return;
 
-		// only the notice about the key goes with the key: a scan's error stays when other settings change
+		// only the message about the key goes with the key: a scan's error stays when other settings change
 		if (settings.apiKey) {
 			if (this._showsNoKey)
-				this._hideNotice();
+				this._hideMessage();
 		} else if (!this._showsNoKey) {
 			const tr = window.Asc.plugin.tr;
-			this._showNotice("info", tr("No API key"), tr("Add your Originality.ai API key in Settings."));
+			this._showMessage("info", tr("No API key"), tr("Add your Originality.ai API key in Settings."));
 			this._showsNoKey = true;
 		}
 	}
@@ -164,7 +173,7 @@ class ScanView {
 			return;
 
 		this._setScanning(true);
-		this._hideNotice();
+		this._hideMessage();
 		this._result.clear();
 		await this._clearHighlights();
 
@@ -211,9 +220,9 @@ class ScanView {
 	async _select(finding) {
 		const tr = window.Asc.plugin.tr;
 		if (!(await this._highlights.select(finding)))
-			this._showNotice("info", tr("Not found"), tr("This passage is not in the document any more."));
+			this._showMessage("info", tr("Not found"), tr("This passage is not in the document any more."));
 		else
-			this._hideNotice();
+			this._hideMessage();
 	}
 
 	/**
@@ -223,19 +232,19 @@ class ScanView {
 	_showError(error) {
 		const tr = window.Asc.plugin.tr;
 		if (error instanceof ScanInputError) {
-			this._showNotice("warning", tr("Cannot scan yet"), tr(error.message));
+			this._showMessage("warning", tr("Cannot scan yet"), tr(error.message));
 		} else if (error instanceof OriginalityApiError && error.mayHaveRun) {
-			this._showNotice("warning", tr("Originality.ai took too long to answer"), [
+			this._showMessage("warning", tr("Originality.ai took too long to answer"), [
 				tr("The scan may still have finished and used credits."),
 				this._storeScan ? tr("If it did, you will find it in your Originality.ai account.") : "",
 				tr("Try again with a shorter selection."),
 			].filter(Boolean).join(" "));
 		} else if (error instanceof OriginalityApiError) {
 			// the API's own wording is English and specific ("Invalid API Key", "insufficient credits")
-			this._showNotice("error", tr("Originality.ai could not scan the text"),
+			this._showMessage("error", tr("Originality.ai could not scan the text"),
 				error.status ? error.message : tr(error.message));
 		} else {
-			this._showNotice("error", tr("Something went wrong"), error instanceof Error ? error.message : String(error));
+			this._showMessage("error", tr("Something went wrong"), error instanceof Error ? error.message : String(error));
 		}
 	}
 

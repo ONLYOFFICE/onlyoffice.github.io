@@ -34,7 +34,6 @@
 
 /// <reference path="../settings/settings-store.js" />
 /// <reference path="../service/originality-client.js" />
-/// <reference path="./notice.js" />
 
 /**
  * The Settings tab: shows the stored settings in the controls of `index.html` and stores every
@@ -57,8 +56,13 @@ class SettingsView {
 
 		const tr = window.Asc.plugin.tr;
 
-		new Notice("settings-notice").show("warning", tr("Before you start"),
-			tr("The Originality.ai API is available on the Enterprise plan. Every scan spends credits, and by default Originality.ai tops credits up automatically from your card."));
+		new Message("settings-notice", {
+			type                : "warning",
+			title               : tr("Before you start"),
+			text                : tr("The Originality.ai API is available on the Enterprise plan. Every scan spends credits, and by default Originality.ai tops credits up automatically from your card."),
+			closeButton         : true,
+			closeOnClickOutside : false,
+		}).show();
 
 		this._apiKey = new InputField("api-key", {
 			type        : "password",
