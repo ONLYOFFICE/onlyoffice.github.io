@@ -1,0 +1,43 @@
+.ui-panel-button,
+.ui-icon-button,
+.ui-link-button {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+.ui-panel-button,
+.ui-icon-button {
+  padding: 0;
+  background: transparent;
+  transition: filter 120ms ease, transform 120ms ease;
+}
+
+.ui-link-button {
+  all: unset;
+  box-sizing: border-box;
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  display: inline-block;
+  min-height: 0;
+  cursor: pointer;
+}
+
+.ui-panel-button__spinner {
+  width: var(--spinner-size, 16px);
+  height: var(--spinner-size, 16px);
+  display: inline-block;
+  animation: ui-plugin-spin 0.9s linear infinite;
+}
+
+.ui-panel-button--pressed,
+.ui-icon-button--pressed {
+  transform: translateY(0.5px);
+}
+
+@keyframes ui-plugin-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

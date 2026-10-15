@@ -1,0 +1,13 @@
+.ui-card,
+.ui-card * {
+  box-sizing: border-box;
+}
+
+.ui-card button {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}

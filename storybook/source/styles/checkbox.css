@@ -1,0 +1,15 @@
+.ui-checkbox {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1;
+}
+
+.ui-checkbox * {
+  box-sizing: border-box;
+}
+
+.ui-checkbox--disabled {
+  cursor: default;
+}
