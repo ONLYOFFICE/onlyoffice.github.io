@@ -66,11 +66,24 @@ class ReplayPlayer {
 		};
 
 		this._playButton = new Button("replay-play", { variant: "primary", text: tr("Play") });
-		this._playButton.subscribe(() => (this._playing ? this.pause() : this.play()));
+		this._playButton.subscribe((event) => {
+			if (event.type !== "button:click")
+				return;
+			if (this._playing)
+				this.pause();
+			else
+				this.play();
+		});
 		this._prevButton = new Button("replay-prev-paste", { variant: "secondary", text: tr("Previous paste") });
-		this._prevButton.subscribe(() => this._jumpToPaste(-1));
+		this._prevButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._jumpToPaste(-1);
+		});
 		this._nextButton = new Button("replay-next-paste", { variant: "secondary", text: tr("Next paste") });
-		this._nextButton.subscribe(() => this._jumpToPaste(1));
+		this._nextButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._jumpToPaste(1);
+		});
 
 		this._speed = 8;
 		const speed = new SelectBox("replay-speed", { placeholder: "" });

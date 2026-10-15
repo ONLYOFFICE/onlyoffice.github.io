@@ -63,7 +63,7 @@ class Notice {
 			title               : Notice._escape(title),
 			text                : Notice._escape(text),
 			duration            : 0,
-			closeButton         : false,
+			closeButton         : true,
 			autoClose           : false,
 			closeOnClickOutside : false,
 		}).show();

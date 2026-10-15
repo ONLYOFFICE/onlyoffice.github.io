@@ -1,6 +1,6 @@
 /* Styles of the components in scripts/ui/components.
    Button, input, checkbox, message and loader come from the zotero plugin (src/components.css with
-   the colours its src/app/theme.js injects); selectbox comes from the AI plugin
+   the colours its src/app/theme.js injects, which is the reference for them); selectbox comes from the AI plugin
    (resources/styles/customAssistant.css). Flattened from zotero's nested CSS, and every colour
    reads a theme variable (see theme-variables.js) instead of being injected per theme. */
 
@@ -18,7 +18,6 @@
 	gap: 8px;
 	border-style: solid;
 	border-width: 1px;
-	border-radius: 1px;
 	font-weight: bold;
 	text-decoration: none;
 	cursor: pointer;
@@ -98,19 +97,25 @@
 	border-color: var(--background-toolbar-additional);
 	color: var(--text-tertiary);
 }
+.theme-night .custom-button-secondary:disabled,
+.theme-night .custom-button-secondary.custom-button-disabled,
+.theme-night .custom-button-secondary-icon:disabled,
+.theme-night .custom-button-secondary-icon.custom-button-disabled {
+	border-color: var(--border-regular-control);
+}
+
 .custom-button-disabled,
 .custom-button:disabled {
 	pointer-events: none;
 	opacity: 0.5;
 	cursor: not-allowed;
-}
-.custom-button-loading {
+}.custom-button-loading {
 	cursor: wait;
 }
 .custom-button-spinner {
 	display: none;
-	width: 12px;
-	height: 12px;
+	width: 16px;
+	height: 16px;
 	border: 2px solid transparent;
 	border-top: 2px solid currentColor;
 	border-radius: 50%;
@@ -123,6 +128,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	font-size: 1.2em;
 }
 .custom-button-icon-left {
 	order: -1;
@@ -152,7 +158,6 @@
 	line-height: 22px;
 	border-style: solid;
 	border-width: 1px;
-	border-radius: 1px;
 	transition: all 0.3s ease;
 	box-sizing: border-box;
 	font-family: inherit;
@@ -284,7 +289,6 @@ input:focus-visible + .checkbox-visual {
 .message {
 	border-style: solid;
 	border-width: 1px;
-	border-radius: 1px;
 	padding: 9px 6px 6px 6px;
 	margin-bottom: 10px;
 	display: flex;
@@ -305,20 +309,27 @@ input:focus-visible + .checkbox-visual {
 	top: 9px;
 	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%23F62211"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
 }
-.message-warning {
-	background-color: #fff3cd;
-	border-color: #ffeaa7;
-	color: #383838;
+/* zotero draws an icon for errors only; the others take theirs from the editor's own alert icons
+   (web-apps apps/common/main/resources/img/controls/warnings_s.svg) */
+.message-warning:before,
+.message-info:before,
+.message-success:before {
+	content: "";
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	left: 6px;
+	top: 9px;
+	background-size: 12px 12px;
 }
-.message-info {
-	background-color: #d1ecf1;
-	border-color: #bee5eb;
-	color: #383838;
+.message-warning:before {
+	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.25245 31.1904L18.366 4.94276C19.0898 3.68575 20.9102 3.68575 21.634 4.94275L36.7475 31.1904C37.4678 32.4412 36.5612 34 35.1136 34H4.88642C3.43881 34 2.53225 32.4412 3.25245 31.1904Z" fill="%23FFD112"/><path fill-rule="evenodd" clip-rule="evenodd" d="M21 25H19L18 18V12H22V18L21 25ZM22 31H18V27H22V31Z" fill="white"/></svg>');
 }
-.message-success {
-	background-color: #d4edda;
-	border-color: #c3e6cb;
-	color: #383838;
+.message-info:before {
+	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%234E8AFB"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="16" fill="%23007DF1"/><path fill-rule="evenodd" clip-rule="evenodd" d="M22 10H18V14H22V10ZM22 17H18V30H22V17Z" fill="white"/></svg>');
+}
+.message-success:before {
+	background-image: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="12" rx="6" fill="%2300AB62"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.14265 9.59991L6.85693 9.59991L6.85693 7.88563L5.14265 7.88563L5.14265 9.59991ZM5.14265 7.19991L6.85693 7.19991L6.85693 2.39991L5.14265 2.39991L5.14265 7.19991Z" fill="white"/></svg>');
 }
 .message-content {
 	display: flex;

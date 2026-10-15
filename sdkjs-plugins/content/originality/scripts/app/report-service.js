@@ -60,6 +60,14 @@ class ReportService {
 	}
 
 	/**
+	 * @returns {boolean} whether the report would show anything: a scan, recorded writing or
+	 *   tracked changes
+	 */
+	get hasContent() {
+		return this._scan !== null || this._history.sessions.length > 0 || this._reviews.records.length > 0;
+	}
+
+	/**
 	 * @param {"document" | "selection"} scope
 	 * @param {ScanResult} result
 	 * @param {ScanFindings} findings

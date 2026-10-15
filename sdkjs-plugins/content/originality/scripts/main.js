@@ -97,8 +97,20 @@
 		/** @type {WritingView | null} */
 		let writingView = null;
 
+		// both tabs export the same report, so both buttons follow whether it has anything to show
+		const updateExport = () => {
+			const enabled = reports.hasContent;
+			if (scanView)
+				scanView.setExportEnabled(enabled);
+			if (writingView)
+				writingView.setExportEnabled(enabled);
+		};
+
 		scanView = new ScanView(scanService, highlights, {
-			onScanned      : (scope, result, findings) => reports.rememberScan(scope, result, findings),
+			onScanned      : (scope, result, findings) => {
+				reports.rememberScan(scope, result, findings);
+				updateExport();
+			},
 			// the report covers the writer the Writing tab shows
 			onExportReport : () => reports.export(writingView ? writingView.writerId : null),
 		});
@@ -125,13 +137,20 @@
 		// tracked changes come and go with the text, so the review is read again as the text changes
 		history.onChange(() => {
 			showHistory();
+			updateExport();
 			reviews.refreshSoon();
 		});
-		reviews.onChange(showHistory);
+		reviews.onChange(() => {
+			showHistory();
+			updateExport();
+		});
 		showHistory();
+		updateExport();
 	}
 
 	window.Asc.plugin.init = function() {
+		// the theme, if the editor has one, came with this same message, just before
+		ThemeVariables.reveal();
 		const info = window.Asc.plugin.info;
 		keystrokes.attach();
 		structure.attach();
@@ -163,10 +182,13 @@
 	 * @param {string} [windowId]
 	 */
 	window.Asc.plugin.button = function(id, windowId) {
-		if (windowId)
+		if (windowId && windowId === replayWindow.id) {
 			replayWindow.onButton(windowId);
-		else if (id === -1)
+		} else if (id === -1) {
 			history.flush();
+			this.executeCommand('close', '');
+		}
+		
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme) {

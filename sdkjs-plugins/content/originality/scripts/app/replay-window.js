@@ -49,6 +49,13 @@ class ReplayWindow {
 	}
 
 	/**
+	 * @returns {string} The ID of the replay window
+	 */
+	get id() {
+		return this._window?.id ?? '';
+	}
+
+	/**
 	 * @param {WritingSession[]} sessions - every recorded session, oldest first
 	 * @param {string | null} writerId - the writer to play first
 	 */
@@ -72,6 +79,13 @@ class ReplayWindow {
 			size           : [820, 600],
 		});
 		this._window = window_;
+	}
+
+	hide() {
+		if (this._window) {
+			this._window.close();
+			this._window = null;
+		}
 	}
 
 	/**

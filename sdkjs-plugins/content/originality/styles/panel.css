@@ -1,21 +1,9 @@
 /* ---- colours ----
-   Defaults until the editor palette arrives: ThemeVariables appends a `:root` block with the
-   editor's own names, later in the document than this file, so it wins. Same names and defaults
-   as the AI plugin, so both plugins look alike. */
-:root {
-	--background-normal: #ffffff;
-	--background-toolbar: #f7f7f7;
-	--text-normal: #383838;
-	--text-secondary: rgba(0, 0, 0, 0.6);
-	--text-tertiary: rgba(0, 0, 0, 0.4);
-	--border-regular-control: #E1E1E1;
-	--border-divider: #EAEAEA;
-	--border-control-focus: #306AD9;
-	--highlight-button-hover: #EFEFEF;
-	--highlight-button-pressed: #E1E1E1;
-	--background-primary-dialog-button: #306AD9;
-	--highlight-primary-dialog-button-hover: #1B55C1;
-	--text-inverse: #FFFFFF;
+   No colours of our own: they all come from the editor theme (theme-variables.js). Until it is
+   applied the page is not drawn at all, so a dark editor never flashes a white panel; the editor
+   sends its theme with the init message, and the page shows at init even if none came. */
+body:not(.page-ready) {
+	visibility: hidden;
 }
 
 html,
@@ -52,6 +40,7 @@ body.panel {
 	color: var(--text-secondary);
 	font: inherit;
 	cursor: pointer;
+	width: stretch;
 }
 
 .tabs__tab:hover {
@@ -70,7 +59,7 @@ body.panel {
 	right: 0;
 	bottom: -1px;
 	height: 2px;
-	background: var(--border-control-focus);
+	background: var(--highlight-header-tab-underline-document);
 }
 
 /* ---- sections ---- */

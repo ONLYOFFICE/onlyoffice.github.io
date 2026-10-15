@@ -20,7 +20,8 @@ declare class Button {
         disabled?: boolean;
         tooltip?: string;
     });
-    subscribe(callback: (event: ComponentEvent<string, { originalEvent?: Event }>) => void): ComponentSubscription;
+    /** Every event of the button, hovering and focus included: actions filter on "button:click". */
+    subscribe(callback: (event: ComponentEvent<"button:click" | "button:mouseenter" | "button:mouseleave" | "button:focus" | "button:blur" | "button:keydown", { originalEvent?: Event; key?: string | number }>) => void): ComponentSubscription;
     setText(text: string): void;
     enable(): void;
     disable(): void;

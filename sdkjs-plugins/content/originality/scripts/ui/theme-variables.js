@@ -39,10 +39,14 @@
  * `theme-type-light|dark` class.
  *
  * `onThemeChangedBase` already styles the stock `asc-plugin` classes; this covers the page's own.
+ *
+ * The page has no colours of its own and stays hidden until the theme is applied, or until
+ * {@link ThemeVariables.reveal} says there will be none.
  */
 const ThemeVariables = Object.freeze({
 
 	_styleId    : "theme-variables",
+	_readyClass : "page-ready",
 	_colorRegex : /^(#([0-9a-f]{3}){1,2}|rgba?\([^)]+\)|hsl\([^)]+\))$/i,
 
 	/**
@@ -54,6 +58,14 @@ const ThemeVariables = Object.freeze({
 
 		this._applyVariables(/** @type {Record<string, unknown>} */ (/** @type {unknown} */ (theme)));
 		this._applyBodyClasses(theme.type, theme.name);
+		this.reveal();
+	},
+
+	/**
+	 * Shows the page: the theme is applied, or the editor sent none and the page has to do without.
+	 */
+	reveal() {
+		document.body.classList.add(this._readyClass);
 	},
 
 	/**

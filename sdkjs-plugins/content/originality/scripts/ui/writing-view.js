@@ -65,9 +65,17 @@ class WritingView {
 	constructor(callbacks) {
 		this._onSelectText = callbacks.onSelectText;
 		const replayButton = new Button("open-replay", { variant: "primary", text: window.Asc.plugin.tr("Watch replay") });
-		replayButton.subscribe(() => callbacks.onOpenReplay(this._writerId));
-		const exportButton = new Button("export-report-writing", { variant: "secondary", text: window.Asc.plugin.tr("Export report") });
-		exportButton.subscribe(() => callbacks.onExportReport(this._writerId));
+		replayButton.subscribe((event) => {
+			if (event.type === "button:click")
+				callbacks.onOpenReplay(this._writerId);
+		});
+		// nothing to report until something is scanned or recorded; the caller says when
+		const exportButton = new Button("export-report-writing", { variant: "secondary", text: window.Asc.plugin.tr("Export report"), disabled: true });
+		this._exportButton = exportButton;
+		exportButton.subscribe((event) => {
+			if (event.type === "button:click")
+				callbacks.onExportReport(this._writerId);
+		});
 
 		this._writersBox = /** @type {HTMLElement} */ (document.getElementById("writing-writers"));
 		this._writerSelect = /** @type {HTMLElement} */ (document.getElementById("writing-writer"));
@@ -100,6 +108,16 @@ class WritingView {
 	 */
 	get writerId() {
 		return this._writerId;
+	}
+
+	/**
+	 * @param {boolean} enabled - whether the report has anything to show
+	 */
+	setExportEnabled(enabled) {
+		if (enabled)
+			this._exportButton.enable();
+		else
+			this._exportButton.disable();
 	}
 
 	/**
@@ -157,7 +175,8 @@ class WritingView {
 			const select = new SelectBox(this._writerSelect, { placeholder: "" });
 			select.addItems(writers.map((w) => [w.id, w.name]), shown.id);
 			select.subscribe((event) => {
-				if (event.type !== "selectbox:change")
+				// picking the writer already shown reports a change too
+				if (event.type !== "selectbox:change" || String(event.detail.current) === this._writerId)
 					return;
 				this._writerId = String(event.detail.current);
 				this._writersKey = "";

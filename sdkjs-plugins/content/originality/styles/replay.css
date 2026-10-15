@@ -1,14 +1,10 @@
 /* The Writer Replay window. Colours of the marks match the "Where the text came from" bar of
    the panel (panel.css). Theme variables come from theme-variables.js. */
-:root {
-	--background-normal: #ffffff;
-	--background-toolbar: #f7f7f7;
-	--text-normal: #383838;
-	--text-secondary: rgba(0, 0, 0, 0.6);
-	--border-divider: #EAEAEA;
-	--border-regular-control: #E1E1E1;
-	--border-control-focus: #306AD9;
-	--canvas-background: #eeeeee;
+/* No colours of our own: they all come from the editor theme (theme-variables.js). Until it is
+   applied the page is not drawn at all, so a dark editor never flashes a white panel; the editor
+   sends its theme with the init message, and the page shows at init even if none came. */
+body:not(.page-ready) {
+	visibility: hidden;
 }
 
 html,

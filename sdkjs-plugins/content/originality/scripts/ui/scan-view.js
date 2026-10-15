@@ -60,11 +60,21 @@ class ScanView {
 		const tr = window.Asc.plugin.tr;
 
 		this._documentButton = new Button("scan-document", { variant: "primary", text: tr("Scan document") });
-		this._documentButton.subscribe(() => this._scan("document"));
+		this._documentButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._scan("document");
+		});
 		this._selectionButton = new Button("scan-selection", { variant: "secondary", text: tr("Scan selection") });
-		this._selectionButton.subscribe(() => this._scan("selection"));
+		this._selectionButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._scan("selection");
+		});
 
 		this._notice = new Notice("scan-message");
+		/** whether the notice shown is the one about a missing API key */
+		this._showsNoKey = false;
+		/** whether scans are kept on Originality.ai, as the settings last said */
+		this._storeScan = true;
 		this._loader = new Loader("scan-loader", tr("Scanning… A plagiarism check can take up to a minute."));
 		this._loader.hide();
 		this._result = new ScanResultView(/** @type {HTMLElement} */ (document.getElementById("scan-result")), {
@@ -74,12 +84,47 @@ class ScanView {
 		this._highlightBar = /** @type {HTMLElement} */ (document.getElementById("scan-highlights"));
 		this._highlightStatus = /** @type {HTMLElement} */ (document.getElementById("highlights-status"));
 		this._clearButton = new Button("clear-highlights", { variant: "secondary", text: tr("Clear marks") });
-		this._clearButton.subscribe(() => this._clearHighlights());
+		this._clearButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._clearHighlights();
+		});
 
-		const exportButton = new Button("export-report-scan", { variant: "secondary", text: tr("Export report") });
-		exportButton.subscribe(() => callbacks.onExportReport());
+		// nothing to report until something is scanned or recorded; the caller says when
+		const exportButton = new Button("export-report-scan", { variant: "secondary", text: tr("Export report"), disabled: true });
+		this._exportButton = exportButton;
+		exportButton.subscribe((event) => {
+			if (event.type === "button:click")
+				callbacks.onExportReport();
+		});
 
 		this._isScanning = false;
+	}
+
+	/**
+	 * @param {boolean} enabled - whether the report has anything to show
+	 */
+	setExportEnabled(enabled) {
+		if (enabled)
+			this._exportButton.enable();
+		else
+			this._exportButton.disable();
+	}
+
+	/**
+	 * @param {"error" | "warning" | "info" | "success"} type
+	 * @param {string} title
+	 * @param {string} text
+	 * @private
+	 */
+	_showNotice(type, title, text) {
+		this._notice.show(type, title, text);
+		this._showsNoKey = false;
+	}
+
+	/** @private */
+	_hideNotice() {
+		this._notice.hide();
+		this._showsNoKey = false;
 	}
 
 	/**
@@ -95,13 +140,19 @@ class ScanView {
 	 * @param {ScanSettings} settings
 	 */
 	onSettingsChanged(settings) {
+		this._storeScan = settings.storeScan;
 		if (this._isScanning)
 			return;
 
-		if (settings.apiKey)
-			this._notice.hide();
-		else
-			this._notice.show("info", window.Asc.plugin.tr("No API key"), window.Asc.plugin.tr("Add your Originality.ai API key in Settings."));
+		// only the notice about the key goes with the key: a scan's error stays when other settings change
+		if (settings.apiKey) {
+			if (this._showsNoKey)
+				this._hideNotice();
+		} else if (!this._showsNoKey) {
+			const tr = window.Asc.plugin.tr;
+			this._showNotice("info", tr("No API key"), tr("Add your Originality.ai API key in Settings."));
+			this._showsNoKey = true;
+		}
 	}
 
 	/**
@@ -113,7 +164,7 @@ class ScanView {
 			return;
 
 		this._setScanning(true);
-		this._notice.hide();
+		this._hideNotice();
 		this._result.clear();
 		await this._clearHighlights();
 
@@ -160,9 +211,9 @@ class ScanView {
 	async _select(finding) {
 		const tr = window.Asc.plugin.tr;
 		if (!(await this._highlights.select(finding)))
-			this._notice.show("info", tr("Not found"), tr("This passage is not in the document any more."));
+			this._showNotice("info", tr("Not found"), tr("This passage is not in the document any more."));
 		else
-			this._notice.hide();
+			this._hideNotice();
 	}
 
 	/**
@@ -172,13 +223,19 @@ class ScanView {
 	_showError(error) {
 		const tr = window.Asc.plugin.tr;
 		if (error instanceof ScanInputError) {
-			this._notice.show("warning", tr("Cannot scan yet"), tr(error.message));
+			this._showNotice("warning", tr("Cannot scan yet"), tr(error.message));
+		} else if (error instanceof OriginalityApiError && error.mayHaveRun) {
+			this._showNotice("warning", tr("Originality.ai took too long to answer"), [
+				tr("The scan may still have finished and used credits."),
+				this._storeScan ? tr("If it did, you will find it in your Originality.ai account.") : "",
+				tr("Try again with a shorter selection."),
+			].filter(Boolean).join(" "));
 		} else if (error instanceof OriginalityApiError) {
 			// the API's own wording is English and specific ("Invalid API Key", "insufficient credits")
-			this._notice.show("error", tr("Originality.ai could not scan the text"),
+			this._showNotice("error", tr("Originality.ai could not scan the text"),
 				error.status ? error.message : tr(error.message));
 		} else {
-			this._notice.show("error", tr("Something went wrong"), error instanceof Error ? error.message : String(error));
+			this._showNotice("error", tr("Something went wrong"), error instanceof Error ? error.message : String(error));
 		}
 	}
 

@@ -62,11 +62,14 @@ class OriginalityApiError extends Error {
 	/**
 	 * @param {string} message - what the API said, or what went wrong on the way
 	 * @param {number} status - the HTTP status; 0 when no answer came
+	 * @param {boolean} [mayHaveRun] - the request reached the API but its answer did not come back,
+	 *   so the API may have done the work, and charged for it, all the same
 	 */
-	constructor(message, status) {
+	constructor(message, status, mayHaveRun) {
 		super(message);
 		this.name = "OriginalityApiError";
 		this.status = status;
+		this.mayHaveRun = !!mayHaveRun;
 	}
 }
 
@@ -76,6 +79,9 @@ class OriginalityApiError extends Error {
  *
  * The API allows calls from any origin (`Access-Control-Allow-Origin: *`), so the plugin page
  * calls it directly.
+ *
+ * A failed request is never sent again on its own: a scan is paid for, and one whose answer was
+ * lost may have run, so a second try could charge twice. Trying again is the user's call.
  */
 class OriginalityClient {
 
@@ -83,6 +89,14 @@ class OriginalityClient {
 	static _baseUrl = "https://api.originality.ai/api/v3";
 	/** plagiarism checks can take up to a minute, per the API documentation */
 	static _timeoutMs = 120000;
+	/**
+	 * A connection that fails after this long failed while the API was at work, most likely at its
+	 * gateway's time limit, whose error answer the browser cannot read: it comes without CORS
+	 * headers. One that fails sooner never got through.
+	 */
+	static _workingMs = 25000;
+	/** gateway errors: the API behind it may have run the request */
+	static _gatewayStatuses = [502, 503, 504, 524];
 
 	/**
 	 * @param {string} apiKey
@@ -155,6 +169,7 @@ class OriginalityClient {
 
 		const abort = new AbortController();
 		const timer = setTimeout(() => abort.abort(), OriginalityClient._timeoutMs);
+		const startedAt = Date.now();
 
 		/** @type {Response} */
 		let response;
@@ -166,8 +181,11 @@ class OriginalityClient {
 				signal  : abort.signal,
 			});
 		} catch (e) {
-			const timedOut = abort.signal.aborted;
-			throw new OriginalityApiError(timedOut ? "The request timed out" : "Could not reach Originality.ai", 0);
+			if (abort.signal.aborted)
+				throw new OriginalityApiError("The request timed out", 0, true);
+			if (Date.now() - startedAt >= OriginalityClient._workingMs)
+				throw new OriginalityApiError("Originality.ai did not answer in time", 0, true);
+			throw new OriginalityApiError("Could not reach Originality.ai", 0);
 		} finally {
 			clearTimeout(timer);
 		}
@@ -184,7 +202,7 @@ class OriginalityClient {
 			const error = payload && typeof payload === "object" && "error" in payload
 				? String(/** @type {{ error: unknown }} */ (payload).error)
 				: response.statusText || "Request failed";
-			throw new OriginalityApiError(error, response.status);
+			throw new OriginalityApiError(error, response.status, OriginalityClient._gatewayStatuses.includes(response.status));
 		}
 
 		return payload;

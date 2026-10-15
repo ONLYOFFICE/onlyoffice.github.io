@@ -66,12 +66,18 @@
 		container.textContent = "";
 		container.classList.toggle("hidden", writers.length < 2);
 		if (writers.length >= 2 && first) {
+			let shown = first.id;
 			const select = new SelectBox(container, { placeholder: "" });
 			select.addItems(writers.map((w) => [w.id, w.name]), first.id);
 			select.subscribe((event) => {
+				if (event.type !== "selectbox:change")
+					return;
+				// picking the writer already shown reports a change too; it must not restart the replay
 				const writer = writers.find((w) => w.id === String(event.detail.current));
-				if (event.type === "selectbox:change" && writer)
-					current.load(writer.sessions);
+				if (!writer || writer.id === shown)
+					return;
+				shown = writer.id;
+				current.load(writer.sessions);
 			});
 		}
 
@@ -79,6 +85,8 @@
 	}
 
 	window.Asc.plugin.init = function() {
+		// the theme, if the editor has one, came with this same message, just before
+		ThemeVariables.reveal();
 		window.Asc.plugin.attachEvent(ReplayProtocol.data, (data) => {
 			const payload = /** @type {Partial<ReplayData>} */ (data);
 			pending = {

@@ -72,7 +72,10 @@ class SettingsView {
 		});
 
 		this._balanceButton = new Button("check-balance", { variant: "secondary", text: tr("Check balance") });
-		this._balanceButton.subscribe(() => this._showBalance());
+		this._balanceButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._showBalance();
+		});
 		this._balance = /** @type {HTMLElement} */ (document.getElementById("balance"));
 
 		this._model = new SelectBox("ai-model", { placeholder: "" });
