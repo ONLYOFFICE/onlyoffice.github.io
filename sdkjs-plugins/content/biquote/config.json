@@ -1,0 +1,59 @@
+{
+  "name": "biquote",
+  "nameLocale": { "tr": "biquote" },
+  "guid": "asc.{F1512AC9-A67A-41E2-87B8-38B0C9F4EA18}",
+  "version": "1.0.0",
+  "minVersion": "9.0.0",
+  "offered": "biquote",
+  "baseUrl": "",
+  "variations": [
+    {
+      "description": "Live forex, gold, crypto and stock prices in your spreadsheet: =BIQUOTE(\"EURUSD\") and =BIQUOTE_CONVERT(100, \"USD\", \"EUR\"), including Istanbul Grand Bazaar gold. Free, no API key.",
+      "descriptionLocale": {
+        "tr": "Döviz, altın, kripto ve hisse fiyatları tablonuzda: =BIQUOTE(\"çeyrek\") ve =BIQUOTE_CONVERT(100; \"USD\"; \"TRY\"), Kapalıçarşı altın fiyatları dahil. Ücretsiz, API anahtarı gerekmez."
+      },
+      "url": "index.html",
+      "icons": [
+        "resources/light/icon.png",
+        "resources/light/icon@2x.png"
+      ],
+      "icons2": [
+        {
+          "100%": { "normal": "resources/light/icon.png" },
+          "125%": { "normal": "resources/light/icon@1.25x.png" },
+          "150%": { "normal": "resources/light/icon@1.5x.png" },
+          "175%": { "normal": "resources/light/icon@1.75x.png" },
+          "200%": { "normal": "resources/light/icon@2x.png" },
+          "style": "light"
+        },
+        {
+          "100%": { "normal": "resources/dark/icon.png" },
+          "125%": { "normal": "resources/dark/icon@1.25x.png" },
+          "150%": { "normal": "resources/dark/icon@1.5x.png" },
+          "175%": { "normal": "resources/dark/icon@1.75x.png" },
+          "200%": { "normal": "resources/dark/icon@2x.png" },
+          "style": "dark"
+        }
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["cell"],
+      "type": "background",
+      "initDataType": "none",
+      "initData": "",
+      "buttons": [],
+      "events": ["onToolbarMenuClick"],
+      "store": {
+        "background": { "light": "#F5F7FA", "dark": "#2A2F38" },
+        "screenshots": [
+          "resources/store/screenshots/screen_1.png",
+          "resources/store/screenshots/screen_2.png"
+        ],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": ["work"]
+      }
+    }
+  ]
+}

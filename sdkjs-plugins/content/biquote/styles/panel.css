@@ -1,0 +1,63 @@
+/* Colours come from the editor theme (plugins.css sets the variables and
+   updates them on theme change), so light and dark both work. */
+body {
+  margin: 0;
+  padding: 12px;
+  font-size: 11px;
+  color: var(--text-normal, #444);
+  background: var(--background-normal, #fff);
+}
+section { margin-bottom: 14px; }
+h2 {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--text-secondary, #848484);
+}
+.form-control { width: 100%; box-sizing: border-box; margin-bottom: 6px; }
+.row { display: flex; gap: 6px; }
+.row > * { flex: 1; min-width: 0; }
+.row > button { flex: 0 0 auto; }
+
+#results {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid var(--border-regular-control, #cbcbcb);
+}
+#results:empty { display: none; }
+#results li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 6px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-divider, #dfdfdf);
+}
+#results li:last-child { border-bottom: 0; }
+#results li:hover { background: var(--highlight-button-hover, #e0e0e0); }
+#results li.sel { background: var(--highlight-button-pressed, #cbcbcb); }
+.sym { font-weight: 700; }
+.desc {
+  color: var(--text-secondary, #848484);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.px { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.px.stale { color: var(--text-tertiary, #bfbfbf); }
+
+.hint { margin: 2px 0 0; color: var(--text-secondary, #848484); }
+.msg { min-height: 14px; margin-top: 4px; }
+.msg.err { color: var(--text-error, #f62211); }
+
+footer {
+  padding-top: 8px;
+  border-top: 1px solid var(--border-divider, #dfdfdf);
+  color: var(--text-secondary, #848484);
+}
+footer a { color: inherit; text-decoration: underline; }
