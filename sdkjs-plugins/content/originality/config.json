@@ -1,9 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/refs/heads/master/schemas/config.schema.json",
 	"name" : "Originality.ai",
-	"nameLocale": {
-		"ru": "Originality.ai"
-	},
 	"guid" : "asc.{CF9942BA-02C3-4AB7-B88E-77C26000E93A}",
 	"version" : "1.0.0",
 	"minVersion" : "9.2.0",
@@ -13,7 +10,20 @@
 		{
 			"description" : "Check documents for AI-generated text and plagiarism with Originality.ai, watch a replay of how the document was written and detect pasted or auto-typed text.",
 			"descriptionLocale": {
-				"ru": "Проверка документа на сгенерированный ИИ текст и плагиат через Originality.ai, воспроизведение процесса написания и выявление вставленного или автоматически набранного текста."
+				"ru": "Проверка документа на сгенерированный ИИ текст и плагиат через Originality.ai, воспроизведение процесса написания и выявление вставленного или автоматически набранного текста.",
+				"cs": "Kontrolujte dokumenty na text vygenerovaný AI a plagiáty pomocí Originality.ai, sledujte záznam toho, jak byl dokument napsán, a odhalte vložený nebo automaticky napsaný text.",
+				"de": "Prüfen Sie Dokumente mit Originality.ai auf KI-generierten Text und Plagiate, sehen Sie sich eine Wiedergabe an, wie das Dokument geschrieben wurde, und erkennen Sie eingefügten oder automatisch getippten Text.",
+				"es": "Compruebe si los documentos contienen texto generado por IA o plagio con Originality.ai, vea una reproducción de cómo se escribió el documento y detecte el texto pegado o tecleado automáticamente.",
+				"fr": "Vérifiez si vos documents contiennent du texte généré par l'IA ou du plagiat avec Originality.ai, regardez une relecture de la rédaction du document et détectez le texte collé ou saisi automatiquement.",
+				"it": "Verifica se i documenti contengono testo generato dall'IA o plagio con Originality.ai, guarda una riproduzione di come è stato scritto il documento e rileva il testo incollato o digitato automaticamente.",
+				"ja-JA": "Originality.aiで文書のAI生成テキストと盗用をチェックし、文書がどのように書かれたかをリプレイで確認して、貼り付けや自動入力されたテキストを検出します。",
+				"nl": "Controleer documenten met Originality.ai op door AI gegenereerde tekst en plagiaat, bekijk een herhaling van hoe het document is geschreven en detecteer geplakte of automatisch getypte tekst.",
+				"pt": "Verifique se os documentos têm texto gerado por IA e plágio com o Originality.ai, veja uma reprodução de como o documento foi escrito e detete texto colado ou escrito automaticamente.",
+				"pt-BR": "Verifique se os documentos contêm texto gerado por IA e plágio com o Originality.ai, assista a uma reprodução de como o documento foi escrito e detecte texto colado ou digitado automaticamente.",
+				"zh": "使用Originality.ai检查文档中的AI生成文本和抄袭，观看文档写作过程的回放，并检测粘贴或自动输入的文本。",
+				"sq-AL": "Kontrolloni dokumentet për tekst të gjeneruar nga IA dhe plagjiaturë me Originality.ai, shikoni riprodhimin e mënyrës si u shkrua dokumenti dhe zbuloni tekstin e ngjitur ose të shtypur automatikisht.",
+				"sr-Cyrl-RS": "Проверите да ли документи садрже текст генерисан помоћу ВИ и плагијат уз Originality.ai, погледајте снимак настанка документа и откријте налепљен или аутоматски откуцан текст.",
+				"sr-Latn-RS": "Proverite da li dokumenti sadrže tekst generisan pomoću VI i plagijat uz Originality.ai, pogledajte snimak nastanka dokumenta i otkrijte nalepljen ili automatski otkucan tekst."
 			},
 			"url" : "index.html",
 
