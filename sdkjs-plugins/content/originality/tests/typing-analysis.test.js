@@ -126,3 +126,45 @@ test("the recorder tells where inserted text came from", () => {
 		[summary.typedChars, summary.pastedChars, summary.movedChars, summary.otherChars, summary.deletedChars, summary.pastes.length],
 		[6, 300, 300, 4, 300, 1]);
 });
+
+test("with a co-author writing elsewhere, only the edit the keys made is the user's", () => {
+	const start = "Intro.\nMiddle.\nThe end";
+	const recorder = new WritingRecorder({ id: "ann", name: "Ann" }, start, 0, null);
+	const typed = (/** @type {number} */ count, /** @type {number} */ from) => {
+		for (let i = 1; i <= count; i++)
+			recorder.addKeystroke({ time: from + i * 100, kind: "char" });
+	};
+	const events = (/** @type {string} */ text, /** @type {number} */ time) =>
+		recorder.addSnapshot(text, time).map((e) => [e.source, e.text]);
+
+	// Ann types at the end while Bob adds a sentence at the start: before Ann has edited anywhere,
+	// her edit is the one her keys fit
+	typed(6, 0);
+	assert.deepStrictEqual(events("Intro. Bob wrote this long sentence here.\nMiddle.\nThe end. Ann.", 1000),
+		[["other", " Bob wrote this long sentence here."], ["typed", ". Ann."]]);
+
+	// from then on, the edit nearest to where she last edited — even when Bob's is the same size
+	typed(4, 1000);
+	assert.deepStrictEqual(events("Intro. Bob wrote this long sentence here. Bob\nMiddle.\nThe end. Ann. Ann", 2000),
+		[["other", " Bob"], ["typed", " Ann"]]);
+
+	// Bob alone, while Ann types nothing
+	assert.deepStrictEqual(events("Intro. Bob wrote this long sentence here. Bob\nMiddle, by Bob.\nThe end. Ann. Ann", 3000),
+		[["other", ", by Bob"]]);
+
+	// Ann's place moved with Bob's text before it, so her next edit is still found
+	typed(3, 3000);
+	assert.deepStrictEqual(events("Bob: Intro. Bob wrote this long sentence here. Bob\nMiddle, by Bob.\nThe end. Ann. Ann!!!", 4000),
+		[["other", "Bob: "], ["typed", "!!!"]]);
+});
+
+test("a co-author's paste next to the user's typing is not taken for the user's paste", () => {
+	const recorder = new WritingRecorder({ id: "ann", name: "Ann" }, "First.\nSecond.", 0, null);
+	recorder.addKeystroke({ time: 100, kind: "char" });
+	recorder.addSnapshot("First.\nSecond.!", 200);
+	const block = "B".repeat(400);
+	[300, 400].forEach((t) => recorder.addKeystroke({ time: t, kind: "char" }));
+	const events = recorder.addSnapshot(block + "\nFirst.\nSecond.!!!", 500).map((e) => [e.source, e.text.length]);
+	assert.deepStrictEqual(events, [["other", 401], ["typed", 2]]);
+	assert.strictEqual(TypingAnalysis.summarize([recorder.session]).pastes.length, 0);
+});
