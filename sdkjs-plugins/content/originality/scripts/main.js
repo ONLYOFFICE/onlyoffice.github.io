@@ -39,6 +39,7 @@
 /// <reference path="./editor/annotation-renderer.js" />
 /// <reference path="./editor/annotation-clicks.js" />
 /// <reference path="./editor/text-selector.js" />
+/// <reference path="./editor/selection-menu.js" />
 /// <reference path="./editor/keystroke-source.js" />
 /// <reference path="./editor/document-structure.js" />
 /// <reference path="./editor/custom-xml-parts.js" />
@@ -50,6 +51,7 @@
 /// <reference path="./app/recording-service.js" />
 /// <reference path="./app/writing-history-service.js" />
 /// <reference path="./app/replay-window.js" />
+/// <reference path="./app/confirm-window.js" />
 /// <reference path="./app/review-watcher.js" />
 /// <reference path="./app/report-service.js" />
 /// <reference path="./ui/page-translator.js" />
@@ -84,34 +86,25 @@
 	const recording = new RecordingService(new SnapshotReader(reader), keystrokes, structure, paragraphTexts);
 	const history = new WritingHistoryService(new HistoryStore(new CustomXmlParts()), recording);
 	const replayWindow = new ReplayWindow();
+	const confirmWindow = new ConfirmWindow();
+	const confirm = (/** @type {string} */ title, /** @type {string[]} */ paragraphs, /** @type {string[]} */ buttons) =>
+		confirmWindow.ask(title, paragraphs, buttons);
 	const reviews = new ReviewWatcher(new ReviewReader());
-	const reports = new ReportService(history, reviews);
+	const reports = new ReportService();
 
 	/** @type {ScanView | null} */
 	let scanView = null;
 
 	function buildViews() {
-		/** @type {WritingView | null} */
-		let writingView = null;
-
-		// both tabs export the same report, so both buttons follow whether it has anything to show
-		const updateExport = () => {
-			const enabled = reports.hasContent;
-			if (scanView)
-				scanView.setExportEnabled(enabled);
-			if (writingView)
-				writingView.setExportEnabled(enabled);
-		};
-
-		scanView = new ScanView(scanService, highlights, {
+		const view = new ScanView(scanService, highlights, {
 			onScanned      : (scope, result, findings) => {
 				reports.rememberScan(scope, result, findings);
-				updateExport();
+				view.setExportEnabled(reports.hasContent);
 			},
-			// the report covers the writer the Writing tab shows
-			onExportReport : () => reports.export(writingView ? writingView.writerId : null),
+			onExportReport : () => reports.export(),
+			confirm        : confirm,
 		});
-		const view = scanView;
+		scanView = view;
 		new SettingsView(settingsStore, {
 			checkBalance : (apiKey) => client.getBalance(apiKey),
 			onChange     : (settings) => view.onSettingsChanged(settings),
@@ -121,14 +114,13 @@
 		const writing = new WritingView(settingsStore.load().recordWriting, {
 			onSelectText      : (text) => selector.select(text),
 			onOpenReplay      : (writerId) => replayWindow.show(history.sessions, writerId),
-			onExportReport    : (writerId) => reports.export(writerId),
 			onRecordingChange : (on) => {
 				settingsStore.update({ recordWriting: on });
 				history.setRecording(on);
 			},
 			onDeleteRecord    : (everyone) => history.remove(everyone),
+			confirm           : confirm,
 		});
-		writingView = writing;
 		const showHistory = () => writing.update({
 			sessions       : history.sessions,
 			recordingSince : recording.session ? recording.session.startedAt : null,
@@ -140,15 +132,10 @@
 		// tracked changes come and go with the text, so the review is read again as the text changes
 		history.onChange(() => {
 			showHistory();
-			updateExport();
 			reviews.refreshSoon();
 		});
-		reviews.onChange(() => {
-			showHistory();
-			updateExport();
-		});
+		reviews.onChange(showHistory);
 		showHistory();
-		updateExport();
 	}
 
 	window.Asc.plugin.init = function() {
@@ -160,6 +147,13 @@
 		paragraphTexts.attach();
 		history.start({ id: info.userId || "", name: info.userName || "" }, !info.isViewMode, settingsStore.load().recordWriting);
 		reviews.refresh();
+
+		new SelectionMenu().attach(window.Asc.plugin.tr("Scan with Originality.ai"), () => {
+			if (scanView) {
+				tabs.show(TabView.tabs.scan);
+				scanView.scanSelection();
+			}
+		});
 
 		new AnnotationClicks().attach((name, paragraphId, rangeIds) => {
 			const findingId = highlights.findingAt(name, paragraphId, rangeIds);
@@ -177,16 +171,17 @@
 	};
 
 	/**
-	 * A close cross. With a window id it is the replay window's, which the plugin closes itself.
-	 * Without, it is the panel's: the history is written, then the panel closed. Not every host
-	 * gets here — sdkjs `plugin_base.js` closes the panel itself on its cross — so the regular
-	 * write after a quiet spell is what keeps the history.
+	 * A button or a close cross. With a window id it is a window's — the replay's or a
+	 * confirmation's — which the plugin closes itself. Without, it is the panel's cross: the history
+	 * is written, then the panel closed. Not every host gets here — sdkjs `plugin_base.js` closes the
+	 * panel itself on its cross — so the regular write after a quiet spell is what keeps the history.
 	 * @param {number} id
 	 * @param {string} [windowId]
 	 */
 	window.Asc.plugin.button = function(id, windowId) {
-		if (windowId && windowId === replayWindow.id) {
-			replayWindow.onButton(windowId);
+		if (windowId) {
+			if (!replayWindow.onButton(windowId))
+				confirmWindow.onButton(id, windowId);
 		} else if (id === -1) {
 			// close once the history is written: closing first would drop the write
 			history.flush().finally(() => this.executeCommand("close", ""));
@@ -197,6 +192,7 @@
 		window.Asc.plugin.onThemeChangedBase(theme);
 		ThemeVariables.apply(theme);
 		replayWindow.onThemeChanged(theme);
+		confirmWindow.onThemeChanged(theme);
 	};
 
 })(window);

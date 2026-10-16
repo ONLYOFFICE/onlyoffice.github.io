@@ -17,7 +17,7 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 * **Writer Replay.** Watch the document being written, jump between pastes, skip long pauses.
 * **Several writers.** Each person who wrote with the panel open has their own record.
 * **Tracked changes.** If the document is edited in review mode, the plugin also shows who changed how much and when, and which changes were made while no panel was recording.
-* **Report.** Export the last scan, a writer's record and the tracked changes as a single HTML file.
+* **Report.** Export the last scan as a single HTML file.
 
 ## Requirements
 
@@ -28,9 +28,9 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 
 1. Open the **Plugins** tab and click **Originality.ai**.
 2. On the **Settings** tab, enter your API key and choose the checks.
-3. On the **Scan** tab, click **Scan document**, or select some text and click **Scan selection**. The text needs at least 50 words.
+3. On the **Scan** tab, click **Scan document**, or select some text and click **Scan selection** — or right-click the selection and choose **Scan with Originality.ai**. The text needs at least 100 words.
 4. To record your writing, turn on **Record my writing** on the **Writing** tab and keep the panel open while you write. The tab shows the record of the selected writer; click **Watch replay** to replay it.
-5. Click **Export report** to save the report.
+5. After a scan, click **Export report** on the **Scan** tab to save its report.
 
 ## Data and privacy
 
@@ -41,6 +41,7 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 
 ## Limitations
 
+* One scan covers up to 10,000 words. For a longer text the plugin asks first whether to scan only its first 10,000 words; scan the rest as a selection.
 * Writing is recorded only while the panel is open. Changes made with the panel closed are shown as "Changed while nothing was recording".
 * The record is part of the document, so the document's editors can remove or alter it. Treat it, and the auto-typing score, as an indication, not proof.
 * The record is kept in DOCX files. Other formats may drop it on save.

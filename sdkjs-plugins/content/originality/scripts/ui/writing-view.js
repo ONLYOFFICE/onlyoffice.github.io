@@ -60,9 +60,9 @@ class WritingView {
 	 * @param {{
 	 *   onSelectText: (text: string) => void,
 	 *   onOpenReplay: (writerId: string | null) => void,
-	 *   onExportReport: (writerId: string | null) => void,
 	 *   onRecordingChange: (on: boolean) => void,
 	 *   onDeleteRecord: (everyone: boolean) => Promise<boolean>,
+	 *   confirm: (title: string, paragraphs: string[], buttons: string[]) => Promise<number>,
 	 * }} callbacks
 	 */
 	constructor(recording, callbacks) {
@@ -75,45 +75,29 @@ class WritingView {
 				callbacks.onRecordingChange(event.detail.checked);
 		});
 
-		this._deleteBox = /** @type {HTMLElement} */ (document.getElementById("delete-confirm"));
-		this._deleteOthersNote = /** @type {HTMLElement} */ (document.getElementById("delete-others-note"));
+		/** whether someone besides the user has a record, so that everyone's can be deleted */
+		this._othersRecorded = false;
 		this._deleteButton = new Button("delete-record", { variant: "secondary", text: tr("Delete record…"), disabled: true });
-		this._deleteButton.subscribe((event) => {
-			if (event.type === "button:click")
-				this._deleteBox.classList.remove("hidden");
-		});
-		const deleteMine = new Button("delete-mine", { variant: "primary", text: tr("Delete my record") });
-		const deleteAll = new Button("delete-all", { variant: "secondary", text: tr("Delete all records") });
-		const cancel = new Button("delete-cancel", { variant: "secondary", text: tr("Cancel") });
-		const remove = async (/** @type {boolean} */ everyone) => {
-			this._deleteBox.classList.add("hidden");
+		this._deleteButton.subscribe(async (event) => {
+			if (event.type !== "button:click")
+				return;
+			const others = this._othersRecorded;
+			const answer = await callbacks.confirm(tr("Delete record"), [
+				tr("The record will be removed from the document, with everything it holds: typing, pastes, deleted text. This cannot be undone from the plugin."),
+				others ? tr("People writing in the document right now with the plugin open keep their records and save them again.") : "",
+			].filter(Boolean), others
+				? [tr("Delete my record"), tr("Delete all records"), tr("Cancel")]
+				: [tr("Delete my record"), tr("Cancel")]);
+			if (answer !== 0 && !(others && answer === 1))
+				return;
 			this._deleteButton.disable();
-			await callbacks.onDeleteRecord(everyone);
-		};
-		deleteMine.subscribe((event) => {
-			if (event.type === "button:click")
-				remove(false);
-		});
-		deleteAll.subscribe((event) => {
-			if (event.type === "button:click")
-				remove(true);
-		});
-		cancel.subscribe((event) => {
-			if (event.type === "button:click")
-				this._deleteBox.classList.add("hidden");
+			await callbacks.onDeleteRecord(answer === 1);
 		});
 
 		const replayButton = new Button("open-replay", { variant: "primary", text: window.Asc.plugin.tr("Watch replay") });
 		replayButton.subscribe((event) => {
 			if (event.type === "button:click")
 				callbacks.onOpenReplay(this._writerId);
-		});
-		// nothing to report until something is scanned or recorded; the caller says when
-		const exportButton = new Button("export-report-writing", { variant: "secondary", text: window.Asc.plugin.tr("Export report"), disabled: true });
-		this._exportButton = exportButton;
-		exportButton.subscribe((event) => {
-			if (event.type === "button:click")
-				callbacks.onExportReport(this._writerId);
 		});
 
 		this._writersBox = /** @type {HTMLElement} */ (document.getElementById("writing-writers"));
@@ -142,23 +126,6 @@ class WritingView {
 	 * @property {boolean} isRecording
 	 * @property {ReviewRecord[]} reviewRecords - the document's tracked changes
 	 */
-
-	/**
-	 * @returns {string | null} the writer the tab shows
-	 */
-	get writerId() {
-		return this._writerId;
-	}
-
-	/**
-	 * @param {boolean} enabled - whether the report has anything to show
-	 */
-	setExportEnabled(enabled) {
-		if (enabled)
-			this._exportButton.enable();
-		else
-			this._exportButton.disable();
-	}
 
 	/**
 	 * @param {WritingViewState} state
@@ -247,10 +214,7 @@ class WritingView {
 			this._deleteButton.enable();
 		else
 			this._deleteButton.disable();
-		const others = writers.length > 1;
-		const allButton = /** @type {HTMLElement} */ (document.getElementById("delete-all"));
-		(allButton.closest(".custom-button-container") || allButton).classList.toggle("hidden", !others);
-		this._deleteOthersNote.classList.toggle("hidden", !others);
+		this._othersRecorded = writers.length > 1;
 	}
 
 	/**

@@ -50,12 +50,14 @@ class ScanView {
 	 * @param {{
 	 *   onScanned: (scope: ScanScope, result: ScanResult, findings: ScanFindings) => void,
 	 *   onExportReport: () => void,
+	 *   confirm: (title: string, paragraphs: string[], buttons: string[]) => Promise<number>,
 	 * }} callbacks
 	 */
 	constructor(service, highlights, callbacks) {
 		this._service = service;
 		this._highlights = highlights;
 		this._onScanned = callbacks.onScanned;
+		this._confirm = callbacks.confirm;
 		const tr = window.Asc.plugin.tr;
 
 		this._documentButton = new Button("scan-document", { variant: "primary", text: tr("Scan document") });
@@ -89,7 +91,7 @@ class ScanView {
 				this._clearHighlights();
 		});
 
-		// nothing to report until something is scanned or recorded; the caller says when
+		// nothing to report until a scan is done; the caller says when
 		const exportButton = new Button("export-report-scan", { variant: "secondary", text: tr("Export report"), disabled: true });
 		this._exportButton = exportButton;
 		exportButton.subscribe((event) => {
@@ -137,6 +139,13 @@ class ScanView {
 	}
 
 	/**
+	 * Scans the selected text, as its button does.
+	 */
+	scanSelection() {
+		this._scan("selection");
+	}
+
+	/**
 	 * A mark was clicked in the document: show its finding.
 	 * @param {string} findingId
 	 */
@@ -173,12 +182,17 @@ class ScanView {
 			return;
 
 		this._setScanning(true);
-		this._hideMessage();
-		this._result.clear();
-		await this._clearHighlights();
-
 		try {
-			const result = await this._service.scan(scope);
+			const text = await this._service.read(scope);
+			// the last result stays until the scan is sure to go ahead
+			if (text.words > ScanService.maxWords && !(await this._confirmCut(text.words)))
+				return;
+
+			this._hideMessage();
+			this._result.clear();
+			await this._clearHighlights();
+			this._loader.show();
+			const result = await this._service.scan(text);
 			const findings = ScanFindings.fromResult(result);
 			this._result.show(result, findings);
 			this._onScanned(scope, result, findings);
@@ -226,6 +240,22 @@ class ScanView {
 	}
 
 	/**
+	 * @param {number} words - in the text to scan
+	 * @returns {Promise<boolean>} whether the user agrees to scan only its beginning
+	 * @private
+	 */
+	async _confirmCut(words) {
+		const tr = window.Asc.plugin.tr;
+		const max = ScanService.maxWords.toLocaleString();
+		const answer = await this._confirm(tr("The text is too long"), [
+			tr("The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.")
+				.replace("%1", words.toLocaleString()).replace(/%2/g, max),
+			tr("To scan the rest, select it and scan it separately."),
+		], [tr("Continue"), tr("Cancel")]);
+		return answer === 0;
+	}
+
+	/**
 	 * @param {unknown} error
 	 * @private
 	 */
@@ -254,10 +284,10 @@ class ScanView {
 	 */
 	_setScanning(isScanning) {
 		this._isScanning = isScanning;
+		// the loader shows once the text is on its way, see _scan
 		if (isScanning) {
 			this._documentButton.disable();
 			this._selectionButton.disable();
-			this._loader.show();
 		} else {
 			this._documentButton.enable();
 			this._selectionButton.enable();

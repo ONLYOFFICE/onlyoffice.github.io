@@ -34,37 +34,24 @@
 
 /// <reference path="../domain/scan-result.js" />
 /// <reference path="../domain/scan-findings.js" />
-/// <reference path="../domain/typing-analysis.js" />
-/// <reference path="../domain/writers.js" />
-/// <reference path="../domain/tracked-changes.js" />
 /// <reference path="../report/report-document.js" />
 /// <reference path="../report/report-download.js" />
-/// <reference path="./writing-history-service.js" />
-/// <reference path="./review-watcher.js" />
 
 /**
- * Puts the report together — the last scan of this panel session, one writer's writing record and
- * the document's tracked changes — and hands it to the user as a file.
+ * Keeps the last scan of this panel session and hands its report to the user as a file.
  */
 class ReportService {
 
-	/**
-	 * @param {WritingHistoryService} history
-	 * @param {ReviewWatcher} reviews
-	 */
-	constructor(history, reviews) {
-		this._history = history;
-		this._reviews = reviews;
-		/** @type {ReportModel["scan"]} */
+	constructor() {
+		/** @type {ReportModel["scan"] | null} */
 		this._scan = null;
 	}
 
 	/**
-	 * @returns {boolean} whether the report would show anything: a scan, recorded writing or
-	 *   tracked changes
+	 * @returns {boolean} whether there is a scan to report
 	 */
 	get hasContent() {
-		return this._scan !== null || this._history.sessions.length > 0 || this._reviews.records.length > 0;
+		return this._scan !== null;
 	}
 
 	/**
@@ -76,42 +63,20 @@ class ReportService {
 		this._scan = { at: Date.now(), scope: scope, result: result, findings: findings };
 	}
 
-	/**
-	 * @param {string | null} writerId - whose writing goes into the report; null for the most active
-	 * @returns {Promise<void>}
-	 */
-	async export(writerId) {
+	export() {
+		if (!this._scan)
+			return;
 		const plugin = window.Asc.plugin;
-		const model = this._model(writerId, await this._reviews.refresh());
-		const name = plugin.tr("Originality report") + " - " + (model.documentTitle || plugin.tr("Untitled document"))
-			+ " - " + new Date(model.generatedAt).toISOString().slice(0, 10);
-		ReportDownload.save(ReportDocument.render(model, (text) => plugin.tr(text)), name);
-	}
-
-	/**
-	 * @param {string | null} writerId
-	 * @param {ReviewRecord[]} reviewRecords
-	 * @returns {ReportModel}
-	 * @private
-	 */
-	_model(writerId, reviewRecords) {
-		const info = window.Asc.plugin.info;
-		const sessions = this._history.sessions;
-		const writers = Writers.of(sessions);
-		const tracked = TrackedChanges.summarize(reviewRecords, sessions);
-		const writer = writers.find((w) => w.id === writerId) || writers[0] || null;
-
-		return {
+		const info = plugin.info;
+		/** @type {ReportModel} */
+		const model = {
 			documentTitle : (info && info.documentTitle) || "",
 			generatedAt   : Date.now(),
 			generatedBy   : (info && info.userName) || "",
 			scan          : this._scan,
-			writing       : writer ? {
-				writerName   : writer.name,
-				summary      : TypingAnalysis.summarize(writer.sessions),
-				otherWriters : writers.filter((w) => w !== writer).map((w) => w.name),
-			} : null,
-			tracked       : tracked.changes ? tracked : null,
 		};
+		const name = plugin.tr("Originality report") + " - " + (model.documentTitle || plugin.tr("Untitled document"))
+			+ " - " + new Date(model.generatedAt).toISOString().slice(0, 10);
+		ReportDownload.save(ReportDocument.render(model, (text) => plugin.tr(text)), name);
 	}
 }

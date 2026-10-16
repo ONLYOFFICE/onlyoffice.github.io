@@ -34,8 +34,6 @@
 
 /// <reference path="../domain/scan-result.js" />
 /// <reference path="../domain/scan-findings.js" />
-/// <reference path="../domain/typing-analysis.js" />
-/// <reference path="../domain/tracked-changes.js" />
 /// <reference path="../ui/format.js" />
 
 /**
@@ -43,13 +41,11 @@
  * @property {string} documentTitle
  * @property {number} generatedAt
  * @property {string} generatedBy
- * @property {{ at: number, scope: "document" | "selection", result: ScanResult, findings: ScanFindings } | null} scan
- * @property {{ writerName: string, summary: WritingSummary, otherWriters: string[] } | null} writing
- * @property {TrackedChangesSummary | null} tracked - null when the document has no tracked changes
+ * @property {{ at: number, scope: "document" | "selection", result: ScanResult, findings: ScanFindings }} scan
  */
 
 /**
- * Renders a report as one self-contained HTML page: styles inline, no scripts, nothing loaded from
+ * Renders the report of a scan as one self-contained HTML page: styles inline, no scripts, nothing loaded from
  * elsewhere, so it opens anywhere and prints as it looks. Everything that comes from the API or the
  * document is escaped; only web links are made links.
  */
@@ -71,9 +67,6 @@ const ReportDocument = Object.freeze({
 			+ e(tr("Generated")) + ": " + e(Format.dateTime(model.generatedAt))
 			+ (model.generatedBy ? " · " + e(model.generatedBy) : "") + "</p></header>"
 			+ ReportDocument._scan(model, tr)
-			+ ReportDocument._writing(model, tr)
-			+ ReportDocument._tracked(model, tr)
-			+ ReportDocument._limits(model, tr)
 			+ "<footer>" + e(tr("Made with the Originality.ai plugin for ONLYOFFICE.")) + "</footer>"
 			+ "</body></html>";
 	},
@@ -87,9 +80,6 @@ const ReportDocument = Object.freeze({
 	_scan(model, tr) {
 		const e = ReportDocument._escape;
 		let html = "<section><h2>" + e(tr("AI and plagiarism scan")) + "</h2>";
-		if (!model.scan)
-			return html + "<p class=\"muted\">" + e(tr("No scan was run before this report was made.")) + "</p></section>";
-
 		const { at, scope, result, findings } = model.scan;
 		html += "<p class=\"muted\">" + e(Format.dateTime(at)) + " · "
 			+ e(tr(scope === "selection" ? "Selected text" : "Whole document")) + "</p>";
@@ -148,136 +138,6 @@ const ReportDocument = Object.freeze({
 	},
 
 	/**
-	 * @param {ReportModel} model
-	 * @param {(text: string) => string} tr
-	 * @returns {string}
-	 * @private
-	 */
-	_writing(model, tr) {
-		const e = ReportDocument._escape;
-		let html = "<section><h2>" + e(tr("How the document was written")) + "</h2>";
-		if (!model.writing)
-			return html + "<p class=\"muted\">" + e(tr("No writing has been recorded in this document.")) + "</p></section>";
-
-		const { writerName, summary, otherWriters } = model.writing;
-		html += "<p>" + e(tr("Writer")) + ": <b>" + e(writerName) + "</b>"
-			+ (otherWriters.length ? "<br><span class=\"muted\">" + e(tr("Also recorded in this document")) + ": " + e(otherWriters.join(", ")) + "</span>" : "")
-			+ "</p>";
-
-		const typing = summary.autoTyping;
-		html += "<h3>" + e(tr("Human typing score")) + "</h3>";
-		html += typing.score === null
-			? "<p class=\"muted\">" + e(tr("Not enough typing yet: the score needs at least 50 typed characters in a row.")) + "</p>"
-			: "<p class=\"score\"><b>" + Math.round(typing.score * 100) + "%</b> " + e(tr(Format.verdict(typing.verdict))) + "</p>";
-		if (typing.reasons.length)
-			html += "<ul>" + typing.reasons.map((reason) => "<li>" + e(tr(reason)) + "</li>").join("") + "</ul>";
-
-		const origin = [
-			[tr("Typed"), summary.typedChars],
-			[tr("Pasted"), summary.pastedChars],
-			[tr("Moved within the document"), summary.movedChars],
-			[tr("Restored by undo"), summary.restoredChars],
-			[tr("Not from the writer's keyboard"), summary.otherChars],
-			[tr("Changed while nothing was recording"), summary.unrecordedInserted],
-		].filter((row) => Number(row[1]) > 0);
-		const total = origin.reduce((sum, row) => sum + Number(row[1]), 0);
-		html += "<h3>" + e(tr("Where the text came from")) + "</h3>";
-		html += total
-			? "<table>" + origin.map((row) => ReportDocument._row(String(row[0]),
-				Math.round(Number(row[1]) / total * 100) + "% · " + Number(row[1]).toLocaleString() + " " + tr("chars"))).join("") + "</table>"
-			: "<p class=\"muted\">" + e(tr("Nothing has been added to the document yet.")) + "</p>";
-		if (summary.otherChars)
-			html += "<p class=\"muted\">" + e(tr("Not from the writer's keyboard: a co-author, another plugin, a macro or dictation.")) + "</p>";
-		if (summary.unrecordedDeleted)
-			html += "<p class=\"muted\">" + e(tr("Removed while nothing was recording")) + ": " + summary.unrecordedDeleted.toLocaleString() + " " + e(tr("chars")) + "</p>";
-
-		html += "<h3>" + e(tr("Activity")) + "</h3><table>"
-			+ (summary.firstSessionAt !== null ? ReportDocument._row(tr("Sessions recorded"), summary.sessions + " " + tr("since") + " " + Format.date(summary.firstSessionAt)) : "")
-			+ ReportDocument._row(tr("Time spent writing"), Format.duration(summary.activeMs))
-			+ ReportDocument._row(tr("Keystrokes"), summary.keystrokes.toLocaleString())
-			+ ReportDocument._row(tr("Corrections"), summary.corrections.toLocaleString())
-			+ ReportDocument._row(tr("Typing speed"), summary.wordsPerMinute === null ? "—" : summary.wordsPerMinute + " " + tr("words/min"))
-			+ "</table>";
-
-		if (summary.pastes.length) {
-			html += "<h3>" + e(tr("Pastes")) + " (" + summary.pastes.length + ")</h3><ol>" + summary.pastes.map((paste) =>
-				"<li><span class=\"muted\">" + e(Format.dateTime(paste.time)) + " · " + paste.length.toLocaleString() + " " + e(tr("chars")) + "</span>"
-				+ "<div class=\"quote\">" + e(paste.text.trim()) + "</div></li>").join("") + "</ol>";
-		}
-
-		return html + "</section>";
-	},
-
-	/**
-	 * @param {ReportModel} model
-	 * @param {(text: string) => string} tr
-	 * @returns {string}
-	 * @private
-	 */
-	_tracked(model, tr) {
-		const tracked = model.tracked;
-		if (!tracked)
-			return "";
-
-		const e = ReportDocument._escape;
-		const chars = " " + tr("chars");
-		let html = "<section><h2>" + e(tr("Tracked changes")) + " (" + tracked.changes + ")</h2>"
-			+ "<p class=\"muted\">" + e(tr("Changes kept in review mode show who changed how much and when, not whether the text was typed or pasted.")) + "</p>";
-
-		html += "<table>" + tracked.authors.map((author) => ReportDocument._row(author.name || tr("Unknown author"),
-			"+" + author.insertedChars.toLocaleString() + chars + " · −" + author.deletedChars.toLocaleString() + chars
-			+ (author.formatting ? " · " + tr("formatting") + ": " + author.formatting : "")
-			+ ReportDocument._period(author.firstAt, author.lastAt))).join("")
-			+ (tracked.unrecordedChanges
-				? ReportDocument._row(tr("Made while nothing was recording"), tracked.unrecordedChanges + " · +" + tracked.unrecordedChars.toLocaleString() + chars)
-				: "")
-			+ "</table>";
-
-		if (tracked.insertions.length) {
-			html += "<h3>" + e(tr("Insertions")) + " (" + tracked.insertions.length + ")</h3><ol>" + tracked.insertions.map((insertion) =>
-				"<li><span class=\"muted\">" + e([
-					insertion.time ? Format.dateTime(insertion.time) : "",
-					insertion.text.length.toLocaleString() + chars,
-					insertion.author,
-					insertion.unrecorded ? tr("while nothing was recording") : "",
-				].filter(Boolean).join(" · ")) + "</span>"
-				+ "<div class=\"quote\">" + e(insertion.text.trim()) + "</div></li>").join("") + "</ol>";
-		}
-		return html + "</section>";
-	},
-
-	/**
-	 * @param {number | null} from
-	 * @param {number | null} to
-	 * @returns {string} " · from – to", one moment when they are the same, nothing when unknown
-	 * @private
-	 */
-	_period(from, to) {
-		if (from === null || to === null)
-			return "";
-		const first = Format.dateTime(from);
-		const last = Format.dateTime(to);
-		return " · " + (first === last ? first : first + " – " + last);
-	},
-
-	/**
-	 * What the reader has to know to weigh the report.
-	 * @param {ReportModel} model
-	 * @param {(text: string) => string} tr
-	 * @returns {string}
-	 * @private
-	 */
-	_limits(model, tr) {
-		const e = ReportDocument._escape;
-		return "<section class=\"limits\"><h2>" + e(tr("How to read this report")) + "</h2><ul>"
-			+ "<li>" + e(tr("Writing is recorded by the plugin only while its panel is open. What changed while it was closed is shown as changed without recording, without an author.")) + "</li>"
-			+ "<li>" + e(tr("The record is kept inside the document. Whoever can edit the document can also remove or alter it.")) + "</li>"
-			+ "<li>" + e(tr("The typing score and the AI detection are statistical estimates, not proof.")) + "</li>"
-			+ (model.tracked ? "<li>" + e(tr("Tracked changes are kept by the editor only until they are accepted or rejected, and can be edited like any text.")) + "</li>" : "")
-			+ "</ul></section>";
-	},
-
-	/**
 	 * @param {string} label
 	 * @param {string} value
 	 * @returns {string}
@@ -330,10 +190,10 @@ const ReportDocument = Object.freeze({
 		"h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:28px 0 8px;padding-bottom:4px;border-bottom:1px solid #ddd}",
 		"h3{font-size:15px;margin:18px 0 6px}h4{font-size:14px;margin:12px 0 4px}",
 		"table{border-collapse:collapse;margin:4px 0}th{text-align:left;font-weight:normal;color:#666;padding:2px 24px 2px 0}td{padding:2px 0}",
-		".meta,.muted{color:#666}.score b{font-size:20px}.error{color:#c0392b}",
+		".meta,.muted{color:#666}.error{color:#c0392b}",
 		".quote{white-space:pre-wrap;border-left:3px solid #ddd;padding-left:8px;margin:4px 0;color:#444}",
 		"ol,ul{padding-left:22px}li{margin:4px 0}a{color:#1b55c1}",
-		".limits{background:#f7f7f7;padding:4px 16px 8px;border-radius:4px}footer{margin-top:32px;color:#999;font-size:12px}",
+		"footer{margin-top:32px;color:#999;font-size:12px}",
 		"@media print{body{margin:0}a{color:inherit}}",
 	].join(""),
 });

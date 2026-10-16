@@ -46,6 +46,13 @@
  */
 
 /**
+ * @typedef {Object} ScanText
+ * @property {ScanScope} scope
+ * @property {string} text
+ * @property {number} words
+ */
+
+/**
  * A scan that was not sent, because what it would scan or how is not acceptable. The message is
  * the untranslated text to show; `problem` says which case it is.
  */
@@ -63,13 +70,16 @@ class ScanInputError extends Error {
 }
 
 /**
- * Runs one scan: reads the text, checks it can be scanned with the current settings, sends it
- * to Originality.ai and returns what came back.
+ * Runs one scan in two steps: reads the text and checks it can be scanned with the current
+ * settings, then sends it to Originality.ai and returns what came back. Between the two the
+ * caller may ask the user, e.g. whether a text over {@link ScanService.maxWords} may be cut.
  */
 class ScanService {
 
-	/** Originality.ai rejects shorter texts (API v1 documentation; v3 does not say otherwise) */
-	static minWords = 50;
+	/** shorter texts give unreliable results; the Originality.ai extension asks for as many */
+	static minWords = 100;
+	/** longer texts are cut, as the Originality.ai extension does: one request has to answer in time */
+	static maxWords = 10000;
 
 	/**
 	 * @param {DocumentReader} reader
@@ -84,10 +94,10 @@ class ScanService {
 
 	/**
 	 * @param {ScanScope} scope
-	 * @returns {Promise<ScanResult>}
-	 * @throws {ScanInputError | OriginalityApiError}
+	 * @returns {Promise<ScanText>}
+	 * @throws {ScanInputError}
 	 */
-	async scan(scope) {
+	async read(scope) {
 		const settings = this._settings.load();
 		if (!settings.apiKey)
 			throw new ScanInputError("noApiKey", "Add your Originality.ai API key in Settings.");
@@ -97,12 +107,24 @@ class ScanService {
 		const text = (scope === "selection" ? await this._reader.readSelection() : await this._reader.readDocument()).trim();
 		if (!text && scope === "selection")
 			throw new ScanInputError("emptySelection", "Select the text to scan first.");
-		if (ScanService._countWords(text) < ScanService.minWords)
-			throw new ScanInputError("tooShort", "The text is too short: Originality.ai needs at least 50 words.");
+		const words = ScanService._countWords(text);
+		if (words < ScanService.minWords)
+			throw new ScanInputError("tooShort", "The text is too short: the scan needs at least 100 words.");
+		return { scope: scope, text: text, words: words };
+	}
 
+	/**
+	 * @param {ScanText} text - as {@link ScanService.read} gave it; cut to the first
+	 *   {@link ScanService.maxWords} words when longer
+	 * @returns {Promise<ScanResult>}
+	 * @throws {OriginalityApiError}
+	 */
+	async scan(text) {
+		const settings = this._settings.load();
+		const content = text.words > ScanService.maxWords ? ScanService._firstWords(text.text, ScanService.maxWords) : text.text;
 		const response = await this._client.scan(settings.apiKey, {
 			title            : this._title(),
-			content          : text,
+			content          : content,
 			checkAi          : settings.checkAi,
 			checkPlagiarism  : settings.checkPlagiarism,
 			checkReadability : settings.checkReadability,
@@ -133,5 +155,19 @@ class ScanService {
 	 */
 	static _countWords(text) {
 		return text ? text.split(/\s+/).filter(Boolean).length : 0;
+	}
+
+	/**
+	 * @param {string} text
+	 * @param {number} count
+	 * @returns {string} the text up to the end of its `count`-th word, spacing kept
+	 * @private
+	 */
+	static _firstWords(text, count) {
+		const word = /\S+/g;
+		let end = 0;
+		for (let i = 0; i < count && word.exec(text); i++)
+			end = word.lastIndex;
+		return text.slice(0, end);
 	}
 }
