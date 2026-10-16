@@ -1,6 +1,4 @@
 {
-	"Scan": "Проверка",
-	"Writing": "Набор",
 	"Settings": "Настройки",
 	"Check the document for AI-generated text and plagiarism.": "Проверка документа на текст, сгенерированный ИИ, и на плагиат.",
 	"How the document was written: typed, pasted and auto-typed text.": "Как написан документ: набранный вручную, вставленный и автоматически набранный текст.",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "Идёт проверка… Проверка на плагиат может занять до минуты.",
 	"Cannot scan yet": "Проверить пока нельзя",
 	"No API key": "Нет ключа API",
-	"Add your Originality.ai API key in Settings.": "Добавьте ключ API Originality.ai в настройках.",
-	"Choose at least one check in Settings.": "Выберите в настройках хотя бы одну проверку.",
+	"Add your Originality.ai API key in [Settings].": "Добавьте ключ API Originality.ai в [настройках].",
+	"Choose at least one check in [Settings].": "Выберите в [настройках] хотя бы одну проверку.",
 	"Select the text to scan first.": "Сначала выделите текст для проверки.",
 	"The text is too short: the scan needs at least 100 words.": "Текст слишком короткий: для проверки нужно не меньше 100 слов.",
 	"Originality.ai could not scan the text": "Originality.ai не смог проверить текст",
@@ -168,5 +166,6 @@
 	"Continue": "Продолжить",
 	"Delete record": "Удаление записи",
 	"Select at least 100 words": "Выделите не меньше 100 слов",
-	"Done": "Готово"
+	"Writing record": "Запись набора",
+	"Back": "Назад"
 }

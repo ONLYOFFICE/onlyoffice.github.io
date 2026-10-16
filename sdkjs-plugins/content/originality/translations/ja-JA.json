@@ -1,6 +1,4 @@
 {
-	"Scan": "スキャン",
-	"Writing": "入力",
 	"Settings": "設定",
 	"Check the document for AI-generated text and plagiarism.": "AI生成テキストと盗用がないか文書をチェックします。",
 	"How the document was written: typed, pasted and auto-typed text.": "文書の作成方法：入力、貼り付け、自動入力されたテキスト。",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "スキャン中… 盗用チェックには最大1分かかることがあります。",
 	"Cannot scan yet": "まだスキャンできません",
 	"No API key": "APIキーがありません",
-	"Add your Originality.ai API key in Settings.": "設定でOriginality.aiのAPIキーを追加してください。",
-	"Choose at least one check in Settings.": "設定でチェックを1つ以上選択してください。",
+	"Add your Originality.ai API key in [Settings].": "[設定]でOriginality.aiのAPIキーを追加してください。",
+	"Choose at least one check in [Settings].": "[設定]でチェックを1つ以上選択してください。",
 	"Select the text to scan first.": "先にスキャンするテキストを選択してください。",
 	"The text is too short: the scan needs at least 100 words.": "テキストが短すぎます。スキャンには100語以上が必要です。",
 	"Originality.ai could not scan the text": "Originality.aiはテキストをスキャンできませんでした",
@@ -168,5 +166,6 @@
 	"Continue": "続行",
 	"Delete record": "記録の削除",
 	"Select at least 100 words": "100語以上を選択してください",
-	"Done": "完了"
+	"Writing record": "入力の記録",
+	"Back": "戻る"
 }

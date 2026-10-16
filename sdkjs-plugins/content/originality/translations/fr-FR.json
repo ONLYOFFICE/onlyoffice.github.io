@@ -1,6 +1,4 @@
 {
-	"Scan": "Analyse",
-	"Writing": "Saisie",
 	"Settings": "Paramètres",
 	"Check the document for AI-generated text and plagiarism.": "Vérifiez si le document contient du texte généré par l'IA ou du plagiat.",
 	"How the document was written: typed, pasted and auto-typed text.": "Comment le document a été rédigé : texte saisi, collé et saisi automatiquement.",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "Analyse en cours… Une vérification du plagiat peut prendre jusqu'à une minute.",
 	"Cannot scan yet": "Analyse impossible pour le moment",
 	"No API key": "Aucune clé API",
-	"Add your Originality.ai API key in Settings.": "Ajoutez votre clé API Originality.ai dans les paramètres.",
-	"Choose at least one check in Settings.": "Choisissez au moins une vérification dans les paramètres.",
+	"Add your Originality.ai API key in [Settings].": "Ajoutez votre clé API Originality.ai dans les [paramètres].",
+	"Choose at least one check in [Settings].": "Choisissez au moins une vérification dans les [paramètres].",
 	"Select the text to scan first.": "Sélectionnez d'abord le texte à analyser.",
 	"The text is too short: the scan needs at least 100 words.": "Le texte est trop court : l'analyse nécessite au moins 100 mots.",
 	"Originality.ai could not scan the text": "Originality.ai n'a pas pu analyser le texte",
@@ -168,5 +166,6 @@
 	"Continue": "Continuer",
 	"Delete record": "Supprimer l'enregistrement",
 	"Select at least 100 words": "Sélectionnez au moins 100 mots",
-	"Done": "Terminé"
+	"Writing record": "Enregistrement de la saisie",
+	"Back": "Retour"
 }

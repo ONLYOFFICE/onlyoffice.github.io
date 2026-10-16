@@ -1,6 +1,4 @@
 {
-	"Scan": "Kontrolli",
-	"Writing": "Shkrimi",
 	"Settings": "Cilësimet",
 	"Check the document for AI-generated text and plagiarism.": "Kontrolloni dokumentin për tekst të gjeneruar nga IA dhe plagjiaturë.",
 	"How the document was written: typed, pasted and auto-typed text.": "Si u shkrua dokumenti: tekst i shtypur, i ngjitur dhe i shtypur automatikisht.",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "Duke kontrolluar… Kontrolli për plagjiaturë mund të zgjasë deri në një minutë.",
 	"Cannot scan yet": "Ende nuk mund të kontrollohet",
 	"No API key": "Nuk ka çelës API",
-	"Add your Originality.ai API key in Settings.": "Shtoni çelësin tuaj API të Originality.ai te Cilësimet.",
-	"Choose at least one check in Settings.": "Zgjidhni të paktën një kontroll te Cilësimet.",
+	"Add your Originality.ai API key in [Settings].": "Shtoni çelësin tuaj API të Originality.ai te [Cilësimet].",
+	"Choose at least one check in [Settings].": "Zgjidhni të paktën një kontroll te [Cilësimet].",
 	"Select the text to scan first.": "Përzgjidhni fillimisht tekstin për kontroll.",
 	"The text is too short: the scan needs at least 100 words.": "Teksti është shumë i shkurtër: skanimi kërkon të paktën 100 fjalë.",
 	"Originality.ai could not scan the text": "Originality.ai nuk mundi ta kontrollonte tekstin",
@@ -168,5 +166,6 @@
 	"Continue": "Vazhdo",
 	"Delete record": "Fshirja e regjistrimit",
 	"Select at least 100 words": "Përzgjidhni të paktën 100 fjalë",
-	"Done": "U krye"
+	"Writing record": "Regjistrimi i shkrimit",
+	"Back": "Prapa"
 }

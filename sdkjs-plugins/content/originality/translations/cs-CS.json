@@ -1,6 +1,4 @@
 {
-	"Scan": "Kontrola",
-	"Writing": "Psaní",
 	"Settings": "Nastavení",
 	"Check the document for AI-generated text and plagiarism.": "Zkontrolujte dokument na text vygenerovaný AI a plagiáty.",
 	"How the document was written: typed, pasted and auto-typed text.": "Jak byl dokument napsán: ručně napsaný, vložený a automaticky napsaný text.",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "Probíhá kontrola… Kontrola plagiátů může trvat až minutu.",
 	"Cannot scan yet": "Kontrolu zatím nelze spustit",
 	"No API key": "Chybí klíč API",
-	"Add your Originality.ai API key in Settings.": "Přidejte klíč API Originality.ai v Nastavení.",
-	"Choose at least one check in Settings.": "Vyberte v Nastavení alespoň jednu kontrolu.",
+	"Add your Originality.ai API key in [Settings].": "Přidejte klíč API Originality.ai v [Nastavení].",
+	"Choose at least one check in [Settings].": "Vyberte v [Nastavení] alespoň jednu kontrolu.",
 	"Select the text to scan first.": "Nejprve vyberte text ke kontrole.",
 	"The text is too short: the scan needs at least 100 words.": "Text je příliš krátký: kontrola potřebuje alespoň 100 slov.",
 	"Originality.ai could not scan the text": "Originality.ai nemohl text zkontrolovat",
@@ -168,5 +166,6 @@
 	"Continue": "Pokračovat",
 	"Delete record": "Smazání záznamu",
 	"Select at least 100 words": "Vyberte alespoň 100 slov",
-	"Done": "Hotovo"
+	"Writing record": "Záznam psaní",
+	"Back": "Zpět"
 }

@@ -1,6 +1,4 @@
 {
-	"Scan": "Prüfung",
-	"Writing": "Schreiben",
 	"Settings": "Einstellungen",
 	"Check the document for AI-generated text and plagiarism.": "Prüfen Sie das Dokument auf KI-generierten Text und Plagiate.",
 	"How the document was written: typed, pasted and auto-typed text.": "Wie das Dokument geschrieben wurde: getippter, eingefügter und automatisch getippter Text.",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "Prüfung läuft… Eine Plagiatsprüfung kann bis zu einer Minute dauern.",
 	"Cannot scan yet": "Prüfung noch nicht möglich",
 	"No API key": "Kein API-Schlüssel",
-	"Add your Originality.ai API key in Settings.": "Fügen Sie Ihren Originality.ai-API-Schlüssel in den Einstellungen hinzu.",
-	"Choose at least one check in Settings.": "Wählen Sie in den Einstellungen mindestens eine Prüfung aus.",
+	"Add your Originality.ai API key in [Settings].": "Fügen Sie Ihren Originality.ai-API-Schlüssel in den [Einstellungen] hinzu.",
+	"Choose at least one check in [Settings].": "Wählen Sie in den [Einstellungen] mindestens eine Prüfung aus.",
 	"Select the text to scan first.": "Markieren Sie zuerst den zu prüfenden Text.",
 	"The text is too short: the scan needs at least 100 words.": "Der Text ist zu kurz: Die Prüfung braucht mindestens 100 Wörter.",
 	"Originality.ai could not scan the text": "Originality.ai konnte den Text nicht prüfen",
@@ -168,5 +166,6 @@
 	"Continue": "Weiter",
 	"Delete record": "Aufzeichnung löschen",
 	"Select at least 100 words": "Markieren Sie mindestens 100 Wörter",
-	"Done": "Fertig"
+	"Writing record": "Schreibaufzeichnung",
+	"Back": "Zurück"
 }

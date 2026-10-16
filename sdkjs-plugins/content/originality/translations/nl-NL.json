@@ -1,6 +1,4 @@
 {
-	"Scan": "Scannen",
-	"Writing": "Schrijven",
 	"Settings": "Instellingen",
 	"Check the document for AI-generated text and plagiarism.": "Controleer het document op door AI gegenereerde tekst en plagiaat.",
 	"How the document was written: typed, pasted and auto-typed text.": "Hoe het document is geschreven: getypte, geplakte en automatisch getypte tekst.",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "Bezig met scannen… Een plagiaatcontrole kan tot een minuut duren.",
 	"Cannot scan yet": "Scannen nog niet mogelijk",
 	"No API key": "Geen API-sleutel",
-	"Add your Originality.ai API key in Settings.": "Voeg uw Originality.ai-API-sleutel toe in Instellingen.",
-	"Choose at least one check in Settings.": "Kies ten minste één controle in Instellingen.",
+	"Add your Originality.ai API key in [Settings].": "Voeg uw Originality.ai-API-sleutel toe in [Instellingen].",
+	"Choose at least one check in [Settings].": "Kies ten minste één controle in [Instellingen].",
 	"Select the text to scan first.": "Selecteer eerst de tekst die u wilt scannen.",
 	"The text is too short: the scan needs at least 100 words.": "De tekst is te kort: de scan heeft minstens 100 woorden nodig.",
 	"Originality.ai could not scan the text": "Originality.ai kon de tekst niet scannen",
@@ -168,5 +166,6 @@
 	"Continue": "Doorgaan",
 	"Delete record": "Registratie verwijderen",
 	"Select at least 100 words": "Selecteer minstens 100 woorden",
-	"Done": "Gereed"
+	"Writing record": "Schrijfregistratie",
+	"Back": "Terug"
 }

@@ -1,6 +1,4 @@
 {
-	"Scan": "扫描",
-	"Writing": "输入",
 	"Settings": "设置",
 	"Check the document for AI-generated text and plagiarism.": "检查文档中的AI生成文本和抄袭。",
 	"How the document was written: typed, pasted and auto-typed text.": "文档的写作方式：输入、粘贴和自动输入的文本。",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "正在扫描… 抄袭检查可能需要最多一分钟。",
 	"Cannot scan yet": "暂时无法扫描",
 	"No API key": "没有API密钥",
-	"Add your Originality.ai API key in Settings.": "请在设置中添加您的Originality.ai API密钥。",
-	"Choose at least one check in Settings.": "请在设置中至少选择一项检查。",
+	"Add your Originality.ai API key in [Settings].": "请在[设置]中添加您的Originality.ai API密钥。",
+	"Choose at least one check in [Settings].": "请在[设置]中至少选择一项检查。",
 	"Select the text to scan first.": "请先选择要扫描的文本。",
 	"The text is too short: the scan needs at least 100 words.": "文本太短：扫描至少需要100个单词。",
 	"Originality.ai could not scan the text": "Originality.ai无法扫描该文本",
@@ -168,5 +166,6 @@
 	"Continue": "继续",
 	"Delete record": "删除记录",
 	"Select at least 100 words": "请至少选择100个单词",
-	"Done": "完成"
+	"Writing record": "写作记录",
+	"Back": "返回"
 }

@@ -1,6 +1,4 @@
 {
-	"Scan": "Провера",
-	"Writing": "Писање",
 	"Settings": "Подешавања",
 	"Check the document for AI-generated text and plagiarism.": "Провера да ли документ садржи текст генерисан помоћу ВИ и плагијат.",
 	"How the document was written: typed, pasted and auto-typed text.": "Како је документ написан: откуцан, налепљен и аутоматски откуцан текст.",
@@ -9,8 +7,8 @@
 	"Scanning… A plagiarism check can take up to a minute.": "Провера у току… Провера плагијата може трајати до један минут.",
 	"Cannot scan yet": "Провера још није могућа",
 	"No API key": "Нема API кључа",
-	"Add your Originality.ai API key in Settings.": "Додајте свој Originality.ai API кључ у подешавањима.",
-	"Choose at least one check in Settings.": "Изаберите бар једну проверу у подешавањима.",
+	"Add your Originality.ai API key in [Settings].": "Додајте свој Originality.ai API кључ у [подешавањима].",
+	"Choose at least one check in [Settings].": "Изаберите бар једну проверу у [подешавањима].",
 	"Select the text to scan first.": "Прво изаберите текст за проверу.",
 	"The text is too short: the scan needs at least 100 words.": "Текст је прекратак: за проверу је потребно најмање 100 речи.",
 	"Originality.ai could not scan the text": "Originality.ai није могао да провери текст",
@@ -168,5 +166,6 @@
 	"Continue": "Настави",
 	"Delete record": "Брисање записа",
 	"Select at least 100 words": "Изаберите најмање 100 речи",
-	"Done": "Готово"
+	"Writing record": "Запис писања",
+	"Back": "Назад"
 }
