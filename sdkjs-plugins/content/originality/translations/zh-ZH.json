@@ -167,5 +167,10 @@
 	"Delete record": "删除记录",
 	"Select at least 100 words": "请至少选择100个单词",
 	"Writing record": "写作记录",
-	"Back": "返回"
+	"Back": "返回",
+	"Checking the key…": "正在检查密钥…",
+	"The key works.": "密钥有效。",
+	"The key was not accepted": "密钥未被接受",
+	"An API key has Latin letters and digits only. Check the keyboard layout.": "API密钥只包含拉丁字母和数字。请检查键盘布局。",
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "未检查密钥：Originality.ai没有响应。请检查网络连接。"
 }

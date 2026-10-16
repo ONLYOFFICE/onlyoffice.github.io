@@ -167,5 +167,10 @@
 	"Delete record": "Supprimer l'enregistrement",
 	"Select at least 100 words": "Sélectionnez au moins 100 mots",
 	"Writing record": "Enregistrement de la saisie",
-	"Back": "Retour"
+	"Back": "Retour",
+	"Checking the key…": "Vérification de la clé…",
+	"The key works.": "La clé fonctionne.",
+	"The key was not accepted": "La clé n'a pas été acceptée",
+	"An API key has Latin letters and digits only. Check the keyboard layout.": "Une clé API ne contient que des lettres latines et des chiffres. Vérifiez la disposition du clavier.",
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "La clé n'a pas été vérifiée : Originality.ai n'a pas répondu. Vérifiez la connexion Internet."
 }

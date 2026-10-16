@@ -31,7 +31,7 @@
  */
 
 // A copy of sdkjs-plugin-ai/scripts/custom-actions/utils/selectBox.js, kept as close to it as possible so the plugins look and behave alike.
-// Changes: a classic script instead of an ES module (no import/export).
+// Changes: a classic script instead of an ES module (no import/export); the dropdown's wheel listener is passive.
 // Not type-checked here: types/components.d.ts declares what the plugin uses of it.
 
 
@@ -262,9 +262,10 @@ class SelectBox {
             "click",
             this.#boundHandles.dropdownClick
         );
+        // passive: it only keeps the wheel from reaching the page, never cancels the scroll
         this.#dropdown.addEventListener("wheel", function (e) {
             e.stopPropagation();
-        });
+        }, { passive: true });
 
         // Keyboard navigation
         this.#header.addEventListener("keydown", this.#boundHandles.keydown);

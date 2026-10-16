@@ -99,6 +99,17 @@ class OriginalityClient {
 	static _gatewayStatuses = [502, 503, 504, 524];
 
 	/**
+	 * Whether the key can be sent at all: it goes in a request header, which carries printable
+	 * Latin characters only. The browser refuses any other before a request is made, so such a
+	 * key is no key, whatever Originality.ai would say.
+	 * @param {string} apiKey
+	 * @returns {boolean}
+	 */
+	static acceptsKey(apiKey) {
+		return /^[\x21-\x7e]+$/.test(apiKey);
+	}
+
+	/**
 	 * @param {string} apiKey
 	 * @param {ScanRequest} request
 	 * @returns {Promise<unknown>} the response body as the API sent it
@@ -162,6 +173,8 @@ class OriginalityClient {
 	 * @private
 	 */
 	async _request(method, path, apiKey, body) {
+		if (!OriginalityClient.acceptsKey(apiKey))
+			throw new OriginalityApiError("An API key has Latin letters and digits only. Check the keyboard layout.", 0);
 		/** @type {Record<string, string>} */
 		const headers = { "X-OAI-API-KEY": apiKey };
 		if (body)

@@ -41,6 +41,9 @@
  */
 class SettingsView {
 
+	/** how long after the last change to the key it is checked */
+	static _keyCheckMs = 1000;
+
 	/**
 	 * @param {SettingsStore} store
 	 * @param {{
@@ -78,10 +81,26 @@ class SettingsView {
 			value       : this._settings.apiKey,
 			showClear   : false,
 		});
+		this._keyStatus = /** @type {HTMLElement} */ (document.getElementById("api-key-status"));
+		/** @type {ReturnType<typeof setTimeout> | null} */
+		this._keyTimer = null;
+		/** the key in the field; stored only once Originality.ai has accepted it */
+		this._typedKey = this._settings.apiKey;
 		this._apiKey.subscribe((event) => {
-			if (event.type === "inputfield:input" || event.type === "inputfield:change")
-				this._update({ apiKey: event.detail.value.trim() });
+			if (event.type !== "inputfield:input" && event.type !== "inputfield:change")
+				return;
+			const apiKey = event.detail.value.trim();
+			if (apiKey === this._typedKey)
+				return;
+			this._typedKey = apiKey;
+			// until the new key is accepted the panel has none, rather than the old one unseen
+			if (this._settings.apiKey)
+				this._update({ apiKey: "" });
+			this._checkKeySoon();
 		});
+
+		// the key's field is a password field, which the browser wants in a form; the form is never sent
+		/** @type {HTMLFormElement} */ (document.getElementById("api-key-form")).addEventListener("submit", (event) => event.preventDefault());
 
 		this._balanceButton = new Button("check-balance", { variant: "secondary", text: tr("Check balance") });
 		this._balanceButton.subscribe((event) => {
@@ -155,6 +174,62 @@ class SettingsView {
 		const allowanceApplies = this._settings.checkAi && this._settings.aiModel === "standard";
 		allowanceApplies ? this._allowance.enable() : this._allowance.disable();
 		this._settings.apiKey ? this._balanceButton.enable() : this._balanceButton.disable();
+	}
+
+	/**
+	 * Checks the key once the user stops typing it; a key typed meanwhile cancels the check.
+	 * @private
+	 */
+	_checkKeySoon() {
+		if (this._keyTimer)
+			clearTimeout(this._keyTimer);
+		this._keyTimer = null;
+		this._showKeyStatus("", false);
+		const apiKey = this._typedKey;
+		if (apiKey)
+			this._keyTimer = setTimeout(() => this._checkKey(apiKey), SettingsView._keyCheckMs);
+	}
+
+	/**
+	 * Asks for the balance with the key, which costs nothing: a balance means the key works, and
+	 * only then is it stored. Originality.ai answers a key it does not know as one without API
+	 * access.
+	 * @param {string} apiKey
+	 * @private
+	 */
+	async _checkKey(apiKey) {
+		const tr = window.Asc.plugin.tr;
+		this._keyTimer = null;
+		if (!OriginalityClient.acceptsKey(apiKey)) {
+			this._showKeyStatus(tr("An API key has Latin letters and digits only. Check the keyboard layout."), true);
+			return;
+		}
+		this._showKeyStatus(tr("Checking the key…"), false);
+		try {
+			const balance = await this._checkBalance(apiKey);
+			if (apiKey !== this._typedKey)
+				return;
+			this._update({ apiKey: apiKey });
+			this._showKeyStatus(tr("The key works.") + " " + tr("Credits") + ": " + balance.credits.toLocaleString(), false);
+		} catch (e) {
+			if (apiKey !== this._typedKey)
+				return;
+			if (e instanceof OriginalityApiError && e.status)
+				this._showKeyStatus(tr("The key was not accepted") + ": " + e.message, true);
+			else
+				this._showKeyStatus(tr("The key was not checked: Originality.ai did not answer. Check the internet connection."), true);
+		}
+	}
+
+	/**
+	 * @param {string} text - empty to hide the status
+	 * @param {boolean} isError
+	 * @private
+	 */
+	_showKeyStatus(text, isError) {
+		this._keyStatus.textContent = text;
+		this._keyStatus.classList.toggle("hidden", !text);
+		this._keyStatus.classList.toggle("field__hint--error", isError);
 	}
 
 	/** @private */

@@ -167,5 +167,10 @@
 	"Delete record": "Smazání záznamu",
 	"Select at least 100 words": "Vyberte alespoň 100 slov",
 	"Writing record": "Záznam psaní",
-	"Back": "Zpět"
+	"Back": "Zpět",
+	"Checking the key…": "Kontrola klíče…",
+	"The key works.": "Klíč funguje.",
+	"The key was not accepted": "Klíč nebyl přijat",
+	"An API key has Latin letters and digits only. Check the keyboard layout.": "Klíč API obsahuje jen latinská písmena a číslice. Zkontrolujte rozložení klávesnice.",
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Klíč nebyl ověřen: Originality.ai neodpověděl. Zkontrolujte připojení k internetu."
 }

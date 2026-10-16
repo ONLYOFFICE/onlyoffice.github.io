@@ -167,5 +167,10 @@
 	"Delete record": "Registratie verwijderen",
 	"Select at least 100 words": "Selecteer minstens 100 woorden",
 	"Writing record": "Schrijfregistratie",
-	"Back": "Terug"
+	"Back": "Terug",
+	"Checking the key…": "Sleutel controleren…",
+	"The key works.": "De sleutel werkt.",
+	"The key was not accepted": "De sleutel is niet geaccepteerd",
+	"An API key has Latin letters and digits only. Check the keyboard layout.": "Een API-sleutel bevat alleen Latijnse letters en cijfers. Controleer de toetsenbordindeling.",
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "De sleutel is niet gecontroleerd: Originality.ai gaf geen antwoord. Controleer de internetverbinding."
 }

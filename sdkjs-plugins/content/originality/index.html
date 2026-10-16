@@ -98,13 +98,14 @@
 			<section class="section">
 				<div id="settings-notice"></div>
 
-				<div class="field">
+				<form id="api-key-form" class="field">
 					<label class="field__label" for="api-key" data-i18n="API key">API key</label>
 					<input type="password" id="api-key" autocomplete="off" spellcheck="false">
+					<p id="api-key-status" class="field__hint hidden"></p>
 					<p class="field__hint">
 						<a href="https://app.originality.ai/home/api-token-dashboard" target="_blank" rel="noopener noreferrer" data-i18n="Get your API key">Get your API key</a>
 					</p>
-				</div>
+				</form>
 
 				<div class="field field--row">
 					<button type="button" id="check-balance" data-i18n="Check balance">Check balance</button>

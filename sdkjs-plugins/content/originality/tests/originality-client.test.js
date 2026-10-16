@@ -110,3 +110,11 @@ test("the plugin's own time limit may have cut a running scan short", async () =
 	}
 });
 
+
+test("a key with anything but printable Latin characters is refused before any request", async () => {
+	assert.strictEqual(OriginalityClient.acceptsKey("0123abcdEF-_"), true);
+	assert.strictEqual(OriginalityClient.acceptsKey("ключ"), false);
+	assert.strictEqual(OriginalityClient.acceptsKey("abc def"), false);
+	assert.strictEqual(OriginalityClient.acceptsKey(""), false);
+	await assert.rejects(new OriginalityClient().getBalance("ключ"), (e) => e instanceof OriginalityApiError && e.status === 0 && !e.mayHaveRun);
+});

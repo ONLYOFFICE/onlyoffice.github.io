@@ -167,5 +167,10 @@
 	"Delete record": "Брисање записа",
 	"Select at least 100 words": "Изаберите најмање 100 речи",
 	"Writing record": "Запис писања",
-	"Back": "Назад"
+	"Back": "Назад",
+	"Checking the key…": "Провера кључа…",
+	"The key works.": "Кључ ради.",
+	"The key was not accepted": "Кључ није прихваћен",
+	"An API key has Latin letters and digits only. Check the keyboard layout.": "API кључ садржи само латинична слова и цифре. Проверите распоред тастатуре.",
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Кључ није проверен: Originality.ai није одговорио. Проверите интернет везу."
 }

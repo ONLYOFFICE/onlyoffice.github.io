@@ -456,6 +456,11 @@ a {
 	margin-bottom: 14px;
 }
 
+/* a hint that reports a problem, e.g. a key Originality.ai did not accept */
+.field__hint.field__hint--error {
+	color: var(--text-error, #f56c6c);
+}
+
 .field--row {
 	display: flex;
 	align-items: center;

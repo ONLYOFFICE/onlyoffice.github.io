@@ -167,5 +167,10 @@
 	"Delete record": "記録の削除",
 	"Select at least 100 words": "100語以上を選択してください",
 	"Writing record": "入力の記録",
-	"Back": "戻る"
+	"Back": "戻る",
+	"Checking the key…": "キーを確認しています…",
+	"The key works.": "キーは有効です。",
+	"The key was not accepted": "キーが受け付けられませんでした",
+	"An API key has Latin letters and digits only. Check the keyboard layout.": "APIキーはラテン文字と数字のみです。キーボードの入力言語を確認してください。",
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "キーは確認されませんでした：Originality.aiから応答がありません。インターネット接続を確認してください。"
 }

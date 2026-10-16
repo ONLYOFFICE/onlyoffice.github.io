@@ -167,5 +167,10 @@
 	"Delete record": "Fshirja e regjistrimit",
 	"Select at least 100 words": "Përzgjidhni të paktën 100 fjalë",
 	"Writing record": "Regjistrimi i shkrimit",
-	"Back": "Prapa"
+	"Back": "Prapa",
+	"Checking the key…": "Po kontrollohet çelësi…",
+	"The key works.": "Çelësi funksionon.",
+	"The key was not accepted": "Çelësi nuk u pranua",
+	"An API key has Latin letters and digits only. Check the keyboard layout.": "Një çelës API ka vetëm shkronja latine dhe shifra. Kontrolloni paraqitjen e tastierës.",
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Çelësi nuk u kontrollua: Originality.ai nuk u përgjigj. Kontrolloni lidhjen me internetin."
 }

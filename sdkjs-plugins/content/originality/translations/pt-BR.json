@@ -167,5 +167,10 @@
 	"Delete record": "Excluir registro",
 	"Select at least 100 words": "Selecione pelo menos 100 palavras",
 	"Writing record": "Registro da digitação",
-	"Back": "Voltar"
+	"Back": "Voltar",
+	"Checking the key…": "Verificando a chave…",
+	"The key works.": "A chave funciona.",
+	"The key was not accepted": "A chave não foi aceita",
+	"An API key has Latin letters and digits only. Check the keyboard layout.": "Uma chave de API tem apenas letras latinas e dígitos. Verifique o layout do teclado.",
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "A chave não foi verificada: o Originality.ai não respondeu. Verifique a conexão com a internet."
 }
