@@ -5,8 +5,8 @@
     "ja": "marinaMoji"
   },
   "guid": "asc.{7A9E3B2C-4D5F-6E8A-1B0C-9D3E5F7A2B1C}",
-  "version": "0.1.13",
-  "minVersion": "7.0.0",
+  "version": "0.1.14",
+  "minVersion": "9.3.0",
   "offered": "marinaMoji",
   "description": "Render Kanbun kaeriten marks from marinaMoji Unicode source. Make room for character.",
   "descriptionLocale": {
@@ -16,10 +16,6 @@
   "author": "marinaMoji",
   "help": "https://github.com/marinaMoji/marinaMoji",
   "baseUrl": "",
-  "group": {
-    "name": "marinaMoji",
-    "rank": 1
-  },
   "variations": [
     {
       "description": "Render Kanbun kaeriten marks from marinaMoji Unicode source. Make room for character.",
@@ -27,7 +23,7 @@
         "fr": "Formater les marques kaeriten Unicode saisies avec marinaMoji. Make room for character.",
         "ja": "marinaMojiのUnicode入力から漢文返り点を整形します。Make room for character."
       },
-      "url": "index.html?v=0.1.13",
+      "url": "index.html?v=0.1.14",
       "icons": [
         "resources/light/icon.png",
         "resources/light/icon@2x.png"

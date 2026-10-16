@@ -1,10 +1,29 @@
+:root {
+  --mm-bg: #ffffff;
+  --mm-text: #1a1a1a;
+  --mm-text-secondary: #444444;
+  --mm-text-muted: #666666;
+  --mm-heading: #555555;
+  --mm-slogan: #203758;
+  --mm-border: #cccccc;
+  --mm-btn-bg: #f7f7f7;
+  --mm-btn-hover: #eeeeee;
+  --mm-btn-primary-bg: #1a5f7a;
+  --mm-btn-primary-border: #154a5f;
+  --mm-btn-primary-text: #ffffff;
+  --mm-status-bg: #f0f4f8;
+  --mm-status-err-bg: #fdecea;
+  --mm-status-err-text: #8a1f11;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 13px;
   line-height: 1.45;
   margin: 0;
   padding: 12px;
-  color: #1a1a1a;
+  color: var(--mm-text);
+  background: var(--mm-bg);
   min-width: 220px;
 }
 
@@ -26,6 +45,7 @@ header .logo {
 h1 {
   font-size: 15px;
   margin: 0 0 4px;
+  color: var(--mm-text);
 }
 
 .brand h1 {
@@ -37,19 +57,19 @@ h2 {
   margin: 12px 0 6px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #555;
+  color: var(--mm-heading);
 }
 
 .slogan {
   margin: 4px 0 6px;
-  color: #203758;
+  color: var(--mm-slogan);
   font-size: 12px;
   font-style: italic;
 }
 
 .lead {
   margin: 0 0 8px;
-  color: #444;
+  color: var(--mm-text-secondary);
   font-size: 12px;
 }
 
@@ -66,14 +86,15 @@ h2 {
 button {
   font-size: 12px;
   padding: 6px 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--mm-border);
   border-radius: 4px;
-  background: #f7f7f7;
+  background: var(--mm-btn-bg);
+  color: var(--mm-text);
   cursor: pointer;
 }
 
 button:hover {
-  background: #eee;
+  background: var(--mm-btn-hover);
 }
 
 button:disabled {
@@ -82,14 +103,14 @@ button:disabled {
 }
 
 #btn-render {
-  background: #1a5f7a;
-  color: #fff;
-  border-color: #154a5f;
+  background: var(--mm-btn-primary-bg);
+  color: var(--mm-btn-primary-text);
+  border-color: var(--mm-btn-primary-border);
 }
 
 .hint {
   font-size: 11px;
-  color: #666;
+  color: var(--mm-text-muted);
   margin: 6px 0 0;
 }
 
@@ -97,11 +118,12 @@ button:disabled {
   margin-top: 12px;
   padding: 8px 10px;
   border-radius: 6px;
-  background: #f0f4f8;
+  background: var(--mm-status-bg);
+  color: var(--mm-text);
   font-size: 12px;
 }
 
 .status.err {
-  background: #fdecea;
-  color: #8a1f11;
+  background: var(--mm-status-err-bg);
+  color: var(--mm-status-err-text);
 }

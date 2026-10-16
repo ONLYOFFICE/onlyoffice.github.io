@@ -1,6 +1,11 @@
 /**
  * Canonical-text exporters (no editor dependency).
- * Port of libreoffice/marinamoji_kaeriten/export_core.py
+ *
+ * Copyright (C) 2024–2026 marinaMoji contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later OR AGPL-3.0-or-later
+ *
+ * Port of libreoffice/marinamoji_kaeriten/export_core.py in the marinaMoji/plugin
+ * repository (GPL-3.0). Not derived from the BSD-licensed marinaMoji IME tree.
  */
 (function (global) {
   /** Marks may be split across lines in the document (漢㆒↵㆖字) — whitespace only between mark code points. */

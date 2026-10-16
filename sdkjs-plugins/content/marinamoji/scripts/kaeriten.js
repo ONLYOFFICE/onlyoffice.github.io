@@ -1,5 +1,8 @@
 /**
  * marinaMoji Kaeriten — ONLYOFFICE Document Editor plugin
+ *
+ * Copyright (C) 2024–2026 marinaMoji contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later OR AGPL-3.0-or-later
  */
 (function () {
   const SOURCE_PREFIX = "MARINAMOJI:source=";
@@ -179,15 +182,95 @@
   }
 
   function copyToClipboard(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      return navigator.clipboard.writeText(text);
+    function execCommandFallback() {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      ta.style.top = "0";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch (e) {
+        ok = false;
+      }
+      document.body.removeChild(ta);
+      if (!ok) return Promise.reject(new Error("Clipboard failed"));
+      return Promise.resolve();
     }
-    return new Promise((resolve, reject) => {
-      window.Asc.plugin.executeMethod("PasteText", [text], function (ok) {
-        if (ok === false) reject(new Error("Clipboard failed"));
-        else resolve();
+
+    // Clipboard API often exists in the plugin frame but rejects under the
+    // editor permissions policy — always fall back to execCommand on failure.
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () {
+        return execCommandFallback();
       });
-    });
+    }
+    return execCommandFallback();
+  }
+
+  function applyTheme(theme) {
+    if (window.Asc && window.Asc.plugin && window.Asc.plugin.onThemeChangedBase) {
+      window.Asc.plugin.onThemeChangedBase(theme);
+    }
+    const t = theme || (window.Asc && window.Asc.plugin && window.Asc.plugin.theme) || {};
+    const isDark =
+      t.type === "dark" ||
+      t.Type === "dark" ||
+      String(t["theme-type"] || t.theme_type || "").toLowerCase() === "dark";
+
+    const pick = function (key, fallback) {
+      return t[key] || fallback;
+    };
+
+    const root = document.documentElement;
+    root.style.setProperty("--mm-bg", pick("background-normal", isDark ? "#333333" : "#ffffff"));
+    root.style.setProperty("--mm-text", pick("text-normal", isDark ? "#eeeeee" : "#1a1a1a"));
+    root.style.setProperty(
+      "--mm-text-secondary",
+      pick("text-secondary", isDark ? "#bbbbbb" : "#444444")
+    );
+    root.style.setProperty(
+      "--mm-text-muted",
+      pick("text-secondary", isDark ? "#999999" : "#666666")
+    );
+    root.style.setProperty(
+      "--mm-heading",
+      pick("text-secondary", isDark ? "#aaaaaa" : "#555555")
+    );
+    root.style.setProperty(
+      "--mm-slogan",
+      pick("text-normal", isDark ? "#9ec9e0" : "#203758")
+    );
+    root.style.setProperty(
+      "--mm-border",
+      pick("border-regular-control", isDark ? "#666666" : "#cccccc")
+    );
+    root.style.setProperty(
+      "--mm-btn-bg",
+      pick("background-toolbar", isDark ? "#555555" : "#f7f7f7")
+    );
+    root.style.setProperty(
+      "--mm-btn-hover",
+      pick("highlight-button-hover", isDark ? "#666666" : "#eeeeee")
+    );
+    root.style.setProperty(
+      "--mm-status-bg",
+      pick("background-toolbar-additional", isDark ? "#444444" : "#f0f4f8")
+    );
+
+    const logo = document.getElementById("logo");
+    if (logo) {
+      logo.src = isDark
+        ? "resources/dark/icon-sidebar.png"
+        : "resources/light/icon-sidebar.png";
+    }
+    document.body.classList.toggle("theme-dark", isDark);
   }
 
   /** Read canonical paragraph texts; skip clean rendered paragraphs. */
@@ -433,8 +516,147 @@
             fillPositionStack(sdt, glyphLines);
           }
 
-          function fillParagraph(oPara, segments, itemFontSizePt) {
-            var localFontSizePt = itemFontSizePt || fontSizePt;
+          function createKaeritenView(seg, localFontSizePt) {
+            var tag = (seg.view && seg.view.tag) || (sourcePrefix + seg.marks);
+            if (seg.view && seg.view.image && Api.CreateImage) {
+              var img = seg.view.image;
+              var drawing = Api.CreateImage(img.src, img.widthEmu, img.heightEmu);
+              if (drawing.SetWrappingStyle) drawing.SetWrappingStyle("inline");
+              if (drawing.SetName) drawing.SetName(tag);
+              var pos = Number((seg.view && seg.view.positionHps) || 0);
+              if (pos && Api.CreateRun && Api.CreateInlineLvlSdt) {
+                var imgSdt = Api.CreateInlineLvlSdt();
+                var imgRun = Api.CreateRun();
+                if (imgRun.SetPosition) imgRun.SetPosition(pos);
+                if (imgRun.AddDrawing) {
+                  imgRun.AddDrawing(drawing);
+                  imgSdt.AddElement(imgRun);
+                  imgSdt.SetTag(tag);
+                  if (imgSdt.SetAlias) imgSdt.SetAlias(seg.marks);
+                  return { kind: "sdt", el: imgSdt };
+                }
+              }
+              return { kind: "drawing", el: drawing };
+            }
+            var sdt = Api.CreateInlineLvlSdt();
+            var previousFontSizePt = fontSizePt;
+            fontSizePt = localFontSizePt;
+            fillInlineSdtGlyphs(sdt, seg.glyphLines);
+            fontSizePt = previousFontSizePt;
+            sdt.SetTag(tag);
+            if (sdt.SetAlias) sdt.SetAlias(seg.marks);
+            return { kind: "sdt", el: sdt };
+          }
+
+          function insertViewAt(oPara, index, view) {
+            if (!view || !view.el) return;
+            // Prefer AddElement with an index so in-place mark replacement keeps order.
+            if (typeof index === "number" && oPara.AddElement) {
+              oPara.AddElement(view.el, index);
+              return;
+            }
+            if (view.kind === "sdt" && oPara.AddInlineLvlSdt) {
+              oPara.AddInlineLvlSdt(view.el);
+              return;
+            }
+            if (view.kind === "drawing" && oPara.AddDrawing) {
+              oPara.AddDrawing(view.el);
+              return;
+            }
+            oPara.AddElement(view.el);
+          }
+
+          function copyRunStyle(fromRun, toRun, localFontSizePt) {
+            if (!toRun) return;
+            if (toRun.SetFontSize) toRun.SetFontSize(fontSizeHps(localFontSizePt));
+            if (!fromRun) return;
+            try {
+              if (fromRun.GetBold && toRun.SetBold && fromRun.GetBold()) toRun.SetBold(true);
+              if (fromRun.GetItalic && toRun.SetItalic && fromRun.GetItalic()) toRun.SetItalic(true);
+              if (fromRun.GetUnderline && toRun.SetUnderline) {
+                var u = fromRun.GetUnderline();
+                if (u) toRun.SetUnderline(u);
+              }
+              if (fromRun.GetColor && toRun.SetColor) {
+                var c = fromRun.GetColor();
+                if (c) toRun.SetColor(c);
+              }
+              if (fromRun.GetFontFamily && toRun.SetFontFamily) {
+                var ff = fromRun.GetFontFamily();
+                if (ff) toRun.SetFontFamily(ff);
+              }
+              if (fromRun.GetTextPr && toRun.SetTextPr) {
+                var pr = fromRun.GetTextPr();
+                if (pr) toRun.SetTextPr(pr);
+              }
+            } catch (e) {}
+          }
+
+          /**
+           * Prefer replacing only mark characters inside existing runs so the rest
+           * of the paragraph (bold, links, etc.) stays intact. Fall back to a full
+           * rebuild when the paragraph already holds marinaMoji views.
+           */
+          function fillParagraphInPlace(oPara, segments, localFontSizePt) {
+            var markMap = {};
+            for (var s = 0; s < segments.length; s++) {
+              if (segments[s].type === "kaeriten") markMap[segments[s].marks] = segments[s];
+            }
+            var markRe = /[\u3190-\u319f]+/g;
+            var touched = false;
+            var ec = oPara.GetElementsCount ? oPara.GetElementsCount() : 0;
+            for (var e = ec - 1; e >= 0; e--) {
+              var el = oPara.GetElement(e);
+              if (!el || !el.GetClassType || el.GetClassType() !== "run") continue;
+              var text = el.GetText ? el.GetText() || "" : "";
+              if (!markRe.test(text)) continue;
+              markRe.lastIndex = 0;
+              var parts = [];
+              var last = 0;
+              var m;
+              while ((m = markRe.exec(text)) !== null) {
+                if (m.index > last) {
+                  parts.push({ type: "text", value: text.slice(last, m.index) });
+                }
+                var marks = m[0];
+                if (markMap[marks]) {
+                  parts.push({ type: "kaeriten", seg: markMap[marks] });
+                } else {
+                  parts.push({ type: "text", value: marks });
+                }
+                last = m.index + marks.length;
+              }
+              if (last < text.length) parts.push({ type: "text", value: text.slice(last) });
+              if (!parts.length) continue;
+
+              oPara.RemoveElement(e);
+              for (var p = parts.length - 1; p >= 0; p--) {
+                var part = parts[p];
+                if (part.type === "text" && part.value) {
+                  var run = Api.CreateRun();
+                  copyRunStyle(el, run, localFontSizePt);
+                  run.AddText(part.value);
+                  oPara.AddElement(run, e);
+                } else if (part.type === "kaeriten") {
+                  var view = createKaeritenView(part.seg, localFontSizePt);
+                  insertViewAt(oPara, e, view);
+                }
+              }
+              touched = true;
+            }
+            return touched;
+          }
+
+          function fillParagraphRebuild(oPara, segments, localFontSizePt) {
+            var styleRun = null;
+            var ec0 = oPara.GetElementsCount ? oPara.GetElementsCount() : 0;
+            for (var i = 0; i < ec0; i++) {
+              var child = oPara.GetElement(i);
+              if (child && child.GetClassType && child.GetClassType() === "run" && child.GetText && child.GetText()) {
+                styleRun = child;
+                break;
+              }
+            }
             var n = oPara.GetElementsCount();
             for (var k = n - 1; k >= 0; k--) {
               oPara.RemoveElement(k);
@@ -443,44 +665,44 @@
               var seg = segments[s];
               if (seg.type === "text" && seg.value) {
                 var run = Api.CreateRun();
-                if (run.SetFontSize) run.SetFontSize(fontSizeHps(localFontSizePt));
+                copyRunStyle(styleRun, run, localFontSizePt);
                 run.AddText(seg.value);
                 oPara.AddElement(run);
               } else if (seg.type === "kaeriten") {
-                var tag = (seg.view && seg.view.tag) || (sourcePrefix + seg.marks);
-                if (seg.view && seg.view.image && Api.CreateImage && oPara.AddDrawing) {
-                  var img = seg.view.image;
-                  var drawing = Api.CreateImage(img.src, img.widthEmu, img.heightEmu);
-                  if (drawing.SetWrappingStyle) drawing.SetWrappingStyle("inline");
-                  if (drawing.SetName) drawing.SetName(tag);
-                  var pos = Number((seg.view && seg.view.positionHps) || 0);
-                  var placed = false;
-                  if (pos && Api.CreateRun && Api.CreateInlineLvlSdt) {
-                    var imgSdt = Api.CreateInlineLvlSdt();
-                    var imgRun = Api.CreateRun();
-                    if (imgRun.SetPosition) imgRun.SetPosition(pos);
-                    if (imgRun.AddDrawing) {
-                      imgRun.AddDrawing(drawing);
-                      imgSdt.AddElement(imgRun);
-                      oPara.AddInlineLvlSdt(imgSdt);
-                      imgSdt.SetTag(tag);
-                      if (imgSdt.SetAlias) imgSdt.SetAlias(seg.marks);
-                      placed = true;
-                    }
-                  }
-                  if (!placed) oPara.AddDrawing(drawing);
-                } else {
-                  var sdt = Api.CreateInlineLvlSdt();
-                  var previousFontSizePt = fontSizePt;
-                  fontSizePt = localFontSizePt;
-                  fillInlineSdtGlyphs(sdt, seg.glyphLines);
-                  fontSizePt = previousFontSizePt;
-                  oPara.AddInlineLvlSdt(sdt);
-                  sdt.SetTag(tag);
-                  if (sdt.SetAlias) sdt.SetAlias(seg.marks);
-                }
+                var view = createKaeritenView(seg, localFontSizePt);
+                insertViewAt(oPara, null, view);
               }
             }
+          }
+
+          function fillParagraph(oPara, segments, itemFontSizePt) {
+            var localFontSizePt = itemFontSizePt || fontSizePt;
+            var hasViews = false;
+            var ec = oPara.GetElementsCount ? oPara.GetElementsCount() : 0;
+            for (var e = 0; e < ec; e++) {
+              var el = oPara.GetElement(e);
+              if (!el) continue;
+              var type = el.GetClassType ? el.GetClassType() : "";
+              if (type === "inlineLvlSdt") {
+                hasViews = true;
+                break;
+              }
+              if (type === "run" && el.GetElementsCount && el.GetElementsCount() > 0) {
+                for (var r = 0; r < el.GetElementsCount(); r++) {
+                  var inner = el.GetElement(r);
+                  var it = inner && inner.GetClassType ? inner.GetClassType() : "";
+                  if (it === "inlineLvlSdt" || it === "drawing" || it === "image") {
+                    hasViews = true;
+                    break;
+                  }
+                }
+              }
+              if (hasViews) break;
+            }
+            if (!hasViews && fillParagraphInPlace(oPara, segments, localFontSizePt)) {
+              return;
+            }
+            fillParagraphRebuild(oPara, segments, localFontSizePt);
           }
 
           for (var p = 0; p < plan.length; p++) {
@@ -576,13 +798,10 @@
             for (var e = 0; e < ec; e++) {
               var child = para.GetElement(e);
               if (!child || !child.GetClassType) continue;
+              // Paragraph.GetElement returns drawings wrapped in ApiRun, not bare
+              // "image" / "drawing" elements — walk runs and inline content controls.
               var type = child.GetClassType();
-              if (
-                type !== "inlineLvlSdt" &&
-                type !== "image" &&
-                type !== "drawing" &&
-                type !== "run"
-              ) {
+              if (type !== "inlineLvlSdt" && type !== "run") {
                 continue;
               }
               var marks = marksFromElementTree(child);
@@ -762,6 +981,9 @@
   }
 
   window.Asc.plugin.init = function () {
+    if (window.Asc && window.Asc.plugin && window.Asc.plugin.theme) {
+      applyTheme(window.Asc.plugin.theme);
+    }
     loadMapping()
       .then(() => {
         setStatus("Ready — type 說㆒㆑者, then Render.", false);
@@ -771,6 +993,13 @@
       })
       .catch((err) => setStatus(String(err.message || err), true));
   };
+
+  window.Asc.plugin.onThemeChanged = function (theme) {
+    applyTheme(theme);
+  };
+  if (window.Asc && window.Asc.plugin && window.Asc.plugin.attachEvent) {
+    window.Asc.plugin.attachEvent("onThemeChanged", applyTheme);
+  }
 
   window.Asc.plugin.button = function () {};
 })();
