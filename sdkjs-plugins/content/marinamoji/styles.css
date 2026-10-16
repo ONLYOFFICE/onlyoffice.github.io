@@ -1,0 +1,107 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+  padding: 12px;
+  color: #1a1a1a;
+  min-width: 220px;
+}
+
+header {
+  margin-bottom: 8px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+header .logo {
+  flex: 0 0 auto;
+  border-radius: 6px;
+}
+
+h1 {
+  font-size: 15px;
+  margin: 0 0 4px;
+}
+
+.brand h1 {
+  margin: 0;
+}
+
+h2 {
+  font-size: 12px;
+  margin: 12px 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #555;
+}
+
+.slogan {
+  margin: 4px 0 6px;
+  color: #203758;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.lead {
+  margin: 0 0 8px;
+  color: #444;
+  font-size: 12px;
+}
+
+.sample {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+button {
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f7f7f7;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #eee;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+#btn-render {
+  background: #1a5f7a;
+  color: #fff;
+  border-color: #154a5f;
+}
+
+.hint {
+  font-size: 11px;
+  color: #666;
+  margin: 6px 0 0;
+}
+
+.status {
+  margin-top: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #f0f4f8;
+  font-size: 12px;
+}
+
+.status.err {
+  background: #fdecea;
+  color: #8a1f11;
+}
