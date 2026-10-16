@@ -33,27 +33,116 @@
 // @ts-check
 
 /**
- * Translates the static text of a plugin page: every element marked `data-i18n` gets its
- * English source text replaced through `Asc.plugin.tr`. The English text stays in the markup,
- * so the page reads correctly before the dictionary arrives.
+ * Translates a plugin page drawn before its dictionary came. The page and its components are
+ * drawn at once in English, the language the texts are written in; once the dictionary is in,
+ * every text, title, placeholder and label whose whole wording is a phrase of the dictionary is
+ * put in the user's language — in the markup and in what components drew alike. Text put
+ * together from parts ("Credits: 42") is not a phrase: whoever drew it draws it again. Nothing
+ * inside an element marked `translate="no"` is touched, e.g. text taken from the document.
+ *
+ * Until the dictionary comes the words can be kept out of sight, the page laid out without them,
+ * so that they do not change language before the user's eyes.
  */
 class PageTranslator {
 
+	static _attributes = Object.freeze(["title", "placeholder", "aria-label"]);
+	/** the class that keeps the words out of sight (panel.css, replay.css) */
+	static _pendingClass = "texts-pending";
+
 	/**
-	 * @param {ParentNode} root
+	 * @param {HTMLElement} root
 	 */
 	constructor(root) {
-		/** @type {Array<{ element: HTMLElement, key: string }>} */
-		this._entries = Array.from(root.querySelectorAll("[data-i18n]")).map((element) => {
-			const html = /** @type {HTMLElement} */ (element);
-			return { element: html, key: html.dataset.i18n || (html.textContent || "").trim() };
-		});
+		this._root = root;
+		/** the English wording of what was translated, so that a later pass starts from it again */
+		/** @type {WeakMap<Node, string>} */
+		this._texts = new WeakMap();
+		/** @type {WeakMap<Element, Record<string, string>>} */
+		this._attributeTexts = new WeakMap();
+		this._isTranslated = false;
+		/** @type {ReturnType<typeof setTimeout> | null} */
+		this._waitTimer = null;
+	}
+
+	/**
+	 * Keeps the words out of sight until the dictionary comes, and shows them in English if it has
+	 * not come within the time given: it may never come, when its file fails to load. Does nothing
+	 * once the page is translated.
+	 * @param {number} ms
+	 */
+	hideUntilTranslated(ms) {
+		if (this._isTranslated || this._waitTimer)
+			return;
+		this._root.classList.add(PageTranslator._pendingClass);
+		this._waitTimer = setTimeout(() => this._showTexts(), ms);
 	}
 
 	translate() {
-		const plugin = window.Asc.plugin;
-		this._entries.forEach((entry) => {
-			entry.element.textContent = plugin.tr(entry.key);
+		this._isTranslated = true;
+		this._translateTexts();
+		this._showTexts();
+	}
+
+	/** @private */
+	_showTexts() {
+		if (this._waitTimer)
+			clearTimeout(this._waitTimer);
+		this._waitTimer = null;
+		this._root.classList.remove(PageTranslator._pendingClass);
+	}
+
+	/** @private */
+	_translateTexts() {
+		const walker = document.createTreeWalker(this._root, NodeFilter.SHOW_TEXT, {
+			acceptNode: (node) => (PageTranslator._isTranslatable(node.parentElement)
+				? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT),
 		});
+		for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+			const english = this._texts.get(node) ?? node.nodeValue ?? "";
+			const translated = PageTranslator._translatePhrase(english);
+			if (translated !== null) {
+				this._texts.set(node, english);
+				node.nodeValue = translated;
+			}
+		}
+
+		const selector = PageTranslator._attributes.map((name) => "[" + name + "]").join(",");
+		this._root.querySelectorAll(selector).forEach((element) => {
+			if (!PageTranslator._isTranslatable(element))
+				return;
+			const english = this._attributeTexts.get(element) || {};
+			PageTranslator._attributes.forEach((name) => {
+				const value = english[name] ?? element.getAttribute(name);
+				const translated = value === null ? null : PageTranslator._translatePhrase(value);
+				if (value !== null && translated !== null) {
+					english[name] = value;
+					element.setAttribute(name, translated);
+				}
+			});
+			this._attributeTexts.set(element, english);
+		});
+	}
+
+	/**
+	 * @param {string} text
+	 * @returns {string | null} the text in the user's language, its spacing kept; null when it is
+	 *   no phrase of the dictionary
+	 * @private
+	 */
+	static _translatePhrase(text) {
+		const phrase = text.trim();
+		if (!phrase)
+			return null;
+		const translated = window.Asc.plugin.tr(phrase);
+		return translated === phrase ? null : text.replace(phrase, translated);
+	}
+
+	/**
+	 * @param {Element | null} element
+	 * @returns {boolean}
+	 * @private
+	 */
+	static _isTranslatable(element) {
+		return !!element && !element.closest("script, style, [translate='no']");
 	}
 }

@@ -7,6 +7,18 @@ body:not(.page-ready) {
 	visibility: hidden;
 }
 
+/* until the dictionary comes the page is laid out but its words are out of sight, so that they do
+   not change language before the eyes (page-translator.js); the icons drawn in the text colour
+   (the settings and back arrows) keep it */
+body.texts-pending *,
+body.texts-pending ::placeholder {
+	color: transparent !important;
+}
+
+body.texts-pending svg {
+	color: var(--text-normal) !important;
+}
+
 html,
 body {
 	width: 100%;

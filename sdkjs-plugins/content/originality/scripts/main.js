@@ -94,6 +94,8 @@
 
 	/** @type {ScanView | null} */
 	let scanView = null;
+	/** draws again what the views put together from translated parts; set once they are built */
+	let retranslateViews = () => {};
 	/** @type {PanelPages | null} */
 	let pages = null;
 
@@ -145,9 +147,19 @@
 		});
 		reviews.onChange(showHistory);
 		showHistory();
+
+		retranslateViews = () => {
+			view.retranslate();
+			showHistory();
+		};
 	}
 
 	window.Asc.plugin.init = function() {
+		// the panel is drawn in English at once, not after the dictionary, which may be slow to come
+		if (!scanView)
+			buildViews();
+		// the dictionary of any language but English is still loading
+		translator.hideUntilTranslated(2000);
 		// the theme, if the editor has one, came with this same message, just before
 		ThemeVariables.reveal();
 		const info = window.Asc.plugin.info;
@@ -174,10 +186,15 @@
 		});
 	};
 
+	/**
+	 * The dictionary is in: before init for English, after it for any other language, once its file
+	 * has loaded.
+	 */
 	window.Asc.plugin.onTranslate = function() {
-		translator.translate();
 		if (!scanView)
 			buildViews();
+		translator.translate();
+		retranslateViews();
 	};
 
 	/**

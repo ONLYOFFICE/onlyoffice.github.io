@@ -201,10 +201,24 @@ class ScanView {
 			if (this._showsNoKey)
 				this._hideMessage();
 		} else if (!this._showsNoKey) {
-			const tr = window.Asc.plugin.tr;
-			this._showMessage("info", tr("No API key"), tr("Add your Originality.ai API key in [Settings]."));
-			this._showsNoKey = true;
+			this._showNoKey();
 		}
+	}
+
+	/**
+	 * The dictionary came after the page was drawn: draws again what was put together from parts,
+	 * which the page's own translation leaves as it was.
+	 */
+	retranslate() {
+		if (this._showsNoKey)
+			this._showNoKey();
+	}
+
+	/** @private */
+	_showNoKey() {
+		const tr = window.Asc.plugin.tr;
+		this._showMessage("info", tr("No API key"), tr("Add your Originality.ai API key in [Settings]."));
+		this._showsNoKey = true;
 	}
 
 	/**

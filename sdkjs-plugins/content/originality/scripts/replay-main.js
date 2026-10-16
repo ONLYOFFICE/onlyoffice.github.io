@@ -48,9 +48,6 @@
 	const translator = new PageTranslator(document.body);
 	/** @type {ReplayPlayer | null} */
 	let player = null;
-	/** @type {ReplayData} */
-	let pending = { sessions: [], writerId: null };
-	let isReady = false;
 
 	/**
 	 * @param {ReplayData} data
@@ -85,32 +82,35 @@
 	}
 
 	window.Asc.plugin.init = function() {
+		// the player is drawn in English at once, not after the dictionary, which may be slow to come
+		if (!player)
+			player = new ReplayPlayer();
+		// the dictionary of any language but English is still loading
+		translator.hideUntilTranslated(2000);
 		// the theme, if the editor has one, came with this same message, just before
 		ThemeVariables.reveal();
 		window.Asc.plugin.attachEvent(ReplayProtocol.data, (data) => {
 			const payload = /** @type {Partial<ReplayData>} */ (data);
-			pending = {
+			show({
 				sessions : payload && Array.isArray(payload.sessions) ? payload.sessions : [],
 				writerId : payload && typeof payload.writerId === "string" ? payload.writerId : null,
-			};
-			show(pending);
+			});
 		});
 		window.Asc.plugin.attachEvent("onThemeChanged", (theme) => {
 			window.Asc.plugin.onThemeChangedBase(/** @type {AscTheme} */ (theme));
 			ThemeVariables.apply(/** @type {AscTheme} */ (theme));
 		});
-		isReady = true;
 		window.Asc.plugin.sendToPlugin(ReplayProtocol.ready, {});
 	};
 
+	/**
+	 * The dictionary is in: before init for English, after it for any other language, once its file
+	 * has loaded.
+	 */
 	window.Asc.plugin.onTranslate = function() {
-		translator.translate();
-		if (!player) {
-			// the player puts translated captions into its controls, so it is built with the dictionary in
+		if (!player)
 			player = new ReplayPlayer();
-			if (isReady)
-				show(pending);
-		}
+		translator.translate();
 	};
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
