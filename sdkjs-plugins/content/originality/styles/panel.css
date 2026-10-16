@@ -63,6 +63,24 @@ body.panel {
 }
 
 /* ---- sections ---- */
+/* the panel shows one page at a time: the tabs, or the settings */
+.page {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	min-height: 0;
+}
+
+.page__footer {
+	flex: 0 0 auto;
+	padding: 12px;
+	border-top: 1px solid var(--border-divider);
+}
+
+.page__footer .custom-button-container {
+	display: block;
+}
+
 .sections {
 	flex: 1 1 auto;
 	overflow-y: auto;
@@ -96,6 +114,27 @@ a {
 	display: flex;
 	gap: 8px;
 	margin-bottom: 12px;
+}
+
+/* the scan button with the settings button beside it, as in Zotero, and the hint about the
+   selection under them */
+.scan-action {
+	margin-bottom: 12px;
+}
+
+.scan-action__buttons {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.scan-action__buttons .custom-button-container:first-child {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.scan-action .scan-action__error {
+	color: var(--text-error, #f56c6c);
 }
 
 .actions .custom-button-container {

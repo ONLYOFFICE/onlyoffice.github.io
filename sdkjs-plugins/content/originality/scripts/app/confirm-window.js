@@ -51,6 +51,13 @@ class ConfirmWindow {
 	}
 
 	/**
+	 * @returns {string} The ID of the confirmation window; empty when none is open
+	 */
+	get id() {
+		return this._window?.id ?? '';
+	}
+
+	/**
 	 * @param {string} title - the window's caption, translated
 	 * @param {string[]} paragraphs - the question, translated
 	 * @param {string[]} buttons - captions, translated; the first is the main one

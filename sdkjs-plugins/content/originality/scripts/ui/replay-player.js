@@ -113,7 +113,7 @@ class ReplayPlayer {
 		this._playing = false;
 		/** @type {number | null} */
 		this._lastFrameAt = null;
-		/** @type {ReturnType<typeof setInterval> | null} */
+		/** @type {ReturnType<typeof setTimeout> | null} */
 		this._timer = null;
 	}
 
@@ -139,15 +139,25 @@ class ReplayPlayer {
 		this._lastFrameAt = performance.now();
 		this._playButton.setText(window.Asc.plugin.tr("Pause"));
 		if (!this._timer)
-			this._timer = setInterval(() => this._tick(performance.now()), ReplayPlayer._frameMs);
+			this._nextFrame();
 	}
 
 	pause() {
 		this._playing = false;
 		if (this._timer)
-			clearInterval(this._timer);
+			clearTimeout(this._timer);
 		this._timer = null;
 		this._playButton.setText(window.Asc.plugin.tr("Play"));
+	}
+
+	/** @private */
+	_nextFrame() {
+		this._timer = setTimeout(() => {
+			this._timer = null;
+			this._tick(performance.now());
+			if (this._playing)
+				this._nextFrame();
+		}, ReplayPlayer._frameMs);
 	}
 
 	/**

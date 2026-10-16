@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "De tekst heeft %1 woorden. Eén scan omvat maximaal %2, dus alleen de eerste %2 woorden worden gescand.",
 	"To scan the rest, select it and scan it separately.": "Selecteer de rest en scan die apart om ook die te scannen.",
 	"Continue": "Doorgaan",
-	"Delete record": "Registratie verwijderen"
+	"Delete record": "Registratie verwijderen",
+	"Select at least 100 words": "Selecteer minstens 100 woorden",
+	"Done": "Gereed"
 }

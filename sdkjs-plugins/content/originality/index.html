@@ -10,107 +10,128 @@
 	<link rel="stylesheet" href="styles/panel.css">
 </head>
 <body class="panel">
-	<nav class="tabs" role="tablist">
-		<button type="button" class="tabs__tab" role="tab" data-tab="scan" data-i18n="Scan">Scan</button>
-		<button type="button" class="tabs__tab" role="tab" data-tab="writing" data-i18n="Writing">Writing</button>
-		<button type="button" class="tabs__tab" role="tab" data-tab="settings" data-i18n="Settings">Settings</button>
-	</nav>
+	<div id="main-page" class="page">
+		<nav class="tabs" role="tablist">
+			<button type="button" class="tabs__tab" role="tab" data-tab="scan" data-i18n="Scan">Scan</button>
+			<button type="button" class="tabs__tab" role="tab" data-tab="writing" data-i18n="Writing">Writing</button>
+		</nav>
 
-	<main class="sections">
-		<section class="section" data-section="scan" role="tabpanel">
-			<p class="hint" data-i18n="Check the document for AI-generated text and plagiarism.">Check the document for AI-generated text and plagiarism.</p>
-			<div class="actions">
-				<button type="button" id="scan-document" data-i18n="Scan document">Scan document</button>
-				<button type="button" id="scan-selection" data-i18n="Scan selection">Scan selection</button>
-			</div>
-			<div id="scan-message"></div>
-			<div id="scan-loader" class="hidden"></div>
-			<div id="scan-highlights" class="highlights hidden">
-				<span id="highlights-status" class="highlights__status"></span>
-				<button type="button" id="clear-highlights" data-i18n="Clear marks">Clear marks</button>
-			</div>
-			<div id="scan-result"></div>
-			<div class="actions">
-				<button type="button" id="export-report-scan" data-i18n="Export report">Export report</button>
-			</div>
-		</section>
-
-		<section class="section" data-section="writing" role="tabpanel" hidden>
-			<p class="hint" data-i18n="How the document was written: typed, pasted and auto-typed text.">How the document was written: typed, pasted and auto-typed text.</p>
-			<div class="recording">
-				<span class="recording__dot"></span>
-				<span id="recording-status" class="recording__text"></span>
-			</div>
-			<div class="field">
-				<input type="checkbox" id="record-writing">
-			</div>
-			<p class="field__hint recording__note" data-i18n="Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.">Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.</p>
-			<p class="field__hint recording__note" data-i18n="The record is kept in the document file and goes wherever the file goes, deleted drafts included.">The record is kept in the document file and goes wherever the file goes, deleted drafts included.</p>
-			<div class="actions">
-				<button type="button" id="open-replay" data-i18n="Watch replay">Watch replay</button>
-			</div>
-			<div class="actions">
-				<button type="button" id="delete-record" data-i18n="Delete record…">Delete record…</button>
-			</div>
-			<div id="writing-writers" class="field hidden">
-				<label class="field__label" data-i18n="Writer">Writer</label>
-				<div id="writing-writer"></div>
-				<p id="writing-others" class="field__hint"></p>
-			</div>
-			<div id="writing-result"></div>
-		</section>
-
-		<section class="section" data-section="settings" role="tabpanel" hidden>
-			<div id="settings-notice"></div>
-
-			<div class="field">
-				<label class="field__label" for="api-key" data-i18n="API key">API key</label>
-				<input type="password" id="api-key" autocomplete="off" spellcheck="false">
-				<p class="field__hint">
-					<a href="https://app.originality.ai/home/api-token-dashboard" target="_blank" rel="noopener noreferrer" data-i18n="Get your API key">Get your API key</a>
-				</p>
-			</div>
-
-			<div class="field field--row">
-				<button type="button" id="check-balance" data-i18n="Check balance">Check balance</button>
-				<span id="balance" class="field__value"></span>
-			</div>
-
-			<div class="field">
-				<label class="field__label" data-i18n="AI detection model">AI detection model</label>
-				<div id="ai-model"></div>
-			</div>
-
-			<div class="field">
-				<label class="field__label" data-i18n="AI allowance">AI allowance</label>
-				<div id="ai-allowance"></div>
-				<p class="field__hint" data-i18n="How much AI-assisted writing is acceptable before text counts as AI-generated.">How much AI-assisted writing is acceptable before text counts as AI-generated.</p>
-			</div>
-
-			<div class="field">
-				<span class="field__label" data-i18n="Checks">Checks</span>
-				<div class="field__options">
-					<input type="checkbox" id="check-ai">
-					<input type="checkbox" id="check-plagiarism">
-					<input type="checkbox" id="check-readability">
-					<input type="checkbox" id="check-facts">
+		<main class="sections">
+			<section class="section" data-section="scan" role="tabpanel">
+				<p class="hint" data-i18n="Check the document for AI-generated text and plagiarism.">Check the document for AI-generated text and plagiarism.</p>
+				<div class="scan-action">
+					<div class="scan-action__buttons">
+						<button type="button" id="scan" data-i18n="Scan document">Scan document</button>
+						<button type="button" id="open-settings">
+							<svg width="14" height="14" viewBox="0 0 14 14" fill="currentcolor"
+							xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" clip-rule="evenodd"
+								d="M7.07031 10C8.72717 10 10.0703 8.65685 10.0703 7C10.0703 5.34315 8.72717 4 7.07031 4C5.41346 4 4.07031 5.34315 4.07031 7C4.07031 8.65685 5.41346 10 7.07031 10ZM9.07031 7C9.07031 8.10457 8.17488 9 7.07031 9C5.96574 9 5.07031 8.10457 5.07031 7C5.07031 5.89543 5.96574 5 7.07031 5C8.17488 5 9.07031 5.89543 9.07031 7Z"
+								fill="currentcolor" fill-opacity="0.8" />
+								<path fill-rule="evenodd" clip-rule="evenodd"
+								d="M12.4834 11.7324L13.9299 9.30047C14.0421 9.10329 14.0196 8.94992 13.8626 8.84038L12.3488 7.69014C12.3712 7.53678 12.3825 7.30673 12.3825 7C12.3825 6.69327 12.3712 6.46322 12.3488 6.30986L13.8626 5.15962C14.0196 5.05008 14.0421 4.89671 13.9299 4.69953L12.4834 2.26761C12.3937 2.11424 12.2479 2.07042 12.0461 2.13615L10.2631 2.82629C9.88186 2.54147 9.47817 2.31142 9.05206 2.13615L8.78294 0.295775C8.73809 0.0985915 8.62595 0 8.44654 0H5.55346C5.37405 0 5.26191 0.0985915 5.21706 0.295775L4.94794 2.13615C4.61153 2.26761 4.20785 2.49765 3.73688 2.82629L1.95394 2.13615C1.7521 2.07042 1.60633 2.11424 1.51662 2.26761L0.0700841 4.69953C-0.0420505 4.89671 -0.0196235 5.05008 0.137365 5.15962L1.65118 6.30986C1.62875 6.46322 1.61754 6.69327 1.61754 7C1.61754 7.30673 1.62875 7.53678 1.65118 7.69014L0.137365 8.84038C-0.0196235 8.94992 -0.0420505 9.10329 0.0700841 9.30047L1.51662 11.7324C1.60633 11.8858 1.7521 11.9296 1.95394 11.8638L3.73688 11.1737C4.11814 11.4585 4.52183 11.6886 4.94794 11.8638L5.21706 13.7042C5.26191 13.9014 5.37405 14 5.55346 14H8.44654C8.62595 14 8.73809 13.9014 8.78294 13.7042L9.05206 11.8638C9.38847 11.7324 9.79215 11.5023 10.2631 11.1737L12.0461 11.8638C12.2479 11.9296 12.3937 11.8858 12.4834 11.7324ZM11.3593 7.54545L11.274 8.12935L12.7816 9.2749L11.9107 10.7391L10.1275 10.0489L9.69087 10.3536C9.25147 10.6602 8.92091 10.8415 8.6881 10.9324L8.14669 11.144L7.87529 13H6.12472L5.85501 11.1557L5.32835 10.939C4.98235 10.7967 4.65163 10.6088 4.33537 10.3726L3.89201 10.0414L2.08935 10.7391L1.2184 9.2749L2.72604 8.12935L2.64066 7.54545C2.6291 7.46641 2.61754 7.2955 2.61754 7C2.61754 6.7045 2.6291 6.53359 2.64066 6.45455L2.72604 5.87065L1.2184 4.7251L2.08935 3.26086L3.87247 3.95107L4.30913 3.64637C4.74853 3.33976 5.07909 3.15854 5.3119 3.06756L5.85331 2.856L6.12472 1H7.87529L8.14499 2.84433L8.67165 3.06097C9.01765 3.20329 9.34837 3.39116 9.66463 3.62742L10.108 3.95864L11.9107 3.26086L12.7816 4.7251L11.274 5.87065L11.3593 6.45455C11.3709 6.53359 11.3825 6.7045 11.3825 7C11.3825 7.2955 11.3709 7.46641 11.3593 7.54545Z"
+								fill="currentcolor" fill-opacity="0.8" />
+							</svg>
+						</button>
+					</div>
+					<p id="scan-selection-hint" class="field__hint scan-action__error hidden" data-i18n="Select at least 100 words">Select at least 100 words</p>
 				</div>
-			</div>
-
-			<div class="field">
-				<div class="field__options">
-					<input type="checkbox" id="store-scan">
+				<div id="scan-message"></div>
+				<div id="scan-loader" class="hidden"></div>
+				<div id="scan-highlights" class="highlights hidden">
+					<span id="highlights-status" class="highlights__status"></span>
+					<button type="button" id="clear-highlights" data-i18n="Clear marks">Clear marks</button>
 				</div>
-				<p class="field__hint" data-i18n="Stored scans can be opened on Originality.ai and shared with a link.">Stored scans can be opened on Originality.ai and shared with a link.</p>
-			</div>
+				<div id="scan-result"></div>
+				<div class="actions">
+					<button type="button" id="export-report-scan" data-i18n="Export report">Export report</button>
+				</div>
+			</section>
 
-			<div class="field">
-				<label class="field__label" for="excluded-urls" data-i18n="Sources to ignore in the plagiarism check">Sources to ignore in the plagiarism check</label>
-				<textarea id="excluded-urls" class="textarea" rows="3" spellcheck="false" placeholder="https://example.com"></textarea>
-				<p class="field__hint" data-i18n="One address per line.">One address per line.</p>
-			</div>
-		</section>
-	</main>
+			<section class="section" data-section="writing" role="tabpanel" hidden>
+				<p class="hint" data-i18n="How the document was written: typed, pasted and auto-typed text.">How the document was written: typed, pasted and auto-typed text.</p>
+				<div class="recording">
+					<span class="recording__dot"></span>
+					<span id="recording-status" class="recording__text"></span>
+				</div>
+				<div class="field">
+					<input type="checkbox" id="record-writing">
+				</div>
+				<p class="field__hint recording__note" data-i18n="Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.">Writing is recorded only while this panel is open. Keys are not stored, only when they were pressed.</p>
+				<p class="field__hint recording__note" data-i18n="The record is kept in the document file and goes wherever the file goes, deleted drafts included.">The record is kept in the document file and goes wherever the file goes, deleted drafts included.</p>
+				<div class="actions">
+					<button type="button" id="open-replay" data-i18n="Watch replay">Watch replay</button>
+				</div>
+				<div class="actions">
+					<button type="button" id="delete-record" data-i18n="Delete record…">Delete record…</button>
+				</div>
+				<div id="writing-writers" class="field hidden">
+					<label class="field__label" data-i18n="Writer">Writer</label>
+					<div id="writing-writer"></div>
+					<p id="writing-others" class="field__hint"></p>
+				</div>
+				<div id="writing-result"></div>
+			</section>
+		</main>
+	</div>
+
+	<div id="settings-page" class="page hidden">
+		<main class="sections">
+			<section class="section">
+				<div id="settings-notice"></div>
+
+				<div class="field">
+					<label class="field__label" for="api-key" data-i18n="API key">API key</label>
+					<input type="password" id="api-key" autocomplete="off" spellcheck="false">
+					<p class="field__hint">
+						<a href="https://app.originality.ai/home/api-token-dashboard" target="_blank" rel="noopener noreferrer" data-i18n="Get your API key">Get your API key</a>
+					</p>
+				</div>
+
+				<div class="field field--row">
+					<button type="button" id="check-balance" data-i18n="Check balance">Check balance</button>
+					<span id="balance" class="field__value"></span>
+				</div>
+
+				<div class="field">
+					<label class="field__label" data-i18n="AI detection model">AI detection model</label>
+					<div id="ai-model"></div>
+				</div>
+
+				<div class="field">
+					<label class="field__label" data-i18n="AI allowance">AI allowance</label>
+					<div id="ai-allowance"></div>
+					<p class="field__hint" data-i18n="How much AI-assisted writing is acceptable before text counts as AI-generated.">How much AI-assisted writing is acceptable before text counts as AI-generated.</p>
+				</div>
+
+				<div class="field">
+					<span class="field__label" data-i18n="Checks">Checks</span>
+					<div class="field__options">
+						<input type="checkbox" id="check-ai">
+						<input type="checkbox" id="check-plagiarism">
+						<input type="checkbox" id="check-readability">
+						<input type="checkbox" id="check-facts">
+					</div>
+				</div>
+
+				<div class="field">
+					<div class="field__options">
+						<input type="checkbox" id="store-scan">
+					</div>
+					<p class="field__hint" data-i18n="Stored scans can be opened on Originality.ai and shared with a link.">Stored scans can be opened on Originality.ai and shared with a link.</p>
+				</div>
+
+				<div class="field">
+					<label class="field__label" for="excluded-urls" data-i18n="Sources to ignore in the plagiarism check">Sources to ignore in the plagiarism check</label>
+					<textarea id="excluded-urls" class="textarea" rows="3" spellcheck="false" placeholder="https://example.com"></textarea>
+					<p class="field__hint" data-i18n="One address per line.">One address per line.</p>
+				</div>
+			</section>
+		</main>
+		<footer class="page__footer">
+			<button type="button" id="close-settings" data-i18n="Done">Done</button>
+		</footer>
+	</div>
 
 	<script type="text/javascript" src="scripts/ui/components/button.js"></script>
 	<script type="text/javascript" src="scripts/ui/components/input.js"></script>
@@ -139,6 +160,7 @@
 	<script type="text/javascript" src="scripts/editor/annotation-clicks.js"></script>
 	<script type="text/javascript" src="scripts/editor/text-selector.js"></script>
 	<script type="text/javascript" src="scripts/editor/selection-menu.js"></script>
+	<script type="text/javascript" src="scripts/editor/selection-watcher.js"></script>
 	<script type="text/javascript" src="scripts/editor/keystroke-source.js"></script>
 	<script type="text/javascript" src="scripts/editor/document-structure.js"></script>
 	<script type="text/javascript" src="scripts/editor/custom-xml-parts.js"></script>
@@ -162,6 +184,7 @@
 	<script type="text/javascript" src="scripts/ui/page-translator.js"></script>
 	<script type="text/javascript" src="scripts/ui/theme-variables.js"></script>
 	<script type="text/javascript" src="scripts/ui/tab-view.js"></script>
+	<script type="text/javascript" src="scripts/ui/panel-pages.js"></script>
 	<script type="text/javascript" src="scripts/ui/cards.js"></script>
 	<script type="text/javascript" src="scripts/ui/format.js"></script>
 	<script type="text/javascript" src="scripts/ui/settings-view.js"></script>

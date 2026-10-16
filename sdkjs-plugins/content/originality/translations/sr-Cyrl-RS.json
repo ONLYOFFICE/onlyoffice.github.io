@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "Текст има %1 речи. Једна провера обухвата до %2, па ће бити проверено само првих %2 речи.",
 	"To scan the rest, select it and scan it separately.": "Да бисте проверили остатак, изаберите га и проверите засебно.",
 	"Continue": "Настави",
-	"Delete record": "Брисање записа"
+	"Delete record": "Брисање записа",
+	"Select at least 100 words": "Изаберите најмање 100 речи",
+	"Done": "Готово"
 }

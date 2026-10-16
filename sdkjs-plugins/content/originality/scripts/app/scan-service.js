@@ -107,7 +107,7 @@ class ScanService {
 		const text = (scope === "selection" ? await this._reader.readSelection() : await this._reader.readDocument()).trim();
 		if (!text && scope === "selection")
 			throw new ScanInputError("emptySelection", "Select the text to scan first.");
-		const words = ScanService._countWords(text);
+		const words = ScanService.countWords(text);
 		if (words < ScanService.minWords)
 			throw new ScanInputError("tooShort", "The text is too short: the scan needs at least 100 words.");
 		return { scope: scope, text: text, words: words };
@@ -151,9 +151,8 @@ class ScanService {
 	/**
 	 * @param {string} text
 	 * @returns {number}
-	 * @private
 	 */
-	static _countWords(text) {
+	static countWords(text) {
 		return text ? text.split(/\s+/).filter(Boolean).length : 0;
 	}
 

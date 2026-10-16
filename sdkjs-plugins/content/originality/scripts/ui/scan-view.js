@@ -38,7 +38,8 @@
 /// <reference path="./scan-result-view.js" />
 
 /**
- * The Scan tab: the two scan buttons, progress while a scan runs, and then either the result or
+ * The Scan tab: the scan button, which scans the selection when one is long enough and the whole
+ * document otherwise, progress while a scan runs, and then either the result or
  * why there is none. The findings of the result are marked in the document where the editor can
  * do that, and choosing one in the panel selects it in the text.
  */
@@ -60,16 +61,14 @@ class ScanView {
 		this._confirm = callbacks.confirm;
 		const tr = window.Asc.plugin.tr;
 
-		this._documentButton = new Button("scan-document", { variant: "primary", text: tr("Scan document") });
-		this._documentButton.subscribe((event) => {
+		/** @type {ScanScope} what the scan button scans: the selection once it is long enough */
+		this._scope = "document";
+		this._scanButton = new Button("scan", { variant: "primary", text: tr("Scan document") });
+		this._scanButton.subscribe((event) => {
 			if (event.type === "button:click")
-				this._scan("document");
+				this._scan(this._scope);
 		});
-		this._selectionButton = new Button("scan-selection", { variant: "secondary", text: tr("Scan selection") });
-		this._selectionButton.subscribe((event) => {
-			if (event.type === "button:click")
-				this._scan("selection");
-		});
+		this._selectionHint = /** @type {HTMLElement} */ (document.getElementById("scan-selection-hint"));
 
 		/** @type {Message | null} */
 		this._message = null;
@@ -139,7 +138,18 @@ class ScanView {
 	}
 
 	/**
-	 * Scans the selected text, as its button does.
+	 * @param {number} words - selected in the document; 0 when nothing is
+	 */
+	setSelectedWords(words) {
+		const tr = window.Asc.plugin.tr;
+		this._scope = words >= ScanService.minWords ? "selection" : "document";
+		this._scanButton.setText(tr(this._scope === "selection" ? "Scan selection" : "Scan document"));
+		// the hint is for a selection too short to scan on its own
+		this._selectionHint.classList.toggle("hidden", words === 0 || this._scope === "selection");
+	}
+
+	/**
+	 * Scans the selected text, whatever the scan button would scan.
 	 */
 	scanSelection() {
 		this._scan("selection");
@@ -286,11 +296,9 @@ class ScanView {
 		this._isScanning = isScanning;
 		// the loader shows once the text is on its way, see _scan
 		if (isScanning) {
-			this._documentButton.disable();
-			this._selectionButton.disable();
+			this._scanButton.disable();
 		} else {
-			this._documentButton.enable();
-			this._selectionButton.enable();
+			this._scanButton.enable();
 			this._loader.hide();
 		}
 	}

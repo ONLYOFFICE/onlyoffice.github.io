@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "В тексте %1 слов. Одна проверка охватывает до %2, поэтому будут проверены только первые %2 слов.",
 	"To scan the rest, select it and scan it separately.": "Чтобы проверить остальное, выделите его и проверьте отдельно.",
 	"Continue": "Продолжить",
-	"Delete record": "Удаление записи"
+	"Delete record": "Удаление записи",
+	"Select at least 100 words": "Выделите не меньше 100 слов",
+	"Done": "Готово"
 }

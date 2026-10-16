@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "Der Text hat %1 Wörter. Eine Prüfung umfasst bis zu %2, daher werden nur die ersten %2 Wörter geprüft.",
 	"To scan the rest, select it and scan it separately.": "Um den Rest zu prüfen, markieren Sie ihn und prüfen Sie ihn separat.",
 	"Continue": "Weiter",
-	"Delete record": "Aufzeichnung löschen"
+	"Delete record": "Aufzeichnung löschen",
+	"Select at least 100 words": "Markieren Sie mindestens 100 Wörter",
+	"Done": "Fertig"
 }

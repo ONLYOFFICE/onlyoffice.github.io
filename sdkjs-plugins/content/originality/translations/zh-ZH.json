@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "文本共有%1个单词。一次扫描最多涵盖%2个单词，因此只会扫描前%2个单词。",
 	"To scan the rest, select it and scan it separately.": "要扫描其余部分，请选中并单独扫描。",
 	"Continue": "继续",
-	"Delete record": "删除记录"
+	"Delete record": "删除记录",
+	"Select at least 100 words": "请至少选择100个单词",
+	"Done": "完成"
 }

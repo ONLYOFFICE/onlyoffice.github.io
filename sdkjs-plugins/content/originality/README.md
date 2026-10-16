@@ -27,8 +27,8 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 ## How to use
 
 1. Open the **Plugins** tab and click **Originality.ai**.
-2. On the **Settings** tab, enter your API key and choose the checks.
-3. On the **Scan** tab, click **Scan document**, or select some text and click **Scan selection** — or right-click the selection and choose **Scan with Originality.ai**. The text needs at least 100 words.
+2. Click the gear button next to **Scan document**, enter your API key and choose the checks, then click **Done**.
+3. On the **Scan** tab, click **Scan document**. To scan a part of the text, select at least 100 words: the button turns into **Scan selection**. You can also right-click the selection and choose **Scan with Originality.ai**.
 4. To record your writing, turn on **Record my writing** on the **Writing** tab and keep the panel open while you write. The tab shows the record of the selected writer; click **Watch replay** to replay it.
 5. After a scan, click **Export report** on the **Scan** tab to save its report.
 

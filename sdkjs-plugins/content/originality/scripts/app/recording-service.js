@@ -82,7 +82,7 @@ class RecordingService {
 		this._lastKeyAt = 0;
 		this._lastFullReadAt = 0;
 		this._fullReadNext = false;
-		/** @type {ReturnType<typeof setInterval> | null} */
+		/** @type {ReturnType<typeof setTimeout> | null} */
 		this._pollTimer = null;
 
 		/** @type {WritingRecorder | null} */
@@ -119,7 +119,7 @@ class RecordingService {
 		this._lastFullReadAt = time;
 		const unrecorded = previousText === null ? null : TextDiff.between(previousText, text);
 		this._recorder = new WritingRecorder(user, text, time, unrecorded);
-		this._pollTimer = setInterval(() => this._poll(), RecordingService._pollMs);
+		this._schedulePoll();
 		this._paragraphs.isSupported().then((supported) => {
 			if (!supported)
 				return;
@@ -135,7 +135,7 @@ class RecordingService {
 	 */
 	stop() {
 		if (this._pollTimer)
-			clearInterval(this._pollTimer);
+			clearTimeout(this._pollTimer);
 		if (this._settleTimer)
 			clearTimeout(this._settleTimer);
 		this._pollTimer = null;
@@ -193,6 +193,17 @@ class RecordingService {
 		if (this._byParagraph)
 			delay = Math.max(settleMs, this._lastKeyAt + RecordingService._paragraphReportMs - now);
 		this._settleTimer = setTimeout(() => this._snapshot(), delay);
+	}
+
+	/** @private */
+	_schedulePoll() {
+		this._pollTimer = setTimeout(() => {
+			this._pollTimer = null;
+			if (!this._recorder)
+				return;
+			this._poll();
+			this._schedulePoll();
+		}, RecordingService._pollMs);
 	}
 
 	/** @private */

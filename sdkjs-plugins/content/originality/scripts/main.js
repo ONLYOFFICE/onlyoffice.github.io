@@ -40,6 +40,7 @@
 /// <reference path="./editor/annotation-clicks.js" />
 /// <reference path="./editor/text-selector.js" />
 /// <reference path="./editor/selection-menu.js" />
+/// <reference path="./editor/selection-watcher.js" />
 /// <reference path="./editor/keystroke-source.js" />
 /// <reference path="./editor/document-structure.js" />
 /// <reference path="./editor/custom-xml-parts.js" />
@@ -57,6 +58,7 @@
 /// <reference path="./ui/page-translator.js" />
 /// <reference path="./ui/theme-variables.js" />
 /// <reference path="./ui/tab-view.js" />
+/// <reference path="./ui/panel-pages.js" />
 /// <reference path="./ui/settings-view.js" />
 /// <reference path="./ui/scan-view.js" />
 /// <reference path="./ui/writing-view.js" />
@@ -76,6 +78,7 @@
 	const client = new OriginalityClient();
 	const reader = new DocumentReader();
 	const scanService = new ScanService(reader, client, settingsStore);
+	const selection = new SelectionWatcher(reader);
 
 	const paragraphTexts = new ParagraphTexts();
 	const selector = new TextSelector();
@@ -105,6 +108,8 @@
 			confirm        : confirm,
 		});
 		scanView = view;
+		selection.onChange((text) => view.setSelectedWords(ScanService.countWords(text)));
+		new PanelPages();
 		new SettingsView(settingsStore, {
 			checkBalance : (apiKey) => client.getBalance(apiKey),
 			onChange     : (settings) => view.onSettingsChanged(settings),
@@ -148,6 +153,7 @@
 		history.start({ id: info.userId || "", name: info.userName || "" }, !info.isViewMode, settingsStore.load().recordWriting);
 		reviews.refresh();
 
+		selection.attach();
 		new SelectionMenu().attach(window.Asc.plugin.tr("Scan with Originality.ai"), () => {
 			if (scanView) {
 				tabs.show(TabView.tabs.scan);
@@ -179,9 +185,10 @@
 	 * @param {string} [windowId]
 	 */
 	window.Asc.plugin.button = function(id, windowId) {
-		if (windowId) {
-			if (!replayWindow.onButton(windowId))
-				confirmWindow.onButton(id, windowId);
+		if (windowId && windowId === replayWindow.id) {
+			replayWindow.onButton(windowId);
+		} else if (windowId && windowId === confirmWindow.id) {
+			confirmWindow.onButton(id, windowId);
 		} else if (id === -1) {
 			// close once the history is written: closing first would drop the write
 			history.flush().finally(() => this.executeCommand("close", ""));

@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "Text má %1 slov. Jedna kontrola pokryje nejvýše %2, proto bude zkontrolováno jen prvních %2 slov.",
 	"To scan the rest, select it and scan it separately.": "Chcete-li zkontrolovat zbytek, vyberte ho a zkontrolujte zvlášť.",
 	"Continue": "Pokračovat",
-	"Delete record": "Smazání záznamu"
+	"Delete record": "Smazání záznamu",
+	"Select at least 100 words": "Vyberte alespoň 100 slov",
+	"Done": "Hotovo"
 }

@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "O texto tem %1 palavras. Uma verificação abrange até %2, então apenas as primeiras %2 palavras serão verificadas.",
 	"To scan the rest, select it and scan it separately.": "Para verificar o restante, selecione-o e verifique-o separadamente.",
 	"Continue": "Continuar",
-	"Delete record": "Excluir registro"
+	"Delete record": "Excluir registro",
+	"Select at least 100 words": "Selecione pelo menos 100 palavras",
+	"Done": "Concluído"
 }

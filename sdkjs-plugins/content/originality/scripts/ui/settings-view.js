@@ -36,7 +36,7 @@
 /// <reference path="../service/originality-client.js" />
 
 /**
- * The Settings tab: shows the stored settings in the controls of `index.html` and stores every
+ * The settings page: shows the stored settings in the controls of `index.html` and stores every
  * change at once. How the balance is fetched is the caller's business.
  */
 class SettingsView {

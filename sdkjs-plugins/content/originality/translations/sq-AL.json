@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "Teksti ka %1 fjalë. Një skanim mbulon deri në %2, prandaj do të skanohen vetëm %2 fjalët e para.",
 	"To scan the rest, select it and scan it separately.": "Për të skanuar pjesën tjetër, përzgjidheni dhe skanojeni veçmas.",
 	"Continue": "Vazhdo",
-	"Delete record": "Fshirja e regjistrimit"
+	"Delete record": "Fshirja e regjistrimit",
+	"Select at least 100 words": "Përzgjidhni të paktën 100 fjalë",
+	"Done": "U krye"
 }

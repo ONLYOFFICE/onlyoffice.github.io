@@ -166,5 +166,7 @@
 	"The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.": "テキストは%1語あります。1回のスキャンは最大%2語までのため、最初の%2語のみがスキャンされます。",
 	"To scan the rest, select it and scan it separately.": "残りをスキャンするには、その部分を選択して別にスキャンしてください。",
 	"Continue": "続行",
-	"Delete record": "記録の削除"
+	"Delete record": "記録の削除",
+	"Select at least 100 words": "100語以上を選択してください",
+	"Done": "完了"
 }
