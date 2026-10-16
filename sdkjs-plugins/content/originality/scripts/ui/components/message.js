@@ -131,7 +131,11 @@ Message.prototype = {
         titleEl.textContent = title;
         var textEl = document.createElement("span");
         textEl.className = "message-text";
-        textEl.textContent = text;
+        // a node, for a text with a link in it; a string is never parsed as markup
+        if (text instanceof Node)
+            textEl.appendChild(text);
+        else
+            textEl.textContent = text;
         contentEl.appendChild(titleEl);
         contentEl.appendChild(textEl);
         messageEl.appendChild(contentEl);

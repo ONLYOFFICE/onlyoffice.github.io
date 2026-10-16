@@ -40,7 +40,7 @@
 /// <reference path="./cards.js" />
 
 /**
- * The Writing tab: how the text recorded so far was written — the typing score with its reasons,
+ * The writing record page: how the text recorded so far was written — the typing score with its reasons,
  * where the text came from, typing activity, and the pastes — for one writer at a time, chosen
  * when several recorded (see {@link Writers}); and, for the whole document, the changes the editor
  * tracks in review mode (see {@link TrackedChanges}). Redraws at most once a second, since the
@@ -52,7 +52,7 @@ class WritingView {
 	static _redrawMs = 1000;
 	/** how much of a pasted text the list shows */
 	static _previewLength = 140;
-	/** how many of the longest tracked insertions the tab lists */
+	/** how many of the longest tracked insertions the page lists */
 	static _trackedInsertions = 5;
 
 	/**
@@ -94,7 +94,9 @@ class WritingView {
 			await callbacks.onDeleteRecord(answer === 1);
 		});
 
-		const replayButton = new Button("open-replay", { variant: "primary", text: window.Asc.plugin.tr("Watch replay") });
+		// nothing to watch until something is recorded
+		const replayButton = new Button("open-replay", { variant: "primary", text: window.Asc.plugin.tr("Watch replay"), disabled: true });
+		this._replayButton = replayButton;
 		replayButton.subscribe((event) => {
 			if (event.type === "button:click")
 				callbacks.onOpenReplay(this._writerId);
@@ -153,6 +155,10 @@ class WritingView {
 		this._writerId = writer ? writer.id : null;
 		this._showWriters(writers, writer);
 		this._showDelete(state, writers);
+		if (state.sessions.some((session) => session.events.length > 0))
+			this._replayButton.enable();
+		else
+			this._replayButton.disable();
 
 		const summary = TypingAnalysis.summarize(writer ? writer.sessions : []);
 		this._root.textContent = "";

@@ -23,47 +23,8 @@ body.panel {
 	font-size: 11px;
 }
 
-/* ---- tabs ---- */
-.tabs {
-	display: flex;
-	flex: 0 0 auto;
-	gap: 4px;
-	padding: 0 12px;
-	border-bottom: 1px solid var(--border-divider);
-}
-
-.tabs__tab {
-	position: relative;
-	padding: 8px 6px;
-	border: none;
-	background: transparent;
-	color: var(--text-secondary);
-	font: inherit;
-	cursor: pointer;
-	width: stretch;
-}
-
-.tabs__tab:hover {
-	color: var(--text-normal);
-}
-
-.tabs__tab--active {
-	color: var(--text-normal);
-	font-weight: 700;
-}
-
-.tabs__tab--active::after {
-	content: "";
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: -1px;
-	height: 2px;
-	background: var(--highlight-header-tab-underline-document);
-}
-
 /* ---- sections ---- */
-/* the panel shows one page at a time: the tabs, or the settings */
+/* the panel shows one page at a time: the scan, the writing record or the settings */
 .page {
 	display: flex;
 	flex: 1 1 auto;
@@ -71,14 +32,21 @@ body.panel {
 	min-height: 0;
 }
 
-.page__footer {
+/* the writing record and the settings: the way back, then the page's name */
+.page__header {
+	display: flex;
 	flex: 0 0 auto;
-	padding: 12px;
-	border-top: 1px solid var(--border-divider);
+	align-items: center;
+	gap: 6px;
+	padding: 8px 12px;
+	border-bottom: 1px solid var(--border-divider);
+	/* the whole header goes back, not only its arrow */
+	cursor: pointer;
+	user-select: none;
 }
 
-.page__footer .custom-button-container {
-	display: block;
+.page__title {
+	font-weight: 700;
 }
 
 .sections {
@@ -113,7 +81,7 @@ a {
 .actions {
 	display: flex;
 	gap: 8px;
-	margin-bottom: 12px;
+	margin: 12px 0;
 }
 
 /* the scan button with the settings button beside it, as in Zotero, and the hint about the
@@ -347,6 +315,7 @@ a {
 	display: flex;
 	align-items: center;
 	gap: 6px;
+	margin-bottom: 8px;
 }
 
 .recording__dot {
@@ -360,6 +329,11 @@ a {
 .recording--off .recording__dot {
 	background: var(--text-tertiary);
 	animation: none;
+}
+
+/* the button to the writing record shows the dot only while the writing is recorded */
+#open-writing:not(.open-writing--recording) .recording__dot {
+	display: none;
 }
 
 .recording__note {

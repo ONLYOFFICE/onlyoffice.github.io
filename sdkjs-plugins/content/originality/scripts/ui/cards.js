@@ -33,7 +33,7 @@
 // @ts-check
 
 /**
- * The building blocks of the result cards both tabs draw. Text is always set as text, never as
+ * The building blocks of the result cards both pages draw. Text is always set as text, never as
  * HTML: much of it comes from the API or the document.
  */
 const Cards = Object.freeze({

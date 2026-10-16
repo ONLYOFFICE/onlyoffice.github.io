@@ -57,7 +57,6 @@
 /// <reference path="./app/report-service.js" />
 /// <reference path="./ui/page-translator.js" />
 /// <reference path="./ui/theme-variables.js" />
-/// <reference path="./ui/tab-view.js" />
 /// <reference path="./ui/panel-pages.js" />
 /// <reference path="./ui/settings-view.js" />
 /// <reference path="./ui/scan-view.js" />
@@ -70,9 +69,7 @@
 (function(window) {
 
 	// the scripts load at the end of <body>, so the markup is there already
-	const tabs = new TabView(document.body);
 	const translator = new PageTranslator(document.body);
-	tabs.show(TabView.tabs.scan);
 
 	const settingsStore = new SettingsStore();
 	const client = new OriginalityClient();
@@ -97,8 +94,12 @@
 
 	/** @type {ScanView | null} */
 	let scanView = null;
+	/** @type {PanelPages | null} */
+	let pages = null;
 
 	function buildViews() {
+		const panelPages = new PanelPages();
+		pages = panelPages;
 		const view = new ScanView(scanService, highlights, {
 			onScanned      : (scope, result, findings) => {
 				reports.rememberScan(scope, result, findings);
@@ -106,10 +107,10 @@
 			},
 			onExportReport : () => reports.export(),
 			confirm        : confirm,
+			onOpenSettings : () => panelPages.showSettings(),
 		});
 		scanView = view;
 		selection.onChange((text) => view.setSelectedWords(ScanService.countWords(text)));
-		new PanelPages();
 		new SettingsView(settingsStore, {
 			checkBalance : (apiKey) => client.getBalance(apiKey),
 			onChange     : (settings) => view.onSettingsChanged(settings),
@@ -126,14 +127,17 @@
 			onDeleteRecord    : (everyone) => history.remove(everyone),
 			confirm           : confirm,
 		});
-		const showHistory = () => writing.update({
-			sessions       : history.sessions,
-			recordingSince : recording.session ? recording.session.startedAt : null,
-			savedAt        : history.savedAt,
-			canSave        : history.canSave,
-			isRecording    : history.isRecording,
-			reviewRecords  : reviews.records,
-		});
+		const showHistory = () => {
+			panelPages.showRecording(history.isRecording);
+			writing.update({
+				sessions       : history.sessions,
+				recordingSince : recording.session ? recording.session.startedAt : null,
+				savedAt        : history.savedAt,
+				canSave        : history.canSave,
+				isRecording    : history.isRecording,
+				reviewRecords  : reviews.records,
+			});
+		};
 		// tracked changes come and go with the text, so the review is read again as the text changes
 		history.onChange(() => {
 			showHistory();
@@ -155,16 +159,16 @@
 
 		selection.attach();
 		new SelectionMenu().attach(window.Asc.plugin.tr("Scan with Originality.ai"), () => {
-			if (scanView) {
-				tabs.show(TabView.tabs.scan);
+			if (scanView && pages) {
+				pages.showMain();
 				scanView.scanSelection();
 			}
 		});
 
 		new AnnotationClicks().attach((name, paragraphId, rangeIds) => {
 			const findingId = highlights.findingAt(name, paragraphId, rangeIds);
-			if (findingId && scanView) {
-				tabs.show(TabView.tabs.scan);
+			if (findingId && scanView && pages) {
+				pages.showMain();
 				scanView.revealFinding(findingId);
 			}
 		});

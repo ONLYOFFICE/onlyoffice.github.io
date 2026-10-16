@@ -56,13 +56,21 @@ class SettingsView {
 
 		const tr = window.Asc.plugin.tr;
 
-		new Message("settings-notice", {
-			type                : "warning",
-			title               : tr("Before you start"),
-			text                : tr("The Originality.ai API is available on the Enterprise plan. Every scan spends credits, and by default Originality.ai tops credits up automatically from your card."),
-			closeButton         : true,
-			closeOnClickOutside : false,
-		}).show();
+		if (!this._settings.hideStartNotice) {
+			const notice = /** @type {HTMLElement} */ (document.getElementById("settings-notice"));
+			new Message(notice, {
+				type                : "warning",
+				title               : tr("Before you start"),
+				text                : tr("The Originality.ai API is available on the Enterprise plan. Every scan spends credits, and by default Originality.ai tops credits up automatically from your card."),
+				closeButton         : true,
+				closeOnClickOutside : false,
+			}).show();
+			// the message tells nobody it was closed; its cross is the only way to close this one
+			notice.addEventListener("click", (event) => {
+				if (event.target instanceof Element && event.target.closest(".message-close"))
+					this._settings = this._store.update({ hideStartNotice: true });
+			});
+		}
 
 		this._apiKey = new InputField("api-key", {
 			type        : "password",

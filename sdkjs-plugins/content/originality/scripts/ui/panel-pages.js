@@ -33,36 +33,83 @@
 // @ts-check
 
 /**
- * The two pages of the panel, one shown at a time: the tabs, and the settings, which open with
- * the button beside the scan button and close with Done. Settings are stored as they change,
- * so leaving the page needs nothing more.
+ * @typedef {"main" | "writing" | "settings"} PanelPage
+ */
+
+/**
+ * The pages of the panel, one shown at a time: the scan, which is where the panel starts; the
+ * writing record; the settings. The scan page has the buttons that open the other two, and each
+ * of those has a back arrow by its name, and its whole header goes back. Settings are stored as they change, so leaving a page
+ * needs nothing more.
  */
 class PanelPages {
 
 	constructor() {
 		const tr = window.Asc.plugin.tr;
-		this._main = /** @type {HTMLElement} */ (document.getElementById("main-page"));
-		this._settings = /** @type {HTMLElement} */ (document.getElementById("settings-page"));
+		/** @type {Record<PanelPage, HTMLElement>} */
+		this._pages = {
+			main     : /** @type {HTMLElement} */ (document.getElementById("main-page")),
+			writing  : /** @type {HTMLElement} */ (document.getElementById("writing-page")),
+			settings : /** @type {HTMLElement} */ (document.getElementById("settings-page")),
+		};
 
-		const open = new Button("open-settings", { variant: "icon-only", size: "small", tooltip: tr("Settings") });
-		open.subscribe((event) => {
-			if (event.type === "button:click")
-				this.showSettings();
-		});
-		const done = new Button("close-settings", { variant: "primary", text: tr("Done") });
-		done.subscribe((event) => {
-			if (event.type === "button:click")
-				this.showMain();
-		});
-	}
-
-	showSettings() {
-		this._main.classList.add("hidden");
-		this._settings.classList.remove("hidden");
+		this._link(new Button("open-settings", { variant: "icon-only", size: "small", tooltip: tr("Settings") }), "settings");
+		this._back("close-settings");
+		// the dot blinks while the writing is recorded, as on the writing page itself
+		this._writingButton = /** @type {HTMLElement} */ (document.getElementById("open-writing"));
+		this._link(new Button("open-writing", {
+			variant : "secondary",
+			text    : tr("Writing record"),
+			icon    : "<span class=\"recording__dot\"></span>",
+		}), "writing");
+		this._back("close-writing");
+		this.showRecording(false);
 	}
 
 	showMain() {
-		this._settings.classList.add("hidden");
-		this._main.classList.remove("hidden");
+		this._show("main");
+	}
+
+	showSettings() {
+		this._show("settings");
+	}
+
+	/**
+	 * @param {boolean} on - whether the user's writing is being recorded
+	 */
+	showRecording(on) {
+		this._writingButton.classList.toggle("open-writing--recording", on);
+	}
+
+	/**
+	 * @param {Button} button
+	 * @param {PanelPage} page - the page the button opens
+	 * @private
+	 */
+	_link(button, page) {
+		button.subscribe((event) => {
+			if (event.type === "button:click")
+				this._show(page);
+		});
+	}
+
+	/**
+	 * The back arrow, and the header it is in: a click anywhere on the header goes back, the
+	 * arrow's own click included, since it reaches the header too.
+	 * @param {string} id - the arrow's
+	 * @private
+	 */
+	_back(id) {
+		new Button(id, { variant: "icon-only", size: "small", tooltip: window.Asc.plugin.tr("Back") });
+		const header = /** @type {HTMLElement} */ (/** @type {HTMLElement} */ (document.getElementById(id)).closest(".page__header"));
+		header.addEventListener("click", () => this._show("main"));
+	}
+
+	/**
+	 * @param {PanelPage} page
+	 * @private
+	 */
+	_show(page) {
+		Object.entries(this._pages).forEach(([name, element]) => element.classList.toggle("hidden", name !== page));
 	}
 }

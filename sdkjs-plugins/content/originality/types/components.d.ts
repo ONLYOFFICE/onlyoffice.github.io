@@ -19,6 +19,9 @@ declare class Button {
         size?: "small" | "medium" | "large";
         disabled?: boolean;
         tooltip?: string;
+        /** markup put before the text (after it with iconPosition "right"); shown with a text only */
+        icon?: string;
+        iconPosition?: "left" | "right";
     });
     /** Every event of the button, hovering and focus included: actions filter on "button:click". */
     subscribe(callback: (event: ComponentEvent<"button:click" | "button:mouseenter" | "button:mouseleave" | "button:focus" | "button:blur" | "button:keydown", { originalEvent?: Event; key?: string | number }>) => void): ComponentSubscription;
@@ -61,7 +64,8 @@ declare class Message {
     constructor(container: string | HTMLElement, options: {
         type: "error" | "warning" | "info" | "success";
         title?: string;
-        text?: string;
+        /** a node for a text with markup in it, e.g. a link; a string is shown as plain text */
+        text?: string | Node;
         duration?: number;
         closeButton?: boolean;
         autoClose?: boolean;

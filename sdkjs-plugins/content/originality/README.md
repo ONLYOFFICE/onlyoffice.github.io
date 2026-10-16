@@ -27,17 +27,17 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 ## How to use
 
 1. Open the **Plugins** tab and click **Originality.ai**.
-2. Click the gear button next to **Scan document**, enter your API key and choose the checks, then click **Done**.
-3. On the **Scan** tab, click **Scan document**. To scan a part of the text, select at least 100 words: the button turns into **Scan selection**. You can also right-click the selection and choose **Scan with Originality.ai**.
-4. To record your writing, turn on **Record my writing** on the **Writing** tab and keep the panel open while you write. The tab shows the record of the selected writer; click **Watch replay** to replay it.
-5. After a scan, click **Export report** on the **Scan** tab to save its report.
+2. Click the gear button next to **Scan document**, enter your API key and choose the checks, then click the back arrow.
+3. Click **Scan document**. To scan a part of the text, select at least 100 words: the button turns into **Scan selection**. You can also right-click the selection and choose **Scan with Originality.ai**.
+4. To record your writing, click **Writing record**, turn on **Record my writing** and keep the panel open while you write. While it records, the **Writing record** button shows a blinking dot. The page shows the record of the selected writer; click **Watch replay** to replay it, and the back arrow to go back.
+5. After a scan, click **Export report** to save its report.
 
 ## Data and privacy
 
 * The text you scan is sent to `api.originality.ai`. With **Store scans on Originality.ai** on, Originality.ai keeps the scan in your account, and it can be shared with a link.
 * The API key and the settings are kept in the browser's local storage. They are not stored in the document.
 * The writing record is stored in the document itself, as one custom XML part per writer. It holds the text changes and when keys were pressed, with the kind of key (a character, Backspace, Delete, Enter, a paste or an undo), but not which character was typed. Anyone who has the file can read the record.
-* The record goes wherever the file goes — deleted drafts and pasted text included. Recording is off until you turn on **Record my writing** on the **Writing** tab; use **Delete record…** there to remove your record, or everyone's, before you send the file on.
+* The record goes wherever the file goes — deleted drafts and pasted text included. Recording is off until you turn on **Record my writing** under **Writing record**; use **Delete record…** there to remove your record, or everyone's, before you send the file on.
 
 ## Limitations
 

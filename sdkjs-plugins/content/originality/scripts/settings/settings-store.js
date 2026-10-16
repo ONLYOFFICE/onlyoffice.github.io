@@ -50,6 +50,7 @@
  * @property {boolean} storeScan - keep the scan on Originality.ai, which the shareable link needs
  * @property {string[]} excludedUrls - sources the plagiarism check ignores
  * @property {boolean} recordWriting - record the user's writing into the documents they open
+ * @property {boolean} hideStartNotice - the user closed the "Before you start" notice
  */
 
 /**
@@ -73,6 +74,7 @@ class SettingsStore {
 		storeScan        : true,
 		excludedUrls     : [],
 		recordWriting    : false,
+		hideStartNotice  : false,
 	});
 
 	/** @private */
@@ -140,6 +142,7 @@ class SettingsStore {
 				? value.excludedUrls.filter((url) => typeof url === "string" && url.trim() !== "").map((url) => url.trim())
 				: [],
 			recordWriting    : bool(value.recordWriting, d.recordWriting),
+			hideStartNotice  : bool(value.hideStartNotice, d.hideStartNotice),
 		};
 	}
 }

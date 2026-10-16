@@ -87,6 +87,7 @@ class ReplayPlayer {
 
 		this._speed = 8;
 		const speed = new SelectBox("replay-speed", { placeholder: "" });
+		this._speedSelect = speed;
 		speed.addItems(ReplayPlayer.speeds.map((s) => [String(s), s + "×"]), String(this._speed));
 		speed.subscribe((event) => {
 			if (event.type === "selectbox:change")
@@ -95,6 +96,7 @@ class ReplayPlayer {
 
 		this._skipPauses = true;
 		const skip = new Checkbox("replay-skip-pauses", { label: tr("Skip long pauses"), checked: true });
+		this._skipBox = skip;
 		skip.subscribe((event) => {
 			if (event.type === "checkbox:change") {
 				this._skipPauses = event.detail.checked;
@@ -115,6 +117,8 @@ class ReplayPlayer {
 		this._lastFrameAt = null;
 		/** @type {ReturnType<typeof setTimeout> | null} */
 		this._timer = null;
+		/** which controls are enabled now, so that they are switched only when that changes */
+		this._enabled = { play: true, prev: true, next: true, rest: true };
 	}
 
 	/**
@@ -206,6 +210,34 @@ class ReplayPlayer {
 		this._stats.words.textContent = frame.text.split(/\s+/).filter(Boolean).length.toLocaleString();
 		this._stats.pastes.textContent = frame.pastes + " / " + this._timeline.pasteSteps.length;
 		this._stats.session.textContent = (frame.step ? frame.step.session + 1 : this._timeline.sessionCount ? 1 : 0) + " / " + this._timeline.sessionCount;
+		this._syncControls();
+	}
+
+	/**
+	 * Disables what would do nothing now: everything when there is nothing to play, and the paste
+	 * jumps when there is no paste that way.
+	 * @private
+	 */
+	_syncControls() {
+		const playable = this._timeline.steps.length > 0;
+		this._enable("play", playable, [this._playButton]);
+		this._enable("prev", this._pasteTarget(-1) !== undefined, [this._prevButton]);
+		this._enable("next", this._pasteTarget(1) !== undefined, [this._nextButton]);
+		this._enable("rest", playable, [this._speedSelect, this._skipBox]);
+		this._slider.disabled = !playable;
+	}
+
+	/**
+	 * @param {"play" | "prev" | "next" | "rest"} key
+	 * @param {boolean} enabled
+	 * @param {Array<{ enable(): void, disable(): void }>} controls
+	 * @private
+	 */
+	_enable(key, enabled, controls) {
+		if (this._enabled[key] === enabled)
+			return;
+		this._enabled[key] = enabled;
+		controls.forEach((control) => (enabled ? control.enable() : control.disable()));
 	}
 
 	/**
@@ -214,16 +246,26 @@ class ReplayPlayer {
 	 * @private
 	 */
 	_jumpToPaste(direction) {
-		const pastes = this._timeline.pasteSteps;
-		const current = this._timeline.countAt(this._position) - 1;
-		const target = direction > 0
-			? pastes.find((i) => i > current)
-			: pastes.slice().reverse().find((i) => i < current);
+		const target = this._pasteTarget(direction);
 		if (target === undefined)
 			return;
 
 		this.pause();
 		this._seek(this._timeline.steps[target].t);
+	}
+
+	/**
+	 * @param {-1 | 1} direction
+	 * @returns {number | undefined} the step of the previous or the next paste; none when there is
+	 *   no paste that way
+	 * @private
+	 */
+	_pasteTarget(direction) {
+		const pastes = this._timeline.pasteSteps;
+		const current = this._timeline.countAt(this._position) - 1;
+		return direction > 0
+			? pastes.find((i) => i > current)
+			: pastes.slice().reverse().find((i) => i < current);
 	}
 
 	/**

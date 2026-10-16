@@ -11,13 +11,8 @@
 </head>
 <body class="panel">
 	<div id="main-page" class="page">
-		<nav class="tabs" role="tablist">
-			<button type="button" class="tabs__tab" role="tab" data-tab="scan" data-i18n="Scan">Scan</button>
-			<button type="button" class="tabs__tab" role="tab" data-tab="writing" data-i18n="Writing">Writing</button>
-		</nav>
-
 		<main class="sections">
-			<section class="section" data-section="scan" role="tabpanel">
+			<section class="section">
 				<p class="hint" data-i18n="Check the document for AI-generated text and plagiarism.">Check the document for AI-generated text and plagiarism.</p>
 				<div class="scan-action">
 					<div class="scan-action__buttons">
@@ -44,11 +39,26 @@
 				</div>
 				<div id="scan-result"></div>
 				<div class="actions">
+					<button type="button" id="open-writing" data-i18n="Writing record">Writing record</button>
+				</div>
+				<div class="actions">
 					<button type="button" id="export-report-scan" data-i18n="Export report">Export report</button>
 				</div>
 			</section>
+		</main>
+	</div>
 
-			<section class="section" data-section="writing" role="tabpanel" hidden>
+	<div id="writing-page" class="page hidden">
+		<header class="page__header">
+			<button type="button" id="close-writing">
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="currentcolor" xmlns="http://www.w3.org/2000/svg">
+					<path d="M5.7 2.3 1 7l4.7 4.7.7-.7-3.5-3.5H13v-1H2.9l3.5-3.5-.7-.7Z" />
+				</svg>
+			</button>
+			<span class="page__title" data-i18n="Writing record">Writing record</span>
+		</header>
+		<main class="sections">
+			<section class="section">
 				<p class="hint" data-i18n="How the document was written: typed, pasted and auto-typed text.">How the document was written: typed, pasted and auto-typed text.</p>
 				<div class="recording">
 					<span class="recording__dot"></span>
@@ -76,6 +86,14 @@
 	</div>
 
 	<div id="settings-page" class="page hidden">
+		<header class="page__header">
+			<button type="button" id="close-settings">
+				<svg width="14" height="14" viewBox="0 0 14 14" fill="currentcolor" xmlns="http://www.w3.org/2000/svg">
+					<path d="M5.7 2.3 1 7l4.7 4.7.7-.7-3.5-3.5H13v-1H2.9l3.5-3.5-.7-.7Z" />
+				</svg>
+			</button>
+			<span class="page__title" data-i18n="Settings">Settings</span>
+		</header>
 		<main class="sections">
 			<section class="section">
 				<div id="settings-notice"></div>
@@ -128,9 +146,6 @@
 				</div>
 			</section>
 		</main>
-		<footer class="page__footer">
-			<button type="button" id="close-settings" data-i18n="Done">Done</button>
-		</footer>
 	</div>
 
 	<script type="text/javascript" src="scripts/ui/components/button.js"></script>
@@ -183,7 +198,6 @@
 
 	<script type="text/javascript" src="scripts/ui/page-translator.js"></script>
 	<script type="text/javascript" src="scripts/ui/theme-variables.js"></script>
-	<script type="text/javascript" src="scripts/ui/tab-view.js"></script>
 	<script type="text/javascript" src="scripts/ui/panel-pages.js"></script>
 	<script type="text/javascript" src="scripts/ui/cards.js"></script>
 	<script type="text/javascript" src="scripts/ui/format.js"></script>

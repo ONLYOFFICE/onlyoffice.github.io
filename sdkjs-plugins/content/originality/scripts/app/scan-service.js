@@ -100,9 +100,9 @@ class ScanService {
 	async read(scope) {
 		const settings = this._settings.load();
 		if (!settings.apiKey)
-			throw new ScanInputError("noApiKey", "Add your Originality.ai API key in Settings.");
+			throw new ScanInputError("noApiKey", "Add your Originality.ai API key in [Settings].");
 		if (!settings.checkAi && !settings.checkPlagiarism && !settings.checkReadability && !settings.checkFacts)
-			throw new ScanInputError("nothingToCheck", "Choose at least one check in Settings.");
+			throw new ScanInputError("nothingToCheck", "Choose at least one check in [Settings].");
 
 		const text = (scope === "selection" ? await this._reader.readSelection() : await this._reader.readDocument()).trim();
 		if (!text && scope === "selection")

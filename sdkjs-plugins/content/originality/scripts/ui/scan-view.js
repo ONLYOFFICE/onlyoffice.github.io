@@ -38,7 +38,7 @@
 /// <reference path="./scan-result-view.js" />
 
 /**
- * The Scan tab: the scan button, which scans the selection when one is long enough and the whole
+ * The scan page: the scan button, which scans the selection when one is long enough and the whole
  * document otherwise, progress while a scan runs, and then either the result or
  * why there is none. The findings of the result are marked in the document where the editor can
  * do that, and choosing one in the panel selects it in the text.
@@ -52,6 +52,7 @@ class ScanView {
 	 *   onScanned: (scope: ScanScope, result: ScanResult, findings: ScanFindings) => void,
 	 *   onExportReport: () => void,
 	 *   confirm: (title: string, paragraphs: string[], buttons: string[]) => Promise<number>,
+	 *   onOpenSettings: () => void,
 	 * }} callbacks
 	 */
 	constructor(service, highlights, callbacks) {
@@ -59,6 +60,7 @@ class ScanView {
 		this._highlights = highlights;
 		this._onScanned = callbacks.onScanned;
 		this._confirm = callbacks.confirm;
+		this._onOpenSettings = callbacks.onOpenSettings;
 		const tr = window.Asc.plugin.tr;
 
 		/** @type {ScanScope} what the scan button scans: the selection once it is long enough */
@@ -114,7 +116,7 @@ class ScanView {
 	/**
 	 * @param {"error" | "warning" | "info" | "success"} type
 	 * @param {string} title
-	 * @param {string} text
+	 * @param {string} text - translated; a part in [brackets] becomes a link to the settings
 	 * @private
 	 */
 	_showMessage(type, title, text) {
@@ -122,11 +124,33 @@ class ScanView {
 		this._message = new Message("scan-message", {
 			type                : type,
 			title               : title,
-			text                : text,
+			text                : this._linkSettings(text),
 			closeButton         : true,
 			closeOnClickOutside : false,
 		}).show();
 		this._showsNoKey = false;
+	}
+
+	/**
+	 * @param {string} text
+	 * @returns {string | DocumentFragment} the text, with its part in [brackets], if any, made a
+	 *   link that opens the settings
+	 * @private
+	 */
+	_linkSettings(text) {
+		const match = /^(.*?)\[(.+?)\](.*)$/s.exec(text);
+		if (!match)
+			return text;
+		const link = document.createElement("a");
+		link.href = "#";
+		link.textContent = match[2];
+		link.addEventListener("click", (event) => {
+			event.preventDefault();
+			this._onOpenSettings();
+		});
+		const fragment = document.createDocumentFragment();
+		fragment.append(match[1], link, match[3]);
+		return fragment;
 	}
 
 	/** @private */
@@ -178,7 +202,7 @@ class ScanView {
 				this._hideMessage();
 		} else if (!this._showsNoKey) {
 			const tr = window.Asc.plugin.tr;
-			this._showMessage("info", tr("No API key"), tr("Add your Originality.ai API key in Settings."));
+			this._showMessage("info", tr("No API key"), tr("Add your Originality.ai API key in [Settings]."));
 			this._showsNoKey = true;
 		}
 	}

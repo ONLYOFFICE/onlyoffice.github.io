@@ -122,6 +122,12 @@ body.theme-night {
 	accent-color: var(--border-control-focus);
 }
 
+/* nothing to play: the timeline is there, but it does not move */
+.replay__timeline input[type="range"]:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
 .replay__markers {
 	position: absolute;
 	left: 0;
