@@ -28,3 +28,11 @@ Compatible with:
 4. Click **Settings** > **Add Plugin**.
 5. Select the `QuickTranslator.plugin` file (or extract the zip into `sdkjs-plugins/quicktranslator`).
 6. The **QuickTranslator** button will appear on your Plugins tab!
+
+---
+
+## Privacy and Data Disclosure
+
+QuickTranslator sends the text you select directly to external third-party translation providers via their respective APIs to perform translations (such as Google Translate, DeepL, or Google AI Studio, depending on your configuration). 
+
+Please avoid submitting sensitive, confidential, or personally identifiable information if your organization's security policy or privacy standards prohibit sharing data with these external services.
