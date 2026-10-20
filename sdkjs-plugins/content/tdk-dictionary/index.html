@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Türkçe Sözlük (TDK)</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Yerel OnlyOffice SDK API (Offline desteği için yerel) -->
+    <script type="text/javascript" src="plugins.js"></script>
+    <script type="text/javascript" src="plugin.js"></script>
+</head>
+<body>
+    <div class="top-bar">
+        <!-- Eklenti Başlığı ve TDK Resmi Logosu -->
+        <div class="header-branding">
+            <img src="resources/tdk-logo.png" alt="TDK Logo" class="tdk-brand-logo">
+            <div class="header-titles">
+                <span class="brand-title">TÜRK DİL KURUMU</span>
+                <span class="brand-sub">Güncel Türkçe Sözlük</span>
+            </div>
+        </div>
+
+        <!-- Çevrim İçi / Çevrim Dışı Seçeneği -->
+        <div class="mode-selector">
+            <button class="mode-btn active" id="btn-mode-online" type="button">
+                🌐 Çevrim İçi
+            </button>
+            <button class="mode-btn" id="btn-mode-offline" type="button">
+                💾 Çevrim Dışı
+            </button>
+        </div>
+
+        <div class="search-box">
+            <div class="input-wrapper">
+                <input type="text" id="search-input" placeholder="Kelime ara veya belgede seç..." autocomplete="off">
+                <!-- Otomatik Tamamlama / Öneri Listesi -->
+                <ul id="autocomplete-list" class="autocomplete-dropdown" style="display: none;"></ul>
+            </div>
+            <button id="search-btn">Ara</button>
+        </div>
+
+        <!-- TDK Şapkalı ve Özel Türkçe Karakter Butonları -->
+        <div class="char-keyboard" id="char-keyboard">
+            <button class="char-btn" type="button" data-char="â">â</button>
+            <button class="char-btn" type="button" data-char="î">î</button>
+            <button class="char-btn" type="button" data-char="û">û</button>
+            <button class="char-btn" type="button" data-char="ç">ç</button>
+            <button class="char-btn" type="button" data-char="ğ">ğ</button>
+            <button class="char-btn" type="button" data-char="ı">ı</button>
+            <button class="char-btn" type="button" data-char="ö">ö</button>
+            <button class="char-btn" type="button" data-char="ş">ş</button>
+            <button class="char-btn" type="button" data-char="ü">ü</button>
+        </div>
+    </div>
+
+    <div id="status-message"></div>
+
+    <!-- Kaydırılabilir sonuç alanı -->
+    <div class="scroll-content" id="results-container">
+        <div class="empty-state">
+            Belgede bir kelime seçin veya yukarıdan arama yapın.
+        </div>
+    </div>
+</body>
+</html>
