@@ -1,0 +1,75 @@
+{
+	"name": "Turkish Dictionary (TDK)",
+	"nameLocale": {
+		"tr": "Türkçe Sözlük (TDK)",
+		"en": "Turkish Dictionary (TDK)"
+	},
+	"guid": "asc.{D7A3728E-6C36-4B81-998C-7E4A1087C102}",
+	"version": "1.0.1",
+	"offered": "Samim Kel",
+	"variations": [
+		{
+			"description": "Look up definitions, word origins, examples and idioms in Turkish Language Association (TDK) Dictionary.",
+			"descriptionLocale": {
+				"tr": "TDK Güncel Türkçe Sözlük entegrasyonu ile kelime anlamları, kökenleri, atasözleri ve deyimleri arayın.",
+				"en": "Look up definitions, word origins, examples and idioms in Turkish Language Association (TDK) Dictionary."
+			},
+			"url": "index.html",
+			"icons": [
+				"resources/light/icon.png",
+				"resources/light/icon@2x.png"
+			],
+			"icons2": [
+				{
+					"style": "light",
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style": "dark",
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer": true,
+			"EditorsSupport": [
+				"word",
+				"cell",
+				"slide"
+			],
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": false,
+			"type": "panel",
+			"initOn": "textSelection",
+			"initDataType": "text",
+			"buttons": [],
+			"store": {
+				"background": {
+					"light": "#b71c1c",
+					"dark": "#b71c1c"
+				},
+				"screenshots": [
+					"resources/tdk-logo.png"
+				],
+				"icons": {
+					"light": "resources/icon_128.png",
+					"dark": "resources/icon_128.png"
+				},
+				"categories": [
+					"specAbilities",
+					"work"
+				]
+			}
+		}
+	]
+}
+
