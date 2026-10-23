@@ -7,17 +7,19 @@
 //   editor → plugin  {naqsha: "ready"}                      editor is running
 //   plugin → editor  {naqsha: "load", doc}                  the diagram to edit ("" for a new one)
 //   plugin → editor  {naqsha: "export"}                     Insert was pressed
+//   plugin → editor  {naqsha: "theme", type}                the editor's theme, "dark" or "light"
 //   editor → plugin  {naqsha: "exported", doc, png, width, height}  or  {naqsha: "error", message}
 (function (window) {
 	"use strict";
 
-	// a different editor (a local build, a staging site) can be given as ?editor=… on the plugin URL
-	var EDITOR = new URLSearchParams(location.search).get("editor") || "https://nixpx.com/naqsha/app/";
-	var EDITOR_ORIGIN = new URL(EDITOR, location.href).origin;
+	var EDITOR = "https://nixpx.com/naqsha/app/";
+	var EDITOR_ORIGIN = "https://nixpx.com";
 	// widest a new diagram is placed, in millimetres (the text width of an A4 page)
 	var MAX_WIDTH_MM = 160;
 
 	var frame, status, ready = false, inserting = false, stored = "", timer;
+	// the ONLYOFFICE theme ("dark" or "light"), passed on to Naqsha
+	var themeType = null;
 
 	var slow = false;
 	function tr(t) { return window.Asc.plugin.tr ? window.Asc.plugin.tr(t) : t; }
@@ -42,7 +44,7 @@
 		// the OLE data of the object being edited (empty when inserting a new diagram)
 		stored = typeof data === "string" ? data : "";
 		window.addEventListener("message", onMessage);
-		frame.src = EDITOR + (EDITOR.indexOf("?") < 0 ? "?" : "&") + "embed=onlyoffice";
+		frame.src = EDITOR + "?embed=onlyoffice" + (themeType ? "&theme=" + themeType : "");
 		message();
 		timer = setTimeout(function () { slow = true; message(); }, 20000);
 	};
@@ -56,6 +58,7 @@
 			ready = true;
 			clearTimeout(timer);
 			status.classList.add("hidden");
+			if (themeType) send({ naqsha: "theme", type: themeType });
 			send({ naqsha: "load", doc: stored || null });
 		} else if (m.naqsha === "exported") {
 			insert(m);
@@ -64,7 +67,16 @@
 		}
 	}
 
+	// what goes into the document must be a PNG picture and a sensible size: nothing else is
+	// passed on (the document server would fetch a URL given as the picture)
+	function valid(m) {
+		var dim = function (v) { return typeof v === "number" && isFinite(v) && v > 0 && v < 100000; };
+		return typeof m.png === "string" && m.png.indexOf("data:image/png;base64,") === 0 &&
+			typeof m.doc === "string" && m.doc.length > 0 && dim(m.width) && dim(m.height);
+	}
+
 	function insert(m) {
+		if (!valid(m)) { inserting = false; return; }
 		var info = window.Asc.plugin.info;
 		var editing = info.objectId !== undefined;
 		var aspect = m.height / m.width;
@@ -110,5 +122,9 @@
 
 	window.Asc.plugin.onThemeChanged = function (theme) {
 		if (window.Asc.plugin.onThemeChangedBase) window.Asc.plugin.onThemeChangedBase(theme);
+		var type = theme && theme.type === "dark" ? "dark" : "light";
+		if (type === themeType) return;
+		themeType = type;
+		if (ready) send({ naqsha: "theme", type: type });
 	};
 })(window);

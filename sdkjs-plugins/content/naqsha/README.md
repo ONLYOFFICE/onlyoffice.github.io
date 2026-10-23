@@ -1,48 +1,38 @@
-# Naqsha for ONLYOFFICE
+# Naqsha
 
-Draw Naqsha diagrams inside ONLYOFFICE documents, spreadsheets and presentations, the way Visio
-drawings sit inside Word: the document shows (and prints) a picture of the diagram, and
-double-clicking it opens the diagram again for editing.
+Draw diagrams inside your ONLYOFFICE documents, spreadsheets and presentations, and keep them
+editable: flowcharts, cloud and software architecture, process and P&ID diagrams, electrical
+single-line diagrams and more.
 
-The plugin shows the Naqsha editor from <https://nixpx.com/naqsha/app/> in the plugin window, so it
-needs an internet connection, and it always runs the latest Naqsha. Pro features work as on the
-web: start the trial or activate a licence from the Pro tab inside the plugin. Some browsers keep
-an embedded site's storage separate, so the plugin may need its own activation (one device seat).
+The document shows and prints a picture of the diagram. Double-click it and the diagram opens in
+Naqsha again, with all its pages, ready to change.
 
-## Install
+## How to use it
 
-Package it (from the repo root):
+1. Open **Plugins › Naqsha**.
+2. Pick a template or start from a blank page, and draw.
+3. Press **Insert**. The diagram is placed at the cursor.
 
-```sh
-./onlyoffice/package.sh        # → dist/naqsha-onlyoffice.plugin
-```
+To change a diagram later, **double-click** it, edit, and press **Insert** again. The picture in
+the document is updated and keeps its size.
 
-- **ONLYOFFICE Desktop Editors:** Plugins › Plugin Manager › Install plugin manually, and choose
-  `naqsha-onlyoffice.plugin`.
-- **ONLYOFFICE Docs (server):** copy the `onlyoffice` folder to the server's plugins folder (for
-  Docker: `/var/www/onlyoffice/documentserver/sdkjs-plugins/naqsha`) and restart, or install the
-  `.plugin` file from the Plugin Manager.
+The plugin works in the Document, Spreadsheet and Presentation editors, in light and dark themes,
+and in Arabic, Chinese, Czech, English, French, German, Italian, Japanese, Portuguese (Brazil),
+Russian and Spanish.
 
-Then: Plugins › Naqsha opens the editor; pick a template or draw, and press **Insert**.
-Double-click an inserted diagram to edit it.
+## Good to know
 
-## How it works
+- **Internet connection:** the plugin shows the Naqsha editor from nixpx.com, so it needs to reach
+  nixpx.com, like the draw.io plugin's online mode.
+- **Your diagrams stay in your document.** The diagram is saved inside the file, together with its
+  picture. Nothing is stored anywhere else, and there's no account to create.
+- **Free, with an optional Pro edition.** Drawing, templates and editing are free. Naqsha Pro adds
+  engineering tools (P&ID and electrical symbols with tags, title blocks, schedules, production
+  line balancing and more), with a free 14-day trial: open the **Pro** tab inside the plugin.
+- **Sharing:** anyone with the plugin can edit the diagram. Without it, they still see and print
+  the picture.
 
-`scripts/naqsha.js` loads `…/naqsha/app/?embed=onlyoffice` in an iframe and talks to it with
-`postMessage` (the messages are described in `src/embed.rs`). On Insert the editor sends the
-whole diagram (`.nqs` JSON) and a PNG of the current page; the plugin stores them as an OLE
-object (`AddOleObject`, or `EditOleObject` for a diagram that is being edited). The document
-keeps the diagram JSON as the object's data, so nothing is stored anywhere else.
+## Help
 
-The plugin GUID, `asc.{DA395EC3-313E-48F3-BE8D-A4217BE92C27}`, is written into every document
-that holds a Naqsha diagram: never change it.
-
-## Publishing to the ONLYOFFICE marketplace
-
-1. Fork <https://github.com/ONLYOFFICE/onlyoffice.github.io> on GitHub and clone the fork.
-2. `./onlyoffice/marketplace.sh <path to the clone>`: copies the plugin to
-   `sdkjs-plugins/content/naqsha` and adds it to `store/config.json`.
-3. Commit, push, and open a pull request to ONLYOFFICE/onlyoffice.github.io with the text in
-   `PULL_REQUEST.md`.
-
-For an update, raise `version` in `config.json`, add a `CHANGELOG.md` entry, and repeat.
+- Naqsha: <https://nixpx.com/naqsha>
+- Questions and problems: <https://github.com/tamerrab2003/naqsha/issues> or support@nixpx.com
