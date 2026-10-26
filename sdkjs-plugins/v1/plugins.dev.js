@@ -594,6 +594,7 @@
 
 		this.separator = false;
 		this.lockInViewMode = true;
+		this.manageButtonState = false;
 		this.enableToggle = false;
 		this.disabled = false;
 		this.removed = false;
@@ -627,6 +628,9 @@
 
 		if (this.lockInViewMode)
 			item.lockInViewMode = true;
+
+		if (this.manageButtonState)
+			item.manageButtonState = true;
 
 		if (this.enableToggle)
 			item.enableToggle = true;
