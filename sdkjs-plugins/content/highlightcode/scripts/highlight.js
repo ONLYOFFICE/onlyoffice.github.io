@@ -76,6 +76,22 @@
 		font : "Arial",								// current font (default - Arial)
 		font_size : 14								// current font_size (default - 14)
 	};
+	var hardcodedThemeColors = {								// colors of styles for the preview and the inserted code (vendor styles are kept as they are)
+		"googlecode.css"      : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"github.css"          : { background: "#ffffff", color: "#24292e", selection: "#c8c8fa" },
+		"github-gist.css"     : { background: "#ffffff", color: "#333333", selection: "#c8c8fa" },
+		"androidstudio.css"   : { background: "#282b2e", color: "#a9b7c6", selection: "#4a4543" },
+		"vs.css"              : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"vs2015.css"          : { background: "#1e1e1e", color: "#dcdcdc", selection: "#264f78" },
+		"idea.css"            : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"qtcreator_dark.css"  : { background: "#000000", color: "#aaaaaa", selection: "#1d6bb9" },
+		"qtcreator_light.css" : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"xcode.css"           : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"far.css"             : { background: "#000080", color: "#00ffff", selection: "#343434" },
+		"foundation.css"      : { background: "#eeeeee", color: "#000000", selection: "#c8c8fa" },
+		"xml_1.css"           : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"xml_2.css"           : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" }
+	};
 	var xml_formatter_settings = {					// object with settings for xml_formatter ( https://github.com/chrisbottin/xml-formatter )
 		indentation: "\t",							// (String, default=' ') The value used for indentation.
 		collapseContent: false,						// (Boolean, default=false] True to keep content in the same line as the element. Only works if element contains at least one text node
@@ -151,6 +167,7 @@
 		}).on('select2:select', function(e) {
 			document.getElementById("style").href = "vendor/highlight/styles/" + e.params.data.id;
 			settings.style = e.params.data.id;
+			set_selection_color();
 			window.Asc.plugin.loadModule("./vendor/highlight/styles/" + e.params.data.id , function(content){
 				style_value = content;
 				set_bacground_color();
@@ -623,7 +640,7 @@
 		if (code[code.length-1] == "<p>&nbsp</p>")
 			code.pop();
 
-		window.Asc.plugin.executeMethod("PasteHtml",['<html lang=\"en\"><head><style> p{background:'+settings.background+'}\r\n'+style_value +'</style></head><body><div style = \"white-space: pre;\"><span style =\"font-size:'+settings.font_size+'pt; font-family:'+settings.font+';\">'+code.join("")+'</span></div></body></html>']);
+		window.Asc.plugin.executeMethod("PasteHtml",['<html lang=\"en\"><head><style> p{background:'+settings.background+'; margin:0; line-height:1; color:'+get_theme_colors().color+'}\r\n'+style_value +'</style></head><body><div style = \"white-space: pre;\"><span style =\"font-size:'+settings.font_size+'pt; font-family:'+settings.font+';\">'+code.join("")+'</span></div></body></html>']);
 	};
 
 	$.fn.get_selection_range = function() {
@@ -727,16 +744,6 @@
 		}
 	};
 
-	function hexc(colorval) {
-		var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-		delete(parts[0]);
-		for (var i = 1; i <= 3; ++i) {
-			parts[i] = parseInt(parts[i]).toString(16);
-			if (parts[i].length == 1) parts[i] = '0' + parts[i];
-		}
-		return ('#' + parts.join(''));
-	};
-
 	function get_supported_fonts() {
 		const fontCheck = new Set([
 			'Arial', 'Asana', 'Monotype corsiva', 'Arial Black', 'Bahnschrift', 'Calibri', 'Cambria', 'Cambria Math', 'Candara', 'Comic Sans MS', 'Consolas', 'Constantia', 'Corbel', 'Courier New', 'Ebrima', 'Franklin Gothic Medium', 'Gabriola', 'Gadugi', 'Georgia', 'HoloLens MDL2 Assets', 'Impact', 'Ink Free', 'Javanese Text', 'Leelawadee UI', 'Lucida Console', 'Lucida Sans Unicode', 'Malgun Gothic', 'Marlett', 'Microsoft Himalaya', 'Microsoft JhengHei', 'Microsoft New Tai Lue', 'Microsoft PhagsPa', 'Microsoft Sans Serif', 'Microsoft Tai Le', 'Microsoft YaHei', 'Microsoft Yi Baiti', 'MingLiU-ExtB', 'Mongolian Baiti', 'MS Gothic', 'MV Boli', 'Myanmar Text', 'Nirmala UI', 'Palatino Linotype', 'Segoe MDL2 Assets', 'Segoe Print', 'Segoe Script', 'Segoe UI Symbol', 'SimSun', 'Sitka', 'Sylfaen', 'Symbol', 'Tahoma', 'Times New Roman',
@@ -824,21 +831,34 @@
 			return;
 		
 		var main;
+		if (!color)
+			color = get_theme_colors().background;
 
 		for (var i = 0; i < document.styleSheets.length; i++) {
-			if (!color && document.styleSheets[i].href && document.styleSheets[i].href.indexOf(settings.style) !== -1) {
-				var rules = document.styleSheets[i].cssRules || document.styleSheets[i].rules;
-				color = (rules[0].style.background.indexOf("rgb") !== -1) ? hexc(rules[0].style.background) : rules[0].style.background;
-			}
 			if (document.styleSheets[i].href && document.styleSheets[i].href.indexOf("resources/css/plugin_style.css") !== -1) {
 				main = document.styleSheets[i].cssRules || document.styleSheets[i].rules;
-			}
-			if (color && main)
 				break;
+			}
 		}
 		main[0].style.background = color;
 		settings.background = color;
 	}
+
+	function get_theme_colors() {
+		return hardcodedThemeColors[settings.style] || hardcodedThemeColors["googlecode.css"];
+	};
+
+	function set_selection_color() {
+		var selection = get_theme_colors().selection;
+		var selection_style = document.getElementById("selection_style");
+		if (!selection_style) {
+			selection_style = document.createElement("style");
+			selection_style.id = "selection_style";
+			document.head.appendChild(selection_style);
+		}
+		selection_style.textContent = ".content::selection, span::selection { background: " + selection + "; }\n" +
+			".content::-moz-selection, span::-moz-selection { background: " + selection + "; }";
+	};
 
 	function save_settings() {
 		localStorage.setItem("pluginHighglightSettings", JSON.stringify(settings));
