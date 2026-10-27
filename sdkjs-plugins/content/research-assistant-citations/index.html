@@ -3,18 +3,50 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ResearchAssistant</title>
-    <script type="text/javascript" src="../v1/plugins.js"></script>
+    <title>Research Assistant Citations</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <style>
+      :root {
+        --bg: #fff;
+        --text: #201f1e;
+        --text-secondary: #605e5c;
+        --border: #c8c6c4;
+        --divider: #edebe9;
+        --button: #f3f2f1;
+        --button-hover: #e1dfdd;
+        --accent: #0078d4;
+        --accent-hover: #106ebe;
+        --accent-text: #fff;
+        --focus: #0078d4;
+        --error: #c72a1c;
+      }
       *, *::before, *::after { box-sizing: border-box; }
       body {
         margin: 0;
         font-family: "Segoe UI", system-ui, sans-serif;
         font-size: 14px;
-        color: #201f1e;
-        background: #fff;
+        color: var(--text);
+        background: var(--bg);
       }
       #root { height: 100vh; overflow: hidden; }
+      input, select {
+        color: var(--text);
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+      }
+      input:focus, select:focus { outline: none; border-color: var(--focus); }
+      button {
+        color: var(--text);
+        background: var(--button);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      button:hover:not(:disabled) { background: var(--button-hover); }
+      button.primary { color: var(--accent-text); background: var(--accent); border-color: transparent; }
+      button.primary:hover:not(:disabled) { background: var(--accent-hover); }
+      button:disabled { opacity: 0.6; cursor: default; }
     </style>
   </head>
   <body>
