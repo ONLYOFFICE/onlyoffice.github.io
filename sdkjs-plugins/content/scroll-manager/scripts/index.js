@@ -18,7 +18,7 @@ window.Asc.plugin.init = async function () {
     }
 
     // Saving the current position every second
-    startTempScrollSaver();    
+    startTempScrollSaver();
 };
 
 function setupToolbar() {
@@ -65,16 +65,20 @@ function setupToolbar() {
 }
 
 async function tryRestoreScroll() {
-    if (!plugStore.getSaveByCloseFlag()) return;
 
     let savedView = plugStore.getView();
-    let tempSavedView = plugStore.getView(true);
 
-    // if there is a temporary scroll, it becomes the main
-    if (tempSavedView !== null && isViewDifferent(savedView, tempSavedView) && plugStore.getSaveByCloseFlag()) {
-        savedView = tempSavedView;
-        plugStore.saveView(savedView);
+    if (plugStore.getSaveByCloseFlag()) {
+        let tempSavedView = plugStore.getView(true);
+        // if there is a temporary scroll, it becomes the main
+        if (tempSavedView !== null && isViewDifferent(savedView, tempSavedView)) {
+            savedView = tempSavedView;
+            plugStore.saveView(savedView);
+        }
     }
+
+    // If the user has not enabled the option to restore the scroll position, we do not restore it
+    if (!plugStore.getMoveByOpenFlag()) return;
 
     if (savedView === null) return;
 
@@ -84,9 +88,10 @@ async function tryRestoreScroll() {
 // Timer for saving the current position every second
 async function startTempScrollSaver() {
     setInterval(async () => {
+
         if (!plugStore.getSaveByCloseFlag()) return;
 
-        const currentView = await editorCtrl.getView();
+        const currentView = await editorCtrl.getView()
 
         if (currentView === null) return;
 
@@ -103,7 +108,8 @@ function isViewDifferent(view1, view2) {
     if (!view1 || !view2) return view1 !== view2;
 
     // Compare fields directly
-    return view1.x !== view2.x ||
+    return view1.pageIndex !== view2.pageIndex ||
+        view1.x !== view2.x ||
         view1.y !== view2.y ||
         view1.zoom !== view2.zoom;
 }
