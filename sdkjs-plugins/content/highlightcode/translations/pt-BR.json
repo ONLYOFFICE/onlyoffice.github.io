@@ -11,5 +11,7 @@
 	"Background": "Fundo",
 	"Format": "Formato",
 	"Available only for the following languages": "Disponível apenas para os seguintes idiomas",
-	"This plugin is not supported by IE": "Este plugin não é suportado pelo IE"
+	"This plugin is not supported by IE": "Este plugin não é suportado pelo IE",
+	"Monospace": "Monoespaçado",
+	"Other": "Outros"
 }

@@ -11,5 +11,7 @@
 	"Background": "Задний фон",
 	"Format": "Форматировать",
 	"Available only for the following languages": "Доступно только для следующих языков",
-	"This plugin is not supported by IE": "Этот плагин не поддерживается IE"
+	"This plugin is not supported by IE": "Этот плагин не поддерживается IE",
+	"Monospace": "Моноширинные",
+	"Other": "Другие"
 }

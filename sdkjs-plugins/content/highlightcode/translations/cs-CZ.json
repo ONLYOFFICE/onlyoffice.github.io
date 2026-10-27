@@ -11,5 +11,7 @@
 	"Font settings": "Nastavení písma",
 	"Format": "Formát",
 	"Available only for the following languages": "Dostupné pouze pro následující jazyky",
-	"This plugin is not supported by IE": "Tento plugin není podporován IE"
+	"This plugin is not supported by IE": "Tento plugin není podporován IE",
+	"Monospace": "Pevná šířka",
+	"Other": "Ostatní"
 }

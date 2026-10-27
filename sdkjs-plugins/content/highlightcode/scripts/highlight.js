@@ -749,22 +749,60 @@
 			'Arial', 'Asana', 'Monotype corsiva', 'Arial Black', 'Bahnschrift', 'Calibri', 'Cambria', 'Cambria Math', 'Candara', 'Comic Sans MS', 'Consolas', 'Constantia', 'Corbel', 'Courier New', 'Ebrima', 'Franklin Gothic Medium', 'Gabriola', 'Gadugi', 'Georgia', 'HoloLens MDL2 Assets', 'Impact', 'Ink Free', 'Javanese Text', 'Leelawadee UI', 'Lucida Console', 'Lucida Sans Unicode', 'Malgun Gothic', 'Marlett', 'Microsoft Himalaya', 'Microsoft JhengHei', 'Microsoft New Tai Lue', 'Microsoft PhagsPa', 'Microsoft Sans Serif', 'Microsoft Tai Le', 'Microsoft YaHei', 'Microsoft Yi Baiti', 'MingLiU-ExtB', 'Mongolian Baiti', 'MS Gothic', 'MV Boli', 'Myanmar Text', 'Nirmala UI', 'Palatino Linotype', 'Segoe MDL2 Assets', 'Segoe Print', 'Segoe Script', 'Segoe UI Symbol', 'SimSun', 'Sitka', 'Sylfaen', 'Symbol', 'Tahoma', 'Times New Roman',
 			'American Typewriter', 'Andale Mono', 'Arial Narrow', 'Arial Rounded MT Bold', 'Arial Unicode MS', 'Avenir', 'Avenir Next', 'Avenir Next Condensed', 'Baskerville', 'Big Caslon', 'Bodoni 72', 'Bodoni 72 Oldstyle', 'Bodoni 72 Smallcaps', 'Bradley Hand', 'Brush Script MT', 'Chalkboard', 'Chalkboard SE', 'Chalkduster', 'Charter', 'Cochin', 'Copperplate', 'Courier', 'Didot', 'DIN Alternate', 'DIN Condensed', 'Futura', 'Geneva', 'Gill Sans', 'Helvetica', 'Helvetica Neue', 'Herculanum', 'Hoefler Text', 'Lucida Grande', 'Luminari', 'Marker Felt', 'Menlo', 'Monaco', 'Noteworthy', 'Optima', 'Palatino', 'Papyrus', 'Phosphate', 'Rockwell', 'Savoye LET', 'SignPainter', 'Skia', 'Snell Roundhand', 'Times', 'Trattatello', 'Zapfino', 'Segoe UI', 'Segoe UI Historic', 'Segoe UI Emoji','Trebuchet MS', 'Verdana', 'Webdings', 'Wingdings', 'Yu Gothic'
 		].sort());
-		  
-		document.fonts.ready.then(function() {
+		var editorFontsReady = new Promise(function(resolve) {
+			window.Asc.plugin.executeMethod("GetFontList", [], resolve);
+		});
+
+		Promise.all([document.fonts.ready, editorFontsReady]).then(function(results) {
+			var fontNames = new Set();
+			var monospaceFonts = new Set();
 			for (const font of fontCheck.values()) {
 				if (document.fonts.check(`14px "${font}"`))
-					fontsAvailable.push({ id : font, text : font});
+					fontNames.add(font);
 			}
-			$('#fonts').select2({
-				data : fontsAvailable,
-				minimumResultsForSearch: Infinity
-			}).on('select2:select', function(e) {
+			// editor fonts are drawn by the editor, so the browser doesn't have to know them
+			results[1].forEach(function(font) {
+				if (font && font["m_wsFontName"]) {
+					fontNames.add(font["m_wsFontName"]);
+					// the editor lists every face of a font, one fixed face is enough
+					if (font["m_bIsFixed"])
+						monospaceFonts.add(font["m_wsFontName"]);
+				}
+			});
+			var monospaceGroup = [], otherGroup = [];
+			Array.from(fontNames).sort(function(a, b) {
+				return a.localeCompare(b);
+			}).forEach(function(font) {
+				(monospaceFonts.has(font) ? monospaceGroup : otherGroup).push({ id : font, text : font});
+			});
+			if (monospaceGroup.length)
+				fontsAvailable.push({ name : "Monospace", children : monospaceGroup });
+			if (otherGroup.length)
+				fontsAvailable.push({ name : "Other", children : otherGroup });
+			$('#fonts').on('select2:select', function(e) {
 				document.getElementById('conteiner_id1').style["font-family"] = e.params.data.text;
 				settings.font = e.params.data.id;
 			});
-			$('#fonts').val(settings.font).trigger("change");
-			document.getElementById('conteiner_id1').style["font-family"] = settings.font;
+			fill_fonts();
 		});
+	};
+
+	// group names are translated, so the list is built again when translations come after the fonts
+	function fill_fonts() {
+		var fonts = $('#fonts');
+		if (fonts.hasClass("select2-hidden-accessible"))
+			fonts.select2("destroy");
+		fonts.empty().select2({
+			data : fontsAvailable.map(function(group) {
+				return { text : window.Asc.plugin.tr(group.name), children : group.children };
+			}),
+			minimumResultsForSearch: 0,
+			// editor font names can be long, so the box keeps its size and the list grows instead
+			width: "150px",
+			dropdownAutoWidth: true
+		});
+		fonts.val(settings.font).trigger("change");
+		document.getElementById('conteiner_id1').style["font-family"] = settings.font;
 	};
 
 	function createLanguageAliasMap(options) {
@@ -971,6 +1009,9 @@
 			btn_format.title = window.Asc.plugin.tr("Available only for the following languages") + ": " + formatLangTooltip;
 
 		}
+
+		if (fontsAvailable.length)
+			fill_fonts();
 			
 		$('#tab_replace_id').select2({
 			minimumResultsForSearch: Infinity

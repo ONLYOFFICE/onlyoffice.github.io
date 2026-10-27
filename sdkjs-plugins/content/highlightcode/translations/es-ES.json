@@ -11,5 +11,7 @@
 	"Font settings": "Preferencias de fuente",
 	"Format": "Formato",
 	"Available only for the following languages": "Disponible solo para los siguientes idiomas",
-	"This plugin is not supported by IE": "Este plugin no es compatible con IE"
+	"This plugin is not supported by IE": "Este plugin no es compatible con IE",
+	"Monospace": "Monoespaciado",
+	"Other": "Otros"
 }

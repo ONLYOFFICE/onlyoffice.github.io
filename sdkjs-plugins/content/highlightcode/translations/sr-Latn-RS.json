@@ -11,5 +11,7 @@
 	"Font settings": "Podešavanja fonta",
 	"Format": "Format",
 	"Available only for the following languages": "Dostupno samo za sledeće jezike",
-	"This plugin is not supported by IE": "Ovaj dodatak nije podržan u IE"
+	"This plugin is not supported by IE": "Ovaj dodatak nije podržan u IE",
+	"Monospace": "Fiksne širine",
+	"Other": "Ostali"
 }

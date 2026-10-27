@@ -11,5 +11,7 @@
 	"Font settings": "Cilësimet e fontit",
 	"Format": "Formati",
 	"Available only for the following languages": "I disponueshëm vetëm për gjuhet e mëposhtme",
-	"This plugin is not supported by IE": "Kjo shtojcë nuk mbështetet nga IE"
+	"This plugin is not supported by IE": "Kjo shtojcë nuk mbështetet nga IE",
+	"Monospace": "Me gjerësi fikse",
+	"Other": "Të tjera"
 }
