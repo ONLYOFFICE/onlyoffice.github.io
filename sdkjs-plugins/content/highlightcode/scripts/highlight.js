@@ -769,11 +769,16 @@
 
 	function createLanguageAliasMap(options) {
 		var aliasMap = {};
+		// language names go first, so an alias of another language can't take them
+		for (var i = 0; i < options.length; i++)
+			aliasMap[String(options[i].id).toLowerCase()] = options[i].id;
+
 		for (var i = 0; i < options.length; i++) {
 			var option = options[i];
-			var terms = option.searchText ? option.searchText.split(" ") : [option.id];
+			var terms = option.searchText ? option.searchText.split(" ") : [];
 			for (var j = 0; j < terms.length; j++) {
-				if (terms[j])
+				// a shared alias stays with the first language that has it (ls - lasso, not livescript)
+				if (terms[j] && !aliasMap.hasOwnProperty(terms[j]))
 					aliasMap[terms[j]] = option.id;
 			}
 		}
