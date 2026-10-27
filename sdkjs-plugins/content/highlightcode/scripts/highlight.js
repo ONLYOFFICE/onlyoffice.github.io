@@ -50,9 +50,7 @@
 		need_formatting = false,													// flag to check need format code or not
 		flag_init = false,															// flag for restore background
 		fontsAvailable = [];														// list of supported fonts
-	const isIE = checkInternetExplorer();											// check IE
-	const isDE = (window.AscDesktopEditor) ? true : false;							// check desktope editor
-	const isFF = (navigator.userAgent.indexOf("Firefox") > -1) ? true : false;		// check FF
+	const isNeedCustomColorpicker = !isColorInputSupported();						// check color input support
 	const isOldChrome = checkOldChrome();                                           // check chrome older than 50 version
 	var message = "This plugin doesn't work in Internet Explorer."                  // message for IE
 	var xml_formatter = require('xml-formatter');									// object for xml formatting
@@ -155,7 +153,7 @@
 			window.Asc.plugin.loadModule("./vendor/highlight/styles/" + e.params.data.id , function(content){
 				style_value = content;
 				set_bacground_color();
-				if (isDE || isFF) {
+				if (isNeedCustomColorpicker) {
 					$("#jq_color").spectrum("set", settings.background);
 				} else {
 					background_color.value = settings.background;
@@ -207,7 +205,7 @@
 		var temp_code,
 			flag = false;	//flag change code (true = changed)
 
-		if (isDE || isFF) {
+		if (isNeedCustomColorpicker) {
 			document.getElementById("jq_color").style.display = "inline";
 			document.getElementById("background_color").style.display = "none";
 			initSpectrum("#FFFFFF");
@@ -522,6 +520,12 @@
 		};
 	};
 
+	function isColorInputSupported() {
+		const input = document.createElement('input');
+		input.setAttribute('type', 'color');
+		return input.type === 'color';
+	}
+
 	function initSpectrum(clr) {
 		$("#jq_color").spectrum({
 			color: clr,
@@ -710,7 +714,6 @@
 	function checkOldChrome() {
 		let raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
 		let version = raw ? parseInt(raw[2], 10) : -1;
-		console.log(version);
 		return version <= 49;
 	}
 
