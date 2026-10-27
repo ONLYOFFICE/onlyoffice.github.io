@@ -40,6 +40,7 @@
 	};
 
 	var languages = hljs.listLanguages().sort(),									// array languages
+		languagesToAutodetect = ["accesslog", "apache", "bash", "basic", "cpp", "csharp", "css", "delphi", "erlang", "fortran", "go", "http", "java", "javascript", "json", "kotlin", "markdown", "matlab", "nginx", "objectivec", "perl", "php", "prolog", "python", "ruby", "rust", "shell", "sql", "swift", "typescript", "xml"],
 		languageOptions = [],
 		languageAliases = {},
 		style_value,																// current value style
@@ -273,7 +274,7 @@
 				if (need_formatting) {
 					var isAuto = false;
 					if (settings.curLang == "Auto") {
-						temp_code = hljs.highlightAuto(text, languages);
+						temp_code = hljs.highlightAuto(text, languagesToAutodetect);
 						settings.curLang = temp_code.language;
 						isAuto = true;
 					}
@@ -334,14 +335,14 @@
 						if (!isAuto) {
 							highlight(text, settings.curLang);
 						} else {
-							temp_code = hljs.highlightAuto(text, languages);
+							temp_code = hljs.highlightAuto(text, languagesToAutodetect);
 							createPreview(temp_code);
 						}
 					}
 					need_formatting = false;
 				} else {
 					if (settings.curLang == "Auto")
-						temp_code = hljs.highlightAuto(text, languages);
+						temp_code = hljs.highlightAuto(text, languagesToAutodetect);
 					else
 						temp_code = hljs.highlight(text, {language: settings.curLang});
 
