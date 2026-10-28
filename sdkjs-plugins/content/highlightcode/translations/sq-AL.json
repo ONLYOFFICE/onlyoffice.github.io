@@ -13,5 +13,7 @@
 	"Available only for the following languages": "I disponueshëm vetëm për gjuhet e mëposhtme",
 	"This plugin is not supported by IE": "Kjo shtojcë nuk mbështetet nga IE",
 	"Monospace": "Me gjerësi fikse",
-	"Other": "Të tjera"
+	"Other": "Të tjera",
+	"Preview may use a substitute font": "Pamja paraprake mund të përdorë një font zëvendësues",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "Shfletuesi mund të mos e ketë këtë font, prandaj pamja paraprake mund të duket ndryshe. Dokumenti do të përdorë fontin e zgjedhur."
 }

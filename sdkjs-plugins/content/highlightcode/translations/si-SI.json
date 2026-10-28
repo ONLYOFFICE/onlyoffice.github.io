@@ -12,5 +12,7 @@
 	"Format": "ආකෘතිය",
 	"Available only for the following languages": "පහත භාෂා සඳහා පමණක් තිබේ",
 	"Monospace": "ස්ථාවර පළල",
-	"Other": "වෙනත්"
+	"Other": "වෙනත්",
+	"Preview may use a substitute font": "පෙරදසුන ආදේශක රුවකුරක් භාවිත කළ හැක",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "බ්‍රවුසරයේ මෙම රුවකුර නොතිබිය හැකි බැවින් පෙරදසුන වෙනස් ලෙස පෙනිය හැක. ලේඛනයේ තෝරාගත් රුවකුර භාවිත වනු ඇත."
 }

@@ -13,5 +13,7 @@
 	"Available only for the following languages": "Dostupné pouze pro následující jazyky",
 	"This plugin is not supported by IE": "Tento plugin není podporován IE",
 	"Monospace": "Pevná šířka",
-	"Other": "Ostatní"
+	"Other": "Ostatní",
+	"Preview may use a substitute font": "Náhled může používat náhradní písmo",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "Prohlížeč toto písmo možná nemá, proto může náhled vypadat jinak. V dokumentu bude použito vybrané písmo."
 }

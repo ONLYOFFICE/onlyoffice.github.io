@@ -13,5 +13,7 @@
 	"Available only for the following languages": "Disponible solo para los siguientes idiomas",
 	"This plugin is not supported by IE": "Este plugin no es compatible con IE",
 	"Monospace": "Monoespaciado",
-	"Other": "Otros"
+	"Other": "Otros",
+	"Preview may use a substitute font": "La vista previa puede usar una fuente sustituta",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "Es posible que el navegador no tenga esta fuente, por eso la vista previa puede verse diferente. El documento usará la fuente seleccionada."
 }

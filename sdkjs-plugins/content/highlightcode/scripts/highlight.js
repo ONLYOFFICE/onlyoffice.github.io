@@ -782,6 +782,7 @@
 			$('#fonts').on('select2:select', function(e) {
 				document.getElementById('conteiner_id1').style["font-family"] = e.params.data.text;
 				settings.font = e.params.data.id;
+				update_font_hint();
 			});
 			fill_fonts();
 		});
@@ -803,6 +804,30 @@
 		});
 		fonts.val(settings.font).trigger("change");
 		document.getElementById('conteiner_id1').style["font-family"] = settings.font;
+		update_font_hint();
+	};
+
+	// the editor draws its own fonts, while the preview has only the fonts of the browser
+	function update_font_hint() {
+		var hint = document.getElementById("font_hint");
+		if (!hint)
+			return;
+
+		hint.innerText = window.Asc.plugin.tr("Preview may use a substitute font");
+		hint.title = window.Asc.plugin.tr("The browser may not have this font, so the preview may look different. The document will use the selected font.");
+		hint.style.display = is_font_in_browser(settings.font) ? "none" : "block";
+	};
+
+	// a missing font falls back to the generic family, so its text width stays the same for both families
+	function is_font_in_browser(font) {
+		var context = document.createElement("canvas").getContext("2d");
+		var text = "mmmmmmmmmmlli1WQ@#";
+		return ["monospace", "serif"].some(function(fallback) {
+			context.font = "72px " + fallback;
+			var width = context.measureText(text).width;
+			context.font = "72px \"" + String(font).replace(/"/g, "") + "\", " + fallback;
+			return context.measureText(text).width !== width;
+		});
 	};
 
 	function createLanguageAliasMap(options) {

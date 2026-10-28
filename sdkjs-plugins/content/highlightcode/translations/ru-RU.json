@@ -13,5 +13,7 @@
 	"Available only for the following languages": "Доступно только для следующих языков",
 	"This plugin is not supported by IE": "Этот плагин не поддерживается IE",
 	"Monospace": "Моноширинные",
-	"Other": "Другие"
+	"Other": "Другие",
+	"Preview may use a substitute font": "В превью может использоваться замещающий шрифт",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "Возможно, в браузере нет этого шрифта, поэтому превью может выглядеть иначе. В документе будет использован выбранный шрифт."
 }

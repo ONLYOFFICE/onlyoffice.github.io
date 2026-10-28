@@ -13,5 +13,7 @@
 	"Available only for the following languages": "Dostupno samo za sledeće jezike",
 	"This plugin is not supported by IE": "Ovaj dodatak nije podržan u IE",
 	"Monospace": "Fiksne širine",
-	"Other": "Ostali"
+	"Other": "Ostali",
+	"Preview may use a substitute font": "Pregled možda koristi zamenski font",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "Pregledač možda nema ovaj font, pa pregled može izgledati drugačije. Dokument će koristiti izabrani font."
 }

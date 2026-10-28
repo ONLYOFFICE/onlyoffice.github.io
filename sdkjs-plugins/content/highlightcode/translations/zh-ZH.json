@@ -13,5 +13,7 @@
 	"Available only for the following languages": "仅对以下语言可用",
 	"This plugin is not supported by IE": "IE不支持此插件",
 	"Monospace": "等宽",
-	"Other": "其他"
+	"Other": "其他",
+	"Preview may use a substitute font": "预览可能使用替代字体",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "浏览器中可能没有此字体，因此预览效果可能不同。文档将使用所选字体。"
 }
