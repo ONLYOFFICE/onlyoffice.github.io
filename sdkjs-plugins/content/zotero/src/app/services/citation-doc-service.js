@@ -650,7 +650,7 @@ class CitationDocService {
                                  let margin = paragraph.GetElement(i);
                                  if (!margin || typeof margin.GetText !== 'function') continue;
                                  if (margin.GetText() === numberText) {
-                                    margin.AddTabStop();
+                                    margin.AddText("\t");
                                     margin.SetItalic(false);
                                     break;
                                  }

@@ -2217,7 +2217,7 @@ function gt() {
 								for (var r = String(Asc.scope.numbers[n]), i = 0; i < e.GetElementsCount(); i++) {
 									var a = e.GetElement(i);
 									if (a && typeof a.GetText == "function" && a.GetText() === r) {
-										a.AddTabStop(), a.SetItalic(!1);
+										a.AddText("	"), a.SetItalic(!1);
 										break;
 									}
 								}
