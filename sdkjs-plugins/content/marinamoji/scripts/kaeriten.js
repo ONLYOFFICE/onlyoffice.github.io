@@ -1000,6 +1000,4 @@
   if (window.Asc && window.Asc.plugin && window.Asc.plugin.attachEvent) {
     window.Asc.plugin.attachEvent("onThemeChanged", applyTheme);
   }
-
-  window.Asc.plugin.button = function () {};
 })();

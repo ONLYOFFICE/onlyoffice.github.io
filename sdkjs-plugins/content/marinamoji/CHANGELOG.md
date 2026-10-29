@@ -2,6 +2,10 @@
 
 Version history for the ONLYOFFICE Document Editor plugin. Marketplace updates require a new `config.json` `version` and an entry here.
 
+## 0.1.15 - 2026-10-29
+
+* Fix: panel close (X) button did nothing; remove the empty `Asc.plugin.button` handler so the SDK closes the panel.
+
 ## 0.1.14 - 2026-10-16
 
 * Marketplace review: user `README.md`, `translations/langs.json`, remove `group`, `minVersion` 9.3.0.
