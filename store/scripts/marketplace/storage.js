@@ -73,6 +73,27 @@ const MarketplaceStorage = {
     addInstalledPlugin: function(plugin) {
         this._installedPlugins.push(plugin);
     },
+    /**
+     * In 10.0.0 AI Tools was moved to the core
+     * Remove from everywhere to avoid an incorrect plugin count in the interface.
+     */
+    excludeAiPluginIfNeeded: function() {
+        const AI_TOOLS_GUID = 'asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}';
+        const AI_TOOLS_MIN_PLUGIN_VERSION = 3003000;
+        
+        let plugin = this.findPlugin(AI_TOOLS_GUID);
+        if (!plugin) {
+            return;
+        }
+        let installedPlugin = this.findInstalledPlugin(AI_TOOLS_GUID);
+        if (installedPlugin) {
+            const version = Utils.convertPluginVersionToNumber(installedPlugin.version || '');
+            if (version < AI_TOOLS_MIN_PLUGIN_VERSION) {
+                return;
+            }
+        }
+        return this.removePluginEverywhere(AI_TOOLS_GUID);
+    },
     /** 
      * @param {Array<PluginInfo>} plugins 
      * @returns {Array<PluginInfo>}
@@ -156,7 +177,11 @@ const MarketplaceStorage = {
             filteredPlugins = this.getPluginsToUpdate();
         } else if (category === "onlyoffice") {
             filteredPlugins = filteredPlugins.filter(function(plugin) {
-                return !(plugin && plugin.offered);
+                if (!plugin) {
+                    return false;
+                }
+                const offered = String(plugin.offered || "").trim();
+                return offered.toUpperCase() === 'ASCENSIO SYSTEM SIA';
             });
         } else if (category != "all") {
             filteredPlugins = filteredPlugins.filter(function(plugin) {
@@ -170,12 +195,14 @@ const MarketplaceStorage = {
 
         filteredPlugins = this._filterPluginsByEditor(filteredPlugins);
 
-        filteredPlugins = filteredPlugins.filter(function(plugin) {
+        if (searchQuery.trim() === "") {
+            return filteredPlugins;
+        }
+        return filteredPlugins.filter(function(plugin) {
             let name = translateName(plugin);
             return name.toLowerCase().includes(searchQuery);
         });
 
-        return filteredPlugins;
     },
     /** @returns {Array<PluginInfo>} */
     getInstalledPlugins: function() {
@@ -374,8 +401,15 @@ const MarketplaceStorage = {
         if (!variations) {
             return;
         }
-
-		if (!config.offered && !(plugin && plugin.offered) && !(installed && installed.obj && installed.obj.offered)) {
+        let offered = '';
+        if (config.offered) {
+            offered = String(config.offered).trim();
+        } else if (plugin && plugin.offered) {
+            offered = String(plugin.offered).trim();
+        } else if (installed && installed.obj && installed.obj.offered) {
+            offered = String(installed.obj.offered).trim();
+        }
+		if (offered.toUpperCase() === 'ASCENSIO SYSTEM SIA') {
 			let category = 'onlyoffice';
 			if (this._categories.has(category)) {
 				let num = Number(this._categories.get(category));

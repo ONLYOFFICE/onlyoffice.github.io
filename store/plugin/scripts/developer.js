@@ -29,10 +29,13 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+
+/// <reference path="./shared/marketplace-url.js" />
+
 (function(window, undefined) {
 
     window.Asc.plugin.init = function() {
-		document.getElementById('inp_url').value = localStorage.getItem('DeveloperMarketplaceUrl') || '';
+		document.getElementById('inp_url').value = MarketplaceUrlManager.getDeveloperUrl();
 		document.getElementById('lbl_reset').onclick = function() {
 			document.getElementById('inp_url').value = '';
 		};

@@ -353,9 +353,14 @@ const Theme = {
                 ".selectbox-dropdown,\n" +
                 ".radio-visual, \n" +
                 ".checkbox-visual, \n" +
+                "#previewWrapper, \n" +
                 ".message { background-color: " +
                 theme["background-normal"] +
                 "; }\n";
+            styles +=
+                ".custom-button-primary:focus-visible { box-shadow: 0 0 0 1px inset " +
+                theme["background-normal"] +
+                "; }\n";    
         }
         if (theme["text-inverse"]) {
             styles +=
@@ -379,6 +384,7 @@ const Theme = {
                 ".selectbox-header,\n" +
                 ".selectbox-dropdown,\n" +
                 ".selectbox-search-input:focus,\n" +
+                "#previewWrapper,\n" +
                 ".message { border-color: " +
                 theme["border-regular-control"] +
                 "; }\n";
@@ -396,16 +402,27 @@ const Theme = {
         }
         if (theme["border-control-focus"]) {
             styles +=
-                ".custom-button-icon-only:focus:not(:active):not(:hover),\n" +
-                ".custom-button-secondary-icon:focus:not(:active):not(:hover),\n" +
-                ".custom-button-secondary:focus:not(:active):not(:hover),\n" +
+                ".custom-button-icon-only:focus-visible,\n" +
+                ".custom-button-secondary-icon:focus-visible,\n" +
+                ".custom-button-secondary:focus-visible,\n" +
                 ".input-field-element:focus,\n" +
                 ".input-field-focused .input-field-element,\n" +
                 ".selectbox-header:active,\n" +
-                ".selectbox-header:focus,\n" +
+                ".selectbox-header:focus-visible,\n" +
+                ".link:focus-visible,\n" +
+                ".selectbox-arrow:focus-visible b,\n" +
                 ".selectbox-header-open { border-color: " +
                 theme["border-control-focus"] +
                 "; }\n";
+            styles +=
+                ".link:focus-visible { color: " +
+                theme["border-control-focus"] +
+                "; }\n";    
+            styles +=
+                "input:focus-visible + .checkbox-visual,\n" +
+                "input:focus-visible + .radio-visual { outline: 1px solid " +
+                theme["border-control-focus"] +
+                "; }\n";    
         }
         if (theme["highlight-button-hover"]) {
             styles +=
@@ -507,6 +524,7 @@ const Theme = {
             fontSize = "12px";
             styles +=
                 ".message,\n" +
+                "#previewWrapper,\n" +
                 ".custom-button,\n" +
                 ".selectbox-header,\n" +
                 ".input-field-element { border-radius: 4px; }\n";

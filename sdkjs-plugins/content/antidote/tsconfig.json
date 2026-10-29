@@ -1,0 +1,33 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"allowJs": true,
+		"checkJs": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "preact",
+		"skipLibCheck": false,
+		"paths": {
+			"react": ["./node_modules/preact/compat/"],
+			"react-dom": ["./node_modules/preact/compat/"],
+			"@/*": ["./src/*"],
+			"@api": ["./src/api"],
+			"@api/*": ["./src/api/*"],
+			"@components": ["./src/components"],
+			"@components/*": ["./src/components/*"],
+			"@features/*": ["./src/features/*"],
+			"@hooks": ["./src/hooks"],
+			"@hooks/*": ["./src/hooks/*"],
+			"@pages/*": ["./src/pages/*"],
+			"@store": ["./src/store"],
+			"@store/*": ["./src/store/*"],
+			"@utils": ["./src/utils"],
+			"@utils/*": ["./src/utils/*"],
+			"@resources/*": ["./resources/*"]
+		}
+	},
+	"include": ["**/*"],
+	"exclude": ["dist", "node_modules", "eslint.config.mjs"]
+}

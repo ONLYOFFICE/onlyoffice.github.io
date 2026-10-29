@@ -19,6 +19,8 @@
     "Display citations as:": "Literaturengaben anzeigen als:",
     "Footnotes": "Fußnoten",
     "Endnotes": "Endnoten",
+    "Include URLs of paper articles": "URLs von Artikelartikeln einschließen",
+    "Use MEDLINE journal abbreviations": "MEDLINE-Journal-Abkürzungen verwenden",
     "Reconfigure": "Neu konfigurieren",
     "Learn more here.": "Erfahren Sie mehr hier.",
     "Save": "Speichern",
@@ -94,5 +96,22 @@
     "Section": "Abschnitt",
     "Timestamp": "Zeitstempel",
     "Verse": "Vers",
-    "Volume": "Band"
+    "Volume": "Band",
+    "Bibliography preview": "Vorschau der Bibliografie",
+    "Locator": "Fundstelle",
+    "selected": "ausgewählt",
+    "No items selected": "Keine Elemente ausgewählt",
+    "Failed to load language": "Fehler beim Laden der Sprache",
+    "Invalid CSL style file": "Ungültige CSL-Stildatei",
+    "More Styles...": "Weitere Stile...",
+    "Add custom style...": "Benutzerdefinierten Stil hinzufügen...",
+    "Select language": "Sprache auswählen",
+    "Warning!": "Warnung!",
+    "Error": "Fehler",
+    "Success": "Erfolg",
+    "Warning": "Warnung",
+    "Information": "Information",
+    "Operation completed successfully": "Vorgang erfolgreich abgeschlossen",
+    "Please be cautious": "Bitte seien Sie vorsichtig"
+
 }

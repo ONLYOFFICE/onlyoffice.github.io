@@ -14,6 +14,7 @@
 		"sr-Cyrl-RS": "Генератор QR кодова",
 		"sr-Latn-RS": "Generator QR kodova"
 	},
+	"offered": "Ascensio System SIA",
 	"guid": "asc.{E5DD8D78-92F4-43B4-825B-E963D5CE8AC9}",
 	"version": "1.0.1",
 	"minVersion": "7.4.0",

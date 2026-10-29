@@ -138,7 +138,7 @@
                 </div>
                 <div id="selectedInfo" class="hidden">
                     <span id="selectedCount">0 selected</span>
-                    <span id="cancelSelectBtn" class="i18n link">Cancel selection</span>
+                    <span id="cancelSelectBtn" class="i18n link" tabindex="0">Cancel selection</span>
                 </div>
                 <div class="flexCol controls-holder">
                     <div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
@@ -176,7 +176,6 @@
                     <div id="langMessage"></div>
                 </div>
 
-
                 <div id="notesStyle" class="notesStyle hidden">
                     <span class="i18n">Display citations as:</span>
                     <div class="radioHolder">
@@ -184,6 +183,16 @@
                         <input type="radio" id="endNotes" value="endnotes" name="notesAs" />
                     </div>
                 </div>
+
+                <div id="includeUrlWrapper" class="mrtop hidden">
+                    <input type="checkbox" id="includeUrlForPaperArticles" />
+                </div>
+
+                <div id="abbreviateJournalTitlesWrapper" class="mrtop hidden">
+                    <input type="checkbox" id="abbreviateJournalTitles" />
+                </div>
+
+                <div id="previewWrapper" class="mrtop hidden"></div>
 
                 <div class="flexCol flexSize"></div>
 

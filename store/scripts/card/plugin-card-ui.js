@@ -161,9 +161,6 @@ const PluginCardUI = {
             rule += '.pc .btn_install[disabled]:hover,.pc .btn_install.disabled:hover,.pc .btn_install[disabled]:active,.pc .btn_install[disabled].active,.pc .btn_install.disabled:active,.pc .btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
             style = style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
             rule += '.pc .ti-circle-check{background-color: ' + ('#0e8a7e') + ';}\n';    
-            
-            rule += '.pc-badge{color: ' + ('#0e8a7e') + ' !important;}\n';   
-            rule += '.pc-badge{background-color: ' + ('#e8f5f1') + ';}\n';
 
         } else {
             document.body.classList.remove('white_bg');
@@ -181,9 +178,6 @@ const PluginCardUI = {
             rule += '.pc .btn_install[disabled]:hover,.pc .btn_install.disabled:hover,.pc .btn_install[disabled]:active,.pc .btn_install[disabled].active,.pc .btn_install.disabled:active,.pc .btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
             style = style.replace(/#b5e4ff/g, 'rgba(255, 255, 255, 0.8)');
             rule += '.pc .ti-circle-check{background-color: ' + ('#39bda0') + ';}\n';  
-
-            rule += '.pc-badge{color: ' + ('#60ddc0') + ' !important;}\n';   
-            rule += '.pc-badge{background-color: ' + ('rgba(96, 221, 192, 0.1)') + ';}\n'; 
 
         }
 

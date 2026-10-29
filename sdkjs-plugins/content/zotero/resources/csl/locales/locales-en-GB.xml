@@ -20,7 +20,7 @@
       <uri>https://orcid.org/0000-0003-1779-8883</uri>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-18T05:52:38+00:00</updated>
+    <updated>2026-01-10T00:00:00+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -142,7 +142,7 @@
     <term name="document">document</term>
     <term name="entry">entry</term>
     <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
+    <term name="entry-encyclopedia">encyclopaedia entry</term>
     <term name="event">event</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic">graphic</term>
@@ -518,8 +518,8 @@
       <multiple>editions</multiple>
     </term>
     <term name="first-reference-note-number">
-      <single>reference</single>
-      <multiple>references</multiple>
+      <single>note</single>
+      <multiple>notes</multiple>
     </term>
     <term name="number">
       <single>number</single>
@@ -564,8 +564,8 @@
       <multiple>edns</multiple>
     </term>
     <term name="first-reference-note-number" form="short">
-      <single>ref.</single>
-      <multiple>refs</multiple>
+      <single>n.</single>
+      <multiple>nn.</multiple>
     </term>
     <term name="number" form="short">
       <single>no.</single>
@@ -655,8 +655,8 @@
       <multiple>narrators</multiple>
     </term>
     <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
+      <single>organiser</single>
+      <multiple>organisers</multiple>
     </term>
     <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
@@ -783,7 +783,7 @@
     <term name="illustrator" form="verb">illustrated by</term>
     <term name="interviewer" form="verb">interview by</term>
     <term name="narrator" form="verb">read by</term> <!-- verb role form in Oxford Style Manual, MHRA -->
-    <term name="organizer" form="verb">organized by</term>
+    <term name="organizer" form="verb">organised by</term>
     <term name="original-author" form="verb">by</term>
     <term name="performer" form="verb">performed by</term>
     <term name="producer" form="verb">produced by</term>

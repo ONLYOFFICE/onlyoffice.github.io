@@ -70,6 +70,8 @@ class CitationDocService {
      * @returns {Promise<string>}
      */
     async addBibliography(text, value) {
+        await this.#addParagraphIfNeeded();
+
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9004000) {
             const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
@@ -379,6 +381,43 @@ class CitationDocService {
     }
 
     /**
+     * @returns {Promise<void>}
+     */
+    #addParagraphIfNeeded() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const oDocument = Api.GetDocument();
+                    const oParagraph = oDocument.GetCurrentParagraph();
+                    if (!oParagraph) {
+                        return;
+                    }
+                    if (oParagraph.GetText() === "") {
+                        return;
+                    }
+
+                    const oNewParagraph = oParagraph.InsertParagraph(
+                        "",
+                        "after",
+                        true,
+                    );
+                    if (!oNewParagraph) {
+                        return;
+                    }
+
+                    const oRange = oNewParagraph.GetRange();
+                    if (oRange) {
+                        oRange.MoveCursorToPos(0);
+                    }
+                },
+                false,
+                false,
+                resolve,
+            );
+        });
+    }
+
+    /**
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
@@ -609,6 +648,7 @@ class CitationDocService {
                             
                             for (let i = 0; i < paragraph.GetElementsCount(); i++) {
                                  let margin = paragraph.GetElement(i);
+                                 if (!margin || typeof margin.GetText !== 'function') continue;
                                  if (margin.GetText() === numberText) {
                                     margin.AddTabStop();
                                     margin.SetItalic(false);
@@ -616,6 +656,7 @@ class CitationDocService {
                                  }
                             }
                             let margin = paragraph.Search(Asc.scope.hash, true)[0];
+                            if (!margin) return;
                             margin.Delete();
 
                             paragraph.SetIndLeft(style.maxoffset * 120);

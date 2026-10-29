@@ -163,7 +163,6 @@ class Radio {
             "aria-disabled",
             String(!!this.#options.disabled)
         );
-        this.#container.tabIndex = this.#options.disabled ? -1 : 0;
 
         this.#visualRadio.className = "radio-visual";
         this.#visualRadio.setAttribute("aria-hidden", "true");
@@ -186,37 +185,6 @@ class Radio {
         this.#container.appendChild(this.#visualRadio);
         if (this.#labelElement) {
             this.#container.appendChild(this.#labelElement);
-        }
-
-        this.#updateRadioGroupTabIndex();
-    }
-
-    #updateRadioGroupTabIndex() {
-        if (this.#options.checked) {
-            this.#container.tabIndex = this.#options.disabled ? -1 : 0;
-        } else if (
-            this.#options.name &&
-            Radio.#instances.has(this.#options.name)
-        ) {
-            const radios = Radio.#instances.get(this.#options.name);
-            let hasChecked = false;
-
-            radios &&
-                radios.forEach((radio) => {
-                    if (radio.#options.checked && radio !== this) {
-                        hasChecked = true;
-                    }
-                });
-
-            if (
-                !hasChecked &&
-                !this.#options.checked &&
-                !this.#options.disabled
-            ) {
-                this.#container.tabIndex = 0;
-            } else {
-                this.#container.tabIndex = -1;
-            }
         }
     }
 
@@ -277,8 +245,6 @@ class Radio {
         );
 
         this.#input.checked = !!this.#options.checked;
-
-        this.#updateRadioGroupTabIndex();
     }
 
     /** @param {Event} [e] */
@@ -360,12 +326,6 @@ class Radio {
         this.#input.disabled = false;
         this.#container.setAttribute("aria-disabled", "false");
 
-        if (this.#options.checked) {
-            this.#container.tabIndex = 0;
-        } else {
-            this.#updateRadioGroupTabIndex();
-        }
-
         this.#container.classList.remove("radio--disabled");
     }
 
@@ -375,7 +335,6 @@ class Radio {
         this.#options.disabled = true;
         this.#input.disabled = true;
         this.#container.setAttribute("aria-disabled", "true");
-        this.#container.tabIndex = -1;
         this.#container.classList.add("radio--disabled");
     }
 

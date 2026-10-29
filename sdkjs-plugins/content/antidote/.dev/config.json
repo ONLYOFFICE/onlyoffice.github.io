@@ -1,0 +1,14 @@
+{
+    "excludes": [
+        ".dev/*",
+        "node_modules/*",
+        "src/*",
+        ".gitignore",
+        "package.json",
+        "package-lock.json",
+        "vite.config.ts",
+        "tsconfig.json",
+        "eslint.config.mjs",
+        "CLAUDE.md"
+    ]
+}

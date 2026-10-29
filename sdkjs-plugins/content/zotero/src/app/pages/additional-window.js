@@ -3,6 +3,8 @@
 /// <reference path="../types-global.js" />
 /// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" /> 
 
+import { CslHtmlParser } from "../services/csl-html-parser";
+
 /** @typedef {import("../../../../../v1/onlyoffice-types").PluginWindow} PluginWindow */
 /** @typedef {import("../../../../../v1/onlyoffice-types").VariationConfig} VariationConfig */
 

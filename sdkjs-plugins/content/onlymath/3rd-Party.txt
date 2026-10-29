@@ -1,0 +1,16 @@
+OnlyMath uses code from the following 3rd party projects.
+
+
+1. Giac/Xcas - a computer algebra system by Bernard Parisse (Institut Fourier, Universite Grenoble Alpes). OnlyMath bundles the WebAssembly build (cas/giac/giacwasm.js) and runs it in a Web Worker to evaluate, solve, differentiate and integrate expressions entirely on the user's machine. (https://www-fourier.univ-grenoble-alpes.fr/~parisse/giac.html)
+
+License:        GNU General Public License v3.0 or later
+License File:   licenses/giac.license
+
+Note: because OnlyMath links Giac, the combined work is distributed under the
+GPL. A verbatim copy of Giac's own license also ships at cas/giac/LICENSE.
+
+
+2. Emscripten - the LLVM-to-WebAssembly compiler toolchain used to build Giac for the browser. Emscripten's runtime support code (module loader, filesystem and memory shims) is embedded in the generated cas/giac/giacwasm.js. (https://emscripten.org/)
+
+License:        MIT License / University of Illinois NCSA Open Source License
+License File:   licenses/emscripten.license

@@ -46,6 +46,7 @@
 	<script src="scripts/marketplace/service.js" defer></script>
 	<script src="scripts/marketplace/scale.js" defer></script>
 	<script src="scripts/marketplace/plugin-icons.js" defer></script>
+	<script src="scripts/plugin-card-controller.js" defer></script>
 	<script src="scripts/code.js" defer></script>
 </head>
 	<body class="noselect">
@@ -162,9 +163,9 @@
 			</main>
 
 		</div>
-		<div id="plugin_card_overlay" class="hidden" onclick="_onClickBackToMarketplace()"></div>
+		<div id="plugin_card_overlay" class="hidden" onclick="PluginCardController.goBackToMarketplace()"></div>
 		<div id="plugin_card_panel" class="pc hidden">
-			<button id="btn_close_card" class="pc-close btn-text-default i18n" type="button" title="Close" onclick="_onClickBackToMarketplace()">&times;</button>
+			<button id="btn_close_card" class="pc-close btn-text-default i18n" type="button" title="Close" onclick="PluginCardController.goBackToMarketplace()">&times;</button>
 			<div class="pc-header">
 				<div class="pc-title-row">
 				<div id="div_icon_info" class="pc-icon">
@@ -173,7 +174,6 @@
 				<div class="pc-meta">
 					<div class="pc-name-row">
 					<span id="span_name" class="pc-name">---</span>
-					<span class="pc-badge hidden"><i class="ti ti-circle-check">✓</i> <span class="i18n" title="By ONLYOFFICE">By ONLYOFFICE</span></span>
 					</div>
 					<div class="pc-sub">
 						<span class="default-plugin-icon hidden i18n" title="Local">
@@ -183,6 +183,7 @@
 								<line x1="12" y1="22.08" x2="12" y2="12"></line>
 							</svg>
 						</span>
+						<span class="pc-badge hidden"><i class="ti ti-circle-check">✓</i> <span class="i18n" title="By ONLYOFFICE">By ONLYOFFICE</span></span>
 						<span id="span_offered"></span> <span id="span_version"></span>
 					</div>
 					<div id="div_editor_badges" class="pc-editor-badges hidden"></div>

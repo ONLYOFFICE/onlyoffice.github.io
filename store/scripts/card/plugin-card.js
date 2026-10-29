@@ -56,6 +56,8 @@ const PluginCard = {
     slideIndex: 1,  // index for slides
     backup: false,
     LANGUAGES: [
+        ['ar-Sa', 'ar', 'Arabic'],
+        ['cs-CS', 'cs', 'Czech'],
         ['cs-CZ', 'cs', 'Czech'],
         ['de-DE', 'de', 'German'],
         ['es-ES', 'es', 'Spanish'],
@@ -67,6 +69,9 @@ const PluginCard = {
         ['pt-BR', 'pt', 'Brazilian'],
         ['ru-RU', 'ru', 'Russian'],
         ['si-SI', 'si', 'Sinhala'],
+        ['sq-AL', 'sq', 'Albanian'],
+        ['sr-Cyrl-RS', 'sr', 'Serbian'],
+        ['sr-Latn-RS', 'sr', 'Serbian'],
         ['uk-UA', 'uk', 'Ukrainian'],
         ['zh-ZH', 'zh', 'Chinese']
     ],
@@ -76,8 +81,8 @@ const PluginCard = {
         const self = this;
         window.onresize = function() {
             self.setDivHeight();
-            if (typeof _syncPluginCardModalState === 'function') {
-                _syncPluginCardModalState(data.independentMode);
+            if (typeof PluginCardController !== 'undefined') {
+                PluginCardController.syncPluginCardModalState(data.independentMode);
             }
         };
         this._resetDom();
@@ -173,7 +178,7 @@ const PluginCard = {
                 } else {
                     PluginCardUI.divRatingLink.setAttribute(
                         "title",
-                        Utils.getTranslated("No disscussion page for this plugin.")
+                        Utils.getTranslated("No discussion page for this plugin.")
                     );
                     PluginCardUI.discussionLink.classList.add("hidden");
                 }
@@ -278,21 +283,24 @@ const PluginCard = {
             PluginCardUI.imgIcon.removeAttribute("srcset");
         }
         PluginCardUI.spanName.textContent = data.pluginName;
+        PluginCardUI.spanName.title = data.pluginName;
         
         if (this.config.local || (this.available && this.available.obj && this.available.obj.local)) {
             PluginCardUI.defaultPluginIcon.classList.remove("hidden");
         } else {
             PluginCardUI.defaultPluginIcon.classList.add("hidden");
         }
-        if (this.config.offered) {
-            PluginCardUI.spanOffered.textContent = this.config.offered;
-            PluginCardUI.spanOnlyOfficeBadge.classList.add("hidden");
-        } else {
+        let offered = String(this.config.offered || "").trim();
+        let isOfficial = offered.toUpperCase() === "ASCENSIO SYSTEM SIA";
+        PluginCardUI.spanOffered.textContent = isOfficial ? "" : (offered || Utils.getTranslated("Unknown publisher"));
+        if (isOfficial) {
             PluginCardUI.spanOnlyOfficeBadge.classList.remove("hidden");
-            PluginCardUI.spanOffered.textContent = "Ascensio System SIA";
+        } else {
+            PluginCardUI.spanOnlyOfficeBadge.classList.add("hidden");
         }
         const version = this.installed && this.installed.version || this.config.version;
         if (version) {
+            PluginCardUI.version.classList.remove('hidden');
             PluginCardUI.version.textContent = "· v" + version;
             PluginCardUI.version.title = Utils.getTranslated("Version") + ": " + String(version);
         } else {
@@ -717,3 +725,14 @@ window.addEventListener('message', function(event) {
 			break;
 	};
 }, false);
+
+if (typeof PluginCardController === 'undefined') {
+	window.addEventListener('keydown', function(e) {
+		if (!e || e.key !== 'Escape')
+			return;
+		if (!PluginCard.config)
+			return;
+
+		PluginCard.onClickClose();
+	});
+}

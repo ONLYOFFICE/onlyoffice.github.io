@@ -31,6 +31,7 @@
  */
 
 /// <reference path="../../scripts/types.js" />
+/// <reference path="./shared/marketplace-url.js" />
 /// <reference path="../../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
 
 (function(window, undefined) {
@@ -40,18 +41,12 @@
 	const iframe = document.createElement('iframe');
 	const OOMarketplaceUrl = isLocal ? './store/plugin-card.html' : 'https://onlyoffice.github.io/store/plugin-card.html';
 	let marketplaceUrl = OOMarketplaceUrl;
-	try {
-		// for incognito mode
-		let developerMarketplaceUrl = localStorage.getItem('DeveloperMarketplaceUrl');
-		if (developerMarketplaceUrl && developerMarketplaceUrl.indexOf('/store/') !== -1) {
-			const storeIndex = developerMarketplaceUrl.indexOf('/store/');
-			marketplaceUrl = developerMarketplaceUrl.substring(0, storeIndex) + '/store/plugin-card.html';
-		}
-	} catch (err) {
-		marketplaceUrl = OOMarketplaceUrl;
-	}
 	
 	window.Asc.plugin.init = function() {
+		const pluginOptions = this.info.options || {};
+		const url = MarketplaceUrlManager.resolve(pluginOptions, OOMarketplaceUrl);
+		marketplaceUrl = MarketplaceUrlManager.toStorePage(url, 'plugin-card.html', OOMarketplaceUrl);
+
 		initPluginCard();
 	};
 

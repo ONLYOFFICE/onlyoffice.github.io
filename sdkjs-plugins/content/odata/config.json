@@ -6,7 +6,7 @@
 		"fr": "Import OData",
 		"es": "Importar OData"
 	},
-
+	"offered": "Ascensio System SIA",
 	"guid": "asc.{6B290456-D38E-4E00-9387-C3105CCF9BDC}",
 	"version": "1.0.0",
 	"minVersion": "8.2.0",

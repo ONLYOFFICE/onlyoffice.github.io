@@ -104,13 +104,20 @@ function SelectCitationsComponent(
 SelectCitationsComponent.prototype._init = function () {
     const self = this;
     if (this._cancelSelectBtn) {
-        this._cancelSelectBtn.onclick = function (e) {
+        let onclickFn = function() {
             var ids = [];
             for (var id in self._items) {
                 ids.push(id);
             }
             for (var i = 0; i < ids.length; i++) {
                 self._removeSelected(ids[i]);
+            }
+        };
+        this._cancelSelectBtn.onclick = onclickFn;
+        this._cancelSelectBtn.onkeydown = function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onclickFn();
             }
         };
     }
@@ -242,6 +249,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     }
     const arrow = document.createElement("div");
     arrow.classList.add("selectbox-arrow");
+    arrow.setAttribute("tabindex", "0");
     arrow.innerHTML = "<b></b>";
 
     var title = document.createElement("div");
@@ -302,6 +310,12 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     }
 
     arrow.onclick = toggleItem;
+    arrow.onkeydown = function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleItem();
+        }
+    };
     checkInput.subscribe(function (event) {
         if (event.type !== "checkbox:change") {
             return;
