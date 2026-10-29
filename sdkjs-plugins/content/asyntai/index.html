@@ -1,0 +1,81 @@
+<!--
+ Asyntai AI Assistant for ONLYOFFICE
+ Copyright (c) Asyntai. Licensed under the GNU AGPL v3.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Asyntai AI Assistant</title>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<link rel="stylesheet" href="styles.css">
+	<script type="text/javascript" src="scripts/api.js"></script>
+	<script type="text/javascript" src="scripts/code.js"></script>
+</head>
+<body>
+	<div id="app">
+
+		<!-- Shown until a valid API key is saved -->
+		<section id="connect-view" class="view hidden">
+			<p class="lead i18n">Answer questions from your business knowledge base inside the editor, and add your documents to it.</p>
+			<label class="field-label i18n" for="api-key">Asyntai API key</label>
+			<input type="password" id="api-key" class="form-control" autocomplete="off" spellcheck="false">
+			<button id="connect-btn" class="btn-text-default primary i18n">Connect</button>
+			<div id="connect-status" class="status hidden" role="status"></div>
+			<p class="hint">
+				<span class="i18n">Find the key in your Asyntai account under Settings and API.</span>
+				<a href="https://asyntai.com/settings/api/" target="_blank" rel="noopener" class="i18n">Open API settings</a>
+				<a href="https://asyntai.com/register/" target="_blank" rel="noopener" class="i18n">Create an account</a>
+			</p>
+		</section>
+
+		<!-- Shown after the key is accepted -->
+		<section id="main-view" class="view hidden">
+			<div id="website-row" class="row hidden">
+				<label class="field-label i18n" for="website">Knowledge base</label>
+				<select id="website" class="form-control"></select>
+			</div>
+
+			<h2 class="section-title i18n">Ask</h2>
+			<textarea id="question" class="form-control" rows="3"></textarea>
+			<div class="actions">
+				<button id="ask-btn" class="btn-text-default primary i18n">Ask</button>
+				<a href="#" id="use-selection" class="link i18n">Use selected text</a>
+			</div>
+			<div id="ask-status" class="status hidden" role="status"></div>
+
+			<div id="answer-box" class="answer hidden">
+				<div id="answer-text" class="answer-text"></div>
+				<div id="answer-disclosure" class="disclosure hidden"></div>
+				<div class="actions">
+					<button id="insert-btn" class="btn-text-default i18n">Insert into document</button>
+					<button id="copy-btn" class="btn-text-default i18n">Copy</button>
+				</div>
+				<a href="#" id="new-chat" class="link small i18n">Start a new conversation</a>
+			</div>
+
+			<div class="separator horizontal"></div>
+
+			<h2 class="section-title i18n">Add to knowledge base</h2>
+			<label class="field-label i18n" for="kb-title">Title</label>
+			<input type="text" id="kb-title" class="form-control" maxlength="200">
+			<div id="kb-source" class="radios">
+				<label><input type="radio" name="kb-source" value="selection" checked> <span class="i18n">Selected text</span></label>
+				<label id="kb-whole-label"><input type="radio" name="kb-source" value="document"> <span class="i18n">Whole document</span></label>
+			</div>
+			<button id="kb-btn" class="btn-text-default i18n">Add to knowledge base</button>
+			<div id="kb-status" class="status hidden" role="status"></div>
+
+			<div class="separator horizontal"></div>
+
+			<div class="footer">
+				<span id="account-email" class="muted"></span>
+				<a href="#" id="disconnect" class="link small i18n">Disconnect</a>
+			</div>
+		</section>
+
+	</div>
+</body>
+</html>
