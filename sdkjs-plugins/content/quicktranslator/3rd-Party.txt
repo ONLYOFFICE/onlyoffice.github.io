@@ -1,0 +1,2 @@
+This plugin uses icons from Heroicons (https://heroicons.com/)
+MIT License - Copyright (c) Tailwind Labs, Inc.
