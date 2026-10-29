@@ -1,0 +1,274 @@
+{
+  "$schema": "marinaMoji kaeriten mapping (v1)",
+  "description": "Canonical Unicode marks from marinaMoji IME; display glyphs and render hints for LibreOffice, Word, and ONLYOFFICE. To change kaeriten size, edit glyph_ratio (and compound_glyph_ratio) in the three image blocks under rendering; see docs/TWEAKING_LAYOUT.md.",
+  "version": 2,
+  "rendering": {
+    "libreoffice_primary": "inline_image",
+    "libreoffice_frame": {
+      "border": false,
+      "anchor": "as_character",
+      "content_align": "bottom",
+      "vert_orient_position_hmm": 0,
+      "vertical_vert_orient": "char_bottom",
+      "vertical_orient_position_hmm": 0,
+      "vertical_box_width_factor": 1.18,
+      "vertical_box_height_factor": 1.0,
+      "vertical_box_pad_hmm": 0,
+      "vertical_glyph_kern_hmm": -40,
+      "font_size_pt": 5,
+      "font_size_ratio": 0.42,
+      "frame_width_hmm": 180,
+      "line_height_twips": 0,
+      "stack_direction": "top_to_bottom_first_mark_first"
+    },
+    "libreoffice_image": {
+      "glyph_ratio": 0.42,
+      "compound_glyph_ratio": 0.34,
+      "compound_line_gap_ratio": -0.15,
+      "glyph_fill": 0.94,
+      "line_gap_ratio": 0,
+      "compound_touch": true,
+      "compound_touch_overlap_ratio": 0.72,
+      "color": "#000000",
+      "font_family": "\"Hiragino Mincho ProN\",\"YuMincho\",\"Yu Mincho\",\"MS Mincho\",\"Songti SC\",\"SimSun\",serif",
+      "vert_orient_position_hmm": 0,
+      "vertical_orient_position_hmm": 0
+    },
+    "fallback": "subscript",
+    "word_assume_vertical": false,
+    "word_primary": "inline_picture",
+    "word_mac_use_ooxml": true,
+    "word_mac_ooxml_fallback_api": true,
+    "word_mac_ooxml_probe_with_word": true,
+    "word_mac_prefer_inline_textbox": true,
+    "word_inline_picture": {
+      "glyph_ratio": 0.42,
+      "compound_glyph_ratio": 0.34,
+      "compound_line_gap_ratio": -0.15,
+      "glyph_fill": 0.94,
+      "line_gap_ratio": 0,
+      "supersample": 4,
+      "box_height_em": 0,
+      "baseline_shift_pt": -5,
+      "baseline_anchor": "bottom",
+      "below_baseline_em": 0.42,
+      "descent_em": 0,
+      "glyph_nudge_em": 0.02,
+      "color": "#000000",
+      "compound_layout": "stack",
+      "compound_touch": false,
+      "compound_touch_overlap_ratio": 0.72,
+      "vertical_renderer": "picture",
+      "vertical_baseline_shift_pt": -5,
+      "vertical_compound_layout": "stack",
+      "vertical_glyph_nudge_em": 0,
+      "vertical_float_left_em": -0.88,
+      "vertical_dist_pt": 0,
+      "vertical_dist_side": "L",
+      "font_family": "\"Hiragino Mincho ProN\",\"YuMincho\",\"Yu Mincho\",\"MS Mincho\",\"Songti SC\",\"SimSun\",serif"
+    },
+    "word_mac_force_solid_fill": false,
+    "word_mac_fill_color": "FFFFFF",
+    "word_mac_no_outline": true,
+    "word_content_control": {
+      "font_size_ratio": "12:5",
+      "min_font_size_pt": 6,
+      "stack_direction": "top_to_bottom_first_mark_first"
+    },
+    "word_inline_textbox": {
+      "font_size_ratio": "12:5",
+      "min_font_size_pt": 6,
+      "stack_direction": "top_to_bottom_first_mark_first",
+      "content_align": "bottom",
+      "content_align_horizontal": "center",
+      "margin_pt": 0,
+      "margin_top_pt": 0,
+      "margin_bottom_pt": 0,
+      "margin_left_pt": 0,
+      "margin_right_pt": 0,
+      "frame_width_hmm": 180,
+      "frame_width_reference_pt": 12,
+      "box_extra_width_right_pt": 2.5,
+      "baseline_shift_pt": -4,
+      "inline_effect_extent_pt": 0,
+      "word_mac_compound_layout": "stack",
+      "compound_line_spacing_pt": 4,
+      "compound_box_padding_pt": 0.12
+    },
+    "onlyoffice_primary": "inline_image",
+    "onlyoffice_inline_image": {
+      "glyph_ratio": 0.42,
+      "compound_glyph_ratio": 0.34,
+      "compound_line_gap_ratio": -0.15,
+      "glyph_fill": 0.94,
+      "line_gap_ratio": 0,
+      "supersample": 4,
+      "headroom_em": 0.16,
+      "baseline_pad_em": 0,
+      "position_hps_per_pt": -0.72,
+      "compound_touch": true,
+      "compound_touch_overlap_ratio": 0.72,
+      "color": "#000000",
+      "font_family": "\"Hiragino Mincho ProN\",\"YuMincho\",\"Yu Mincho\",\"MS Mincho\",\"Songti SC\",\"SimSun\",serif"
+    },
+    "onlyoffice_inline": {
+      "font_size_ratio": 0.42,
+      "min_font_size_pt": 6,
+      "stack_direction": "top_to_bottom_first_mark_first",
+      "compound_layout": "stack",
+      "stack_step_hps": 0
+    }
+  },
+  "marks": [
+    {
+      "unicode": "U+3191",
+      "char": "㆑",
+      "marinamoji_shortcut": ";r",
+      "name": "re",
+      "display_glyph": "レ",
+      "stack_order": 10,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+3192",
+      "char": "㆒",
+      "marinamoji_shortcut": ";1",
+      "name": "one",
+      "display_glyph": "一",
+      "stack_order": 0,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+3193",
+      "char": "㆓",
+      "marinamoji_shortcut": ";2",
+      "name": "two",
+      "display_glyph": "二",
+      "stack_order": 1,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+3194",
+      "char": "㆔",
+      "marinamoji_shortcut": ";3",
+      "name": "three",
+      "display_glyph": "三",
+      "stack_order": 2,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+3195",
+      "char": "㆕",
+      "marinamoji_shortcut": ";4",
+      "name": "four",
+      "display_glyph": "四",
+      "stack_order": 3,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+3196",
+      "char": "㆖",
+      "marinamoji_shortcut": ";u",
+      "name": "top",
+      "display_glyph": "上",
+      "stack_order": 0,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+3197",
+      "char": "㆗",
+      "marinamoji_shortcut": ";m",
+      "name": "middle",
+      "display_glyph": "中",
+      "stack_order": 1,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+3198",
+      "char": "㆘",
+      "marinamoji_shortcut": ";d",
+      "name": "bottom",
+      "display_glyph": "下",
+      "stack_order": 2,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+3199",
+      "char": "㆙",
+      "marinamoji_shortcut": ";k",
+      "name": "first",
+      "display_glyph": "甲",
+      "stack_order": 0,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+319A",
+      "char": "㆚",
+      "marinamoji_shortcut": ";o",
+      "name": "second",
+      "display_glyph": "乙",
+      "stack_order": 1,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+319B",
+      "char": "㆛",
+      "marinamoji_shortcut": ";h",
+      "name": "third",
+      "display_glyph": "丙",
+      "stack_order": 2,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+319C",
+      "char": "㆜",
+      "marinamoji_shortcut": ";t",
+      "name": "fourth",
+      "display_glyph": "丁",
+      "stack_order": 3,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+319D",
+      "char": "㆝",
+      "marinamoji_shortcut": ";te",
+      "name": "heaven",
+      "display_glyph": "天",
+      "stack_order": 0,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+319E",
+      "char": "㆞",
+      "marinamoji_shortcut": ";ti",
+      "name": "earth",
+      "display_glyph": "地",
+      "stack_order": 1,
+      "format": "subscript"
+    },
+    {
+      "unicode": "U+319F",
+      "char": "㆟",
+      "marinamoji_shortcut": ";ji",
+      "name": "man",
+      "display_glyph": "人",
+      "stack_order": 2,
+      "format": "subscript"
+    }
+  ],
+  "punctuation_not_kanbun": [
+    {
+      "unicode": "U+30FB",
+      "char": "・",
+      "marinamoji_shortcut": ";.",
+      "note": "Inserted as-is; no kaeriten rendering"
+    },
+    {
+      "unicode": "U+3001",
+      "char": "、",
+      "marinamoji_shortcut": ";,",
+      "note": "Inserted as-is; no kaeriten rendering"
+    }
+  ],
+  "cluster_rule": "One contiguous run of marks (U+3190–U+319F) immediately after a single base character becomes one LibreOffice frame; glyphs sorted by stack_order ascending (top to bottom)."
+}
