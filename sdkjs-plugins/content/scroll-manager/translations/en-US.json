@@ -1,0 +1,9 @@
+{
+    "text_viewCard": "Document opened for the first time, saved position not found",
+    "text_clearPositionBtn": "Clear position",
+    "text_savePositionBtn": "Save position",
+    "text_pluginSettings": "PLUGIN SETTINGS",
+    "text_moveOnOpenCheckbox": "Go to saved position on open",
+    "text_saveOnCloseCheckbox": "Save position on close",
+    "text_clearAllBtn": "Clear all"
+}

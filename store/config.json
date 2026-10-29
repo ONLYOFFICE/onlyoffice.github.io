@@ -53,5 +53,6 @@
 	{ "name": "pdf-bookmarks", "discussion": "" },
 	{ "name": "naqsha", "discussion": "" },
     { "name": "quicktranslator", "discussion": ""},
-    { "name": "marinamoji", "discussion": ""}
+    { "name": "marinamoji", "discussion": ""},
+	{ "name": "scroll-manager", "discussion": "" }
 ]
