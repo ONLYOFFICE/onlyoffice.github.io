@@ -82,7 +82,19 @@
                     <span class="i18n">Application ID</span>
                     <input id="appIdField" autocomplete="off" class="i18n" type="text" placeholder="Application ID" />
                 </div>
+                <div id="appSecretWrapper" class="mrtop label hidden">
+                    <span class="i18n">Secret</span>
+                    <input id="appSecretField" autocomplete="off" class="i18n" type="password" placeholder="Secret" />
+                </div>
                 <button id="loginBtn" class="i18n" style="margin-top: 12px; width: 100%;">Login</button>
+                <div id="authCodeWrapper" class="hidden">
+                    <p class="i18n">Sign in to Mendeley in the opened browser, then copy the authorization code and paste it below.</p>
+                    <div class="label">
+                        <span class="i18n">Authorization code</span>
+                        <input id="authCodeField" autocomplete="off" class="i18n" type="text" placeholder="Authorization code" />
+                    </div>
+                    <button id="authCodeBtn" class="i18n" style="margin-top: 12px; width: 100%;">Confirm</button>
+                </div>
                 <div id="loginMessage"></div>
                 <p>
                     <span class="i18n">Click</span>

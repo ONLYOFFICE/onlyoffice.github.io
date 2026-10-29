@@ -38,13 +38,19 @@
 
 import { InputField, Button, Message } from "../shared/components";
 import { translate } from "../services";
+import { AuthCodeFlow } from "../sdk";
+
+const DESKTOP_REDIRECT_URL =
+    "https://onlyoffice.github.io/sdkjs-plugins/content/mendeley/oauth.html";
 
 class LoginPage {
     /**
      * @param {Router} router
+     * @param {boolean} isDesktop
      */
-    constructor(router) {
+    constructor(router, isDesktop) {
         this._router = router;
+        this._isDesktop = isDesktop;
         this._redirectConfigField = new InputField("redirectConfig", {
             readonly: true,
             showClear: false
@@ -57,9 +63,29 @@ class LoginPage {
             autocomplete: "on",
         });
 
+        this._appSecretField = new InputField("appSecretField", {
+            type: "password",
+            autocomplete: "off",
+        });
+
         this._loginBtn = new Button("loginBtn", {
             variant: "primary",
         });
+
+        this._authCodeField = new InputField("authCodeField", {
+            autocomplete: "off",
+        });
+        this._authCodeBtn = new Button("authCodeBtn", {
+            variant: "primary",
+        });
+
+        const appSecretWrapper = document.getElementById("appSecretWrapper");
+        const authCodeWrapper = document.getElementById("authCodeWrapper");
+        if (!appSecretWrapper || !authCodeWrapper) {
+            throw new Error("appSecretWrapper or authCodeWrapper not found");
+        }
+        this._appSecretWrapper = appSecretWrapper;
+        this._authCodeWrapper = authCodeWrapper;
 
         this._loginMessage = new Message("loginMessage", {
             type: "error",
@@ -72,6 +98,7 @@ class LoginPage {
 
         this._loginStateHash = "";
         this._mendAppId = "";
+        this._mendAppSecret = "";
 
         this._onAuthorized = function () {};
         this._onOpen = function () {};
@@ -79,16 +106,22 @@ class LoginPage {
 
     init() {
         const self = this;
-        const redirectUrl =
-            document.location.protocol +
-            "//" +
-            document.location.host +
-            document.location.pathname.replace("index.html", "oauth.html");
+        const redirectUrl = this._isDesktop
+            ? DESKTOP_REDIRECT_URL
+            : document.location.protocol +
+              "//" +
+              document.location.host +
+              document.location.pathname.replace("index.html", "oauth.html");
         this._redirectConfigField.setValue(redirectUrl);
 
         this._addEventListeners();
 
         this._mendAppId = localStorage.getItem("mendAppId") || "";
+        if (this._isDesktop) {
+            this._appSecretWrapper.classList.remove("hidden");
+            this._mendAppSecret = localStorage.getItem("mendAppSecret") || "";
+            this._appSecretField.setValue(this._mendAppSecret);
+        }
 
         const triggers = {
             /**
@@ -115,6 +148,19 @@ class LoginPage {
                 Promise.resolve().then(() => {
                     self._onAuthorized();
                 });
+                return triggers;
+            }
+            if (this._hasRefreshToken()) {
+                this._refreshToken()
+                    .then(function () {
+                        self._hide();
+                        self._onAuthorized();
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                        self._show();
+                        self._onOpen();
+                    });
                 return triggers;
             }
         }
@@ -160,6 +206,9 @@ class LoginPage {
                 return self._getToken();
             },
             refreshToken: function () {
+                if (self._hasRefreshToken()) {
+                    return self._refreshToken();
+                }
                 return false;
             },
         };
@@ -193,9 +242,21 @@ class LoginPage {
             }
             self._authenticate();
         });
+        this._authCodeField.subscribe(function (event) {
+            if (event.type === "inputfield:submit") {
+                self._confirmAuthCode();
+            }
+        });
+        this._authCodeBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
+            self._confirmAuthCode();
+        });
         this._logoutLink.onclick = function (e) {
             document.cookie = "mendToken=; max-age=0";
             localStorage.removeItem("mendToken");
+            localStorage.removeItem("mendRefreshToken");
             self._show();
             return true;
         };
@@ -215,6 +276,11 @@ class LoginPage {
             this._loginMessage.show(
                 translate("Please enter your Mendeley App ID"),
             );
+            return;
+        }
+
+        if (this._isDesktop) {
+            this._authenticateWithCode();
             return;
         }
 
@@ -241,6 +307,87 @@ class LoginPage {
                 this._hideLoader();
             }
         }, 500);
+    }
+
+    _authenticateWithCode() {
+        const secret = this._appSecretField.getValue();
+        if (!secret) {
+            this._loginMessage.show(translate("Secret is empty"));
+            return;
+        }
+        this._mendAppSecret = secret;
+        localStorage.setItem("mendAppSecret", secret);
+
+        this._loginStateHash = new Date().getTime().toString();
+        window.open(
+            this._getAuthCodeFlow().getAuthorizeUrl(this._loginStateHash),
+        );
+
+        this._authCodeField.clear();
+        this._authCodeWrapper.classList.remove("hidden");
+        this._authCodeField.focus();
+    }
+
+    _confirmAuthCode() {
+        const self = this;
+        const code = this._authCodeField.getValue().trim();
+        if (!code) {
+            this._loginMessage.show(translate("Authorization code is empty"));
+            return;
+        }
+
+        this._showLoader();
+        this._authCodeBtn.disable();
+        this._getAuthCodeFlow()
+            .exchangeCode(code)
+            .then(function (tokens) {
+                self._saveTokens(tokens);
+                self._authCodeField.clear();
+                self._authCodeWrapper.classList.add("hidden");
+                self._onAuthorized();
+                self._hide();
+            })
+            .catch(function (error) {
+                console.error(error);
+                self._loginMessage.show(
+                    translate(
+                        "Failed to sign in. Check the Application ID, the secret and the authorization code, then try again.",
+                    ),
+                );
+            })
+            .finally(function () {
+                self._hideLoader();
+                self._authCodeBtn.enable();
+            });
+    }
+
+    /** @returns {AuthCodeFlow} */
+    _getAuthCodeFlow() {
+        return new AuthCodeFlow(
+            this._mendAppId,
+            this._mendAppSecret,
+            this._redirectConfigField.getValue(),
+        );
+    }
+
+    /** @returns {boolean} */
+    _hasRefreshToken() {
+        return (
+            this._isDesktop &&
+            !!this._mendAppSecret &&
+            !!localStorage.getItem("mendRefreshToken")
+        );
+    }
+
+    /** @returns {Promise<void>} */
+    _refreshToken() {
+        const self = this;
+        const refreshToken = localStorage.getItem("mendRefreshToken") || "";
+        return this._getAuthCodeFlow()
+            .refresh(refreshToken)
+            .then(function (tokens) {
+                self._saveTokens(tokens);
+            });
     }
 
     _hideAllMessages() {}
@@ -275,10 +422,18 @@ class LoginPage {
         }
         return token;
     }
-    /** @param {string} token */
-    _saveToken(token) {
+    /**
+     * @param {string} token
+     * @param {number} [expiresIn] - milliseconds
+     */
+    _saveToken(token, expiresIn) {
         localStorage.setItem("mendToken", token);
-        localStorage.setItem("mendTokenExpiresAt", String(Date.now() + (60000 * 60))); // 1 hour
+        localStorage.setItem("mendTokenExpiresAt", String(Date.now() + (expiresIn || 60000 * 60))); // 1 hour by default
+    }
+    /** @param {import("../sdk/auth-code-flow").AuthCodeTokens} tokens */
+    _saveTokens(tokens) {
+        this._saveToken(tokens.accessToken, tokens.expiresIn);
+        localStorage.setItem("mendRefreshToken", tokens.refreshToken);
     }
 }
 

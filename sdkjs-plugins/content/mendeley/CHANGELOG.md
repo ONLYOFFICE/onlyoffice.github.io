@@ -39,3 +39,4 @@
 * Add MEDLINE journal title abbreviation option.
 * Add option to include URLs of paper articles.
 * Add bibliography preview to the settings page.
+* Add support for Desktop Editors: sign in with an authorization code and renew the session automatically.

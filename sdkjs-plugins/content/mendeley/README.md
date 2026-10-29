@@ -62,7 +62,21 @@ You will need to register the application.
 
 3. Press `Generate secret` and copy it.
 
-4. Insert the secret into the appropriate field in the plugin interface.
+4. Insert the Application ID into the appropriate field in the plugin interface and press `Login`.
+
+### Desktop Editors
+
+ONLYOFFICE Desktop Editors open the Mendeley sign-in page in the system browser, so the plugin uses an authorization code that you paste manually.
+
+1. Register the application as described above. The redirect URL shown in the plugin is `https://onlyoffice.github.io/sdkjs-plugins/content/mendeley/oauth.html`.
+
+2. Insert both the Application ID and the secret into the plugin and press `Login`.
+
+3. Sign in to Mendeley in the browser that opens. The page shows an authorization code: press `Copy`.
+
+4. Paste the code into the `Authorization code` field in the plugin and press `Confirm`.
+
+You only need to do this once: the plugin keeps your session and renews it automatically. The Application ID and the secret are stored locally in the editor.
 
 ## Known issues
 
@@ -77,8 +91,6 @@ After that restart the services:
 ```
 sudo supervisorctl restart ds:docservice
 ```
-
-This plugin doesn't work in desktop editor, because has problem with authorization. We know about this problem and will try to fix it in the feature.
 
 ## User feedback and support
 

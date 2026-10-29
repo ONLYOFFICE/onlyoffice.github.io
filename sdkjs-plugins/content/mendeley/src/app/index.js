@@ -146,21 +146,11 @@ import "../styles.css";
     }
 
     window.Asc.plugin.init = function () {
-        if (isLocal) {
-            const message = "This plugin doesn't work into Desktop Editors.";
-            const content = document.getElementById('content');
-            if (!content) {
-                console.error(message);
-                return false;
-            }
-			content.innerHTML = "<p id='message' style='text-align:center; font-size:14pt;' class='i18n';>" + message + "<\/p>";
-			return;
-		}
         Loader.show();
         initElements();
 
         router = new Router();
-        loginPage = new LoginPage(router);
+        loginPage = new LoginPage(router, isLocal);
 
         sdk = new Sdk({
             authFlow: loginPage.getAuthFlow()
