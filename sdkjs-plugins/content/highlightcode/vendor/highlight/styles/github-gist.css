@@ -83,7 +83,7 @@ p {
 .content::-moz-selection {
   background-color: #c8c8fa;
 }
-  
+
 span::selection {
   background-color: #c8c8fa;
 }

@@ -11,5 +11,9 @@
 	"Font settings": "Подешавања фонта",
 	"Format": "Формат",
 	"Available only for the following languages": "Доступно само за следеће језике",
-	"This plugin is not supported by IE": "Овај додатак није подржан у IE"
+	"This plugin is not supported by IE": "Овај додатак није подржан у IE",
+	"Monospace": "Фиксне ширине",
+	"Other": "Остали",
+	"Preview may use a substitute font": "Преглед можда користи заменски фонт",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "Прегледач можда нема овај фонт, па преглед може изгледати другачије. Документ ће користити изабрани фонт."
 }
