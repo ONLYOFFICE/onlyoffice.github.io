@@ -1,10 +1,11 @@
 /*
  * marinaMoji character composer -> ONLYOFFICE.
  *
- * Keep this panel open. On Insert the composer writes composer_result.js next
- * to index.html (svg and/or text). The panel polls that file (script tag,
- * # cache-bust only — a ?query breaks file:// on Desktop) and also checks the
- * clipboard for SVG, then inserts text or an inline PNG at the caret.
+ * Desktop Editors only. Keep this panel open. On Insert the composer writes
+ * composer_result.js next to index.html (svg and/or text). The panel polls that
+ * file with XHR (no eval; the fixed one-line format is parsed with JSON.parse)
+ * and inserts text or an inline PNG at the caret. The clipboard is read only
+ * when the user clicks "Insert composed".
  */
 (function () {
   "use strict";
@@ -22,7 +23,6 @@
   var busy = false;
   var memoryId = 0;
   var started = false;
-  var lastClipboardHash = "";
 
   function lastSeenId() {
     try {
@@ -52,10 +52,22 @@
     return { width: width || 100, height: height || 100 };
   }
 
-  function hashText(text) {
-    var h = 5381;
-    for (var i = 0; i < text.length; i++) h = ((h << 5) + h) ^ text.charCodeAt(i);
-    return (h >>> 0).toString(16);
+  // The composer both types a Unicode character through the input method and
+  // writes it to composer_result.js. Where the input method delivers it
+  // (macOS, Windows) the plugin must not insert it a second time. Only Linux
+  // Desktop is known to drop the input-method commit, so only there is a
+  // text hand-off inserted without being asked.
+  function insertsTextAutomatically() {
+    var ua = String((window.navigator && window.navigator.userAgent) || "");
+    return /Linux|X11/i.test(ua) && !/Android|Mac OS X|Windows/i.test(ua);
+  }
+
+  function isDesktop() {
+    try {
+      return !!(window.AscDesktopEditor || (window.parent && window.parent.AscDesktopEditor));
+    } catch (e) {
+      return !!window.AscDesktopEditor;
+    }
   }
 
   function svgToPng(svg) {
@@ -215,6 +227,7 @@
       return false;
     }
     busy = true;
+    rememberId(id);
     setStatus("Inserting character…");
     var asc = window.Asc;
     var settled = false;
@@ -290,6 +303,7 @@
       return false;
     }
     busy = true;
+    rememberId(id);
     setStatus("Inserting composed character…");
     svgToPng(svg)
       .then(function (png) {
@@ -326,25 +340,38 @@
     }
   }
 
-  function loadComposerResultViaXhr() {
+  // The IME writes exactly: window.marinaMojiComposerResult={id:N[,svg:"…"][,text:"…"]};
+  // Match that shape and hand the string literals to JSON.parse.
+  var RESULT_RE =
+    /^\s*window\.marinaMojiComposerResult\s*=\s*\{\s*id:\s*(\d+)\s*(?:,\s*svg:\s*("(?:[^"\\\r\n]|\\.)*"))?\s*(?:,\s*text:\s*("(?:[^"\\\r\n]|\\.)*"))?\s*\}\s*;?\s*$/;
+
+  function parseComposerResult(source) {
+    var m = RESULT_RE.exec(source);
+    if (!m) return undefined;
+    try {
+      var result = { id: Number(m[1]) };
+      if (m[2]) result.svg = JSON.parse(m[2]);
+      if (m[3]) result.text = JSON.parse(m[3]);
+      return result;
+    } catch (e) {
+      return undefined;
+    }
+  }
+
+  function loadComposerResult() {
     return new Promise(function (resolve) {
-      window.marinaMojiComposerResult = undefined;
       var xhr = new XMLHttpRequest();
       try {
-        // No ?query — that breaks file:// on Desktop. Bust cache with open+send timing.
+        // No ?query — that breaks file:// on Desktop.
         xhr.open("GET", composerResultBaseUrl(), true);
         xhr.overrideMimeType("text/plain; charset=utf-8");
         xhr.onload = function () {
           if (xhr.status === 0 || (xhr.status >= 200 && xhr.status < 300)) {
-            try {
-              // Same assignment as the .js file; avoids <script> injection quirks.
-              // eslint-disable-next-line no-eval
-              eval(xhr.responseText);
-            } catch (e) {
-              setStatus("composer_result.js parse error: " + (e && e.message ? e.message : e));
-            }
+            var result = parseComposerResult(xhr.responseText);
+            resolve(result);
+          } else {
+            resolve(undefined);
           }
-          resolve(window.marinaMojiComposerResult);
         };
         xhr.onerror = function () {
           resolve(undefined);
@@ -353,36 +380,6 @@
       } catch (e) {
         resolve(undefined);
       }
-    });
-  }
-
-  function loadComposerResultViaScript() {
-    return new Promise(function (resolve) {
-      window.marinaMojiComposerResult = undefined;
-      var old = document.getElementById("composer-result-script");
-      if (old && old.parentNode) old.parentNode.removeChild(old);
-      var s = document.createElement("script");
-      s.id = "composer-result-script";
-      s.charset = "utf-8";
-      var settled = false;
-      function finish() {
-        if (settled) return;
-        settled = true;
-        resolve(window.marinaMojiComposerResult);
-      }
-      s.onload = finish;
-      s.onerror = finish;
-      // # cache-bust only — a ?query breaks file:// on Desktop.
-      s.src = composerResultBaseUrl() + "#" + Date.now();
-      document.head.appendChild(s);
-      window.setTimeout(finish, 800);
-    });
-  }
-
-  function loadComposerResult() {
-    return loadComposerResultViaXhr().then(function (result) {
-      if (result) return result;
-      return loadComposerResultViaScript();
     });
   }
 
@@ -409,7 +406,15 @@
     }
     loadComposerResult().then(function (result) {
       // Unicode character from the composer (IBus may also try; often fails in Desktop).
-      if (result && result.text && insertText(result.text, result.id, opts)) return;
+      if (result && result.text && !opts.force && !insertsTextAutomatically()) {
+        // The input method already typed it.
+        if (!result.svg) {
+          if (Number(result.id) > Math.max(lastSeenId(), memoryId)) rememberId(Number(result.id));
+          return;
+        }
+      } else if (result && result.text && insertText(result.text, result.id, opts)) {
+        return;
+      }
       if (result && insertSvg(result.svg, result.id, opts)) return;
       if (opts.force && result) {
         setStatus("Loaded composer_result.js but it has no usable svg/text.");
@@ -419,16 +424,13 @@
         setStatus("Could not load composer_result.js next to the plugin.");
         return;
       }
+      if (!opts.force) return;
       return readClipboardSvg().then(function (svg) {
         if (!svg) {
-          if (opts.force) {
-            setStatus("No composer_result.js and no SVG on the clipboard.");
-          }
+          setStatus("No composer_result.js and no SVG on the clipboard.");
           return;
         }
-        var h = hashText(svg);
-        if (!opts.force && h === lastClipboardHash) return;
-        if (insertSvg(svg, Date.now(), opts)) lastClipboardHash = h;
+        insertSvg(svg, Date.now(), opts);
       });
     });
   }
@@ -502,8 +504,17 @@
     });
   }
 
+  function hideSection() {
+    var el = document.getElementById("composer-section");
+    if (el) el.style.display = "none";
+  }
+
   function startPolling() {
     if (started) return;
+    if (!isDesktop()) {
+      hideSection();
+      return;
+    }
     started = true;
     setStatus("Composer: waiting for a composed character.");
     poll();
@@ -514,12 +525,16 @@
     refreshSizes: refreshSizes,
     // Manual button: retry even if this id was already marked seen.
     pollNow: function () {
-      poll({ force: true });
+      if (isDesktop()) poll({ force: true });
     },
     start: startPolling,
   };
 
   function arm() {
+    if (!isDesktop()) {
+      hideSection();
+      return;
+    }
     if (!window.Asc || !window.Asc.plugin) {
       setStatus("Open this panel from Plugins → marinaMoji.");
       window.setTimeout(arm, 500);

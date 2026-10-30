@@ -4,6 +4,16 @@ Version history for the ONLYOFFICE Document Editor plugin. Marketplace updates r
 
 ## Unreleased
 
+## 0.1.20 - 2026-10-30
+
+* Character composer hand-off runs only in ONLYOFFICE Desktop Editors (`AscDesktopEditor` present). In the web editor the "Character composer" section is hidden and nothing is polled, so there are no per-second requests or console errors.
+* The clipboard is no longer read in the background. It is read only when the user clicks **Insert composed**; copied SVG from other pages or apps is never inserted on its own.
+* `composer_result.js` is no longer executed (`eval` and the `<script>` fallback are gone). The fixed one-line format the composer writes is matched and its string literals are read with `JSON.parse`, so it also works under a strict Content Security Policy.
+* A hand-off is marked as seen as soon as its insert starts, so a `callCommand` timeout can no longer insert the same character twice. **Insert composed** still retries on demand.
+* Reported by the ONLYOFFICE Marketplace reviewer.
+* A composed Unicode character (not a drawing) is no longer inserted a second time on macOS and Windows: the input method already types it, so the hand-off text is ignored there unless you click **Insert composed**. Linux Desktop, where the input-method commit can be lost, still inserts it.
+* Plugin Manager tile now uses the marinaMoji header logo on a light background (`store.background` is `#fdfdfd`).
+
 ## 0.1.19 - 2026-10-30
 
 * Render on an already rendered paragraph now replaces only the existing marinaMoji views (matched by tag) and the raw marks, and leaves the rest of the paragraph alone. Before, a second Render rebuilt the whole paragraph: a hyperlink inside it was lost (Unrender could not bring it back) and bold/colour were reset to the first run's style. A paragraph that holds other content (hyperlinks, fields) is never rebuilt, and hyperlink text now counts as part of the paragraph's canonical text. Reported by the ONLYOFFICE Marketplace reviewer. Checked on the reviewer's example (hyperlink, bold, colour; Render, Render, Unrender) in ONLYOFFICE Desktop, and with an in-memory model of the document API (`tests/render_refresh.test.js`).
