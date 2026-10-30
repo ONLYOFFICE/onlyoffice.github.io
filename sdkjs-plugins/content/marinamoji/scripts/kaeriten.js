@@ -43,6 +43,12 @@
       imageHeadroomEm: Number(ooImg.headroom_em ?? 0),
       imageBaselinePadEm: Number(ooImg.baseline_pad_em ?? 0),
       imagePositionHps: Number(ooImg.position_hps ?? 0),
+      imageBottomLineEm:
+        ooImg.bottom_line_em != null && ooImg.bottom_line_em !== ""
+          ? Number(ooImg.bottom_line_em)
+          : null,
+      imageFontBottomLineEm: ooImg.font_bottom_line_em || {},
+      imageInkInsetEm: Number(ooImg.ink_inset_em ?? 0.056),
       imagePositionHpsPerPt:
         ooImg.position_hps_per_pt != null && ooImg.position_hps_per_pt !== ""
           ? Number(ooImg.position_hps_per_pt)
@@ -74,23 +80,29 @@
     );
   }
 
-  function renderFingerprint(opts, hostPt) {
+  function fingerprintFont(fontName) {
+    return String(fontName || "").replace(/[|;=]/g, "");
+  }
+
+  function renderFingerprint(opts, hostPt, fontName) {
     const pt = Number.isFinite(Number(hostPt))
       ? Number(hostPt)
       : Math.max(opts.minFontSizePt, 8);
     return [
-      "v1",
+      "v2",
       "renderer=" + (opts.useImages ? "image" : "control"),
       "pt=" + pt.toFixed(1),
+      "font=" + fingerprintFont(fontName),
       "rh=" + renderingHash(),
     ].join("|");
   }
 
   function renderFingerprintTemplate(opts) {
     return [
-      "v1",
+      "v2",
       "renderer=" + (opts.useImages ? "image" : "control"),
       "pt={pt}",
+      "font={font}",
       "rh=" + renderingHash(),
     ].join("|");
   }
@@ -335,9 +347,32 @@
             return fallback;
           }
 
-          function fingerprintForFontSize(fontSizePt) {
+          function textPrFontName(textPr) {
+            try {
+              return textPr && textPr.GetFontFamily ? textPr.GetFontFamily() || "" : "";
+            } catch (e) {
+              return "";
+            }
+          }
+
+          function paragraphFontName(para) {
+            var name = "";
+            var ec = para.GetElementsCount ? para.GetElementsCount() : 0;
+            for (var e = 0; e < ec && !name; e++) {
+              var child = para.GetElement(e);
+              if (!child || !child.GetText || !child.GetText()) continue;
+              if (child.GetTextPr) name = textPrFontName(child.GetTextPr());
+            }
+            if (!name && para.GetTextPr) name = textPrFontName(para.GetTextPr());
+            if (!name && doc.GetDefaultTextPr) name = textPrFontName(doc.GetDefaultTextPr());
+            return name;
+          }
+
+          function fingerprintForFontSize(fontSizePt, fontName) {
             if (!fpTemplate) return "";
-            return fpTemplate.replace("{pt}", Number(fontSizePt || defaultFontSizePt).toFixed(1));
+            return fpTemplate
+              .replace("{pt}", Number(fontSizePt || defaultFontSizePt).toFixed(1))
+              .replace("{font}", String(fontName || "").replace(/[|;=]/g, ""));
           }
 
           function elementTag(el) {
@@ -356,6 +391,13 @@
               return;
             }
             var type = el.GetClassType ? el.GetClassType() : "";
+            if (type === "hyperlink") {
+              // ApiHyperlink has no GetText; without this its text drops out of
+              // the canonical paragraph text.
+              var shown = el.GetDisplayedText ? el.GetDisplayedText() : "";
+              state.text += shown || "";
+              return;
+            }
             var childCount = el.GetElementsCount ? el.GetElementsCount() : 0;
             if ((type === "run" || type === "inlineLvlSdt") && childCount > 0) {
               for (var i = 0; i < childCount; i++) {
@@ -373,7 +415,8 @@
             var raw = para.GetText ? para.GetText() || "" : "";
             var hasRawMarks = /[\u3190-\u319f]/.test(raw);
             var fontSizePt = paragraphFontSizePt(para);
-            var currentFp = fingerprintForFontSize(fontSizePt);
+            var fontName = paragraphFontName(para);
+            var currentFp = fingerprintForFontSize(fontSizePt, fontName);
             var ec = para.GetElementsCount ? para.GetElementsCount() : 0;
             for (var e = 0; e < ec; e++) {
               appendElementCanonical(para.GetElement(e), currentFp, state);
@@ -383,6 +426,7 @@
               stale: state.stale,
               hasRawMarks: hasRawMarks,
               fontSizePt: fontSizePt,
+              fontName: fontName,
             };
           }
 
@@ -391,7 +435,12 @@
             if (el.GetClassType && el.GetClassType() === "paragraph") {
               var para = paragraphCanonical(el);
               if (para.hasRawMarks || para.stale) {
-                out.push({ index: i, text: para.text, fontSizePt: para.fontSizePt });
+                out.push({
+                  index: i,
+                  text: para.text,
+                  fontSizePt: para.fontSizePt,
+                  fontName: para.fontName,
+                });
               }
             }
           }
@@ -410,6 +459,31 @@
     });
   }
 
+  /**
+   * Run position (half-points) that puts the mark's ink on the characters' bottom line:
+   * the picture's bottom rests on the baseline at position 0 and the glyph ink is
+   * `imageInkInsetEm` above it, so lower it by bottom line + inset. Falls back to the
+   * fixed shift when `bottom_line_em` is not set.
+   */
+  function imagePositionHps(opts, hostPt, fontName) {
+    if (opts.imageBottomLineEm != null && Number.isFinite(opts.imageBottomLineEm)) {
+      const font = String(fontName || "").toLowerCase();
+      const table = opts.imageFontBottomLineEm || {};
+      const names = Object.keys(table).sort((a, b) => b.length - a.length);
+      let bottomLineEm = opts.imageBottomLineEm;
+      for (let i = 0; i < names.length; i++) {
+        if (font && font.indexOf(names[i].toLowerCase()) === 0) {
+          bottomLineEm = Number(table[names[i]]);
+          break;
+        }
+      }
+      return Math.round(-(bottomLineEm + opts.imageInkInsetEm) * hostPt * 2);
+    }
+    return opts.imagePositionHpsPerPt != null
+      ? Math.round(hostPt * opts.imagePositionHpsPerPt)
+      : opts.imagePositionHps;
+  }
+
   function buildRenderPlan(paragraphs, opts) {
     const plan = [];
     for (const para of paragraphs) {
@@ -417,17 +491,14 @@
         opts.minFontSizePt,
         Number.isFinite(Number(para.fontSizePt)) ? Number(para.fontSizePt) : 8
       );
-      const fp = renderFingerprint(opts, hostPt);
+      const fp = renderFingerprint(opts, hostPt, para.fontName);
       const segments = MarinaMojiExport.buildSegments(para.text, byChar).map((seg) => {
         if (seg.type !== "kaeriten") return seg;
         const glyphLines = MarinaMojiExport.glyphLinesForMarks(seg.marks, byChar);
         const view = { tag: encodeTag(seg.marks, fp) };
         if (opts.useImages) {
           view.image = drawKaeritenImage(glyphLines, opts, hostPt);
-          view.positionHps =
-            opts.imagePositionHpsPerPt != null
-              ? Math.round(hostPt * opts.imagePositionHpsPerPt)
-              : opts.imagePositionHps;
+          view.positionHps = imagePositionHps(opts, hostPt, para.fontName);
         }
         return {
           ...seg,
@@ -593,15 +664,12 @@
           }
 
           /**
-           * Prefer replacing only mark characters inside existing runs so the rest
-           * of the paragraph (bold, links, etc.) stays intact. Fall back to a full
-           * rebuild when the paragraph already holds marinaMoji views.
+           * Replace only mark characters inside existing runs so the rest of the
+           * paragraph (bold, links, etc.) stays intact. Existing views are handled
+           * by refreshViewsInPlace.
            */
           function fillParagraphInPlace(oPara, segments, localFontSizePt) {
-            var markMap = {};
-            for (var s = 0; s < segments.length; s++) {
-              if (segments[s].type === "kaeriten") markMap[segments[s].marks] = segments[s];
-            }
+            var markMap = markMapOf(segments);
             var markRe = /[\u3190-\u319f]+/g;
             var touched = false;
             var ec = oPara.GetElementsCount ? oPara.GetElementsCount() : 0;
@@ -647,6 +715,71 @@
             return touched;
           }
 
+          function marksFromTag(tag) {
+            if (!tag || tag.indexOf(sourcePrefix) !== 0) return null;
+            return tag.substring(sourcePrefix.length).split(";")[0] || null;
+          }
+
+          /** Source marks if el is (or wraps) a marinaMoji view, else null. */
+          function viewMarksOf(el) {
+            if (!el) return null;
+            var marks = marksFromTag(el.GetTag ? el.GetTag() || "" : "");
+            if (marks) return marks;
+            marks = marksFromTag(el.GetName ? el.GetName() || "" : "");
+            if (marks) return marks;
+            var alias = el.GetAlias ? el.GetAlias() || "" : "";
+            if (/^[\u3190-\u319f]+$/.test(alias)) return alias;
+            var count = el.GetElementsCount ? el.GetElementsCount() : 0;
+            for (var i = 0; i < count; i++) {
+              var inner = viewMarksOf(el.GetElement(i));
+              if (inner) return inner;
+            }
+            return null;
+          }
+
+          function markMapOf(segments) {
+            var map = {};
+            for (var s = 0; s < segments.length; s++) {
+              if (segments[s].type === "kaeriten") map[segments[s].marks] = segments[s];
+            }
+            return map;
+          }
+
+          /**
+           * Replace only the existing marinaMoji views (matched by tag) with fresh
+           * ones. Everything else in the paragraph (hyperlinks, formatted runs,
+           * fields) is left exactly as it is.
+           */
+          function refreshViewsInPlace(oPara, markMap, localFontSizePt) {
+            var touched = false;
+            var ec = oPara.GetElementsCount ? oPara.GetElementsCount() : 0;
+            for (var e = ec - 1; e >= 0; e--) {
+              var el = oPara.GetElement(e);
+              var type = el && el.GetClassType ? el.GetClassType() : "";
+              if (type !== "inlineLvlSdt" && type !== "run") continue;
+              var marks = viewMarksOf(el);
+              if (!marks || !markMap[marks]) continue;
+              var view = createKaeritenView(markMap[marks], localFontSizePt);
+              if (!view || !view.el) continue;
+              // Same pattern as Unrender: insert the new view, then drop the old one.
+              insertViewAt(oPara, e, view);
+              oPara.RemoveElement(e + 1);
+              touched = true;
+            }
+            return touched;
+          }
+
+          /** True when the paragraph holds only runs and inline controls. */
+          function paragraphIsPlain(oPara) {
+            var ec = oPara.GetElementsCount ? oPara.GetElementsCount() : 0;
+            for (var e = 0; e < ec; e++) {
+              var el = oPara.GetElement(e);
+              var type = el && el.GetClassType ? el.GetClassType() : "";
+              if (type !== "run" && type !== "inlineLvlSdt") return false;
+            }
+            return true;
+          }
+
           function fillParagraphRebuild(oPara, segments, localFontSizePt) {
             var styleRun = null;
             var ec0 = oPara.GetElementsCount ? oPara.GetElementsCount() : 0;
@@ -677,32 +810,14 @@
 
           function fillParagraph(oPara, segments, itemFontSizePt) {
             var localFontSizePt = itemFontSizePt || fontSizePt;
-            var hasViews = false;
-            var ec = oPara.GetElementsCount ? oPara.GetElementsCount() : 0;
-            for (var e = 0; e < ec; e++) {
-              var el = oPara.GetElement(e);
-              if (!el) continue;
-              var type = el.GetClassType ? el.GetClassType() : "";
-              if (type === "inlineLvlSdt") {
-                hasViews = true;
-                break;
-              }
-              if (type === "run" && el.GetElementsCount && el.GetElementsCount() > 0) {
-                for (var r = 0; r < el.GetElementsCount(); r++) {
-                  var inner = el.GetElement(r);
-                  var it = inner && inner.GetClassType ? inner.GetClassType() : "";
-                  if (it === "inlineLvlSdt" || it === "drawing" || it === "image") {
-                    hasViews = true;
-                    break;
-                  }
-                }
-              }
-              if (hasViews) break;
+            var refreshed = refreshViewsInPlace(oPara, markMapOf(segments), localFontSizePt);
+            var split = fillParagraphInPlace(oPara, segments, localFontSizePt);
+            if (refreshed || split) return;
+            // Last resort: rebuild, but only a paragraph made of nothing but runs
+            // and controls. Anything else (hyperlinks, fields...) would be lost.
+            if (paragraphIsPlain(oPara)) {
+              fillParagraphRebuild(oPara, segments, localFontSizePt);
             }
-            if (!hasViews && fillParagraphInPlace(oPara, segments, localFontSizePt)) {
-              return;
-            }
-            fillParagraphRebuild(oPara, segments, localFontSizePt);
           }
 
           for (var p = 0; p < plan.length; p++) {
@@ -747,7 +862,16 @@
   }
 
   function runRender() {
-    return renderAllViews("Rendering…", "Rendered");
+    // Composed-character pictures follow the font size too; do them first.
+    const composer = window.MarinaMojiComposer;
+    const sizes = composer && composer.refreshSizes ? composer.refreshSizes() : Promise.resolve(0);
+    return sizes.then((resized) => {
+      renderAllViews("Rendering…", "Rendered");
+      if (resized) {
+        const el = document.getElementById("composer-status");
+        if (el) el.textContent = resized + " composed character(s) resized.";
+      }
+    });
   }
 
   function runUnrender() {
@@ -990,6 +1114,16 @@
         wire("btn-render", runRender);
         wire("btn-unrender", runUnrender);
         wire("btn-plain", runCopyPlain);
+        wire("btn-composed-insert", () => {
+          const composer = window.MarinaMojiComposer;
+          const status = document.getElementById("composer-status");
+          if (status) status.textContent = "Insert composed: loading…";
+          if (composer && composer.pollNow) composer.pollNow();
+          else if (status) status.textContent = "Composer hand-off script not loaded.";
+        });
+        if (window.MarinaMojiComposer && window.MarinaMojiComposer.start) {
+          window.MarinaMojiComposer.start();
+        }
       })
       .catch((err) => setStatus(String(err.message || err), true));
   };
