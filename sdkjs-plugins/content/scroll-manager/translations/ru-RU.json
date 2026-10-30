@@ -1,0 +1,9 @@
+{
+    "text_viewCard": "Документ открыт впервые, сохраненная позиция не найдена",
+    "text_clearPositionBtn": "Стереть позицию",
+    "text_savePositionBtn": "Сохранить позицию",
+    "text_pluginSettings": "НАСТРОЙКИ ПЛАГИНА",
+    "text_moveOnOpenCheckbox": "Перемещаться при открытии",
+    "text_saveOnCloseCheckbox": "Сохранять позицию при закрытии",
+    "text_clearAllBtn": "Стереть все"
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>marinaMoji</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script
+    type="text/javascript"
+    src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
+  ></script>
+  <script type="text/javascript" src="scripts/exportCore.js"></script>
+  <script type="text/javascript" src="scripts/kaeriten.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img id="logo" class="logo" src="resources/light/icon-sidebar.png" width="32" height="32" alt="" />
+      <h1>marinaMoji</h1>
+    </div>
+    <p class="slogan">Make room for character</p>
+    <p class="lead">Unicode source <span class="sample">說㆒㆑者</span> → stacked views</p>
+  </header>
+
+  <section>
+    <h2>Format</h2>
+    <div class="btn-row">
+      <button type="button" id="btn-render">Render</button>
+      <button type="button" id="btn-unrender">Unrender</button>
+    </div>
+    <p class="hint">Processes paragraphs that contain Kanbun marks.</p>
+  </section>
+
+  <section>
+    <h2>Copy</h2>
+    <div class="btn-row">
+      <button type="button" id="btn-plain">Plain text</button>
+    </div>
+    <p class="hint">Selection if highlighted, else whole document.</p>
+  </section>
+
+  <p id="status" class="status" role="status">Loading…</p>
+</body>
+</html>

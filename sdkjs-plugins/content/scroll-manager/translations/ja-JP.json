@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "ドキュメントが初めて開かれました。保存された位置が見つかりません",
+  "text_clearPositionBtn": "位置を消去",
+  "text_savePositionBtn": "位置を保存",
+  "text_pluginSettings": "プラグイン設定",
+  "text_moveOnOpenCheckbox": "開くときに保存された位置へ移動",
+  "text_saveOnCloseCheckbox": "閉じるときに位置を保存",
+  "text_clearAllBtn": "すべて消去"
+}
