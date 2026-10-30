@@ -517,6 +517,14 @@ const UI = {
                 '<line x1="12" y1="22.08" x2="12" y2="12"></line>' +
                 '</svg></span>';
         }
+        const platform = Utils.getPluginPlatform(config);
+        if (platform && platform !== Utils.getCurrentPlatform()) {
+            intro += '<span class="platform-warning-icon" title="' + Utils.getPlatformNote(platform) + '">' +
+                '<svg width="18" height="18" viewBox="0 0 40 40" fill="none">' +
+                '<path d="M3.25245 31.1904L18.366 4.94276C19.0898 3.68575 20.9102 3.68575 21.634 4.94275L36.7475 31.1904C37.4678 32.4412 36.5612 34 35.1136 34H4.88642C3.43881 34 2.53225 32.4412 3.25245 31.1904Z" fill="#FFD112"></path>' +
+                '<path fill-rule="evenodd" clip-rule="evenodd" d="M21 25H19L18 18V12H22V18L21 25ZM22 31H18V27H22V31Z" fill="white"></path>' +
+                '</svg></span>';
+        }
         intro += '<div class="rating">' +
                     this._makeRatingElements(config.rating, Utils.getTranslated('Not rated')) +
                 '</div>' +
