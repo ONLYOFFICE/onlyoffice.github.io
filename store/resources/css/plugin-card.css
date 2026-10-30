@@ -30,6 +30,8 @@ a.link {
 .pc-editor-badges-label { font-size: 13px; margin-right: 8px; }
 .pc-editor-badges .editor-badge { width: 13.5px; height: 18px; border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 0px 1px inset; }
 .pc-editor-badges .editor-badge:not(:last-child) { margin-right: 6px; }
+.pc-editor-badges .platform-badge { margin-left: 4px; padding: 0 7px; font-size: 11px; line-height: 16px; white-space: nowrap; border: 1px solid currentColor; border-radius: 9px; opacity: 0.75; }
+.pc-editor-badges .platform-badge-warning { opacity: 1; color: #6b4e00; background: #fff1c2; border-color: #f0b400; }
 .pc-stats { display: flex; flex-wrap: wrap; align-items: baseline;}
 .pc-rating { display: flex; align-items: baseline; margin-right: 10px; }
 .pc-rating > span:last-child { margin-left: 4px; }

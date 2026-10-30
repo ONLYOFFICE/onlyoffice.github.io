@@ -347,6 +347,11 @@ main {
 		height: 18px;
 		margin-right: 8px;
 	}
+	.plugin-plate .platform-warning-icon {
+		width: 18px;
+		height: 18px;
+		margin-right: 8px;
+	}
 	.plugin-plate > *:not(:last-child) {
 		margin-bottom: 12px;
 	}

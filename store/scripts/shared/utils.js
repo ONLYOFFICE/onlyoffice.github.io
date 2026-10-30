@@ -38,6 +38,8 @@
  * @property {string} versionWarning
  * @property {string} installed
  * @property {string} marketplace
+ * @property {string} webOnly
+ * @property {string} desktopOnly
  */
 
 const Utils = {
@@ -54,7 +56,9 @@ const Utils = {
     _MESSAGES: {
         versionWarning: 'This plugin will only work in a newer version of the editor.',
         installed: 'Install plugin manually',
-        marketplace: 'Submit your own plugin'
+        marketplace: 'Submit your own plugin',
+        webOnly: 'Works only in the web version',
+        desktopOnly: 'Works only in the desktop editors'
     },
 
     /** @type {Object<string, string>} */
@@ -133,6 +137,35 @@ const Utils = {
         }
         throw new Error("Message key " + messageKey + " not found in MESSAGES");
     }, 
+    /**
+     * The one platform a plugin limits itself to in variations[0].store.platforms.
+     * @param {PluginInfo} config
+     * @returns {'desktop' | 'web' | ''}
+     */
+    getPluginPlatform: function(config) {
+        const variation = config && config.variations && config.variations[0];
+        /** @type {{platforms?: string[]} | undefined} */
+        const store = /** @type {any} */ (variation && variation.store);
+        const platforms = store && Array.isArray(store.platforms) ? store.platforms : [];
+        const isWeb = platforms.indexOf('web') !== -1;
+        const isDesktop = platforms.indexOf('desktop') !== -1;
+        if (isWeb === isDesktop)
+            return '';
+        return isWeb ? 'web' : 'desktop';
+    },
+    /**
+     * @returns {'desktop' | 'web'} 'desktop' or 'web'
+     */
+    getCurrentPlatform: function() {
+        return window.AscDesktopEditor !== undefined ? 'desktop' : 'web';
+    },
+    /**
+     * @param {'web' | 'desktop'} platform 'web' or 'desktop'
+     * @returns {string}
+     */
+    getPlatformNote: function(platform) {
+        return this.getTranslatedMessage(platform === 'web' ? 'webOnly' : 'desktopOnly');
+    },
     /**
      * @param {PluginInfo} plugin
      */
