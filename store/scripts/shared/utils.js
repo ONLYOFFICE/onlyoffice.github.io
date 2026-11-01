@@ -154,17 +154,26 @@ const Utils = {
         return isWeb ? 'web' : 'desktop';
     },
     /**
-     * @returns {'desktop' | 'web'} 'desktop' or 'web'
-     */
-    getCurrentPlatform: function() {
-        return window.AscDesktopEditor !== undefined ? 'desktop' : 'web';
-    },
-    /**
      * @param {'web' | 'desktop'} platform 'web' or 'desktop'
      * @returns {string}
      */
     getPlatformNote: function(platform) {
         return this.getTranslatedMessage(platform === 'web' ? 'webOnly' : 'desktopOnly');
+    },
+    /**
+     * The same icon goes to the plate and the card, so the labelled one on the card explains the bare one in the list.
+     * @param {'web' | 'desktop'} platform 'web' or 'desktop'
+     * @param {number} size in pixels
+     * @returns {string}
+     */
+    getPlatformIconHtml: function(platform, size) {
+        return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            (platform === 'web'
+                ? '<circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>' +
+                    '<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>'
+                : '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>' +
+                    '<line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>') +
+            '</svg>';
     },
     /**
      * @param {PluginInfo} plugin

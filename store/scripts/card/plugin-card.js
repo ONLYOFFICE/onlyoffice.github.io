@@ -665,7 +665,7 @@ const PluginCard = {
         return '<span class="pc-editor-badges-label i18n">' + Utils.getTranslated('Works with') + '</span>' + icons;
     },
     /**
-     * On the other platform it carries a warning mark, so the user knows before installing.
+     * The platform a plugin is limited to, shown next to the editors it works with.
      * @param {PluginInfo} config
      * @returns {string} empty when the plugin works everywhere
      */
@@ -675,8 +675,7 @@ const PluginCard = {
             return '';
         }
         const name = Utils.getTranslated(platform === 'web' ? 'Web' : 'Desktop');
-        const isUnsupported = platform !== Utils.getCurrentPlatform();
-        return '<span class="platform-badge' + (isUnsupported ? ' platform-badge-warning' : '') + '" title="' + Utils.getPlatformNote(platform) + '">' + name + '</span>';
+        return '<span class="platform-badge" title="' + Utils.getPlatformNote(platform) + '">' + Utils.getPlatformIconHtml(platform, 12) + name + '</span>';
     },
 
     /**
