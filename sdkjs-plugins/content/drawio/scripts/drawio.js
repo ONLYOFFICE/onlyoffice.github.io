@@ -37,40 +37,48 @@
 	var loader;
 	var lang = "";
 	var title = "Click on diagram to edit."
-	var STORAGE_KEY = "drawio_export_format";
+	var formatLabel = "Insert as:";
+	var FORMAT_STORAGE_KEY = "drawio_insert_format";
+	var DEFAULT_FORMAT = "xmlpng";
 
-	function getExportFormat()
+	// the format chosen last time, used for new diagrams
+	function getPreferredFormat()
 	{
 		try {
-			return localStorage.getItem(STORAGE_KEY) || 'xmlsvg';
+			var format = localStorage.getItem(FORMAT_STORAGE_KEY);
+			return (format === "xmlpng" || format === "xmlsvg") ? format : DEFAULT_FORMAT;
 		} catch (e) {
-			return 'xmlsvg';
+			// localStorage may be blocked in sandboxed environments
+			return DEFAULT_FORMAT;
 		}
 	};
 
-	function setExportFormat(format)
+	function savePreferredFormat(format)
 	{
 		try {
-			localStorage.setItem(STORAGE_KEY, format);
+			localStorage.setItem(FORMAT_STORAGE_KEY, format);
 		} catch (e) {
 			// localStorage may be blocked in sandboxed environments
 		}
 	};
 
-	function initFormatSelector()
+	// the selector is shown only while the diagram editor is open: the format is applied when the diagram is exported from it
+	function showFormatSelector(bShow)
 	{
-		var select = document.getElementById('format-select');
+		if (bShow && editor)
+			document.getElementById("format-select").value = editor.format;
+		document.getElementById("format-selector").classList.toggle("hidden", !bShow);
+	};
 
-		if (select) {
-			select.value = getExportFormat();
-			select.addEventListener('change', function() {
-				setExportFormat(this.value);
+	function onEditorLoaded()
+	{
+		hideLoader();
+		showFormatSelector(true);
+	};
 
-				if (editor) {
-					editor.format = this.value;
-				}
-			});
-		}
+	DiagramEditor.prototype.stopped = function()
+	{
+		showFormatSelector(false);
 	};
 
 	window.Asc.plugin.init = function(data)
@@ -79,24 +87,29 @@
 		img = document.createElement('img');
 		img.setAttribute('title', title)
 		document.getElementById("div_preview").appendChild(img);
+		var bNewDiagram = !data;
 		// create an empty image for editor (if data doesn't set), after export we put the result in it
-		if (!data)
+		if (bNewDiagram)
 			data = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII=";
 
 		img.setAttribute('src', data);
 		var config = {css: "button.geBigButton:nth-of-type(1) {background-color:transparent !important; color:"+ (UI == 'dark' ? '#ccc' : '#000') +" !important;} body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }"};
-		initFormatSelector();
+		document.getElementById("format-select").addEventListener("change", function() {
+			if (editor)
+				editor.format = this.value;
+			savePreferredFormat(this.value);
+		});
 		img.onclick = function() {
 			makeLoader();
-			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
-			if (editor) {
-				editor.format = getExportFormat();
+			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, onEditorLoaded);
+			// editElement returns nothing if the editor is already starting
+			if (editor)
 				editor.isChanged = true;
-			}
 		}
-		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&dev=1&spin=0'], closePlugin, hideLoader);
-		if (editor)
-			editor.format = getExportFormat();
+		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&dev=1&spin=0'], closePlugin, onEditorLoaded);
+		// an existing diagram keeps its own format until the user switches it
+		if (bNewDiagram)
+			editor.setElementFormat(getPreferredFormat());
 		window.Asc.plugin.resizeWindow(1200, 1000, 800, 600, 0, 0);
 	};
 
@@ -160,6 +173,8 @@
 		title = window.Asc.plugin.tr(title);
 		if (img)
 			img.setAttribute("title", title);
+		formatLabel = window.Asc.plugin.tr(formatLabel);
+		document.getElementById("format-label").innerText = formatLabel;
 		makeLoader();
 	};
 
