@@ -63,11 +63,7 @@
   }
 
   function isDesktop() {
-    try {
-      return !!(window.AscDesktopEditor || (window.parent && window.parent.AscDesktopEditor));
-    } catch (e) {
-      return !!window.AscDesktopEditor;
-    }
+    return !!window.AscDesktopEditor;
   }
 
   function svgToPng(svg) {

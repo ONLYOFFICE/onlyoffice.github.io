@@ -4,6 +4,8 @@ Version history for the ONLYOFFICE Document Editor plugin. Marketplace updates r
 
 ## Unreleased
 
+* Desktop detection reads only `window.AscDesktopEditor` in the plugin frame; the plugin no longer touches the editor's parent window. Reported by the ONLYOFFICE Marketplace reviewer.
+
 ## 0.1.20 - 2026-10-30
 
 * Character composer hand-off runs only in ONLYOFFICE Desktop Editors (`AscDesktopEditor` present). In the web editor the "Character composer" section is hidden and nothing is polled, so there are no per-second requests or console errors.
