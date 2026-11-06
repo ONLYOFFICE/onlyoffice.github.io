@@ -38,8 +38,19 @@
 	var lang = "";
 	var title = "Click on diagram to edit."
 	var formatLabel = "Insert as:";
+	var readOnlyNotice = "Viewing mode. Changes will not be saved to the document.";
+	var readOnlyPopup = "The document is opened in viewing mode. Changes to the diagram will not be saved to the document.";
 	var FORMAT_STORAGE_KEY = "drawio_insert_format";
 	var DEFAULT_FORMAT = "xmlpng";
+	// Asc.c_oAscRestrictionType.View: the full editor switched to viewing from its header
+	var RESTRICTION_VIEW = 0x80;
+
+	// the viewer or the editor switched to viewing: the diagram can be looked at, but not inserted
+	function isReadOnly()
+	{
+		var info = window.Asc.plugin.info;
+		return !!(info.isViewMode || (info.restrictions & RESTRICTION_VIEW));
+	};
 
 	// the format chosen last time, used for new diagrams
 	function getPreferredFormat()
@@ -70,15 +81,43 @@
 		document.getElementById("format-selector").classList.toggle("hidden", !bShow);
 	};
 
+	// warns that the diagram can be edited in draw.io, but the result goes nowhere
+	function showReadOnlyNotice(bShow)
+	{
+		document.getElementById("readonly-notice").classList.toggle("hidden", !bShow);
+	};
+
+	var READONLY_POPUP_TIMEOUT = 7000;
+	var readOnlyPopupTimer = null;
+
+	// the same warning, prominent but for a while only; a click closes it earlier
+	function showReadOnlyPopup(bShow)
+	{
+		clearTimeout(readOnlyPopupTimer);
+		readOnlyPopupTimer = null;
+		document.getElementById("readonly-popup").classList.toggle("hidden", !bShow);
+		if (bShow) {
+			readOnlyPopupTimer = setTimeout(function() {
+				showReadOnlyPopup(false);
+			}, READONLY_POPUP_TIMEOUT);
+		}
+	};
+
 	function onEditorLoaded()
 	{
 		hideLoader();
-		showFormatSelector(true);
+		// nothing is inserted when read-only, so there is no format to choose
+		var bReadOnly = isReadOnly();
+		showFormatSelector(!bReadOnly);
+		showReadOnlyNotice(bReadOnly);
+		showReadOnlyPopup(bReadOnly);
 	};
 
 	DiagramEditor.prototype.stopped = function()
 	{
 		showFormatSelector(false);
+		showReadOnlyNotice(false);
+		showReadOnlyPopup(false);
 	};
 
 	window.Asc.plugin.init = function(data)
@@ -99,6 +138,9 @@
 				editor.format = this.value;
 			savePreferredFormat(this.value);
 		});
+		document.getElementById("readonly-popup").addEventListener("click", function() {
+			showReadOnlyPopup(false);
+		});
 		img.onclick = function() {
 			makeLoader();
 			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, onEditorLoaded);
@@ -110,12 +152,14 @@
 		// an existing diagram keeps its own format until the user switches it
 		if (bNewDiagram)
 			editor.setElementFormat(getPreferredFormat());
+		if (isReadOnly() && !window.Asc.plugin.info.isViewMode)
+			window.Asc.plugin.executeMethod("SetButtonDisabled", [0, true]);
 		window.Asc.plugin.resizeWindow(1200, 1000, 800, 600, 0, 0);
 	};
 
 	window.Asc.plugin.button = function(id)
 	{
-		if (id == 0) {
+		if (id == 0 && !isReadOnly()) {
 			if (editor.frame) {
 				// if editor is opened
 				editor.closePlugin(true);
@@ -175,6 +219,12 @@
 			img.setAttribute("title", title);
 		formatLabel = window.Asc.plugin.tr(formatLabel);
 		document.getElementById("format-label").innerText = formatLabel;
+		readOnlyNotice = window.Asc.plugin.tr(readOnlyNotice);
+		var notice = document.getElementById("readonly-notice");
+		notice.innerText = readOnlyNotice;
+		notice.setAttribute("title", readOnlyNotice);
+		readOnlyPopup = window.Asc.plugin.tr(readOnlyPopup);
+		document.getElementById("readonly-popup").innerText = readOnlyPopup;
 		makeLoader();
 	};
 

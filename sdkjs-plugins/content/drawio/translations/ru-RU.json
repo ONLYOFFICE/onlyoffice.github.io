@@ -2,5 +2,7 @@
 	"Loading" : "Загрузка",
 	"Click on diagram to edit." : "Нажмите на диаграмму для редактирования.",
 	"This plugin is not supported by IE": "Этот плагин не поддерживается IE",
-	"Insert as:": "Вставить как:"
+	"Insert as:": "Вставить как:",
+	"Viewing mode. Changes will not be saved to the document.": "Режим просмотра. Изменения не будут сохранены в документе.",
+	"The document is opened in viewing mode. Changes to the diagram will not be saved to the document.": "Документ открыт в режиме просмотра. Изменения диаграммы не будут сохранены в документе."
 }

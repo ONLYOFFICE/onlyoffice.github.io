@@ -79,7 +79,7 @@
 			justify-content: center;
 			align-items: center;
 		}
-		/* sits in the empty right part of the draw.io menu bar; colors come from the editor theme via .form-control and .defaultlable */
+		/* sits in the empty right part of the draw.io menu bar */
 		.format-selector {
 			position: fixed;
 			top: 3px;
@@ -88,6 +88,37 @@
 		}
 		.format-selector select {
 			margin-left: 4px;
+			cursor: pointer;
+		}
+		.readonly-notice {
+			position: fixed;
+			top: 7px;
+			right: 16px;
+			z-index: 1000;
+			max-width: 45%;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		.readonly-popup {
+			position: fixed;
+			top: 64px;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 1001;
+			width: max-content;
+			max-width: 80%;
+			box-sizing: border-box;
+			padding: 10px 16px;
+			border: 1px solid #f0c36d;
+			border-radius: 4px;
+			background-color: #fff4ce;
+			color: #5c4300;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12px;
+			font-weight: bold;
+			text-align: center;
 			cursor: pointer;
 		}
 	</style>
@@ -102,5 +133,7 @@
 			<option value="xmlsvg">SVG</option>
 		</select>
 	</div>
+	<div id="readonly-notice" class="readonly-notice defaultlable hidden">Viewing mode. Changes will not be saved to the document.</div>
+	<div id="readonly-popup" class="readonly-popup hidden">The document is opened in viewing mode. Changes to the diagram will not be saved to the document.</div>
 </body>
 </html>

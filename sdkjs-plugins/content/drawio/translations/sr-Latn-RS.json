@@ -2,5 +2,7 @@
 	"Loading" : "Učitavanje",
 	"Click on diagram to edit." : "Kliknite na dijagram da uredite.",
 	"This plugin is not supported by IE": "Ovaj dodatak nije podržan u IE",
-	"Insert as:": "Ubaci kao:"
+	"Insert as:": "Ubaci kao:",
+	"Viewing mode. Changes will not be saved to the document.": "Režim pregleda. Izmene neće biti sačuvane u dokumentu.",
+	"The document is opened in viewing mode. Changes to the diagram will not be saved to the document.": "Dokument je otvoren u režimu pregleda. Izmene dijagrama neće biti sačuvane u dokumentu."
 }

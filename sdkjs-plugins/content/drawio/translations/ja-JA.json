@@ -2,5 +2,7 @@
 	"Loading" : "読み込み中",
 	"Click on diagram to edit." : "編集するには、チャートをクリックしてください。",
 	"This plugin is not supported by IE": "このプラグインはIEではサポートされていません",
-	"Insert as:": "挿入形式:"
+	"Insert as:": "挿入形式:",
+	"Viewing mode. Changes will not be saved to the document.": "表示モードです。変更はドキュメントに保存されません。",
+	"The document is opened in viewing mode. Changes to the diagram will not be saved to the document.": "ドキュメントは表示モードで開かれています。図への変更はドキュメントに保存されません。"
 }
