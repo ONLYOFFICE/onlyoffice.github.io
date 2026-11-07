@@ -54,5 +54,6 @@
 	{ "name": "naqsha", "discussion": "" },
     { "name": "quicktranslator", "discussion": ""},
     { "name": "marinamoji", "discussion": ""},
-	{ "name": "scroll-manager", "discussion": "" }
+	{ "name": "scroll-manager", "discussion": "" },
+	{ "name": "vn-document-format", "discussion": "" }
 ]
