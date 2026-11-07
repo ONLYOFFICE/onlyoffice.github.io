@@ -1,0 +1,11 @@
+{
+  "Render": "整形",
+  "Unrender": "整形を解除",
+  "Plain text": "プレーンテキスト",
+  "Format": "書式",
+  "Copy": "コピー",
+  "Make room for character": "Make room for character",
+  "Unicode source": "Unicodeソース",
+  "Processes paragraphs that contain Kanbun marks.": "漢文返り点を含む段落を処理します。",
+  "Selection if highlighted, else whole document.": "選択範囲があればそれを、なければ文書全体をコピーします。"
+}
