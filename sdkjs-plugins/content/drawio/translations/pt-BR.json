@@ -1,5 +1,8 @@
 {
 	"Loading" : "Carregando",
 	"Click on diagram to edit." : "Clique no diagrama para editar.",
-	"This plugin is not supported by IE": "Este plugin não é suportado pelo IE"
+	"This plugin is not supported by IE": "Este plugin não é suportado pelo IE",
+	"Insert as:": "Inserir como:",
+	"Viewing mode. Changes will not be saved to the document.": "Modo de visualização. As alterações não serão salvas no documento.",
+	"The document is opened in viewing mode. Changes to the diagram will not be saved to the document.": "O documento está aberto no modo de visualização. As alterações no diagrama não serão salvas no documento."
 }
