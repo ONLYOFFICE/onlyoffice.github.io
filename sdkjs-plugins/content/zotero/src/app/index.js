@@ -73,7 +73,29 @@ import "../styles.css";
         groups: [],
         groupsHash: "",
     };
+    /**
+     * Bumped by every new search. The list is cleared for it, so a library
+     * answer that belongs to an earlier search must not land in the list.
+     */
+    let searchGeneration = 0;
     let bInProgress = false;
+
+    /**
+     * Items already cited in the document, so that the search results can put
+     * them on top of the list. Collecting them walks every Zotero field of the
+     * document, which is too slow to redo on every keystroke, so the scan is
+     * cached for a short while and dropped whenever the plugin edits the
+     * document.
+     */
+    const usedItems = {
+        /** @type {Set<string>} */
+        keys: new Set(),
+        /** @type {Promise<Set<string>>|null} */
+        promise: null,
+        fetchedAt: 0,
+        ttl: 5000,
+        timeout: 1000,
+    };
 
     /** @type {SearchFilterComponents} */
     let searchFilter;
@@ -203,6 +225,49 @@ import "../styles.css";
         
     };
 
+    function invalidateUsedItems() {
+        usedItems.promise = null;
+        usedItems.fetchedAt = 0;
+    }
+
+    /** @returns {Promise<Set<string>>} */
+    function getUsedItemKeys() {
+        const now = Date.now();
+        if (usedItems.promise && now - usedItems.fetchedAt < usedItems.ttl) {
+            return usedItems.promise;
+        }
+        if (bInProgress) {
+            // A document action owns the editor: reading the fields would have
+            // to wait for it, and the search results must not wait for a sort
+            // hint. Rescan once the action is over.
+            return Promise.resolve(usedItems.keys);
+        }
+        usedItems.fetchedAt = now;
+        usedItems.promise = new Promise(function (resolve) {
+            const timer = setTimeout(function () {
+                // The editor did not answer - priority sorting is optional,
+                // displaying the results is not. The scan stays in the cache:
+                // its late answer serves the next search, and a new scan
+                // would only queue up behind it.
+                resolve(usedItems.keys);
+            }, usedItems.timeout);
+            citationService
+                .getUsedItemKeys()
+                .then(function (keys) {
+                    clearTimeout(timer);
+                    usedItems.keys = keys;
+                    resolve(keys);
+                })
+                .catch(function (e) {
+                    clearTimeout(timer);
+                    console.error(e);
+                    invalidateUsedItems();
+                    resolve(usedItems.keys);
+                });
+        });
+        return usedItems.promise;
+    }
+
     function showCitationsAtTheStartFromMyLibrary() {
         libLoader.show();
         const promise = sdk.getItems(null)
@@ -210,8 +275,13 @@ import "../styles.css";
                 delete res.next;
                 return res;
             })
-        return loadLibrary(promise, false)
+        const generation = searchGeneration;
+        return loadLibrary(promise, false, generation)
             .then((res) => {
+                // A search started meanwhile and owns the header now.
+                if (generation !== searchGeneration) {
+                    return;
+                }
                 if (res > 0) {
                     updateHeaderText("started"); 
                 } else {
@@ -244,9 +314,10 @@ import "../styles.css";
          * @param {string} text
          * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
          * @param {string} groupsHash
+         * @param {number} generation
          * @returns {Promise<Array<Promise<number>>>}
          */
-        function searchFor(text, selectedGroups, groupsHash) {
+        function searchFor(text, selectedGroups, groupsHash, generation) {
             selectCitation.clearLibrary();
             /** @type {Array<Promise<number>>} */
             const promises = [];
@@ -256,6 +327,9 @@ import "../styles.css";
                 .then(function (
                     /** @type {Array<UserGroupInfo>} */ userGroups
                 ) {
+                    if (generation !== searchGeneration) {
+                        return promises;
+                    }
                     /** @type {Array<string|number>} */
                     let groups = selectedGroups.filter(function (group) {
                         return (
@@ -266,7 +340,7 @@ import "../styles.css";
 
                     if (selectedGroups.indexOf("my_library") !== -1) {
                         promises.push(
-                            loadLibrary(sdk.getItems(text), false),
+                            loadLibrary(sdk.getItems(text), false, generation),
                         );
                     }
 
@@ -274,7 +348,8 @@ import "../styles.css";
                         promises.push(
                             loadLibrary(
                                 sdk.getGroupItems(text, groups[i]),
-                                true
+                                true,
+                                generation,
                             )
                         );
                     }
@@ -297,7 +372,8 @@ import "../styles.css";
             )
                 return;
 
-            searchFor(text, selectedGroups, groupsHash)
+            const generation = ++searchGeneration;
+            searchFor(text, selectedGroups, groupsHash, generation)
                 .catch(() => {
                     return [];
                 })
@@ -317,6 +393,10 @@ import "../styles.css";
                 .then(function (
                         /** @type {Array<PromiseSettledResult<number>>} */ numOfShownByLib,
                     ) {
+                        // A newer search owns the list by now.
+                        if (generation !== searchGeneration) {
+                            return;
+                        }
                         let numOfShown = 0;
                         numOfShownByLib.forEach(function (promise) {
                             if (promise.status === "fulfilled") {
@@ -709,6 +789,7 @@ import "../styles.css";
      */
     async function onEndAction(scrollToTarget, preloaderMessage) {
         bInProgress = false;
+        invalidateUsedItems();
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
@@ -767,7 +848,7 @@ import "../styles.css";
     function loadMore() {
         console.warn("Loading more...");
         if (lastSearch.obj && lastSearch.obj.next) {
-            loadLibrary(lastSearch.obj.next(), false);
+            loadLibrary(lastSearch.obj.next(), false, searchGeneration);
         }
 
         for (
@@ -781,6 +862,7 @@ import "../styles.css";
                     lastSearch.groups[i].id,
                 ),
                 true,
+                searchGeneration,
             );
         }
     }
@@ -813,19 +895,20 @@ import "../styles.css";
     /**
      * @param {Promise<SearchResult>} promise
      * @param {boolean} isGroup
+     * @param {number} generation the search the request was made for
      * @returns {Promise<number>}
      */
-    function loadLibrary(promise, isGroup) {
+    function loadLibrary(promise, isGroup, generation) {
         return promise
             .then(function (res) {
-                return displaySearchItems(res, null, isGroup);
+                return displaySearchItems(res, null, isGroup, generation);
             })
             .catch(function (err) {
                 console.error(err);
                 if (err.message) {
                     showError(translate(err.message));
                 }
-                return displaySearchItems(null, err, isGroup);
+                return displaySearchItems(null, err, isGroup, generation);
             })
             .then(function (numOfShown) {
                 return numOfShown;
@@ -836,9 +919,14 @@ import "../styles.css";
      * @param {SearchResult | null} res
      * @param {Error | null} err
      * @param {boolean} isGroup
+     * @param {number} generation the search the results belong to
      * @returns {Promise<number>}
      */
-    function displaySearchItems(res, err, isGroup) {
+    function displaySearchItems(res, err, isGroup, generation) {
+        // The list was cleared for a newer search while this one was loading.
+        if (generation !== searchGeneration) {
+            return Promise.resolve(0);
+        }
         let first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
@@ -881,7 +969,14 @@ import "../styles.css";
             });
         }
 
-        return selectCitation.displaySearchItems(res, err, lastSearch);
+        return getUsedItemKeys().then(function (usedItemKeys) {
+            // The document scan takes time too: check again.
+            if (generation !== searchGeneration) {
+                return 0;
+            }
+            selectCitation.setUsedItemKeys(usedItemKeys);
+            return selectCitation.displaySearchItems(res, err, lastSearch);
+        });
     }
 
     /**
