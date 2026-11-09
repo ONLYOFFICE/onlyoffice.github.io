@@ -55,7 +55,28 @@ import "../edit-window.css";
  * @property {boolean} [suppress-author]
  */
 
+/**
+ * @typedef {Object} EditWindowForm
+ * @property {string} id
+ * @property {HTMLFormElement} element
+ * @property {Checkbox} omitAuthorInput
+ * @property {InputField} prefixInput
+ * @property {InputField} suffixInput
+ * @property {InputField} locatorInput
+ * @property {SelectBox} locatorSelectbox
+ */
+
 (function () {
+
+    const GRIP_ICON =
+        '<svg width="8" height="14" viewBox="0 0 8 14" xmlns="http://www.w3.org/2000/svg">' +
+        '<circle cx="2" cy="3" r="1" fill="currentColor"/>' +
+        '<circle cx="6" cy="3" r="1" fill="currentColor"/>' +
+        '<circle cx="2" cy="7" r="1" fill="currentColor"/>' +
+        '<circle cx="6" cy="7" r="1" fill="currentColor"/>' +
+        '<circle cx="2" cy="11" r="1" fill="currentColor"/>' +
+        '<circle cx="6" cy="11" r="1" fill="currentColor"/>' +
+        '</svg>';
 
     class EditWindow {
         constructor() {
@@ -68,9 +89,18 @@ import "../edit-window.css";
             
             /** @type {{citationItems: CitationItem[]} | null} */
             this.citationObject = null;
-            /** @type {Array<{id: string, omitAuthorInput: Checkbox, prefixInput: InputField, suffixInput: InputField, locatorInput: InputField, locatorSelectbox: SelectBox}>} */
+            /** @type {EditWindowForm[]} */
             this.forms = [];
             this._hasRemovedItems = false;
+            /**
+             * The item order the window was opened with
+             * @type {string[]}
+             */
+            this._initialOrder = [];
+            /** @type {{entry: EditWindowForm, startY: number} | null} */
+            this._drag = null;
+            this._onDragMoveBound = this.onDragMove.bind(this);
+            this._onDragEndBound = this.onDragEnd.bind(this);
         }
 
         /**
@@ -91,10 +121,22 @@ import "../edit-window.css";
 
             deleteBtn.onclick = this.removeItem.bind(this, form, citationItem.id);
             form.appendChild(deleteBtn);
+
+            const header = document.createElement("div");
+            header.classList.add("form-header");
+
+            const grip = document.createElement("span");
+            grip.classList.add("form-grip");
+            grip.innerHTML = GRIP_ICON;
+            header.appendChild(grip);
+
             const title = document.createElement("div");
             title.classList.add("title");
             title.textContent = citationItem.itemData.title;
-            form.appendChild(title);
+            header.appendChild(title);
+
+            header.onmousedown = this.onDragStart.bind(this, citationItem.id);
+            form.appendChild(header);
             const params = document.createDocumentFragment();
             const prefixSuffixContainer = document.createElement("div");
             const prefix = document.createElement("input");
@@ -162,6 +204,7 @@ import "../edit-window.css";
 
             this.forms.push({
                 id: citationItem.id,
+                element: form,
                 omitAuthorInput,
                 prefixInput,
                 suffixInput,
@@ -172,19 +215,139 @@ import "../edit-window.css";
             form.appendChild(params);
         }
 
-        updateRemoveButtonsVisibility() {
+        updateItemControlsVisibility() {
             if (!this.citationObject) {
                 return;
             }
             const numOfCitations = this.citationObject.citationItems.length;
             if (numOfCitations > 1) {
-                this._container.classList.remove('hide-remove-button');
+                this._container.classList.remove('hide-item-controls');
             } else {
-                this._container.classList.add('hide-remove-button');
+                this._container.classList.add('hide-item-controls');
             }
+        }
+
+        updateWindowHeight() {
+            if (!this.citationObject) {
+                return;
+            }
+            const numOfCitations = this.citationObject.citationItems.length;
             const formHeight = (document.querySelector('form')?.offsetHeight || 134);
-            const winHeight = numOfCitations === 1 ? (formHeight + 16) : (2 * formHeight);
+            const winHeight = (numOfCitations * formHeight) + 16;
             window.Asc.plugin.sendToPlugin("onUpdateHeight", winHeight);
+        }
+
+        /**
+         * Reflows the forms in the container so that the markup follows the
+         * current item order. appendChild moves a node that is already in the
+         * container, so this both reorders and leaves every form in place.
+         */
+        syncDomOrder() {
+            const container = this._container;
+            this.forms.forEach(function (entry) {
+                container.appendChild(entry.element);
+            });
+        }
+
+        /**
+         * Swaps two positions in the item list and in the forms that mirror
+         * it, keeping the two arrays index-aligned.
+         * @param {number} first
+         * @param {number} second
+         */
+        swapItems(first, second) {
+            if (!this.citationObject) {
+                return;
+            }
+            const items = this.citationObject.citationItems;
+            const item = items[first];
+            items[first] = items[second];
+            items[second] = item;
+
+            const form = this.forms[first];
+            this.forms[first] = this.forms[second];
+            this.forms[second] = form;
+
+            this.syncDomOrder();
+        }
+
+        /**
+         * @returns {boolean}
+         */
+        isOrderChanged() {
+            if (!this.citationObject) {
+                return false;
+            }
+            const current = this.citationObject.citationItems.map(
+                (/** @type {CitationItem} */ item) => item.id,
+            );
+            return (
+                current.join("\u0000") !== this._initialOrder.join("\u0000")
+            );
+        }
+
+        /**
+         * @param {string} id
+         * @param {MouseEvent} event
+         */
+        onDragStart(id, event) {
+            if (event.button !== 0 || this.forms.length < 2 || this._drag) {
+                return;
+            }
+            const entry = this.forms.find(form => form.id === id);
+            if (!entry) {
+                return;
+            }
+            event.preventDefault();
+
+            this._drag = { entry: entry, startY: event.clientY };
+            entry.element.classList.add("dragging");
+            document.addEventListener("mousemove", this._onDragMoveBound);
+            document.addEventListener("mouseup", this._onDragEndBound);
+        }
+
+        /** @param {MouseEvent} event */
+        onDragMove(event) {
+            const drag = this._drag;
+            if (!drag) {
+                return;
+            }
+            let delta = event.clientY - drag.startY;
+            const index = this.forms.indexOf(drag.entry);
+
+            // A form only has to pass half of its neighbour to trade places
+            // with it. The swap moves the form in the markup as well, so the
+            // offset it is drawn with is corrected by the neighbour's height
+            // to keep the form under the pointer.
+            if (delta < 0 && index > 0) {
+                const above = this.forms[index - 1].element.offsetHeight;
+                if (-delta > above / 2) {
+                    this.swapItems(index, index - 1);
+                    drag.startY -= above;
+                    delta += above;
+                }
+            } else if (delta > 0 && index < this.forms.length - 1) {
+                const below = this.forms[index + 1].element.offsetHeight;
+                if (delta > below / 2) {
+                    this.swapItems(index, index + 1);
+                    drag.startY += below;
+                    delta -= below;
+                }
+            }
+
+            drag.entry.element.style.transform = "translateY(" + delta + "px)";
+        }
+
+        onDragEnd() {
+            const drag = this._drag;
+            if (!drag) {
+                return;
+            }
+            this._drag = null;
+            drag.entry.element.classList.remove("dragging");
+            drag.entry.element.style.transform = "";
+            document.removeEventListener("mousemove", this._onDragMoveBound);
+            document.removeEventListener("mouseup", this._onDragEndBound);
         }
 
         /**
@@ -207,7 +370,8 @@ import "../edit-window.css";
             this._hasRemovedItems = true;
             this._container.removeChild(form);
 
-            this.updateRemoveButtonsVisibility();
+            this.updateItemControlsVisibility();
+            this.updateWindowHeight();
         }
 
         onTranslate() {
@@ -261,12 +425,16 @@ import "../edit-window.css";
             if (!this.citationObject) {
                 return;
             }
+            this._initialOrder = this.citationObject.citationItems.map(
+                (/** @type {CitationItem} */ item) => item.id,
+            );
             this.citationObject.citationItems.forEach(
                 (/** @type {CitationItem} */ item) => {
                     this.createForm(item);
                 },
             );
-            this.updateRemoveButtonsVisibility();
+            this.updateItemControlsVisibility();
+            this.updateWindowHeight();
 
             for (let i = 0; i < 10; i++) {
                 if (window.Asc.plugin.translateManager) {
@@ -279,7 +447,7 @@ import "../edit-window.css";
         }
 
         onClickSave() {
-            let bHasChanges = this._hasRemovedItems;
+            let bHasChanges = this._hasRemovedItems || this.isOrderChanged();
             for (let i = 0; i < this.forms.length; i++) {
                 const form = this.forms[i];
                 const citationItem = this.citationObject?.citationItems.find(

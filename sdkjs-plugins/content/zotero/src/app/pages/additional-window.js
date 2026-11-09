@@ -75,6 +75,13 @@ class AdditionalWindow {
         if (this.#window) {
             this.#hide();
         }
+        /**
+         * @type {{min: [number, number], max: [number, number]}}
+         */
+        const EDIT_WINDOW_SIZE_LIMITS = {
+            min: [380, 200],
+            max: [600, 1000],
+        };
         this.#window = new window.Asc.PluginWindow();
         /** @type {VariationConfig} */
         const variation = {
@@ -93,12 +100,13 @@ class AdditionalWindow {
             isModal: false,
             EditorsSupport: ["word"],
             size: [380, 150],
+			fixedSize : false,
             isViewer: true,
             isDisplayedInViewer: false,
             isInsideMode: false,
         };
 
-        this.#onShow(variation, content, "default");
+        this.#onShow(variation, content, "default", EDIT_WINDOW_SIZE_LIMITS);
         this.#window.show(variation);
 
         return new Promise((resolve, reject) => {
@@ -176,8 +184,9 @@ class AdditionalWindow {
      * @param {VariationConfig} variation
      * @param {any} content
      * @param {"default" | "warning" | "success"} type
+     * @param {{min: [number, number], max: [number, number]}} [sizeLimits]
      */
-    #onShow(variation, content, type) {
+    #onShow(variation, content, type, sizeLimits) {
         if (!this.#window) return;
         this.#defaultButtonFn = window.Asc.plugin.button;
         this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
@@ -204,11 +213,12 @@ class AdditionalWindow {
         this.#window.attachEvent(
             "onUpdateHeight",
             (/** @type {number} */ height) => {
-                Asc.plugin.executeMethod(
-                    "ResizeWindow",
-                    [this.#window?.id, [variation.size[0] - 2, height]],
-                    () => {}
-                ); // 2 is the border-width at the window
+                const args = [this.#window?.id, [variation.size[0] - 2, height]];
+                if (sizeLimits) {
+                    args.push(sizeLimits.min);
+                    args.push(sizeLimits.max);
+                }
+                Asc.plugin.executeMethod("ResizeWindow", args, () => {});
             }
         );
     }

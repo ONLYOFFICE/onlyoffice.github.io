@@ -39,8 +39,41 @@ form > div:last-child {
 .title {
     padding-right: 12px;
 }
-.hide-remove-button .message-close {
+.hide-item-controls .message-close,
+.hide-item-controls .form-grip {
     display: none;
+}
+
+/* The header doubles as the drag handle: the remove button is positioned
+   over its right edge, so the padding keeps the move buttons clear of it. */
+.form-header {
+    align-items: center;
+    gap: 4px;
+    padding-right: 18px;
+    cursor: grab;
+}
+
+.form-header .title {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.form-grip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    color: transparent;
+    transition: color 0.2s;
+}
+
+.form.dragging {
+    position: relative;
+    z-index: 2;
+    opacity: 0.85;
+}
+
+.form.dragging .form-header {
+    cursor: grabbing;
 }
 
 .selectbox-container .selectbox-dropdown .selectbox-options {

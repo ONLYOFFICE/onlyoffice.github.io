@@ -970,8 +970,8 @@ import "../styles.css";
             (/** @type {{id: string|number}} */ item) => String(item.id)
         );
         const bItemsChanged =
-            idsBeforeEdit.slice().sort().join("\u0000") !==
-            idsAfterEdit.slice().sort().join("\u0000");
+            idsBeforeEdit.join("\u0000") !==
+            idsAfterEdit.join("\u0000");
 
         let updateFn = citationService.updateItem.bind(
             citationService,
