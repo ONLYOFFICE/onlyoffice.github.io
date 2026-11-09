@@ -73,6 +73,12 @@ class CitationService {
     #abbreviationsManager;
     /** @type {string|undefined} last XML handed to saveStyleToDocument() */
     #lastSavedPrefXml;
+    /**
+     * Which style, in which version, the document carries as far as this
+     * session knows, so the large CSL is only sent when that changes.
+     * @type {string|undefined}
+     */
+    #embeddedStyleKey;
 
     /**
      * @param {LocalesManager} localesManager
@@ -1537,6 +1543,14 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async loadStyleFromDocument(styleManager) {
+        await this.citationDocService
+            .loadEmbeddedStyle()
+            .then((style) => {
+                this.#embeddedStyleKey = embeddedStyleKey(style);
+                styleManager.setDocumentStyle(style);
+            })
+            .catch((e) => console.error("Failed to read the document style:", e));
+
         const prefXml = await this.citationDocService.loadStyleFromDocument();
 
         if (!prefXml) return;
@@ -1608,8 +1622,17 @@ class CitationService {
             '</prefs>' +
             '</data>';
 
-        if (prefXml === this.#lastSavedPrefXml) return Promise.resolve();
+        if (prefXml !== this.#lastSavedPrefXml) {
+            await this.#savePrefXmlToDocument(prefXml);
+        }
+        await this.#saveEmbeddedStyle(styleManager);
+    }
 
+    /**
+     * @param {string} prefXml
+     * @returns {Promise<void>}
+     */
+    async #savePrefXmlToDocument(prefXml) {
         // Chunk into 255-char segments (OOXML custom property value limit)
         var chunks = [];
         for (var i = 0; i < prefXml.length; i += 255) {
@@ -1630,9 +1653,43 @@ class CitationService {
         return this.citationDocService.saveStyleToDocument(chunks).then(() => {
             this.#lastSavedPrefXml = prefXml;
         });
+    }
+
+    /**
+     * Keeps the CSL of the style in use inside the document, so the document
+     * can be formatted where the style repository is out of reach. A style
+     * the repository updated replaces the stored one on the next save, once
+     * the citations have been formatted with it.
+     * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @returns {Promise<void>}
+     */
+    async #saveEmbeddedStyle(styleManager) {
+        const style = styleManager.getStyleToEmbed();
+        const key = embeddedStyleKey(style);
+        if (key === this.#embeddedStyleKey) {
+            return;
+        }
+        try {
+            if (style) {
+                await this.citationDocService.saveEmbeddedStyle(style);
+            } else {
+                await this.citationDocService.removeEmbeddedStyle();
+            }
+            this.#embeddedStyleKey = key;
+        } catch (e) {
+            console.error("Failed to store the style in the document:", e);
+        }
         
     }
 
+}
+
+/**
+ * @param {StyleCopy|null} style
+ * @returns {string}
+ */
+function embeddedStyleKey(style) {
+    return style ? style.styleId + "\n" + style.updated : "";
 }
 
 export { CitationService };

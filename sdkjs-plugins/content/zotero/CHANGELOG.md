@@ -68,3 +68,4 @@
 * Replace an editor API call deprecated starting from version 10.0.3.
 * Add drag-and-drop reordering of sources in the citation editing window.
 * Show sources already cited in the document first in the search results.
+* Keep the citation style in the document, so it stays available offline and on other computers.

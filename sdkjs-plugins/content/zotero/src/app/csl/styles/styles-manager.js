@@ -57,6 +57,7 @@ function CslStylesManager(lastStyleKey) {
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
     this._lastIncludeUrlForPaperArticlesKey = "zoteroIncludeUrlForPaperArticles";
     this._lastAbbreviateJournalTitlesKey = "zoteroAbbreviateJournalTitles";
+    this._lastStyleCopyKey = "zoteroLastStyleCopy";
 
     this._defaultStyles = [
         "american-anthropological-association",
@@ -71,9 +72,19 @@ function CslStylesManager(lastStyleKey) {
         "modern-language-association",
         "nature",
     ];
+    /**
+     * The styles shipped with the plugin. `_defaultStyles` also collects the
+     * user's own styles as they load, so it cannot tell the two apart.
+     */
+    this._bundledStyles = this._defaultStyles.slice();
 
     /** @type {Object.<string, string>} */
     this._cache = {};
+    /**
+     * The style the open document carries, see setDocumentStyle().
+     * @type {StyleCopy|null}
+     */
+    this._documentStyle = null;
 }
 
 /**
@@ -186,11 +197,34 @@ CslStylesManager.prototype.getStyle = function (
             if (self._isOnlineAvailable) {
                 url = self._STYLES_URL + styleName;
             } else if (self._defaultStyles.indexOf(styleName) === -1) {
-                throw "The style is not available in the local version of the plugin.";
+                const copy = self._getStyleCopy(styleName);
+                if (!copy) {
+                    throw "The style is not available in the local version of the plugin.";
+                }
+                return copy.content;
             }
-            return fetch(url).then(function (resp) {
-                return resp.text();
-            });
+            const fromRepository = url !== self._STYLES_LOCAL + styleName + ".csl";
+            return fetch(url).then(
+                function (resp) {
+                    // A style the repository does not have, such as one the
+                    // user added on another computer, may still have come
+                    // along with the document.
+                    const copy =
+                        !resp.ok && fromRepository
+                            ? self._getStyleCopy(styleName)
+                            : null;
+                    return copy ? copy.content : resp.text();
+                },
+                function (error) {
+                    const copy = fromRepository
+                        ? self._getStyleCopy(styleName)
+                        : null;
+                    if (copy) {
+                        return copy.content;
+                    }
+                    throw error;
+                }
+            );
         })
         .then(function (content) {
             if (
@@ -256,10 +290,12 @@ CslStylesManager.prototype.getStylesInfo = function () {
         var customStyles = styles[1];
 
         if (self._isDesktopAvailable && !self._isOnlineAvailable) {
+            const copiedStyleIds = self._getStyleCopyIds();
             loadedStyles = loadedStyles.filter(function (style) {
                 return (
                     self._defaultStyles.indexOf(style.name) >= 0 ||
-                    style.name == lastStyle
+                    style.name == lastStyle ||
+                    copiedStyleIds.indexOf(style.name) >= 0
                 );
             });
         }
@@ -308,6 +344,117 @@ CslStylesManager.prototype.cached = function (id) {
         return this._cache[id];
     }
     return null;
+};
+
+/**
+ * Hands over the style the open document carries, so that the document keeps
+ * its formatting where the style repository cannot be reached.
+ * @param {StyleCopy|null} style
+ */
+CslStylesManager.prototype.setDocumentStyle = function (style) {
+    this._documentStyle =
+        style && style.styleId && this._isValidCSL(style.content)
+            ? style
+            : null;
+};
+
+/**
+ * The style in use, in the form a document carries it. Null for a style
+ * shipped with the plugin, which every installation already has.
+ * @returns {StyleCopy|null}
+ */
+CslStylesManager.prototype.getStyleToEmbed = function () {
+    const styleId = this.getLastUsedStyleId();
+    if (!styleId || this._bundledStyles.indexOf(styleId) !== -1) {
+        return null;
+    }
+    const content = this.cached(styleId);
+    if (!content) {
+        return null;
+    }
+    return {
+        styleId: styleId,
+        updated: CslStylesParser.getStyleInfo(styleId, content).updated,
+        content: content,
+    };
+};
+
+/**
+ * Ids of the styles that have a copy outside the repository.
+ * @returns {Array<string>}
+ */
+CslStylesManager.prototype._getStyleCopyIds = function () {
+    return [this._documentStyle, this._getLastStyleCopy()]
+        .filter(function (copy) {
+            return copy !== null;
+        })
+        .map(function (copy) {
+            return copy.styleId;
+        });
+};
+
+/**
+ * The newest copy of a style that is kept outside the repository: the one the
+ * document carries or the one last used on this computer.
+ * @param {string} styleId
+ * @returns {StyleCopy|null}
+ */
+CslStylesManager.prototype._getStyleCopy = function (styleId) {
+    /** @type {StyleCopy|null} */
+    let newest = null;
+    [this._documentStyle, this._getLastStyleCopy()].forEach(function (copy) {
+        if (!copy || copy.styleId !== styleId) {
+            return;
+        }
+        if (!newest || isNewerStyle(copy.updated, newest.updated)) {
+            newest = copy;
+        }
+    });
+    return newest;
+};
+
+/**
+ * @returns {StyleCopy|null}
+ */
+CslStylesManager.prototype._getLastStyleCopy = function () {
+    try {
+        const copy = JSON.parse(
+            localStorage.getItem(this._lastStyleCopyKey) || "null"
+        );
+        if (copy && copy.styleId && this._isValidCSL(copy.content)) {
+            return copy;
+        }
+    } catch (e) {
+        console.error(e);
+    }
+    return null;
+};
+
+/**
+ * Keeps the last style fetched from the repository on this computer: a new
+ * document has no style of its own to fall back on offline.
+ * @param {string} styleId
+ * @param {string} content
+ */
+CslStylesManager.prototype._saveLastStyleCopy = function (styleId, content) {
+    if (
+        this._bundledStyles.indexOf(styleId) !== -1 ||
+        this._customStylesStorage.getStyleNames().indexOf(styleId) !== -1
+    ) {
+        return;
+    }
+    /** @type {StyleCopy} */
+    const copy = {
+        styleId: styleId,
+        updated: CslStylesParser.getStyleInfo(styleId, content).updated,
+        content: content,
+    };
+    try {
+        localStorage.setItem(this._lastStyleCopyKey, JSON.stringify(copy));
+    } catch (e) {
+        // A full localStorage only costs the offline copy.
+        console.error(e);
+    }
 };
 
 /**
@@ -399,6 +546,7 @@ CslStylesManager.prototype._saveLastUsedStyle = function (
     this._cache[id] = content;
     localStorage.setItem(this._lastStyleKey, id);
     localStorage.setItem(this._lastFormatKey, currentStyleFormat);
+    this._saveLastStyleCopy(id, content);
     const containBibliography =
         CslStylesParser.isStyleContainBibliography(content);
     localStorage.setItem(
@@ -465,5 +613,21 @@ CslStylesManager.prototype.setDesktopApiAvailable = function (isApiAvailable) {
 CslStylesManager.prototype.setRestApiAvailable = function (isApiAvailable) {
     this._isOnlineAvailable = isApiAvailable;
 };
+
+/**
+ * Compares two `<info><updated>` timestamps. A copy without a date never
+ * wins over one that has it.
+ * @param {string} updated
+ * @param {string} than
+ * @returns {boolean}
+ */
+function isNewerStyle(updated, than) {
+    const a = Date.parse(updated);
+    const b = Date.parse(than);
+    if (isNaN(a)) {
+        return false;
+    }
+    return isNaN(b) || a > b;
+}
 
 export { CslStylesManager };

@@ -48,6 +48,11 @@ class CitationDocService {
     #citSuffix;
     #bibPrefix;
     #bibSuffix;
+    /**
+     * Namespace of the custom XML part that carries the document's citation
+     * style. The CSL sits in it as text, so it comes back exactly as stored.
+     */
+    #EMBEDDED_STYLE_NAMESPACE = "urn:onlyoffice:zotero:style";
 
     /**
      * @param {string} citPrefix
@@ -866,6 +871,145 @@ class CitationDocService {
     }
 
     /**
+     * The citation style stored in the document by saveEmbeddedStyle().
+     * @returns {Promise<StyleCopy|null>}
+     */
+    async loadEmbeddedStyle() {
+        const xml = await new Promise((resolve) => {
+            Asc.scope.embeddedStyleNamespace = this.#EMBEDDED_STYLE_NAMESPACE;
+            Asc.plugin.callCommand(
+                function () {
+                    const doc = Api.GetDocument();
+                    if (!doc) {
+                        return "";
+                    }
+                    const customParts = doc.GetCustomXmlParts();
+                    if (!customParts) {
+                        return "";
+                    }
+                    const parts = customParts
+                        .GetByNamespace(Asc.scope.embeddedStyleNamespace);
+                    return parts.length ? parts[0].GetXml() : "";
+                },
+                false,
+                false,
+                resolve
+            );
+        });
+        if (!xml) {
+            return null;
+        }
+        const root = new DOMParser().parseFromString(
+            xml,
+            "application/xml"
+        ).documentElement;
+        if (!root || root.namespaceURI !== this.#EMBEDDED_STYLE_NAMESPACE) {
+            return null;
+        }
+        return {
+            styleId: root.getAttribute("style-id") || "",
+            updated: root.getAttribute("updated") || "",
+            content: root.textContent || "",
+        };
+    }
+
+    /**
+     * Stores the citation style in the document, replacing the one there -
+     * unless the document already holds this style in the same or a newer
+     * version, which a co-author may have stored meanwhile.
+     * @param {StyleCopy} style
+     * @returns {Promise<void>}
+     */
+    async saveEmbeddedStyle(style) {
+        const xml =
+            '<?xml version="1.0" encoding="UTF-8"?>' +
+            '<embeddedStyle xmlns="' + this.#EMBEDDED_STYLE_NAMESPACE + '"' +
+            ' style-id="' + escapeXml(style.styleId) + '"' +
+            ' updated="' + escapeXml(style.updated) + '">' +
+            escapeXml(style.content) +
+            "</embeddedStyle>";
+        return new Promise((resolve) => {
+            Asc.scope.embeddedStyleNamespace = this.#EMBEDDED_STYLE_NAMESPACE;
+            Asc.scope.embeddedStyle = {
+                styleId: style.styleId,
+                updated: style.updated,
+                xml: xml,
+            };
+            Asc.plugin.callCommand(
+                function () {
+                    const style = Asc.scope.embeddedStyle;
+                    const doc = Api.GetDocument();
+                    if (!doc) {
+                        return;
+                    }
+                    const customParts = doc.GetCustomXmlParts();
+                    if (!customParts) {
+                        return;
+                    }
+                    const stored = customParts.GetByNamespace(
+                        Asc.scope.embeddedStyleNamespace
+                    );
+                    for (let i = 0; i < stored.length; i++) {
+                        // The attributes come before the CSL text.
+                        const head = stored[i].GetXml().slice(0, 1000);
+                        const id = /style-id="([^"]*)"/.exec(head);
+                        const updated = /updated="([^"]*)"/.exec(head);
+                        if (!id || id[1] !== style.styleId || !updated) {
+                            continue;
+                        }
+                        const storedTime = Date.parse(updated[1]);
+                        const newTime = Date.parse(style.updated);
+                        if (isNaN(newTime) || storedTime >= newTime) {
+                            return;
+                        }
+                    }
+                    for (let i = 0; i < stored.length; i++) {
+                        stored[i].Delete();
+                    }
+                    customParts.Add(style.xml);
+                },
+                false,
+                false,
+                function () {
+                    resolve();
+                }
+            );
+        });
+    }
+
+    /**
+     * Drops the citation style stored by saveEmbeddedStyle().
+     * @returns {Promise<void>}
+     */
+    async removeEmbeddedStyle() {
+        return new Promise((resolve) => {
+            Asc.scope.embeddedStyleNamespace = this.#EMBEDDED_STYLE_NAMESPACE;
+            Asc.plugin.callCommand(
+                function () {
+                    const doc = Api.GetDocument();
+                    if (!doc) {
+                        return;
+                    }
+                    const customParts = doc.GetCustomXmlParts();
+                    if (!customParts) {
+                        return;
+                    }
+                    const stored = customParts
+                        .GetByNamespace(Asc.scope.embeddedStyleNamespace);
+                    for (let i = 0; i < stored.length; i++) {
+                        stored[i].Delete();
+                    }
+                },
+                false,
+                false,
+                function () {
+                    resolve();
+                }
+            );
+        });
+    }
+
+    /**
      * @param {Array<string>} chunks
      * @returns 
      */
@@ -888,6 +1032,18 @@ class CitationDocService {
             );
         });
     }
+}
+
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+function escapeXml(text) {
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
 }
 
 export { CitationDocService };
