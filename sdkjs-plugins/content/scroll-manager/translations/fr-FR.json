@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "Document ouvert pour la première fois, position enregistrée introuvable",
+  "text_clearPositionBtn": "Effacer la position",
+  "text_savePositionBtn": "Enregistrer la position",
+  "text_pluginSettings": "PARAMÈTRES DU PLUGIN",
+  "text_moveOnOpenCheckbox": "Aller à la position enregistrée à l'ouverture",
+  "text_saveOnCloseCheckbox": "Enregistrer la position à la fermeture",
+  "text_clearAllBtn": "Tout effacer"
+}

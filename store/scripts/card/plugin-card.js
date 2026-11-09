@@ -56,6 +56,8 @@ const PluginCard = {
     slideIndex: 1,  // index for slides
     backup: false,
     LANGUAGES: [
+        ['ar-Sa', 'ar', 'Arabic'],
+        ['cs-CS', 'cs', 'Czech'],
         ['cs-CZ', 'cs', 'Czech'],
         ['de-DE', 'de', 'German'],
         ['es-ES', 'es', 'Spanish'],
@@ -67,6 +69,9 @@ const PluginCard = {
         ['pt-BR', 'pt', 'Brazilian'],
         ['ru-RU', 'ru', 'Russian'],
         ['si-SI', 'si', 'Sinhala'],
+        ['sq-AL', 'sq', 'Albanian'],
+        ['sr-Cyrl-RS', 'sr', 'Serbian'],
+        ['sr-Latn-RS', 'sr', 'Serbian'],
         ['uk-UA', 'uk', 'Ukrainian'],
         ['zh-ZH', 'zh', 'Chinese']
     ],
@@ -76,8 +81,8 @@ const PluginCard = {
         const self = this;
         window.onresize = function() {
             self.setDivHeight();
-            if (typeof _syncPluginCardModalState === 'function') {
-                _syncPluginCardModalState(data.independentMode);
+            if (typeof PluginCardController !== 'undefined') {
+                PluginCardController.syncPluginCardModalState(data.independentMode);
             }
         };
         this._resetDom();
@@ -173,7 +178,7 @@ const PluginCard = {
                 } else {
                     PluginCardUI.divRatingLink.setAttribute(
                         "title",
-                        Utils.getTranslated("No disscussion page for this plugin.")
+                        Utils.getTranslated("No discussion page for this plugin.")
                     );
                     PluginCardUI.discussionLink.classList.add("hidden");
                 }
@@ -244,7 +249,8 @@ const PluginCard = {
             PluginCardUI.divMinVersion.classList.add("hidden");
         }
 
-        const editorBadgesHtml = this._buildEditorBadgesHtml(this.config.variations && this.config.variations[0]);
+        const editorBadgesHtml = this._buildEditorBadgesHtml(this.config.variations && this.config.variations[0])
+            + this._buildPlatformBadgeHtml(this.config);
         if (editorBadgesHtml) {
             PluginCardUI.divEditorBadges.innerHTML = editorBadgesHtml;
             PluginCardUI.divEditorBadges.classList.remove("hidden");
@@ -393,6 +399,9 @@ const PluginCard = {
 			.onSuccess(function(/** @type {string} */response) {
                 /** @type {Array<string>} */
                 let langs = JSON.parse(response);
+                if (!Array.isArray(langs)) {
+                    langs = [];
+                }
                 langs.forEach(function(full) {
                     let short = full.split('-')[0];
                     for (let i = 0; i < self.LANGUAGES.length; i++) {
@@ -655,6 +664,19 @@ const PluginCard = {
         }
         return '<span class="pc-editor-badges-label i18n">' + Utils.getTranslated('Works with') + '</span>' + icons;
     },
+    /**
+     * The platform a plugin is limited to, shown next to the editors it works with.
+     * @param {PluginInfo} config
+     * @returns {string} empty when the plugin works everywhere
+     */
+    _buildPlatformBadgeHtml: function(config) {
+        const platform = Utils.getPluginPlatform(config);
+        if (!platform) {
+            return '';
+        }
+        const name = Utils.getTranslated(platform === 'web' ? 'Web' : 'Desktop');
+        return '<span class="platform-badge" title="' + Utils.getPlatformNote(platform) + '">' + Utils.getPlatformIconHtml(platform, 12) + name + '</span>';
+    },
 
     /**
      * @param {PluginInfo} [plugin]
@@ -720,3 +742,14 @@ window.addEventListener('message', function(event) {
 			break;
 	};
 }, false);
+
+if (typeof PluginCardController === 'undefined') {
+	window.addEventListener('keydown', function(e) {
+		if (!e || e.key !== 'Escape')
+			return;
+		if (!PluginCard.config)
+			return;
+
+		PluginCard.onClickClose();
+	});
+}

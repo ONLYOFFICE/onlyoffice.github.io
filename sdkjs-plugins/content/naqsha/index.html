@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Naqsha</title>
+	<script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<style>
+		html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+		#naqsha { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+		#status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+			padding: 24px; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; color: #6B6880; }
+		#status.hidden { display: none; }
+		#status a { color: #6C4DFF; }
+	</style>
+</head>
+<body>
+	<iframe id="naqsha" title="Naqsha diagram editor" allow="clipboard-read; clipboard-write"></iframe>
+	<div id="status"></div>
+	<script src="scripts/naqsha.js"></script>
+</body>
+</html>

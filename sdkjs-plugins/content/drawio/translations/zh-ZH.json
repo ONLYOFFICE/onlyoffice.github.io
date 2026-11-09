@@ -1,5 +1,8 @@
 {
 	"Loading" : "加载中",
 	"Click on diagram to edit." : "点击图形以编辑。",
-	"This plugin is not supported by IE": "IE不支持此插件"
+	"This plugin is not supported by IE": "IE不支持此插件",
+	"Insert as:": "插入为：",
+	"Viewing mode. Changes will not be saved to the document.": "查看模式。更改不会保存到文档中。",
+	"The document is opened in viewing mode. Changes to the diagram will not be saved to the document.": "文档以查看模式打开。对图表的更改不会保存到文档中。"
 }

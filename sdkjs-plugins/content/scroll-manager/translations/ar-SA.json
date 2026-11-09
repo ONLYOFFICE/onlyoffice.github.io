@@ -1,0 +1,9 @@
+{
+  "text_viewCard": "تم فتح المستند لأول مرة، لم يتم العثور على الموضع المحفوظ",
+  "text_clearPositionBtn": "مسح الموضع",
+  "text_savePositionBtn": "حفظ الموضع",
+  "text_pluginSettings": "إعدادات الملحق",
+  "text_moveOnOpenCheckbox": "الانتقال إلى الموضع المحفوظ عند الفتح",
+  "text_saveOnCloseCheckbox": "حفظ الموضع عند الإغلاق",
+  "text_clearAllBtn": "مسح الكل"
+}

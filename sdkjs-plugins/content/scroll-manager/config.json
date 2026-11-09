@@ -1,0 +1,76 @@
+{
+  "name": "Scroll Manager",
+  "nameLocale": {
+    "ru": "Scroll Manager",
+    "fr": "Scroll Manager",
+    "es": "Scroll Manager",
+    "de": "Scroll Manager",
+    "cs": "Scroll Manager",
+    "zh": "Scroll Manager",
+    "pt-BR": "Scroll Manager",
+    "sr-Cyrl-RS": "Scroll Manager",
+    "sr-Latn-RS": "Scroll Manager",
+    "ja-JA": "Scroll Manager",
+    "sq-AL": "Scroll Manager",
+    "it": "Scroll Manager",
+    "ar-SA": "Scroll Manager"
+  },
+  "offered": "Jhon Titor",
+  "guid": "asc.{CA39B178-83EF-4074-B248-108D0634A4DB}",
+  "version": "1.0.0",
+  "minVersion": "9.4.0",
+  "variations": [
+    {
+      "description": "Plugin for automatic saving and restoring of scroll position in PDF documents. Provides a side panel for quick navigation and saving settings.",
+      "descriptionLocale": {
+        "ar-SA": "ملحق للحفظ والتلقائي واستعادة موضع التمرير في مستندات PDF. يوفر لوحة جانبية للتنقل السريع وإعدادات الحفظ.",
+        "cs-CZ": "Doplněk pro automatické ukládání a obnovení pozice posunu v dokumentech PDF. Poskytuje postranní panel pro rychlou navigaci a nastavení ukládání.",
+        "de-DE": "Plugin zum automatischen Speichern und Wiederherstellen der Scrollposition in PDF-Dokumenten. Bietet eine Seitenleiste für schnelle Navigation und Speichereinstellungen.",
+        "es-ES": "Plugin para guardar y restaurar automáticamente la posición de desplazamiento en documentos PDF. Proporciona un panel lateral para navegación rápida y configuración de guardado.",
+        "fr-FR": "Plugin pour la sauvegarde et la restauration automatiques de la position de défilement dans les documents PDF. Fournit un panneau latéral pour une navigation rapide et la configuration des paramètres de sauvegarde.",
+        "it-IT": "Plugin per il salvataggio e il ripristino automatico della posizione di scorrimento nei documenti PDF. Fornisce un pannello laterale per la navigazione rapida e le impostazioni di salvataggio.",
+        "ja-JP": "PDFドキュメントのスクロール位置を自動保存および復元するプラグイン。素早いナビゲーションと保存設定のためのサイドパネルを提供します。",
+        "pt-BR": "Plugin para salvamento e restauração automática da posição de rolagem em documentos PDF. Fornece um painel lateral para navegação rápida e configuração de parâmetros de salvamento.",
+        "ru-RU": "Плагин автоматического восстановления и сохранения позиции прокрутки в PDF-документах. Предоставляет боковую панель для быстрой навигации и настройки параметров сохранения.",
+        "sq-AL": "Shtojcë për ruajtjen dhe rikthimin automatik të pozicionit të shfletimit në dokumentet PDF. Ofron një panel anësor për navigim të shpejtë dhe cilësimet e ruajtjes.",
+        "sr-Cyrl-RS": "Прикључак за аутоматско чување и обнављање позиције померања у ПДФ документима. Пружа бочну таблу за брзу навигацију и подешавање параметара чувања.",
+        "sr-Latn-RS": "Priključak za automatsko čuvanje i obnavljanje pozicije pomeranja u PDF dokumentima. Pruža bočnu tablu za brzu navigaciju i podešavanje parametara čuvanja.",
+        "zh-CN": "用于自动保存和恢复 PDF 文档滚动位置的插件。提供用于快速导航和保存设置的侧边栏。"
+      },
+      "url": "index.html",
+      "icons": "resources/icons/icon%state%(normal)%scale%(default|*).%extension%(svg|png)",
+      "isViewer": true,
+      "EditorsSupport": [
+        "pdf"
+      ],
+      "initDataType": "none",
+      "initOnSelectionChanged": false,
+      "isVisual": false,
+      "isModal": false,
+      "isInsideMode": false,
+      "type": "background",
+      "events": [
+        "onToolbarMenuClick"
+      ],
+      "store": {
+        "background": {
+          "light": "#726868",
+          "dark": "#726868"
+        },
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "screenshots": [
+          "resources/store/screenshots/short_description.png",
+          "resources/store/screenshots/screen_light.png",
+          "resources/store/screenshots/screen_dark.png"
+        ],
+        "categories": [
+          "work",
+          "specAbilities"
+        ]
+      }
+    }
+  ]
+}

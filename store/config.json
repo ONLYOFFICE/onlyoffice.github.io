@@ -48,7 +48,13 @@
 	{ "name": "chineseautoformattool", "discussion": "" },
 	{ "name": "nlpsolver", "discussion": "" },
 	{ "name": "salesforce", "discussion": "" },
-	{ "name": "curly", "discussion": "" },
+	{ "name": "curly", "discussion": "690" },
 	{ "name": "onlymath", "discussion": "" },
-	{ "name": "pdf-bookmarks", "discussion": "" }
+	{ "name": "pdf-bookmarks", "discussion": "" },
+	{ "name": "naqsha", "discussion": "" },
+	{ "name": "research-assistant-citations", "discussion": "" },
+    { "name": "quicktranslator", "discussion": ""},
+    { "name": "marinamoji", "discussion": ""},
+	{ "name": "scroll-manager", "discussion": "" },
+	{ "name": "vn-document-format", "discussion": "" }
 ]

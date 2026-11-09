@@ -205,6 +205,7 @@
 	window.Asc.plugin.button = function(id, windowID) {
 		if (previewWindow && windowID) {
 			this.executeMethod('CloseWindow', [windowID]);
+			previewWindow = null;
 		} else {
 			this.executeCommand("close", "");
 		}

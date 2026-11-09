@@ -11,5 +11,9 @@
 	"Font settings": "Paramètres de police",
 	"Format": "Format",
 	"Available only for the following languages": "Disponible uniquement pour les langues suivantes",
-	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE"
+	"This plugin is not supported by IE": "Ce plugin n'est pas supporté par IE",
+	"Monospace": "Chasse fixe",
+	"Other": "Autres",
+	"Preview may use a substitute font": "L'aperçu peut utiliser une police de remplacement",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "Le navigateur ne dispose peut-être pas de cette police, l'aperçu peut donc être différent. Le document utilisera la police sélectionnée."
 }

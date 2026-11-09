@@ -1,0 +1,32 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+SPDX-FileCopyrightText: 2026 Desktiny contributors
+-->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Kiểm tra thể thức văn bản</title>
+  <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+  <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+  <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+  <script src="src/rules.js"></script>
+  <script src="src/checker.js"></script>
+  <script src="scripts/plugin.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; }
+    body { font-family: Arial, sans-serif; font-size: 12px; padding: 8px; box-sizing: border-box; }
+    #summary { font-weight: bold; margin: 4px 0 8px; }
+    #findings { list-style: none; margin: 0 0 8px; padding: 0; }
+    #findings li { padding: 4px 6px 4px 8px; margin-bottom: 4px; border-left: 4px solid #999; }
+    #findings li.error { border-left-color: #cc2f2f; }
+    #findings li.warning { border-left-color: #c58a00; }
+    #findings li.info { border-left-color: #4a7fb5; }
+  </style>
+</head>
+<body>
+  <div id="summary"></div>
+  <ul id="findings"></ul>
+  <button id="recheck" class="btn-text-default"></button>
+</body>
+</html>

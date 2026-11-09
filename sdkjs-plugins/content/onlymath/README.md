@@ -6,20 +6,24 @@ OnlyMath turns an ONLYOFFICE text document into a CAS-calculator.
 
 Insert an equation field (a mathematical field), type an expression the way you would write it on paper (i.e. 2+2), and press Alt+C to calculate it. The result is written straight back into the document as a real equation (i.e. 2+2=4).
 
+**Watch it:** [OnlyMath in action — 2+2](https://www.youtube.com/shorts/kOxe0qzAUoc) · [OnlyMath on YouTube](https://www.youtube.com/@OnlyMathPlugin)
+
 Runs locally. OnlyMath is free. There is no service to sign up for, no account, no API key, and nothing leaves the machine.
 
 ## What it can do
 
-- Calculate (Alt+C) — OnlyMath calculates arithmetic and symbolic expressions like: `2+2`, `sin(60)`, `f(1)`, `f'(1)`, `√18`
+- Calculate (Alt+C) — OnlyMath calculates arithmetic and symbolic expressions like: `2+2`, `sin(60)`, `f(1)`, `f'(1)`, `√18`. Alt+C never solves an equation: `2x-4=6` is left alone (use Alt+L), while `f(1)=1²+2-2` has its right-hand side calculated and the value added: `f(1)=1²+2-2=1`.
 - Solve equations like `2x-4=6` — press Alt+L — OnlyMath will respond: `x=5`.
+- Works in a sentence too — an equation field can sit inside a line of text. Put the cursor in it (or select it) and press Alt+C or Alt+L: only the field is replaced and the sentence around it is left alone.
 - Define your own functions — write `f(x):=2x²+3` (and press Alt+C). Then write `f(1)` in a new math field (and press Alt+C). OnlyMath will respond: `f(1)=5`.
 - Differentiate — define a function and then write `f'(x)` Alt+C and OnlyMath will respond `f'(x)=4x`
-- Integrate — define a function and then write `F(x)` Alt+C and OnlyMath will respond `F(x)=(2/3)x³+3x+k`
+- Integrate — define a function and then write `F(x)` Alt+C and OnlyMath will respond `F(x)=(2/3)x³+3x+c`. You can also integrate directly: `∫2x dx` gives `∫2x dx=x²+c`.
+- Roots of any index — `√`, `∛`, `∜` and a root with a typed index, for example `∛27=3`.
 
 ## Written for Danish high school students (A-levels, upper-secondary maths)
 
 Output follows the conventions students are expected to use: decimal comma,
-`k` as the integration constant, and Scandinavian solution notation.
+`c` as the integration constant, and Scandinavian solution notation.
 
 ## Using it
 
@@ -44,6 +48,10 @@ The student defines the function by typing: "Alt+M   f(x):=x^2-4x+3   Alt+C" (an
 To get the result, on the next line the student types: "Alt+M   f(4)   Alt+C" (and OnlyMath replies by writing `f(4)=3` )
 
 To find the x-coordinate of the vertex, the student solves the equation f'(x)=0 by typing: "Alt+M   f'(x)=0   Alt+L" (and OnlyMath replies by writing `x=2,000` )
+
+**Symbols while you type** — inside an equation field, `*` becomes `·` and `'` becomes `′` as you type it (press space after `f′` and the editor draws the raised prime). This only happens at the end of what you are typing, never in ordinary text. (`<=` becoming `≤` and `+-` becoming `±` are done by ONLYOFFICE itself.)
+
+**Where results go** — Alt+C replaces the field with the result and leaves the cursor inside it, ready to edit. Alt+L writes the solution directly below the equation.
 
 **Toolbar**
 

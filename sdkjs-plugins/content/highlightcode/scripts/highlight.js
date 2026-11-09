@@ -40,6 +40,9 @@
 	};
 
 	var languages = hljs.listLanguages().sort(),									// array languages
+		languagesToAutodetect = ["accesslog", "apache", "bash", "basic", "cpp", "csharp", "css", "delphi", "erlang", "fortran", "go", "http", "java", "javascript", "json", "kotlin", "markdown", "matlab", "nginx", "objectivec", "perl", "php", "prolog", "python", "ruby", "rust", "shell", "sql", "swift", "typescript", "xml"],
+		languageOptions = [],
+		languageAliases = {},
 		style_value,																// current value style
 		code_field,																	// field for higlight code
 		container,																	// scrollable conteiner
@@ -48,9 +51,7 @@
 		need_formatting = false,													// flag to check need format code or not
 		flag_init = false,															// flag for restore background
 		fontsAvailable = [];														// list of supported fonts
-	const isIE = checkInternetExplorer();											// check IE
-	const isDE = (window.AscDesktopEditor) ? true : false;							// check desktope editor
-	const isFF = (navigator.userAgent.indexOf("Firefox") > -1) ? true : false;		// check FF
+	const isNeedCustomColorpicker = !isColorInputSupported();						// check color input support
 	const isOldChrome = checkOldChrome();                                           // check chrome older than 50 version
 	var message = "This plugin doesn't work in Internet Explorer."                  // message for IE
 	var xml_formatter = require('xml-formatter');									// object for xml formatting
@@ -64,6 +65,9 @@
 		php : !isOldChrome,
 		html : true
 	};
+	var formatLangTooltip = Object.keys(format_lang).filter(function(lang) {
+		return format_lang[lang];
+	}).join(", ");
 	var settings = {								// object with current settings for user (there are default values)
 		curLang : "Auto",							// current language (default - Auto)
 		style : "googlecode.css",					// current style name (dafault - googlecode.css)
@@ -71,6 +75,22 @@
 		tab_replace : "0",							// value for tab raplace (default - 0)
 		font : "Arial",								// current font (default - Arial)
 		font_size : 14								// current font_size (default - 14)
+	};
+	var hardcodedThemeColors = {								// colors of styles for the preview and the inserted code (vendor styles are kept as they are)
+		"googlecode.css"      : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"github.css"          : { background: "#ffffff", color: "#24292e", selection: "#c8c8fa" },
+		"github-gist.css"     : { background: "#ffffff", color: "#333333", selection: "#c8c8fa" },
+		"androidstudio.css"   : { background: "#282b2e", color: "#a9b7c6", selection: "#4a4543" },
+		"vs.css"              : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"vs2015.css"          : { background: "#1e1e1e", color: "#dcdcdc", selection: "#264f78" },
+		"idea.css"            : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"qtcreator_dark.css"  : { background: "#000000", color: "#aaaaaa", selection: "#1d6bb9" },
+		"qtcreator_light.css" : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"xcode.css"           : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"far.css"             : { background: "#000080", color: "#00ffff", selection: "#343434" },
+		"foundation.css"      : { background: "#eeeeee", color: "#000000", selection: "#c8c8fa" },
+		"xml_1.css"           : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" },
+		"xml_2.css"           : { background: "#ffffff", color: "#000000", selection: "#c5c8c6" }
 	};
 	var xml_formatter_settings = {					// object with settings for xml_formatter ( https://github.com/chrisbottin/xml-formatter )
 		indentation: "\t",							// (String, default=' ') The value used for indentation.
@@ -138,6 +158,8 @@
 	var myscroll = window.Asc.ScrollableDiv;
 
 	window.Asc.plugin.init = function(text) {
+		languageOptions = createLangForSelect();
+		languageAliases = createLanguageAliasMap(languageOptions);
 
 		get_supported_fonts();
 		$('#style_id').select2({
@@ -145,10 +167,11 @@
 		}).on('select2:select', function(e) {
 			document.getElementById("style").href = "vendor/highlight/styles/" + e.params.data.id;
 			settings.style = e.params.data.id;
+			set_selection_color();
 			window.Asc.plugin.loadModule("./vendor/highlight/styles/" + e.params.data.id , function(content){
 				style_value = content;
 				set_bacground_color();
-				if (isDE || isFF) {
+				if (isNeedCustomColorpicker) {
 					$("#jq_color").spectrum("set", settings.background);
 				} else {
 					background_color.value = settings.background;
@@ -167,11 +190,12 @@
 			settings.font_size = this.value;
 		};
 		$('#language_id').select2({
-			data : createLangForSelect(),
-			minimumResultsForSearch: Infinity
+			data : languageOptions,
+			matcher: matchLanguageOption,
+			minimumResultsForSearch: 0
 		}).on('select2:select', function(e) {
 			text = code_field.innerText;
-			settings.curLang = e.params.data.text;		// change current language
+			settings.curLang = e.params.data.id;		// change current language
 			if (format_lang[settings.curLang]) {
 				document.getElementById("btn_format").removeAttribute('disabled');
 			} else {
@@ -199,7 +223,7 @@
 		var temp_code,
 			flag = false;	//flag change code (true = changed)
 
-		if (isDE || isFF) {
+		if (isNeedCustomColorpicker) {
 			document.getElementById("jq_color").style.display = "inline";
 			document.getElementById("background_color").style.display = "none";
 			initSpectrum("#FFFFFF");
@@ -209,11 +233,21 @@
 		};
 
 		function createLangForSelect() {
-			var tmpArr = [{id:0, text:"Auto"}];
+			var tmpArr = [{
+				id: "Auto",
+				text: "Auto",
+				searchText: "auto automatic autodetect highlight highlight.js"
+			}];
 			for (var i = 0; i < languages.length; i++) {
+				var searchText = [languages[i]];
+				var languageInfo = hljs.getLanguage(languages[i]);
+				if (languageInfo && Array.isArray(languageInfo.aliases))
+					searchText = searchText.concat(languageInfo.aliases);
+
 				tmpArr.push({
-					id : i+1,
-					text : languages[i]
+					id : languages[i],
+					text : languages[i],
+					searchText : searchText.join(" ").toLowerCase()
 				});
 			}
 			return tmpArr;
@@ -257,7 +291,7 @@
 				if (need_formatting) {
 					var isAuto = false;
 					if (settings.curLang == "Auto") {
-						temp_code = hljs.highlightAuto(text, languages);
+						temp_code = hljs.highlightAuto(text, languagesToAutodetect);
 						settings.curLang = temp_code.language;
 						isAuto = true;
 					}
@@ -318,14 +352,14 @@
 						if (!isAuto) {
 							highlight(text, settings.curLang);
 						} else {
-							temp_code = hljs.highlightAuto(text, languages);
+							temp_code = hljs.highlightAuto(text, languagesToAutodetect);
 							createPreview(temp_code);
 						}
 					}
 					need_formatting = false;
 				} else {
 					if (settings.curLang == "Auto")
-						temp_code = hljs.highlightAuto(text, languages);
+						temp_code = hljs.highlightAuto(text, languagesToAutodetect);
 					else
 						temp_code = hljs.highlight(text, {language: settings.curLang});
 
@@ -504,6 +538,12 @@
 		};
 	};
 
+	function isColorInputSupported() {
+		const input = document.createElement('input');
+		input.setAttribute('type', 'color');
+		return input.type === 'color';
+	}
+
 	function initSpectrum(clr) {
 		$("#jq_color").spectrum({
 			color: clr,
@@ -600,7 +640,7 @@
 		if (code[code.length-1] == "<p>&nbsp</p>")
 			code.pop();
 
-		window.Asc.plugin.executeMethod("PasteHtml",['<html lang=\"en\"><head><style> p{background:'+settings.background+'}\r\n'+style_value +'</style></head><body><div style = \"white-space: pre;\"><span style =\"font-size:'+settings.font_size+'pt; font-family:'+settings.font+';\">'+code.join("")+'</span></div></body></html>']);
+		window.Asc.plugin.executeMethod("PasteHtml",['<html lang=\"en\"><head><style> p{background:'+settings.background+'; margin:0; line-height:1; color:'+get_theme_colors().color+'}\r\n'+style_value +'</style></head><body><div style = \"white-space: pre;\"><span style =\"font-size:'+settings.font_size+'pt; font-family:'+settings.font+';\">'+code.join("")+'</span></div></body></html>']);
 	};
 
 	$.fn.get_selection_range = function() {
@@ -692,7 +732,6 @@
 	function checkOldChrome() {
 		let raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
 		let version = raw ? parseInt(raw[2], 10) : -1;
-		console.log(version);
 		return version <= 49;
 	}
 
@@ -705,52 +744,139 @@
 		}
 	};
 
-	function hexc(colorval) {
-		var parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-		delete(parts[0]);
-		for (var i = 1; i <= 3; ++i) {
-			parts[i] = parseInt(parts[i]).toString(16);
-			if (parts[i].length == 1) parts[i] = '0' + parts[i];
-		}
-		return ('#' + parts.join(''));
-	};
-
 	function get_supported_fonts() {
 		const fontCheck = new Set([
 			'Arial', 'Asana', 'Monotype corsiva', 'Arial Black', 'Bahnschrift', 'Calibri', 'Cambria', 'Cambria Math', 'Candara', 'Comic Sans MS', 'Consolas', 'Constantia', 'Corbel', 'Courier New', 'Ebrima', 'Franklin Gothic Medium', 'Gabriola', 'Gadugi', 'Georgia', 'HoloLens MDL2 Assets', 'Impact', 'Ink Free', 'Javanese Text', 'Leelawadee UI', 'Lucida Console', 'Lucida Sans Unicode', 'Malgun Gothic', 'Marlett', 'Microsoft Himalaya', 'Microsoft JhengHei', 'Microsoft New Tai Lue', 'Microsoft PhagsPa', 'Microsoft Sans Serif', 'Microsoft Tai Le', 'Microsoft YaHei', 'Microsoft Yi Baiti', 'MingLiU-ExtB', 'Mongolian Baiti', 'MS Gothic', 'MV Boli', 'Myanmar Text', 'Nirmala UI', 'Palatino Linotype', 'Segoe MDL2 Assets', 'Segoe Print', 'Segoe Script', 'Segoe UI Symbol', 'SimSun', 'Sitka', 'Sylfaen', 'Symbol', 'Tahoma', 'Times New Roman',
 			'American Typewriter', 'Andale Mono', 'Arial Narrow', 'Arial Rounded MT Bold', 'Arial Unicode MS', 'Avenir', 'Avenir Next', 'Avenir Next Condensed', 'Baskerville', 'Big Caslon', 'Bodoni 72', 'Bodoni 72 Oldstyle', 'Bodoni 72 Smallcaps', 'Bradley Hand', 'Brush Script MT', 'Chalkboard', 'Chalkboard SE', 'Chalkduster', 'Charter', 'Cochin', 'Copperplate', 'Courier', 'Didot', 'DIN Alternate', 'DIN Condensed', 'Futura', 'Geneva', 'Gill Sans', 'Helvetica', 'Helvetica Neue', 'Herculanum', 'Hoefler Text', 'Lucida Grande', 'Luminari', 'Marker Felt', 'Menlo', 'Monaco', 'Noteworthy', 'Optima', 'Palatino', 'Papyrus', 'Phosphate', 'Rockwell', 'Savoye LET', 'SignPainter', 'Skia', 'Snell Roundhand', 'Times', 'Trattatello', 'Zapfino', 'Segoe UI', 'Segoe UI Historic', 'Segoe UI Emoji','Trebuchet MS', 'Verdana', 'Webdings', 'Wingdings', 'Yu Gothic'
 		].sort());
-		  
-		document.fonts.ready.then(function() {
+		var editorFontsReady = new Promise(function(resolve) {
+			window.Asc.plugin.executeMethod("GetFontList", [], resolve);
+		});
+
+		Promise.all([document.fonts.ready, editorFontsReady]).then(function(results) {
+			var fontNames = new Set();
+			var monospaceFonts = new Set();
 			for (const font of fontCheck.values()) {
 				if (document.fonts.check(`14px "${font}"`))
-					fontsAvailable.push({ id : font, text : font});
+					fontNames.add(font);
 			}
-			$('#fonts').select2({
-				data : fontsAvailable,
-				minimumResultsForSearch: Infinity
-			}).on('select2:select', function(e) {
+			// editor fonts are drawn by the editor, so the browser doesn't have to know them
+			results[1].forEach(function(font) {
+				if (font && font["m_wsFontName"]) {
+					fontNames.add(font["m_wsFontName"]);
+					// the editor lists every face of a font, one fixed face is enough
+					if (font["m_bIsFixed"])
+						monospaceFonts.add(font["m_wsFontName"]);
+				}
+			});
+			var monospaceGroup = [], otherGroup = [];
+			Array.from(fontNames).sort(function(a, b) {
+				return a.localeCompare(b);
+			}).forEach(function(font) {
+				(monospaceFonts.has(font) ? monospaceGroup : otherGroup).push({ id : font, text : font});
+			});
+			if (monospaceGroup.length)
+				fontsAvailable.push({ name : "Monospace", children : monospaceGroup });
+			if (otherGroup.length)
+				fontsAvailable.push({ name : "Other", children : otherGroup });
+			$('#fonts').on('select2:select', function(e) {
 				document.getElementById('conteiner_id1').style["font-family"] = e.params.data.text;
 				settings.font = e.params.data.id;
+				update_font_hint();
 			});
-			$('#fonts').val(settings.font).trigger("change");
-			document.getElementById('conteiner_id1').style["font-family"] = settings.font;
+			fill_fonts();
 		});
 	};
 
-	function select_language(lang) {
-		for (var i=0; i<$('#language_id')[0].length;i++) {
-			if ($('#language_id')[0].options[i].text == lang) {
-				settings.curLang = lang;
-				if (format_lang[lang]) {
-					document.getElementById("btn_format").removeAttribute('disabled');
-				} else {
-					document.getElementById("btn_format").setAttribute('disabled', true);
-				}
-				$('#language_id').val(i).trigger("change");
-				break;
-			}	
+	// group names are translated, so the list is built again when translations come after the fonts
+	function fill_fonts() {
+		var fonts = $('#fonts');
+		if (fonts.hasClass("select2-hidden-accessible"))
+			fonts.select2("destroy");
+		fonts.empty().select2({
+			data : fontsAvailable.map(function(group) {
+				return { text : window.Asc.plugin.tr(group.name), children : group.children };
+			}),
+			minimumResultsForSearch: 0,
+			// editor font names can be long, so the box keeps its size and the list grows instead
+			width: "150px",
+			dropdownAutoWidth: true
+		});
+		fonts.val(settings.font).trigger("change");
+		document.getElementById('conteiner_id1').style["font-family"] = settings.font;
+		update_font_hint();
+	};
+
+	// the editor draws its own fonts, while the preview has only the fonts of the browser
+	function update_font_hint() {
+		var hint = document.getElementById("font_hint");
+		if (!hint)
+			return;
+
+		hint.innerText = window.Asc.plugin.tr("Preview may use a substitute font");
+		hint.title = window.Asc.plugin.tr("The browser may not have this font, so the preview may look different. The document will use the selected font.");
+		hint.style.display = is_font_in_browser(settings.font) ? "none" : "block";
+	};
+
+	// a missing font falls back to the generic family, so its text width stays the same for both families
+	function is_font_in_browser(font) {
+		var context = document.createElement("canvas").getContext("2d");
+		var text = "mmmmmmmmmmlli1WQ@#";
+		return ["monospace", "serif"].some(function(fallback) {
+			context.font = "72px " + fallback;
+			var width = context.measureText(text).width;
+			context.font = "72px \"" + String(font).replace(/"/g, "") + "\", " + fallback;
+			return context.measureText(text).width !== width;
+		});
+	};
+
+	function createLanguageAliasMap(options) {
+		var aliasMap = {};
+		// language names go first, so an alias of another language can't take them
+		for (var i = 0; i < options.length; i++)
+			aliasMap[String(options[i].id).toLowerCase()] = options[i].id;
+
+		for (var i = 0; i < options.length; i++) {
+			var option = options[i];
+			var terms = option.searchText ? option.searchText.split(" ") : [];
+			for (var j = 0; j < terms.length; j++) {
+				// a shared alias stays with the first language that has it (ls - lasso, not livescript)
+				if (terms[j] && !aliasMap.hasOwnProperty(terms[j]))
+					aliasMap[terms[j]] = option.id;
+			}
 		}
+		return aliasMap;
+	};
+
+	function matchLanguageOption(params, data) {
+		var term = $.trim(params.term || "").toLowerCase();
+		if (!term)
+			return data;
+		if (data.searchText && data.searchText.indexOf(term) !== -1)
+			return data;
+		return null;
+	};
+
+	function normalizeLanguage(lang) {
+		if (!lang)
+			return null;
+		if (lang === "Auto")
+			return lang;
+		return languageAliases[String(lang).toLowerCase()] || null;
+	};
+
+	function select_language(lang) {
+		var normalizedLang = normalizeLanguage(lang);
+		if (!normalizedLang)
+			return;
+
+		settings.curLang = normalizedLang;
+		if (format_lang[normalizedLang]) {
+			document.getElementById("btn_format").removeAttribute('disabled');
+		} else {
+			document.getElementById("btn_format").setAttribute('disabled', true);
+		}
+		$('#language_id').val(normalizedLang).trigger("change");
 	};
 
 	function select_style(style) {
@@ -773,21 +899,34 @@
 			return;
 		
 		var main;
+		if (!color)
+			color = get_theme_colors().background;
 
 		for (var i = 0; i < document.styleSheets.length; i++) {
-			if (!color && document.styleSheets[i].href && document.styleSheets[i].href.indexOf(settings.style) !== -1) {
-				var rules = document.styleSheets[i].cssRules || document.styleSheets[i].rules;
-				color = (rules[0].style.background.indexOf("rgb") !== -1) ? hexc(rules[0].style.background) : rules[0].style.background;
-			}
 			if (document.styleSheets[i].href && document.styleSheets[i].href.indexOf("resources/css/plugin_style.css") !== -1) {
 				main = document.styleSheets[i].cssRules || document.styleSheets[i].rules;
-			}
-			if (color && main)
 				break;
+			}
 		}
 		main[0].style.background = color;
 		settings.background = color;
 	}
+
+	function get_theme_colors() {
+		return hardcodedThemeColors[settings.style] || hardcodedThemeColors["googlecode.css"];
+	};
+
+	function set_selection_color() {
+		var selection = get_theme_colors().selection;
+		var selection_style = document.getElementById("selection_style");
+		if (!selection_style) {
+			selection_style = document.createElement("style");
+			selection_style.id = "selection_style";
+			document.head.appendChild(selection_style);
+		}
+		selection_style.textContent = ".content::selection, span::selection { background: " + selection + "; }\n" +
+			".content::-moz-selection, span::-moz-selection { background: " + selection + "; }";
+	};
 
 	function save_settings() {
 		localStorage.setItem("pluginHighglightSettings", JSON.stringify(settings));
@@ -892,9 +1031,12 @@
 		var btn_format = document.getElementById("btn_format");
 		if (btn_format) {
 			btn_format.innerHTML = window.Asc.plugin.tr("Format");
-			btn_format.title = window.Asc.plugin.tr("Available only for the following languages") + ": xml, javascript, typescript, css, markdown, json, php, html";
+			btn_format.title = window.Asc.plugin.tr("Available only for the following languages") + ": " + formatLangTooltip;
 
 		}
+
+		if (fontsAvailable.length)
+			fill_fonts();
 			
 		$('#tab_replace_id').select2({
 			minimumResultsForSearch: Infinity

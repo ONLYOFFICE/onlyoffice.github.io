@@ -71,6 +71,121 @@
       return t;
     }
 
+    // ONLYOFFICE writes an nth root in linear form as √(n&x): index first, then "&",
+    // then the radicand (√(3&27) is the cube root of 27). Giac reads "&" as plus,
+    // so √(2&16) was silently evaluated as √18 = 3·√2 ≈ 4,243 instead of 4.
+    //
+    // Rewrite it to simplify(surd((x),(n))):
+    //  - surd is the real nth root (surd(-8,3) = -2); root(n,x) is x^(1/n) and goes
+    //    complex for negative x, which is not school-maths behaviour.
+    //  - simplify turns Giac's "27^(1/3)=3.0" into a clean 3.
+    //  - each argument is wrapped in its own parentheses so the decimal-comma rule
+    //    at the end of this function ("16,2" → "16.2") cannot merge "x,n" into one
+    //    number: surd(16.2) is a Giac error, and ")," / ",(" never match that rule.
+    // Nested roots work because the radicand and the index are converted recursively.
+    // Anything not of the exact form √(a&b) (missing index or radicand, several "&")
+    // is left untouched and rejected by the "&" guard in doEval().
+    function topLevelAmpersands(str) {
+      const at = [];
+      let depth = 0;
+      for (let i = 0; i < str.length; i++) {
+        const c = str.charAt(i);
+        if (c === "(") depth++;
+        else if (c === ")") depth--;
+        else if (c === "&" && depth === 0) at.push(i);
+      }
+      return at;
+    }
+
+    // Degree 3 and 4 are single characters, not "√(n&x)": ONLYOFFICE writes the fourth
+    // root of 625 as ∜625 (U+221C) and the cube root of 27 as ∛27 (U+221B) — both read
+    // from the real editor 2026-10-01. Giac answers `undef` for either character, so
+    // rewrite to the same surd form.
+    const ROOT_SIGNS = { "∛": "3", "∜": "4" };
+
+    // End (exclusive) of the radicand that follows a ∛/∜ at str[pos], or -1.
+    // Understood: a parenthesised group, a plain number, a function call such as
+    // sin(x), or a single letter. Anything else is left alone and rejected by the
+    // leftover-sign guard in doEval(), rather than guessed.
+    function rootOperandEnd(str, pos) {
+      const rest = str.slice(pos);
+      if (rest.charAt(0) === "(") {
+        let depth = 0;
+        for (let j = pos; j < str.length; j++) {
+          const c = str.charAt(j);
+          if (c === "(") depth++;
+          else if (c === ")") { if (--depth === 0) return j + 1; }
+        }
+        return -1;
+      }
+      const num = /^\d+(?:[.,]\d+)?/.exec(rest);
+      if (num) return pos + num[0].length;
+      const fn = /^[A-Za-z]+(?=\()/.exec(rest);
+      if (fn) {
+        const inner = rootOperandEnd(str, pos + fn[0].length);
+        return inner;
+      }
+      // π has already been mapped to "pi" by this point; it is one symbol, not p·i.
+      if (/^pi(?![A-Za-z])/.test(rest)) return pos + 2;
+      if (/^[A-Za-z]/.test(rest)) return pos + 1;
+      return -1;
+    }
+
+    function convertNthRoots(str) {
+      let out = "";
+      let i = 0;
+      while (i < str.length) {
+        const ch = str.charAt(i);
+        if (ROOT_SIGNS[ch] !== undefined) {
+          const end = rootOperandEnd(str, i + 1);
+          if (end !== -1) {
+            let radicand = str.slice(i + 1, end);
+            if (radicand.charAt(0) === "(" && radicand.charAt(radicand.length - 1) === ")" &&
+                rootOperandEnd(radicand, 0) === radicand.length) {
+              radicand = radicand.slice(1, -1);
+            }
+            const prev = out.replace(/\s+$/, "").slice(-1);
+            const glue = /[A-Za-z0-9)⁰¹²³⁴⁵⁶⁷⁸⁹]/.test(prev) ? "*" : "";
+            out += glue + "simplify(surd((" + convertNthRoots(radicand) + "),(" + ROOT_SIGNS[ch] + ")))";
+            i = end;
+            continue;
+          }
+        }
+        if (ch === "√" && str.charAt(i + 1) === "(") {
+          let depth = 0, end = -1;
+          for (let j = i + 1; j < str.length; j++) {
+            const c = str.charAt(j);
+            if (c === "(") depth++;
+            else if (c === ")") { if (--depth === 0) { end = j; break; } }
+          }
+          if (end !== -1) {
+            const inner = str.slice(i + 2, end);
+            const amp = topLevelAmpersands(inner);
+            if (amp.length === 1) {
+              const index = inner.slice(0, amp[0]).trim();
+              const radicand = inner.slice(amp[0] + 1).trim();
+              if (index !== "" && radicand !== "") {
+                // A letter/digit/")" right before the root is an implicit product
+                // (x√(3&8), 2√(3&8)); make the "*" explicit, since the word
+                // "simplify" would otherwise fuse onto a preceding letter.
+                const prev = out.replace(/\s+$/, "").slice(-1);
+                const glue = /[A-Za-z0-9)⁰¹²³⁴⁵⁶⁷⁸⁹]/.test(prev) ? "*" : "";
+                out += glue + "simplify(surd((" + convertNthRoots(radicand) + "),(" +
+                  convertNthRoots(index) + ")))";
+                i = end + 1;
+                continue;
+              }
+            }
+          }
+        }
+        out += ch;
+        i++;
+      }
+      return out;
+    }
+
+    s = convertNthRoots(s);
+
     // Subscript/superscript digit sets used in bound regexes below.
     const SUB  = "₀₁₂₃₄₅₆₇₈₉";
     const SUPR = "⁰¹²³⁴⁵⁶⁷⁸⁹";
@@ -173,6 +288,30 @@
       return;
     }
     const normalized = normalizeForCas(expr);
+    // Nothing OnlyMath sends to Giac legitimately contains "&". One that survives
+    // normalization is notation we cannot read (a matrix, or a root whose index or
+    // radicand is missing). Giac would quietly evaluate it as a sum and return a
+    // wrong answer, so refuse instead of guessing.
+    if (normalized.indexOf("&") !== -1) {
+      respond(id, {
+        ok: false,
+        normalized,
+        error: "Unsupported notation: \u201C&\u201D is not understood (for example a matrix, " +
+          "or a root with a missing index or radicand)."
+      });
+      return;
+    }
+    // Same for a cube/fourth-root sign whose radicand we could not read: Giac would
+    // answer `undef`, which looks like a calculation failure rather than a notation one.
+    if (/[∛∜]/.test(normalized)) {
+      respond(id, {
+        ok: false,
+        normalized,
+        error: "Unsupported notation: this root could not be read " +
+          "(write the radicand in parentheses, e.g. \u221B(x+1))."
+      });
+      return;
+    }
     try {
       // Set the angle unit for THIS evaluation (CAS context is persistent, so we
       // set it explicitly every time rather than relying on a global default).
@@ -182,6 +321,27 @@
     } catch (e) {
       respond(id, { ok: false, normalized, error: String(e) });
     }
+  }
+
+  /**
+   * Make the worker unable to reach the network after start-up.
+   * XMLHttpRequest becomes a stub whose send() never answers (so Giac's read(url)
+   * ends in an ordinary Giac error instead of a request) and fetch rejects.
+   * Ordinary calculations are unaffected (verified: identical results).
+   */
+  function disableNetwork() {
+    function InertXHR() {}
+    InertXHR.prototype.open = function () {};
+    InertXHR.prototype.overrideMimeType = function () {};
+    InertXHR.prototype.setRequestHeader = function () {};
+    InertXHR.prototype.send = function () {
+      this.status = 0; this.statusText = ""; this.responseText = "";
+    };
+    function blockedFetch() {
+      return Promise.reject(new Error("Network access is disabled in the OnlyMath worker."));
+    }
+    try { self.XMLHttpRequest = InertXHR; } catch (_) { /* best effort */ }
+    try { self.fetch = blockedFetch; } catch (_) { /* best effort */ }
   }
 
   // Emscripten Module overrides must be defined before importScripts.
@@ -196,6 +356,11 @@
         // sets the unit explicitly via angleRadianFor(), so calculus runs in
         // radians while numeric/solve runs in degrees; this is just a safe default.
         try { caseval("angle_radian:=0"); } catch (_) { /* keep init resilient */ }
+        // The engine never needs the network once it is running. Giac's own
+        // `read("https://...")` would otherwise do a synchronous XMLHttpRequest GET
+        // for any text typed into a math field, so cut the worker off from the
+        // network now (the engine itself is already loaded at this point).
+        disableNetwork();
         // Notify the main thread via a one-shot READY message instead of
         // requiring repeated PING polling.
         postMessage({ type: "READY" });

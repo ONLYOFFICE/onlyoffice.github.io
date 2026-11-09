@@ -38,7 +38,7 @@
 /**
  * @typedef {Object} IframeMessage
  * @property {PluginInfo} config
- * @property {'getInstalled' | 'install' | 'remove' | 'update' | 'showPluginCard' | 'hidePluginCard' | 'close' | 'resize' | 'showButton'} type
+ * @property {'getInstalled' | 'install' | 'remove' | 'update' | 'showPluginCard' | 'hidePluginCard' | 'close' | 'closeMarketplace' | 'resize' | 'showButton'} type
  * @property {string} guid
  * @property {string} [url]
  * @property {boolean} [updateInstalled]

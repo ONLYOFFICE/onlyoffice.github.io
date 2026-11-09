@@ -98,6 +98,30 @@ DiagramEditor.prototype.xml = null;
 DiagramEditor.prototype.format = 'xml';
 
 /**
+ * Format the edited element is stored in. Exporting in another format
+ * changes the element even if the diagram itself is unchanged.
+ */
+DiagramEditor.prototype.startFormat = 'xml';
+
+/**
+ * Sets the format the edited element is stored in, e.g. for a new diagram
+ * whose empty placeholder image says nothing about the wanted format.
+ */
+DiagramEditor.prototype.setElementFormat = function(format)
+{
+	this.format = format;
+	this.startFormat = format;
+};
+
+/**
+ * Returns true if the element has to be exported in another format.
+ */
+DiagramEditor.prototype.isFormatChanged = function()
+{
+	return this.format != this.startFormat;
+};
+
+/**
  * Specifies if libraries should be enabled.
  */
 DiagramEditor.prototype.libraries = true;
@@ -170,6 +194,7 @@ DiagramEditor.prototype.startEditing = function(data, format, title)
 	{
 		window.addEventListener('message', this.handleMessageEvent);
 		this.format = (format != null) ? format : this.format;
+		this.startFormat = this.format;
 		this.title = (title != null) ? title : this.title;
 		this.data = data;
 
@@ -241,6 +266,7 @@ DiagramEditor.prototype.stopEditing = function()
 		document.body.removeChild(this.frame);
 		this.setActive(false);
 		this.frame = null;
+		this.stopped();
 		var t = this;
 		var el = this.startElement;
 		setTimeout(function() {
@@ -259,7 +285,7 @@ DiagramEditor.prototype.postMessage = function(msg)
 	if (this.frame != null)
 	{
 		// if we put id of the current page instead of the first page id, final image will be from curent page
-		if (this.curPage !== 0) {
+		if (this.curPage !== 0 && msg.xml != null) {
 			var first = {start : 0, id: ""};
 			var needed = {start : 0, id: ""};
 			var newXml = "";
@@ -388,6 +414,11 @@ DiagramEditor.prototype.handleMessage = function(msg)
 
 		case "export":
 			this.setElementData(this.startElement, msg.data);
+			if (this.isFormatChanged()) {
+				// the element is now stored in the new format
+				this.startFormat = this.format;
+				this.isChanged = true;
+			}
 			this.stopEditing();
 			this.xml = null;
 			if (this.isClosePlugin || !this.isChanged) {
@@ -418,7 +449,8 @@ DiagramEditor.prototype.handleMessage = function(msg)
 			// this.postMessage({action: 'prompt', title: 'page number', okKey: 'ok', defaultValue: '1' });
 			this.startElement.classList.remove("hidden");
 			if (this.format != 'xml') {
-				if (this.xml != null) {
+				// without xml the editor exports its current diagram
+				if (this.xml != null || this.isFormatChanged()) {
 					this.postMessage({action: 'export', format: this.format,
 					xml: this.xml, spinKey: 'export'});
 				} else {
@@ -490,6 +522,14 @@ DiagramEditor.prototype.initialized = function()
 };
 
 /**
+ * Invoked after the editor frame has been removed.
+ */
+DiagramEditor.prototype.stopped = function()
+{
+	// hook for subclassers
+};
+
+/**
  * Static method to export the diagram when the plugin is closing.
  */
 DiagramEditor.prototype.closePlugin = function(bUnsaved)
@@ -499,7 +539,7 @@ DiagramEditor.prototype.closePlugin = function(bUnsaved)
 	}
 
 	this.isClosePlugin = true;
-	if (this.isChanged)
+	if (this.isChanged || this.isFormatChanged())
 		this.postMessage({action: 'export', format: this.format, xml: this.xml, spinKey: 'export'});
 	else
 		this.pluginCallback(false);

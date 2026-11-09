@@ -11,5 +11,9 @@
 	"Background": "Fundo",
 	"Format": "Formato",
 	"Available only for the following languages": "Disponível apenas para os seguintes idiomas",
-	"This plugin is not supported by IE": "Este plugin não é suportado pelo IE"
+	"This plugin is not supported by IE": "Este plugin não é suportado pelo IE",
+	"Monospace": "Monoespaçado",
+	"Other": "Outros",
+	"Preview may use a substitute font": "A visualização pode usar uma fonte substituta",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "O navegador pode não ter esta fonte, por isso a visualização pode ficar diferente. O documento usará a fonte selecionada."
 }

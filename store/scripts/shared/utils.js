@@ -38,6 +38,8 @@
  * @property {string} versionWarning
  * @property {string} installed
  * @property {string} marketplace
+ * @property {string} webOnly
+ * @property {string} desktopOnly
  */
 
 const Utils = {
@@ -54,7 +56,9 @@ const Utils = {
     _MESSAGES: {
         versionWarning: 'This plugin will only work in a newer version of the editor.',
         installed: 'Install plugin manually',
-        marketplace: 'Submit your own plugin'
+        marketplace: 'Submit your own plugin',
+        webOnly: 'Works only in the web version',
+        desktopOnly: 'Works only in the desktop editors'
     },
 
     /** @type {Object<string, string>} */
@@ -133,6 +137,44 @@ const Utils = {
         }
         throw new Error("Message key " + messageKey + " not found in MESSAGES");
     }, 
+    /**
+     * The one platform a plugin limits itself to in variations[0].store.platforms.
+     * @param {PluginInfo} config
+     * @returns {'desktop' | 'web' | ''}
+     */
+    getPluginPlatform: function(config) {
+        const variation = config && config.variations && config.variations[0];
+        /** @type {{platforms?: string[]} | undefined} */
+        const store = /** @type {any} */ (variation && variation.store);
+        const platforms = store && Array.isArray(store.platforms) ? store.platforms : [];
+        const isWeb = platforms.indexOf('web') !== -1;
+        const isDesktop = platforms.indexOf('desktop') !== -1;
+        if (isWeb === isDesktop)
+            return '';
+        return isWeb ? 'web' : 'desktop';
+    },
+    /**
+     * @param {'web' | 'desktop'} platform 'web' or 'desktop'
+     * @returns {string}
+     */
+    getPlatformNote: function(platform) {
+        return this.getTranslatedMessage(platform === 'web' ? 'webOnly' : 'desktopOnly');
+    },
+    /**
+     * The same icon goes to the plate and the card, so the labelled one on the card explains the bare one in the list.
+     * @param {'web' | 'desktop'} platform 'web' or 'desktop'
+     * @param {number} size in pixels
+     * @returns {string}
+     */
+    getPlatformIconHtml: function(platform, size) {
+        return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            (platform === 'web'
+                ? '<circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>' +
+                    '<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>'
+                : '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>' +
+                    '<line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>') +
+            '</svg>';
+    },
     /**
      * @param {PluginInfo} plugin
      */
