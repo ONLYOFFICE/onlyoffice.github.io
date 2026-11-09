@@ -34,7 +34,7 @@
 /// <reference path="./types-global.js" />
 /// <reference path="./zotero/types.js" />
 
-/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme */
 
 import { Theme } from "./theme";
 import { Router } from "./router";

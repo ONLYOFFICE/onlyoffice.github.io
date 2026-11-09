@@ -73,12 +73,12 @@ class CslDocFormatter {
                         var paraCount = note.GetElementsCount();
                         for (var p = 0; p < paraCount; p++) {
                             var para = note.GetElement(p);
-                            if (!para) continue;
-                            var count = para.GetElementsCount ? para.GetElementsCount() : 0;
+                            if (!para || !("GetElementsCount" in para)) continue;
+                            var count = para.GetElementsCount();
                             for (var e = 0; e < count; e++) {
                                 var elem = para.GetElement(e);
-                                if (!elem || typeof elem.GetRange !== "function") continue;
-                                var elemText = elem.GetText ? elem.GetText() : "";
+                                if (!elem || !("GetRange" in elem)) continue;
+                                var elemText = "GetText" in elem ? elem.GetText() : "";
                                 if (elemText === Asc.scope.textToMatch) {
                                     run = elem;
                                     break;
@@ -168,8 +168,8 @@ class CslDocFormatter {
                             var count = para.GetElementsCount();
                             for (var e = 0; e < count; e++) {
                                 var elem = para.GetElement(e);
-                                if (!elem || typeof elem.GetRange !== "function") continue;
-                                var elemText = elem.GetText ? elem.GetText() : "";
+                                if (!elem || !("GetRange" in elem)) continue;
+                                var elemText = "GetText" in elem ? elem.GetText() : "";
                                 if (elemText === Asc.scope.text) {
                                     run = elem;
                                     break;

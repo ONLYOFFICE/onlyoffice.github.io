@@ -1,12 +1,12 @@
 // @ts-check
 
 /// <reference path="../types-global.js" />
-/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" /> 
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
 
 import { CslHtmlParser } from "../services/csl-html-parser";
 
-/** @typedef {import("../../../../../v1/onlyoffice-types").PluginWindow} PluginWindow */
-/** @typedef {import("../../../../../v1/onlyoffice-types").VariationConfig} VariationConfig */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").PluginWindow} PluginWindow */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").VariationConfig} VariationConfig */
 
 class AdditionalWindow {
     /** @type {PluginWindow | null} */

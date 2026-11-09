@@ -32,7 +32,8 @@
 
 // @ts-check
 
-/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" /> 
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
+/// <reference types="@onlyoffice/doceditor-plugin-types/word" />
 /// <reference path="../types-global.js" />
 /// <reference path="../csl/citation/types.js" />
 /// <reference path="../csl/styles/types.js" />
@@ -481,7 +482,7 @@ class CitationDocService {
 
     /**
      * @param {AddinFieldData} field
-     * @returns {Promise<void>}
+     * @returns {Promise<AddinFieldData | null>}
      */
     #addAddinField(field) {
         return new Promise(function (resolve) {
@@ -811,7 +812,7 @@ class CitationDocService {
                             
                             for (let i = 0; i < paragraph.GetElementsCount(); i++) {
                                  let margin = paragraph.GetElement(i);
-                                 if (!margin || typeof margin.GetText !== 'function') continue;
+                                 if (!margin || !("GetText" in margin) || !("AddText" in margin)) continue;
                                  if (margin.GetText() === numberText) {
                                     margin.AddText("\t");
                                     margin.SetItalic(false);
