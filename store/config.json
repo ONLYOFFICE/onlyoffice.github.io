@@ -52,8 +52,9 @@
 	{ "name": "onlymath", "discussion": "" },
 	{ "name": "pdf-bookmarks", "discussion": "" },
 	{ "name": "naqsha", "discussion": "" },
-  { "name": "quicktranslator", "discussion": ""},
-  { "name": "marinamoji", "discussion": ""},
+	{ "name": "research-assistant-citations", "discussion": "" },
+    { "name": "quicktranslator", "discussion": ""},
+    { "name": "marinamoji", "discussion": ""},
 	{ "name": "scroll-manager", "discussion": "" },
-	{ "name": "research-assistant-citations", "discussion": "" }
+	{ "name": "vn-document-format", "discussion": "" }
 ]

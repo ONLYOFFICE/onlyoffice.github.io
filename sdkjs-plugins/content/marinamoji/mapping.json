@@ -3,6 +3,11 @@
   "description": "Canonical Unicode marks from marinaMoji IME; display glyphs and render hints for LibreOffice, Word, and ONLYOFFICE. To change kaeriten size, edit glyph_ratio (and compound_glyph_ratio) in the three image blocks under rendering; see docs/TWEAKING_LAYOUT.md.",
   "version": 2,
   "rendering": {
+    "glyph_ink_left_em": {
+      "レ": 0.187, "一": 0.049, "二": 0.053, "三": 0.05, "四": 0.086,
+      "上": 0.06, "中": 0.123, "下": 0.05, "甲": 0.139, "乙": 0.125,
+      "丙": 0.049, "丁": 0.051, "天": 0.045, "地": 0.036, "人": 0.048
+    },
     "libreoffice_primary": "inline_image",
     "libreoffice_frame": {
       "border": false,
@@ -32,7 +37,20 @@
       "color": "#000000",
       "font_family": "\"Hiragino Mincho ProN\",\"YuMincho\",\"Yu Mincho\",\"MS Mincho\",\"Songti SC\",\"SimSun\",serif",
       "vert_orient_position_hmm": 0,
-      "vertical_orient_position_hmm": 0
+      "vertical_orient_position_hmm": 0,
+      "bottom_line_em": 0.067,
+      "font_bottom_line_em": {
+        "Songti SC": 0.156
+      },
+      "vertical_left_em": 0.328,
+      "vertical_font_left_em": {
+        "Hiragino Mincho ProN": 0.325,
+        "Hiragino Sans GB": 0.339,
+        "Hiragino Sans": 0.332,
+        "Yu Mincho": 0.325,
+        "Yu Gothic": 0.357,
+        "Songti SC": 0.317
+      }
     },
     "fallback": "subscript",
     "word_assume_vertical": false,
@@ -50,6 +68,12 @@
       "supersample": 4,
       "box_height_em": 0,
       "baseline_shift_pt": -5,
+      "bottom_line_em": 0.06,
+      "font_bottom_line_em": {
+        "Songti SC": 0.122
+      },
+      "ink_inset_em": 0.066,
+      "vertical_center_em": 0.458,
       "baseline_anchor": "bottom",
       "below_baseline_em": 0.42,
       "descent_em": 0,
@@ -106,6 +130,11 @@
       "headroom_em": 0.16,
       "baseline_pad_em": 0,
       "position_hps_per_pt": -0.72,
+      "bottom_line_em": 0.06,
+      "font_bottom_line_em": {
+        "Songti SC": 0.122
+      },
+      "ink_inset_em": 0.056,
       "compound_touch": true,
       "compound_touch_overlap_ratio": 0.72,
       "color": "#000000",

@@ -10,6 +10,7 @@
   ></script>
   <script type="text/javascript" src="scripts/exportCore.js"></script>
   <script type="text/javascript" src="scripts/kaeriten.js"></script>
+  <script type="text/javascript" src="scripts/composerHandoff.js"></script>
 </head>
 <body>
   <header>
@@ -36,6 +37,15 @@
       <button type="button" id="btn-plain">Plain text</button>
     </div>
     <p class="hint">Selection if highlighted, else whole document.</p>
+  </section>
+
+  <section id="composer-section">
+    <h2>Character composer</h2>
+    <p class="hint"><strong>Open this panel first</strong>, then press Insert in the marinaMoji character composer. The drawing appears at the cursor. If needed, click Insert composed (this also reads an SVG from the clipboard).</p>
+    <div class="btn-row">
+      <button type="button" id="btn-composed-insert">Insert composed</button>
+    </div>
+    <p id="composer-status" class="hint" role="status"></p>
   </section>
 
   <p id="status" class="status" role="status">Loading…</p>
