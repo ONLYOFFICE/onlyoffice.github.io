@@ -1068,6 +1068,10 @@ class CitationService {
      */
     async insertSelectedCitationsToCurrentField(items, currentField) {
         const citationObject = this.#extractField(currentField);
+        if (!citationObject || !citationObject.citationID) {
+            return currentField;
+        }
+        
         let citationID = citationObject.citationID;
 
         const tempCitation = new CSLCitation("");

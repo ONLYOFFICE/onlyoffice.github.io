@@ -135,7 +135,7 @@
     "href": "https://www.zotero.org/styles/acme-an-international-journal-for-critical-geographies"
   },
   {
-    "title": "ACS Guide 2022 revision",
+    "title": "ACS Guide 2026 revision",
     "titleShort": "American Chemical Society",
     "name": "american-chemical-society",
     "dependent": 0,
@@ -145,7 +145,7 @@
         "chemistry"
       ]
     },
-    "updated": "2026-01-03 19:12:53",
+    "updated": "2026-08-28 13:29:34",
     "href": "https://www.zotero.org/styles/american-chemical-society"
   },
   {
@@ -2058,7 +2058,7 @@
         "chemistry"
       ]
     },
-    "updated": "2025-08-22 11:01:26",
+    "updated": "2026-09-09 08:58:56",
     "href": "https://www.zotero.org/styles/angewandte-chemie"
   },
   {
@@ -2674,7 +2674,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa"
   },
   {
@@ -2695,7 +2695,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa-annotated-bibliography"
   },
   {
@@ -2731,7 +2731,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-09 21:49:58",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa-cv"
   },
   {
@@ -2752,7 +2752,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa-no-ampersand"
   },
   {
@@ -2773,7 +2773,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa-no-initials"
   },
   {
@@ -2794,7 +2794,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-09 21:49:58",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa-numeric-superscript-brackets"
   },
   {
@@ -2815,7 +2815,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-09 21:49:58",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa-numeric-superscript"
   },
   {
@@ -2836,7 +2836,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa-single-spaced"
   },
   {
@@ -2857,7 +2857,7 @@
         "sociology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-10-02 20:29:11",
     "href": "https://www.zotero.org/styles/apa-with-abstract"
   },
   {
@@ -4222,7 +4222,7 @@
       "format": "note",
       "fields": []
     },
-    "updated": "2024-01-17 03:17:24",
+    "updated": "2026-08-31 09:32:55",
     "href": "https://www.zotero.org/styles/bibliotheca-hertziana-max-planck-institute-for-art-history"
   },
   {
@@ -4344,7 +4344,7 @@
         "anthropology"
       ]
     },
-    "updated": "2016-06-21 02:53:37",
+    "updated": "2026-09-17 13:46:20",
     "href": "https://www.zotero.org/styles/bioarchaeology-international"
   },
   {
@@ -6197,23 +6197,6 @@
     },
     "updated": "2022-04-19 10:40:59",
     "href": "https://www.zotero.org/styles/centre-de-recherche-sur-les-civilisations-de-l-asie-orientale-auteur-date"
-  },
-  {
-    "title": "Centro Regional de Estudios Teológicos de Aragón (Español)",
-    "titleShort": "CRETA",
-    "name": "centro-regional-de-estudios-teologicos-de-aragon",
-    "dependent": 0,
-    "categories": {
-      "format": "note",
-      "fields": [
-        "theology",
-        "humanities",
-        "philosophy",
-        "social_science"
-      ]
-    },
-    "updated": "2025-08-28 15:53:14",
-    "href": "https://www.zotero.org/styles/centro-regional-de-estudios-teologicos-de-aragon"
   },
   {
     "title": "Česká zemědělská univerzita v Praze - Fakulta agrobiologie, potravinových a přírodních zdrojů",
@@ -8717,7 +8700,7 @@
         "anthropology"
       ]
     },
-    "updated": "2021-02-11 04:03:08",
+    "updated": "2026-09-17 13:47:04",
     "href": "https://www.zotero.org/styles/chungara-revista-de-antropologia-chilena"
   },
   {
@@ -8932,6 +8915,17 @@
     "href": "https://www.zotero.org/styles/climate-change-economics"
   },
   {
+    "title": "Climate Smart Agriculture",
+    "name": "climate-smart-agriculture",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": []
+    },
+    "updated": "2026-09-23 11:55:04",
+    "href": "https://www.zotero.org/styles/climate-smart-agriculture"
+  },
+  {
     "title": "Clínica e Investigación en Arteriosclerosis (Español)",
     "titleShort": "ARTERI",
     "name": "clinica-e-investigacion-en-arteriosclerosis",
@@ -8957,6 +8951,20 @@
     },
     "updated": "2017-09-04 20:45:05",
     "href": "https://www.zotero.org/styles/clinical-anatomy"
+  },
+  {
+    "title": "Clinical and Experimental Rheumatology",
+    "titleShort": "CER",
+    "name": "clinical-and-experimental-rheumatology",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": [
+        "medicine"
+      ]
+    },
+    "updated": "2026-10-01 20:18:03",
+    "href": "https://www.zotero.org/styles/clinical-and-experimental-rheumatology"
   },
   {
     "title": "Clinical Dysmorphology",
@@ -9629,7 +9637,7 @@
         "science"
       ]
     },
-    "updated": "2024-05-14 14:13:11",
+    "updated": "2026-08-18 08:20:40",
     "href": "https://www.zotero.org/styles/copernicus-publications"
   },
   {
@@ -9684,18 +9692,6 @@
     },
     "updated": "2026-01-05 14:58:08",
     "href": "https://www.zotero.org/styles/harvard-coventry-university"
-  },
-  {
-    "title": "Cranfield University (author-date/Harvard)",
-    "titleShort": "Cranfield Harvard",
-    "name": "harvard-cranfield-university",
-    "dependent": 0,
-    "categories": {
-      "format": "author-date",
-      "fields": []
-    },
-    "updated": "2026-01-05 14:58:08",
-    "href": "https://www.zotero.org/styles/harvard-cranfield-university"
   },
   {
     "title": "Cranfield University (numeric)",
@@ -10830,6 +10826,21 @@
     },
     "updated": "2025-08-09 13:44:04",
     "href": "https://www.zotero.org/styles/duale-hochschule-baden-wurttemberg-villingen-schwenningen-roter-grubert-mattern"
+  },
+  {
+    "title": "Dumbarton Oaks Pre-Columbian Studies",
+    "titleShort": "DO Pre-Columbian",
+    "name": "dumbarton-oaks-pre-columbian",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "anthropology",
+        "history"
+      ]
+    },
+    "updated": "2026-08-28 13:36:55",
+    "href": "https://www.zotero.org/styles/dumbarton-oaks-pre-columbian"
   },
   {
     "title": "Dundalk Institute of Technology (author-date/Harvard)",
@@ -12088,7 +12099,7 @@
         "linguistics"
       ]
     },
-    "updated": "2026-03-11 13:41:08",
+    "updated": "2026-08-26 11:34:35",
     "href": "https://www.zotero.org/styles/estonian-journal-of-archaeology"
   },
   {
@@ -12296,8 +12307,21 @@
         "generic-base"
       ]
     },
-    "updated": "2025-10-17 09:43:48",
+    "updated": "2026-08-10 07:46:05",
     "href": "https://www.zotero.org/styles/eu-interinstitutional-style"
+  },
+  {
+    "title": "EU Interinstitutional Style (notes)",
+    "name": "eu-interinstitutional-style-notes",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "generic-base"
+      ]
+    },
+    "updated": "2026-08-07 14:19:55",
+    "href": "https://www.zotero.org/styles/eu-interinstitutional-style-notes"
   },
   {
     "title": "EUNOMÍA. Revista en Cultura de la Legalidad (Español)",
@@ -12592,19 +12616,6 @@
     },
     "updated": "2018-03-28 23:10:24",
     "href": "https://www.zotero.org/styles/european-journal-of-microbiology-and-immunology"
-  },
-  {
-    "title": "European Journal of Neuroscience",
-    "name": "european-journal-of-neuroscience",
-    "dependent": 0,
-    "categories": {
-      "format": "author-date",
-      "fields": [
-        "biology"
-      ]
-    },
-    "updated": "2014-09-06 22:02:33",
-    "href": "https://www.zotero.org/styles/european-journal-of-neuroscience"
   },
   {
     "title": "European Journal of Ophthalmology",
@@ -13184,7 +13195,7 @@
         "social_science"
       ]
     },
-    "updated": "2026-05-15 06:33:52",
+    "updated": "2026-08-29 04:32:20",
     "href": "https://www.zotero.org/styles/facolta-teologica-dell-italia-settentrionale-milano"
   },
   {
@@ -14054,6 +14065,20 @@
     },
     "updated": "2025-08-24 16:31:31",
     "href": "https://www.zotero.org/styles/gallia-prehistoire"
+  },
+  {
+    "title": "Game Studies",
+    "name": "game-studies",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "communications",
+        "humanities"
+      ]
+    },
+    "updated": "2026-08-24 17:49:09",
+    "href": "https://www.zotero.org/styles/game-studies"
   },
   {
     "title": "Gastroenterology",
@@ -15450,7 +15475,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2025-12-10 13:24:19",
+    "updated": "2026-08-03 10:41:10",
     "href": "https://www.zotero.org/styles/hochschule-fur-soziale-arbeit-fhnw"
   },
   {
@@ -15919,6 +15944,20 @@
     },
     "updated": "2015-03-19 02:36:13",
     "href": "https://www.zotero.org/styles/ie-comunicaciones"
+  },
+  {
+    "title": "IEEE Annals of the History of Computing",
+    "name": "ieee-annals-of-the-history-of-computing",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": [
+        "engineering",
+        "generic-base"
+      ]
+    },
+    "updated": "2026-09-24 13:56:15",
+    "href": "https://www.zotero.org/styles/ieee-annals-of-the-history-of-computing"
   },
   {
     "title": "IEEE Reference Guide version 11.29.2023",
@@ -16426,20 +16465,6 @@
     "href": "https://www.zotero.org/styles/institut-francais-darcheologie-orientale-etudes-arabes"
   },
   {
-    "title": "Institut für Geschichte des ländlichen Raums (Deutsch)",
-    "titleShort": "IGLR",
-    "name": "institut-fur-geschichte-des-landlichen-raums",
-    "dependent": 0,
-    "categories": {
-      "format": "note",
-      "fields": [
-        "history"
-      ]
-    },
-    "updated": "2026-06-05 14:59:00",
-    "href": "https://www.zotero.org/styles/institut-fur-geschichte-des-landlichen-raums"
-  },
-  {
     "title": "Institut für Praxisforschung (author-date/Harvard, Bahr & Frackmann) (Deutsch)",
     "name": "harvard-institut-fur-praxisforschung-de",
     "dependent": 0,
@@ -16576,7 +16601,7 @@
         "math"
       ]
     },
-    "updated": "2017-08-15 03:56:09",
+    "updated": "2026-08-10 16:09:51",
     "href": "https://www.zotero.org/styles/institute-of-mathematics-and-its-applications"
   },
   {
@@ -17160,6 +17185,20 @@
     },
     "updated": "2017-11-29 04:39:10",
     "href": "https://www.zotero.org/styles/international-journal-of-geriatric-psychiatry"
+  },
+  {
+    "title": "International Journal of Healthcare Quality, Patient Centeredness and Safety",
+    "titleShort": "IJHQPCS",
+    "name": "international-journal-of-healthcare-quality-patient-centeredness-and-safety",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": [
+        "medicine"
+      ]
+    },
+    "updated": "2026-08-10 15:25:53",
+    "href": "https://www.zotero.org/styles/international-journal-of-healthcare-quality-patient-centeredness-and-safety"
   },
   {
     "title": "International Journal of Humanoid Robotics",
@@ -18303,6 +18342,20 @@
     },
     "updated": "2021-02-10 05:28:52",
     "href": "https://www.zotero.org/styles/jahrbuch-fur-evangelikale-theologie"
+  },
+  {
+    "title": "Jahrbuch für Geschichte des ländlichen Raums/Rural History Yearbook",
+    "titleShort": "JGLR/RHY",
+    "name": "institut-fur-geschichte-des-landlichen-raums",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "history"
+      ]
+    },
+    "updated": "2026-08-03 11:09:33",
+    "href": "https://www.zotero.org/styles/institut-fur-geschichte-des-landlichen-raums"
   },
   {
     "title": "Japanese Journal of Applied Physics",
@@ -19807,7 +19860,7 @@
         "science"
       ]
     },
-    "updated": "2026-01-25 22:16:24",
+    "updated": "2026-09-17 13:42:15",
     "href": "https://www.zotero.org/styles/journal-of-hearing-science"
   },
   {
@@ -21414,6 +21467,20 @@
     "href": "https://www.zotero.org/styles/journal-of-sport-and-health-science"
   },
   {
+    "title": "Journal of Sporthopedia",
+    "titleShort": "JSP",
+    "name": "journal-of-sporthopedia",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": [
+        "medicine"
+      ]
+    },
+    "updated": "2026-08-14 08:36:50",
+    "href": "https://www.zotero.org/styles/journal-of-sporthopedia"
+  },
+  {
     "title": "Journal of Sports Science & Medicine",
     "titleShort": "JSSM",
     "name": "journal-of-sports-science-and-medicine",
@@ -21743,7 +21810,7 @@
         "humanities"
       ]
     },
-    "updated": "2017-03-05 18:40:08",
+    "updated": "2026-09-17 13:49:56",
     "href": "https://www.zotero.org/styles/journal-of-the-association-of-environmental-and-resource-economists"
   },
   {
@@ -22819,7 +22886,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-01-25 22:16:24",
+    "updated": "2026-08-10 15:28:44",
     "href": "https://www.zotero.org/styles/lancaster-university-harvard"
   },
   {
@@ -25462,7 +25529,7 @@
         "generic-base"
       ]
     },
-    "updated": "2025-09-10 18:26:53",
+    "updated": "2026-09-08 08:32:30",
     "href": "https://www.zotero.org/styles/nature"
   },
   {
@@ -26766,7 +26833,7 @@
         "law"
       ]
     },
-    "updated": "2026-05-27 12:14:09",
+    "updated": "2026-09-30 09:05:27",
     "href": "https://www.zotero.org/styles/norsk-henvisningsstandard-for-rettsvitenskapelige-tekster-full-firstnote"
   },
   {
@@ -26779,7 +26846,7 @@
         "law"
       ]
     },
-    "updated": "2026-05-27 12:14:09",
+    "updated": "2026-09-30 09:05:27",
     "href": "https://www.zotero.org/styles/norsk-henvisningsstandard-for-rettsvitenskapelige-tekster"
   },
   {
@@ -26830,7 +26897,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-01-05 14:58:08",
+    "updated": "2026-10-06 10:26:04",
     "href": "https://www.zotero.org/styles/nottingham-trent-university-library-harvard"
   },
   {
@@ -26905,6 +26972,7 @@
   },
   {
     "title": "Nucleic Acids Research",
+    "titleShort": "NAR",
     "name": "nucleic-acids-research",
     "dependent": 0,
     "categories": {
@@ -26913,7 +26981,7 @@
         "biology"
       ]
     },
-    "updated": "2026-01-03 21:21:12",
+    "updated": "2026-09-04 11:56:12",
     "href": "https://www.zotero.org/styles/nucleic-acids-research"
   },
   {
@@ -29041,6 +29109,19 @@
     },
     "updated": "2021-02-14 05:16:25",
     "href": "https://www.zotero.org/styles/pontifical-gregorian-university"
+  },
+  {
+    "title": "Pontificia Universidad Católica de Chile - Facultad de Teología (Español)",
+    "name": "teologia-uc-chile",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "theology"
+      ]
+    },
+    "updated": "2026-09-30 07:14:40",
+    "href": "https://www.zotero.org/styles/teologia-uc-chile"
   },
   {
     "title": "Pontificia Universidad Católica del Ecuador (author-date/Harvard, Español)",
@@ -31240,7 +31321,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-07 15:28:31",
+    "updated": "2026-08-12 12:31:57",
     "href": "https://www.zotero.org/styles/society-of-biblical-literature-author-date"
   },
   {
@@ -31254,7 +31335,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-07 15:28:31",
+    "updated": "2026-08-12 12:18:39",
     "href": "https://www.zotero.org/styles/society-of-biblical-literature-fullnote-bibliography"
   },
   {
@@ -31349,7 +31430,7 @@
         "social_science"
       ]
     },
-    "updated": "2026-02-26 14:14:04",
+    "updated": "2026-08-13 13:24:08",
     "href": "https://www.zotero.org/styles/schweizerische-zeitschrift-fur-geschichte"
   },
   {
@@ -32065,20 +32146,6 @@
     },
     "updated": "2019-04-09 04:04:12",
     "href": "https://www.zotero.org/styles/societes-contemporaines"
-  },
-  {
-    "title": "Society for American Archaeology",
-    "titleShort": "SAA",
-    "name": "society-for-american-archaeology",
-    "dependent": 0,
-    "categories": {
-      "format": "author-date",
-      "fields": [
-        "anthropology"
-      ]
-    },
-    "updated": "2025-02-15 11:01:15",
-    "href": "https://www.zotero.org/styles/society-for-american-archaeology"
   },
   {
     "title": "Society for Historical Archaeology",
@@ -37099,6 +37166,18 @@
     "href": "https://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas-ufrgs"
   },
   {
+    "title": "Universidade Federal Rural do Rio de Janeiro - Instituto Três Rios - Administração (Português - Brasil)",
+    "titleShort": "UFRRJ",
+    "name": "universidade-federal-rural-do-rio-de-janeiro-instituto-tres-rios-administracao",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": []
+    },
+    "updated": "2026-08-31 17:17:46",
+    "href": "https://www.zotero.org/styles/universidade-federal-rural-do-rio-de-janeiro-instituto-tres-rios-administracao"
+  },
+  {
     "title": "Università Cattolica del Sacro Cuore (note, Italiano)",
     "name": "universita-cattolica-del-sacro-cuore",
     "dependent": 0,
@@ -37169,6 +37248,21 @@
     },
     "updated": "2025-07-14 15:39:42",
     "href": "https://www.zotero.org/styles/universitas-gadjah-mada-departemen-sejarah"
+  },
+  {
+    "title": "Universitas Gadjah Mada - Doctor of Pharmaceutical Sciences (Bahasa Indonesia)",
+    "titleShort": "UGM DIF",
+    "name": "universitas-gadjah-mada-doctor-of-pharmaceutical-sciences",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "science",
+        "chemistry"
+      ]
+    },
+    "updated": "2026-08-10 08:06:36",
+    "href": "https://www.zotero.org/styles/universitas-gadjah-mada-doctor-of-pharmaceutical-sciences"
   },
   {
     "title": "Universitas Gadjah Mada - Doctoral Program in Pharmaceutical Sciences (Bahasa Indonesia)",
@@ -37735,11 +37829,11 @@
         "psychology"
       ]
     },
-    "updated": "2025-05-18 00:55:38",
+    "updated": "2026-09-14 19:24:03",
     "href": "https://www.zotero.org/styles/universite-du-quebec-a-montreal"
   },
   {
-    "title": "Université du Québec à Montréal - Département d’histoire (Français - Canada)",
+    "title": "Université du Québec à Montréal - Département d'histoire (Français - Canada)",
     "titleShort": "UQAM - histoire",
     "name": "universite-du-quebec-a-montreal-departement-dhistoire",
     "dependent": 0,
@@ -37749,7 +37843,7 @@
         "history"
       ]
     },
-    "updated": "2025-08-22 17:17:51",
+    "updated": "2026-08-21 11:41:56",
     "href": "https://www.zotero.org/styles/universite-du-quebec-a-montreal-departement-dhistoire"
   },
   {
@@ -38380,6 +38474,18 @@
     "href": "https://www.zotero.org/styles/harvard-university-of-westminster"
   },
   {
+    "title": "University of Wollongong (author-date/Harvard)",
+    "titleShort": "UOW",
+    "name": "university-of-wollongong-harvard",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": []
+    },
+    "updated": "2026-08-08 11:37:41",
+    "href": "https://www.zotero.org/styles/university-of-wollongong-harvard"
+  },
+  {
     "title": "University of Wolverhampton (author-date/Harvard)",
     "name": "harvard-university-of-wolverhampton",
     "dependent": 0,
@@ -38399,7 +38505,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-01-25 22:16:24",
+    "updated": "2026-08-30 01:57:00",
     "href": "https://www.zotero.org/styles/university-of-york-harvard-archaeology"
   },
   {
@@ -39325,7 +39431,7 @@
         "engineering"
       ]
     },
-    "updated": "2025-05-18 00:55:38",
+    "updated": "2026-09-29 07:52:48",
     "href": "https://www.zotero.org/styles/wiley-vch-books"
   },
   {
@@ -40067,7 +40173,7 @@
         "law"
       ]
     },
-    "updated": "2025-10-21 09:16:25",
+    "updated": "2026-08-06 14:52:15",
     "href": "https://www.zotero.org/styles/zitierguide-leitfaden-zum-fachgerechten-zitieren-in-rechtswissenschaftlichen-arbeiten"
   },
   {

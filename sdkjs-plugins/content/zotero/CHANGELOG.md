@@ -62,3 +62,7 @@
 * Add option to include URLs of paper articles.
 * Add bibliography preview to the settings page.
 * Fix incorrect "(Version N)" appearing in bibliographies (e.g. APA 7th edition) for items with no real citable version.
+
+## 1.1.1
+
+* Replace an editor API call deprecated starting from version 10.0.3.

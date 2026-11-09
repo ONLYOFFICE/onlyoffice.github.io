@@ -994,15 +994,15 @@ import "../styles.css";
                 if (!bItemsChanged) {
                     return;
                 }
-                /*const updateOptions = {
+                const updateOptions = {
                     skipCitations:
                         !AutoUpdatePreferences.shouldUpdateCitations(),
                     skipBibliography:
                         !AutoUpdatePreferences.shouldUpdateBibliography(),
-                };*/
+                };
                 return citationService.updateCslItems(
                     bIsNotesFormat ? false : undefined,
-                    //updateOptions
+                    updateOptions
                 );
             })
             .then(() => {
