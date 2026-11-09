@@ -42,7 +42,8 @@ import { collectItemKeys } from "../item-keys";
 
 /**
  * @typedef {Object} Scroller
- * @property {Function} onscroll
+ * @property {function(boolean=): void} onscroll - pass true when the user
+ *  scrolled; other calls only redraw the thumb
  */
 
 /**
@@ -607,9 +608,16 @@ SelectCitationsComponent.prototype._addSelected = function (item, checkbox) {
 /**
  * @param {HTMLElement} holder - The element that contains the document list.
  * @param {HTMLElement} [thumb]
+ * @param {boolean} [byUser] - whether the user scrolled the list
  */
-SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb) {
+SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb, byUser) {
     const self = this;
+    // Only the user's scrolling asks for the next page. Redraws after a page
+    // arrives would otherwise keep fetching until the list overflows, and
+    // every page is a request against the Zotero API rate limit.
+    if (!byUser) {
+        return;
+    }
     if (this._fShouldLoadMore(holder)) {
         if (this._loadTimeout) {
             clearTimeout(this._loadTimeout);
@@ -629,6 +637,23 @@ SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb) {
         }, 500);
     }
 };
+
+/**
+ * The vertical distance of a wheel event in pixels. A touchpad reports many
+ * small pixel deltas; only line and page deltas need scaling.
+ * @param {WheelEvent} e
+ * @param {HTMLElement} holder
+ * @returns {number}
+ */
+function wheelDeltaInPixels(e, holder) {
+    if (e.deltaMode === 1) {
+        return e.deltaY * 20; // lines
+    }
+    if (e.deltaMode === 2) {
+        return e.deltaY * holder.clientHeight; // pages
+    }
+    return e.deltaY;
+}
 
 /**
  * @param {HTMLElement} holder
@@ -652,9 +677,8 @@ SelectCitationsComponent.prototype._initScrollBox = function (
     );
 
     holder.onwheel = function (e) {
-        holder.scrollTop +=
-            e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
-        scroller.onscroll();
+        holder.scrollTop += wheelDeltaInPixels(e, holder);
+        scroller.onscroll(true);
     };
 
     thumb.onmousedown = function (e) {
@@ -662,19 +686,27 @@ SelectCitationsComponent.prototype._initScrollBox = function (
         var y = e.clientY;
         var initialPos = holder.scrollTop;
 
-        window.onmouseup = function (e) {
+        var stopDragging = function () {
             thumb.classList.remove("scrolling");
             window.onmouseup = null;
             window.onmousemove = null;
         };
+        window.onmouseup = stopDragging;
         window.onmousemove = function (e) {
+            // The button was released outside the plugin frame, where the
+            // mouseup never reaches us: without this, merely moving the
+            // pointer would keep dragging the list.
+            if (e.buttons === 0) {
+                stopDragging();
+                return;
+            }
             var delta = e.clientY - y;
 
             var percMoved = delta / holder.clientHeight;
             var deltaScroll = holder.scrollHeight * percMoved;
             holder.scrollTop = initialPos + deltaScroll;
 
-            scroller.onscroll();
+            scroller.onscroll(true);
         };
     };
 
@@ -689,8 +721,8 @@ SelectCitationsComponent.prototype._initScrollBox = function (
  * @param {HTMLElement} holder
  * @param {HTMLElement} thumb
  * @param {number} minThumbHeight
- * @param {function} [func] - an optional function to be called with the holder and thumb as arguments.
- * @returns {function} - a function that checks the scroll state and updates the thumb accordingly.
+ * @param {function} [func] - an optional function to be called with the holder, the thumb and whether the user scrolled.
+ * @returns {function(boolean=): void} - a function that checks the scroll state and updates the thumb accordingly.
  * */
 SelectCitationsComponent.prototype._checkScroll = function (
     holder,
@@ -699,7 +731,7 @@ SelectCitationsComponent.prototype._checkScroll = function (
     func
 ) {
     const displayNoneClass = this._displayNoneClass;
-    return function () {
+    return function (byUser) {
         if (holder.scrollHeight <= holder.clientHeight) {
             thumb.classList.add(displayNoneClass);
         } else {
@@ -717,7 +749,7 @@ SelectCitationsComponent.prototype._checkScroll = function (
             thumb.style.marginTop = margin + "px";
         }
 
-        if (func) func(holder, thumb);
+        if (func) func(holder, thumb, byUser === true);
     };
 };
 

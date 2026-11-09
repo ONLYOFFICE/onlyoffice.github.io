@@ -158,5 +158,6 @@ var AscSimpleRequest = window.AscSimpleRequest;
  * @property {string} text
  * @property {SearchResult | null} obj
  * @property {Array<SearchResult>} groups
+ * @property {Array<string|number>} groupOrder - the searched groups in the order of the library filter
  * @property {string} groupsHash
  */

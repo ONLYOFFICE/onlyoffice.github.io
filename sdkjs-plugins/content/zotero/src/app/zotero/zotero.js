@@ -92,6 +92,11 @@ ZoteroSdk.prototype.ZOTERO_API_VERSION = "3";
 ZoteroSdk.prototype.USER_AGENT = "AscDesktopEditor";
 /** @type {"csljson"|"json"} */
 ZoteroSdk.prototype.DEFAULT_FORMAT = "csljson";
+/**
+ * Page size of a search against the local Zotero API. Unlike the web API it
+ * answers with every match at once when no limit is given.
+ */
+ZoteroSdk.prototype.DESKTOP_PAGE_SIZE = 25;
 ZoteroSdk.prototype.STORAGE_KEYS = {
     USER_ID: "zoteroUserId",
     API_KEY: "zoteroApiKey",
@@ -144,17 +149,19 @@ ZoteroSdk.prototype._getDesktopRequest = function (url) {
 /**
  * Make a GET request to the online Zotero API
  * @param {URL} url
+ * @param {AbortSignal} [signal] - cancels the request, see RateLimitedFetcher
  * @returns {Promise<FetchResponse>}
  */
-ZoteroSdk.prototype._getOnlineRequest = function (url) {
+ZoteroSdk.prototype._getOnlineRequest = function (url, signal) {
     const headers = {
         "Zotero-API-Version": this.ZOTERO_API_VERSION,
         "Zotero-API-Key": this._apiKey || "",
     };
 
-    //return this._fetcher.fetchWithRetry(url, headers, 9);
-
-    return fetch(url, { headers: headers, cache: "no-store" })
+    // Queued: a search over several libraries must not reach the API as a
+    // burst of parallel requests.
+    return this._fetcher
+        .fetchWithRetry(url, headers, signal)
         .then(function (response) {
             if (!response.ok) {
                 const message = response.status + " " + response.statusText;
@@ -164,7 +171,8 @@ ZoteroSdk.prototype._getOnlineRequest = function (url) {
             return response;
         })
         .catch(function (error) {
-            if (typeof error === "object") {
+            // A cancelled request is not a failed connection.
+            if (typeof error === "object" && error.name !== "AbortError") {
                 error.message = "Connection to Zotero failed";
             }
             throw error;
@@ -174,11 +182,12 @@ ZoteroSdk.prototype._getOnlineRequest = function (url) {
 /**
  * Universal request handler with offline support
  * @param {URL} url
+ * @param {AbortSignal} [signal] - cancels an online request
  * @returns {Promise<AscSimpleResponse | FetchResponse>}
  */
-ZoteroSdk.prototype._getRequestWithOfflineSupport = function (url) {
+ZoteroSdk.prototype._getRequestWithOfflineSupport = function (url, signal) {
     return this._isOnlineAvailable
-        ? this._getOnlineRequest(url)
+        ? this._getOnlineRequest(url, signal)
         : this._getDesktopRequest(url.href);
 };
 
@@ -186,9 +195,10 @@ ZoteroSdk.prototype._getRequestWithOfflineSupport = function (url) {
  * Build URL and make GET request
  * @param {string} path
  * @param {Object<string, string>} [queryParams]
+ * @param {AbortSignal} [signal] - cancels an online request
  * @returns {Promise<AscSimpleResponse | FetchResponse>}
  */
-ZoteroSdk.prototype._buildGetRequest = function (path, queryParams) {
+ZoteroSdk.prototype._buildGetRequest = function (path, queryParams, signal) {
     queryParams = queryParams || {};
     var url = new URL(path, this._getBaseUrl());
 
@@ -198,7 +208,7 @@ ZoteroSdk.prototype._buildGetRequest = function (path, queryParams) {
         }
     });
 
-    return this._getRequestWithOfflineSupport(url);
+    return this._getRequestWithOfflineSupport(url, signal);
 };
 
 /**
@@ -245,11 +255,13 @@ ZoteroSdk.prototype._parseDesktopItemsResponse = function (
  * Parse response for online mode with pagination support
  * @param {Promise<FetchResponse>} promise
  * @param {number|string} id
+ * @param {AbortSignal} [signal] - the next page is cancelled with the first
  * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype._parseItemsResponse = function (
     promise,
-    id
+    id,
+    signal
 ) {
     var self = this;
     return promise
@@ -274,8 +286,9 @@ ZoteroSdk.prototype._parseItemsResponse = function (
             if (links.next) {
                 result.next = function () {
                     return self._parseItemsResponse(
-                        self._getOnlineRequest(new URL(links.next)),
-                        id
+                        self._getOnlineRequest(new URL(links.next), signal),
+                        id,
+                        signal
                     );
                 };
             }
@@ -288,14 +301,15 @@ ZoteroSdk.prototype._parseItemsResponse = function (
  * Universal items response parser
  * @param {Promise<AscSimpleResponse | FetchResponse>} promise
  * @param {number|string} id
+ * @param {AbortSignal} [signal] - cancels the further pages of an online answer
  * @returns {Promise<SearchResult>}
  */
-ZoteroSdk.prototype._parseResponse = function (promise, id) {
+ZoteroSdk.prototype._parseResponse = function (promise, id, signal) {
     /** @type {Promise<SearchResult>} */
     let result = Promise.resolve({items:[], id: 0});
     if (this._isOnlineAvailable) {
         const fetchPromise = /** @type {Promise<FetchResponse>} */ (promise);
-        result = this._parseItemsResponse(fetchPromise, id);
+        result = this._parseItemsResponse(fetchPromise, id, signal);
     } else {
         const ascSimplePromise = /** @type {Promise<AscSimpleResponse>} */ (
             promise
@@ -309,13 +323,60 @@ ZoteroSdk.prototype._parseResponse = function (promise, id) {
 };
 
 /**
+ * One page of a search against the local Zotero API. Its answers reach the
+ * plugin without headers, so there is no Link to follow: a full page stands
+ * for "there may be more". An answer longer than a page means the limit was
+ * not applied and everything has come already.
+ * @param {string} path
+ * @param {{format: "csljson"|"json", q?: string, itemKey?: string, itemType?: string}} queryParams
+ * @param {number|string} id
+ * @param {number} start
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype._getDesktopSearchPage = function (path, queryParams, id, start) {
+    const self = this;
+    const limit = this.DESKTOP_PAGE_SIZE;
+    const pageParams = Object.assign({}, queryParams, {
+        limit: String(limit),
+        start: String(start),
+    });
+    let response = this._parseResponse(
+        this._buildGetRequest(path, pageParams),
+        id
+    );
+    if (pageParams.format === "csljson") {
+        // See getItems: local csljson results cannot be traced back to the
+        // library, the json answer for the same page carries keys and links.
+        response = this._addJsonToClsJsonItemsResponse(
+            response,
+            path,
+            Object.assign({}, pageParams)
+        );
+    }
+    return response.then(function (res) {
+        if (Array.isArray(res.items) && res.items.length === limit) {
+            res.next = function () {
+                return self._getDesktopSearchPage(
+                    path,
+                    queryParams,
+                    id,
+                    start + limit
+                );
+            };
+        }
+        return res;
+    });
+};
+
+/**
  * Get items from user library
  * @param {string|null} search
  * @param {string[]|null} [itemsID]
  * @param {"csljson"|"json"} [format]
+ * @param {AbortSignal} [signal] - cancels the search and its further pages
  * @returns {Promise<SearchResult>}
  */
-ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
+ZoteroSdk.prototype.getItems = function (search, itemsID, format, signal) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
@@ -343,8 +404,11 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
         self._userId +
         "/" +
         self.API_PATHS.ITEMS;
-    const request = self._buildGetRequest(path, queryParams);
-    const response = self._parseResponse(request, self._userId);
+    if (search && !this._isOnlineAvailable) {
+        return this._getDesktopSearchPage(path, queryParams, self._userId, 0);
+    }
+    const request = self._buildGetRequest(path, queryParams, signal);
+    const response = self._parseResponse(request, self._userId, signal);
     
     if (!this._isOnlineAvailable && format === "csljson") {
         return this._addJsonToClsJsonItemsResponse(response, path, queryParams);
@@ -358,37 +422,45 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
  * @param {number|string} groupId
  * @param {string[]} [itemsID]
  * @param {"csljson"|"json"} [format]
+ * @param {AbortSignal} [signal] - cancels the search and its further pages
  * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype.getGroupItems = function (
     search,
     groupId,
     itemsID,
-    format
+    format,
+    signal
 ) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
     var queryParams =
-        /** @type {{format: string, q?: string, itemKey?: string}} */ ({
+        /** @type {{format: "csljson"|"json", q?: string, itemKey?: string}} */ ({
             format: format,
         });
 
     if (search) {
         queryParams.q = search;
-        if (!this._isOnlineAvailable) {
-            // See getItems: local csljson results cannot be traced back to
-            // the library, json results carry real keys and links.
-            queryParams.format = "json";
-        }
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
     }
 
     var path =
         self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
-    var request = self._buildGetRequest(path, queryParams);
-    return self._parseResponse(request, groupId);
+    if (search && !this._isOnlineAvailable) {
+        return this._getDesktopSearchPage(path, queryParams, groupId, 0);
+    }
+    var request = self._buildGetRequest(path, queryParams, signal);
+    var response = self._parseResponse(request, groupId, signal);
+
+    // As in getItems: local csljson results cannot be traced back to the
+    // library, and plain json ones carry no title the result list can show,
+    // so the two are merged.
+    if (!this._isOnlineAvailable && format === "csljson") {
+        return this._addJsonToClsJsonItemsResponse(response, path, queryParams);
+    }
+    return response;
 
 };
 
@@ -513,7 +585,7 @@ ZoteroSdk.prototype.getUserGroups = function () {
 /**
  * @param {Promise<SearchResult>} response 
  * @param {string} path 
- * @param {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType?: string}} queryParams 
+ * @param {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number|string, start?: string, itemType?: string}} queryParams 
  * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype._addJsonToClsJsonItemsResponse = function (response, path, queryParams) {

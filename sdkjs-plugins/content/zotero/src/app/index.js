@@ -71,6 +71,7 @@ import "../styles.css";
         text: "",
         obj: null,
         groups: [],
+        groupOrder: [],
         groupsHash: "",
     };
     /**
@@ -78,6 +79,12 @@ import "../styles.css";
      * answer that belongs to an earlier search must not land in the list.
      */
     let searchGeneration = 0;
+    /**
+     * Cancels the requests of the search on screen, so that a newer search
+     * drops what the older one still has queued.
+     * @type {AbortController | null}
+     */
+    let searchAbort = null;
     let bInProgress = false;
 
     /**
@@ -315,9 +322,10 @@ import "../styles.css";
          * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
          * @param {string} groupsHash
          * @param {number} generation
+         * @param {AbortSignal} [signal]
          * @returns {Promise<Array<Promise<number>>>}
          */
-        function searchFor(text, selectedGroups, groupsHash, generation) {
+        function searchFor(text, selectedGroups, groupsHash, generation, signal) {
             selectCitation.clearLibrary();
             /** @type {Array<Promise<number>>} */
             const promises = [];
@@ -340,14 +348,24 @@ import "../styles.css";
 
                     if (selectedGroups.indexOf("my_library") !== -1) {
                         promises.push(
-                            loadLibrary(sdk.getItems(text), false, generation),
+                            loadLibrary(
+                                sdk.getItems(text, null, undefined, signal),
+                                false,
+                                generation,
+                            ),
                         );
                     }
 
                     for (var i = 0; i < groups.length; i++) {
                         promises.push(
                             loadLibrary(
-                                sdk.getGroupItems(text, groups[i]),
+                                sdk.getGroupItems(
+                                    text,
+                                    groups[i],
+                                    undefined,
+                                    undefined,
+                                    signal,
+                                ),
                                 true,
                                 generation,
                             )
@@ -356,6 +374,7 @@ import "../styles.css";
                     lastSearch.text = text;
                     lastSearch.obj = null;
                     lastSearch.groups = [];
+                    lastSearch.groupOrder = groups.map(String);
                     lastSearch.groupsHash = groupsHash;
                     return promises;
                 });
@@ -373,20 +392,26 @@ import "../styles.css";
                 return;
 
             const generation = ++searchGeneration;
-            searchFor(text, selectedGroups, groupsHash, generation)
+            if (searchAbort) {
+                searchAbort.abort();
+            }
+            searchAbort =
+                typeof AbortController === "function"
+                    ? new AbortController()
+                    : null;
+            searchFor(
+                text,
+                selectedGroups,
+                groupsHash,
+                generation,
+                searchAbort ? searchAbort.signal : undefined,
+            )
                 .catch(() => {
                     return [];
                 })
                 .then(function (promises) {
                     if (promises.length) {
                         libLoader.show();
-                        Promise.any(promises)
-                            .then(function () {
-                                libLoader.hide();
-                            })
-                            .finally(function () {
-                                libLoader.hide();
-                            });
                     }
                     return Promise.allSettled(promises);
                 })
@@ -397,6 +422,8 @@ import "../styles.css";
                         if (generation !== searchGeneration) {
                             return;
                         }
+                        // Every library has answered.
+                        libLoader.hide();
                         let numOfShown = 0;
                         numOfShownByLib.forEach(function (promise) {
                             if (promise.status === "fulfilled") {
@@ -850,24 +877,39 @@ import "../styles.css";
     }
 
     function loadMore() {
-        console.warn("Loading more...");
+        // Each `next` is taken before its request goes out, so another
+        // scroll cannot ask for the same page while this one is loading.
+        // One page from one library per scroll: the user's own library is
+        // read to its end first, then the groups in the order of the filter.
+        /** @type {Array<Promise<number>>} */
+        const pages = [];
+        const order = lastSearch.groupOrder;
+        const group = lastSearch.groups
+            .filter(function (group) {
+                return !!group.next;
+            })
+            .sort(function (a, b) {
+                return order.indexOf(String(a.id)) - order.indexOf(String(b.id));
+            })[0];
         if (lastSearch.obj && lastSearch.obj.next) {
-            loadLibrary(lastSearch.obj.next(), false, searchGeneration);
+            const next = lastSearch.obj.next;
+            delete lastSearch.obj.next;
+            pages.push(loadLibrary(next(), false, searchGeneration));
+        } else if (group && group.next) {
+            const next = group.next;
+            delete group.next;
+            pages.push(loadLibrary(next(), true, searchGeneration));
         }
 
-        for (
-            let i = 0;
-            i < lastSearch.groups.length && lastSearch.groups[i].next;
-            i++
-        ) {
-            loadLibrary(
-                sdk.getGroupItems(
-                    lastSearch.groups[i].next(),
-                    lastSearch.groups[i].id,
-                ),
-                true,
-                searchGeneration,
-            );
+        if (pages.length) {
+            const generation = searchGeneration;
+            libLoader.show();
+            Promise.allSettled(pages).then(function () {
+                // A newer search shows the loader for its own requests.
+                if (generation === searchGeneration) {
+                    libLoader.hide();
+                }
+            });
         }
     }
 
@@ -877,15 +919,18 @@ import "../styles.css";
      */
     function shouldLoadMore(holder) {
         if (router.getRoute() != "main") return false;
-        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight) {
+        // A pixel of slack: native scrolling can stop a fraction short of
+        // the end at some zoom levels.
+        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight - 1) {
             return false;
         }
 
-        let flag = true;
-        lastSearch.groups.forEach(function (el) {
-            if (el.next) flag = false;
-        });
-        if (!lastSearch.obj || !lastSearch.obj.next || !flag) return false;
+        const hasMore =
+            !!(lastSearch.obj && lastSearch.obj.next) ||
+            lastSearch.groups.some(function (group) {
+                return !!group.next;
+            });
+        if (!hasMore) return false;
         if (
             !lastSearch.obj &&
             !lastSearch.text.trim() &&
@@ -908,6 +953,11 @@ import "../styles.css";
                 return displaySearchItems(res, null, isGroup, generation);
             })
             .catch(function (err) {
+                // A replaced search's failures, its cancelled requests
+                // among them, are nobody's concern any more.
+                if (generation !== searchGeneration) {
+                    return 0;
+                }
                 console.error(err);
                 if (err.message) {
                     showError(translate(err.message));
@@ -939,12 +989,23 @@ import "../styles.css";
                 lastSearch.obj = null;
                 lastSearch.groups = [];
             }
-            if (lastSearch && lastSearch.obj) {
+            if (!isGroup && lastSearch && lastSearch.obj) {
                 delete lastSearch.obj.next;
             }
-        } else {
-            if (isGroup && res && res.next) lastSearch.groups.push(res);
-            else lastSearch.obj = res && res.items.length ? res : null;
+        } else if (isGroup && res) {
+            // One entry per group, holding the page to continue from.
+            const index = lastSearch.groups.findIndex(function (group) {
+                return group.id === res.id;
+            });
+            if (!res.next) {
+                if (index !== -1) lastSearch.groups.splice(index, 1);
+            } else if (index === -1) {
+                lastSearch.groups.push(res);
+            } else {
+                lastSearch.groups[index] = res;
+            }
+        } else if (!isGroup) {
+            lastSearch.obj = res && res.items.length ? res : null;
         }
         /**
          * @param {SearchResultItem} item

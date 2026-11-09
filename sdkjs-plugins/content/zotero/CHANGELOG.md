@@ -80,3 +80,9 @@
 * Fix inserting a citation inside a footnote or endnote, which created a note within the note.
 * Fix the formatting of citations inside footnotes and endnotes.
 * Reload the group libraries after reconnecting to Zotero, for example with another account.
+* Fix loading more search results when scrolling: further pages of group libraries never loaded, and they stopped your own library from loading more too.
+* Fix scrolling the search results: a touchpad swipe jumped to the end of the list, and the scroll bar kept following the pointer after the mouse button was released outside the plugin.
+* Load search results through the Zotero desktop app page by page while scrolling, as with the web API, instead of all at once.
+* Load further search results only when the list is scrolled to its end, one library at a time: your own library first, then the groups in the order of the library filter.
+* Show the loading indicator while further search results load, and keep it until every library has answered.
+* Send requests to the Zotero web API one at a time and wait when Zotero asks to slow down, instead of several at once that ran into its rate limit. A new search drops the requests the previous one still had waiting.

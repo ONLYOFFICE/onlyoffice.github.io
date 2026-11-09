@@ -204,7 +204,8 @@ div::-moz-selection {
     border-style: solid;
     border-radius: 2px;
     padding: 8px;
-    max-height: 180px;
+    max-height: 200px;
+    min-height: 100px;
     overflow-y: auto;
     font-size: 11px;
     line-height: 1.35;
