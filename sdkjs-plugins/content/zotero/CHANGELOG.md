@@ -69,3 +69,14 @@
 * Add drag-and-drop reordering of sources in the citation editing window.
 * Show sources already cited in the document first in the search results.
 * Keep the citation style in the document, so it stays available offline and on other computers.
+* Store the citation style in the document properties the way the Zotero plugin for Word does, so the style is kept when the document is opened in Word and restored when it is opened here.
+* Refresh re-reads the cited items from Zotero, so changes made in the library reach the document.
+* Add settings to stop inserting a citation from updating the other citations and the bibliography.
+* Add the Advanced page with a button that restores citations turned into plain text, for example by copying them from another document.
+* Add the missing contributors (editors, translators, series editors and others) and item fields (DOI, ISBN, ISSN, container and collection titles) to citations.
+* Keep an item's abstract in the document only when the citation style uses it.
+* Search in drop-down lists matches items that contain all the typed words.
+* Speed up inserting and refreshing citations.
+* Fix inserting a citation inside a footnote or endnote, which created a note within the note.
+* Fix the formatting of citations inside footnotes and endnotes.
+* Reload the group libraries after reconnecting to Zotero, for example with another account.
