@@ -944,6 +944,16 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async saveEmbeddedStyle(style) {
+        /**
+         * @param {string} text
+         * @returns {string}
+         */
+        const escapeXml = (text) => String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+
         const xml =
             '<?xml version="1.0" encoding="UTF-8"?>' +
             '<embeddedStyle xmlns="' + this.#EMBEDDED_STYLE_NAMESPACE + '"' +
@@ -1055,18 +1065,6 @@ class CitationDocService {
             );
         });
     }
-}
-
-/**
- * @param {string} text
- * @returns {string}
- */
-function escapeXml(text) {
-    return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
 }
 
 export { CitationDocService };

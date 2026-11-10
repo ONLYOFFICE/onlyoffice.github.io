@@ -617,13 +617,6 @@ import "../styles.css";
                     }
                     return citationService.updateCslItems(undefined, updateOptions);
                 })
-                .then(() => {
-                    if (bHasNotes) {
-                        return citationService.moveCursorRight();
-                    } else if (currentField) {
-                        return citationService.moveCursorOutsideField(currentField.FieldId);
-                    }
-                })
                 .catch(function (error) {
                     console.error(error);
                     let message = translate("Failed to insert citation");
@@ -634,6 +627,11 @@ import "../styles.css";
                 })
                 .finally(async () => {
                     await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    if (bHasNotes) {
+                        citationService.moveCursorRight();
+                    } else if (currentField) {
+                        citationService.moveCursorOutsideField(currentField.FieldId);
+                    }
                     const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
                     await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
                 });
