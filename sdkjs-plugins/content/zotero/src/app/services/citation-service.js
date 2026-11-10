@@ -298,8 +298,9 @@ class CitationService {
     }
 
     /**
-     * Re-reads stored items from Zotero, one request per item key. A csljson
-     * refresh first uses what prefetchCitedItems() fetched.
+     * Re-reads stored items from Zotero, the items of one library asked for
+     * together. A csljson refresh first uses what prefetchCitedItems()
+     * fetched.
      * @param {(item: CitationItem, id: string) => boolean} shouldRefreshItem
      * @param {"csljson"|"json"} format
      * @param {RefreshProgressCallback} [onProgress]
@@ -352,65 +353,87 @@ class CitationService {
             }
         };
 
-        // One request per key, through the single-item endpoint: the csljson
-        // format identifies items by CSL citation key rather than by item
-        // key, so a batched answer cannot be matched back to what was asked
-        // for. A single-item request maps unambiguously and leaves out the
-        // child notes and attachments.
-        const keyedRequests = itemsToRefresh.map((context) => {
-            const requestPromise = context.groupID
-                ? this._sdk.getGroupItemByKey(
-                      context.groupID,
-                      context.fetchKey,
-                      format,
-                  )
-                : this._sdk.getItemByKey(context.fetchKey, format);
+        /**
+         * @param {{id: string, fetchKey: string}} context
+         * @param {any} item - as Zotero returned it, undefined if it did not
+         */
+        const applyItem = (context, item) => {
+            if (!item) {
+                // Deleted in Zotero, stale key: the item keeps its data.
+                console.warn(
+                    "Zotero returned no item for key " +
+                        context.fetchKey +
+                        " (" +
+                        context.id +
+                        ")",
+                );
+                if (fetched) fetched.set(context.id, null);
+                return;
+            }
+            if (fetched) {
+                fetched.set(context.id, { cslItem: item });
+            }
+            const storedItem = this._storage.getItem(context.id);
+            if (!storedItem) {
+                return;
+            }
+            if (format === "csljson") {
+                // A full refresh replaces the data, so a field deleted in
+                // Zotero disappears here too. The json format is only used
+                // to backfill single fields.
+                storedItem.replaceItemDataFromCsl(item);
+            } else {
+                storedItem.fillFromObject(item);
+            }
+        };
 
-            return requestPromise
-                .then((res) => {
-                    const items = this.#normalizeSingleItemResponse(res);
-                    if (items.length !== 1) {
-                        console.warn(
-                            "Zotero returned " +
-                                items.length +
-                                " items for key " +
-                                context.fetchKey,
-                        );
-                        if (fetched) fetched.set(context.id, null);
-                        return;
-                    }
-                    if (fetched) {
-                        fetched.set(context.id, { cslItem: items[0] });
-                    }
-
-                    const storedItem = this._storage.getItem(context.id);
-                    if (!storedItem) {
-                        return;
-                    }
-                    if (format === "csljson") {
-                        // A full refresh replaces the data, so a field
-                        // deleted in Zotero disappears here too. The json
-                        // format is only used to backfill single fields.
-                        storedItem.replaceItemDataFromCsl(items[0]);
-                    } else {
-                        storedItem.fillFromObject(items[0]);
-                    }
-                })
-                .catch((error) => {
-                    // One item that cannot be resolved - deleted in Zotero,
-                    // stale key, library unavailable - must not abort the
-                    // rest of the refresh.
-                    if (fetched) fetched.set(context.id, null);
-                    console.warn(
-                        "Failed to refresh item " +
-                            context.id +
-                            " (Zotero key " +
-                            context.fetchKey +
-                            "):",
-                        error,
-                    );
-                })
-                .finally(reportProgress);
+        // The items of one library are asked for together, up to the
+        // number of keys one request takes.
+        /** @type {Map<string, Array<{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}>>} */
+        const byLibrary = new Map();
+        itemsToRefresh.forEach((context) => {
+            const library = context.groupID ? "groups/" + context.groupID : "user";
+            const contexts = byLibrary.get(library) || [];
+            contexts.push(context);
+            byLibrary.set(library, contexts);
+        });
+        const batchSize = this._sdk.MAX_KEYS_PER_REQUEST;
+        /** @type {Array<Promise<void>>} */
+        const keyedRequests = [];
+        byLibrary.forEach((contexts) => {
+            for (let i = 0; i < contexts.length; i += batchSize) {
+                const batch = contexts.slice(i, i + batchSize);
+                keyedRequests.push(
+                    this._sdk
+                        .getItemsByKeys(
+                            batch.map((context) => context.fetchKey),
+                            batch[0].groupID || null,
+                            format,
+                        )
+                        .then((found) => {
+                            const byKey = new Map(
+                                found.map((item) => [item.key, item.data]),
+                            );
+                            batch.forEach((context) =>
+                                applyItem(context, byKey.get(context.fetchKey)),
+                            );
+                        })
+                        .catch((error) => {
+                            // A library that cannot be read must not abort
+                            // the rest of the refresh.
+                            console.warn(
+                                "Failed to refresh " +
+                                    batch.length +
+                                    " item(s):",
+                                error,
+                            );
+                            batch.forEach((context) => {
+                                if (fetched) fetched.set(context.id, null);
+                            });
+                        })
+                        .finally(() => batch.forEach(reportProgress)),
+                );
+            }
         });
 
         const citationKeyRequests = unresolvedIds.map((id) =>

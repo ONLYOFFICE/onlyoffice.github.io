@@ -52,6 +52,9 @@ const ZoteroSdk = function () {
         initialDelay: 5000,
     });
     
+    this.MAX_KEYS_PER_REQUEST = 50;
+
+    
     // Zotero creatorType -> CSL name variable. Only maps to variables this
     // plugin's own CitationItemData actually recognizes (see its
     // fillFromObject); anything not listed here falls back to "author".
@@ -323,10 +326,9 @@ ZoteroSdk.prototype._parseResponse = function (promise, id, signal) {
 };
 
 /**
- * One page of a search against the local Zotero API. Its answers reach the
- * plugin without headers, so there is no Link to follow: a full page stands
- * for "there may be more". An answer longer than a page means the limit was
- * not applied and everything has come already.
+ * One page of a search against the local Zotero API, top-level items only.
+ * Its answers reach the plugin without headers, so there is no Link to
+ * follow: a full page stands for "there may be more"
  * @param {string} path
  * @param {{format: "csljson"|"json", q?: string, itemKey?: string, itemType?: string}} queryParams
  * @param {number|string} id
@@ -336,24 +338,37 @@ ZoteroSdk.prototype._parseResponse = function (promise, id, signal) {
 ZoteroSdk.prototype._getDesktopSearchPage = function (path, queryParams, id, start) {
     const self = this;
     const limit = this.DESKTOP_PAGE_SIZE;
-    const pageParams = Object.assign({}, queryParams, {
+    const withCsl = queryParams.format === "csljson";
+    /** @type {Object<string, string>} */
+    const pageParams = {
+        format: queryParams.format,
         limit: String(limit),
         start: String(start),
-    });
-    let response = this._parseResponse(
-        this._buildGetRequest(path, pageParams),
+    };
+    if (queryParams.q) pageParams.q = queryParams.q;
+    if (queryParams.itemType) pageParams.itemType = queryParams.itemType;
+    if (withCsl) {
+        // Zotero answers local requests one at a time and each search costs
+        // the same whatever the format, so the CSL comes along with the
+        // json answer instead of in a request of its own.
+        pageParams.format = "json";
+        pageParams.include = "csljson";
+    }
+    // Only top-level items can be cited, and leaving notes and attachments
+    // out makes the local search several times faster.
+    const response = this._parseResponse(
+        this._buildGetRequest(path + "/top", pageParams),
         id
     );
-    if (pageParams.format === "csljson") {
-        // See getItems: local csljson results cannot be traced back to the
-        // library, the json answer for the same page carries keys and links.
-        response = this._addJsonToClsJsonItemsResponse(
-            response,
-            path,
-            Object.assign({}, pageParams)
-        );
-    }
     return response.then(function (res) {
+        if (withCsl && Array.isArray(res.items)) {
+            res.items = res.items.map(function (/** @type {any} */ item) {
+                return (
+                    self._parseIncludedCsl(item.csljson) ||
+                    self._convertJsonToCsl(item)
+                );
+            });
+        }
         if (Array.isArray(res.items) && res.items.length === limit) {
             res.next = function () {
                 return self._getDesktopSearchPage(
@@ -366,6 +381,28 @@ ZoteroSdk.prototype._getDesktopSearchPage = function (path, queryParams, id, sta
         }
         return res;
     });
+};
+
+/**
+ * The CSL item Zotero put next to an API item on include=csljson. The local
+ * API sends it as the text of a one-item array, the web API as the object
+ * itself. Its id is the item's zotero.org URI, as in a csljson answer.
+ * @param {any} included
+ * @returns {SearchResultItem|null} null if there is none or it cannot be read
+ */
+ZoteroSdk.prototype._parseIncludedCsl = function (included) {
+    let csl = included;
+    if (typeof csl === "string") {
+        try {
+            csl = JSON.parse(csl);
+        } catch (e) {
+            return null;
+        }
+    }
+    if (Array.isArray(csl)) {
+        csl = csl[0];
+    }
+    return csl && typeof csl === "object" && csl.id ? csl : null;
 };
 
 /**
@@ -507,6 +544,83 @@ ZoteroSdk.prototype.getItemByKey = function (itemKey, format) {
         format: format || this.DEFAULT_FORMAT,
     });
     return this._parseResponse(request, this._userId);
+};
+
+/**
+ * @param {Array<string>} keys - at most MAX_KEYS_PER_REQUEST
+ * @param {number|string|null} groupId - null for the user library
+ * @param {"csljson"|"json"} format - what `data` holds: the CSL item or the
+ *  API item
+ * @returns {Promise<Array<{key: string, data: any}>>} the items found
+ */
+ZoteroSdk.prototype.getItemsByKeys = function (keys, groupId, format) {
+    var self = this;
+    if (!this._isOnlineAvailable) {
+        return Promise.all(
+            keys.map(function (key) {
+                var request = groupId
+                    ? self.getGroupItemByKey(groupId, key, format)
+                    : self.getItemByKey(key, format);
+                return request.then(
+                    function (res) {
+                        // The local API's answers are not always the array
+                        // SearchResult declares.
+                        var items = /** @type {any} */ (res && res.items);
+                        // A csljson answer may come in the web API's
+                        // {items: [...]} container or as a bare array.
+                        if (items && !Array.isArray(items) && Array.isArray(items.items)) {
+                            items = items.items;
+                        }
+                        if (!Array.isArray(items)) {
+                            items = items ? [items] : [];
+                        }
+                        return items.length === 1
+                            ? { key: key, data: items[0] }
+                            : null;
+                    },
+                    function (error) {
+                        console.warn("Failed to read item " + key + ":", error);
+                        return null;
+                    }
+                );
+            })
+        ).then(function (found) {
+            return found.filter(function (item) {
+                return item !== null;
+            });
+        });
+    }
+
+    var path = groupId
+        ? this.API_PATHS.GROUPS + "/" + groupId + "/" + this.API_PATHS.ITEMS
+        : this.API_PATHS.USERS + "/" + this._userId + "/" + this.API_PATHS.ITEMS;
+    /** @type {Object<string, string>} */
+    var queryParams = {
+        format: "json",
+        itemKey: keys.join(","),
+        limit: String(this.MAX_KEYS_PER_REQUEST),
+    };
+    if (format === "csljson") {
+        queryParams.include = "csljson";
+    }
+    var request = this._buildGetRequest(path, queryParams);
+    return this._parseResponse(request, groupId || this._userId).then(
+        function (res) {
+            var items = Array.isArray(res.items) ? res.items : [];
+            return items
+                .filter(function (/** @type {any} */ item) {
+                    return item && item.key;
+                })
+                .map(function (/** @type {any} */ item) {
+                    return {
+                        key: item.key,
+                        data: format === "csljson"
+                            ? self._parseIncludedCsl(item.csljson)
+                            : item,
+                    };
+                });
+        }
+    );
 };
 
 /**
