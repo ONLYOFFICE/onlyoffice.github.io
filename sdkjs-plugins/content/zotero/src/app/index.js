@@ -452,7 +452,38 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
+
+            // Re-reading the items from Zotero is one queued request per
+            // cited item and can take a while, so it happens before the
+            // document is locked; the lock then covers only the update.
+            insertBibBtn.disable();
+            refreshBtn.disable();
+            insertLinkBtn.disable();
+            const updatingText = "Zotero (" + translate("Updating citations") + ")";
+            Loader.setText(updatingText);
+            Loader.setProgress(0);
+            Loader.show();
+            try {
+                await citationService.prefetchCitedItems(function (progress) {
+                    Loader.setProgress(progress.completed / progress.total);
+                    Loader.setText(
+                        "Zotero (" +
+                            translate("Updating citations") +
+                            " " +
+                            progress.completed +
+                            "/" +
+                            progress.total +
+                            ")",
+                    );
+                });
+            } catch (error) {
+                // The refresh below fetches what is missing itself.
+                console.error(error);
+            }
+            Loader.setProgress(null);
+            Loader.setText(updatingText);
+
+            await onStartAction(true, updatingText);
 
             let updateFn = citationService.updateCslItems.bind(
                 citationService,
@@ -481,6 +512,8 @@ import "../styles.css";
                 })
                 .finally(async function () {
                     await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+                    Loader.hide();
+                    Loader.setText(translate("Loading..."));
                     const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
                     await citationService.saveStyleToDocument(styleManager, locale);
                 });

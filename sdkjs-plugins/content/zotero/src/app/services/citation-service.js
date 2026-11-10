@@ -44,6 +44,13 @@
  * @typedef {(progress: {phase: "fetch"|"apply", completed: number, total: number}) => void} RefreshProgressCallback
  */
 
+/**
+ * A cited item as Zotero returned it on a refresh.
+ * @typedef {Object} FetchedItem
+ * @property {any} cslItem - the item in CSL JSON
+ * @property {string} [uri] - a library URI learnt while locating the item
+ */
+
 import { CitationDocService } from "./citation-doc-service";
 import { CslHtmlParser } from "./csl-html-parser";
 import { translate } from "./translate-service";
@@ -73,6 +80,13 @@ class CitationService {
     #abbreviationsManager;
     /** @type {string|undefined} last XML handed to saveStyleToDocument() */
     #lastSavedPrefXml;
+    /**
+     * Fresh copies of the cited items, fetched by prefetchCitedItems() before
+     * the document is locked and used up by the refresh that follows. null
+     * marks an item Zotero did not return.
+     * @type {Map<string, FetchedItem | null> | null}
+     */
+    #prefetchedItems = null;
     /**
      * Which style, in which version, the document carries as far as this
      * session knows, so the large CSL is only sent when that changes.
@@ -249,13 +263,55 @@ class CitationService {
     }
 
     /**
-     * Re-reads stored items from Zotero, one request per item key.
+     * Fetches fresh copies of every cited item from Zotero ahead of a refresh,
+     * without touching the document. The fetch is one queued request per
+     * item and can take a while, so it runs before the document is locked;
+     * the refresh then reads the document again, uses these copies and only
+     * fetches what was cited meanwhile.
+     * @param {RefreshProgressCallback} [onProgress]
+     * @returns {Promise<void>}
+     */
+    async prefetchCitedItems(onProgress) {
+        this.#prefetchedItems = null;
+        await this.#synchronizeStorageWithDocItems();
+        /** @type {Map<string, FetchedItem | null>} */
+        const fetched = new Map();
+        await this.#refreshStoredItems(() => true, "csljson", onProgress, fetched);
+        this.#prefetchedItems = fetched;
+    }
+
+    /**
+     * @param {string} id
+     * @param {FetchedItem} fetched
+     */
+    #applyFetchedItem(id, fetched) {
+        const storedItem = this._storage.getItem(id);
+        if (!storedItem) {
+            return;
+        }
+        // A full refresh replaces the data, so a field deleted in Zotero
+        // disappears here too.
+        storedItem.replaceItemDataFromCsl(fetched.cslItem);
+        if (fetched.uri) {
+            storedItem.addUri(fetched.uri);
+        }
+    }
+
+    /**
+     * Re-reads stored items from Zotero, one request per item key. A csljson
+     * refresh first uses what prefetchCitedItems() fetched.
      * @param {(item: CitationItem, id: string) => boolean} shouldRefreshItem
      * @param {"csljson"|"json"} format
      * @param {RefreshProgressCallback} [onProgress]
+     * @param {Map<string, FetchedItem | null>} [fetched] - collects what
+     *  Zotero returned, null for an item it did not
      * @returns {Promise<boolean>} whether anything was fetched
      */
-    async #refreshStoredItems(shouldRefreshItem, format, onProgress) {
+    async #refreshStoredItems(shouldRefreshItem, format, onProgress, fetched) {
+        const prefetched = format === "csljson" ? this.#prefetchedItems : null;
+        this.#prefetchedItems = null;
+        let bAppliedPrefetched = false;
+
         /** @type {Array<{id: string, fetchKey: string, userID?: string|number, groupID?: string|number}>} */
         const itemsToRefresh = [];
         /** @type {Array<string>} */
@@ -263,6 +319,16 @@ class CitationService {
 
         this._storage.forEachItem((item, id) => {
             if (!shouldRefreshItem(item, id)) {
+                return;
+            }
+            if (prefetched && prefetched.has(id)) {
+                // Fetched before the lock; an item Zotero did not return
+                // then is not asked for again, it keeps its stored data.
+                const copy = prefetched.get(id);
+                if (copy) {
+                    this.#applyFetchedItem(id, copy);
+                    bAppliedPrefetched = true;
+                }
                 return;
             }
             const libraryContext = this.#getLibraryContext(item, id);
@@ -275,7 +341,7 @@ class CitationService {
 
         const total = itemsToRefresh.length + unresolvedIds.length;
         if (total === 0) {
-            return false;
+            return bAppliedPrefetched;
         }
 
         let completed = 0;
@@ -310,7 +376,11 @@ class CitationService {
                                 " items for key " +
                                 context.fetchKey,
                         );
+                        if (fetched) fetched.set(context.id, null);
                         return;
+                    }
+                    if (fetched) {
+                        fetched.set(context.id, { cslItem: items[0] });
                     }
 
                     const storedItem = this._storage.getItem(context.id);
@@ -330,6 +400,7 @@ class CitationService {
                     // One item that cannot be resolved - deleted in Zotero,
                     // stale key, library unavailable - must not abort the
                     // rest of the refresh.
+                    if (fetched) fetched.set(context.id, null);
                     console.warn(
                         "Failed to refresh item " +
                             context.id +
@@ -344,7 +415,11 @@ class CitationService {
 
         const citationKeyRequests = unresolvedIds.map((id) =>
             this.#refreshItemByCitationKey(id)
+                .then((found) => {
+                    if (fetched) fetched.set(id, found);
+                })
                 .catch((error) => {
+                    if (fetched) fetched.set(id, null);
                     console.warn("Failed to re-link item " + id + ":", error);
                 })
                 .finally(reportProgress),
@@ -361,7 +436,7 @@ class CitationService {
      * csljson citation key, and on a match also records the canonical URI of
      * the item so that the next refresh can resolve it directly.
      * @param {string} storedId
-     * @returns {Promise<void>}
+     * @returns {Promise<FetchedItem | null>} what was found, null for nothing
      */
     async #refreshItemByCitationKey(storedId) {
         const searchResult = await this._sdk.searchUserItemsEverything(storedId);
@@ -386,26 +461,22 @@ class CitationService {
                 continue;
             }
 
-            const storedItem = this._storage.getItem(storedId);
-            if (!storedItem) {
-                return;
-            }
-            storedItem.replaceItemDataFromCsl(cslItem);
-
+            /** @type {FetchedItem} */
+            const found = { cslItem: cslItem };
             const library = candidate.library;
             if (library && library.id !== undefined && library.id !== null) {
                 const libraryPath =
                     library.type === "group" ? "groups" : "users";
-                storedItem.addUri(
+                found.uri =
                     "http://zotero.org/" +
-                        libraryPath +
-                        "/" +
-                        library.id +
-                        "/items/" +
-                        candidateKey,
-                );
+                    libraryPath +
+                    "/" +
+                    library.id +
+                    "/items/" +
+                    candidateKey;
             }
-            return;
+            this.#applyFetchedItem(storedId, found);
+            return found;
         }
 
         console.warn(
@@ -413,6 +484,7 @@ class CitationService {
                 storedId +
                 " in the Zotero library; it will not be refreshed.",
         );
+        return null;
     }
 
     /** @returns {Promise<boolean>} whether anything was fetched */
@@ -870,6 +942,7 @@ class CitationService {
                 } else {
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
+                    cslCitation.removeFormattedCitation();
                 }
                 bHasChanges = true;
             } else {
@@ -878,6 +951,11 @@ class CitationService {
                 }
                 field["Content"] = htmlCitation;
                 cslCitation.setPlainCitation(newContent);
+                // Only a changed text outdates Word's cache; dropping it
+                // otherwise would rewrite every field of a Word document.
+                if (newContent !== oldContentInCit) {
+                    cslCitation.removeFormattedCitation();
+                }
             }
 
             if (cslCitation) {

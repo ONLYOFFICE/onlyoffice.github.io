@@ -659,6 +659,14 @@
         line-height: 17px;
     }
 }
+/* Progress: the ring fills up instead of spinning */
+.loader-container.loader-determinate .loader-image {
+    animation: none;
+    transform: rotate(-90deg);
+}
+.loader-container.loader-determinate .loader-image circle {
+    transition: stroke-dashoffset 0.25s ease;
+}
 .loader-container-main {
     width: 100vw;
     height: 100vh;

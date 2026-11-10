@@ -70,7 +70,7 @@
 * Show sources already cited in the document first in the search results.
 * Keep the citation style in the document, so it stays available offline and on other computers.
 * Store the citation style in the document properties the way the Zotero plugin for Word does, so the style is kept when the document is opened in Word and restored when it is opened here.
-* Refresh re-reads the cited items from Zotero, so changes made in the library reach the document.
+* Refresh re-reads the cited items from Zotero, so changes made in the library reach the document. The items are fetched before the document is locked, with progress shown, so the editor stays usable meanwhile.
 * Add settings to stop inserting a citation from updating the other citations and the bibliography.
 * Add the Advanced page with a button that restores citations turned into plain text, for example by copying them from another document.
 * Add the missing contributors (editors, translators, series editors and others) and item fields (DOI, ISBN, ISSN, container and collection titles) to citations.
