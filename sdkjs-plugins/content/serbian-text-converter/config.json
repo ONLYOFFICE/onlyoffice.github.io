@@ -1,0 +1,87 @@
+{
+    "name": "Serbian Text Converter",
+    "nameLocale": {
+        "sr-Cyrl-RS": "Српски конвертер текста",
+        "sr-Latn-RS": "Srpski konverter teksta"
+    },
+    "guid": "asc.{7F3C1D9A-4B62-4E58-9C0D-2A6E8B5F31D7}",
+    "offered": "Igor Stojadinović",
+    "version": "1.0.0",
+    "variations": [{
+        "description": "Convert Serbian text between Cyrillic and Latin script.",
+        "descriptionLocale": {
+            "sr-Cyrl-RS": "Додатак за конверзију изабраног текста са ћирилице на латиницу и обрнуто.",
+            "sr-Latn-RS": "Dodatak za konverziju izabranog teksta sa ćirilice na latinicu i obrnuto."
+        },
+        "url": "index.html",
+        "icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
+        "icons2": [
+            {
+                "style": "light",
+                "100%": {
+                    "normal": "resources/light/icon.png"
+                },
+                "125%": {
+                    "normal": "resources/light/icon@1.25x.png"
+                },
+                "150%": {
+                    "normal": "resources/light/icon@1.5x.png"
+                },
+                "175%": {
+                    "normal": "resources/light/icon@1.75x.png"
+                },
+                "200%": {
+                    "normal": "resources/light/icon@2x.png"
+                }
+            },
+            {
+                "style": "dark",
+                "100%": {
+                    "normal": "resources/dark/icon.png"
+                },
+                "125%": {
+                    "normal": "resources/dark/icon@1.25x.png"
+                },
+                "150%": {
+                    "normal": "resources/dark/icon@1.5x.png"
+                },
+                "175%": {
+                    "normal": "resources/dark/icon@1.75x.png"
+                },
+                "200%": {
+                    "normal": "resources/dark/icon@2x.png"
+                }
+            }
+        ],
+        "store": {
+            "background": {
+                "light": "#FFFFFF",
+                "dark": "#FFFFFF"
+            },
+            "icons": {
+                "light": "resources/store/icons",
+                "dark": "resources/store/icons"
+            },
+            "screenshots": [
+                "resources/store/screenshots/Screenshot1.png",
+                "resources/store/screenshots/Screenshot2.png"
+            ],
+            "categories": ["specAbilities"]
+        },
+        "isViewer": false,
+        "EditorsSupport": ["word", "cell", "slide", "pdf"],
+        "isVisual": true,
+        "isModal": false,
+        "isInsideMode": true,
+        "initDataType": "text",
+        "initData": "",
+        "initOnSelectionChanged": true,
+        "buttons": [],
+        "events": [
+            "onContextMenuShow",
+            "onContextMenuClick",
+            "onTargetPositionChanged"
+        ],
+        "type": "panel"
+    }]
+}
