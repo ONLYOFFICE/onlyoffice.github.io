@@ -41,6 +41,8 @@
 import { CslHtmlParser } from "./csl-html-parser";
 import { CslDocFormatter } from "./csl-doc-formatter";
 
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiParagraph} ApiParagraph */
+
 class CitationDocService {
     #citPrefixOld;
     #citPrefix;
@@ -225,6 +227,10 @@ class CitationDocService {
             const isClose = false;
             Asc.plugin.callCommand(
                 () => {
+                    /**
+                     * @param {Array<ApiParagraph>} paragraphs
+                     * @param {"body" | "footnote" | "endnote"} location
+                     */
                     function scan(paragraphs, location) {
                         const found = [];
                         for (let i = 0; i < paragraphs.length; i++) {
@@ -465,7 +471,7 @@ class CitationDocService {
     async moveCursorToField(fieldId, isBegin) {
         return new Promise((resolve) => {
             isBegin = isBegin ?? true;
-            window.Asc.plugin.executeMethod("MoveCursorToField", [fieldId, isBegin], resolve);
+            window.Asc.plugin.executeMethod("MoveCursorToField", [fieldId, isBegin], () => resolve());
         });
     }
 
@@ -477,7 +483,7 @@ class CitationDocService {
     async moveCursorOutsideField(fieldId, isBeforeField) {
         return new Promise((resolve) => {
             isBeforeField = isBeforeField ?? false;
-            window.Asc.plugin.executeMethod("MoveCursorOutsideField", [fieldId, isBeforeField], resolve);
+            window.Asc.plugin.executeMethod("MoveCursorOutsideField", [fieldId, isBeforeField], () => resolve());
         });
     }
 
@@ -606,7 +612,9 @@ class CitationDocService {
      */
     #pasteHtml(html) {
         return new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("PasteHtml", [html], resolve);
+            window.Asc.plugin.executeMethod("PasteHtml", [html], function () {
+                resolve();
+            });
         });
     }
 
@@ -632,7 +640,7 @@ class CitationDocService {
             window.Asc.plugin.executeMethod(
                 "RemoveSelectedContent",
                 undefined,
-                resolve,
+                () => resolve(),
             );
         });
     }
