@@ -85,7 +85,7 @@ class CitationDocService {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: fieldId,
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibliographyCode(value),
                 Content: formattingPositions.text,
             };
 
@@ -109,12 +109,27 @@ class CitationDocService {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: "",
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibliographyCode(value),
                 Content: " ",
             };
 
             return await this.#pasteBibliographyWithHtml(field, text);
         }
+    }
+
+    /**
+     * The code of a bibliography field, spaced the way the Zotero plugin for
+     * Word writes it: ZOTERO_BIBL {json} CSL_BIBLIOGRAPHY. A bibliography
+     * without stored settings has no JSON part.
+     * @param {string} value
+     * @returns {string}
+     */
+    #bibliographyCode(value) {
+        return [this.#bibPrefix, value.trim(), this.#bibSuffix]
+            .filter(function (part) {
+                return part !== "";
+            })
+            .join(" ");
     }
 
     /**
@@ -128,7 +143,7 @@ class CitationDocService {
         /** @type {AddinFieldData} */
         const field = {
             FieldId: "",
-            Value: this.#citPrefix + " " + this.#citSuffix + value,
+            Value: this.#citPrefix + " " + this.#citSuffix + " " + value,
             Content: formattingPositions.text,
         };
         // Inserting while the cursor already sits inside a footnote/endnote

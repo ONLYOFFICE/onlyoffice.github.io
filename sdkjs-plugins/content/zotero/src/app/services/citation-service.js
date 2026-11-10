@@ -1579,10 +1579,13 @@ class CitationService {
                 : (citationObject.properties && citationObject.properties.plainCitation) ||
                   translate("Citation");
 
+            const json = JSON.stringify(citationObject);
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: "",
-                Value: prefix + " " + suffix + " " + JSON.stringify(citationObject),
+                Value: isBibliography
+                    ? prefix + " " + json + " " + suffix
+                    : prefix + " " + suffix + " " + json,
                 Content: content,
             };
 
