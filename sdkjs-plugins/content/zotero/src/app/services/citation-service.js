@@ -1268,7 +1268,11 @@ class CitationService {
             });
     }
 
-    /** @returns {Promise<string>} */
+    /**
+     * Updates the bibliography of the document, or inserts one at the
+     * cursor if there is none.
+     * @returns {Promise<{fieldId: string, isNew: boolean}>}
+     */
     async insertBibliography() {
         try {
             const { fieldsWithCitations, bibFieldValue, bibField } =
@@ -1282,9 +1286,13 @@ class CitationService {
                     await this.#updateBibliography(bNoHaveFields, bibField),
                 ];
                 return this.citationDocService.updateAddinFields(updatedFields)
-                    .then((fieldIds) => fieldIds ? fieldIds[0] : "");
+                    .then((fieldIds) => ({
+                        fieldId: fieldIds ? fieldIds[0] : "",
+                        isNew: false,
+                    }));
             } else {
-                return this.#addBibliography(bNoHaveFields, bibFieldValue);
+                return this.#addBibliography(bNoHaveFields, bibFieldValue)
+                    .then((fieldId) => ({ fieldId: fieldId, isNew: true }));
             }
         } catch (e) {
             throw e;
@@ -1298,6 +1306,13 @@ class CitationService {
      */
     async moveCursorToField(fieldId, isBegin) {
         return this.citationDocService.moveCursorToField(fieldId, isBegin);
+    }
+
+    /**
+     * @returns {Promise<void>}
+     */
+    async addParagraphAfterCursor() {
+        return this.citationDocService.addParagraphAfterCursor();
     }
 
     /**

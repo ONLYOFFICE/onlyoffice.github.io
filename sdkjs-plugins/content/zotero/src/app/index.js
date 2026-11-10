@@ -539,11 +539,13 @@ import "../styles.css";
             await onStartAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
             /** @type {string} */
             let addedFieldId = "";
+            let isNewBibliography = false;
 
             citationService
                 .insertBibliography()
-                .then(function (fieldId) {
-                    addedFieldId = fieldId;
+                .then(function (result) {
+                    addedFieldId = result.fieldId;
+                    isNewBibliography = result.isNew;
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -558,6 +560,12 @@ import "../styles.css";
                     await onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
                     if (addedFieldId) {
                         await citationService.moveCursorOutsideField(addedFieldId);
+                        // Writing goes on below a new bibliography; an
+                        // updated one is left as it stood.
+                        const editorVersion = window.Asc.scope.editorVersion;
+                        if (isNewBibliography && editorVersion && editorVersion >= 10000000) {
+                            await citationService.addParagraphAfterCursor();
+                        }
                     }
                     const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
                     await citationService.saveStyleToDocument(settings.getStyleManager(), locale);

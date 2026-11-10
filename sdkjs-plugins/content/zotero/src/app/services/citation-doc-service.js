@@ -480,6 +480,26 @@ class CitationDocService {
     }
 
     /**
+     * @returns {Promise<void>}
+     */
+    addParagraphAfterCursor() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const paragraph = doc.GetCurrentParagraph();
+                    if (!paragraph) return;
+                    if (!paragraph.InsertParagraph("", "after", true)) return;
+                    doc.MoveCursorRight(1);
+                },
+                false,
+                false,
+                () => resolve(),
+            );
+        });
+    }
+
+    /**
      * @param {string} fieldId
      * @param {boolean} [isBeforeField]
      * @returns {Promise<void>}
@@ -616,9 +636,13 @@ class CitationDocService {
      */
     #pasteHtml(html) {
         return new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("PasteHtml", [html], function () {
-                resolve();
-            });
+            window.Asc.plugin.executeMethod(
+                "PasteHtml",
+                [html, { MergeLast: true }],
+                function () {
+                    resolve();
+                },
+            );
         });
     }
 
