@@ -109,6 +109,7 @@ ZoteroSdk.prototype.API_PATHS = {
     GROUPS: "groups",
     ITEMS: "items",
     TOP: "top",
+    COLLECTIONS: "collections",
     KEYS: "keys",
 };
 
@@ -517,6 +518,174 @@ ZoteroSdk.prototype.getGroupItems = function (
     }
     return response;
 
+};
+
+/**
+ * The path of a library: the user's or a group's.
+ * @param {number|string|null} groupId - null for the user library
+ * @returns {string}
+ */
+ZoteroSdk.prototype._getLibraryPath = function (groupId) {
+    return groupId
+        ? this.API_PATHS.GROUPS + "/" + groupId
+        : this.API_PATHS.USERS + "/" + this._userId;
+};
+
+/**
+ * Every collection of a library, subcollections included.
+ * @param {number|string|null} groupId - null for the user library
+ * @returns {Promise<Array<ZoteroCollection>>}
+ */
+ZoteroSdk.prototype.getCollections = function (groupId) {
+    const path =
+        this._getLibraryPath(groupId) + "/" + this.API_PATHS.COLLECTIONS;
+    /** @type {Object<string, string>} */
+    const queryParams = { format: "json" };
+    // The web API answers 25 at a time unless asked for more; the local one
+    // sends them all.
+    if (this._isOnlineAvailable) {
+        queryParams.limit = "100";
+    }
+    /** @type {Array<ZoteroCollection>} */
+    const collections = [];
+    /**
+     * @param {SearchResult} res
+     * @returns {Promise<Array<ZoteroCollection>>|Array<ZoteroCollection>}
+     */
+    const collect = function (res) {
+        const items = Array.isArray(res.items) ? res.items : [];
+        items.forEach(function (/** @type {any} */ item) {
+            const data = item && item.data;
+            if (!data || !item.key) {
+                return;
+            }
+            collections.push({
+                key: item.key,
+                name: data.name || "",
+                parentCollection: data.parentCollection || null,
+                numItems: item.meta ? item.meta.numItems : undefined,
+            });
+        });
+        return res.next ? res.next().then(collect) : collections;
+    };
+    return this._parseResponse(
+        this._buildGetRequest(path, queryParams),
+        groupId || this._userId
+    ).then(collect);
+};
+
+/** The fewest results a page of searchCollections holds, unless no more. */
+ZoteroSdk.prototype.COLLECTIONS_PAGE_SIZE = 25;
+
+/**
+ * Searches some collections of one library: the items right in them, top
+ * level only, each item once. The collections are read one after another,
+ * the next one when the previous has no more results, and a page goes on
+ * into the next collections until it holds COLLECTIONS_PAGE_SIZE results:
+ * the list loads more only when scrolled, and a short one cannot be.
+ * @param {string} search
+ * @param {number|string|null} groupId - null for the user library
+ * @param {Array<string>} collectionKeys
+ * @param {AbortSignal} [signal] - cancels the search and its further pages
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.searchCollections = function (
+    search,
+    groupId,
+    collectionKeys,
+    signal
+) {
+    const self = this;
+    const id = groupId || this._userId;
+    if (collectionKeys.length === 0) {
+        return Promise.resolve({ items: [], id: id });
+    }
+    /** @type {Set<string>} */
+    const seen = new Set();
+    /**
+     * @param {number} index - of the collection to read
+     * @param {(function(): Promise<SearchResult>)|null} nextPage - of that
+     *  collection; its first page when null
+     * @param {Array<SearchResultItem>} found - the results of this page so
+     *  far
+     * @returns {Promise<SearchResult>}
+     */
+    const read = function (index, nextPage, found) {
+        const page = nextPage
+            ? nextPage()
+            : self._searchCollection(
+                  search,
+                  groupId,
+                  collectionKeys[index],
+                  signal
+              );
+        return page.then(function (res) {
+            // An item can be in several of the collections.
+            const fresh = (res.items || []).filter(function (item) {
+                if (seen.has(item.id)) {
+                    return false;
+                }
+                seen.add(item.id);
+                return true;
+            });
+            const items = found.concat(fresh);
+            const pageAfter = res.next || null;
+            const nextIndex = pageAfter ? index : index + 1;
+            /** @type {SearchResult} */
+            const result = { items: items, id: id };
+            if (nextIndex >= collectionKeys.length) {
+                return result;
+            }
+            if (items.length >= self.COLLECTIONS_PAGE_SIZE) {
+                result.next = function () {
+                    return read(nextIndex, pageAfter, []);
+                };
+                return result;
+            }
+            return read(nextIndex, pageAfter, items);
+        });
+    };
+    return read(0, null, []);
+};
+
+/**
+ * The first page of a search in one collection.
+ * @param {string} search
+ * @param {number|string|null} groupId - null for the user library
+ * @param {string} collectionKey
+ * @param {AbortSignal} [signal]
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype._searchCollection = function (
+    search,
+    groupId,
+    collectionKey,
+    signal
+) {
+    const id = groupId || this._userId;
+    const path = this._getListPath(
+        this._getLibraryPath(groupId) +
+            "/" +
+            this.API_PATHS.COLLECTIONS +
+            "/" +
+            collectionKey +
+            "/" +
+            this.API_PATHS.ITEMS
+    );
+    /** @type {{format: "csljson"|"json", q?: string, itemType?: string}} */
+    const queryParams = {
+        format: this.DEFAULT_FORMAT,
+        q: search,
+        itemType: "-attachment", // as in getItems
+    };
+    if (!this._isOnlineAvailable) {
+        return this._getDesktopSearchPage(path, queryParams, id, 0);
+    }
+    return this._parseResponse(
+        this._buildGetRequest(path, queryParams, signal),
+        id,
+        signal
+    );
 };
 
 /**

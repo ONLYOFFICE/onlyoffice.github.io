@@ -132,7 +132,9 @@ import "../styles.css";
             throw new Error("mainState not found");
         }
 
-        searchFilter = new SearchFilterComponents();
+        searchFilter = new SearchFilterComponents(function (groupId) {
+            return sdk.getCollections(groupId);
+        });
         selectCitation = new SelectCitationsComponent(
             displayNoneClass,
             loadMore,
@@ -319,13 +321,13 @@ import "../styles.css";
 
         /**
          * @param {string} text
-         * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
+         * @param {Array<LibraryScope>} scope
          * @param {string} groupsHash
          * @param {number} generation
          * @param {AbortSignal} [signal]
          * @returns {Promise<Array<Promise<number>>>}
          */
-        function searchFor(text, selectedGroups, groupsHash, generation, signal) {
+        function searchFor(text, scope, groupsHash, generation, signal) {
             selectCitation.clearLibrary();
             /** @type {Array<Promise<number>>} */
             const promises = [];
@@ -338,56 +340,59 @@ import "../styles.css";
                     if (generation !== searchGeneration) {
                         return promises;
                     }
-                    /** @type {Array<string|number>} */
-                    let groups = selectedGroups.filter(function (group) {
-                        return (
-                            group !== "my_library" &&
-                            group !== "group_libraries"
+                    /** @type {Array<string>} */
+                    const groups = [];
+                    scope.forEach(function (library) {
+                        const groupId = library.groupId;
+                        /** @type {Promise<SearchResult>} */
+                        let request;
+                        if (library.collections) {
+                            request = sdk.searchCollections(
+                                text,
+                                groupId,
+                                library.collections,
+                                signal,
+                            );
+                        } else if (groupId !== null) {
+                            request = sdk.getGroupItems(
+                                text,
+                                groupId,
+                                undefined,
+                                undefined,
+                                signal,
+                            );
+                        } else {
+                            request = sdk.getItems(
+                                text,
+                                null,
+                                undefined,
+                                signal,
+                            );
+                        }
+                        if (groupId !== null) {
+                            groups.push(groupId);
+                        }
+                        promises.push(
+                            loadLibrary(request, groupId !== null, generation),
                         );
                     });
-
-                    if (selectedGroups.indexOf("my_library") !== -1) {
-                        promises.push(
-                            loadLibrary(
-                                sdk.getItems(text, null, undefined, signal),
-                                false,
-                                generation,
-                            ),
-                        );
-                    }
-
-                    for (var i = 0; i < groups.length; i++) {
-                        promises.push(
-                            loadLibrary(
-                                sdk.getGroupItems(
-                                    text,
-                                    groups[i],
-                                    undefined,
-                                    undefined,
-                                    signal,
-                                ),
-                                true,
-                                generation,
-                            )
-                        );
-                    }
                     lastSearch.text = text;
                     lastSearch.obj = null;
                     lastSearch.groups = [];
-                    lastSearch.groupOrder = groups.map(String);
+                    lastSearch.groupOrder = groups;
                     lastSearch.groupsHash = groupsHash;
                     return promises;
                 });
         }
-        searchFilter.subscribe(function (text, selectedGroups) {
+        searchFilter.subscribe(function (text, scope) {
             text = text.trim();
-            const groupsHash = selectedGroups.join(",");
+            const groupsHash = JSON.stringify(scope);
             if (
                 elements.mainState.classList.contains(displayNoneClass) ||
                 !text ||
                 (text == lastSearch.text &&
                     groupsHash === lastSearch.groupsHash) ||
-                selectedGroups.length === 0
+                scope.length === 0
             )
                 return;
 
@@ -401,7 +406,7 @@ import "../styles.css";
                     : null;
             searchFor(
                 text,
-                selectedGroups,
+                scope,
                 groupsHash,
                 generation,
                 searchAbort ? searchAbort.signal : undefined,

@@ -463,6 +463,57 @@
     }
 }
 
+/** Tree select ************ */
+.tree-select {
+    .tree-select-option {
+        gap: 4px;
+        .checkbox-visual {
+            margin-right: 2px;
+        }
+    }
+    /* Clickable inside a row, unlike the rest of it. */
+    .selectbox-option .tree-select-expander {
+        pointer-events: auto;
+    }
+    .tree-select-expander {
+        position: relative;
+        flex-shrink: 0;
+        width: 12px;
+        height: 16px;
+        cursor: pointer;
+        b {
+            position: absolute;
+            top: 6px;
+            left: 3px;
+            width: 5px;
+            height: 5px;
+            box-sizing: border-box;
+            border-style: solid;
+            border-color: currentColor;
+            border-width: 1px 1px 0 0;
+            transform: rotate(45deg);
+            transition: transform 0.2s ease;
+            pointer-events: none;
+        }
+        &.tree-select-expander-open b {
+            transform: rotate(135deg);
+        }
+        &.tree-select-expander-none {
+            cursor: default;
+        }
+    }
+    .selectbox-option-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .tree-select-loading {
+        padding-top: 5.7px;
+        padding-bottom: 5.7px;
+        opacity: 0.6;
+    }
+}
+
 /** Message ************ */
 .message-container {
     box-sizing: border-box;

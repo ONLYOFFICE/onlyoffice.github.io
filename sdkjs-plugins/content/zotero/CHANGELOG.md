@@ -90,3 +90,7 @@
 * Load further search results only when the list is scrolled to its end, one library at a time: your own library first, then the groups in the order of the library filter.
 * Show the loading indicator while further search results load, and keep it until every library has answered.
 * Send requests to the Zotero web API one at a time and wait when Zotero asks to slow down, instead of several at once that ran into its rate limit. A new search drops the requests the previous one still had waiting.
+
+## 1.2.1
+
+* Search in collections: the library filter shows the collections of each library as a tree, loaded when a library is opened. A checked library or collection is searched whole, subcollections included; a partly checked one only in its checked collections.

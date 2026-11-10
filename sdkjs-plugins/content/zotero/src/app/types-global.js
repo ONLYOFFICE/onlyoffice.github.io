@@ -154,6 +154,14 @@ var AscSimpleRequest = window.AscSimpleRequest;
 /** ------------------------------------------------ */
 
 /**
+ * Where to search in one library.
+ * @typedef {Object} LibraryScope
+ * @property {string|null} groupId - null for the user library
+ * @property {Array<string>|null} collections - the keys of the collections
+ *  to search in; null for the whole library
+ */
+
+/**
  * @typedef {Object} LastSearch
  * @property {string} text
  * @property {SearchResult | null} obj
