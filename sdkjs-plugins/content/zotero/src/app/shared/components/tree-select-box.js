@@ -45,6 +45,9 @@ class TreeSelectBox {
     /** Indent of one tree level, px. */
     static #INDENT = 16;
 
+    static #MIN_LIST_HEIGHT = 157;
+    static #WINDOW_MARGIN = 54;
+
     #tree = new CheckTree();
     /** @type {Set<string>} */
     #expanded = new Set();
@@ -68,6 +71,9 @@ class TreeSelectBox {
         ) {
             this.closeDropdown();
         }
+    };
+    #onResize = () => {
+        this.#fitHeight();
     };
     #onKeydown = (/** @type {KeyboardEvent} */ e) => {
         const key = e.key || e.keyCode;
@@ -192,15 +198,12 @@ class TreeSelectBox {
         }
         this.isOpen = true;
         document.addEventListener("click", this.#onOutsideClick);
+        window.addEventListener("resize", this.#onResize);
         this.#dropdown.style.display = "block";
         this.#arrow.classList.add("selectbox-arrow-open");
         this.#header.classList.add("selectbox-header-open");
         this.#render();
-        if (
-            this.#dropdown.getBoundingClientRect().bottom > window.innerHeight
-        ) {
-            this.#dropdown.classList.add("selectbox-dropdown-top");
-        }
+        this.#fitHeight();
     }
 
     closeDropdown() {
@@ -209,6 +212,7 @@ class TreeSelectBox {
         }
         this.isOpen = false;
         document.removeEventListener("click", this.#onOutsideClick);
+        window.removeEventListener("resize", this.#onResize);
         this.#dropdown.style.display = "none";
         this.#dropdown.classList.remove("selectbox-dropdown-top");
         this.#arrow.classList.remove("selectbox-arrow-open");
@@ -267,6 +271,29 @@ class TreeSelectBox {
         this.#dropdown.addEventListener("keydown", this.#onKeydown);
         this.#dropdown.addEventListener("click", (e) => this.#onClick(e));
         this.#dropdown.addEventListener("wheel", (e) => e.stopPropagation());
+    }
+
+    /**
+     * Lets the list reach down to the bottom of the window: a library with
+     * its collections opened takes many rows.
+     */
+    #fitHeight() {
+        if (!this.isOpen) {
+            return;
+        }
+        const options = this.#optionsContainer;
+        this.#dropdown.classList.remove("selectbox-dropdown-top");
+        this.#dropdown.style.maxHeight = "none";
+        const room =
+            window.innerHeight -
+            options.getBoundingClientRect().top -
+            TreeSelectBox.#WINDOW_MARGIN;
+        if (room >= TreeSelectBox.#MIN_LIST_HEIGHT) {
+            options.style.maxHeight = Math.floor(room) + "px";
+        } else {
+            options.style.maxHeight = TreeSelectBox.#MIN_LIST_HEIGHT + "px";
+            this.#dropdown.classList.add("selectbox-dropdown-top");
+        }
     }
 
     /**

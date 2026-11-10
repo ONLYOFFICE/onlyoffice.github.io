@@ -467,6 +467,7 @@
 .tree-select {
     .tree-select-option {
         gap: 4px;
+        cursor: default;
         .checkbox-visual {
             margin-right: 2px;
         }
@@ -480,6 +481,7 @@
         flex-shrink: 0;
         width: 12px;
         height: 16px;
+        border-radius: 2px;
         cursor: pointer;
         b {
             position: absolute;
@@ -495,11 +497,23 @@
             transition: transform 0.2s ease;
             pointer-events: none;
         }
+        &:hover b {
+            opacity: 0.8;
+        }
         &.tree-select-expander-open b {
             transform: rotate(135deg);
+            top: 4px;
         }
         &.tree-select-expander-none {
             cursor: default;
+        }
+        &::after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -8px;
+            width: calc(100% + 10px);
+            height: calc(100% + 10px);
         }
     }
     .selectbox-option-text {
