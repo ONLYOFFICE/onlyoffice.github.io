@@ -79,6 +79,7 @@
     "Saving as text": "Enregistrer comme texte",
 	"Remove": "Supprimer",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Aucune citation Zotero trouvée au curseur. Veuillez cliquer directement sur une citation pour la modifier.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Impossible d’insérer des citations dans la bibliographie. Placez le curseur en dehors de celle-ci.",
     "Prefix": "Préfixe",
     "Suffix": "Suffixe",
     "Book": "Livre",

@@ -79,6 +79,7 @@
     "Saving as text": "保存為文本",
     "Remove": "移除",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "在游標位置未找到 Zotero 引用。請直接點擊引用以進行編輯。",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "无法在参考文献列表中插入引文。请将光标置于参考文献列表之外。",
     "Prefix": "前缀",
     "Suffix": "后缀",
     "Book": "书籍",

@@ -797,10 +797,7 @@ class CitationService {
 
                 /** @type {AddinFieldData | undefined} */
                 const bibField = arrFields.find(function (field) {
-                    return (
-                        field.Value.indexOf(self._bibPrefixNew) !== -1 ||
-                        field.Value.indexOf(self._bibPrefix) !== -1
-                    );
+                    return self.isBibliographyField(field);
                 });
                 if (bibField) {
                     let citationObject = self.#extractField(bibField);
@@ -1173,6 +1170,18 @@ class CitationService {
     /** @returns {Promise<AddinFieldData | null>} */
     async getCurrentField() {
         return this.citationDocService.getCurrentField();
+    }
+
+    /**
+     * @param {AddinFieldData} field
+     * @returns {boolean} whether the field is a Zotero bibliography
+     */
+    isBibliographyField(field) {
+        return (
+            !!field.Value &&
+            (field.Value.indexOf(this._bibPrefixNew) !== -1 ||
+                field.Value.indexOf(this._bibPrefix) !== -1)
+        );
     }
 
     /**

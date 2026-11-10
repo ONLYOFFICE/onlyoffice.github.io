@@ -79,6 +79,7 @@
     "Saving as text": "Сачувај као текст",
 	"Remove": "Уклони",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Није пронађен Zotero цитат на курсору. Кликните директно на цитат да бисте га изменили.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитати не могу да се убаце у библиографију. Поставите курсор изван ње.",
     "Prefix": "Префикс",
     "Suffix": "Суфикс",
     "Book": "Књига",

@@ -582,6 +582,12 @@ import "../styles.css";
 
             /** @type {AddinFieldData | null} */
             let currentField = await citationService.getCurrentField();
+            if (currentField && citationService.isBibliographyField(currentField)) {
+                // Nothing is inserted, so the chosen sources stay selected.
+                citationService.showWarningMessage("Citations cannot be inserted into the bibliography. Place the cursor outside it.");
+                await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                return;
+            }
             if (currentField) {
                 return citationService.insertSelectedCitationsToCurrentField(items, currentField)
                     .then((field) => {

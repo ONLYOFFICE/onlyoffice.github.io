@@ -79,6 +79,7 @@
     "Saving as text": "Ruaj si tekst",
 	"Remove": "Hiq",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Nuk u gjet citat Zotero në kursor. Ju lutem klikoni direkt në një citat për të redaktuar atë.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citimet nuk mund të shtohen në bibliografi. Vendoseni kursorin jashtë saj.",
     "Prefix": "Parashtesë",
     "Suffix": "Prapashtesë",
     "Book": "Libër",

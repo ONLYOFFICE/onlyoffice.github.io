@@ -79,6 +79,7 @@
     "Saving as text": "Uložit jako text",
     "Remove": "Odstranit",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Nenalezeno žádné Zotero citace na kurzoru. Klikněte prosím přímo na citaci, kterou chcete upravit.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citace nelze vložit do bibliografie. Umístěte kurzor mimo ni.",
     "Prefix": "Předpona",
     "Suffix": "Přípona",
     "Book": "Kniha",
