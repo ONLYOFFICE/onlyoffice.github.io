@@ -1177,7 +1177,7 @@ function D(e) {
 	return n && (t.selectedValue = n), t;
 }
 var O = { _: /* @__PURE__ */ new Set() };
-document.getElementById("loader");
+document.getElementById("loader"), document.querySelector("#loader .loader-image circle"), document.querySelector("#loader .loader-title");
 //#endregion
 //#region src/app/shared/constants/locator-values.js
 var k = [
@@ -1205,7 +1205,7 @@ var k = [
 ], A = {
 	addStylesForComponents: function(e) {
 		var t = "";
-		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n", t += ".custom-button-primary:focus-visible { box-shadow: 0 0 0 1px inset " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus-visible,\n.custom-button-secondary-icon:focus-visible,\n.custom-button-secondary:focus-visible,\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus-visible,\n.link:focus-visible,\n.selectbox-arrow:focus-visible b,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n", t += ".link:focus-visible { color: " + e["border-control-focus"] + "; }\n", t += "input:focus-visible + .checkbox-visual,\ninput:focus-visible + .radio-visual { outline: 1px solid " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
+		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n", t += ".custom-button-primary:focus-visible { box-shadow: 0 0 0 1px inset " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus-visible,\n.custom-button-secondary-icon:focus-visible,\n.custom-button-secondary:focus-visible,\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus-visible,\n.link:focus-visible,\n.selectbox-arrow:focus-visible b,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n", t += ".link:focus-visible { color: " + e["border-control-focus"] + "; }\n", t += "input:focus-visible + .checkbox-visual,\ninput:focus-visible + .radio-visual { outline: 1px solid " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.message-container:hover .form-grip,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n", t += ".message-container:focus-within .message-close,\n.message-container:focus-within .form-grip { color: " + e["text-tertiary"] + "; }\n");
 		var n = "11px";
 		["theme-white", "theme-night"].indexOf(e.name) !== -1 || ["theme-white", "theme-night"].indexOf(e.Name) !== -1 ? (n = "12px", t += ".message,\n#previewWrapper,\n.custom-button,\n.selectbox-header,\n.input-field-element { border-radius: 4px; }\n", t += ".radio--checked .radio-visual { border-width: 4px; }\n", t += ".checkbox-checkmark { color: " + e["text-inverse"] + "; }\n", t += ".checkbox--checked .checkbox-visual { background-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio--checked .radio-visual,\n.checkbox--checked .checkbox-visual { border-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + e["highlight-button-hover"] + "; }\n", t += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; background-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += "body { font-size: 12px; }\n") : (t += ".checkbox-checkmark { color: " + e["text-normal"] + "; }\n", t += ".radio--checked .radio-visual { background-color: " + e["text-normal"] + ";\n box-shadow: 0 0 0 2px" + e["background-normal"] + " inset; }\n", t += ".radio-button-container:hover .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["border-control-focus"] + "; }\n"), t += "body, input, textarea, select, button { font-size: " + n + "; }\n";
 		var r = document.getElementById("componentsStyles");
@@ -1222,7 +1222,7 @@ var k = [
 		constructor() {
 			var e = document.querySelector(".container");
 			if (!(e instanceof HTMLElement)) throw Error("container is not initialized");
-			this._container = e, this.citationObject = null, this.forms = [], this._hasRemovedItems = !1;
+			this._container = e, this.citationObject = null, this.forms = [], this._hasRemovedItems = !1, this._initialOrder = [], this._drag = null, this._onDragMoveBound = this.onDragMove.bind(this), this._onDragEndBound = this.onDragEnd.bind(this);
 		}
 		createForm(e) {
 			var t = document.createElement("form");
@@ -1230,64 +1230,114 @@ var k = [
 			var n = document.createElement("button");
 			n.className = "message-close i18n", n.textContent = "×", n.setAttribute("aria-label", "Close"), n.setAttribute("title", "Remove"), n.setAttribute("type", "button"), n.onclick = this.removeItem.bind(this, t, e.id), t.appendChild(n);
 			var r = document.createElement("div");
-			r.classList.add("title"), r.textContent = e.itemData.title, t.appendChild(r);
-			var i = document.createDocumentFragment(), a = document.createElement("div"), o = document.createElement("input"), c = document.createElement("input"), l = document.createElement("div"), u = document.createElement("div"), f = document.createElement("input"), m = document.createElement("div"), h = document.createElement("input");
-			i.appendChild(l), l.appendChild(u), l.appendChild(f);
-			var g = "";
-			i.appendChild(a), a.appendChild(o), a.appendChild(c), i.appendChild(m), m.appendChild(h);
-			var _ = new s(o, {
+			r.classList.add("form-header");
+			var i = document.createElement("span");
+			i.classList.add("form-grip"), i.innerHTML = "<svg width=\"8\" height=\"14\" viewBox=\"0 0 8 14\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"2\" cy=\"3\" r=\"1\" fill=\"currentColor\"/><circle cx=\"6\" cy=\"3\" r=\"1\" fill=\"currentColor\"/><circle cx=\"2\" cy=\"7\" r=\"1\" fill=\"currentColor\"/><circle cx=\"6\" cy=\"7\" r=\"1\" fill=\"currentColor\"/><circle cx=\"2\" cy=\"11\" r=\"1\" fill=\"currentColor\"/><circle cx=\"6\" cy=\"11\" r=\"1\" fill=\"currentColor\"/></svg>", r.appendChild(i);
+			var a = document.createElement("div");
+			a.classList.add("title"), a.textContent = e.itemData.title, r.appendChild(a), r.onmousedown = this.onDragStart.bind(this, e.id), t.appendChild(r);
+			var o = document.createDocumentFragment(), c = document.createElement("div"), l = document.createElement("input"), u = document.createElement("input"), f = document.createElement("div"), m = document.createElement("div"), h = document.createElement("input"), g = document.createElement("div"), _ = document.createElement("input");
+			o.appendChild(f), f.appendChild(m), f.appendChild(h);
+			var v = "";
+			o.appendChild(c), c.appendChild(l), c.appendChild(u), o.appendChild(g), g.appendChild(_);
+			var y = new s(l, {
 				type: "text",
 				placeholder: "Prefix",
 				value: e.prefix,
 				showClear: !1
-			}), v = new s(c, {
+			}), b = new s(u, {
 				type: "text",
 				placeholder: "Suffix",
 				value: e.suffix,
 				showClear: !1
-			}), y = new p(u, {
+			}), x = new p(m, {
 				placeholder: "Locator",
 				translate: Asc.plugin.tr
-			}), b = e.label || "page";
+			}), S = e.label || "page";
 			k.forEach(function(e) {
-				var t = e[0] === b;
-				y.addItem(e[0], e[1], t), t && (g = e[1]);
+				var t = e[0] === S;
+				x.addItem(e[0], e[1], t), t && (v = e[1]);
 			});
-			var x = new s(f, {
+			var C = new s(h, {
 				type: "text",
-				placeholder: g,
+				placeholder: v,
 				value: e.locator,
 				showClear: !1
-			}), S = new d(h, {
+			}), w = new d(_, {
 				label: "Omit Author",
 				checked: !!e["suppress-author"]
 			});
-			y.subscribe(function(e) {
+			x.subscribe(function(e) {
 				if (e.type === "selectbox:change" && e.detail.items) {
 					var t = e.detail.items[0];
-					x.setPlaceholder(t.text);
+					C.setPlaceholder(t.text);
 				}
 			}), this.forms.push({
 				id: e.id,
-				omitAuthorInput: S,
-				prefixInput: _,
-				suffixInput: v,
-				locatorInput: x,
-				locatorSelectbox: y
-			}), t.appendChild(i);
+				element: t,
+				omitAuthorInput: w,
+				prefixInput: y,
+				suffixInput: b,
+				locatorInput: C,
+				locatorSelectbox: x
+			}), t.appendChild(o);
 		}
-		updateRemoveButtonsVisibility() {
+		updateItemControlsVisibility() {
+			this.citationObject && (this.citationObject.citationItems.length > 1 ? this._container.classList.remove("hide-item-controls") : this._container.classList.add("hide-item-controls"));
+		}
+		updateWindowHeight() {
 			if (this.citationObject) {
-				var e = this.citationObject.citationItems.length;
-				e > 1 ? this._container.classList.remove("hide-remove-button") : this._container.classList.add("hide-remove-button");
-				var t = document.querySelector("form")?.offsetHeight || 134, n = e === 1 ? t + 16 : 2 * t;
-				window.Asc.plugin.sendToPlugin("onUpdateHeight", n);
+				var e = this.citationObject.citationItems.length * (document.querySelector("form")?.offsetHeight || 134) + 16;
+				window.Asc.plugin.sendToPlugin("onUpdateHeight", e);
 			}
+		}
+		syncDomOrder() {
+			var e = this._container;
+			this.forms.forEach(function(t) {
+				e.appendChild(t.element);
+			});
+		}
+		swapItems(e, t) {
+			if (this.citationObject) {
+				var n = this.citationObject.citationItems, r = n[e];
+				n[e] = n[t], n[t] = r;
+				var i = this.forms[e];
+				this.forms[e] = this.forms[t], this.forms[t] = i, this.syncDomOrder();
+			}
+		}
+		isOrderChanged() {
+			return this.citationObject ? this.citationObject.citationItems.map((e) => e.id).join("\0") !== this._initialOrder.join("\0") : !1;
+		}
+		onDragStart(e, t) {
+			if (!(t.button !== 0 || this.forms.length < 2 || this._drag)) {
+				var n = this.forms.find((t) => t.id === e);
+				n && (t.preventDefault(), this._drag = {
+					entry: n,
+					startY: t.clientY
+				}, n.element.classList.add("dragging"), document.addEventListener("mousemove", this._onDragMoveBound), document.addEventListener("mouseup", this._onDragEndBound));
+			}
+		}
+		onDragMove(e) {
+			var t = this._drag;
+			if (t) {
+				var n = e.clientY - t.startY, r = this.forms.indexOf(t.entry);
+				if (n < 0 && r > 0) {
+					var i = this.forms[r - 1].element.offsetHeight;
+					-n > i / 2 && (this.swapItems(r, r - 1), t.startY -= i, n += i);
+				} else if (n > 0 && r < this.forms.length - 1) {
+					var a = this.forms[r + 1].element.offsetHeight;
+					n > a / 2 && (this.swapItems(r, r + 1), t.startY += a, n -= a);
+				}
+				t.entry.element.style.transform = "translateY(" + n + "px)";
+			}
+		}
+		onDragEnd() {
+			var e = this._drag;
+			e && (this._drag = null, e.entry.element.classList.remove("dragging"), e.entry.element.style.transform = "", document.removeEventListener("mousemove", this._onDragMoveBound), document.removeEventListener("mouseup", this._onDragEndBound));
 		}
 		removeItem(e, t) {
 			if (this.citationObject) {
 				var n = this.citationObject.citationItems.findIndex((e) => e.id === t);
-				n !== -1 && (this.citationObject.citationItems.splice(n, 1), this.forms.splice(n, 1), this._hasRemovedItems = !0, this._container.removeChild(e), this.updateRemoveButtonsVisibility());
+				n !== -1 && (this.citationObject.citationItems.splice(n, 1), this.forms.splice(n, 1), this._hasRemovedItems = !0, this._container.removeChild(e), this.updateItemControlsVisibility(), this.updateWindowHeight());
 			}
 		}
 		onTranslate() {
@@ -1312,9 +1362,9 @@ var k = [
 			var t = this;
 			return r(function* () {
 				if (t.citationObject = e, t.citationObject) {
-					t.citationObject.citationItems.forEach((e) => {
+					t._initialOrder = t.citationObject.citationItems.map((e) => e.id), t.citationObject.citationItems.forEach((e) => {
 						t.createForm(e);
-					}), t.updateRemoveButtonsVisibility();
+					}), t.updateItemControlsVisibility(), t.updateWindowHeight();
 					for (var n = 0; n < 10; n++) {
 						if (window.Asc.plugin.translateManager) {
 							t.onTranslate(), n = 2 ** 53 - 1;
@@ -1326,7 +1376,7 @@ var k = [
 			})();
 		}
 		onClickSave() {
-			for (var e = this, t = this._hasRemovedItems, n = function() {
+			for (var e = this, t = this._hasRemovedItems || this.isOrderChanged(), n = function() {
 				var n = e.forms[r], i = e.citationObject?.citationItems.find((e) => e.id === n.id);
 				if (!i) return 1;
 				var a = n.prefixInput.getValue(), o = n.suffixInput.getValue(), s = n.locatorSelectbox.getSelectedValue(), c = n.locatorInput.getValue(), l = n.omitAuthorInput.getState().checked;
