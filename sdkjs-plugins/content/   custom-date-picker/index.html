@@ -1,1 +1,125 @@
-<!DOCTYPE html><html><head><meta charset=utf-8><title>Custom Date Picker</title></head><body><div id=calendarContainer><input type=date id=datepicker><button id=insertBtn>Вставить дату</button></div><script src=pluginCode.js></script></body></html>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <title>Custom Date Picker</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #fff;
+            padding: 12px;
+            min-width: 280px;
+            user-select: none;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 4px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+        .calendar-header button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #5f6368;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calendar-header button:hover { background: #f1f3f4; }
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 11px;
+            color: #70757a;
+            padding-bottom: 4px;
+        }
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+        .day {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 13px;
+            color: #3c4043;
+            margin: 0 auto;
+        }
+        .day:hover { background: #f1f3f4; }
+        .day.today {
+            color: #1a73e8;
+            font-weight: 600;
+        }
+        .day.selected {
+            background: #1a73e8;
+            color: #fff;
+        }
+        .day.other-month { color: #bdc1c6; }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 4px 4px;
+            border-top: 1px solid #e8eaed;
+            margin-top: 8px;
+        }
+        .today-btn {
+            background: none;
+            border: none;
+            color: #1a73e8;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+        .today-btn:hover { background: #e8f0fe; }
+        .date-display {
+            font-size: 13px;
+            color: #5f6368;
+        }
+        .insert-btn {
+            background: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .insert-btn:hover { background: #1557b0; }
+    </style>
+</head>
+<body>
+    <div class="calendar-header">
+        <button id="prevMonth">&lt;</button>
+        <span id="monthYear"></span>
+        <button id="nextMonth">&gt;</button>
+    </div>
+    <div class="weekdays">
+        <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+    </div>
+    <div class="days" id="daysGrid"></div>
+    <div class="footer">
+    	<button class="today-btn" id="todayBtn">Сегодня</button>
+    	<span class="date-display" id="dateDisplay"></span>
+    </div>
+
+    <script src="pluginCode.js"></script>
+</body>
+</html>
