@@ -306,13 +306,17 @@ class CitationDocService {
         const bibFields = fields.filter(field => field.Value.indexOf(this.#bibPrefix) === 0);
 
         if (bibFields.length && editorVersion && editorVersion >= 9004000) {
-            fields = fields.filter(field => field.Value.indexOf(this.#bibPrefix) !== 0);
             const field = bibFields[0];
-            await this.#selectField(field.FieldId);
-            const text = field.Content || '';
-            field.Content = " ";
-            await this.#removeSelectedContent();
-            await this.#pasteBibliographyWithHtml(field, text);
+            // The bibliography is written anew where the old one was. If
+            // that one is gone, it is updated in place like the other
+            // fields, so that no second one appears at the cursor.
+            const removed = await this.#removeAddinField(field.FieldId);
+            if (removed) {
+                fields = fields.filter(field => field.Value.indexOf(this.#bibPrefix) !== 0);
+                const text = field.Content || '';
+                field.Content = " ";
+                await this.#pasteBibliographyWithHtml(field, text);
+            }
         }
 
         const formats = this.#makeFormattingPositions(fields);
@@ -634,6 +638,22 @@ class CitationDocService {
         });
     }
 
+    /**
+     * Removes a field the way a paste replaces a selection: the cursor
+     * stays where the field was.
+     * @param {string} fieldId
+     * @returns {Promise<boolean>} false if the editor found no such field
+     */
+    #removeAddinField(fieldId) {
+        return new Promise((resolve) => {
+            window.Asc.plugin.executeMethod(
+                "RemoveAddinField",
+                [fieldId],
+                (result) => resolve(result === true),
+            );
+        });
+    }
+
     /** @returns {Promise<void>} */
     #removeSelectedContent() {
         return new Promise((resolve) => {
@@ -650,8 +670,10 @@ class CitationDocService {
      */
     #selectField(fieldId) {
         return new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
-                resolve(true),
+            window.Asc.plugin.executeMethod(
+                "SelectAddinField",
+                [fieldId],
+                (result) => resolve(result !== false),
             );
         });
     }
