@@ -85,7 +85,8 @@
 * Search in drop-down lists matches items that contain all the typed words.
 * Reload the group libraries after reconnecting to Zotero, for example with another account.
 * Load search results through the Zotero desktop app page by page while scrolling, as with the web API, instead of all at once.
-* Search through the Zotero desktop app up to five times faster: one request per page instead of two, and top-level items only, since notes and attachments cannot be cited.
+* Search through the Zotero desktop app up to five times faster: one request per page instead of two, and only top-level items are searched.
+* Search results and the list of recent items show only top-level items: notes and attachments inside an item cannot be cited and no longer fill the pages of results. Group libraries skip standalone attachments too, as your own library already did.
 * Load further search results only when the list is scrolled to its end, one library at a time: your own library first, then the groups in the order of the library filter.
 * Show the loading indicator while further search results load, and keep it until every library has answered.
 * Send requests to the Zotero web API one at a time and wait when Zotero asks to slow down, instead of several at once that ran into its rate limit. A new search drops the requests the previous one still had waiting.

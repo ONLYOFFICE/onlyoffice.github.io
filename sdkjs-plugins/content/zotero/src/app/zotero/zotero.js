@@ -108,6 +108,7 @@ ZoteroSdk.prototype.API_PATHS = {
     USERS: "users",
     GROUPS: "groups",
     ITEMS: "items",
+    TOP: "top",
     KEYS: "keys",
 };
 
@@ -326,10 +327,10 @@ ZoteroSdk.prototype._parseResponse = function (promise, id, signal) {
 };
 
 /**
- * One page of a search against the local Zotero API, top-level items only.
- * Its answers reach the plugin without headers, so there is no Link to
- * follow: a full page stands for "there may be more"
- * @param {string} path
+ * One page of a search against the local Zotero API. Its answers reach the
+ * plugin without headers, so there is no Link to follow: a full page stands
+ * for "there may be more"
+ * @param {string} path - of the items to search, see _getListPath
  * @param {{format: "csljson"|"json", q?: string, itemKey?: string, itemType?: string}} queryParams
  * @param {number|string} id
  * @param {number} start
@@ -354,10 +355,8 @@ ZoteroSdk.prototype._getDesktopSearchPage = function (path, queryParams, id, sta
         pageParams.format = "json";
         pageParams.include = "csljson";
     }
-    // Only top-level items can be cited, and leaving notes and attachments
-    // out makes the local search several times faster.
     const response = this._parseResponse(
-        this._buildGetRequest(path + "/top", pageParams),
+        this._buildGetRequest(path, pageParams),
         id
     );
     return response.then(function (res) {
@@ -406,6 +405,18 @@ ZoteroSdk.prototype._parseIncludedCsl = function (included) {
 };
 
 /**
+ * The path a search or the list of recent items is read from: top-level
+ * items only. Child notes and attachments cannot be cited, would fill the
+ * pages of results, and leaving them out makes the local search several
+ * times faster.
+ * @param {string} itemsPath - the items path of a library
+ * @returns {string}
+ */
+ZoteroSdk.prototype._getListPath = function (itemsPath) {
+    return itemsPath + "/" + this.API_PATHS.TOP;
+};
+
+/**
  * Get items from user library
  * @param {string|null} search
  * @param {string[]|null} [itemsID]
@@ -441,6 +452,9 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format, signal) {
         self._userId +
         "/" +
         self.API_PATHS.ITEMS;
+    if (!itemsID) {
+        path = self._getListPath(path);
+    }
     if (search && !this._isOnlineAvailable) {
         return this._getDesktopSearchPage(path, queryParams, self._userId, 0);
     }
@@ -473,18 +487,22 @@ ZoteroSdk.prototype.getGroupItems = function (
     format = format || self.DEFAULT_FORMAT;
 
     var queryParams =
-        /** @type {{format: "csljson"|"json", q?: string, itemKey?: string}} */ ({
+        /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, itemType?: string}} */ ({
             format: format,
         });
 
     if (search) {
         queryParams.q = search;
+        queryParams.itemType = "-attachment"; // as in getItems
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
     }
 
     var path =
         self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
+    if (!itemsID) {
+        path = self._getListPath(path);
+    }
     if (search && !this._isOnlineAvailable) {
         return this._getDesktopSearchPage(path, queryParams, groupId, 0);
     }
