@@ -40,7 +40,6 @@
  * @typedef {import('../zotero/zotero').ZoteroSdk} ZoteroSdk
  * @typedef {import('../csl/locales').LocalesManager} LocalesManager
  * @typedef {import('../csl/abbreviations').AbbreviationsManager} AbbreviationsManager
- * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
  * @typedef {(progress: {phase: "fetch"|"apply", completed: number, total: number}) => void} RefreshProgressCallback
  */
 
@@ -55,6 +54,8 @@ import { CitationDocService } from "./citation-doc-service";
 import { CslHtmlParser } from "./csl-html-parser";
 import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
+import { CitationItem } from "../csl/citation/citation-item";
+import { BibliographyEdits, customEntryToHtml } from "../csl/bibliography";
 import { AdditionalWindow } from "../pages/additional-window";
 import { collectItemKeys } from "../shared/item-keys";
 
@@ -90,6 +91,19 @@ class CitationService {
      * @type {Map<string, FetchedItem | null> | null}
      */
     #prefetchedItems = null;
+    /**
+     * What was changed in the document's bibliography with Zotero's
+     * bibliography editor, read along with the citations.
+     * @type {BibliographyEdits}
+     */
+    #bibliographyEdits = new BibliographyEdits();
+    /**
+     * The items the bibliography lists without a citation, fetched from
+     * Zotero once a session, by item key (see BibliographyEdits.itemKey).
+     * null marks one Zotero did not return.
+     * @type {Map<string, CitationItem | null>}
+     */
+    #uncitedItems = new Map();
 
     /**
      * @param {LocalesManager} localesManager
@@ -541,8 +555,194 @@ class CitationService {
             // before this would go on formatting the stale copies.
             this.#formatterCacheKey = null;
         }
+        if (options && options.refreshItems) {
+            // A refresh reads these from Zotero again as well.
+            this.#uncitedItems.clear();
+        }
+        await this.#loadUncitedItems();
 
         this.#updateFormatter();
+    }
+
+    /**
+     * The cited items by item key (see BibliographyEdits.itemKey), for the
+     * URIs in the bibliography code to find them.
+     * @returns {Map<string, string>}
+     */
+    #getCitedItemIds() {
+        /** @type {Map<string, string>} */
+        const ids = new Map();
+        this._storage.forEachItem((item, id) => {
+            const uris = item.toJSON().uris || [];
+            uris.forEach((/** @type {string} */ uri) => {
+                const key = BibliographyEdits.itemKey(uri);
+                if (key && !ids.has(key)) {
+                    ids.set(key, String(id));
+                }
+            });
+        });
+        return ids;
+    }
+
+    /**
+     * The items the bibliography lists without a citation that no citation
+     * names now, by item key, each with its URIs.
+     * @param {Map<string, string>} citedIds
+     * @returns {Array<{key: string, uris: Array<string>}>}
+     */
+    #getUncitedEntries(citedIds) {
+        /** @type {Array<{key: string, uris: Array<string>}>} */
+        const entries = [];
+        for (const uris of this.#bibliographyEdits.uncited) {
+            /** @type {Array<string>} */
+            const keys = [];
+            uris.forEach((uri) => {
+                const key = BibliographyEdits.itemKey(uri);
+                if (key) keys.push(key);
+            });
+            if (!keys.length || keys.some((key) => citedIds.has(key))) {
+                continue;
+            }
+            entries.push({ key: keys[0], uris: uris });
+        }
+        return entries;
+    }
+
+    /**
+     * Fetches from Zotero the items the bibliography lists without a
+     * citation, as far as they are not fetched yet: Zotero keeps only
+     * their URIs. One that cannot be fetched is left out of the
+     * bibliography, and the bibliography code keeps it all the same.
+     * @returns {Promise<void>}
+     */
+    async #loadUncitedItems() {
+        const missing = this.#getUncitedEntries(this.#getCitedItemIds())
+            .filter((entry) => !this.#uncitedItems.has(entry.key));
+        if (!missing.length) {
+            return;
+        }
+
+        /** @type {Map<string, Array<{key: string, uris: Array<string>}>>} */
+        const byLibrary = new Map();
+        missing.forEach((entry) => {
+            const library = entry.key.slice(0, entry.key.lastIndexOf("/"));
+            const entries = byLibrary.get(library) || [];
+            entries.push(entry);
+            byLibrary.set(library, entries);
+        });
+
+        const batchSize = this._sdk.MAX_KEYS_PER_REQUEST;
+        /** @type {Array<Promise<void>>} */
+        const requests = [];
+        byLibrary.forEach((entries, library) => {
+            const groupId = library.indexOf("groups/") === 0
+                ? library.substring("groups/".length)
+                : null;
+            for (let i = 0; i < entries.length; i += batchSize) {
+                const batch = entries.slice(i, i + batchSize);
+                const itemKeys = batch.map((entry) =>
+                    entry.key.substring(entry.key.lastIndexOf("/") + 1)
+                );
+                requests.push(
+                    this._sdk
+                        .getItemsByKeys(itemKeys, groupId, "csljson")
+                        .then((found) => {
+                            const byKey = new Map(
+                                found.map((item) => [item.key, item.data]),
+                            );
+                            batch.forEach((entry, index) => {
+                                const data = byKey.get(itemKeys[index]);
+                                if (!data) {
+                                    this.#uncitedItems.set(entry.key, null);
+                                    return;
+                                }
+                                const item = new CitationItem(entry.key);
+                                item.replaceItemDataFromCsl(data);
+                                entry.uris.forEach((uri) => item.addUri(uri));
+                                this.#uncitedItems.set(entry.key, item);
+                            });
+                        })
+                        .catch((error) => {
+                            // Not remembered, so the next update tries again.
+                            console.warn(
+                                "Failed to fetch " + batch.length +
+                                    " item(s) listed in the bibliography:",
+                                error,
+                            );
+                        }),
+                );
+            }
+        });
+        await Promise.all(requests);
+    }
+
+    /**
+     * Leaves out the entries removed with Zotero's bibliography editor and
+     * puts in the text of the entries rewritten there.
+     * @param {any} bibObject - as citeproc's makeBibliography() gives it
+     * @param {Map<string, string>} citedIds
+     */
+    #applyBibliographyEdits(bibObject, citedIds) {
+        const edits = this.#bibliographyEdits;
+        const entryIds = bibObject && bibObject[0] && bibObject[0].entry_ids;
+        if (edits.isEmpty() || !Array.isArray(entryIds)) {
+            return;
+        }
+        /**
+         * The id the formatter knows the item by: a cited one, or one
+         * listed without a citation.
+         * @param {Array<string>} uris
+         * @param {boolean} citedOnly
+         * @returns {string | null}
+         */
+        const idOf = (uris, citedOnly) => {
+            for (const uri of uris) {
+                const key = BibliographyEdits.itemKey(uri);
+                if (!key) continue;
+                const citedId = citedIds.get(key);
+                if (citedId !== undefined) return citedId;
+                if (!citedOnly && this.#uncitedItems.get(key)) return key;
+            }
+            return null;
+        };
+
+        // As in Zotero: only a cited item can be left out.
+        /** @type {Set<string>} */
+        const omitted = new Set();
+        edits.omitted.forEach((uris) => {
+            const id = idOf(uris, true);
+            if (id !== null) omitted.add(id);
+        });
+        /** @type {Map<string, string>} */
+        const custom = new Map();
+        edits.custom.forEach((entry) => {
+            const id = idOf(entry.uris, false);
+            if (id !== null) custom.set(id, entry.text);
+        });
+
+        /** @type {Array<string>} */
+        const entries = [];
+        /** @type {Array<Array<string|number>>} */
+        const ids = [];
+        bibObject[1].forEach((/** @type {string} */ entry, /** @type {number} */ index) => {
+            /** @type {Array<string>} */
+            const itemIds = (entryIds[index] || []).map(String);
+            if (itemIds.length && itemIds.every((id) => omitted.has(id))) {
+                return;
+            }
+            // An entry for several items has no text of its own to replace.
+            const text = itemIds.length === 1 ? custom.get(itemIds[0]) : undefined;
+            if (text !== undefined) {
+                const html = customEntryToHtml(text);
+                entry = /^\s*<div class="csl-entry"/.test(html)
+                    ? html
+                    : '<div class="csl-entry">' + html + "</div>";
+            }
+            entries.push(entry);
+            ids.push(entryIds[index]);
+        });
+        bibObject[1] = entries;
+        bibObject[0].entry_ids = ids;
     }
 
     /**
@@ -681,8 +881,17 @@ class CitationService {
             if (this.#skipUrlForPaperArticles) {
                 this.#updateFormatter();
             }
+            // Given anew each time: citeproc keeps the uncited items of
+            // the previous bibliography otherwise.
+            const citedIds = this.#getCitedItemIds();
+            this._formatter.updateUncitedItems(
+                this.#getUncitedEntries(citedIds)
+                    .filter((entry) => this.#uncitedItems.get(entry.key))
+                    .map((entry) => entry.key),
+            );
             /** @type {false | any} */
             const bibObject = this._formatter.makeBibliography();
+            this.#applyBibliographyEdits(bibObject, citedIds);
             if (this.#skipUrlForPaperArticles) {
                 this.#skipUrlForPaperArticles = false;
                 this.#updateFormatter();
@@ -791,6 +1000,7 @@ class CitationService {
             .then(function (/** @type {AddinFieldData[]} */ arrFields) {
                 let numOfItems = 0;
                 let bibFieldValue = " ";
+                self.#bibliographyEdits = new BibliographyEdits();
 
                 /** @type {AddinFieldData | undefined} */
                 const bibField = arrFields.find(function (field) {
@@ -803,6 +1013,7 @@ class CitationService {
                         Object.keys(citationObject).length > 0
                     ) {
                         bibFieldValue = JSON.stringify(citationObject);
+                        self.#bibliographyEdits = new BibliographyEdits(citationObject);
                     }
                 }
 
@@ -1091,7 +1302,13 @@ class CitationService {
             retrieveItem: function (id) {
                 const item = self._storage.getItem(id);
                 let index = self._storage.getItemIndex(id);
-                if (!item) return null;
+                if (!item) {
+                    // Listed in the bibliography without a citation.
+                    const uncited = self.#uncitedItems.get(String(id));
+                    return uncited
+                        ? uncited.toFlatJSON(0, self.#skipUrlForPaperArticles)
+                        : null;
+                }
                 return item.toFlatJSON(index, self.#skipUrlForPaperArticles);
             },
         };
