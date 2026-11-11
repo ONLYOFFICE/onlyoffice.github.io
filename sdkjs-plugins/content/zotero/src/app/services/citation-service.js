@@ -1619,22 +1619,7 @@ class CitationService {
             }
 
             const isBibliography = /ZOTERO_BIBL/i.test(match.rawValue);
-            const prefix = isBibliography ? this._bibPrefixNew : this._citPrefixNew;
-            const suffix = isBibliography ? this._bibSuffixNew : this._citSuffixNew;
-            const content = isBibliography
-                ? translate("Bibliography")
-                : (citationObject.properties && citationObject.properties.plainCitation) ||
-                  translate("Citation");
-
-            const json = JSON.stringify(citationObject);
-            /** @type {AddinFieldData} */
-            const field = {
-                FieldId: "",
-                Value: isBibliography
-                    ? prefix + " " + json + " " + suffix
-                    : prefix + " " + suffix + " " + json,
-                Content: content,
-            };
+            const field = this.#makeFieldData(citationObject, isBibliography);
 
             const addedField = await this.citationDocService.repairBrokenField(match, field);
             if (addedField) {
@@ -1645,6 +1630,109 @@ class CitationService {
         }
 
         return { repaired, failed };
+    }
+
+    /**
+     * The field for a citation or a bibliography whose data is known but
+     * whose field is gone. Its text is the one the citation had, until a
+     * refresh writes it anew.
+     * @param {Object} citationObject - the data of the field code
+     * @param {boolean} isBibliography
+     * @returns {AddinFieldData}
+     */
+    #makeFieldData(citationObject, isBibliography) {
+        const prefix = isBibliography ? this._bibPrefixNew : this._citPrefixNew;
+        const suffix = isBibliography ? this._bibSuffixNew : this._citSuffixNew;
+        const properties = /** @type {{properties?: {plainCitation?: string}}} */ (
+            citationObject
+        ).properties;
+        const content = isBibliography
+            ? translate("Bibliography")
+            : (properties && properties.plainCitation) || translate("Citation");
+
+        const json = JSON.stringify(citationObject);
+        return {
+            FieldId: "",
+            Value: isBibliography
+                ? prefix + " " + json + " " + suffix
+                : prefix + " " + suffix + " " + json,
+            Content: content,
+        };
+    }
+
+    /**
+     * Whether Zotero converted the document for moving it between word
+     * processors, so that its citations are links instead of fields.
+     * @returns {Promise<boolean>}
+     */
+    isTransferDocument() {
+        return this.citationDocService.isTransferDocument();
+    }
+
+    /**
+     * Turns a document Zotero converted for moving it between word
+     * processors back into one with fields, as Zotero does on a refresh:
+     * the links that carry field codes become fields, the document
+     * preferences are taken up and what Zotero added is removed. The
+     * citations keep the text they had; a refresh brings it up to date.
+     * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @returns {Promise<{imported: number, failed: number, hasPreferences: boolean}>}
+     */
+    async importTransferDocument(styleManager) {
+        const links = await this.citationDocService.findTransferLinks();
+        const preferencesPrefix = "DOCUMENT_PREFERENCES ";
+        let imported = 0;
+        let failed = 0;
+        /** @type {string | null} */
+        let preferences = null;
+
+        // From the end, location by location, as in repairBrokenCitations:
+        // a change can move what follows it, never what comes before.
+        links.sort(function (a, b) {
+            if (a.location !== b.location) {
+                return a.location < b.location ? 1 : -1;
+            }
+            return b.paragraph - a.paragraph || b.element - a.element;
+        });
+
+        for (const link of links) {
+            if (link.text.indexOf(preferencesPrefix) === 0) {
+                preferences = link.text.substring(preferencesPrefix.length).trim();
+                await this.citationDocService.removeTransferLinkParagraph(link);
+                continue;
+            }
+
+            let citationObject;
+            try {
+                citationObject = this.#extractField({ Value: link.text, FieldId: "", Content: "" });
+            } catch (e) {
+                console.error("Failed to parse a transferred field:", e);
+            }
+            if (!citationObject || typeof citationObject !== "object") {
+                failed++;
+                continue;
+            }
+            const isBibliography = link.text.indexOf("BIBL ") === 0;
+            if (!isBibliography && citationObject.properties) {
+                // What the citation read before the transfer is not known,
+                // so Zotero drops the mark of a manual edit; so do we.
+                delete citationObject.properties.dontUpdate;
+            }
+
+            const field = this.#makeFieldData(citationObject, isBibliography);
+            const addedField = await this.citationDocService.replaceTransferLink(link, field);
+            if (addedField) {
+                imported++;
+            } else {
+                failed++;
+            }
+        }
+
+        await this.citationDocService.removeTransferHeader();
+        if (preferences) {
+            this.#applyDocumentPreferences(preferences, styleManager);
+        }
+        return { imported, failed, hasPreferences: !!preferences };
     }
 
     /** @param {string} message */
@@ -1683,6 +1771,16 @@ class CitationService {
 
         if (!prefXml) return;
 
+        this.#applyDocumentPreferences(prefXml, styleManager);
+    }
+
+    /**
+     * Saves the style, the language and the note type of Zotero's document
+     * preferences as the ones to use.
+     * @param {string} prefXml - as Zotero writes it in ZOTERO_PREF
+     * @param {import('../csl/styles').CslStylesManager} styleManager
+     */
+    #applyDocumentPreferences(prefXml, styleManager) {
         try {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(prefXml, "text/xml");

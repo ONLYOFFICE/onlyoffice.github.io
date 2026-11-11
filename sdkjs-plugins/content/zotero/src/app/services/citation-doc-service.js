@@ -42,6 +42,7 @@ import { CslHtmlParser } from "./csl-html-parser";
 import { CslDocFormatter } from "./csl-doc-formatter";
 
 /** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiParagraph} ApiParagraph */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiHyperlink} ApiHyperlink */
 
 class CitationDocService {
     #citPrefixOld;
@@ -55,6 +56,17 @@ class CitationDocService {
      * style. The CSL sits in it as text, so it comes back exactly as stored.
      */
     #EMBEDDED_STYLE_NAMESPACE = "urn:onlyoffice:zotero:style";
+    /**
+     * The first paragraph of a document Zotero converted for moving it
+     * between word processors; the second one is the older name.
+     */
+    #TRANSFER_MARKERS = ["ZOTERO_TRANSFER_DOCUMENT", "ZOTERO_EXPORTED_DOCUMENT"];
+    /** How the links that carry Zotero's data begin in such a document. */
+    #TRANSFER_LINK_PREFIXES = [
+        "ITEM CSL_CITATION ",
+        "BIBL ",
+        "DOCUMENT_PREFERENCES ",
+    ];
 
     /**
      * @param {string} citPrefix
@@ -250,6 +262,241 @@ class CitationDocService {
                 isClose,
                 isCalc,
                 (result) => resolve(result || []),
+            );
+        });
+    }
+
+    /**
+     * Whether Zotero converted the document for moving it between word
+     * processors: its first paragraph is the transfer marker then.
+     * @returns {Promise<boolean>}
+     */
+    isTransferDocument() {
+        return new Promise((resolve) => {
+            Asc.scope.transferMarkers = this.#TRANSFER_MARKERS;
+            Asc.plugin.callCommand(
+                () => {
+                    const first = Api.GetDocument().GetElement(0);
+                    if (!first || first.GetClassType() !== "paragraph") {
+                        return false;
+                    }
+                    const text = /** @type {ApiParagraph} */ (first).GetText();
+                    return Asc.scope.transferMarkers.indexOf(text.trim()) !== -1;
+                },
+                false,
+                false,
+                (result) => resolve(result === true),
+            );
+        });
+    }
+
+    /**
+     * The links of a transfer document that carry Zotero's data, in the
+     * body, the footnotes and the endnotes.
+     * @returns {Promise<Array<TransferLink>>}
+     */
+    findTransferLinks() {
+        return new Promise((resolve) => {
+            Asc.scope.transferLinkPrefixes = this.#TRANSFER_LINK_PREFIXES;
+            Asc.plugin.callCommand(
+                () => {
+                    /** @type {Array<string>} */
+                    const prefixes = Asc.scope.transferLinkPrefixes;
+                    /**
+                     * @param {Array<ApiParagraph>} paragraphs
+                     * @param {"body" | "footnote" | "endnote"} location
+                     */
+                    function scan(paragraphs, location) {
+                        const found = [];
+                        for (let i = 0; i < paragraphs.length; i++) {
+                            const paragraph = paragraphs[i];
+                            const count = paragraph.GetElementsCount();
+                            for (let j = 0; j < count; j++) {
+                                const element = paragraph.GetElement(j);
+                                if (!element || element.GetClassType() !== "hyperlink") {
+                                    continue;
+                                }
+                                const text = /** @type {ApiHyperlink} */ (element)
+                                    .GetDisplayedText()
+                                    .trim();
+                                const isZotero = prefixes.some(function (prefix) {
+                                    return text.indexOf(prefix) === 0;
+                                });
+                                if (isZotero) {
+                                    found.push({
+                                        location: location,
+                                        paragraph: i,
+                                        element: j,
+                                        text: text,
+                                    });
+                                }
+                            }
+                        }
+                        return found;
+                    }
+
+                    const doc = Api.GetDocument();
+                    return scan(doc.GetAllParagraphs(), "body")
+                        .concat(scan(doc.GetFootnotesFirstParagraphs(), "footnote"))
+                        .concat(scan(doc.GetEndNotesFirstParagraphs(), "endnote"));
+                },
+                false,
+                false,
+                (result) => resolve(result || []),
+            );
+        });
+    }
+
+    /**
+     * Puts a field in the place of a link found by findTransferLinks.
+     * @param {TransferLink} link
+     * @param {AddinFieldData} field
+     * @returns {Promise<AddinFieldData | null>} null if the link is gone
+     */
+    async replaceTransferLink(link, field) {
+        const removed = await this.#removeTransferLink(link);
+        if (!removed) return null;
+        await this.#addAddinField(field);
+        return this.getCurrentField();
+    }
+
+    /**
+     * Deletes the paragraph of a link found by findTransferLinks, such as
+     * the one Zotero writes the document preferences in.
+     * @param {TransferLink} link
+     * @returns {Promise<boolean>} false if the link is gone
+     */
+    removeTransferLinkParagraph(link) {
+        return new Promise((resolve) => {
+            Asc.scope.transferLink = link;
+            Asc.plugin.callCommand(
+                () => {
+                    /** @type {TransferLink} */
+                    const link = Asc.scope.transferLink;
+                    const doc = Api.GetDocument();
+                    let paragraphs;
+                    if ("footnote" === link.location) {
+                        paragraphs = doc.GetFootnotesFirstParagraphs();
+                    } else if ("endnote" === link.location) {
+                        paragraphs = doc.GetEndNotesFirstParagraphs();
+                    } else {
+                        paragraphs = doc.GetAllParagraphs();
+                    }
+                    const paragraph = paragraphs[link.paragraph];
+                    if (!paragraph) return false;
+                    const element = paragraph.GetElement(link.element);
+                    if (
+                        !element ||
+                        element.GetClassType() !== "hyperlink" ||
+                        /** @type {ApiHyperlink} */ (element).GetDisplayedText().trim() !== link.text
+                    ) {
+                        return false;
+                    }
+                    return paragraph.Delete();
+                },
+                false,
+                true,
+                (result) => resolve(result === true),
+            );
+        });
+    }
+
+    /**
+     * Deletes what Zotero puts at the start of a transfer document: the
+     * marker, the instructions and the empty paragraphs around them.
+     * @returns {Promise<void>}
+     */
+    removeTransferHeader() {
+        return new Promise((resolve) => {
+            Asc.scope.transferMarkers = this.#TRANSFER_MARKERS;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    /**
+                     * @param {number} index
+                     * @returns {ApiParagraph | null}
+                     */
+                    function getParagraph(index) {
+                        const element = doc.GetElement(index);
+                        return element && element.GetClassType() === "paragraph"
+                            ? /** @type {ApiParagraph} */ (element)
+                            : null;
+                    }
+                    /** @param {ApiParagraph | null} paragraph */
+                    function isEmpty(paragraph) {
+                        return !!paragraph && paragraph.GetText().trim() === "";
+                    }
+
+                    const marker = getParagraph(0);
+                    if (
+                        !marker ||
+                        Asc.scope.transferMarkers.indexOf(marker.GetText().trim()) === -1
+                    ) {
+                        return;
+                    }
+                    /** @type {Array<ApiParagraph | null>} */
+                    let header = [marker];
+                    const instructions = getParagraph(2);
+                    // Zotero writes four paragraphs: the marker, an empty
+                    // one, the instructions and another empty one. If they
+                    // were changed, only the marker is surely Zotero's.
+                    if (isEmpty(getParagraph(1)) && instructions && isEmpty(getParagraph(3))) {
+                        header = [marker, getParagraph(1), instructions, getParagraph(3)];
+                    }
+                    for (let i = header.length - 1; i >= 0; i--) {
+                        const paragraph = header[i];
+                        if (paragraph) paragraph.Delete();
+                    }
+                },
+                false,
+                true,
+                () => resolve(),
+            );
+        });
+    }
+
+    /**
+     * Takes a link found by findTransferLinks out of its paragraph and puts
+     * the cursor in its place.
+     * @param {TransferLink} link
+     * @returns {Promise<boolean>} false if the link is gone
+     */
+    #removeTransferLink(link) {
+        return new Promise((resolve) => {
+            Asc.scope.transferLink = link;
+            Asc.plugin.callCommand(
+                () => {
+                    /** @type {TransferLink} */
+                    const link = Asc.scope.transferLink;
+                    const doc = Api.GetDocument();
+                    let paragraphs;
+                    if ("footnote" === link.location) {
+                        paragraphs = doc.GetFootnotesFirstParagraphs();
+                    } else if ("endnote" === link.location) {
+                        paragraphs = doc.GetEndNotesFirstParagraphs();
+                    } else {
+                        paragraphs = doc.GetAllParagraphs();
+                    }
+                    const paragraph = paragraphs[link.paragraph];
+                    if (!paragraph) return false;
+                    const element = paragraph.GetElement(link.element);
+                    if (
+                        !element ||
+                        element.GetClassType() !== "hyperlink" ||
+                        /** @type {ApiHyperlink} */ (element).GetDisplayedText().trim() !== link.text
+                    ) {
+                        return false;
+                    }
+                    if (!paragraph.RemoveElement(link.element)) return false;
+                    // An empty run keeps the place of the link, so that the
+                    // field goes there and not into the text around it.
+                    const run = Api.CreateRun();
+                    if (!paragraph.AddElement(run, link.element)) return false;
+                    return run.MoveCursorToPos(0);
+                },
+                false,
+                true,
+                (result) => resolve(result === true),
             );
         });
     }

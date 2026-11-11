@@ -46,6 +46,7 @@ import {
 } from "../shared/components";
 import { translate } from "../services";
 import { CslStylesManager } from "../csl/styles";
+import { CslStylesParser } from "../csl/styles/style-parser";
 import { CslHtmlParser } from "../services/csl-html-parser";
 import { LocalesManager } from "../csl/locales";
 import { AbbreviationsManager } from "../csl/abbreviations";
@@ -344,6 +345,34 @@ SettingsPage.prototype.init = function () {
     this._loadStyles();
 
     return previewPromise;
+};
+
+/**
+ * Takes up the style and the language saved by something else than this
+ * page, such as the preferences of an imported document: loads them and
+ * shows them as chosen.
+ * @returns {Promise<void>}
+ */
+SettingsPage.prototype.loadSavedSettings = function () {
+    const self = this;
+    const styleId = this._cslStylesManager.getLastUsedStyleIdOrDefault();
+    const language = this._localesManager.getLastUsedLanguage();
+    // Named as in the list if it is there, by its code otherwise.
+    this._languageSelect.addItem(language, language, true);
+
+    return this._localesManager
+        .loadLocale(language)
+        .then(function () {
+            return self._onStyleChange(styleId);
+        })
+        .then(function () {
+            const content = self._currentStyleContent;
+            const title = content
+                ? CslStylesParser.getStyleInfo(styleId, content).title
+                : "";
+            self._styleSelect.addItem(styleId, title || styleId, true);
+            self._styleSelectListOther.selectItems(styleId, true);
+        });
 };
 
 /**

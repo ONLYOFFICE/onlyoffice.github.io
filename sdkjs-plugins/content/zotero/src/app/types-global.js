@@ -162,6 +162,17 @@ var AscSimpleRequest = window.AscSimpleRequest;
  */
 
 /**
+ * A link that carries Zotero's data in a document Zotero converted for
+ * moving it between word processors: a field code or the document
+ * preferences as its text.
+ * @typedef {Object} TransferLink
+ * @property {"body" | "footnote" | "endnote"} location
+ * @property {number} paragraph - the index of the paragraph in its location
+ * @property {number} element - the index of the link in its paragraph
+ * @property {string} text
+ */
+
+/**
  * @typedef {Object} LastSearch
  * @property {string} text
  * @property {SearchResult | null} obj

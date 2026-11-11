@@ -458,6 +458,12 @@ import "../styles.css";
                 return;
             }
 
+            // Zotero's "Refresh" brings back the fields of a document it
+            // converted for another word processor, and so does ours.
+            if (await citationService.isTransferDocument()) {
+                await importTransferDocument();
+            }
+
             // Re-reading the items from Zotero is one queued request per
             // cited item and can take a while, so it happens before the
             // document is locked; the lock then covers only the update.
@@ -833,6 +839,35 @@ import "../styles.css";
             elements.error.classList.add(displayNoneClass);
             elements.error.textContent = "";
             window.onclick = null;
+        }
+    }
+
+    /**
+     * Turns the links of a document Zotero converted for moving it between
+     * word processors back into fields and takes up the style and the
+     * language the document was written with.
+     * @returns {Promise<void>}
+     */
+    async function importTransferDocument() {
+        const importingText = "Zotero (" + translate("Updating citations") + ")";
+        // The document changes too much for the selection to be kept.
+        await onStartAction(false, importingText);
+        try {
+            const result = await citationService.importTransferDocument(
+                settings.getStyleManager()
+            );
+            if (result.failed) {
+                console.error(
+                    result.failed + " transferred citation(s) could not be imported"
+                );
+            }
+            if (result.hasPreferences) {
+                await settings.loadSavedSettings();
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            await onEndAction(false, importingText);
         }
     }
 
