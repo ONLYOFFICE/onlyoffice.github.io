@@ -121,7 +121,7 @@ Asc.plugin.attachEvent('onContextMenuShow', function () {
         return { id: id, text: tr(ACTIONS[id].label) };
     });
 
-    window.Asc.plugin.executeMethod('UpdateContextMenuItem', [{
+    window.Asc.plugin.executeMethod('AddContextMenuItem', [{
         guid: window.Asc.plugin.guid,
         items: [{
             id: 'srConverter',
@@ -403,7 +403,7 @@ function convertCells(id) {
             if (dictionaryBlocks(id, text, options)) waitForDictionary = true;
         }
         if (!hasText) {
-            showToast(tr('Nothing to convert here.'), true, 3000);
+            showToast(tr('Nothing to convert.'), true, 3000);
             return;
         }
 
@@ -420,7 +420,7 @@ function convertCells(id) {
             return handler.convert(text, options);
         });
         if (!updates.length) {
-            showToast(tr('Nothing to convert here.'), true, 3000);
+            showToast(tr('Nothing to convert.'), true, 3000);
             return;
         }
 
@@ -471,7 +471,7 @@ function action(id) {
 
         // Check if any conversion happened
         if (paragraphs.join(PARA_SEP) === sourceParts.join(PARA_SEP)) {
-            showToast(tr('Nothing to convert here.'), true, 3000);
+            showToast(tr('Nothing to convert.'), true, 3000);
             return;
         }
 
