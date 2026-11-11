@@ -95,7 +95,7 @@ function getBabelConfig() {
             plugins: [
                 [
                     "polyfill-corejs3",
-                    { method: "usage-global", version: "3.50" },
+                    { method: "usage-global", version: "3.51" },
                 ],
                 "@babel/plugin-transform-class-properties",
             ],
