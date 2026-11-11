@@ -12,7 +12,8 @@
         "watch": "cross-env ENTRY=main vite build --watch",
         "watch-edit": "cross-env ENTRY=edit-window vite build --watch",
         "dev": "cross-env ENTRY=main vite build --watch",
-        "es-check": "npx es-check es5 dist/bundle.es5.js"
+        "es-check": "npx es-check es5 dist/bundle.es5.js",
+        "build:vendor": "node .dev/minify-citeproc.mjs"
     },
     "devDependencies": {
         "@babel/core": "^7.29.7",

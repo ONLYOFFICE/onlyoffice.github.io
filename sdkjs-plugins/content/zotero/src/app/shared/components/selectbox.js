@@ -807,11 +807,14 @@ class SelectBox {
      */
     addItems(values, selectedValue) {
         const self = this;
+        /** @type {Set<string>} */
+        const existingValues = new Set();
+        this._items.forEach(function (item) {
+            if (item) existingValues.add(item.value);
+        });
         values.forEach(function (pair, index) {
-            const bHasItem = self._items.some(
-                (item) => item && item.value === pair[0]
-            );
-            if (bHasItem) return;
+            if (existingValues.has(pair[0])) return;
+            existingValues.add(pair[0]);
             const isSelected = selectedValue
                 ? pair[0] === selectedValue
                 : index === 0;

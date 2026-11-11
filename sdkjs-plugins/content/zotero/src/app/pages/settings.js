@@ -322,7 +322,11 @@ SettingsPage.prototype.init = function () {
         return self._onStyleChange(lastStyle);
     });
 
-    return Promise.all([previewPromise, this._loadStyles()]);
+    // Only the settings page lists the styles, and the list may come from
+    // the Zotero site, so the plugin does not wait for it.
+    this._loadStyles();
+
+    return previewPromise;
 };
 
 /**
@@ -669,6 +673,8 @@ SettingsPage.prototype.show = function () {
 /** @returns {Promise<void>} */
 SettingsPage.prototype._loadStyles = function () {
     const self = this;
+    // Nothing to choose from until the list is there.
+    this._styleSelect.disable();
     return this._cslStylesManager
         .getStylesInfo()
         .then(
@@ -686,6 +692,9 @@ SettingsPage.prototype._loadStyles = function () {
         )
         .catch(function (err) {
             console.error(err);
+        })
+        .finally(function () {
+            self._styleSelect.enable();
         });
 };
 
