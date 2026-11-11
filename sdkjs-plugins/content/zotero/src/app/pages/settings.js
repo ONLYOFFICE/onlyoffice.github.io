@@ -369,19 +369,20 @@ SettingsPage.prototype._addEventListeners = function () {
         const oldState = {...self._stateSettings};
 
         const promises = [];
+        /** @type {Promise<unknown>} */
+        let localeLoaded = Promise.resolve();
         if (self._stateSettings.language !== selectedLang) {
             self._localesManager.saveLastUsedLanguage(selectedLang);
-            promises.push(
-                self._localesManager
-                    .loadLocale(selectedLang)
-                    .catch(function (err) {
-                        console.error(err);
-                        self._langMessage.show(
-                            translate("Failed to load language")
-                        );
-                        throw err;
-                    })
-            );
+            localeLoaded = self._localesManager
+                .loadLocale(selectedLang)
+                .catch(function (err) {
+                    console.error(err);
+                    self._langMessage.show(
+                        translate("Failed to load language")
+                    );
+                    throw err;
+                });
+            promises.push(localeLoaded);
         }
 
         /** @type {NoteStyle} */
@@ -401,7 +402,15 @@ SettingsPage.prototype._addEventListeners = function () {
             self._stateSettings.style !== selectedStyleId &&
             selectedStyleId !== null
         ) {
-            promises.push(self._onStyleChange(selectedStyleId));
+            // The style is rendered in the language just saved, so its
+            // locale has to be there first. A failed one is reported above.
+            promises.push(
+                localeLoaded
+                    .catch(function () {})
+                    .then(function () {
+                        return self._onStyleChange(selectedStyleId);
+                    })
+            );
         }
 
         const includeUrlChecked = self._includeUrlCheckbox.getState().checked;
@@ -572,6 +581,25 @@ SettingsPage.prototype._addEventListeners = function () {
             return;
         }
         self._somethingWasChanged();
+        const language = self._languageSelect.getSelectedValue();
+        if (!language) {
+            return;
+        }
+        self._localesManager
+            .loadLocale(language)
+            .then(function () {
+                // Another language may have been chosen meanwhile.
+                if (
+                    self._currentStyleContent &&
+                    self._getPreviewLanguage() === language
+                ) {
+                    self._showPreview(self._currentStyleContent, language);
+                }
+            })
+            .catch(function (err) {
+                console.error(err);
+                self._langMessage.show(translate("Failed to load language"));
+            });
     });
     this._footNotes.subscribe(function (event) {
         self._somethingWasChanged();
@@ -590,7 +618,7 @@ SettingsPage.prototype._addEventListeners = function () {
         if (self._currentStyleContent) {
             self._showPreview(
                 self._currentStyleContent,
-                self._localesManager.getLastUsedLanguage()
+                self._getPreviewLanguage()
             );
         }
     });
@@ -599,7 +627,7 @@ SettingsPage.prototype._addEventListeners = function () {
         if (self._currentStyleContent) {
             self._showPreview(
                 self._currentStyleContent,
-                self._localesManager.getLastUsedLanguage()
+                self._getPreviewLanguage()
             );
         }
     });
@@ -1012,10 +1040,7 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
 
             self._currentStyleContent = styleInfo.content;
 
-            self._showPreview(
-                styleInfo.content,
-                self._localesManager.getLastUsedLanguage()
-            );
+            self._showPreview(styleInfo.content, self._getPreviewLanguage());
 
             const canUseIncludeUrl = Boolean(
                 styleInfo.content &&
@@ -1061,6 +1086,17 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
             isClick && self._hideLoader();
             throw err;
         });
+};
+
+/**
+ * The preview shows the language chosen on the page, saved or not.
+ * @returns {string}
+ */
+SettingsPage.prototype._getPreviewLanguage = function () {
+    return (
+        this._languageSelect.getSelectedValue() ||
+        this._localesManager.getLastUsedLanguage()
+    );
 };
 
 SettingsPage.prototype._showLoader = function () {

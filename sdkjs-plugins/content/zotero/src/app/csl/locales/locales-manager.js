@@ -56,7 +56,6 @@ function LocalesManager() {
  */
 LocalesManager.prototype.loadLocale = function (langTag) {
     const self = this;
-    this._selectedLanguage = langTag;
     if (this._cache[langTag]) {
         return Promise.resolve(this._cache[langTag]);
     }

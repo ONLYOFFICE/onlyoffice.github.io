@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import { babel } from "@rollup/plugin-babel";
+import { transformAsync } from "@babel/core";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 
@@ -26,6 +27,55 @@ const entries = {
 
 const current = entries[entry];
 
+const ES5_BROWSERS = ["> 0.5%", "last 2 versions", "IE 11"];
+
+/**
+ * Babel compiles the modules, but the ES5 bundle gets newer syntax after
+ * that: the bundler wraps CommonJS modules in arrow functions, and the
+ * minifier writes strings as template literals and turns conditional
+ * member access back into "?.". So the finished bundle is compiled again.
+ */
+function es5Output() {
+    return {
+        name: "es5-output",
+        async generateBundle(_, bundle) {
+            for (const chunk of Object.values(bundle)) {
+                if (chunk.type !== "chunk") continue;
+                const result = await transformAsync(chunk.code, {
+                    babelrc: false,
+                    configFile: false,
+                    sourceType: "script",
+                    compact: true,
+                    minified: true,
+                    comments: false,
+                    sourceMaps: Boolean(chunk.map),
+                    inputSourceMap: chunk.map || undefined,
+                    presets: [
+                        [
+                            "@babel/preset-env",
+                            {
+                                targets: { browsers: ES5_BROWSERS },
+                                modules: false,
+                            },
+                        ],
+                    ],
+                });
+                if (!result || result.code == null) {
+                    throw new Error("Babel returned nothing for " + chunk.fileName);
+                }
+                chunk.code = result.code;
+                if (result.map) {
+                    chunk.map = result.map;
+                    const mapFile = bundle[chunk.fileName + ".map"];
+                    if (mapFile && mapFile.type === "asset") {
+                        mapFile.source = JSON.stringify(result.map);
+                    }
+                }
+            }
+        },
+    };
+}
+
 function getBabelConfig() {
     if (isES5Build) {
         return {
@@ -36,7 +86,7 @@ function getBabelConfig() {
                     "@babel/preset-env",
                     {
                         targets: {
-                            browsers: ["> 0.5%", "last 2 versions", "IE 11"],
+                            browsers: ES5_BROWSERS,
                         },
                         modules: false,
                     },
@@ -69,6 +119,8 @@ function getBabelConfig() {
 
 export default defineConfig({
     plugins: [
+        // Before the banner, which would not survive "comments: false".
+        isES5Build && es5Output(),
         {
             name: "license-banner",
             generateBundle(_, bundle) {
@@ -103,9 +155,20 @@ export default defineConfig({
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */\n`;
+                // The code moves down by the lines of the banner, and so
+                // must its source map: an empty line of mappings for each.
+                const bannerLines = banner.split("\n").length - 1;
                 for (const chunk of Object.values(bundle)) {
                     if (chunk.type === "chunk") {
                         chunk.code = banner + chunk.code;
+                        if (chunk.map) {
+                            chunk.map.mappings =
+                                ";".repeat(bannerLines) + chunk.map.mappings;
+                            const mapFile = bundle[chunk.fileName + ".map"];
+                            if (mapFile && mapFile.type === "asset") {
+                                mapFile.source = JSON.stringify(chunk.map);
+                            }
+                        }
                     }
                 }
             },
@@ -125,6 +188,10 @@ export default defineConfig({
         },
         rollupOptions: {
             output: {
+                // In library mode Vite keeps the whitespace of an ES bundle,
+                // for the bundlers of whoever uses the library. Nothing
+                // bundles this one again, so it is minified in full.
+                minify: true,
                 assetFileNames: (assetInfo) => {
                     if (assetInfo.name === "style.css") return `${current.cssFileName}.css`;
                     return "[name][extname]";
