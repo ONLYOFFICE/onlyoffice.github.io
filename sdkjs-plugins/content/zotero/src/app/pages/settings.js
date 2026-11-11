@@ -200,7 +200,9 @@ function SettingsPage(router, displayNoneClass) {
     this._LANGUAGES = [
         ["af-ZA", "Afrikaans"],
         ["ar", "Arabic"],
+        ["bal-PK", "Balochi"],
         ["bg-BG", "Bulgarian"],
+        ["brh-PK", "Brahui"],
         ["ca-AD", "Catalan"],
         ["cs-CZ", "Czech"],
         ["cy-GB", "Welsh"],
@@ -220,9 +222,12 @@ function SettingsPage(router, displayNoneClass) {
         ["fi-FI", "Finnish"],
         ["fr-CA", "French (Canada)"],
         ["fr-FR", "French (France)"],
+        ["gl-ES", "Galician"],
         ["he-IL", "Hebrew"],
+        ["hi-IN", "Hindi"],
         ["hr-HR", "Croatian"],
         ["hu-HU", "Hungarian"],
+        ["hy-AM", "Armenian"],
         ["id-ID", "Indonesian"],
         ["is-IS", "Icelandic"],
         ["it-IT", "Italian"],
@@ -230,12 +235,15 @@ function SettingsPage(router, displayNoneClass) {
         ["km-KH", "Khmer"],
         ["ko-KR", "Korean"],
         ["la", "Latin"],
+        ["lij-IT", "Ligurian"],
         ["lt-LT", "Lithuanian"],
         ["lv-LV", "Latvian"],
         ["mn-MN", "Mongolian"],
+        ["ms-MY", "Malay"],
         ["nb-NO", "Norwegian (Bokmål)"],
         ["nl-NL", "Dutch"],
         ["nn-NO", "Norwegian (Nynorsk)"],
+        ["pa-PK", "Punjabi (Pakistan)"],
         ["pl-PL", "Polish"],
         ["pt-BR", "Portuguese (Brazil)"],
         ["pt-PT", "Portuguese (Portugal)"],
@@ -243,9 +251,12 @@ function SettingsPage(router, displayNoneClass) {
         ["ru-RU", "Russian"],
         ["sk-SK", "Slovak"],
         ["sl-SI", "Slovenian"],
+        ["sr-Cyrl-RS", "Serbian (Cyrillic)"],
+        ["sr-Latn-RS", "Serbian (Latin)"],
         ["sr-RS", "Serbian"],
         ["sv-SE", "Swedish"],
         ["th-TH", "Thai"],
+        ["tl-PH", "Tagalog"],
         ["tr-TR", "Turkish"],
         ["uk-UA", "Ukrainian"],
         ["vi-VN", "Vietnamese"],
@@ -313,7 +324,13 @@ SettingsPage.prototype.init = function () {
     var lastStyle = this._cslStylesManager.getLastUsedStyleId() || "ieee";
     const savedLang = this._localesManager.getLastUsedLanguage();
     this._addEventListeners();
-    this._languageSelect.addItems(this._LANGUAGES, savedLang);
+    // A document made in Zotero may bring a language the list does not
+    // name. It is offered by its code, or nothing would be selected.
+    const languages = this._LANGUAGES.slice();
+    if (!languages.some((language) => language[0] === savedLang)) {
+        languages.push([savedLang, savedLang]);
+    }
+    this._languageSelect.addItems(languages, savedLang);
 
     const previewPromise = Promise.all([
         this._localesManager.loadLocale(savedLang),

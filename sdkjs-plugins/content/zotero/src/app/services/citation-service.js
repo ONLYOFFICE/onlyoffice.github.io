@@ -1697,7 +1697,7 @@ class CitationService {
                     }
                 }
                 if (locale) {
-                    localStorage.setItem("zoteroLocale", locale);
+                    this._localesManager.saveLastUsedLanguage(locale);
                 }
             }
             const noteTypePref = xmlDoc.querySelector('pref[name="noteType"]');
