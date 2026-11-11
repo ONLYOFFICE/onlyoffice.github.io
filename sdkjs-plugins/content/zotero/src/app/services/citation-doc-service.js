@@ -99,7 +99,7 @@ class CitationDocService {
                     if (!formattingPositions.formatting.length) return;
                     if (fieldId) {
                         return this.#selectField(fieldId).then(() =>
-                            CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions)
+                            CslDocFormatter.formatAfterUpdate(formattingPositions)
                         );
                     }
                     return CslDocFormatter.formatAfterInsert(
@@ -164,7 +164,6 @@ class CitationDocService {
             if (addedField && addedField.FieldId) {
                 await this.#selectField(addedField.FieldId);
                 await CslDocFormatter.formatAfterUpdate(
-                    addedField.FieldId,
                     formattingPositions,
                 );
             } else {
@@ -328,12 +327,14 @@ class CitationDocService {
             );
         });
 
-        if (!formats.size) return fieldIds;
-        for (const [fieldId, formattingPositions] of formats) {
-            const selectFieldResult = await this.#selectField(fieldId);
+        for (const field of fields) {
+            if (!field.Content || !field.FieldId) continue;
+            const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
+            await CslDocFormatter.clearFormatting();
+            const formattingPositions = formats.get(field.FieldId);
+            if (!formattingPositions) continue;
             await CslDocFormatter.formatAfterUpdate(
-                fieldId,
                 formattingPositions,
             );
         }
@@ -366,7 +367,7 @@ class CitationDocService {
             const addedField = await this.getCurrentField();
             if (addedField && addedField.FieldId) {
                 await this.#selectField(addedField.FieldId);
-                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+                await CslDocFormatter.formatAfterUpdate(formatting);
             } else {
                 await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
             }
@@ -395,7 +396,7 @@ class CitationDocService {
             const addedField = await this.getCurrentField();
             if (addedField && addedField.FieldId) {
                 await this.#selectField(addedField.FieldId);
-                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+                await CslDocFormatter.formatAfterUpdate(formatting);
             } else {
                 await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
             }
@@ -440,7 +441,7 @@ class CitationDocService {
             const addedField = await this.getCurrentField();
             if (addedField && addedField.FieldId) {
                 await this.#selectField(addedField.FieldId);
-                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+                await CslDocFormatter.formatAfterUpdate(formatting);
             } else {
                 await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
             }
@@ -460,7 +461,6 @@ class CitationDocService {
                 const selectFieldResult = await this.#selectField(field.FieldId);
                 if (!selectFieldResult) continue;
                 await CslDocFormatter.formatAfterUpdate(
-                    field.FieldId,
                     formatting,
                 );
             }

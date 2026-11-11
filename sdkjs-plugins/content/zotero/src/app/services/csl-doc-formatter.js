@@ -33,8 +33,39 @@
 // @ts-check
 
 /// <reference path="../types-global.js" />
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiRange} ApiRange */
 
 class CslDocFormatter {
+    /**
+     * Removes from the selection the formatting a citation style can set
+     * @returns {Promise<void>}
+     */
+    static clearFormatting() {
+        return new Promise(function (resolve) {
+            const isCalc = false;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                function () {
+                    const range = Api.GetDocument().GetRangeBySelect();
+                    if (!range) return;
+                    // null drops the direct value instead of setting one.
+                    /** @type {any} */
+                    const unset = null;
+                    range.SetVertAlign(unset);
+                    range.SetSmallCaps(unset);
+                    range.SetUnderline(unset);
+                    range.SetBold(unset);
+                    range.SetItalic(unset);
+                },
+                isClose,
+                isCalc,
+                function () {
+                    resolve();
+                }
+            );
+        });
+    }
+
     /**
      * @param {Array<FormattingPositions>} positions
      * @param {string} text
@@ -50,6 +81,11 @@ class CslDocFormatter {
                 function () {
                     const doc = Api.GetDocument();
 
+                    /**
+                     * 
+                     * @param {ApiRange} range 
+                     * @param {string} type 
+                     */
                     function applyFormatting(range, type) {
                         if ("sup" === type) {
                             range.SetVertAlign("superscript");
@@ -108,15 +144,13 @@ class CslDocFormatter {
         });
     }
     /**
-     * @param {string} fieldId
      * @param {{text: string, formatting: Array<FormattingPositions>}} formattingPositions
      * @returns {Promise<void>}
      */
-    static formatAfterUpdate(fieldId, formattingPositions) {
+    static formatAfterUpdate(formattingPositions) {
         const isCalc = true;
         const isClose = false;
 
-        Asc.scope.fieldId = fieldId;
         Asc.scope.text = formattingPositions.text;
         Asc.scope.formatting = formattingPositions.formatting;
 
