@@ -71,8 +71,9 @@
 * Fix the formatting of citations inside footnotes and endnotes.
 * Speed up inserting and refreshing citations.
 * Show sources already cited in the document first in the search results.
-* Keep the citation style in the document, so it stays available offline and on other computers.* Add settings to stop inserting a citation from updating the other citations and the bibliography.
-* Add the Advanced page with a button that restores citations turned into plain text, for example by copying them from another document.
+* Keep the citation style in the document, so it stays available offline and on other computers.
+* Add settings to stop inserting a citation from updating the other citations and the bibliography.
+* Add a button to the settings that restores citations turned into plain text, for example by copying them from another document.
 
 ## 1.2.0
 

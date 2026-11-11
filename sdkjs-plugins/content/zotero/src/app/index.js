@@ -40,7 +40,6 @@ import { Theme } from "./theme";
 import { Router } from "./router";
 import { ZoteroSdk } from "./zotero";
 import { SettingsPage } from "./pages/settings";
-import { AdvancedPage } from "./pages/advanced";
 import { LoginPage } from "./pages/login";
 import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
@@ -60,8 +59,6 @@ import "../styles.css";
 
     /** @type {SettingsPage} */
     let settings;
-    /** @type {AdvancedPage} */
-    let advanced;
 
     /** @type {CitationService} */
     let citationService;
@@ -170,14 +167,13 @@ import "../styles.css";
         sdk = new ZoteroSdk();
         const loginPage = new LoginPage(router, sdk);
         settings = new SettingsPage(router, displayNoneClass);
-        advanced = new AdvancedPage(router, displayNoneClass);
         citationService = new CitationService(
             settings.getLocalesManager(),
             settings.getStyleManager(),
             sdk,
             settings.getAbbreviationsManager()
         );
-        advanced.setCitationService(citationService);
+        settings.setCitationService(citationService);
         let isInit = false;
 
         addEventListeners();
@@ -690,6 +686,10 @@ import "../styles.css";
                 return;
             }
 
+            // The settings page is closed by now, while every citation of
+            // the document is formatted anew, which can take a while.
+            Loader.setText("Zotero (" + translate("Updating citations") + ")");
+            Loader.show();
             await onStartAction(
                 true,
                 "Zotero (" + translate("Updating citations") + ")",
@@ -743,6 +743,8 @@ import "../styles.css";
                         false,
                         "Zotero (" + translate("Updating citations") + ")",
                     );
+                    Loader.hide();
+                    Loader.setText(translate("Loading..."));
                 });
         });
     }
