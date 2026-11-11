@@ -522,11 +522,13 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(async function () {
+                    // Within the action, so that one undo takes it back
+                    // together with the citations.
+                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+                    await citationService.saveStyleToDocument(styleManager, locale);
                     await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
                     Loader.hide();
                     Loader.setText(translate("Loading..."));
-                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
-                    await citationService.saveStyleToDocument(styleManager, locale);
                 });
         });
 
@@ -563,7 +565,6 @@ import "../styles.css";
                     }
                 })
                 .finally(async function () {
-                    await onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
                     if (addedFieldId) {
                         await citationService.moveCursorOutsideField(addedFieldId);
                         // Writing goes on below a new bibliography; an
@@ -575,6 +576,7 @@ import "../styles.css";
                     }
                     const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
                     await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
+                    await onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
                 });
         });
 
@@ -646,14 +648,14 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(async () => {
-                    await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
-                    if (bHasNotes) {
-                        citationService.moveCursorRight();
-                    } else if (currentField) {
-                        citationService.moveCursorOutsideField(currentField.FieldId);
-                    }
                     const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
                     await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
+                    await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    if (bHasNotes) {
+                        await citationService.moveCursorRight();
+                    } else if (currentField) {
+                        await citationService.moveCursorOutsideField(currentField.FieldId);
+                    }
                 });
         });
 
@@ -735,12 +737,12 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(async function () {
+                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
                     await onEndAction(
                         false,
                         "Zotero (" + translate("Updating citations") + ")",
                     );
-                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
-                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
                 });
         });
     }

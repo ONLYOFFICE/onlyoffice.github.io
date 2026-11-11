@@ -191,8 +191,9 @@ class CslDocFormatter {
                     }
 
                     // Find the run containing our text by iterating paragraphs
-                    // from the selected range. This works inside footnotes where
-                    // MoveCursorToPos + GetCurrentRun does not.
+                    // from the selected range.
+                    const selStart = selRange.GetStartPos();
+                    const selEnd = selRange.GetEndPos();
                     var run = null;
                     var paragraphs = selRange.GetAllParagraphs();
                     if (paragraphs && paragraphs.length) {
@@ -204,7 +205,11 @@ class CslDocFormatter {
                                 var elem = para.GetElement(e);
                                 if (!elem || !("GetRange" in elem)) continue;
                                 var elemText = "GetText" in elem ? elem.GetText() : "";
-                                if (elemText === Asc.scope.text) {
+                                if (elemText !== Asc.scope.text) continue;
+                                var elemRange = elem.GetRange(0, elemText.length);
+                                if (!elemRange) continue;
+                                var elemStart = elemRange.GetStartPos();
+                                if (elemStart >= selStart && elemStart < selEnd) {
                                     run = elem;
                                     break;
                                 }

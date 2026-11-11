@@ -658,6 +658,13 @@ class CitationDocService {
     async convertNotesStyle(fields, notesStyle) {
         /** @type {Array<AddinFieldData>} */
         const editedFields = [];
+        // What the fields read now, to tell a note that holds nothing but
+        // its citation; the fields given carry the new text.
+        /** @type {Map<string, string>} */
+        const currentTexts = new Map();
+        (await this.#getAllAddinFields()).forEach(function (field) {
+            if (field.FieldId) currentTexts.set(field.FieldId, field.Content || "");
+        });
         const formats = this.#makeFormattingPositions(fields);
 
         for (let i = 0; i < fields.length; i++) {
@@ -673,14 +680,29 @@ class CitationDocService {
             const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
 
-            const isInNote = await this.#isInNote();
-            if (isInNote) {
-                // Field is already in a footnote/endnote - update in place
+            const noteStyle = await this.#getNoteStyle();
+            if (noteStyle === notesStyle) {
+                // Already in a note of the chosen kind - update in place
                 editedFields.push(field);
                 continue;
             }
+            if (noteStyle) {
+                // A note of the other kind is made anew, which drops all it
+                // holds; one with more than this citation is left as it is.
+                const isAlone = await this.#isAloneInNote(
+                    currentTexts.get(field.FieldId) || "",
+                );
+                if (!isAlone) {
+                    editedFields.push(field);
+                    continue;
+                }
+                const isReferenceSelected = await this.#selectFieldReference();
+                if (!isReferenceSelected) continue;
+                await this.#removeSuperscript();
+                await this.#removeSelectedContent();
+            }
 
-            // Field is inline - needs to be moved into a note
+            // Field is inline or its note is gone - put it in a new note
             await this.#addNote(notesStyle);
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
@@ -905,6 +927,53 @@ class CitationDocService {
                 false,
                 true,
                 (result) => resolve(!!result),
+            );
+        });
+    }
+
+    /**
+     * The kind of note the cursor is in.
+     * @returns {Promise<NoteStyle | null>} null outside notes
+     */
+    #getNoteStyle() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const note = Api.GetDocument().GetCurrentFootEndnote();
+                    if (!note) return null;
+                    if (note.IsEndnote()) return "endnotes";
+                    if (note.IsFootnote()) return "footnotes";
+                    return null;
+                },
+                false,
+                false,
+                (result) =>
+                    resolve(
+                        result === "footnotes" || result === "endnotes"
+                            ? result
+                            : null,
+                    ),
+            );
+        });
+    }
+
+    /**
+     * Whether the note the cursor is in holds nothing but the given text.
+     * @param {string} text
+     * @returns {Promise<boolean>}
+     */
+    #isAloneInNote(text) {
+        return new Promise((resolve) => {
+            Asc.scope.noteText = text;
+            Asc.plugin.callCommand(
+                () => {
+                    const note = Api.GetDocument().GetCurrentFootEndnote();
+                    if (!note) return false;
+                    return note.GetText().trim() === String(Asc.scope.noteText).trim();
+                },
+                false,
+                false,
+                (result) => resolve(result === true),
             );
         });
     }
@@ -1182,6 +1251,41 @@ class CitationDocService {
                 false,
                 true,
                 (result) => resolve(result || ""),
+            );
+        });
+    }
+
+    /**
+     * Which style, in which version, the document stores: what
+     * loadEmbeddedStyle() gives, without the CSL, which can be large.
+     * @returns {Promise<{styleId: string, updated: string} | null>}
+     */
+    loadEmbeddedStyleVersion() {
+        return new Promise((resolve) => {
+            Asc.scope.embeddedStyleNamespace = this.#EMBEDDED_STYLE_NAMESPACE;
+            Asc.plugin.callCommand(
+                function () {
+                    const doc = Api.GetDocument();
+                    const customParts = doc ? doc.GetCustomXmlParts() : null;
+                    if (!customParts) return null;
+                    const parts = customParts
+                        .GetByNamespace(Asc.scope.embeddedStyleNamespace);
+                    if (!parts.length) return null;
+                    const root = new DOMParser().parseFromString(
+                        parts[0].GetXml(),
+                        "application/xml"
+                    ).documentElement;
+                    if (!root || root.namespaceURI !== Asc.scope.embeddedStyleNamespace) {
+                        return null;
+                    }
+                    return {
+                        styleId: root.getAttribute("style-id") || "",
+                        updated: root.getAttribute("updated") || "",
+                    };
+                },
+                false,
+                false,
+                (result) => resolve(result || null)
             );
         });
     }

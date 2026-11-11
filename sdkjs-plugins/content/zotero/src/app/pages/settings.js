@@ -269,6 +269,8 @@ function SettingsPage(router, displayNoneClass) {
 
     /** @type {string|null} */
     this._currentStyleContent = null;
+    /** Whether the list of styles is still on its way. */
+    this._isLoadingStyles = false;
 
     /** @type {Settings} */
     this._stateSettings = {
@@ -748,6 +750,7 @@ SettingsPage.prototype.show = function () {
 SettingsPage.prototype._loadStyles = function () {
     const self = this;
     // Nothing to choose from until the list is there.
+    this._isLoadingStyles = true;
     this._styleSelect.disable();
     return this._cslStylesManager
         .getStylesInfo()
@@ -768,6 +771,7 @@ SettingsPage.prototype._loadStyles = function () {
             console.error(err);
         })
         .finally(function () {
+            self._isLoadingStyles = false;
             self._styleSelect.enable();
         });
 };
@@ -1155,7 +1159,10 @@ SettingsPage.prototype._showLoader = function () {
 SettingsPage.prototype._hideLoader = function () {
     this._cancelBtn.enable();
     this._saveBtn.enable();
-    this._styleSelect.enable();
+    // The list of styles enables it itself once it is there.
+    if (!this._isLoadingStyles) {
+        this._styleSelect.enable();
+    }
     this._languageSelect.enable();
     //Loader.hide();
 };

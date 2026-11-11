@@ -74,12 +74,15 @@ class CitationService {
      * @type {string|null}
      */
     #formatterCacheKey = null;
+    /**
+     * The URL setting the items in this._formatter were read with: citeproc
+     * keeps the items it has read, so a change of it needs them read again.
+     */
+    #formatterSkipsUrl = false;
     /** @type {boolean} */
     #skipUrlForPaperArticles;
     /** @type {AbbreviationsManager} */
     #abbreviationsManager;
-    /** @type {string|undefined} last XML handed to saveStyleToDocument() */
-    #lastSavedPrefXml;
     /**
      * Fresh copies of the cited items, fetched by prefetchCitedItems() before
      * the document is locked and used up by the refresh that follows. null
@@ -87,12 +90,6 @@ class CitationService {
      * @type {Map<string, FetchedItem | null> | null}
      */
     #prefetchedItems = null;
-    /**
-     * Which style, in which version, the document carries as far as this
-     * session knows, so the large CSL is only sent when that changes.
-     * @type {string|undefined}
-     */
-    #embeddedStyleKey;
 
     /**
      * @param {LocalesManager} localesManager
@@ -1065,6 +1062,14 @@ class CitationService {
             bAbbreviate;
 
         if (this._formatter && this.#formatterCacheKey === cacheKey) {
+            if (this.#formatterSkipsUrl !== this.#skipUrlForPaperArticles) {
+                // The items were read with the other URL setting, and
+                // updateItems() reads only the items the engine does not
+                // know yet, so it has to forget them first. This costs far
+                // less than building a new engine.
+                this._formatter.updateItems([]);
+                this.#formatterSkipsUrl = this.#skipUrlForPaperArticles;
+            }
             if (arrIds.length) {
                 this._formatter.updateItems(arrIds);
             }
@@ -1103,6 +1108,7 @@ class CitationService {
             true,
         );
         this.#formatterCacheKey = cacheKey;
+        this.#formatterSkipsUrl = this.#skipUrlForPaperArticles;
         if (arrIds.length) {
             this._formatter.updateItems(arrIds);
         }
@@ -1762,7 +1768,6 @@ class CitationService {
         await this.citationDocService
             .loadEmbeddedStyle()
             .then((style) => {
-                this.#embeddedStyleKey = embeddedStyleKey(style);
                 styleManager.setDocumentStyle(style);
             })
             .catch((e) => console.error("Failed to read the document style:", e));
@@ -1848,7 +1853,8 @@ class CitationService {
             '</prefs>' +
             '</data>';
 
-        if (prefXml !== this.#lastSavedPrefXml) {
+        const savedPrefXml = await this.citationDocService.loadStyleFromDocument();
+        if (prefXml !== savedPrefXml) {
             await this.#savePrefXmlToDocument(prefXml);
         }
         await this.#saveEmbeddedStyle(styleManager);
@@ -1865,20 +1871,7 @@ class CitationService {
             chunks.push(prefXml.substring(i, i + 255));
         }
 
-        // ApiCustomProperties only exposes Add/Get, no way to remove a
-        // property - and Add() overwrites an existing one by name rather
-        // than appending, so switching to a style/locale that needs fewer
-        // chunks than before would otherwise leave stale trailing
-        // ZOTERO_PREF_N values in place. loadStyleFromDocument() reads
-        // ZOTERO_PREF_1..N until one is missing, so a leftover chunk from
-        // the previous, longer XML would get concatenated onto the new
-        // (shorter) one and fail to parse. Blank out a generous number of
-        // slots first so old chunks can never outlive the value they came from.
-        
-
-        return this.citationDocService.saveStyleToDocument(chunks).then(() => {
-            this.#lastSavedPrefXml = prefXml;
-        });
+        return this.citationDocService.saveStyleToDocument(chunks);
     }
 
     /**
@@ -1892,16 +1885,16 @@ class CitationService {
     async #saveEmbeddedStyle(styleManager) {
         const style = styleManager.getStyleToEmbed();
         const key = embeddedStyleKey(style);
-        if (key === this.#embeddedStyleKey) {
-            return;
-        }
         try {
+            const stored = await this.citationDocService.loadEmbeddedStyleVersion();
+            if (key === embeddedStyleKey(stored)) {
+                return;
+            }
             if (style) {
                 await this.citationDocService.saveEmbeddedStyle(style);
             } else {
                 await this.citationDocService.removeEmbeddedStyle();
             }
-            this.#embeddedStyleKey = key;
         } catch (e) {
             console.error("Failed to store the style in the document:", e);
         }
@@ -1911,7 +1904,7 @@ class CitationService {
 }
 
 /**
- * @param {StyleCopy|null} style
+ * @param {{styleId: string, updated: string} | null} style
  * @returns {string}
  */
 function embeddedStyleKey(style) {
