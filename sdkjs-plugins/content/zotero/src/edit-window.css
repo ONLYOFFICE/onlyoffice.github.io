@@ -20,9 +20,14 @@ body {
 
 form {
     padding: 0 8px;
-    &:first-child {
+    /* The first form follows "Keep sources sorted", which may be hidden. */
+    &:first-of-type {
         margin-top: 8px;
     }
+}
+
+.keep-sorted {
+    padding: 8px 8px 0;
 }
 
 form > div {
@@ -40,7 +45,8 @@ form > div:last-child {
     padding-right: 12px;
 }
 .hide-item-controls .message-close,
-.hide-item-controls .form-grip {
+.hide-item-controls .form-grip,
+.hide-item-controls .keep-sorted {
     display: none;
 }
 

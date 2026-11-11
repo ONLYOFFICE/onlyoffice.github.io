@@ -56,6 +56,12 @@ import "../edit-window.css";
  */
 
 /**
+ * @typedef {Object} EditedCitation
+ * @property {CitationItem[]} citationItems
+ * @property {{unsorted?: boolean}} [properties]
+ */
+
+/**
  * @typedef {Object} EditWindowForm
  * @property {string} id
  * @property {HTMLFormElement} element
@@ -87,8 +93,16 @@ import "../edit-window.css";
             /** @type {HTMLElement} */
             this._container = container;
             
-            /** @type {{citationItems: CitationItem[]} | null} */
+            /** @type {EditedCitation | null} */
             this.citationObject = null;
+            /**
+             * "Keep sources sorted": unchecked, the sources stay in the order
+             * set here instead of the one the style sorts them in.
+             * @type {Checkbox | null}
+             */
+            this._keepSortedInput = null;
+            /** @type {HTMLElement | null} */
+            this._keepSortedWrapper = null;
             /** @type {EditWindowForm[]} */
             this.forms = [];
             this._hasRemovedItems = false;
@@ -97,7 +111,7 @@ import "../edit-window.css";
              * @type {string[]}
              */
             this._initialOrder = [];
-            /** @type {{entry: EditWindowForm, startY: number} | null} */
+            /** @type {{entry: EditWindowForm, startY: number, moved: boolean} | null} */
             this._drag = null;
             this._onDragMoveBound = this.onDragMove.bind(this);
             this._onDragEndBound = this.onDragEnd.bind(this);
@@ -233,7 +247,11 @@ import "../edit-window.css";
             }
             const numOfCitations = this.citationObject.citationItems.length;
             const formHeight = (document.querySelector('form')?.offsetHeight || 134);
-            const winHeight = (numOfCitations * formHeight) + 16;
+            // Hidden with a single source, and then of no height.
+            const keepSortedHeight = this._keepSortedWrapper
+                ? this._keepSortedWrapper.offsetHeight
+                : 0;
+            const winHeight = (numOfCitations * formHeight) + keepSortedHeight + 16;
             window.Asc.plugin.sendToPlugin("onUpdateHeight", winHeight);
         }
 
@@ -300,7 +318,7 @@ import "../edit-window.css";
             }
             event.preventDefault();
 
-            this._drag = { entry: entry, startY: event.clientY };
+            this._drag = { entry: entry, startY: event.clientY, moved: false };
             entry.element.classList.add("dragging");
             document.addEventListener("mousemove", this._onDragMoveBound);
             document.addEventListener("mouseup", this._onDragEndBound);
@@ -323,6 +341,7 @@ import "../edit-window.css";
                 const above = this.forms[index - 1].element.offsetHeight;
                 if (-delta > above / 2) {
                     this.swapItems(index, index - 1);
+                    drag.moved = true;
                     drag.startY -= above;
                     delta += above;
                 }
@@ -330,6 +349,7 @@ import "../edit-window.css";
                 const below = this.forms[index + 1].element.offsetHeight;
                 if (delta > below / 2) {
                     this.swapItems(index, index + 1);
+                    drag.moved = true;
                     drag.startY += below;
                     delta -= below;
                 }
@@ -348,6 +368,32 @@ import "../edit-window.css";
             drag.entry.element.style.transform = "";
             document.removeEventListener("mousemove", this._onDragMoveBound);
             document.removeEventListener("mouseup", this._onDragEndBound);
+            // An order set by hand is kept only if the style does not sort
+            // the sources again, as Zotero does when they are dragged.
+            if (drag.moved && this._keepSortedInput) {
+                this._keepSortedInput.uncheck();
+            }
+        }
+
+        /**
+         * Adds "Keep sources sorted" above the sources.
+         * @param {EditedCitation} citationObject
+         */
+        createKeepSorted(citationObject) {
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("keep-sorted");
+            const input = document.createElement("input");
+            wrapper.appendChild(input);
+            this._container.appendChild(wrapper);
+
+            this._keepSortedWrapper = wrapper;
+            this._keepSortedInput = new Checkbox(input, {
+                label: "Keep sources sorted",
+                checked: !(
+                    citationObject.properties &&
+                    citationObject.properties.unsorted
+                ),
+            });
         }
 
         /**
@@ -418,7 +464,7 @@ import "../edit-window.css";
             }
         }
 
-        /** @param {{citationItems: CitationItem[]}} citationObject */
+        /** @param {EditedCitation} citationObject */
         async onAttachedContent(citationObject) {
             this.citationObject = citationObject;
 
@@ -428,6 +474,8 @@ import "../edit-window.css";
             this._initialOrder = this.citationObject.citationItems.map(
                 (/** @type {CitationItem} */ item) => item.id,
             );
+            // First in the container: reordering appends the forms after it.
+            this.createKeepSorted(this.citationObject);
             this.citationObject.citationItems.forEach(
                 (/** @type {CitationItem} */ item) => {
                     this.createForm(item);
@@ -482,6 +530,21 @@ import "../edit-window.css";
                 }
                 if (!!citationItem["suppress-author"] !== omitAuthor) {
                     citationItem["suppress-author"] = omitAuthor;
+                    bHasChanges = true;
+                }
+            }
+            if (this.citationObject && this._keepSortedInput) {
+                const keepSorted = this._keepSortedInput.getState().checked;
+                const properties =
+                    this.citationObject.properties ||
+                    (this.citationObject.properties = {});
+                if (keepSorted === !!properties.unsorted) {
+                    // Zotero writes the flag only for an unsorted citation.
+                    if (keepSorted) {
+                        delete properties.unsorted;
+                    } else {
+                        properties.unsorted = true;
+                    }
                     bHasChanges = true;
                 }
             }

@@ -30,6 +30,7 @@
     "Unlink citations": "Откажи цитате",
     "Please insert some citation into the document.": "Молимо убаците неки цитат у документ.",
     "Omit Author": "Изостави аутора",
+    "Keep sources sorted": "Аутоматски сортирај изворе",
     "Connection to Zotero failed": "Повезивање са Zotero није успело",
     "Connection to Zotero failed. Make sure Zotero is running": "Повезивање са Zotero није успело. Уверите се да је Zotero покренут.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Повезивање са Zotero није успело. Молимо вас да омогућите екстерне везе у Zotero: Уређивање → Подешавања → Напредно → Означите \"Дозволи осталим програмима на овом рачунару да комуницирају са Zotero\"",

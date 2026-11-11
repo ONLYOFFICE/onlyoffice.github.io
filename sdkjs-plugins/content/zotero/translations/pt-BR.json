@@ -30,6 +30,7 @@
     "Unlink citations": "Desligar citações",
     "Please insert some citation into the document.": "Por favor insira alguma citação no documento.",
     "Omit Author": "Omitir autor",
+    "Keep sources sorted": "Manter as fontes ordenadas",
     "Connection to Zotero failed": "A conexão com o Zotero falhou",
     "Connection to Zotero failed. Make sure Zotero is running": "A conexão com o Zotero falhou. Certifique-se de que o Zotero esteja em execução",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "A conexão com o Zotero falhou. Habilite as conexões externas no Zotero: Editar → Configurações → Avançado → Marque \"Permitir que outros aplicativos neste computador se comuniquem com o Zotero\"",

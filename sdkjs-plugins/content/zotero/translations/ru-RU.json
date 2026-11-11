@@ -30,6 +30,7 @@
     "Unlink citations": "Открепить цитаты",
     "Please insert some citation into the document.": "Пожалуйста, вставьте цитату в документ.",
     "Omit Author": "Не выводить автора",
+    "Keep sources sorted": "Сортировать источники автоматически",
     "Connection to Zotero failed": "Не удалось установить соединение с Zotero",
     "Connection to Zotero failed. Make sure Zotero is running": "Не удалось установить соединение с Zotero. Убедитесь, что Zotero запущен",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Не удалось установить соединение с Zotero. Пожалуйста, включите внешние соединения в Zotero. Сделайте это в разделе \"Правка → Настройки → Расширенные\": включите галочку \"Allow other applications on this computer to communicate with Zotero\"",

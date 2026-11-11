@@ -96,3 +96,4 @@
 
 * Search in collections: the library filter shows the collections of each library as a tree, loaded when a library is opened. A checked library or collection is searched whole, subcollections included; a partly checked one only in its checked collections.
 * Refresh restores the citations of a document Zotero converted for moving between word processors ("Switch to a Different Word Processor…"): the links become citations again and the document's citation style and language are applied.
+* Add "Keep sources sorted" to the citation editing window. Dragging a source unchecks it, so the order set by hand is kept instead of being sorted by the style.

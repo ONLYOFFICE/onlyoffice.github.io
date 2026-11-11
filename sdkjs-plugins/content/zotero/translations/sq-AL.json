@@ -30,6 +30,7 @@
     "Unlink citations": "Hiqni citimet",
     "Please insert some citation into the document.": "Ju lutem shtoni ndonjë citim në dokument",
     "Omit Author": "Hiqni autorin",
+    "Keep sources sorted": "Rendit burimet automatikisht",
     "Connection to Zotero failed": "Kontakti me Zotero ka qashtuar",
     "Connection to Zotero failed. Make sure Zotero is running": "Lidhja me Zotero dështoi. Sigurohuni që Zotero është duke punuar.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Kontakti me Zotero ka qashtuar. Ju lutem aktivizoni lidhjen ekstern ne Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"",
