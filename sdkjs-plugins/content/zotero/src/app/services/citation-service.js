@@ -63,10 +63,10 @@ class CitationService {
     /** @type {AdditionalWindow} */
     #additionalWindow;
     /**
-     * Parsed CSL/locale XML, keyed by the source string. Handed a raw
-     * string, citeproc-js falls back to its pure-JS CSL.XmlJSON node engine
-     * instead of the native CSL.XmlDOM one it uses for a DOM Element.
-     * @type {Map<string, Element|string>}
+     * Parsed CSL/locale XML, keyed by the source string, in the form
+     * citeproc-js makes of a string itself (CSL.parseXml). null marks XML
+     * it could not parse.
+     * @type {Map<string, Object|null>}
      */
     #parsedXmlCache = new Map();
     /**
@@ -1208,36 +1208,36 @@ class CitationService {
     }
 
     /**
-     * Parses CSL/locale XML into a DOM Element so citeproc-js takes its
-     * native CSL.XmlDOM path. Returns the original string if parsing fails,
-     * which citeproc still handles, only slower.
+     * Parses CSL/locale XML the way citeproc-js parses a string itself, once
+     * per string. Returns the original string if parsing fails, which
+     * citeproc still handles.
+     *
+     * Not a DOM Element: with one, citeproc takes its CSL.XmlDOM path, which
+     * fails on a style with a <names> that has no <name> outside
+     * <substitute>, such as "AMA Manual of Style 11th edition" - it climbs
+     * to the document node, which has no tagName.
      * @param {string} xmlString
-     * @returns {Element|string}
+     * @returns {Object|string}
      */
     #parseXmlCached(xmlString) {
-        const cached = this.#parsedXmlCache.get(xmlString);
-        if (cached) {
-            return cached;
-        }
-
-        let result = xmlString;
-        try {
-            const root = new DOMParser().parseFromString(
-                xmlString,
-                "application/xml",
-            ).documentElement;
-            if (root && root.nodeName !== "parsererror") {
-                result = root;
+        let parsed = this.#parsedXmlCache.get(xmlString);
+        if (parsed === undefined) {
+            parsed = null;
+            try {
+                // @ts-ignore citeproc does not declare its parser.
+                parsed = CSL.parseXml(xmlString);
+            } catch (e) {
+                console.error(
+                    "Failed to pre-parse CSL/locale XML, falling back to citeproc's string parser:",
+                    e,
+                );
             }
-        } catch (e) {
-            console.error(
-                "Failed to pre-parse CSL/locale XML, falling back to citeproc's string parser:",
-                e,
-            );
+            this.#parsedXmlCache.set(xmlString, parsed);
         }
-
-        this.#parsedXmlCache.set(xmlString, result);
-        return result;
+        // citeproc changes what it is given, so each engine gets its own
+        // copy. Copying takes a millisecond or so; parsing a large style
+        // several times more, and building the engine far more still.
+        return parsed ? JSON.parse(JSON.stringify(parsed)) : xmlString;
     }
 
     #updateFormatter() {
