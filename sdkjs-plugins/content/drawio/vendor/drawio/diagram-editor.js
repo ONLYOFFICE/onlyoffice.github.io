@@ -447,7 +447,7 @@ DiagramEditor.prototype.handleMessage = function(msg)
 			break;
 
 		case "export":
-			this.setElementData(this.startElement, msg.data);
+			this.setElementData(this.startElement, this.normalizeExportData(msg.data));
 			if (this.isFormatChanged()) {
 				// the element is now stored in the new format
 				this.startFormat = this.format;
@@ -510,6 +510,93 @@ DiagramEditor.prototype.exportDiagram = function()
 	// changes its colors with the theme of whoever views the document
 	this.postMessage({action: 'export', format: this.format, xml: this.xml,
 		spinKey: 'export', theme: 'light'});
+};
+
+/**
+ * draw.io's SVG export gives every colored element two styles: a plain
+ * fill/stroke attribute and a style="fill: light-dark(a, b)" override. The
+ * override is what browsers paint (style beats an attribute), so Word/Excel/
+ * PowerPoint's own SVG-to-shape converter (not a browser, no CSS cascade)
+ * parses that style text, does not recognize light-dark(), and ends up with
+ * no fill or stroke at all: the converted shape is there but invisible. We
+ * already export with theme: 'light' (exportDiagram), so it is always safe to
+ * resolve light-dark(a, b) to its first (light) argument.
+ */
+DiagramEditor.prototype.resolveLightDark = function(text)
+{
+	var out = '';
+	var i = 0;
+
+	while (true) {
+		var start = text.indexOf('light-dark(', i);
+		if (start === -1) {
+			out += text.substring(i);
+			break;
+		}
+		out += text.substring(i, start);
+
+		var argsStart = start + 'light-dark('.length;
+		var depth = 1;
+		var j = argsStart;
+		while (j < text.length && depth > 0) {
+			var ch = text.charAt(j);
+			if (ch === '(') depth++;
+			else if (ch === ')') depth--;
+			j++;
+		}
+		var args = text.substring(argsStart, j - 1);
+
+		// split "light, dark" on the first comma outside any rgb(...)/hsl(...)
+		var parenDepth = 0, splitAt = -1;
+		for (var k = 0; k < args.length; k++) {
+			var c = args.charAt(k);
+			if (c === '(') parenDepth++;
+			else if (c === ')') parenDepth--;
+			else if (c === ',' && parenDepth === 0) { splitAt = k; break; }
+		}
+		out += (splitAt === -1 ? args : args.substring(0, splitAt)).trim();
+		i = j;
+	}
+
+	return out;
+};
+
+/**
+ * Removes light-dark() from an exported SVG data: URI (see resolveLightDark).
+ * Leaves anything else (PNG, an SVG without light-dark()) untouched.
+ */
+DiagramEditor.prototype.normalizeExportData = function(data)
+{
+	// light-dark( only ever shows up after the base64 is decoded, not in data itself
+	var prefix = 'data:image/svg+xml;base64,';
+	if (typeof data !== 'string' || data.substring(0, prefix.length) != prefix)
+	{
+		return data;
+	}
+
+	try {
+		var binary = atob(data.substring(prefix.length));
+		var bytes = new Uint8Array(binary.length);
+		for (var i = 0; i < binary.length; i++) {
+			bytes[i] = binary.charCodeAt(i);
+		}
+		var svg = new TextDecoder('utf-8', {fatal: true}).decode(bytes);
+		if (svg.indexOf('light-dark(') === -1) {
+			return data;
+		}
+
+		svg = this.resolveLightDark(svg);
+
+		var encoded = new TextEncoder().encode(svg);
+		var out = '';
+		for (var k = 0; k < encoded.length; k++) {
+			out += String.fromCharCode(encoded[k]);
+		}
+		return prefix + btoa(out);
+	} catch (e) {
+		// not UTF-8, or atob/btoa failed on this data: leave it as draw.io sent it
+		return data;
+	}
 };
 
 /**

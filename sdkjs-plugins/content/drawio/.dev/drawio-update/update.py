@@ -9,8 +9,9 @@ The script downloads draw.war of the release from GitHub, copies it into
 vendor/drawio/webapp without the files the plugin never loads (EXCLUDES) and
 puts our PreConfig.js (next to this script) in place of draw.io's own. It then
 losslessly recompresses the PNGs with oxipng (https://github.com/oxipng/oxipng,
-`scoop install oxipng` / `cargo install oxipng`) when that is installed, or
-prints a reminder and skips it otherwise.
+`scoop install oxipng` / `cargo install oxipng`) and minifies shapes/*.js with
+terser (`npm install -g terser`) when each tool is installed, or prints a
+reminder and skips that step otherwise.
 
 PreConfig.upstream.js is draw.io's PreConfig.js our copy is based on. When a
 release changes it (e.g. math moved to math4 after 22.1.18), the script prints
@@ -183,6 +184,53 @@ def compress_images():
 	print('oxipng: {0} PNGs, {1:.1f} MB -> {2:.1f} MB'.format(len(pngs), before / 1e6, after / 1e6))
 
 
+# Matches a file's leading /** ... */ block (its copyright header, draw.io
+# puts one first in every shapes/*.js file)
+LEADING_COMMENT_RE = re.compile(r'\A\s*(/\*\*.*?\*/)\s*', re.S)
+
+
+def minify_shapes():
+	"""Minifies shapes/*.js (stencil definitions for BPMN, mockups, etc.) with
+	terser, keeping each file's copyright header: Apache 2.0 requires keeping
+	copyright notices, and terser's own --comments filters do not reliably
+	preserve just that one comment."""
+	terser = shutil.which('terser')
+	if terser is None:
+		print('terser not found (npm install -g terser): skipped shapes/*.js minification.')
+		return
+
+	shapes_dir = os.path.join(WEBAPP_DIR, 'shapes')
+	files = []
+	for root, _, names in os.walk(shapes_dir):
+		for name in names:
+			if name.endswith('.js'):
+				files.append(os.path.join(root, name))
+
+	if not files:
+		return
+
+	before = sum(os.path.getsize(p) for p in files)
+	for path in files:
+		with open(path, encoding='utf-8') as f:
+			src = f.read()
+		m = LEADING_COMMENT_RE.match(src)
+		header = m.group(1) + '\n' if m else ''
+
+		# -m does not rename top-level declarations (no --toplevel), so the
+		# mxShape* constructors other files reference by name stay intact.
+		# encoding='utf-8', not text=True (locale default): some files have
+		# non-ASCII bytes (e.g. curly quotes) that aren't valid in the
+		# system's own code page
+		result = subprocess.run([terser, path, '-c', '-m', '--comments', 'false'],
+			capture_output=True, encoding='utf-8', check=True)
+
+		with open(path, 'w', encoding='utf-8', newline='\n') as f:
+			f.write(header + result.stdout)
+	after = sum(os.path.getsize(p) for p in files)
+
+	print('terser: {0} files, {1:.0f} KB -> {2:.0f} KB'.format(len(files), before / 1e3, after / 1e3))
+
+
 def main():
 	parser = argparse.ArgumentParser(description='Update the bundled draw.io.')
 	parser.add_argument('version', help='draw.io release, e.g. 32.6.10')
@@ -211,6 +259,7 @@ def main():
 		copy_webapp(unpacked)
 
 	compress_images()
+	minify_shapes()
 
 	count = 0
 	size = 0
