@@ -1,0 +1,24 @@
+Libraries inside opsin.jar (OPSIN 2.9.0, shipped unchanged as published by its author)
+
+opsin.jar is a single runnable file that bundles OPSIN with the libraries below. Each keeps its own license.
+opsin.jar is a separate program: Reactio Draw starts it with Java and talks to it through standard input and
+output; it can be replaced by any other build of OPSIN.
+
+Component                      Version   License                                   Source
+OPSIN (core, cli, inchi)       2.9.0     MIT (OPSIN-MIT.txt)                       https://github.com/dan2097/opsin
+jna-inchi (core, api, natives) 1.3.1     LGPL-2.1-or-later (LGPL-2.1.txt)          https://github.com/dan2097/jna-inchi
+  with the InChI library        1.07      MIT (InChI-MIT.txt)                       https://github.com/IUPAC-InChI/InChI
+JNA (com.sun.jna)              -         Apache-2.0 or LGPL-2.1, at your choice    https://github.com/java-native-access/jna
+Apache Log4j API and Core      2.25.3    Apache-2.0 (Apache-2.0.txt)               https://logging.apache.org/log4j/
+Woodstox core                  7.1.1     Apache-2.0                                https://github.com/FasterXML/woodstox
+  (with a shaded copy of MSV)
+StAX2 API                      4.2.2     BSD-2-Clause (StAX2-API-BSD-2-Clause.txt) https://github.com/FasterXML/stax2-api
+Apache Commons IO              2.21.0    Apache-2.0                                https://commons.apache.org/io/
+Apache Commons CLI             1.11.0    Apache-2.0                                https://commons.apache.org/cli/
+dk.brics.automaton             1.12-4    BSD-3-Clause (dk.brics.automaton-...)     https://www.brics.dk/automaton/
+MSV xsdlib                     2022.7    BSD-3-Clause (MSV-xsdlib-BSD-3-Clause.txt) https://github.com/xmlark/msv
+ISO RELAX (isorelax)           20090621  MIT (ISO-RELAX-MIT.txt)                   https://sourceforge.net/projects/iso-relax/
+
+The source code of jna-inchi (LGPL) is available from its project page above and from Maven Central
+(io.github.dan2097:jna-inchi-*:1.3.1, -sources.jar). Apache NOTICE texts of the Apache components are kept
+inside opsin.jar (META-INF/NOTICE, META-INF/NOTICE.txt).

@@ -1,0 +1,37 @@
+<!doctype html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+     If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Paste Reactio drawing</title>
+  <style>
+    :root { --bg: #fff; --fg: #222; --muted: #5b6273; --err: #8a1c13; }
+    :root[data-theme=dark] { --bg: #333; --fg: #e8e8e8; --muted: #a8aebb; --err: #ff8a80; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--fg);
+                 font: 13px -apple-system, "Segoe UI", Arial, sans-serif; }
+    main { padding: 16px 18px; }
+    #say { line-height: 1.5; }
+    #say.err { color: var(--err); }
+    .hint { color: var(--muted); font-size: 12px; margin-top: 8px; }
+    /* Reactio Draw reads the drawing out of sight */
+    #rd { position: absolute; left: -12000px; top: 0; width: 1200px; height: 800px; border: 0; }
+  </style>
+  <script src="../v1/plugins.js"></script>
+  <script>
+    if (!(window.Asc && window.Asc.plugin))
+      document.write('<script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"><\/script>');
+  </script>
+  <script src="bridge.js"></script>
+  <script src="insert.js"></script>
+  <script src="paste.js"></script>
+</head>
+<body>
+  <main>
+    <div id="say">Reading the clipboard…</div>
+    <div class="hint" id="hint"></div>
+  </main>
+  <iframe id="rd" title="Reactio Draw" aria-hidden="true"></iframe>
+  <div id="msg" style="display:none"></div>
+</body>
+</html>

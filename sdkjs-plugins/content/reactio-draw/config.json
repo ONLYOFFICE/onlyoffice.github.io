@@ -1,0 +1,117 @@
+{
+  "name": "Reactio Draw",
+  "nameLocale": {
+    "ru": "Reactio Draw",
+    "de": "Reactio Draw",
+    "fr": "Reactio Draw",
+    "es": "Reactio Draw",
+    "it": "Reactio Draw",
+    "pt-BR": "Reactio Draw",
+    "zh": "Reactio Draw",
+    "ja": "Reactio Draw"
+  },
+  "offered": "Pavel Sakharov",
+  "guid": "asc.{38392AF9-5270-40F1-A73C-072432B2C488}",
+  "version": "1.15.1",
+  "minVersion": "8.1.0",
+  "variations": [
+    {
+      "description": "Draw chemical structures and reactions (Insert tab → Reactio Draw); double-click a drawing to edit it; Paste Reactio pastes a drawing copied in Reactio Draw (also right-click, Alt+Shift+V); Number compounds.",
+      "descriptionLocale": {
+        "ru": "Химические структуры и реакции (вкладка «Вставка» → Reactio Draw); двойной щелчок по рисунку открывает его для правки; «Вставить Reactio» вставляет рисунок, скопированный в Reactio Draw (и правая кнопка, Alt+Shift+V); нумерация соединений.",
+        "de": "Chemische Strukturen und Reaktionen zeichnen; Doppelklick auf eine Zeichnung öffnet sie zum Bearbeiten.",
+        "fr": "Dessinez des structures et des réactions chimiques ; double-cliquez sur un dessin pour le modifier.",
+        "es": "Dibuje estructuras y reacciones químicas; haga doble clic en un dibujo para editarlo.",
+        "it": "Disegna strutture e reazioni chimiche; fai doppio clic su un disegno per modificarlo.",
+        "pt-BR": "Desenhe estruturas e reações químicas; clique duas vezes em um desenho para editá-lo.",
+        "zh": "绘制化学结构和反应；双击图形即可编辑。",
+        "ja": "化学構造と反応を描きます。図をダブルクリックすると編集できます。"
+      },
+      "url": "background.html",
+      "icons": [
+        "resources/img/icon.png",
+        "resources/img/icon@2x.png"
+      ],
+      "isViewer": false,
+      "EditorsSupport": [
+        "word",
+        "cell",
+        "slide"
+      ],
+      "isVisual": false,
+      "isModal": false,
+      "isInsideMode": false,
+      "type": "background",
+      "autostart": true,
+      "initDataType": "ole",
+      "initData": "",
+      "isUpdateOleOnResize": false,
+      "events": [
+        "onContextMenuShow",
+        "onContextMenuClick",
+        "onToolbarMenuClick",
+        "onKeyDown"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/img/icon.png"
+          },
+          "125%": {
+            "normal": "resources/img/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/img/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/img/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/img/icon@2x.png"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/img/icon.png"
+          },
+          "125%": {
+            "normal": "resources/img/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/img/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/img/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/img/icon@2x.png"
+          }
+        }
+      ],
+      "store": {
+        "background": {
+          "light": "#E8EDFB",
+          "dark": "#2B3245"
+        },
+        "screenshots": [
+          "resources/store/screenshots/screen_1.png",
+          "resources/store/screenshots/screen_2.png",
+          "resources/store/screenshots/screen_3.png",
+          "resources/store/screenshots/screen_4.png",
+          "resources/store/screenshots/screen_5.png"
+        ],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": [
+          "specAbilities",
+          "work"
+        ]
+      }
+    }
+  ],
+  "onlyofficeScheme": false
+}

@@ -1,0 +1,13 @@
+ChEBI (Chemical Entities of Biological Interest), EMBL-EBI
+https://www.ebi.ac.uk/chebi/
+
+The 2D drawings in names/depictions.txt (atom places, bonds and wedges of 83
+natural products and drugs) are taken from the ChEBI molfiles of those
+entries, unchanged except that their coordinates are rounded to 0.01. Each
+line names its ChEBI entry (CHEBI:<id>).
+
+ChEBI is available under the Creative Commons Attribution 4.0 International
+licence (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+Hastings J, Owen G, Dekker A, Ennis M, Kale N, Muthukrishnan V, Turner S,
+Swainston N, Mendes P, Steinbeck C. ChEBI in 2016: Improved services and an
+expanding collection of metabolites. Nucleic Acids Res. 2016, 44, D1214-9.

@@ -1,0 +1,37 @@
+ReShiki
+Copyright (c) 2026 Ameyanagi and ReShiki contributors
+
+Original ReShiki code and documentation are available under MIT OR Apache-2.0.
+See LICENSE for scope and LICENSE-MIT and LICENSE-APACHE for the full terms.
+
+Third-party material retains its own terms. Source attribution, descriptions
+of adaptations, copyright notices, and license texts are recorded in:
+
+  crates/opsin/           OPSIN 2.9 algorithms, resources, and fixtures (MIT)
+  licenses/rdkit/          Molecular algorithms, data, and reference fixtures
+  licenses/cdxml-native/   Molecular interchange parser adaptations
+  licenses/inchi/          InChIKey adaptations and the Rust InChI kernel
+  licenses/cpython/        Numerical algorithm adaptations
+  licenses/stdlib/         Standard-library algorithm adaptations
+  licenses/amd-win-libm/   Windows numerical algorithm adaptations
+  licenses/oklab/          Public-domain perceptual color conversion matrices
+  licenses/iced/           Canvas glyph rendering adaptation (MIT)
+  licenses/nmrshiftdb2/    Observed-shift derivative database (separate data license)
+  data/nmr/               Offline index, provenance and held-out validation
+  licenses/name-aliases/   Offline retained-name catalog (OPSIN MIT; ChEBI CC BY 4.0)
+  licenses/rust/           Notices omitted from published dependency archives
+  vendor/zune-jpeg/        Modified JPEG dependency and its upstream notices
+  vendor/usvg/            Variable-font weight support in the SVG dependency
+  vendor/svg2pdf/         Variable-font PDF instances and upstream notices
+
+Individual files and fixture directories may contain additional notices.
+Dependencies retain the licenses declared by their respective projects;
+the project-level dual license does not relicense them.
+
+Binary distributions include a Licenses directory. It contains this notice,
+the project license texts, and THIRD-PARTY-NOTICES.txt with the source
+attribution records, dependency versions and declarations, and complete
+upstream license texts and notices. Identical texts are included once,
+with an explicit reference for each dependency and original source file.
+
+On macOS these files are inside ReShiki.app/Contents/Resources/Licenses.
