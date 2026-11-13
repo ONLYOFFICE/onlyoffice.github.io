@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Panel</title>
+  <!-- OnlyOffice plugin stylesheet for editor-consistent styling -->
+  <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Layout controls ── -->
+    <div id="layout-controls">
+
+      <!-- SIZE ─────────────────────────────────── -->
+      <section class="panel-section" id="section-size">
+        <h3 class="section-title">Size</h3>
+        <div class="row">
+          <label class="field">
+            <span class="label-text">W</span>
+            <div class="input-wrap">
+              <input id="input-width" type="number" min="0" step="1" title="Width (mm)">
+              <span class="unit">mm</span>
+            </div>
+          </label>
+          <label class="field">
+            <span class="label-text">H</span>
+            <div class="input-wrap">
+              <input id="input-height" type="number" min="0" step="1" title="Height (mm)">
+              <span class="unit">mm</span>
+            </div>
+          </label>
+        </div>
+        <div class="row">
+          <label class="checkbox-field">
+            <input id="lock-aspect" type="checkbox">
+            <span>Lock aspect ratio</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- POSITION ─────────────────────────────── -->
+      <section class="panel-section" id="section-position">
+        <h3 class="section-title">Position</h3>
+        <div class="row">
+          <label class="field">
+            <span class="label-text">X</span>
+            <div class="input-wrap">
+              <input id="input-x" type="number" step="1" title="X position (mm)">
+              <span class="unit">mm</span>
+            </div>
+          </label>
+          <label class="field">
+            <span class="label-text">Y</span>
+            <div class="input-wrap">
+              <input id="input-y" type="number" step="1" title="Y position (mm)">
+              <span class="unit">mm</span>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- ROTATION ─────────────────────────────── -->
+      <section class="panel-section" id="section-rotation">
+        <h3 class="section-title">Rotation</h3>
+        <div class="row">
+          <label class="field field--wide">
+            <span class="label-text">°</span>
+            <div class="input-wrap">
+              <input id="input-rotation" type="number" min="-360" max="360" step="1" title="Rotation (degrees)">
+              <span class="unit">deg</span>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- ALIGN (relative to selected objects) ───── -->
+      <section class="panel-section" id="section-align">
+        <h3 class="section-title">Align</h3>
+        <div class="row">
+          <label class="radio-field">
+            <input type="radio" name="align-target" value="selection" checked>
+            <span>Selection</span>
+          </label>
+          <label class="radio-field">
+            <input type="radio" name="align-target" value="slide">
+            <span>Slide</span>
+          </label>
+        </div>
+        <div class="btn-grid">
+          <button class="icon-btn" data-align="left"     title="Align left">
+            <span class="icon-svg icon-align-left" aria-hidden="true"></span>
+          </button>
+          <button class="icon-btn" data-align="center-h" title="Center horizontally">
+            <span class="icon-svg icon-align-center-h" aria-hidden="true"></span>
+          </button>
+          <button class="icon-btn" data-align="right"    title="Align right">
+            <span class="icon-svg icon-align-right" aria-hidden="true"></span>
+          </button>
+          <button class="icon-btn" data-align="top"      title="Align top">
+            <span class="icon-svg icon-align-top" aria-hidden="true"></span>
+          </button>
+          <button class="icon-btn" data-align="center-v" title="Center vertically">
+            <span class="icon-svg icon-align-center-v" aria-hidden="true"></span>
+          </button>
+          <button class="icon-btn" data-align="bottom"   title="Align bottom">
+            <span class="icon-svg icon-align-bottom" aria-hidden="true"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- DISTRIBUTE (shown with multiple objects) ────── -->
+      <section class="panel-section" id="section-distribute">
+        <h3 class="section-title">Distribute</h3>
+        <div class="btn-grid btn-grid--2">
+          <button class="icon-btn" data-distribute="h" title="Distribute horizontally">
+            <span class="icon-svg icon-distribute-h" aria-hidden="true"></span>
+          </button>
+          <button class="icon-btn" data-distribute="v" title="Distribute vertically">
+            <span class="icon-svg icon-distribute-v" aria-hidden="true"></span>
+          </button>
+        </div>
+      </section>
+
+    </div><!-- /layout-controls -->
+
+  </div><!-- /app -->
+
+  <!-- OnlyOffice plugin base library -->
+  <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+  <script src="scripts/layout.js"></script>
+</body>
+</html>
