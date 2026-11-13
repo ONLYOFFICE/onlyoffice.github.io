@@ -1,0 +1,28 @@
+.ui-dialog-button {
+  border: none;
+  padding: 0;
+  background: transparent;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: filter 120ms ease, transform 120ms ease;
+}
+
+.ui-dialog-button--hover {
+  filter: brightness(1.03);
+}
+
+.ui-dialog-button--pressed {
+  filter: brightness(0.9);
+  transform: translateY(0.5px);
+}
+
+.ui-dialog-button__spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: ui-dialog-spin 0.9s linear infinite;
+}
+
+@keyframes ui-dialog-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
