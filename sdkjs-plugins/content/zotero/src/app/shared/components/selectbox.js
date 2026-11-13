@@ -429,11 +429,13 @@ class SelectBox {
 
         var filteredItems = this._items;
         if (searchTerm) {
+            var searchWords = searchTerm.split(/\s+/).filter(Boolean);
             filteredItems = filteredItems.filter(function (item) {
-                return (
-                    item !== null &&
-                    item.text.toLowerCase().indexOf(searchTerm) !== -1
-                );
+                if (item === null) return false;
+                var text = item.text.toLowerCase();
+                return searchWords.every(function (word) {
+                    return text.indexOf(word) !== -1;
+                });
             });
         }
 
@@ -805,11 +807,14 @@ class SelectBox {
      */
     addItems(values, selectedValue) {
         const self = this;
+        /** @type {Set<string>} */
+        const existingValues = new Set();
+        this._items.forEach(function (item) {
+            if (item) existingValues.add(item.value);
+        });
         values.forEach(function (pair, index) {
-            const bHasItem = self._items.some(
-                (item) => item && item.value === pair[0]
-            );
-            if (bHasItem) return;
+            if (existingValues.has(pair[0])) return;
+            existingValues.add(pair[0]);
             const isSelected = selectedValue
                 ? pair[0] === selectedValue
                 : index === 0;
@@ -864,6 +869,13 @@ class SelectBox {
         });
         this._selectedValues.delete(value);
         this.#updateSelectedText();
+    }
+    clearItems() {
+        this._items = [];
+        this._customItems = [];
+        this._selectedValues.clear();
+        this.#updateSelectedText();
+        this.#renderOptions();
     }
     /**
      * @return {null | string}

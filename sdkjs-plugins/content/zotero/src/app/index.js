@@ -34,7 +34,7 @@
 /// <reference path="./types-global.js" />
 /// <reference path="./zotero/types.js" />
 
-/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme */
 
 import { Theme } from "./theme";
 import { Router } from "./router";
@@ -44,6 +44,7 @@ import { LoginPage } from "./pages/login";
 import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "./shared/components";
+import { AutoUpdatePreferences } from "./auto-update-preferences";
 
 import "../components.css";
 import "../styles.css";
@@ -67,9 +68,38 @@ import "../styles.css";
         text: "",
         obj: null,
         groups: [],
+        groupOrder: [],
         groupsHash: "",
     };
+    /**
+     * Bumped by every new search. The list is cleared for it, so a library
+     * answer that belongs to an earlier search must not land in the list.
+     */
+    let searchGeneration = 0;
+    /**
+     * Cancels the requests of the search on screen, so that a newer search
+     * drops what the older one still has queued.
+     * @type {AbortController | null}
+     */
+    let searchAbort = null;
     let bInProgress = false;
+
+    /**
+     * Items already cited in the document, so that the search results can put
+     * them on top of the list. Collecting them walks every Zotero field of the
+     * document, which is too slow to redo on every keystroke, so the scan is
+     * cached for a short while and dropped whenever the plugin edits the
+     * document.
+     */
+    const usedItems = {
+        /** @type {Set<string>} */
+        keys: new Set(),
+        /** @type {Promise<Set<string>>|null} */
+        promise: null,
+        fetchedAt: 0,
+        ttl: 5000,
+        timeout: 1000,
+    };
 
     /** @type {SearchFilterComponents} */
     let searchFilter;
@@ -99,7 +129,9 @@ import "../styles.css";
             throw new Error("mainState not found");
         }
 
-        searchFilter = new SearchFilterComponents();
+        searchFilter = new SearchFilterComponents(function (groupId) {
+            return sdk.getCollections(groupId);
+        });
         selectCitation = new SelectCitationsComponent(
             displayNoneClass,
             loadMore,
@@ -141,6 +173,7 @@ import "../styles.css";
             sdk,
             settings.getAbbreviationsManager()
         );
+        settings.setCitationService(citationService);
         let isInit = false;
 
         addEventListeners();
@@ -155,22 +188,31 @@ import "../styles.css";
                 settings.setRestApiAvailable(apis.online);
             })
             .onAuthorized(function (apis) {
-                if (isInit) return;
-                isInit = true;
                 Loader.show();
 
                 let loadGroupsPromise = loadGroups().catch((e) => {
                     console.error(e);
                     showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
                 });
-                let initSettingsPromise = settings.init().catch((e) => {
-                    console.error(e);
-                    showError(translate("An error occurred while loading settings. Try restarting the plugin."));
-                    settings.show();
-                });
+
+                if (isInit) {
+                    return loadGroupsPromise.finally(function () {
+                        Loader.hide();
+                    });
+                }
+
+                let initSettingsPromise = citationService.loadStyleFromDocument(settings.getStyleManager())
+                    .catch((e) => console.error("Failed to read document prefs:", e))
+                    .then(() => settings.init())
+                    .catch((e) => {
+                        console.error(e);
+                        showError(translate("An error occurred while loading settings. Try restarting the plugin."));
+                        settings.show();
+                    });
 
                 Promise.all([loadGroupsPromise, initSettingsPromise]).then(function () {
                     Loader.hide();
+                    isInit = true;
                     return showCitationsAtTheStartFromMyLibrary();
                 }).finally(function () {
                     Loader.hide();
@@ -188,6 +230,49 @@ import "../styles.css";
         
     };
 
+    function invalidateUsedItems() {
+        usedItems.promise = null;
+        usedItems.fetchedAt = 0;
+    }
+
+    /** @returns {Promise<Set<string>>} */
+    function getUsedItemKeys() {
+        const now = Date.now();
+        if (usedItems.promise && now - usedItems.fetchedAt < usedItems.ttl) {
+            return usedItems.promise;
+        }
+        if (bInProgress) {
+            // A document action owns the editor: reading the fields would have
+            // to wait for it, and the search results must not wait for a sort
+            // hint. Rescan once the action is over.
+            return Promise.resolve(usedItems.keys);
+        }
+        usedItems.fetchedAt = now;
+        usedItems.promise = new Promise(function (resolve) {
+            const timer = setTimeout(function () {
+                // The editor did not answer - priority sorting is optional,
+                // displaying the results is not. The scan stays in the cache:
+                // its late answer serves the next search, and a new scan
+                // would only queue up behind it.
+                resolve(usedItems.keys);
+            }, usedItems.timeout);
+            citationService
+                .getUsedItemKeys()
+                .then(function (keys) {
+                    clearTimeout(timer);
+                    usedItems.keys = keys;
+                    resolve(keys);
+                })
+                .catch(function (e) {
+                    clearTimeout(timer);
+                    console.error(e);
+                    invalidateUsedItems();
+                    resolve(usedItems.keys);
+                });
+        });
+        return usedItems.promise;
+    }
+
     function showCitationsAtTheStartFromMyLibrary() {
         libLoader.show();
         const promise = sdk.getItems(null)
@@ -195,8 +280,13 @@ import "../styles.css";
                 delete res.next;
                 return res;
             })
-        return loadLibrary(promise, false)
+        const generation = searchGeneration;
+        return loadLibrary(promise, false, generation)
             .then((res) => {
+                // A search started meanwhile and owns the header now.
+                if (generation !== searchGeneration) {
+                    return;
+                }
                 if (res > 0) {
                     updateHeaderText("started"); 
                 } else {
@@ -216,6 +306,7 @@ import "../styles.css";
         return sdk
             .getUserGroups()
             .then(function (/** @type {Array<UserGroupInfo>} */ groups) {
+                searchFilter.clearGroups();
                 searchFilter.addGroups(groups);
                 return groups;
             });
@@ -226,11 +317,13 @@ import "../styles.css";
 
         /**
          * @param {string} text
-         * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
+         * @param {Array<LibraryScope>} scope
          * @param {string} groupsHash
+         * @param {number} generation
+         * @param {AbortSignal} [signal]
          * @returns {Promise<Array<Promise<number>>>}
          */
-        function searchFor(text, selectedGroups, groupsHash) {
+        function searchFor(text, scope, groupsHash, generation, signal) {
             selectCitation.clearLibrary();
             /** @type {Array<Promise<number>>} */
             const promises = [];
@@ -240,67 +333,98 @@ import "../styles.css";
                 .then(function (
                     /** @type {Array<UserGroupInfo>} */ userGroups
                 ) {
-                    /** @type {Array<string|number>} */
-                    let groups = selectedGroups.filter(function (group) {
-                        return (
-                            group !== "my_library" &&
-                            group !== "group_libraries"
+                    if (generation !== searchGeneration) {
+                        return promises;
+                    }
+                    /** @type {Array<string>} */
+                    const groups = [];
+                    scope.forEach(function (library) {
+                        const groupId = library.groupId;
+                        /** @type {Promise<SearchResult>} */
+                        let request;
+                        if (library.collections) {
+                            request = sdk.searchCollections(
+                                text,
+                                groupId,
+                                library.collections,
+                                signal,
+                            );
+                        } else if (groupId !== null) {
+                            request = sdk.getGroupItems(
+                                text,
+                                groupId,
+                                undefined,
+                                undefined,
+                                signal,
+                            );
+                        } else {
+                            request = sdk.getItems(
+                                text,
+                                null,
+                                undefined,
+                                signal,
+                            );
+                        }
+                        if (groupId !== null) {
+                            groups.push(groupId);
+                        }
+                        promises.push(
+                            loadLibrary(request, groupId !== null, generation),
                         );
                     });
-
-                    if (selectedGroups.indexOf("my_library") !== -1) {
-                        promises.push(
-                            loadLibrary(sdk.getItems(text), false),
-                        );
-                    }
-
-                    for (var i = 0; i < groups.length; i++) {
-                        promises.push(
-                            loadLibrary(
-                                sdk.getGroupItems(text, groups[i]),
-                                true
-                            )
-                        );
-                    }
                     lastSearch.text = text;
                     lastSearch.obj = null;
                     lastSearch.groups = [];
+                    lastSearch.groupOrder = groups;
                     lastSearch.groupsHash = groupsHash;
                     return promises;
                 });
         }
-        searchFilter.subscribe(function (text, selectedGroups) {
+        searchFilter.subscribe(function (text, scope) {
             text = text.trim();
-            const groupsHash = selectedGroups.join(",");
+            const groupsHash = JSON.stringify(scope);
             if (
                 elements.mainState.classList.contains(displayNoneClass) ||
                 !text ||
                 (text == lastSearch.text &&
                     groupsHash === lastSearch.groupsHash) ||
-                selectedGroups.length === 0
+                scope.length === 0
             )
                 return;
 
-            searchFor(text, selectedGroups, groupsHash)
+            const generation = ++searchGeneration;
+            if (searchAbort) {
+                searchAbort.abort();
+            }
+            searchAbort =
+                typeof AbortController === "function"
+                    ? new AbortController()
+                    : null;
+            searchFor(
+                text,
+                scope,
+                groupsHash,
+                generation,
+                searchAbort ? searchAbort.signal : undefined,
+            )
                 .catch(() => {
                     return [];
                 })
                 .then(function (promises) {
                     if (promises.length) {
                         libLoader.show();
-                        Promise.any(promises)
-                            .then(function () {
-                                libLoader.hide();
-                            })
-                            .finally(function () {
-                                libLoader.hide();
-                            });
                     }
                     return Promise.allSettled(promises);
                 })
                 .then(function (
                         /** @type {Array<PromiseSettledResult<number>>} */ numOfShownByLib,
                     ) {
+                        // A newer search owns the list by now.
+                        if (generation !== searchGeneration) {
+                            return;
+                        }
+                        // Every library has answered.
+                        libLoader.hide();
                         let numOfShown = 0;
                         numOfShownByLib.forEach(function (promise) {
                             if (promise.status === "fulfilled") {
@@ -329,11 +453,49 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
+
+            // Zotero's "Refresh" brings back the fields of a document it
+            // converted for another word processor, and so does ours.
+            if (await citationService.isTransferDocument()) {
+                await importTransferDocument();
+            }
+
+            // Re-reading the items from Zotero is one queued request per
+            // cited item and can take a while, so it happens before the
+            // document is locked; the lock then covers only the update.
+            insertBibBtn.disable();
+            refreshBtn.disable();
+            insertLinkBtn.disable();
+            const updatingText = "Zotero (" + translate("Updating citations") + ")";
+            Loader.setText(updatingText);
+            Loader.setProgress(0);
+            Loader.show();
+            try {
+                await citationService.prefetchCitedItems(function (progress) {
+                    Loader.setProgress(progress.completed / progress.total);
+                    Loader.setText(
+                        "Zotero (" +
+                            translate("Updating citations") +
+                            " " +
+                            progress.completed +
+                            "/" +
+                            progress.total +
+                            ")",
+                    );
+                });
+            } catch (error) {
+                // The refresh below fetches what is missing itself.
+                console.error(error);
+            }
+            Loader.setProgress(null);
+            Loader.setText(updatingText);
+
+            await onStartAction(true, updatingText);
 
             let updateFn = citationService.updateCslItems.bind(
                 citationService,
-                false
+                false,
+                { refreshItems: true }
             );
             
             const styleManager = settings.getStyleManager();
@@ -341,7 +503,8 @@ import "../styles.css";
                 // this way, because "SelectAddinField" does not work with notes
                 updateFn = citationService.updateCslItemsInNotes.bind(
                     citationService,
-                    styleManager.getLastUsedNotesStyle()
+                    styleManager.getLastUsedNotesStyle(),
+                    { refreshItems: true }
                 );
             }
 
@@ -354,8 +517,14 @@ import "../styles.css";
                     }
                     showError(message);
                 })
-                .finally(function () {
-                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+                .finally(async function () {
+                    // Within the action, so that one undo takes it back
+                    // together with the citations.
+                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+                    await citationService.saveStyleToDocument(styleManager, locale);
+                    await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+                    Loader.hide();
+                    Loader.setText(translate("Loading..."));
                 });
         });
 
@@ -374,11 +543,13 @@ import "../styles.css";
             await onStartAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
             /** @type {string} */
             let addedFieldId = "";
+            let isNewBibliography = false;
 
             citationService
                 .insertBibliography()
-                .then(function (fieldId) {
-                    addedFieldId = fieldId;
+                .then(function (result) {
+                    addedFieldId = result.fieldId;
+                    isNewBibliography = result.isNew;
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -389,11 +560,19 @@ import "../styles.css";
                         showError(message);
                     }
                 })
-                .finally(function () {
-                    onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
+                .finally(async function () {
                     if (addedFieldId) {
-                        citationService.moveCursorOutsideField(addedFieldId);
+                        await citationService.moveCursorOutsideField(addedFieldId);
+                        // Writing goes on below a new bibliography; an
+                        // updated one is left as it stood.
+                        const editorVersion = window.Asc.scope.editorVersion;
+                        if (isNewBibliography && editorVersion && editorVersion >= 10000000) {
+                            await citationService.addParagraphAfterCursor();
+                        }
                     }
+                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
+                    await onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
                 });
         });
 
@@ -415,6 +594,12 @@ import "../styles.css";
 
             /** @type {AddinFieldData | null} */
             let currentField = await citationService.getCurrentField();
+            if (currentField && citationService.isBibliographyField(currentField)) {
+                // Nothing is inserted, so the chosen sources stay selected.
+                citationService.showWarningMessage("Citations cannot be inserted into the bibliography. Place the cursor outside it.");
+                await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                return;
+            }
             if (currentField) {
                 return citationService.insertSelectedCitationsToCurrentField(items, currentField)
                     .then((field) => {
@@ -439,17 +624,16 @@ import "../styles.css";
                 })
                 .then(function (field) {
                     currentField = field;
+                    const updateOptions = {
+                        skipCitations:
+                            !AutoUpdatePreferences.shouldUpdateCitations(),
+                        skipBibliography:
+                            !AutoUpdatePreferences.shouldUpdateBibliography(),
+                    };
                     if (bHasNotes) {
-                        return citationService.updateCslItems(false);
+                        return citationService.updateCslItems(false, updateOptions);
                     }
-                    return citationService.updateCslItems();
-                })
-                .then(() => {
-                    if (bHasNotes) {
-                        return citationService.moveCursorRight();
-                    } else if (currentField) {
-                        return citationService.moveCursorOutsideField(currentField.FieldId);
-                    }
+                    return citationService.updateCslItems(undefined, updateOptions);
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -460,7 +644,14 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(async () => {
-                    onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
+                    await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    if (bHasNotes) {
+                        await citationService.moveCursorRight();
+                    } else if (currentField) {
+                        await citationService.moveCursorOutsideField(currentField.FieldId);
+                    }
                 });
         });
 
@@ -482,6 +673,23 @@ import "../styles.css";
         });
 
         settings.onChangeState(async function (newState, oldState) {
+            const bAffectsRendering =
+                newState.language !== oldState.language ||
+                newState.style !== oldState.style ||
+                newState.notesStyle !== oldState.notesStyle ||
+                newState.styleFormat !== oldState.styleFormat ||
+                newState.includeUrlForPaperArticles !==
+                    oldState.includeUrlForPaperArticles ||
+                newState.abbreviateJournalTitles !==
+                    oldState.abbreviateJournalTitles;
+            if (!bAffectsRendering) {
+                return;
+            }
+
+            // The settings page is closed by now, while every citation of
+            // the document is formatted anew, which can take a while.
+            Loader.setText("Zotero (" + translate("Updating citations") + ")");
+            Loader.show();
             await onStartAction(
                 true,
                 "Zotero (" + translate("Updating citations") + ")",
@@ -528,11 +736,15 @@ import "../styles.css";
                     }
                     showError(message);
                 })
-                .finally(function () {
-                    onEndAction(
+                .finally(async function () {
+                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
+                    await onEndAction(
                         false,
                         "Zotero (" + translate("Updating citations") + ")",
                     );
+                    Loader.hide();
+                    Loader.setText(translate("Loading..."));
                 });
         });
     }
@@ -635,6 +847,35 @@ import "../styles.css";
     }
 
     /**
+     * Turns the links of a document Zotero converted for moving it between
+     * word processors back into fields and takes up the style and the
+     * language the document was written with.
+     * @returns {Promise<void>}
+     */
+    async function importTransferDocument() {
+        const importingText = "Zotero (" + translate("Updating citations") + ")";
+        // The document changes too much for the selection to be kept.
+        await onStartAction(false, importingText);
+        try {
+            const result = await citationService.importTransferDocument(
+                settings.getStyleManager()
+            );
+            if (result.failed) {
+                console.error(
+                    result.failed + " transferred citation(s) could not be imported"
+                );
+            }
+            if (result.hasPreferences) {
+                await settings.loadSavedSettings();
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            await onEndAction(false, importingText);
+        }
+    }
+
+    /**
      * @param {boolean} keepSelection
      * @param {string} [preloaderMessage]
      */
@@ -668,6 +909,7 @@ import "../styles.css";
      */
     async function onEndAction(scrollToTarget, preloaderMessage) {
         bInProgress = false;
+        invalidateUsedItems();
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
@@ -675,7 +917,7 @@ import "../styles.css";
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9004000) {
             // @ts-ignore
-            CursorService.setCursorPosition(window._cursorPosition || 0);
+            await CursorService.setCursorPosition(window._cursorPosition || 0);
         } else {
             await new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);
@@ -724,23 +966,39 @@ import "../styles.css";
     }
 
     function loadMore() {
-        console.warn("Loading more...");
+        // Each `next` is taken before its request goes out, so another
+        // scroll cannot ask for the same page while this one is loading.
+        // One page from one library per scroll: the user's own library is
+        // read to its end first, then the groups in the order of the filter.
+        /** @type {Array<Promise<number>>} */
+        const pages = [];
+        const order = lastSearch.groupOrder;
+        const group = lastSearch.groups
+            .filter(function (group) {
+                return !!group.next;
+            })
+            .sort(function (a, b) {
+                return order.indexOf(String(a.id)) - order.indexOf(String(b.id));
+            })[0];
         if (lastSearch.obj && lastSearch.obj.next) {
-            loadLibrary(lastSearch.obj.next(), false);
+            const next = lastSearch.obj.next;
+            delete lastSearch.obj.next;
+            pages.push(loadLibrary(next(), false, searchGeneration));
+        } else if (group && group.next) {
+            const next = group.next;
+            delete group.next;
+            pages.push(loadLibrary(next(), true, searchGeneration));
         }
 
-        for (
-            let i = 0;
-            i < lastSearch.groups.length && lastSearch.groups[i].next;
-            i++
-        ) {
-            loadLibrary(
-                sdk.getGroupItems(
-                    lastSearch.groups[i].next(),
-                    lastSearch.groups[i].id,
-                ),
-                true,
-            );
+        if (pages.length) {
+            const generation = searchGeneration;
+            libLoader.show();
+            Promise.allSettled(pages).then(function () {
+                // A newer search shows the loader for its own requests.
+                if (generation === searchGeneration) {
+                    libLoader.hide();
+                }
+            });
         }
     }
 
@@ -750,15 +1008,18 @@ import "../styles.css";
      */
     function shouldLoadMore(holder) {
         if (router.getRoute() != "main") return false;
-        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight) {
+        // A pixel of slack: native scrolling can stop a fraction short of
+        // the end at some zoom levels.
+        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight - 1) {
             return false;
         }
 
-        let flag = true;
-        lastSearch.groups.forEach(function (el) {
-            if (el.next) flag = false;
-        });
-        if (!lastSearch.obj || !lastSearch.obj.next || !flag) return false;
+        const hasMore =
+            !!(lastSearch.obj && lastSearch.obj.next) ||
+            lastSearch.groups.some(function (group) {
+                return !!group.next;
+            });
+        if (!hasMore) return false;
         if (
             !lastSearch.obj &&
             !lastSearch.text.trim() &&
@@ -772,19 +1033,25 @@ import "../styles.css";
     /**
      * @param {Promise<SearchResult>} promise
      * @param {boolean} isGroup
+     * @param {number} generation the search the request was made for
      * @returns {Promise<number>}
      */
-    function loadLibrary(promise, isGroup) {
+    function loadLibrary(promise, isGroup, generation) {
         return promise
             .then(function (res) {
-                return displaySearchItems(res, null, isGroup);
+                return displaySearchItems(res, null, isGroup, generation);
             })
             .catch(function (err) {
+                // A replaced search's failures, its cancelled requests
+                // among them, are nobody's concern any more.
+                if (generation !== searchGeneration) {
+                    return 0;
+                }
                 console.error(err);
                 if (err.message) {
                     showError(translate(err.message));
                 }
-                return displaySearchItems(null, err, isGroup);
+                return displaySearchItems(null, err, isGroup, generation);
             })
             .then(function (numOfShown) {
                 return numOfShown;
@@ -795,9 +1062,14 @@ import "../styles.css";
      * @param {SearchResult | null} res
      * @param {Error | null} err
      * @param {boolean} isGroup
+     * @param {number} generation the search the results belong to
      * @returns {Promise<number>}
      */
-    function displaySearchItems(res, err, isGroup) {
+    function displaySearchItems(res, err, isGroup, generation) {
+        // The list was cleared for a newer search while this one was loading.
+        if (generation !== searchGeneration) {
+            return Promise.resolve(0);
+        }
         let first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
@@ -806,12 +1078,23 @@ import "../styles.css";
                 lastSearch.obj = null;
                 lastSearch.groups = [];
             }
-            if (lastSearch && lastSearch.obj) {
+            if (!isGroup && lastSearch && lastSearch.obj) {
                 delete lastSearch.obj.next;
             }
-        } else {
-            if (isGroup && res && res.next) lastSearch.groups.push(res);
-            else lastSearch.obj = res && res.items.length ? res : null;
+        } else if (isGroup && res) {
+            // One entry per group, holding the page to continue from.
+            const index = lastSearch.groups.findIndex(function (group) {
+                return group.id === res.id;
+            });
+            if (!res.next) {
+                if (index !== -1) lastSearch.groups.splice(index, 1);
+            } else if (index === -1) {
+                lastSearch.groups.push(res);
+            } else {
+                lastSearch.groups[index] = res;
+            }
+        } else if (!isGroup) {
+            lastSearch.obj = res && res.items.length ? res : null;
         }
         /**
          * @param {SearchResultItem} item
@@ -840,7 +1123,14 @@ import "../styles.css";
             });
         }
 
-        return selectCitation.displaySearchItems(res, err, lastSearch);
+        return getUsedItemKeys().then(function (usedItemKeys) {
+            // The document scan takes time too: check again.
+            if (generation !== searchGeneration) {
+                return 0;
+            }
+            selectCitation.setUsedItemKeys(usedItemKeys);
+            return selectCitation.displaySearchItems(res, err, lastSearch);
+        });
     }
 
     /**
@@ -866,9 +1156,6 @@ import "../styles.css";
         }
     }
 
-    /**
-     * @returns {Promise<number>}
-     */
     async function getEditorVersion() {
         try {
             let version = await new Promise(resolve => {
@@ -932,8 +1219,8 @@ import "../styles.css";
             (/** @type {{id: string|number}} */ item) => String(item.id)
         );
         const bItemsChanged =
-            idsBeforeEdit.slice().sort().join("\u0000") !==
-            idsAfterEdit.slice().sort().join("\u0000");
+            idsBeforeEdit.join("\u0000") !==
+            idsAfterEdit.join("\u0000");
 
         let updateFn = citationService.updateItem.bind(
             citationService,
@@ -956,15 +1243,15 @@ import "../styles.css";
                 if (!bItemsChanged) {
                     return;
                 }
-                /*const updateOptions = {
+                const updateOptions = {
                     skipCitations:
                         !AutoUpdatePreferences.shouldUpdateCitations(),
                     skipBibliography:
                         !AutoUpdatePreferences.shouldUpdateBibliography(),
-                };*/
+                };
                 return citationService.updateCslItems(
                     bIsNotesFormat ? false : undefined,
-                    //updateOptions
+                    updateOptions
                 );
             })
             .then(() => {

@@ -56,12 +56,18 @@ function LocalesManager() {
  */
 LocalesManager.prototype.loadLocale = function (langTag) {
     const self = this;
-    this._selectedLanguage = langTag;
     if (this._cache[langTag]) {
         return Promise.resolve(this._cache[langTag]);
     }
     var url = this._getLocalesUrl() + "locales-" + langTag + ".xml";
     return fetch(url)
+        .then(function (response) {
+            // An error page is not a locale.
+            if (!response.ok) {
+                throw new Error("HTTP " + response.status + " for " + url);
+            }
+            return response;
+        })
         .catch(function (err) {
             console.error("Failed to load locale:", err);
             // Try to load from local path as fallback

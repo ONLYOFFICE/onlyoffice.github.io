@@ -98,6 +98,30 @@ CitationItem.prototype.fillFromObject = function (itemObject) {
 };
 
 /**
+ * Replaces the bibliographic data with a freshly fetched CSL item.
+ * fillFromObject only merges, so a field the user deleted in Zotero would
+ * survive in the stored copy forever; a refresh has to treat the fetched
+ * item as the whole authoritative record. Citation-local state (prefix,
+ * suffix, locator, uris) and the library context stay untouched.
+ * @param {CslJsonItem} cslItemObject - a plain CSL JSON item, not the API "json" shape
+ */
+CitationItem.prototype.replaceItemDataFromCsl = function (cslItemObject) {
+    const oldItemData = this._itemData;
+    this._itemData = new CitationItemData(this.id);
+
+    const userID = oldItemData.getCustomProperty("userID");
+    const groupID = oldItemData.getCustomProperty("groupID");
+    if (userID !== null) {
+        this._itemData._addCustomProperty("userID", userID);
+    }
+    if (groupID !== null) {
+        this._itemData._addCustomProperty("groupID", groupID);
+    }
+
+    this._itemData.fillFromObject(cslItemObject);
+};
+
+/**
  * @returns {InfoForCitationCluster}
  */
 CitationItem.prototype.getInfoForCitationCluster = function () {
@@ -266,7 +290,33 @@ CitationItem.prototype.toJSON = function (skipUrlForPaperArticles) {
         result["suppress-author"] = this._suppressAuthor;
     if (this._authorOnly !== undefined)
         result["author-only"] = this._authorOnly;
-    if (this._uris.length) result.uris = this._uris;
+    // Local desktop Zotero and the plain REST API both expose the item
+    // under a machine/session-local URI - neither is portable to another
+    // document or machine, so prefer the canonical zotero.org URI instead.
+    var filteredUris = this._uris.filter(function (uri) {
+        return (
+            uri.indexOf('127.0.0.1') === -1 &&
+            uri.indexOf('localhost') === -1 &&
+            uri.indexOf('api.zotero.org') === -1
+        );
+    });
+    if (filteredUris.length) {
+        result.uris = filteredUris;
+    } else {
+        // Construct URI from library context if available - required for Word Zotero compatibility
+        var userID = this._itemData && this._itemData.getCustomProperty
+            ? this._itemData.getCustomProperty("userID") : null;
+        var groupID = this._itemData && this._itemData.getCustomProperty
+            ? this._itemData.getCustomProperty("groupID") : null;
+        var key = typeof this.id === "string" ? this.id : "";
+        if (key && userID) {
+            result.uris = ["http://zotero.org/users/" + userID + "/items/" + key];
+        } else if (key && groupID) {
+            result.uris = ["http://zotero.org/groups/" + groupID + "/items/" + key];
+        } else {
+            result.uris = [];
+        }
+    }
 
     return result;
 };

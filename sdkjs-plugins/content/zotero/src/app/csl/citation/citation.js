@@ -312,6 +312,16 @@ class CSLCitation {
     }
 
     /**
+     * Drops the formatted text the Zotero plugin for Word keeps as its own
+     * cache of the citation.
+     * @returns {CSLCitation}
+     */
+    removeFormattedCitation() {
+        delete this._properties.formattedCitation;
+        return this;
+    }
+
+    /**
      * @param {string} citeprocText
      * @param {string} [manualOverrideText]
      * @returns

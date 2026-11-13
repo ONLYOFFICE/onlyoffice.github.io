@@ -122,7 +122,7 @@ div::-moz-selection {
     flex-direction: row;
     overflow-y: hidden;
     font-size: 10px;
-    max-height: 33px;
+    max-height: 50px;
     margin-top: 14px;
 }
 
@@ -163,8 +163,11 @@ div::-moz-selection {
     }
 }
 
-#buttonsWrapper .custom-button-container:first-child {
-    width: calc(100% - 28px);
+.buttonsWrapper {
+    justify-content: space-between;
+    .custom-button-container:first-child {
+        width: calc(100% - 28px);
+    }
 }
 
 #prefixSuffixDiv {
@@ -175,6 +178,10 @@ div::-moz-selection {
     input[type="text"] {
         width: 50%;
     }
+}
+
+#repairBrokenFieldsWrapper .custom-button-container {
+    width: 100%;
 }
 
 #styleWrapper {
@@ -197,7 +204,8 @@ div::-moz-selection {
     border-style: solid;
     border-radius: 2px;
     padding: 8px;
-    max-height: 180px;
+    max-height: 200px;
+    min-height: 100px;
     overflow-y: auto;
     font-size: 11px;
     line-height: 1.35;
@@ -328,7 +336,7 @@ div::-moz-selection {
         margin-top: 6px;
     }
 }
-.page0 > .doc:first-child {
+#docsHolder > div:first-child > .doc:first-child {
     margin-top: 0;
 }
 
@@ -360,7 +368,7 @@ div::-moz-selection {
 .selDoc {
     display: inline-block;
     margin-right: 6px;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
 }
 
 .selDoc > span {

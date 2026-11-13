@@ -37,18 +37,57 @@
 
 import { zoteroEnvironment } from "./zotero-environment";
 import { RateLimitedFetcher } from "./zotero-api-fetcher";
+import { ZOTERO_TYPE_TO_CSL } from "../csl/zotero-type-map";
 
 const ZoteroSdk = function () {
     this._apiKey = null;
     this._userId = 0;
     /** @type {Array<UserGroupInfo>}} */
     this._userGroups = [];
+    this._userGroupsLoaded = false;
     this._isOnlineAvailable = true;
 
     this._fetcher = new RateLimitedFetcher({
         maxRetries: 5,
         initialDelay: 5000,
     });
+    
+    this.MAX_KEYS_PER_REQUEST = 50;
+
+    
+    // Zotero creatorType -> CSL name variable. Only maps to variables this
+    // plugin's own CitationItemData actually recognizes (see its
+    // fillFromObject); anything not listed here falls back to "author".
+    this._zoteroCreatorTypeToCsl = {
+        "author": "author",
+        "bookAuthor": "container-author",
+        "castMember": "performer",
+        "chair": "chair",
+        "compiler": "compiler",
+        "composer": "composer",
+        "contributor": "contributor",
+        "curator": "curator",
+        "director": "director",
+        "editor": "editor",
+        "editorialDirector": "editorial-director",
+        "executiveProducer": "executive-producer",
+        "guest": "guest",
+        "host": "host",
+        "illustrator": "illustrator",
+        "interviewee": "author",
+        "narrator": "narrator",
+        "organizer": "organizer",
+        "originalAuthor": "original-author",
+        "performer": "performer",
+        "podcaster": "host",
+        "producer": "producer",
+        "recipient": "recipient",
+        "reviewedAuthor": "reviewed-author",
+        "seriesCreator": "series-creator",
+        "seriesEditor": "collection-editor",
+        "translator": "translator",
+    };
+
 };
 
 // Constants
@@ -56,6 +95,11 @@ ZoteroSdk.prototype.ZOTERO_API_VERSION = "3";
 ZoteroSdk.prototype.USER_AGENT = "AscDesktopEditor";
 /** @type {"csljson"|"json"} */
 ZoteroSdk.prototype.DEFAULT_FORMAT = "csljson";
+/**
+ * Page size of a search against the local Zotero API. Unlike the web API it
+ * answers with every match at once when no limit is given.
+ */
+ZoteroSdk.prototype.DESKTOP_PAGE_SIZE = 25;
 ZoteroSdk.prototype.STORAGE_KEYS = {
     USER_ID: "zoteroUserId",
     API_KEY: "zoteroApiKey",
@@ -64,6 +108,8 @@ ZoteroSdk.prototype.API_PATHS = {
     USERS: "users",
     GROUPS: "groups",
     ITEMS: "items",
+    TOP: "top",
+    COLLECTIONS: "collections",
     KEYS: "keys",
 };
 
@@ -90,6 +136,7 @@ ZoteroSdk.prototype._getDesktopRequest = function (url) {
             headers: {
                 "Zotero-API-Version": self.ZOTERO_API_VERSION,
                 "User-Agent": self.USER_AGENT,
+                "Cache-Control": "no-cache",
             },
             complete: resolve,
             error: function (/** @type {AscSimpleResponse} */ error) {
@@ -107,17 +154,19 @@ ZoteroSdk.prototype._getDesktopRequest = function (url) {
 /**
  * Make a GET request to the online Zotero API
  * @param {URL} url
+ * @param {AbortSignal} [signal] - cancels the request, see RateLimitedFetcher
  * @returns {Promise<FetchResponse>}
  */
-ZoteroSdk.prototype._getOnlineRequest = function (url) {
+ZoteroSdk.prototype._getOnlineRequest = function (url, signal) {
     const headers = {
         "Zotero-API-Version": this.ZOTERO_API_VERSION,
         "Zotero-API-Key": this._apiKey || "",
     };
 
-    //return this._fetcher.fetchWithRetry(url, headers, 9);
-
-    return fetch(url, { headers: headers })
+    // Queued: a search over several libraries must not reach the API as a
+    // burst of parallel requests.
+    return this._fetcher
+        .fetchWithRetry(url, headers, signal)
         .then(function (response) {
             if (!response.ok) {
                 const message = response.status + " " + response.statusText;
@@ -127,7 +176,8 @@ ZoteroSdk.prototype._getOnlineRequest = function (url) {
             return response;
         })
         .catch(function (error) {
-            if (typeof error === "object") {
+            // A cancelled request is not a failed connection.
+            if (typeof error === "object" && error.name !== "AbortError") {
                 error.message = "Connection to Zotero failed";
             }
             throw error;
@@ -137,21 +187,23 @@ ZoteroSdk.prototype._getOnlineRequest = function (url) {
 /**
  * Universal request handler with offline support
  * @param {URL} url
+ * @param {AbortSignal} [signal] - cancels an online request
  * @returns {Promise<AscSimpleResponse | FetchResponse>}
  */
-ZoteroSdk.prototype._getRequestWithOfflineSupport = function (url) {
+ZoteroSdk.prototype._getRequestWithOfflineSupport = function (url, signal) {
     return this._isOnlineAvailable
-        ? this._getOnlineRequest(url)
+        ? this._getOnlineRequest(url, signal)
         : this._getDesktopRequest(url.href);
 };
 
 /**
  * Build URL and make GET request
  * @param {string} path
- * @param {*} [queryParams]
+ * @param {Object<string, string>} [queryParams]
+ * @param {AbortSignal} [signal] - cancels an online request
  * @returns {Promise<AscSimpleResponse | FetchResponse>}
  */
-ZoteroSdk.prototype._buildGetRequest = function (path, queryParams) {
+ZoteroSdk.prototype._buildGetRequest = function (path, queryParams, signal) {
     queryParams = queryParams || {};
     var url = new URL(path, this._getBaseUrl());
 
@@ -161,7 +213,7 @@ ZoteroSdk.prototype._buildGetRequest = function (path, queryParams) {
         }
     });
 
-    return this._getRequestWithOfflineSupport(url);
+    return this._getRequestWithOfflineSupport(url, signal);
 };
 
 /**
@@ -208,11 +260,13 @@ ZoteroSdk.prototype._parseDesktopItemsResponse = function (
  * Parse response for online mode with pagination support
  * @param {Promise<FetchResponse>} promise
  * @param {number|string} id
+ * @param {AbortSignal} [signal] - the next page is cancelled with the first
  * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype._parseItemsResponse = function (
     promise,
-    id
+    id,
+    signal
 ) {
     var self = this;
     return promise
@@ -237,8 +291,9 @@ ZoteroSdk.prototype._parseItemsResponse = function (
             if (links.next) {
                 result.next = function () {
                     return self._parseItemsResponse(
-                        self._getOnlineRequest(new URL(links.next)),
-                        id
+                        self._getOnlineRequest(new URL(links.next), signal),
+                        id,
+                        signal
                     );
                 };
             }
@@ -251,14 +306,15 @@ ZoteroSdk.prototype._parseItemsResponse = function (
  * Universal items response parser
  * @param {Promise<AscSimpleResponse | FetchResponse>} promise
  * @param {number|string} id
+ * @param {AbortSignal} [signal] - cancels the further pages of an online answer
  * @returns {Promise<SearchResult>}
  */
-ZoteroSdk.prototype._parseResponse = function (promise, id) {
+ZoteroSdk.prototype._parseResponse = function (promise, id, signal) {
     /** @type {Promise<SearchResult>} */
     let result = Promise.resolve({items:[], id: 0});
     if (this._isOnlineAvailable) {
         const fetchPromise = /** @type {Promise<FetchResponse>} */ (promise);
-        result = this._parseItemsResponse(fetchPromise, id);
+        result = this._parseItemsResponse(fetchPromise, id, signal);
     } else {
         const ascSimplePromise = /** @type {Promise<AscSimpleResponse>} */ (
             promise
@@ -272,28 +328,123 @@ ZoteroSdk.prototype._parseResponse = function (promise, id) {
 };
 
 /**
+ * One page of a search against the local Zotero API. Its answers reach the
+ * plugin without headers, so there is no Link to follow: a full page stands
+ * for "there may be more"
+ * @param {string} path - of the items to search, see _getListPath
+ * @param {{format: "csljson"|"json", q?: string, itemKey?: string, itemType?: string}} queryParams
+ * @param {number|string} id
+ * @param {number} start
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype._getDesktopSearchPage = function (path, queryParams, id, start) {
+    const self = this;
+    const limit = this.DESKTOP_PAGE_SIZE;
+    const withCsl = queryParams.format === "csljson";
+    /** @type {Object<string, string>} */
+    const pageParams = {
+        format: queryParams.format,
+        limit: String(limit),
+        start: String(start),
+    };
+    if (queryParams.q) pageParams.q = queryParams.q;
+    if (queryParams.itemType) pageParams.itemType = queryParams.itemType;
+    if (withCsl) {
+        // Zotero answers local requests one at a time and each search costs
+        // the same whatever the format, so the CSL comes along with the
+        // json answer instead of in a request of its own.
+        pageParams.format = "json";
+        pageParams.include = "csljson";
+    }
+    const response = this._parseResponse(
+        this._buildGetRequest(path, pageParams),
+        id
+    );
+    return response.then(function (res) {
+        if (withCsl && Array.isArray(res.items)) {
+            res.items = res.items.map(function (/** @type {any} */ item) {
+                return (
+                    self._parseIncludedCsl(item.csljson) ||
+                    self._convertJsonToCsl(item)
+                );
+            });
+        }
+        if (Array.isArray(res.items) && res.items.length === limit) {
+            res.next = function () {
+                return self._getDesktopSearchPage(
+                    path,
+                    queryParams,
+                    id,
+                    start + limit
+                );
+            };
+        }
+        return res;
+    });
+};
+
+/**
+ * The CSL item Zotero put next to an API item on include=csljson. The local
+ * API sends it as the text of a one-item array, the web API as the object
+ * itself. Its id is the item's zotero.org URI, as in a csljson answer.
+ * @param {any} included
+ * @returns {SearchResultItem|null} null if there is none or it cannot be read
+ */
+ZoteroSdk.prototype._parseIncludedCsl = function (included) {
+    let csl = included;
+    if (typeof csl === "string") {
+        try {
+            csl = JSON.parse(csl);
+        } catch (e) {
+            return null;
+        }
+    }
+    if (Array.isArray(csl)) {
+        csl = csl[0];
+    }
+    return csl && typeof csl === "object" && csl.id ? csl : null;
+};
+
+/**
+ * The path a search or the list of recent items is read from: top-level
+ * items only. Child notes and attachments cannot be cited, would fill the
+ * pages of results, and leaving them out makes the local search several
+ * times faster.
+ * @param {string} itemsPath - the items path of a library
+ * @returns {string}
+ */
+ZoteroSdk.prototype._getListPath = function (itemsPath) {
+    return itemsPath + "/" + this.API_PATHS.TOP;
+};
+
+/**
  * Get items from user library
  * @param {string|null} search
  * @param {string[]|null} [itemsID]
  * @param {"csljson"|"json"} [format]
+ * @param {AbortSignal} [signal] - cancels the search and its further pages
  * @returns {Promise<SearchResult>}
  */
-ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
+ZoteroSdk.prototype.getItems = function (search, itemsID, format, signal) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
-    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
+    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType?: string}} */
     let queryParams = {
         format: format,
-        itemType: "-attachment", // skip attachments (pdf, docx, etc.)
     };
 
     if (search) {
         queryParams.q = search;
+        queryParams.itemType = "-attachment"; // skip attachments (pdf, docx, etc.)
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
+        // No itemType filter here on purpose: a negated itemType makes the
+        // local Zotero API search the whole library instead of addressing
+        // the keys directly, and it is pointless when the keys are known.
     } else {
         queryParams.limit = 20;
+        queryParams.itemType = "-attachment"; // skip attachments (pdf, docx, etc.)
     }
 
     var path =
@@ -302,8 +453,14 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
         self._userId +
         "/" +
         self.API_PATHS.ITEMS;
-    const request = self._buildGetRequest(path, queryParams);
-    const response = self._parseResponse(request, self._userId);
+    if (!itemsID) {
+        path = self._getListPath(path);
+    }
+    if (search && !this._isOnlineAvailable) {
+        return this._getDesktopSearchPage(path, queryParams, self._userId, 0);
+    }
+    const request = self._buildGetRequest(path, queryParams, signal);
+    const response = self._parseResponse(request, self._userId, signal);
     
     if (!this._isOnlineAvailable && format === "csljson") {
         return this._addJsonToClsJsonItemsResponse(response, path, queryParams);
@@ -317,33 +474,362 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
  * @param {number|string} groupId
  * @param {string[]} [itemsID]
  * @param {"csljson"|"json"} [format]
+ * @param {AbortSignal} [signal] - cancels the search and its further pages
  * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype.getGroupItems = function (
     search,
     groupId,
     itemsID,
-    format
+    format,
+    signal
 ) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
     var queryParams =
-        /** @type {{format: string, q?: string, itemKey?: string}} */ ({
+        /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, itemType?: string}} */ ({
             format: format,
         });
 
     if (search) {
         queryParams.q = search;
+        queryParams.itemType = "-attachment"; // as in getItems
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
     }
 
     var path =
         self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
-    var request = self._buildGetRequest(path, queryParams);
-    return self._parseResponse(request, groupId);
+    if (!itemsID) {
+        path = self._getListPath(path);
+    }
+    if (search && !this._isOnlineAvailable) {
+        return this._getDesktopSearchPage(path, queryParams, groupId, 0);
+    }
+    var request = self._buildGetRequest(path, queryParams, signal);
+    var response = self._parseResponse(request, groupId, signal);
 
+    // As in getItems: local csljson results cannot be traced back to the
+    // library, and plain json ones carry no title the result list can show,
+    // so the two are merged.
+    if (!this._isOnlineAvailable && format === "csljson") {
+        return this._addJsonToClsJsonItemsResponse(response, path, queryParams);
+    }
+    return response;
+
+};
+
+/**
+ * The path of a library: the user's or a group's.
+ * @param {number|string|null} groupId - null for the user library
+ * @returns {string}
+ */
+ZoteroSdk.prototype._getLibraryPath = function (groupId) {
+    return groupId
+        ? this.API_PATHS.GROUPS + "/" + groupId
+        : this.API_PATHS.USERS + "/" + this._userId;
+};
+
+/**
+ * Every collection of a library, subcollections included.
+ * @param {number|string|null} groupId - null for the user library
+ * @returns {Promise<Array<ZoteroCollection>>}
+ */
+ZoteroSdk.prototype.getCollections = function (groupId) {
+    const path =
+        this._getLibraryPath(groupId) + "/" + this.API_PATHS.COLLECTIONS;
+    /** @type {Object<string, string>} */
+    const queryParams = { format: "json" };
+    // The web API answers 25 at a time unless asked for more; the local one
+    // sends them all.
+    if (this._isOnlineAvailable) {
+        queryParams.limit = "100";
+    }
+    /** @type {Array<ZoteroCollection>} */
+    const collections = [];
+    /**
+     * @param {SearchResult} res
+     * @returns {Promise<Array<ZoteroCollection>>|Array<ZoteroCollection>}
+     */
+    const collect = function (res) {
+        const items = Array.isArray(res.items) ? res.items : [];
+        items.forEach(function (/** @type {any} */ item) {
+            const data = item && item.data;
+            if (!data || !item.key) {
+                return;
+            }
+            collections.push({
+                key: item.key,
+                name: data.name || "",
+                parentCollection: data.parentCollection || null,
+                numItems: item.meta ? item.meta.numItems : undefined,
+            });
+        });
+        return res.next ? res.next().then(collect) : collections;
+    };
+    return this._parseResponse(
+        this._buildGetRequest(path, queryParams),
+        groupId || this._userId
+    ).then(collect);
+};
+
+/** The fewest results a page of searchCollections holds, unless no more. */
+ZoteroSdk.prototype.COLLECTIONS_PAGE_SIZE = 25;
+
+/**
+ * Searches some collections of one library: the items right in them, top
+ * level only, each item once. The collections are read one after another,
+ * the next one when the previous has no more results, and a page goes on
+ * into the next collections until it holds COLLECTIONS_PAGE_SIZE results:
+ * the list loads more only when scrolled, and a short one cannot be.
+ * @param {string} search
+ * @param {number|string|null} groupId - null for the user library
+ * @param {Array<string>} collectionKeys
+ * @param {AbortSignal} [signal] - cancels the search and its further pages
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.searchCollections = function (
+    search,
+    groupId,
+    collectionKeys,
+    signal
+) {
+    const self = this;
+    const id = groupId || this._userId;
+    if (collectionKeys.length === 0) {
+        return Promise.resolve({ items: [], id: id });
+    }
+    /** @type {Set<string>} */
+    const seen = new Set();
+    /**
+     * @param {number} index - of the collection to read
+     * @param {(function(): Promise<SearchResult>)|null} nextPage - of that
+     *  collection; its first page when null
+     * @param {Array<SearchResultItem>} found - the results of this page so
+     *  far
+     * @returns {Promise<SearchResult>}
+     */
+    const read = function (index, nextPage, found) {
+        const page = nextPage
+            ? nextPage()
+            : self._searchCollection(
+                  search,
+                  groupId,
+                  collectionKeys[index],
+                  signal
+              );
+        return page.then(function (res) {
+            // An item can be in several of the collections.
+            const fresh = (res.items || []).filter(function (item) {
+                if (seen.has(item.id)) {
+                    return false;
+                }
+                seen.add(item.id);
+                return true;
+            });
+            const items = found.concat(fresh);
+            const pageAfter = res.next || null;
+            const nextIndex = pageAfter ? index : index + 1;
+            /** @type {SearchResult} */
+            const result = { items: items, id: id };
+            if (nextIndex >= collectionKeys.length) {
+                return result;
+            }
+            if (items.length >= self.COLLECTIONS_PAGE_SIZE) {
+                result.next = function () {
+                    return read(nextIndex, pageAfter, []);
+                };
+                return result;
+            }
+            return read(nextIndex, pageAfter, items);
+        });
+    };
+    return read(0, null, []);
+};
+
+/**
+ * The first page of a search in one collection.
+ * @param {string} search
+ * @param {number|string|null} groupId - null for the user library
+ * @param {string} collectionKey
+ * @param {AbortSignal} [signal]
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype._searchCollection = function (
+    search,
+    groupId,
+    collectionKey,
+    signal
+) {
+    const id = groupId || this._userId;
+    const path = this._getListPath(
+        this._getLibraryPath(groupId) +
+            "/" +
+            this.API_PATHS.COLLECTIONS +
+            "/" +
+            collectionKey +
+            "/" +
+            this.API_PATHS.ITEMS
+    );
+    /** @type {{format: "csljson"|"json", q?: string, itemType?: string}} */
+    const queryParams = {
+        format: this.DEFAULT_FORMAT,
+        q: search,
+        itemType: "-attachment", // as in getItems
+    };
+    if (!this._isOnlineAvailable) {
+        return this._getDesktopSearchPage(path, queryParams, id, 0);
+    }
+    return this._parseResponse(
+        this._buildGetRequest(path, queryParams, signal),
+        id,
+        signal
+    );
+};
+
+/**
+ * Searches the user library across all fields, which also matches CSL
+ * citation keys such as the ones Better BibTeX pins. Used to re-link a
+ * citation whose stored id is a citation key rather than a Zotero item key.
+ * @param {string} query
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.searchUserItemsEverything = function (query) {
+    var path =
+        this.API_PATHS.USERS + "/" + this._userId + "/" + this.API_PATHS.ITEMS;
+    var request = this._buildGetRequest(path, {
+        format: "json",
+        q: query,
+        qmode: "everything",
+        itemType: "-attachment",
+        limit: 10,
+    });
+    return this._parseResponse(request, this._userId);
+};
+
+/**
+ * Gets one item of the user library by key. Uses the single-item endpoint
+ * rather than the list endpoint with itemKey, because the list also returns
+ * the item's child notes and attachments, and in csljson format entries are
+ * identified by CSL citation key, so a multi-entry answer cannot be matched
+ * back to what was asked for.
+ * @param {string} itemKey
+ * @param {"csljson"|"json"} [format]
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.getItemByKey = function (itemKey, format) {
+    var path =
+        this.API_PATHS.USERS +
+        "/" +
+        this._userId +
+        "/" +
+        this.API_PATHS.ITEMS +
+        "/" +
+        itemKey;
+    var request = this._buildGetRequest(path, {
+        format: format || this.DEFAULT_FORMAT,
+    });
+    return this._parseResponse(request, this._userId);
+};
+
+/**
+ * @param {Array<string>} keys - at most MAX_KEYS_PER_REQUEST
+ * @param {number|string|null} groupId - null for the user library
+ * @param {"csljson"|"json"} format - what `data` holds: the CSL item or the
+ *  API item
+ * @returns {Promise<Array<{key: string, data: any}>>} the items found
+ */
+ZoteroSdk.prototype.getItemsByKeys = function (keys, groupId, format) {
+    var self = this;
+    if (!this._isOnlineAvailable) {
+        return Promise.all(
+            keys.map(function (key) {
+                var request = groupId
+                    ? self.getGroupItemByKey(groupId, key, format)
+                    : self.getItemByKey(key, format);
+                return request.then(
+                    function (res) {
+                        // The local API's answers are not always the array
+                        // SearchResult declares.
+                        var items = /** @type {any} */ (res && res.items);
+                        // A csljson answer may come in the web API's
+                        // {items: [...]} container or as a bare array.
+                        if (items && !Array.isArray(items) && Array.isArray(items.items)) {
+                            items = items.items;
+                        }
+                        if (!Array.isArray(items)) {
+                            items = items ? [items] : [];
+                        }
+                        return items.length === 1
+                            ? { key: key, data: items[0] }
+                            : null;
+                    },
+                    function (error) {
+                        console.warn("Failed to read item " + key + ":", error);
+                        return null;
+                    }
+                );
+            })
+        ).then(function (found) {
+            return found.filter(function (item) {
+                return item !== null;
+            });
+        });
+    }
+
+    var path = groupId
+        ? this.API_PATHS.GROUPS + "/" + groupId + "/" + this.API_PATHS.ITEMS
+        : this.API_PATHS.USERS + "/" + this._userId + "/" + this.API_PATHS.ITEMS;
+    /** @type {Object<string, string>} */
+    var queryParams = {
+        format: "json",
+        itemKey: keys.join(","),
+        limit: String(this.MAX_KEYS_PER_REQUEST),
+    };
+    if (format === "csljson") {
+        queryParams.include = "csljson";
+    }
+    var request = this._buildGetRequest(path, queryParams);
+    return this._parseResponse(request, groupId || this._userId).then(
+        function (res) {
+            var items = Array.isArray(res.items) ? res.items : [];
+            return items
+                .filter(function (/** @type {any} */ item) {
+                    return item && item.key;
+                })
+                .map(function (/** @type {any} */ item) {
+                    return {
+                        key: item.key,
+                        data: format === "csljson"
+                            ? self._parseIncludedCsl(item.csljson)
+                            : item,
+                    };
+                });
+        }
+    );
+};
+
+/**
+ * Gets one item of a group library by key. See getItemByKey.
+ * @param {number|string} groupId
+ * @param {string} itemKey
+ * @param {"csljson"|"json"} [format]
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.getGroupItemByKey = function (groupId, itemKey, format) {
+    var path =
+        this.API_PATHS.GROUPS +
+        "/" +
+        groupId +
+        "/" +
+        this.API_PATHS.ITEMS +
+        "/" +
+        itemKey;
+    var request = this._buildGetRequest(path, {
+        format: format || this.DEFAULT_FORMAT,
+    });
+    return this._parseResponse(request, groupId);
 };
 
 /**
@@ -354,7 +840,7 @@ ZoteroSdk.prototype.getUserGroups = function () {
     var self = this;
 
     return new Promise(function (resolve, reject) {
-        if (self._userGroups.length > 0) {
+        if (self._userGroupsLoaded) {
             resolve(self._userGroups);
             return;
         }
@@ -390,6 +876,7 @@ ZoteroSdk.prototype.getUserGroups = function () {
                         name: group.data.name,
                     };
                 });
+                self._userGroupsLoaded = true;
                 resolve(self._userGroups);
             })
             .catch(reject);
@@ -399,7 +886,7 @@ ZoteroSdk.prototype.getUserGroups = function () {
 /**
  * @param {Promise<SearchResult>} response 
  * @param {string} path 
- * @param {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} queryParams 
+ * @param {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number|string, start?: string, itemType?: string}} queryParams 
  * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype._addJsonToClsJsonItemsResponse = function (response, path, queryParams) {
@@ -450,42 +937,77 @@ ZoteroSdk.prototype._addJsonToClsJsonItemsResponse = function (response, path, q
  * @returns {SearchResultItem}
  */
 ZoteroSdk.prototype._convertJsonToCsl = function (item) {
+    const self = this;
     if (item.id || !item.key) return item;
+    var d = item.data || {};
     /** @type {SearchResultItem} */
     const res = {
         id: item.key,
-        title: item.data.title,
-        type: item.data.itemType,
+        title: d.title || "",
+        type: ZOTERO_TYPE_TO_CSL[d.itemType] || d.itemType || "",
     };
-    if (Object.hasOwnProperty.call(item, "url")) {
-        res.URL = item.data.url;
+
+    // creators → CSL name variables. Zotero's creatorType values don't
+    // match CSL's variable names 1:1 (e.g. "seriesEditor" -> "collection-editor",
+    // "bookAuthor" -> "container-author") - unmapped/unrecognized types
+    // fall back to "author" so the person isn't silently dropped.
+    if (Array.isArray(d.creators)) {
+        d.creators.forEach(function (/** @type {any} */ c) {
+            var name = {};
+            if (c.firstName) name.given = c.firstName;
+            if (c.lastName) name.family = c.lastName;
+            if (c.name) name.literal = c.name;
+            var cslRole = self._zoteroCreatorTypeToCsl[c.creatorType] || "author";
+            if (!res[cslRole]) res[cslRole] = [];
+            if (Object.keys(name).length > 0) {
+                res[cslRole].push(name);
+            }
+        });
     }
-    if (Object.hasOwnProperty.call(item, "volume")) {
-        res.volume = item.data.volume;
+
+    // date → issued. Zotero's "date" is free text; only a plain
+    // "YYYY", "YYYY-MM" or "YYYY-MM-DD" (or "/"-separated) shape can be
+    // safely turned into date-parts here - year ranges ("2019-2020"),
+    // circa dates, season names etc. are left unset rather than
+    // mangled (the old `.split("-").map(Number)` read "2019-2020" as
+    // year 2019/month 2020, and dropped the sign off BCE dates like "-0099").
+    if (d.date) {
+        var dateMatch = /^(-?\d{1,4})(?:[-/](\d{1,2}))?(?:[-/](\d{1,2}))?$/.exec(d.date.trim());
+        if (dateMatch) {
+            var parts = [Number(dateMatch[1])];
+            if (dateMatch[2]) parts.push(Number(dateMatch[2]));
+            if (dateMatch[3]) parts.push(Number(dateMatch[3]));
+            res.issued = { "date-parts": [parts] };
+        }
     }
-    if (Object.hasOwnProperty.call(item, "language")) {
-        res.language = item.data.language;
-    }
-    if (Object.hasOwnProperty.call(item, "abstract")) {
-        res.abstract = item.data.abstract;
-    }
-    if (Object.hasOwnProperty.call(item, "note")) {
-        res.note = item.data.note;
-    }
-    if (Object.hasOwnProperty.call(item, "page")) {
-        res.page = item.data.page;
-    }
-    if (Object.hasOwnProperty.call(item, "shortTitle")) {
-        res.shortTitle = item.data.shortTitle;
-    }
-    if (Object.hasOwnProperty.call(item, "links")) {
+
+    // simple 1-to-1 fields (Zotero name → CSL name)
+    if (d.url) res.URL = d.url;
+    if (d.volume) res.volume = d.volume;
+    if (d.issue) res.issue = d.issue;
+    if (d.pages) res.page = d.pages;
+    if (d.edition) res.edition = d.edition;
+    if (d.language) res.language = d.language;
+    if (d.abstractNote) res.abstract = d.abstractNote;
+    if (d.note) res.note = d.note;
+    if (d.shortTitle) res.shortTitle = d.shortTitle;
+    if (d.publisher) res.publisher = d.publisher;
+    if (d.place) res["publisher-place"] = d.place;
+    if (d.DOI) res.DOI = d.DOI;
+    if (d.ISBN) res.ISBN = d.ISBN;
+    if (d.ISSN) res.ISSN = d.ISSN;
+    if (d.publicationTitle) res["container-title"] = d.publicationTitle;
+    if (d.bookTitle) res["container-title"] = d.bookTitle;
+    if (d.series) res["collection-title"] = d.series;
+    if (d.seriesNumber) res["collection-number"] = d.seriesNumber;
+    if (d.numberOfVolumes) res["number-of-volumes"] = d.numberOfVolumes;
+    if (d.numPages) res["number-of-pages"] = d.numPages;
+
+    // uris from links
+    if (item.links) {
         res.uris = [];
-        if (Object.hasOwnProperty.call(item.links, "self")) {
-            res.uris.push(item.links.self.href)
-        }
-        if (Object.hasOwnProperty.call(item.links, "alternate")) {
-            res.uris.push(item.links.alternate.href)
-        }
+        if (item.links.self) res.uris.push(item.links.self.href);
+        if (item.links.alternate) res.uris.push(item.links.alternate.href);
     }
 
     return res;
@@ -500,7 +1022,9 @@ ZoteroSdk.prototype.setApiKey = function (key) {
     var self = this;
     var path = this.API_PATHS.KEYS + "/" + key;
 
-    return this._buildGetRequest(path)
+    var url = new URL(path, zoteroEnvironment.restApiUrl);
+
+    return this._getOnlineRequest(url)
         .then(function (response) {
             var fetchResponse = /** @type {FetchResponse} */ (response);
             if (!fetchResponse.ok) {
@@ -559,6 +1083,7 @@ ZoteroSdk.prototype.clearSettings = function () {
     localStorage.removeItem(this.STORAGE_KEYS.USER_ID);
     localStorage.removeItem(this.STORAGE_KEYS.API_KEY);
     this._userGroups = [];
+    this._userGroupsLoaded = false;
     this._userId = 0;
     this._apiKey = null;
 };

@@ -75,8 +75,8 @@
 
 /** ------------------------------------------------ */
 
-/** @typedef {import("../../../../v1/onlyoffice-types/src/word-methods").ContentControlProperties} ContentControlProperties */
-/** @typedef {import("../../../../v1/onlyoffice-types/src/word-methods").AddinFieldData} AddinFieldData */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").ContentControlProperties} ContentControlProperties */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").AddinFieldData} AddinFieldData */
 
 /** ------------------------------------------------ */
 
@@ -154,9 +154,29 @@ var AscSimpleRequest = window.AscSimpleRequest;
 /** ------------------------------------------------ */
 
 /**
+ * Where to search in one library.
+ * @typedef {Object} LibraryScope
+ * @property {string|null} groupId - null for the user library
+ * @property {Array<string>|null} collections - the keys of the collections
+ *  to search in; null for the whole library
+ */
+
+/**
+ * A link that carries Zotero's data in a document Zotero converted for
+ * moving it between word processors: a field code or the document
+ * preferences as its text.
+ * @typedef {Object} TransferLink
+ * @property {"body" | "footnote" | "endnote"} location
+ * @property {number} paragraph - the index of the paragraph in its location
+ * @property {number} element - the index of the link in its paragraph
+ * @property {string} text
+ */
+
+/**
  * @typedef {Object} LastSearch
  * @property {string} text
  * @property {SearchResult | null} obj
  * @property {Array<SearchResult>} groups
+ * @property {Array<string|number>} groupOrder - the searched groups in the order of the library filter
  * @property {string} groupsHash
  */

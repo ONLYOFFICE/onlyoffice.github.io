@@ -33,38 +33,108 @@
 // @ts-check
 
 /// <reference path="../types-global.js" />
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiRange} ApiRange */
 
 class CslDocFormatter {
     /**
-     * @param {Array<FormattingPositions>} positions
+     * Removes from the selection the formatting a citation style can set
      * @returns {Promise<void>}
      */
-    static formatAfterInsert(positions) {
+    static clearFormatting() {
+        return new Promise(function (resolve) {
+            const isCalc = false;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                function () {
+                    const range = Api.GetDocument().GetRangeBySelect();
+                    if (!range) return;
+                    // null drops the direct value instead of setting one.
+                    /** @type {any} */
+                    const unset = null;
+                    range.SetVertAlign(unset);
+                    range.SetSmallCaps(unset);
+                    range.SetUnderline(unset);
+                    range.SetBold(unset);
+                    range.SetItalic(unset);
+                },
+                isClose,
+                isCalc,
+                function () {
+                    resolve();
+                }
+            );
+        });
+    }
+
+    /**
+     * @param {Array<FormattingPositions>} positions
+     * @param {string} text
+     * @returns {Promise<void>}
+     */
+    static formatAfterInsert(positions, text) {
         return new Promise(function (resolve) {
             const isCalc = true;
             const isClose = false;
             Asc.scope.formatting = positions;
+            Asc.scope.textToMatch = text || "";
             Asc.plugin.callCommand(
                 function () {
                     const doc = Api.GetDocument();
-                    let run = doc.GetCurrentRun();
+
+                    /**
+                     * 
+                     * @param {ApiRange} range 
+                     * @param {string} type 
+                     */
+                    function applyFormatting(range, type) {
+                        if ("sup" === type) {
+                            range.SetVertAlign("superscript");
+                        } else if ("sub" === type) {
+                            range.SetVertAlign("subscript");
+                        } else if ("sc" === type) {
+                            range.SetSmallCaps(true);
+                        } else if ("u" === type) {
+                            range.SetUnderline(true);
+                        } else if ("b" === type) {
+                            range.SetBold(true);
+                        } else if ("i" === type || "em" === type) {
+                            range.SetItalic(true);
+                        }
+                    }
+
+                    // Try to find the run inside footnote via paragraph elements
+                    var run = null;
+                    var note = doc.GetCurrentFootEndnote();
+                    if (note && Asc.scope.textToMatch) {
+                        var paraCount = note.GetElementsCount();
+                        for (var p = 0; p < paraCount; p++) {
+                            var para = note.GetElement(p);
+                            if (!para || !("GetElementsCount" in para)) continue;
+                            var count = para.GetElementsCount();
+                            for (var e = 0; e < count; e++) {
+                                var elem = para.GetElement(e);
+                                if (!elem || !("GetRange" in elem)) continue;
+                                var elemText = "GetText" in elem ? elem.GetText() : "";
+                                if (elemText === Asc.scope.textToMatch) {
+                                    run = elem;
+                                    break;
+                                }
+                            }
+                            if (run) break;
+                        }
+                    }
+
+                    if (!run) {
+                        run = doc.GetCurrentRun();
+                    }
+
+                    if (!run) return;
+
                     for (let i = Asc.scope.formatting.length - 1; i >= 0; i--) {
                         const pos = Asc.scope.formatting[i];
                         let range = run.GetRange(pos.start, pos.end);
                         if (!range) continue;
-                        if ("sup" === pos.type) {
-                            range.SetVertAlign("superscript");
-                        } else if ("sub" === pos.type) {
-                            range.SetVertAlign("subscript");
-                        } else if ("sc" === pos.type) {
-                            range.SetSmallCaps(true);
-                        } else if ("u" === pos.type) {
-                            range.SetUnderline(true);
-                        } else if ("b" === pos.type) {
-                            range.SetBold(true);
-                        } else if ("i" === pos.type || "em" === pos.type) {
-                            range.SetItalic(true);
-                        }
+                        applyFormatting(range, pos.type);
                     }
                 },
                 isClose,
@@ -74,15 +144,13 @@ class CslDocFormatter {
         });
     }
     /**
-     * @param {string} fieldId
      * @param {{text: string, formatting: Array<FormattingPositions>}} formattingPositions
      * @returns {Promise<void>}
      */
-    static formatAfterUpdate(fieldId, formattingPositions) {
+    static formatAfterUpdate(formattingPositions) {
         const isCalc = true;
         const isClose = false;
 
-        Asc.scope.fieldId = fieldId;
         Asc.scope.text = formattingPositions.text;
         Asc.scope.formatting = formattingPositions.formatting;
 
@@ -121,11 +189,44 @@ class CslDocFormatter {
                             return;
                         }
                     }
-                    
-                    doc.MoveCursorToPos(
-                        selRange.GetEndPos() - Asc.scope.text.length,
-                    );
-                    let run = doc.GetCurrentRun();
+
+                    // Find the run containing our text by iterating paragraphs
+                    // from the selected range.
+                    const selStart = selRange.GetStartPos();
+                    const selEnd = selRange.GetEndPos();
+                    var run = null;
+                    var paragraphs = selRange.GetAllParagraphs();
+                    if (paragraphs && paragraphs.length) {
+                        for (var p = 0; p < paragraphs.length; p++) {
+                            var para = paragraphs[p];
+                            if (!para) continue;
+                            var count = para.GetElementsCount();
+                            for (var e = 0; e < count; e++) {
+                                var elem = para.GetElement(e);
+                                if (!elem || !("GetRange" in elem)) continue;
+                                var elemText = "GetText" in elem ? elem.GetText() : "";
+                                if (elemText !== Asc.scope.text) continue;
+                                var elemRange = elem.GetRange(0, elemText.length);
+                                if (!elemRange) continue;
+                                var elemStart = elemRange.GetStartPos();
+                                if (elemStart >= selStart && elemStart < selEnd) {
+                                    run = elem;
+                                    break;
+                                }
+                            }
+                            if (run) break;
+                        }
+                    }
+
+                    if (!run) {
+                        // Fallback: original approach for main document body
+                        doc.MoveCursorToPos(
+                            selRange.GetEndPos() - Asc.scope.text.length,
+                        );
+                        run = doc.GetCurrentRun();
+                    }
+
+                    if (!run) return;
 
                     for (let i = Asc.scope.formatting.length - 1; i >= 0; i--) {
                         const pos = Asc.scope.formatting[i];

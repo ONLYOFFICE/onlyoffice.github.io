@@ -2,21 +2,30 @@
 
 /// <reference path="../types-global.js" />
 
+/**
+ * Sends requests to the Zotero web API one at a time. The API limits how
+ * fast a client may ask, and a search across several libraries would
+ * otherwise fire one request per library at once.
+ */
 class RateLimitedFetcher {
     #maxRetries;
     #initialDelay;
     #maxDelay;
     #backoffFactor;
     #retryOn;
-    #requestLimit;
-    #requestWindow;
-    /** @type {number[]} */
-    #requestTimestamps;
-    #requestCount;
+    /** Shortest time between the starts of two requests, ms. */
+    #minInterval;
+    /**
+     * Settles when the last queued request has finished.
+     * @type {Promise<void>}
+     */
+    #queue;
     #lastRequestTime;
+    /** Time before which the server asked not to be called (Backoff). */
+    #backoffUntil;
 
     /**
-     * @param {{maxRetries?: number, initialDelay?: number, maxDelay?: number, backoffFactor?: number, retryOn?: number[]}} options
+     * @param {{maxRetries?: number, initialDelay?: number, maxDelay?: number, backoffFactor?: number, retryOn?: number[], minInterval?: number}} options
      */
     constructor(options = {}) {
         this.#maxRetries = options.maxRetries || 5;
@@ -24,130 +33,106 @@ class RateLimitedFetcher {
         this.#maxDelay = options.maxDelay || 5000;
         this.#backoffFactor = options.backoffFactor || 2;
         this.#retryOn = options.retryOn || [429, 502, 503, 504]; // Error codes for retry
+        this.#minInterval =
+            options.minInterval !== undefined ? options.minInterval : 300;
 
-        this.#requestLimit = 10; // first N requests per minute without delay
-        this.#requestWindow = 5000; // 5 sec
-
-        this.#requestTimestamps = [];
-        this.#requestCount = 0;
+        this.#queue = Promise.resolve();
         this.#lastRequestTime = 0;
+        this.#backoffUntil = 0;
+    }
+
+    /**
+     * Sends the request once every request queued before it has finished.
+     * An answer the server asks to repeat later (429, 5xx) is retried after
+     * the delay it names, still holding the queue; any other answer is
+     * returned as it is, for the caller to judge. Network errors are not
+     * retried: offline, the search should fail at once.
+     * A request whose signal is aborted while it waits is dropped without
+     * reaching the server, so a replaced search costs nothing more.
+     * @param {URL} url
+     * @param {{ "Zotero-API-Version": string; "Zotero-API-Key": string; }} headers
+     * @param {AbortSignal} [signal]
+     * @returns {Promise<FetchResponse>}
+     */
+    fetchWithRetry(url, headers, signal) {
+        const request = this.#queue.then(() =>
+            this.#send(url, headers, signal)
+        );
+        // The next request waits for this one, whatever its outcome.
+        this.#queue = request.then(
+            () => {},
+            () => {}
+        );
+        return request;
+    }
+
+    resetCounter() {
+        this.#lastRequestTime = 0;
+        this.#backoffUntil = 0;
     }
 
     /**
      * @param {URL} url
      * @param {{ "Zotero-API-Version": string; "Zotero-API-Key": string; }} headers
-     * @param {number} attempt
+     * @param {AbortSignal} [signal]
      * @returns {Promise<FetchResponse>}
      */
-    async fetchWithRetry(url, headers, attempt) {
-        try {
-            await this.#checkAndApplyRateLimit();
+    async #send(url, headers, signal) {
+        for (let attempt = 0; ; attempt++) {
+            // Checked before waiting, so a dropped request delays nobody.
+            throwIfAborted(signal);
+            await this.#waitForTurn();
+            throwIfAborted(signal);
+            const response = await fetch(url, {
+                headers: headers,
+                cache: "no-store",
+                signal: signal,
+            });
+            this.#applyBackoff(response);
 
-            const response = await fetch(url, { headers: headers });
-
-            if (response.ok) {
+            if (
+                response.ok ||
+                !this.#retryOn.includes(response.status) ||
+                attempt >= this.#maxRetries
+            ) {
                 return response;
             }
 
-            if (
-                this.#retryOn.includes(response.status) &&
-                attempt < this.#maxRetries
-            ) {
-                const delay = this.#calculateDelay(attempt, response);
-                console.log(
-                    `Attempt ${attempt + 1}/${this.#maxRetries} failed with ${
-                        response.status
-                    }. Retrying in ${delay}ms`
-                );
-
-                await this.#delay(delay);
-                return this.fetchWithRetry(url, headers, attempt + 1);
-            }
-
-            throw new Error(`${response.status} ${response.statusText}`);
-        } catch (error) {
-            if (attempt >= this.#maxRetries) {
-                let message = "";
-                if (error instanceof Error) {
-                    message = error.message;
-                }
-                throw new Error(
-                    `Request failed after ${
-                        this.#maxRetries
-                    } attempts: ${message}`
-                );
-            }
-
-            // For network errors
-            if (attempt < this.#maxRetries) {
-                const delay = this.#calculateDelay(attempt);
-                console.log(
-                    `Network error on attempt ${
-                        attempt + 1
-                    }. Retrying in ${delay}ms`
-                );
-
-                await this.#delay(delay);
-                return this.fetchWithRetry(url, headers, attempt + 1);
-            }
-
-            throw error;
+            const delay = this.#calculateDelay(attempt, response);
+            console.log(
+                `Zotero answered ${response.status}, attempt ${attempt + 1}/${
+                    this.#maxRetries
+                }. Retrying in ${delay}ms`
+            );
+            await this.#delay(delay);
         }
     }
 
-    resetCounter() {
-        this.#requestTimestamps = [];
-        this.#requestCount = 0;
-        this.#lastRequestTime = 0;
-    }
-
-    #cleanupOldRequests() {
+    async #waitForTurn() {
         const now = Date.now();
-        this.#requestTimestamps = this.#requestTimestamps.filter(
-            (timestamp) => now - timestamp < this.#requestWindow
+        const wait = Math.max(
+            this.#lastRequestTime + this.#minInterval - now,
+            this.#backoffUntil - now,
+            0
         );
+        if (wait > 0) {
+            await this.#delay(wait);
+        }
+        this.#lastRequestTime = Date.now();
     }
 
-    async #checkAndApplyRateLimit() {
-        this.#cleanupOldRequests();
-
-        // If we have too many requests
-        if (this.#requestTimestamps.length >= this.#requestLimit) {
-            const oldestRequest = this.#requestTimestamps[0];
-            const timeSinceOldest = Date.now() - oldestRequest;
-
-            // If we are within the rate limit window, wait
-            if (timeSinceOldest < this.#requestWindow) {
-                let waitTime =
-                    500 * this.#requestTimestamps.length - this.#requestLimit;
-                if (waitTime < 0) {
-                    waitTime = 0;
-                    console.warn("Wait time is less than 0");
-                }
-                console.log(
-                    `Rate limit prevention: ${
-                        this.#requestTimestamps.length
-                    } requests in last ${
-                        this.#requestWindow
-                    }ms. Waiting ${waitTime}ms...`
-                );
-                await this.#delay(waitTime);
-                this.#cleanupOldRequests(); // Update timestamps
-            }
+    /**
+     * The API sends Backoff when it is under load: no request until then.
+     * @param {FetchResponse} response
+     */
+    #applyBackoff(response) {
+        const backoff = parseInt(response.headers.get("Backoff") || "", 10);
+        if (backoff > 0) {
+            this.#backoffUntil = Math.max(
+                this.#backoffUntil,
+                Date.now() + backoff * 1000
+            );
         }
-
-        this.#requestTimestamps.push(Date.now());
-        this.#requestCount++;
-
-        const now = Date.now();
-        const timeSinceLastRequest = now - this.#lastRequestTime;
-        const minDelay = 100;
-
-        if (timeSinceLastRequest < minDelay && this.#lastRequestTime > 0) {
-            await this.#delay(minDelay - timeSinceLastRequest);
-        }
-
-        this.#lastRequestTime = Date.now();
     }
 
     /**
@@ -179,6 +164,17 @@ class RateLimitedFetcher {
      */
     #delay(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+}
+
+/**
+ * @param {AbortSignal} [signal]
+ */
+function throwIfAborted(signal) {
+    if (signal && signal.aborted) {
+        const error = new Error("The request was cancelled");
+        error.name = "AbortError";
+        throw error;
     }
 }
 

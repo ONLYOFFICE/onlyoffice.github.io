@@ -3,6 +3,7 @@
         ".dev/*",
         "node_modules/*",
         "src/*",
+        "vendor/citeproc/citeproc_commonjs.js",
         "*.es5.js.map",
         "*.es5.js",
         ".browserslistrc",

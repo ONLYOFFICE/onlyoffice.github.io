@@ -34,6 +34,7 @@
 
 /**
  * @typedef {import('../router').Router} Router
+ * @typedef {import('../services/citation-service').CitationService} CitationService
  */
 
 import {
@@ -46,10 +47,12 @@ import {
 } from "../shared/components";
 import { translate } from "../services";
 import { CslStylesManager } from "../csl/styles";
+import { CslStylesParser } from "../csl/styles/style-parser";
 import { CslHtmlParser } from "../services/csl-html-parser";
 import { LocalesManager } from "../csl/locales";
 import { AbbreviationsManager } from "../csl/abbreviations";
 import { CitationItemData } from "../csl/citation/citation-item-data";
+import { AutoUpdatePreferences } from "../auto-update-preferences";
 
 const PREVIEW_ITEMS = [
     {
@@ -89,6 +92,8 @@ const PREVIEW_ITEMS = [
  * @property {StyleFormat} styleFormat
  * @property {boolean} includeUrlForPaperArticles
  * @property {boolean} abbreviateJournalTitles
+ * @property {boolean} autoUpdateCitations
+ * @property {boolean} autoUpdateBibliography
  */
 
 /**
@@ -105,6 +110,12 @@ function SettingsPage(router, displayNoneClass) {
     this._cancelBtn = new Button("cancelBtn", {
         variant: "secondary",
     });
+
+    this._repairBrokenFieldsBtn = new Button("repairBrokenFieldsBtn", {
+        variant: "secondary",
+    });
+    /** @type {CitationService|null} */
+    this._citationService = null;
 
     this._styleSelect = new SelectBox("styleSelectList", {
         placeholder: "Enter style name",
@@ -150,6 +161,16 @@ function SettingsPage(router, displayNoneClass) {
         }
     );
 
+    this._autoUpdateCitationsCheckbox = new Checkbox("autoUpdateCitations", {
+        label: "Update other citations when inserting a new one",
+    });
+    this._autoUpdateBibliographyCheckbox = new Checkbox(
+        "autoUpdateBibliography",
+        {
+            label: "Update the bibliography when inserting a citation",
+        }
+    );
+
     this._cslFileInput = document.getElementById("cslFileInput");
     if (!this._cslFileInput) {
         throw new Error("cslFileInput not found");
@@ -182,7 +203,9 @@ function SettingsPage(router, displayNoneClass) {
     this._LANGUAGES = [
         ["af-ZA", "Afrikaans"],
         ["ar", "Arabic"],
+        ["bal-PK", "Balochi"],
         ["bg-BG", "Bulgarian"],
+        ["brh-PK", "Brahui"],
         ["ca-AD", "Catalan"],
         ["cs-CZ", "Czech"],
         ["cy-GB", "Welsh"],
@@ -202,9 +225,12 @@ function SettingsPage(router, displayNoneClass) {
         ["fi-FI", "Finnish"],
         ["fr-CA", "French (Canada)"],
         ["fr-FR", "French (France)"],
+        ["gl-ES", "Galician"],
         ["he-IL", "Hebrew"],
+        ["hi-IN", "Hindi"],
         ["hr-HR", "Croatian"],
         ["hu-HU", "Hungarian"],
+        ["hy-AM", "Armenian"],
         ["id-ID", "Indonesian"],
         ["is-IS", "Icelandic"],
         ["it-IT", "Italian"],
@@ -212,12 +238,15 @@ function SettingsPage(router, displayNoneClass) {
         ["km-KH", "Khmer"],
         ["ko-KR", "Korean"],
         ["la", "Latin"],
+        ["lij-IT", "Ligurian"],
         ["lt-LT", "Lithuanian"],
         ["lv-LV", "Latvian"],
         ["mn-MN", "Mongolian"],
+        ["ms-MY", "Malay"],
         ["nb-NO", "Norwegian (Bokmål)"],
         ["nl-NL", "Dutch"],
         ["nn-NO", "Norwegian (Nynorsk)"],
+        ["pa-PK", "Punjabi (Pakistan)"],
         ["pl-PL", "Polish"],
         ["pt-BR", "Portuguese (Brazil)"],
         ["pt-PT", "Portuguese (Portugal)"],
@@ -225,9 +254,12 @@ function SettingsPage(router, displayNoneClass) {
         ["ru-RU", "Russian"],
         ["sk-SK", "Slovak"],
         ["sl-SI", "Slovenian"],
+        ["sr-Cyrl-RS", "Serbian (Cyrillic)"],
+        ["sr-Latn-RS", "Serbian (Latin)"],
         ["sr-RS", "Serbian"],
         ["sv-SE", "Swedish"],
         ["th-TH", "Thai"],
+        ["tl-PH", "Tagalog"],
         ["tr-TR", "Turkish"],
         ["uk-UA", "Ukrainian"],
         ["vi-VN", "Vietnamese"],
@@ -239,6 +271,14 @@ function SettingsPage(router, displayNoneClass) {
 
     /** @type {string|null} */
     this._currentStyleContent = null;
+    /**
+     * The language the options that depend on the style were worked out
+     * for, so that they are worked out again for another one.
+     * @type {string|null}
+     */
+    this._optionsLanguage = null;
+    /** Whether the list of styles is still on its way. */
+    this._isLoadingStyles = false;
 
     /** @type {Settings} */
     this._stateSettings = {
@@ -247,8 +287,18 @@ function SettingsPage(router, displayNoneClass) {
         styleFormat: "numeric",
         includeUrlForPaperArticles: false,
         abbreviateJournalTitles: false,
+        autoUpdateCitations: true,
+        autoUpdateBibliography: true,
     };
 }
+
+/**
+ * @param {CitationService} citationService - repairs the citations that
+ *  lost their fields
+ */
+SettingsPage.prototype.setCitationService = function (citationService) {
+    this._citationService = citationService;
+};
 
 /**
  * @returns {LocalesManager}
@@ -293,7 +343,13 @@ SettingsPage.prototype.init = function () {
     var lastStyle = this._cslStylesManager.getLastUsedStyleId() || "ieee";
     const savedLang = this._localesManager.getLastUsedLanguage();
     this._addEventListeners();
-    this._languageSelect.addItems(this._LANGUAGES, savedLang);
+    // A document made in Zotero may bring a language the list does not
+    // name. It is offered by its code, or nothing would be selected.
+    const languages = this._LANGUAGES.slice();
+    if (!languages.some((language) => language[0] === savedLang)) {
+        languages.push([savedLang, savedLang]);
+    }
+    this._languageSelect.addItems(languages, savedLang);
 
     const previewPromise = Promise.all([
         this._localesManager.loadLocale(savedLang),
@@ -302,7 +358,39 @@ SettingsPage.prototype.init = function () {
         return self._onStyleChange(lastStyle);
     });
 
-    return Promise.all([previewPromise, this._loadStyles()]);
+    // Only the settings page lists the styles, and the list may come from
+    // the Zotero site, so the plugin does not wait for it.
+    this._loadStyles();
+
+    return previewPromise;
+};
+
+/**
+ * Takes up the style and the language saved by something else than this
+ * page, such as the preferences of an imported document: loads them and
+ * shows them as chosen.
+ * @returns {Promise<void>}
+ */
+SettingsPage.prototype.loadSavedSettings = function () {
+    const self = this;
+    const styleId = this._cslStylesManager.getLastUsedStyleIdOrDefault();
+    const language = this._localesManager.getLastUsedLanguage();
+    // Named as in the list if it is there, by its code otherwise.
+    this._languageSelect.addItem(language, language, true);
+
+    return this._localesManager
+        .loadLocale(language)
+        .then(function () {
+            return self._onStyleChange(styleId);
+        })
+        .then(function () {
+            const content = self._currentStyleContent;
+            const title = content
+                ? CslStylesParser.getStyleInfo(styleId, content).title
+                : "";
+            self._styleSelect.addItem(styleId, title || styleId, true);
+            self._styleSelectListOther.selectItems(styleId, true);
+        });
 };
 
 /**
@@ -377,7 +465,7 @@ SettingsPage.prototype._addEventListeners = function () {
             self._stateSettings.style !== selectedStyleId &&
             selectedStyleId !== null
         ) {
-            promises.push(self._onStyleChange(selectedStyleId));
+            promises.push(self._saveStyle(selectedStyleId));
         }
 
         const includeUrlChecked = self._includeUrlCheckbox.getState().checked;
@@ -403,6 +491,29 @@ SettingsPage.prototype._addEventListeners = function () {
             promises.push(Promise.resolve());
         }
 
+        const autoUpdateCitationsChecked =
+            self._autoUpdateCitationsCheckbox.getState().checked;
+        if (
+            self._stateSettings.autoUpdateCitations !== autoUpdateCitationsChecked
+        ) {
+            AutoUpdatePreferences.setShouldUpdateCitations(
+                autoUpdateCitationsChecked
+            );
+            promises.push(Promise.resolve());
+        }
+
+        const autoUpdateBibliographyChecked =
+            self._autoUpdateBibliographyCheckbox.getState().checked;
+        if (
+            self._stateSettings.autoUpdateBibliography !==
+            autoUpdateBibliographyChecked
+        ) {
+            AutoUpdatePreferences.setShouldUpdateBibliography(
+                autoUpdateBibliographyChecked
+            );
+            promises.push(Promise.resolve());
+        }
+
         if (promises.length) {
             self._showLoader();
             Promise.all(promises)
@@ -417,6 +528,8 @@ SettingsPage.prototype._addEventListeners = function () {
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
                         includeUrlForPaperArticles: includeUrlChecked,
                         abbreviateJournalTitles: abbreviateJournalTitlesChecked,
+                        autoUpdateCitations: autoUpdateCitationsChecked,
+                        autoUpdateBibliography: autoUpdateBibliographyChecked,
                     };
 
                     self._onChangeState(newState, oldState);
@@ -523,6 +636,30 @@ SettingsPage.prototype._addEventListeners = function () {
             return;
         }
         self._somethingWasChanged();
+        const language = self._languageSelect.getSelectedValue();
+        if (!language) {
+            return;
+        }
+        self._showLoader();
+        self._localesManager
+            .loadLocale(language)
+            .then(function () {
+                // Another language may have been chosen meanwhile.
+                if (
+                    self._currentStyleContent &&
+                    self._getPreviewLanguage() === language
+                ) {
+                    self._showPreview(self._currentStyleContent, language);
+                    self._updateStyleOptions(language);
+                }
+            })
+            .catch(function (err) {
+                console.error(err);
+                self._langMessage.show(translate("Failed to load language"));
+            })
+            .finally(function () {
+                self._hideLoader();
+            });
     });
     this._footNotes.subscribe(function (event) {
         self._somethingWasChanged();
@@ -530,12 +667,18 @@ SettingsPage.prototype._addEventListeners = function () {
     this._endNotes.subscribe(function (event) {
         self._somethingWasChanged();
     });
+    this._autoUpdateCitationsCheckbox.subscribe(function (event) {
+        self._somethingWasChanged();
+    });
+    this._autoUpdateBibliographyCheckbox.subscribe(function (event) {
+        self._somethingWasChanged();
+    });
     this._includeUrlCheckbox.subscribe(function (event) {
         self._somethingWasChanged();
         if (self._currentStyleContent) {
             self._showPreview(
                 self._currentStyleContent,
-                self._localesManager.getLastUsedLanguage()
+                self._getPreviewLanguage()
             );
         }
     });
@@ -544,10 +687,58 @@ SettingsPage.prototype._addEventListeners = function () {
         if (self._currentStyleContent) {
             self._showPreview(
                 self._currentStyleContent,
-                self._localesManager.getLastUsedLanguage()
+                self._getPreviewLanguage()
             );
         }
     });
+    this._repairBrokenFieldsBtn.subscribe(function (event) {
+        if (event.type !== "button:click") {
+            return;
+        }
+        self._repairBrokenCitations();
+    });
+};
+
+/**
+ * Restores the citations that lost their fields and tells how it went.
+ */
+SettingsPage.prototype._repairBrokenCitations = function () {
+    const citationService = this._citationService;
+    if (!citationService) {
+        return;
+    }
+    const button = this._repairBrokenFieldsBtn;
+    button.disable();
+    citationService
+        .repairBrokenCitations()
+        .then(function (repairResult) {
+            if (repairResult.repaired > 0) {
+                let message =
+                    translate("Repaired") + " " + repairResult.repaired + " " +
+                    translate("citation(s) that had lost their formatting.");
+                if (repairResult.failed > 0) {
+                    message += " " + repairResult.failed + " " + translate("could not be repaired.");
+                }
+                citationService.showSuccessMessage(message);
+            } else if (repairResult.failed > 0) {
+                citationService.showWarningMessage(
+                    repairResult.failed + " " + translate("citation(s) could not be repaired.")
+                );
+            } else {
+                citationService.showSuccessMessage(
+                    translate("No broken citations were found.")
+                );
+            }
+        })
+        .catch(function (error) {
+            console.error(error);
+            citationService.showWarningMessage(
+                translate("Failed to repair broken citations")
+            );
+        })
+        .finally(function () {
+            button.enable();
+        });
 };
 
 SettingsPage.prototype._hideAllMessages = function () {
@@ -569,6 +760,9 @@ SettingsPage.prototype.show = function () {
             this._cslStylesManager.getIncludeUrlForPaperArticles(),
         abbreviateJournalTitles:
             this._cslStylesManager.getAbbreviateJournalTitles(),
+        autoUpdateCitations: AutoUpdatePreferences.shouldUpdateCitations(),
+        autoUpdateBibliography:
+            AutoUpdatePreferences.shouldUpdateBibliography(),
     };
     this._saveBtn.disable();
     this._router.openSettings();
@@ -587,18 +781,35 @@ SettingsPage.prototype.show = function () {
     } else {
         this._abbreviateJournalTitlesCheckbox.uncheck(true);
     }
+    if (this._stateSettings.autoUpdateCitations) {
+        this._autoUpdateCitationsCheckbox.check(true);
+    } else {
+        this._autoUpdateCitationsCheckbox.uncheck(true);
+    }
+    if (this._stateSettings.autoUpdateBibliography) {
+        this._autoUpdateBibliographyCheckbox.check(true);
+    } else {
+        this._autoUpdateBibliographyCheckbox.uncheck(true);
+    }
     if (this._currentStyleContent) {
-        this._showPreview(
-            this._currentStyleContent,
+        const language =
             this._stateSettings.language ||
-                this._localesManager.getLastUsedLanguage()
-        );
+            this._localesManager.getLastUsedLanguage();
+        // Worked out for a language chosen meanwhile and then cancelled,
+        // or for the one saved before.
+        if (this._optionsLanguage !== language) {
+            this._updateStyleOptions(language);
+        }
+        this._showPreview(this._currentStyleContent, language);
     }
 };
 
 /** @returns {Promise<void>} */
 SettingsPage.prototype._loadStyles = function () {
     const self = this;
+    // Nothing to choose from until the list is there.
+    this._isLoadingStyles = true;
+    this._styleSelect.disable();
     return this._cslStylesManager
         .getStylesInfo()
         .then(
@@ -616,6 +827,10 @@ SettingsPage.prototype._loadStyles = function () {
         )
         .catch(function (err) {
             console.error(err);
+        })
+        .finally(function () {
+            self._isLoadingStyles = false;
+            self._styleSelect.enable();
         });
 };
 
@@ -933,44 +1148,8 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
 
             self._currentStyleContent = styleInfo.content;
 
-            self._showPreview(
-                styleInfo.content,
-                self._localesManager.getLastUsedLanguage()
-            );
-
-            const canUseIncludeUrl = Boolean(
-                styleInfo.content &&
-                    self._styleRespondsToIncludeUrlToggle(
-                        styleInfo.content,
-                        self._localesManager.getLastUsedLanguage()
-                    )
-            );
-            if (canUseIncludeUrl) {
-                self._includeUrlWrapper.classList.remove(
-                    self._displayNoneClass
-                );
-            } else {
-                self._includeUrlWrapper.classList.add(
-                    self._displayNoneClass
-                );
-            }
-
-            const canAbbreviateJournalTitles = Boolean(
-                styleInfo.content &&
-                    self._styleRespondsToAbbreviateJournalTitles(
-                        styleInfo.content,
-                        self._localesManager.getLastUsedLanguage()
-                    )
-            );
-            if (canAbbreviateJournalTitles) {
-                self._abbreviateJournalTitlesWrapper.classList.remove(
-                    self._displayNoneClass
-                );
-            } else {
-                self._abbreviateJournalTitlesWrapper.classList.add(
-                    self._displayNoneClass
-                );
-            }
+            self._showPreview(styleInfo.content, self._getPreviewLanguage());
+            self._updateStyleOptions(self._getPreviewLanguage());
 
             isClick && self._hideLoader();
         })
@@ -984,19 +1163,88 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
         });
 };
 
+/**
+ * Shows the options that change the bibliography of the current style in
+ * the given language and hides the others.
+ * @param {string} language
+ */
+SettingsPage.prototype._updateStyleOptions = function (language) {
+    const content = this._currentStyleContent;
+    this._optionsLanguage = language;
+
+    const canUseIncludeUrl = Boolean(
+        content && this._styleRespondsToIncludeUrlToggle(content, language)
+    );
+    if (canUseIncludeUrl) {
+        this._includeUrlWrapper.classList.remove(this._displayNoneClass);
+    } else {
+        this._includeUrlWrapper.classList.add(this._displayNoneClass);
+    }
+
+    const canAbbreviateJournalTitles = Boolean(
+        content &&
+            this._styleRespondsToAbbreviateJournalTitles(content, language)
+    );
+    if (canAbbreviateJournalTitles) {
+        this._abbreviateJournalTitlesWrapper.classList.remove(
+            this._displayNoneClass
+        );
+    } else {
+        this._abbreviateJournalTitlesWrapper.classList.add(
+            this._displayNoneClass
+        );
+    }
+};
+
+/**
+ * The preview shows the language chosen on the page, saved or not.
+ * @returns {string}
+ */
+SettingsPage.prototype._getPreviewLanguage = function () {
+    return (
+        this._languageSelect.getSelectedValue() ||
+        this._localesManager.getLastUsedLanguage()
+    );
+};
+
+/**
+ * Makes the chosen style the one in use. Choosing it has already shown its
+ * preview and options, so they are not worked out again for a page that is
+ * being closed.
+ * @param {string} styleName
+ * @returns {Promise<void>}
+ */
+SettingsPage.prototype._saveStyle = function (styleName) {
+    const self = this;
+    return this._cslStylesManager.getStyle(styleName, true).then(
+        function () {},
+        function (err) {
+            console.error(err);
+            if (typeof err === "string") {
+                self._styleMessage.show(translate(err));
+            }
+            throw err;
+        }
+    );
+};
+
 SettingsPage.prototype._showLoader = function () {
     this._cancelBtn.disable();
     this._saveBtn.disable();
     this._styleSelect.disable();
     this._languageSelect.disable();
-    //Loader.show();
+    Loader.setText(translate("Loading..."));
+    Loader.show();
 };
 SettingsPage.prototype._hideLoader = function () {
     this._cancelBtn.enable();
     this._saveBtn.enable();
-    this._styleSelect.enable();
+    // The list of styles enables it itself once it is there.
+    if (!this._isLoadingStyles) {
+        this._styleSelect.enable();
+    }
     this._languageSelect.enable();
-    //Loader.hide();
+    Loader.hide();
 };
 
 export { SettingsPage };

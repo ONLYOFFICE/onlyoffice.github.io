@@ -40,8 +40,7 @@
     <style id="componentsStyles"></style>
     <style id="pluginStyles"></style>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <script src="vendor/citeproc/citeproc_commonjs.js"></script>
+    <script src="vendor/citeproc/citeproc_commonjs.min.js"></script>
     <script>
         if (typeof Promise === 'function' && typeof Promise.any === 'function') {
             document.write(
@@ -141,7 +140,7 @@
                     <span id="cancelSelectBtn" class="i18n link" tabindex="0">Cancel selection</span>
                 </div>
                 <div class="flexCol controls-holder">
-                    <div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
+                    <div class="buttonsWrapper flex">
                         <button id="insertLinkBtn" class="i18n" disabled>Insert/Edit Citation</button>
                         <button id="settingsBtn" class="i18n"
                             title="Configure how citations will be formatted in your document.">
@@ -190,6 +189,16 @@
 
                 <div id="abbreviateJournalTitlesWrapper" class="mrtop hidden">
                     <input type="checkbox" id="abbreviateJournalTitles" />
+                </div>
+
+                <div id="autoUpdateWrapper" class="mrtop">
+                    <input type="checkbox" id="autoUpdateCitations" />
+                    <input type="checkbox" id="autoUpdateBibliography" />
+                </div>
+
+                <div id="repairBrokenFieldsWrapper" class="mrtop">
+                    <span class="i18n">If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.</span>
+                    <button id="repairBrokenFieldsBtn" class="i18n" style="width: 100%; margin-top: 8px;">Repair broken citations</button>
                 </div>
 
                 <div id="previewWrapper" class="mrtop hidden"></div>
