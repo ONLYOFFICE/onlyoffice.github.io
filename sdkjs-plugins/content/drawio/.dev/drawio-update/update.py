@@ -61,6 +61,18 @@ EXCLUDES = [
 	'clear.html',
 	# draw.io's own repo docs, not used at runtime
 	'resources/CONTRIBUTING.md', 'resources/README.md',
+	# libraries already bundled into js/app.min.js; draw.io loads the separate
+	# copies only with dev=1, which the plugin no longer uses
+	'js/cryptojs', 'js/deflate', 'js/rough', 'js/freehand', 'js/spin', 'js/sanitizer',
+	# same for js/extensions.min.js (production loads js/orgchart.min.js, not js/orgchart/).
+	# js/libavoid-js/LICENSE stays: libavoid is LGPL and its code is still in extensions.min.js
+	'js/jszip', 'js/vsd', 'js/elk', 'js/mermaid', 'js/orgchart',
+	'js/libavoid-js/libavoid.min.js', 'js/libavoid-js/libavoid-routing.js', 'js/libavoid-js/README.md',
+	# pages of draw.io's server-side export and Visio import, dev embed script.
+	# open.html/js/open.js stay: OpenDialog (OPEN_FORM in PreConfig.js) loads them
+	'export3.html', 'js/export.js', 'js/export-init.js',
+	'vsdxImporter.html', 'js/vsdxImporter.js',
+	'js/clear.js', 'js/embed.dev.js',
 ]
 
 # Of draw.io's own UI translations (resources/dia_<lang>.txt, ~60 of them),
