@@ -35,19 +35,20 @@
 		"text": "Run Macro",
 		"description": `Executes a JavaScript macro using the OnlyOffice Spreadsheet API.
 Use this tool to perform any spreadsheet operation when no other specialized tool is available.
-This tool can also be used to READ/GET data from the spreadsheet — make the last expression in the script be the value you want to retrieve, and it will be returned as the tool result.
-For example, to get the value of cell A1, write: Api.GetActiveSheet().GetRange("A1").GetValue()
-The return value of the last expression will be the tool's output.`,
+This tool can also be used to READ/GET data from the spreadsheet — use an explicit 'return' statement to send the value back as the tool result. When reading or inspecting content, do NOT modify the document — only use 'return' to send the value back.
+For example, to get the value of cell A1, write: return Api.GetActiveSheet().GetRange("A1").GetValue()
+The value passed to 'return' will be the tool's output.`,
 		"parameters": {
 			"type": "object",
 			"properties": {
 				"code": {
 					"type": "string",
-					"description": `Valid JavaScript code using the OnlyOffice Spreadsheet API to execute directly via eval. Rules:
+					"description": `Valid JavaScript code using the OnlyOffice Spreadsheet API to execute directly. Rules:
 - Use only the OnlyOffice Spreadsheet API (Api, ApiWorksheet, ApiRange, etc.)
 - Do NOT wrap the code in a function or IIFE — output only the statements to execute directly
+- SELF-CHECK before returning code: if this is a READ (not modifying the document), your code MUST contain a top-level 'return' statement; if it does not, rewrite to add one (e.g. oDoc.GetElement(0).GetText() → return oDoc.GetElement(0).GetText()). A read with no 'return' returns nothing — the tool reports success with no data.
 - Do NOT include any explanation, comments, or markdown — output raw JavaScript only
-- To GET/READ data: make the last expression the value you want to return (e.g. ws.GetRange("A1").GetValue())
+- To GET/READ data: use an explicit 'return' statement (e.g. return ws.GetRange("A1").GetValue()); do NOT insert the read content back into the document
 - To get the active sheet: var ws = Api.GetActiveSheet()
 - To get sheet by name: Api.GetSheet(sName)
 - To get all sheet names: Api.GetSheets() returns array of ApiWorksheet
@@ -131,16 +132,13 @@ values;`
 
 	func.call = async function(params) {
 		Asc.scope.macroCode = params.code;
-		let returnValue = await Asc.Editor.callCommand(function() {
-			try {
-				var __result = eval(Asc.scope.macroCode);
-				if (__result !== undefined && __result !== null) {
-					return { onlyoffice_id_result: __result };
-				}
-			} catch(e) {
-				return { onlyoffice_id_error_message: e.name + ": " + e.message };
-			}
-		});
+		let __func;
+		try {
+			__func = new Function("try { var __r = (" + Asc.scope.macroCode + "); if (__r !== undefined && __r !== null) return { onlyoffice_id_result: __r }; } catch(e) { return { onlyoffice_id_error_message: e.name + ': ' + e.message }; }");
+		} catch (__e) {
+			__func = new Function("try { var __result = (function(){ " + Asc.scope.macroCode + " }).call(this); if (__result !== undefined && __result !== null) return { onlyoffice_id_result: __result }; } catch(e) { return { onlyoffice_id_error_message: e.name + ': ' + e.message }; }");
+		}
+		let returnValue = await Asc.Editor.callCommand(__func);
 
 		if (returnValue && returnValue.onlyoffice_id_error_message) {
 			throw new window.AgentState.ToolError(returnValue.onlyoffice_id_error_message);
