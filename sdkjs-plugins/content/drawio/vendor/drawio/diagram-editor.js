@@ -324,6 +324,40 @@ DiagramEditor.prototype.getData = function()
 };
 
 /**
+ * Returns the diagram data for the load message. draw.io decodes a base64 SVG
+ * data URL with atob only, which breaks non-Latin text outside the compressed
+ * diagram (page names), so the SVG is passed as decoded text.
+ */
+DiagramEditor.prototype.getLoadData = function()
+{
+	var data = this.getData();
+	var prefix = 'data:image/svg+xml;base64,';
+
+	if (data != null && data.substring(0, prefix.length) == prefix)
+	{
+		try
+		{
+			var binary = atob(data.substring(prefix.length));
+			var bytes = new Uint8Array(binary.length);
+
+			for (var i = 0; i < binary.length; i++)
+			{
+				bytes[i] = binary.charCodeAt(i);
+			}
+
+			// not decodeURIComponent(escape()): the plugin page overrides the global escape
+			return 'data:image/svg+xml;utf8,' + new TextDecoder('utf-8', {fatal: true}).decode(bytes);
+		}
+		catch (e)
+		{
+			// not UTF-8: leave the data to draw.io as it is
+		}
+	}
+
+	return data;
+};
+
+/**
  * Returns the title for the editor.
  */
 DiagramEditor.prototype.getTitle = function()
@@ -346,7 +380,7 @@ DiagramEditor.prototype.getFrameStyle = function()
  */
 DiagramEditor.prototype.getFrameUrl = function()
 {
-	var url = this.drawDomain + '?proto=json&spin=0&gapi=0&embed=1&dev=1';
+	var url = this.drawDomain + '?proto=json&spin=0&gapi=0&embed=1';
 
 	if (this.ui != null)
 	{
@@ -451,8 +485,7 @@ DiagramEditor.prototype.handleMessage = function(msg)
 			if (this.format != 'xml') {
 				// without xml the editor exports its current diagram
 				if (this.xml != null || this.isFormatChanged()) {
-					this.postMessage({action: 'export', format: this.format,
-					xml: this.xml, spinKey: 'export'});
+					this.exportDiagram();
 				} else {
 					this.stopEditing(msg);
 					if (!this.isChanged)
@@ -469,6 +502,17 @@ DiagramEditor.prototype.handleMessage = function(msg)
 };
 
 /**
+ * Posts export message to editor.
+ */
+DiagramEditor.prototype.exportDiagram = function()
+{
+	// theme light: otherwise the SVG gets light-dark() colors and the diagram
+	// changes its colors with the theme of whoever views the document
+	this.postMessage({action: 'export', format: this.format, xml: this.xml,
+		spinKey: 'export', theme: 'light'});
+};
+
+/**
  * Posts configure message to editor.
  */
 DiagramEditor.prototype.configureEditor = function()
@@ -482,8 +526,9 @@ DiagramEditor.prototype.configureEditor = function()
 DiagramEditor.prototype.initializeEditor = function()
 {
 	//https://desk.draw.io/support/solutions/articles/16000042544-how-does-embed-mode-work-
-	this.postMessage({action: 'load', autosave: 1, noSaveBtn: '1', noExitBtn: '1',
-		modified: 'unsavedChanges', xml: this.getData(),
+	// without saveAndExit newer draw.io versions send the save event without exit
+	this.postMessage({action: 'load', autosave: 1, noSaveBtn: '1', noExitBtn: '1', saveAndExit: '1',
+		modified: 'unsavedChanges', xml: this.getLoadData(),
 		title: this.getTitle()});
 	this.setWaiting(false);
 	this.setActive(true);
@@ -540,7 +585,7 @@ DiagramEditor.prototype.closePlugin = function(bUnsaved)
 
 	this.isClosePlugin = true;
 	if (this.isChanged || this.isFormatChanged())
-		this.postMessage({action: 'export', format: this.format, xml: this.xml, spinKey: 'export'});
+		this.exportDiagram();
 	else
 		this.pluginCallback(false);
 

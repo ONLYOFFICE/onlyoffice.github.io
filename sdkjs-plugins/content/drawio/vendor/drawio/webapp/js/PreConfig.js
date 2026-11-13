@@ -18,7 +18,6 @@ window.STYLE_PATH = window.DRAWIO_BASE_URL + "/styles";
 window.CSS_PATH = window.DRAWIO_BASE_URL + "/styles";
 window.OPEN_FORM = window.DRAWIO_BASE_URL + "/open.html";
 
-// mxBasePath is left to bootstrap.js: with dev=1 the sources are in mxgraph/src
 window.mxImageBasePath = window.DRAWIO_BASE_URL + "/mxgraph/images";
 
 window.EMF_CONVERT_URL = window.EMF_CONVERT_URL || "internal"

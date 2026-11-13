@@ -31,3 +31,4 @@
 ## 1.0.7
 
 * Update draw.io version to 32.6.10
+* Reduce the plugin size
