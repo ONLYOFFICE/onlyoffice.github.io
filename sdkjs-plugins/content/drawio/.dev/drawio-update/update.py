@@ -24,6 +24,7 @@ import argparse
 import difflib
 import fnmatch
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -56,7 +57,21 @@ EXCLUDES = [
 	'service-worker.js', 'workbox-*.js',
 	# cache reset page
 	'clear.html',
+	# draw.io's own repo docs, not used at runtime
+	'resources/CONTRIBUTING.md', 'resources/README.md',
 ]
+
+# Of draw.io's own UI translations (resources/dia_<lang>.txt, ~60 of them),
+# only these can ever be requested: the plugin passes the primary subtag of
+# its own UI language (scripts/drawio.js does lang.split('-')[0], so e.g.
+# pt-BR becomes pt and sr-Cyrl-RS/sr-Latn-RS become sr), and draw.io only
+# fetches a dia_<lang>.txt when that code is in its own supported-languages
+# list (app.min.js: isLanguageSupported/getSpecialBundle) - never the plugin's
+# raw tag, so an unmatched one (e.g. sq, see translations/sq-AL.json) falls
+# back to English instead of a 404. resources/dia.txt (English) always stays:
+# it is the base bundle, loaded regardless of language.
+DRAWIO_LANGS = {'cs', 'de', 'es', 'fr', 'it', 'ja', 'pt', 'ru', 'sr', 'zh'}
+DIA_LANG_RE = re.compile(r'^resources/dia_([a-z0-9-]+)\.txt$')
 
 # Files the plugin depends on: their absence means the war layout changed
 REQUIRED = [
@@ -75,6 +90,11 @@ REQUIRED = [
 
 def is_excluded(rel_path):
 	rel_path = rel_path.replace(os.sep, '/')
+
+	m = DIA_LANG_RE.match(rel_path)
+	if m is not None:
+		return m.group(1) not in DRAWIO_LANGS
+
 	for pattern in EXCLUDES:
 		if fnmatch.fnmatch(rel_path, pattern) or fnmatch.fnmatch(os.path.basename(rel_path), pattern):
 			return True
