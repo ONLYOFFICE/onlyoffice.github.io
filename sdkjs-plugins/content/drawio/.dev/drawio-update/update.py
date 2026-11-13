@@ -9,7 +9,8 @@ The script downloads draw.war of the release from GitHub, copies it into
 vendor/drawio/webapp without the files the plugin never loads (EXCLUDES) and
 puts our PreConfig.js (next to this script) in place of draw.io's own. It then
 losslessly recompresses the PNGs with oxipng (https://github.com/oxipng/oxipng,
-`scoop install oxipng` / `cargo install oxipng`) and minifies shapes/*.js with
+`scoop install oxipng` / `cargo install oxipng`), optimizes the icon library
+SVGs (img/lib) with svgo (`npm install -g svgo`) and minifies shapes/*.js with
 terser (`npm install -g terser`) when each tool is installed, or prints a
 reminder and skips that step otherwise.
 
@@ -184,6 +185,32 @@ def compress_images():
 	print('oxipng: {0} PNGs, {1:.1f} MB -> {2:.1f} MB'.format(len(pngs), before / 1e6, after / 1e6))
 
 
+def compress_svgs():
+	"""Optimizes the icon library SVGs (img/lib) with svgo. Precision 5, not
+	svgo's default 3: many icons (azure2) have an 18x18 viewBox, where rounding
+	to 3 digits visibly moves edges; with 5 they render the same as before."""
+	svgo = shutil.which('svgo')
+	if svgo is None:
+		print('svgo not found (npm install -g svgo): skipped SVG optimization.')
+		return
+
+	lib_dir = os.path.join(WEBAPP_DIR, 'img', 'lib')
+	svgs = []
+	for root, _, files in os.walk(lib_dir):
+		for name in files:
+			if name.lower().endswith('.svg'):
+				svgs.append(os.path.join(root, name))
+
+	if not svgs:
+		return
+
+	before = sum(os.path.getsize(p) for p in svgs)
+	subprocess.run([svgo, '-r', '-q', '-p', '5', '-f', lib_dir], check=True)
+	after = sum(os.path.getsize(p) for p in svgs)
+
+	print('svgo: {0} SVGs, {1:.1f} MB -> {2:.1f} MB'.format(len(svgs), before / 1e6, after / 1e6))
+
+
 # Matches a file's leading /** ... */ block (its copyright header, draw.io
 # puts one first in every shapes/*.js file)
 LEADING_COMMENT_RE = re.compile(r'\A\s*(/\*\*.*?\*/)\s*', re.S)
@@ -259,6 +286,7 @@ def main():
 		copy_webapp(unpacked)
 
 	compress_images()
+	compress_svgs()
 	minify_shapes()
 
 	count = 0
