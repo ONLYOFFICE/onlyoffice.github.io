@@ -1,0 +1,7 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. hunspell-sr - Serbian (Cyrillic and Latin) Hunspell spelling dictionary. The word list in resources/dict/ comes from this project. (https://github.com/grakic/hunspell-sr)
+
+License:        GNU LGPL 2.1
+License File:   hunspell-sr.license

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Serbian text converter</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="resources/cyrlatconverter.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="code.js"></script>
+</head>
+
+<body>
+    <p id="hintTop" class="instructions">Select text in the document to convert it.</p>
+
+    <div class="detect-box">
+        <p id="detectLabel" class="detect-label">Selected text is recognized as</p>
+        <p id="detectScript" class="detect-script">No text selected</p>
+        <div id="detectPreview" class="detect-preview" hidden>
+            <span id="previewFrom"></span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="M13 6l6 6-6 6" />
+            </svg>
+            <span id="previewTo"></span>
+        </div>
+    </div>
+
+    <button id="btnPrimary" class="btn btn-primary" data-action="autoSwap" onclick="runPrimary()" disabled>Convert</button>
+
+    <p id="dictStatus" class="dict-status" hidden></p>
+
+    <label class="option-row">
+        <input type="checkbox" id="optForeign" checked onchange="refreshDetection()" />
+        <span id="optForeignLabel">Keep foreign words and brands unchanged (Windows, Google)</span>
+    </label>
+
+    <div class="footer-tip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h.01" />
+        </svg>
+        <span id="hintBottom">Right-click selected text for a quick conversion</span>
+    </div>
+
+    <div id="toast">Conversion completed.</div>
+</body>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --ui-bg: #ffffff;
+        --ui-fg: #2c2c2a;
+        --ui-muted: #5f5e5a;
+        --ui-subtle: #888780;
+        --ui-label: #5f5e5a;
+        --ui-preview: #5f5e5a;
+        --ui-box: #f6f5f1;
+        --btn-primary-bg: #185fa5;
+        --btn-primary-fg: #ffffff;
+        --btn-primary-hover: #0c447c;
+        --toast-warn-bg: #fff1d6;
+        --toast-warn-fg: #7a4a00;
+        --toast-warn-border: #e0a23a;
+    }
+
+    html.theme-dark,
+    body.theme-dark {
+        --ui-bg: #1e1e1e;
+        --ui-fg: #ffffff;
+        --ui-muted: #b0b0b0;
+        --ui-subtle: #8a8a8a;
+        --ui-label: #ffffff;
+        --ui-preview: #ffffff;
+        --ui-box: #141414;
+        --btn-primary-bg: #ffffff;
+        --btn-primary-fg: #111111;
+        --btn-primary-hover: #e6e6e6;
+        --toast-warn-bg: #3d2f12;
+        --toast-warn-fg: #ffd789;
+        --toast-warn-border: #c9842a;
+    }
+
+    html,
+    body {
+        background: var(--ui-bg);
+        color: var(--ui-fg);
+    }
+
+    html {
+        height: 100%;
+    }
+
+    body {
+        font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        padding: 16px 14px;
+        min-height: 100%;
+    }
+  
+    html.theme-dark,
+    body.theme-dark {
+        background: var(--ui-bg) !important;
+        color: var(--ui-fg) !important;
+    }
+
+    #toast {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateY(-20px);
+        background-color: var(--btn-primary-bg);
+        color: var(--btn-primary-fg);
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        line-height: 1.35;
+        font-family: Arial, sans-serif;
+        border: 1px solid transparent;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        z-index: 9999;
+        text-align: center;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    #toast.show {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+    }
+
+    #toast.toast-warn {
+        background-color: var(--toast-warn-bg);
+        color: var(--toast-warn-fg);
+        border-color: var(--toast-warn-border);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+    }
+
+    .instructions {
+        font-size: 13px;
+        color: var(--ui-muted);
+        margin: 0 0 14px;
+        line-height: 1.4;
+    }
+
+    .detect-box {
+        background: var(--ui-box);
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 14px;
+    }
+
+    .detect-label {
+        font-size: 11px;
+        color: var(--ui-subtle);
+        margin: 0 0 4px;
+    }
+
+    .detect-script {
+        font-size: 14px;
+        color: var(--ui-fg);
+        margin: 0 0 6px;
+        font-weight: 600;
+    }
+
+    .detect-preview {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--ui-preview);
+    }
+
+    .detect-preview[hidden] {
+        display: none !important;
+    }
+
+    .detect-preview svg {
+        flex-shrink: 0;
+    }
+
+    .detect-preview span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+    }
+
+    .btn {
+        width: 100%;
+        border-radius: 10px;
+        padding: 11px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .btn-primary {
+        background: var(--btn-primary-bg);
+        color: var(--btn-primary-fg);
+        border: none;
+        margin-bottom: 14px;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        background: var(--btn-primary-hover);
+    }
+
+    .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+    .dict-status {
+        font-size: 12px;
+        color: var(--ui-muted);
+        margin: 0 0 12px;
+        line-height: 1.4;
+    }
+
+    .dict-status[hidden] {
+        display: none !important;
+    }
+
+    .dict-status.dict-failed {
+        color: var(--toast-warn-fg);
+    }
+
+    .option-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--ui-label);
+        margin-bottom: 12px;
+        line-height: 1.4;
+        cursor: pointer;
+    }
+
+    .option-row input {
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    .footer-tip {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--ui-subtle);
+        line-height: 1.4;
+    }
+
+    .footer-tip svg {
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+</style>
+
+</html>
