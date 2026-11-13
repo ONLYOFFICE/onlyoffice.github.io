@@ -1,6 +1,5 @@
 /**
- * $Id: mxAndroid.js,v 1.5 2014/01/21 12:32:06 mate Exp $
- * Copyright (c) 2006-2013, JGraph Ltd
+ * Copyright (c) 2006-2013, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -111,18 +110,16 @@ mxShapeAndroidTabBar.prototype.background = function(c, w, h, buttonNum, buttonW
 	//draw the button separators
 	c.setStrokeColor(separatorColor);
 	c.begin();
+	// Sum of the widths of the buttons before the separator
+	var sumWidth = 0;
+
 	for (var i = 1; i < buttonNum; i++)
 	{
+		sumWidth += buttonWidths[i - 1] + 2 * labelOffset;
+
 		if (i !== selectedButton && i !== (selectedButton + 1))
 		{
-			var currWidth = 0;
-
-			for (var j = 0; j < i; j++)
-			{
-				currWidth += buttonWidths[j] + 2 * labelOffset;
-			}
-
-			currWidth = currWidth * w / minW;
+			var currWidth = sumWidth * w / minW;
 			c.moveTo(currWidth, h * 0.2);
 			c.lineTo(currWidth, h * 0.8);
 		}
@@ -242,9 +239,13 @@ function mxShapeAndroidStatusBar(bounds, fill, stroke, strokewidth)
 */
 mxUtils.extend(mxShapeAndroidStatusBar, mxShape);
 
+mxShapeAndroidStatusBar.prototype.customProperties = [
+	{name: 'batteryColor', dispName: 'Battery Color', defVal: '#444444', type: 'color', primary:true}
+];
+
 /**
 * Function: paintVertexShape
-* 
+*
 * Paints the vertex shape.
 */
 mxShapeAndroidStatusBar.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -270,7 +271,7 @@ mxShapeAndroidStatusBar.prototype.foreground = function(c, x, y, w, h)
 	c.setFontSize(mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '5'));
 	c.text(w - 30, h * 0.5 + 1, 0, 0, '12:00', mxConstants.ALIGN_LEFT, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 
-	c.setFillColor('#444444');
+	c.setFillColor(mxUtils.getValue(this.style, 'batteryColor', '#444444'));
 	c.begin();
 	c.moveTo(w - 37, h * 0.5 + 6);
 	c.lineTo(w - 37, h * 0.5 - 5);
@@ -721,9 +722,13 @@ function mxShapeAndroidIndeterminateSpinner(bounds, fill, stroke, strokewidth)
 */
 mxUtils.extend(mxShapeAndroidIndeterminateSpinner, mxShape);
 
+mxShapeAndroidIndeterminateSpinner.prototype.customProperties = [
+	{name: 'spinnerColor', dispName: 'Spinner Color', defVal: '#ffffff', type: 'color', primary:true}
+];
+
 /**
 * Function: paintVertexShape
-* 
+*
 * Paints the vertex shape.
 */
 mxShapeAndroidIndeterminateSpinner.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -734,7 +739,37 @@ mxShapeAndroidIndeterminateSpinner.prototype.paintVertexShape = function(c, x, y
 
 mxShapeAndroidIndeterminateSpinner.prototype.background = function(c, x, y, w, h)
 {
-	c.setGradient('#aaaaaa', '#dddddd', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	var spinnerColor = mxUtils.getValue(this.style, 'spinnerColor', 'none');
+	var darkStop, midStop, brightStop;
+
+	if (spinnerColor !== 'none')
+	{
+		// Derive shaded variants from spinnerColor.
+		// 0.67 and 0.87 chosen so a white input reproduces the original #aaaaaa / #dddddd.
+		var hex = spinnerColor.charAt(0) === '#' ? spinnerColor.substr(1) : spinnerColor;
+		if (hex.length === 3) hex = hex.charAt(0) + hex.charAt(0) + hex.charAt(1) + hex.charAt(1) + hex.charAt(2) + hex.charAt(2);
+		var r = parseInt(hex.substr(0, 2), 16);
+		var g = parseInt(hex.substr(2, 2), 16);
+		var b = parseInt(hex.substr(4, 2), 16);
+		var shade = function(factor)
+		{
+			var sr = Math.floor(r * factor);
+			var sg = Math.floor(g * factor);
+			var sb = Math.floor(b * factor);
+			return '#' + ('0' + sr.toString(16)).slice(-2) + ('0' + sg.toString(16)).slice(-2) + ('0' + sb.toString(16)).slice(-2);
+		};
+		darkStop = shade(0.67);
+		midStop = shade(0.87);
+		brightStop = spinnerColor;
+	}
+	else
+	{
+		darkStop = '#aaaaaa';
+		midStop = '#dddddd';
+		brightStop = '#ffffff';
+	}
+
+	c.setGradient(darkStop, midStop, w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.begin();
 	c.moveTo(w * 0.5, h * 0.1);
 	c.arcTo(w * 0.4, h * 0.4, 0, 0, 0, w * 0.5, h * 0.9);
@@ -743,7 +778,7 @@ mxShapeAndroidIndeterminateSpinner.prototype.background = function(c, x, y, w, h
 	c.close();
 	c.fill();
 
-	c.setGradient('#ffffff', '#dddddd', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(brightStop, midStop, w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.begin();
 	c.moveTo(w * 0.5, h * 0.1);
 	c.arcTo(w * 0.4, h * 0.4, 0, 0, 1, w * 0.5, h * 0.9);
@@ -895,6 +930,7 @@ function mxShapeAndroidProgressBar(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxShapeAndroidProgressBar, mxShape);
 
 mxShapeAndroidProgressBar.prototype.customProperties = [
+	{name: 'strokeColor2', dispName: 'Stroke Color 2', type: 'color', defVal:"#444444", primary: true},
 	{name: 'dx1', dispName: 'Middle Bar Length', type: 'float', min:0, max:1, defVal:0.8},
 	{name: 'dx2', dispName: 'Left Bar Length', type: 'float', min:0, max:1, defVal:0.6}
 ];
@@ -912,12 +948,13 @@ mxShapeAndroidProgressBar.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	var dx1 = w * Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx1', this.dx1))));
 	var dx2 = w * Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx2', this.dx2))));
+	var strokeColor2 = mxUtils.getValue(this.style, 'strokeColor2', '#444444');
 
 	c.translate(x, y);
 	
 	c.save();
 	c.save();
-	c.setStrokeColor('#444444');
+	c.setStrokeColor(strokeColor2);
 	c.begin();
 	c.moveTo(0, h * 0.5);
 	c.lineTo(w , h * 0.5);
@@ -930,7 +967,7 @@ mxShapeAndroidProgressBar.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.lineTo(dx1, h * 0.5);
 	c.stroke();
 	
-	c.setStrokeColor('#000000');
+	c.setStrokeColor("#000000");
 	c.setAlpha('0.2');
 	c.begin();
 	c.moveTo(0, h * 0.5);
@@ -998,6 +1035,7 @@ function mxShapeAndroidProgressScrubberDisabled(bounds, fill, stroke, strokewidt
 mxUtils.extend(mxShapeAndroidProgressScrubberDisabled, mxShape);
 
 mxShapeAndroidProgressScrubberDisabled.prototype.customProperties = [
+	{name: 'strokeColor2', dispName: 'Stroke Color 2', type: 'color', defVal:"#444444", primary: true},
 	{name: 'dx', dispName: 'Handle Position', type: 'float', min:0, max:1, defVal:0.3}
 ];
 
@@ -1013,12 +1051,13 @@ mxShapeAndroidProgressScrubberDisabled.prototype.cst = {
 mxShapeAndroidProgressScrubberDisabled.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	var dx = w * Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
+	var strokeColor2 = mxUtils.getValue(this.style, 'strokeColor2', '#444444');
 
 	c.translate(x, y);
 	
 	c.save();
 	c.save();
-	c.setStrokeColor('#444444');
+	c.setStrokeColor(strokeColor2);
 	c.begin();
 	c.moveTo(0, h * 0.5);
 	c.lineTo(w, h * 0.5);
@@ -1083,6 +1122,7 @@ function mxShapeAndroidProgressScrubberFocused(bounds, fill, stroke, strokewidth
 mxUtils.extend(mxShapeAndroidProgressScrubberFocused, mxShape);
 
 mxShapeAndroidProgressScrubberFocused.prototype.customProperties = [
+	{name: 'strokeColor2', dispName: 'Stroke Color 2', type: 'color', defVal:"#444444", primary: true},
 	{name: 'dx', dispName: 'Handle Position', type: 'float', min:0, max:1, defVal:0.3}
 ];
 
@@ -1099,12 +1139,13 @@ mxShapeAndroidProgressScrubberFocused.prototype.paintVertexShape = function(c, x
 {
 	var dx = w * Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 	var fillColor = mxUtils.getValue(this.style, 'fillColor', '#ffffff');
+	var strokeColor2 = mxUtils.getValue(this.style, 'strokeColor2', '#444444');
 
 	c.translate(x, y);
 	
 	c.save();
 	c.save();
-	c.setStrokeColor('#444444');
+	c.setStrokeColor(strokeColor2);
 	c.begin();
 	c.moveTo(0, h * 0.5);
 	c.lineTo(w, h * 0.5);
@@ -1175,6 +1216,7 @@ function mxShapeAndroidProgressScrubberPressed(bounds, fill, stroke, strokewidth
 mxUtils.extend(mxShapeAndroidProgressScrubberPressed, mxShape);
 
 mxShapeAndroidProgressScrubberPressed.prototype.customProperties = [
+	{name: 'strokeColor2', dispName: 'Stroke Color 2', type: 'color', defVal:"#444444", primary: true},
 	{name: 'dx', dispName: 'Handle Position', type: 'float', min:0, max:1, defVal:0.3}
 ];
 
@@ -1191,12 +1233,13 @@ mxShapeAndroidProgressScrubberPressed.prototype.paintVertexShape = function(c, x
 {
 	var dx = w * Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 	var fillColor = mxUtils.getValue(this.style, 'fillColor', '#ffffff');
+	var strokeColor2 = mxUtils.getValue(this.style, 'strokeColor2', '#444444');
 
 	c.translate(x, y);
 	
 	c.save();
 	c.save();
-	c.setStrokeColor('#444444');
+	c.setStrokeColor(strokeColor2);
 	c.begin();
 	c.moveTo(0, h * 0.5);
 	c.lineTo(w, h * 0.5);
@@ -1247,7 +1290,7 @@ Graph.handleFactory[mxShapeAndroidProgressScrubberPressed.prototype.cst.PROGRESS
 }
 
 //**********************************************************************************************************************************************************
-//Quickscroll
+//Quickscroll2
 //**********************************************************************************************************************************************************
 /**
 * Extends mxShape.
@@ -1268,6 +1311,8 @@ function mxShapeAndroidQuickscroll2(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxShapeAndroidQuickscroll2, mxShape);
 
 mxShapeAndroidQuickscroll2.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Fill Color 2', type: 'color', defVal:"#cccccc", primary: true},
+	{name: 'fillColor3', dispName: 'Fill Color 3', type: 'color', defVal:"#666666", primary: true},
 	{name: 'dy', dispName: 'Handle Position', type: 'float', min:0, max:1, defVal:0.5}
 ];
 
@@ -1284,12 +1329,14 @@ mxShapeAndroidQuickscroll2.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	var dy = Math.min(h - 20, Math.max(20, h * Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))))));
 	var fillColor = mxUtils.getValue(this.style, 'fillColor', '#ffffff');
+	var fillColor2 = mxUtils.getValue(this.style, 'fillColor2', '#cccccc');
+	var fillColor3 = mxUtils.getValue(this.style, 'fillColor3', '#666666');
 
 	c.translate(x, y);
 	
 	c.save();
 	c.save();
-	c.setStrokeColor('#cccccc');
+	c.setStrokeColor(fillColor2);
 	c.begin();
 	c.moveTo(w - 3, 0);
 	c.lineTo(w - 3, h);
@@ -1300,12 +1347,12 @@ mxShapeAndroidQuickscroll2.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.roundrect(w - 6, dy - 10, 6, 20, 1, 1);
 	c.fillAndStroke();
 	
-	c.setFillColor('#cccccc');
+	c.setFillColor(fillColor2);
 	c.begin();
 	c.rect(0, dy - 20, w - 18, 40);
 	c.fill();
 	
-	c.setFillColor('#666666');
+	c.setFillColor(fillColor3);
 	c.begin();
 	c.moveTo(w - 18, dy - 20);
 	c.lineTo(w - 6, dy);
@@ -1337,7 +1384,7 @@ Graph.handleFactory[mxShapeAndroidQuickscroll2.prototype.cst.QUICKSCROLL] = func
 }
 
 //**********************************************************************************************************************************************************
-//Quickscroll2
+//Quickscroll3
 //**********************************************************************************************************************************************************
 /**
 * Extends mxShape.
@@ -1358,6 +1405,7 @@ function mxShapeAndroidQuickscroll3(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxShapeAndroidQuickscroll3, mxShape);
 
 mxShapeAndroidQuickscroll3.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Fill Color 2', type: 'color', defVal:"#cccccc", primary: true},
 	{name: 'dy', dispName: 'Handle Position', type: 'float', min:0, max:1, defVal:0.5}
 ];
 
@@ -1374,11 +1422,12 @@ mxShapeAndroidQuickscroll3.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	var dy = Math.min(h - 10, Math.max(10, h * Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))))));
 	var fillColor = mxUtils.getValue(this.style, 'fillColor', '#ffffff');
+	var fillColor2 = mxUtils.getValue(this.style, 'fillColor2', '#cccccc');
 
 	c.translate(x, y);
 	
 	c.save();
-	c.setStrokeColor('#cccccc');
+	c.setStrokeColor(fillColor2);
 	c.begin();
 	c.moveTo(w * 0.5, 0);
 	c.lineTo(w * 0.5, h);

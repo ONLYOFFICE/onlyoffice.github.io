@@ -1,6 +1,5 @@
 /**
- * $Id: mxGmdl.js,v 1.0 2015/09/09 17:05:39 mate Exp $
- * Copyright (c) 2006-2015, JGraph Ltd
+ * Copyright (c) 2006-2015, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -27,9 +26,14 @@ mxShapeGmdlPlayer.prototype.cst = {
 		SHAPE_PLAYER : 'mxgraph.gmdl.player'
 };
 
+mxShapeGmdlPlayer.prototype.customProperties = [
+	{name: 'progressColor', dispName: 'Progress Color', defVal: '#FFED00', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Icon Color', defVal: '#717171', type: 'color', primary:true}
+];
+
 /**
 * Function: paintVertexShape
-* 
+*
 * Paints the vertex shape.
 */
 mxShapeGmdlPlayer.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -47,15 +51,15 @@ mxShapeGmdlPlayer.prototype.foreground = function(c, x, y, w, h)
 
 	if ( h >= 4)
 	{
-		c.setFillColor('#FFED00');
+		c.setFillColor(mxUtils.getValue(this.style, 'progressColor', '#FFED00'));
 		c.begin();
 		c.rect(0, 0, w * 0.8, 4);
 		c.fill();
 	}
-	
+
 	if ( h >= 14 && w >= 33)
 	{
-		c.setFillColor('#717171');
+		c.setFillColor(mxUtils.getValue(this.style, 'iconColor', '#717171'));
 		c.begin();
 		c.rect(w - 33, h * 0.5 - 7, 4, 14);
 		c.fill();
@@ -97,7 +101,9 @@ mxShapeGmdlSwitch.prototype.cst = {
 
 mxShapeGmdlSwitch.prototype.customProperties = [
 	{name:'switchState', dispName:'State', type:'enum', defVal:'on',
-		enumList:[{val:'on', dispName: 'On'}, {val:'off', dispName: 'Off'}]}
+		enumList:[{val:'on', dispName: 'On'}, {val:'off', dispName: 'Off'}]},
+	{name: 'offTrackColor', dispName: 'Off Track', defVal: '#BCBBBB', type: 'color', primary:true},
+	{name: 'offKnobColor', dispName: 'Off Knob', defVal: '#F1F1F1', type: 'color', primary:true}
 ];
 
 /**
@@ -133,7 +139,7 @@ mxShapeGmdlSwitch.prototype.background = function(c, x, y, w, h, state)
 	}
 	else
 	{
-		c.setFillColor('#BCBBBB');
+		c.setFillColor(mxUtils.getValue(this.style, 'offTrackColor', '#BCBBBB'));
 		c.moveTo(w * 0.225, h * 0.8);
 		c.arcTo(w * 0.135, h * 0.3, 0, 0, 1, w * 0.225, h * 0.2);
 		c.lineTo(w * 0.865, h * 0.2);
@@ -154,7 +160,7 @@ mxShapeGmdlSwitch.prototype.foreground = function(c, x, y, w, h, state)
 	}
 	else
 	{
-		c.setFillColor('#F1F1F1');
+		c.setFillColor(mxUtils.getValue(this.style, 'offKnobColor', '#F1F1F1'));
 		c.ellipse(0, 0, w * 0.64, h);
 	}
 
@@ -320,7 +326,8 @@ mxShapeGmdlSlider2.prototype.cst = {
 
 mxShapeGmdlSlider2.prototype.customProperties = [
 	{name:'barPos', dispName:'Handle Position', type:'float', min:0, defVal:40},
-	{name:'handleSize', dispName:'Handle Size', type:'float', min:0, defVal:10}
+	{name:'handleSize', dispName:'Handle Size', type:'float', min:0, defVal:10},
+	{name: 'inactiveTrackColor', dispName: 'Inactive Track', defVal: '#bbbbbb', type: 'color', primary:true}
 ];
 
 /**
@@ -344,12 +351,12 @@ mxShapeGmdlSlider2.prototype.background = function(c, x, y, w, h)
 	barPos = Math.max(0, Math.min(1, barPos));
 
 	c.save();
-	c.setStrokeColor('#bbbbbb');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'inactiveTrackColor', '#bbbbbb'));
 	c.begin();
 	c.moveTo(0, h * 0.5);
 	c.lineTo(w, h * 0.5);
 	c.fillAndStroke();
-	
+
 	c.restore();
 	c.begin();
 	c.moveTo(0, h * 0.5);
@@ -409,7 +416,8 @@ mxShapeGmdlSliderFocused.prototype.cst = {
 
 mxShapeGmdlSliderFocused.prototype.customProperties = [
 	{name:'barPos', dispName:'Handle Position', type:'float', min:0, defVal:40},
-	{name:'handleSize', dispName:'Handle Size', type:'float', min:0, defVal:10}
+	{name:'handleSize', dispName:'Handle Size', type:'float', min:0, defVal:10},
+	{name: 'inactiveTrackColor', dispName: 'Inactive Track', defVal: '#bbbbbb', type: 'color', primary:true}
 ];
 
 /**
@@ -434,7 +442,7 @@ mxShapeGmdlSliderFocused.prototype.background = function(c, x, y, w, h)
 	barPos = Math.max(0, Math.min(1, barPos));
 
 	c.save();
-	c.setStrokeColor('#bbbbbb');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'inactiveTrackColor', '#bbbbbb'));
 	c.begin();
 	c.moveTo(0, h * 0.5);
 	c.lineTo(w, h * 0.5);
@@ -445,7 +453,7 @@ mxShapeGmdlSliderFocused.prototype.background = function(c, x, y, w, h)
 	c.moveTo(0, h * 0.5);
 	c.lineTo(barPos * w, h * 0.5);
 	c.fillAndStroke();
-	
+
 	c.begin();
 	c.ellipse(barPos * w - hSize * 0.167, h * 0.5 - hSize * 0.167, hSize * 0.33, hSize * 0.33);
 	c.fillAndStroke();
@@ -674,7 +682,8 @@ mxShapeGmdlSliderDiscrete.prototype.cst = {
 
 mxShapeGmdlSliderDiscrete.prototype.customProperties = [
 	{name:'barPos', dispName:'Handle Position', type:'int', min:0, defVal:'40'},
-	{name:'handleSize', dispName:'Handle Size', type:'float', min:0, defVal:'10'}
+	{name:'handleSize', dispName:'Handle Size', type:'float', min:0, defVal:'10'},
+	{name: 'inactiveTrackColor', dispName: 'Inactive Track', defVal: '#bbbbbb', type: 'color', primary:true}
 ];
 
 /**
@@ -700,12 +709,12 @@ mxShapeGmdlSliderDiscrete.prototype.background = function(c, x, y, w, h)
 	barPos = Math.max(0, Math.min(1, barPos));
 
 	c.save();
-	c.setStrokeColor('#bbbbbb');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'inactiveTrackColor', '#bbbbbb'));
 	c.begin();
 	c.moveTo(0, h * 0.5 + 22.5);
 	c.lineTo(w, h * 0.5 + 22.5);
 	c.fillAndStroke();
-	
+
 	c.restore();
 	c.begin();
 	c.moveTo(0, h * 0.5 + 22.5);
@@ -773,7 +782,9 @@ mxShapeGmdlSliderDiscreteDots.prototype.cst = {
 
 mxShapeGmdlSliderDiscreteDots.prototype.customProperties = [
 	{name:'barPos', dispName:'Handle Position', type:'int', min:0, defVal:'40'},
-	{name:'handleSize', dispName:'Handle Size', type:'float', min:0, defVal:'10'}
+	{name:'handleSize', dispName:'Handle Size', type:'float', min:0, defVal:'10'},
+	{name: 'inactiveTrackColor', dispName: 'Inactive Track', defVal: '#bebebe', type: 'color', primary:true},
+	{name: 'dotColor', dispName: 'Dot Color', defVal: '#000000', type: 'color', primary:true}
 ];
 
 /**
@@ -799,25 +810,27 @@ mxShapeGmdlSliderDiscreteDots.prototype.background = function(c, x, y, w, h)
 
 	barPos = Math.max(0, Math.min(1, barPos));
 
+	var inactiveTrackColor = mxUtils.getValue(this.style, 'inactiveTrackColor', '#bebebe');
+
 	c.save();
-	c.setStrokeColor('#bebebe');
+	c.setStrokeColor(inactiveTrackColor);
 	c.begin();
 	c.moveTo(0, h * 0.5 + 22.5);
 	c.lineTo(w, h * 0.5 + 22.5);
 	c.fillAndStroke();
-	
+
 	c.restore();
 
 	if (barPos <= 0.1)
 	{
-		c.setFillColor('#bebebe');
+		c.setFillColor(inactiveTrackColor);
 	}
-	
+
 	c.begin();
 	c.moveTo(0, h * 0.5 + 22.5);
 	c.lineTo(barPos * w, h * 0.5 + 22.5);
 	c.fillAndStroke();
-	
+
 	c.begin();
 	c.moveTo(barPos * w, h * 0.5 + 15.5);
 	c.lineTo(barPos * w - 10.5, h * 0.5 + 2.5);
@@ -825,15 +838,8 @@ mxShapeGmdlSliderDiscreteDots.prototype.background = function(c, x, y, w, h)
 	c.arcTo(15, 15, 0, 0, 1, barPos * w + 10.5, h * 0.5 + 2.5);
 	c.close();
 	c.fill();
-	
-	if (bright == '1')
-	{
-		c.setFillColor('#000000');
-	}
-	else
-	{
-		c.setFillColor('#ffffff');
-	}
+
+	c.setFillColor(mxUtils.getValue(this.style, 'dotColor', (bright == '1') ? '#000000' : '#ffffff'));
 	
 	c.ellipse(-1.5, h * 0.5 + 21, 3, 3);
 	c.fill();
@@ -904,7 +910,8 @@ mxShapeGmdlProgressBar.prototype.cst = {
 };
 
 mxShapeGmdlProgressBar.prototype.customProperties = [
-	{name:'dx1', dispName:'Handle Position', type:'int', min:0, defVal:0.8}
+	{name:'dx1', dispName:'Handle Position', type:'int', min:0, defVal:0.8},
+	{name: 'inactiveTrackColor', dispName: 'Inactive Track', defVal: '#aaaaaa', type: 'color', primary:true}
 ];
 
 /**
@@ -919,7 +926,7 @@ mxShapeGmdlProgressBar.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.translate(x, y);
 	
 	c.save();
-	c.setStrokeColor('#aaaaaa');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'inactiveTrackColor', '#aaaaaa'));
 	c.begin();
 	c.moveTo(0, h * 0.5);
 	c.lineTo(w , h * 0.5);

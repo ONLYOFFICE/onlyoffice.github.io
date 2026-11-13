@@ -1,6 +1,5 @@
 /**
- * $Id: mxInfographic.js,v 1.5 2016/04/1 12:32:06 mate Exp $
- * Copyright (c) 2006-2018, JGraph Ltd
+ * Copyright (c) 2006-2018, JGraph Holdings Ltd
  */
 //**********************************************************************************************************************************************************
 //Numbered entry (vertical)
@@ -312,16 +311,16 @@ mxShapeInfographicParallelogram.prototype.getConstraints = function(style, w, h)
 {
 	var constr = [];
 	var dx = Math.max(0, Math.min(w * 0.5, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
-	var w2 = w - 2 * dx;
 
+	// Relative points with the fixed slant as offsets, so edges follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 2 * dx, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 2 * dx + w2 * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, dx, 0));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, dx, 0));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - 2 * dx, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, w - dx, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2 * 0.5, h));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -2 * dx, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, -dx, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, -dx, 0));
 
 	return (constr);
 };
@@ -431,18 +430,19 @@ mxShapeInfographicRibbonRolled.prototype.getConstraints = function(style, w, h)
 	var constr = [];
 	var dx = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 	var dy = Math.max(0, Math.min(h * 0.5, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
-	var h2 = h - dy;
 	
+	// Relative points with the fixed ribbon width as offsets, so edges follow
+	// a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h2));
-	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, h2));
-	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, 0, h2));
-	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, h2));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, 0, -dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 0, -dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false));
 
@@ -555,17 +555,19 @@ mxShapeInfographicRibbonDoubleFolded.prototype.getConstraints = function(style, 
 	var dx = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 	var dy = Math.max(0, Math.min(h * 0.5, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
 
+	// Relative points with the fixed ribbon width as offsets, so edges follow
+	// a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, 0, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h - dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 0, -dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false));
 
 	return (constr);
@@ -688,18 +690,20 @@ mxShapeInfographicRibbonFrontFolded.prototype.getConstraints = function(style, w
 	var dy = Math.max(0, Math.min(h * 0.5, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
 	var notch = Math.max(0, Math.min(w - dx, parseFloat(mxUtils.getValue(this.style, 'notch', this.notch))));
 
+	// Relative points with the fixed ribbon width and notch as offsets, so
+	// edges follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - notch, (h + dy) * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, -notch, dy * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, (h + dy) * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, 0, dy * 0.5));
 
 	return (constr);
 };
@@ -820,18 +824,20 @@ mxShapeInfographicRibbonBackFolded.prototype.getConstraints = function(style, w,
 	var dy = Math.max(0, Math.min(h * 0.5, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
 	var notch = Math.max(0, Math.min(w - dx, parseFloat(mxUtils.getValue(this.style, 'notch', this.notch))));
 
+	// Relative points with the fixed ribbon width and notch as offsets, so
+	// edges follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, dy));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - notch, (h + dy) * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, -notch, dy * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, (h + dy) * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, 0, dy * 0.5));
 
 	return (constr);
 };
@@ -976,22 +982,23 @@ mxShapeInfographicBanner.prototype.getConstraints = function(style, w, h)
 	var notch = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'notch', this.notch))));
 	dx = Math.min(w / 2 - 2 * dy, dx);
 	notch = Math.min(dx, notch);
-	var w2 = w - 2 * dx;
 
+	// Relative points with the fixed fold, ribbon width and notch as offsets,
+	// so edges follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2 * 0.25, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2 * 0.5, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2 * 0.75, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2, (h - dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2 * 0.75, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2 * 0.5, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx + w2 * 0.25, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx, (h - dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, notch, (h + dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - notch, (h + dy) * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, dx * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, -dx * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -dx, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, -dx, -dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -dx, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, -dx * 0.5, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, dx * 0.5, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, dx, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, dx, -dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, notch, dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, -notch, dy * 0.5));
 
 	return (constr);
 };
@@ -1248,15 +1255,19 @@ mxShapeInfographicShadedPyramid.prototype.getConstraints = function(style, w, h)
 {
 	var constr = [];
 	var h1 = Math.max(h - w * 0.3, 0);
-	
+	// The side corners are drawn above the bottom by a distance from the width:
+	// anchored to the bottom with offsets, so edges follow a resize that keeps
+	// the width (eg. a taller pyramid)
+	var d1 = h1 - h;
+
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.75, h1 * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h1));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.75, (h + h1) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.25, (h + h1) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h1));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.25, h1 * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0.5), false, null, 0, d1 * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, 0, d1));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, 0, d1 * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, 0, d1 * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 0, d1));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0.5), false, null, 0, d1 * 0.5));
 
 	return (constr);
 };
@@ -1341,22 +1352,25 @@ mxShapeInfographicPyramidStep.prototype.getConstraints = function(style, w, h)
 {
 	var constr = [];
 	var h1 = Math.max(w * 0.1, 0);
-	
+	// The roof height is drawn from the width: anchored to the nearest side
+	// with offsets, so edges follow a resize that keeps the width (eg. a
+	// taller step)
+
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.75, h1 * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h1));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h1 + (h - h1) * 0.25));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h1 + (h - h1) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h1 + (h - h1) * 0.75));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.75, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.25, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h1 + (h - h1) * 0.75));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h1 + (h - h1) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h1 + (h - h1) * 0.25));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.25, h1 * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, h1 * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, h1));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.25), false, null, 0, h1 * 0.75));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, 0, h1 * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.75), false, null, 0, h1 * 0.25));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.75), false, null, 0, h1 * 0.25));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, 0, h1 * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.25), false, null, 0, h1 * 0.75));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, h1 * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h1));
 	return (constr);
 };
@@ -1433,18 +1447,20 @@ mxShapeInfographicCylinder.prototype.getConstraints = function(style, w, h)
 	var rx = w * 0.5;
 	var ry = dy * 0.5;
 	
+	// Relative points with the fixed size of the caps as offsets, so edges
+	// follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dy * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dy * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dy * 0.5 + (h - dy) * 0.25));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dy * 0.5 + (h - dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dy * 0.5 + (h - dy) * 0.75));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h - dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.25), false, null, 0, dy * 0.25));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.75), false, null, 0, -dy * 0.25));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, 0, -dy * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h - dy * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dy * 0.5 + (h - dy) * 0.75));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dy * 0.5 + (h - dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dy * 0.5 + (h - dy) * 0.25));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 0, -dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.75), false, null, 0, -dy * 0.25));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.25), false, null, 0, dy * 0.25));
 
 	return (constr);
 };
@@ -1562,10 +1578,16 @@ mxShapeInfographicCircularCallout2.prototype.getConstraints = function(style, w,
 {
 	var constr = [];
 	var rx = Math.max(0, Math.min(w * 0.5, h * 0.4, h * 0.5 - 7));
+	// The circle is drawn from the smaller side: anchored to the top with the
+	// radius as offset, so edges follow a resize that keeps the smaller side
+	// (eg. a taller callout). The x of a circle as wide as the shape is
+	// relative to the width, else the radius is an offset from the middle.
+	var fx = (rx == w * 0.5) ? 0.5 : 0;
+	var ox = (rx == w * 0.5) ? 0 : rx;
 
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 - rx, rx));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 - fx, 0), false, null, -ox, rx));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 + rx, rx));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 + fx, 0), false, null, ox, rx));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false));
 
 	return (constr);
@@ -1732,29 +1754,30 @@ mxShapeInfographicBannerSingleFold.prototype.getConstraints = function(style, w,
 	dx = Math.min(w - 2 * dy, dx);
 	var dx2 = Math.max(0, Math.min(w - dx - 2 * dy, parseFloat(mxUtils.getValue(this.style, 'dx2', this.dx2))));
 	notch = Math.min(dx, notch);
-	var w2 = w - dx - dx2;
 	
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, (h - dy) * 0.5));
+	// Relative points with the fixed fold, spike, banner width and notch as
+	// offsets, so edges follow a resize
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, 0, -dy * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.25, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.5, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.75, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx * 0.25, dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx * 0.5, dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx * 0.75, dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - notch, (h + dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx - 2 * dy, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - (dx + 2 * dy) * 0.75, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - (dx + 2 * dy) * 0.5, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - (dx + 2 * dy) * 0.25, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.25, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.5, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.75, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2, h - dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, dx2 * 0.75 - dx * 0.25, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, (dx2 - dx) * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, dx2 * 0.25 - dx * 0.75, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -dx, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -dx * 0.25, dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -dx * 0.5, dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -dx * 0.75, dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, -notch, dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -dx - 2 * dy, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -(dx + 2 * dy) * 0.75, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -(dx + 2 * dy) * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -(dx + 2 * dy) * 0.25, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, dx2, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, dx2 * 0.75 - dx * 0.25, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, (dx2 - dx) * 0.5, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, dx2 * 0.25 - dx * 0.75, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -dx, -dy));
 	
 	return (constr);
 };
@@ -1853,24 +1876,27 @@ mxShapeInfographicShadedCube.prototype.getConstraints = function(style, w, h)
 	var constr = [];
 	var isoAngle = Math.max(0.01, Math.min(94, parseFloat(mxUtils.getValue(this.style, 'isoAngle', this.isoAngle)))) * Math.PI / 200 ;
 	var isoH = Math.min(w * Math.tan(isoAngle), h * 0.5);
-	
+	// The iso height is drawn from the width: anchored to the nearest side with
+	// the iso height as offset, so edges follow a resize that keeps the width
+	// (eg. a taller cube)
+
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.75, isoH * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, isoH));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, isoH + (h - 2 * isoH) * 0.25));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, isoH + (h - 2 * isoH) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, isoH + (h - 2 * isoH) * 0.75));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h - isoH));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.75, h - isoH * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, isoH * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, isoH));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.25), false, null, 0, isoH * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.75), false, null, 0, -isoH * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, 0, -isoH));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, 0, -isoH * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.25, h - isoH * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h - isoH));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h - isoH));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, isoH + (h - 2 * isoH) * 0.75));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, isoH + (h - 2 * isoH) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, isoH + (h - 2 * isoH) * 0.25));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, 0, -isoH * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 0, -isoH));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 0, -isoH));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.75), false, null, 0, -isoH * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.25), false, null, 0, isoH * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, isoH));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.25, isoH * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, isoH * 0.5));
 
 	return (constr);
 };
@@ -2217,31 +2243,31 @@ mxShapeInfographicBannerHalfFold.prototype.getConstraints = function(style, w, h
 	var dx = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 	var dx2 = Math.max(0, Math.min(w - dx, parseFloat(mxUtils.getValue(this.style, 'dx2', this.dx2))));
 	var notch = Math.max(0, Math.min(h - dx, parseFloat(mxUtils.getValue(this.style, 'notch', this.notch))));
-	var w2 = w - dx - dx2;
-	var h2 = h - dx;
 
+	// Relative points with the fixed banner width, spike and notch as offsets,
+	// so edges follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, dx * 0.5));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.25, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.5, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.75, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx * 0.5, dx * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dx));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dx + h2 * 0.25));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dx + h2 * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, dx + h2 * 0.75));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, dx2 * 0.75 - dx * 0.25, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, (dx2 - dx) * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, dx2 * 0.25 - dx * 0.75, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -dx, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -dx * 0.5, dx * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, dx));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.25), false, null, 0, dx * 0.75));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, 0, dx * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.75), false, null, 0, dx * 0.25));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx * 0.5, h - notch));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx, h));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -dx * 0.5, -notch));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -dx, 0));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx, dx + h2 * 0.75));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx, dx + h2 * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx, dx + h2 * 0.25));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w - dx, dx));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.25, dx));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.5, dx));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2 + w2 * 0.75, dx));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.75), false, null, -dx, dx * 0.25));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, -dx, dx * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.25), false, null, -dx, dx * 0.75));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -dx, dx));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, dx2 * 0.75 - dx * 0.25, dx));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, (dx2 - dx) * 0.5, dx));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, dx2 * 0.25 - dx * 0.75, dx));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx2, dx));
 
 	return (constr);
@@ -2336,21 +2362,25 @@ Graph.handleFactory[mxShapeInfographicCircularDial.prototype.cst.CIRCULAR_DIAL] 
 mxShapeInfographicCircularDial.prototype.getConstraints = function(style, w, h)
 {
 	var constr = [];
-	var dy = Math.max(0, Math.min(h * 0.5 - 10, w * 0.5, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
 	var rx = Math.max(0, Math.min(w * 0.5, h * 0.5 - 10));
-	var rx2 = rx - dy;
-	
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 - rx, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 - rx, (rx + h) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 - rx, rx));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 - rx * 0.71, rx * 0.29));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 + rx * 0.71, rx * 0.29));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 + rx, rx));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 + rx, (rx + h) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 + rx, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 + rx * 0.5, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5 - rx * 0.5, h));
+	// The dial is drawn from the smaller side: anchored to the nearest side
+	// with the radius as offset, so edges follow a resize that keeps the
+	// smaller side (eg. a taller dial). The x of a dial as wide as the shape
+	// is relative to the width, else the radius is an offset from the middle.
+	var fx = (rx == w * 0.5) ? 0.5 : 0;
+	var ox = (rx == w * 0.5) ? 0 : rx;
+
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 - fx, 1), false, null, -ox, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 - fx, 0.5), false, null, -ox, rx * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 - fx, 0), false, null, -ox, rx));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 - fx * 0.71, 0), false, null, -ox * 0.71, rx * 0.29));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 + fx * 0.71, 0), false, null, ox * 0.71, rx * 0.29));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 + fx, 0), false, null, ox, rx));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 + fx, 0.5), false, null, ox, rx * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 + fx, 1), false, null, ox, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 + fx * 0.5, 1), false, null, ox * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5 - fx * 0.5, 1), false, null, -ox * 0.5, 0));
 
 	return (constr);
 };
@@ -2441,20 +2471,21 @@ mxShapeInfographicRibbonSimple.prototype.getConstraints = function(style, w, h)
 	var constr = [];
 	var notch1 = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'notch1', this.notch2))));
 	var notch2 = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'notch2', this.notch2))));
-	var w2 = w - notch2;
 	
+	// Relative points with the fixed notch and spike as offsets, so edges
+	// follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2 * 0.25, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2 * 0.5, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2 * 0.75, 0));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, -notch2 * 0.25, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, -notch2 * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, -notch2 * 0.75, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, -notch2, 0));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2 * 0.75, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2 * 0.5, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w2 * 0.25, h));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, -notch2, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, -notch2 * 0.75, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, -notch2 * 0.5, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, -notch2 * 0.25, 0));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, notch1, h * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, notch1, 0));
 
 	return (constr);
 };
@@ -2541,20 +2572,20 @@ mxShapeInfographicBarCallout.prototype.getConstraints = function(style, w, h)
 	var constr = [];
 	var dx = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 	var dy = Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
-	var x1 = Math.max(dx - dy * 0.35, 0);
-	var x2 = Math.min(dx + dy * 0.35, w);
 
+	// Relative points with the fixed callout position and size as offsets, so
+	// edges follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, (h - dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false, null, 0, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false, null, 0, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h - dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, 0, -dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, dx, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 0, -dy));
 
 	return (constr);
 };
@@ -2648,19 +2679,21 @@ mxShapeInfographicFlag.prototype.getConstraints = function(style, w, h)
 	var dx = Math.max(0, Math.min(w, parseFloat(mxUtils.getValue(this.style, 'dx', this.dx))));
 	var dy = Math.max(0, Math.min(h, parseFloat(mxUtils.getValue(this.style, 'dy', this.dy))));
 
+	// Relative points with the fixed pole width and spike as offsets, so edges
+	// follow a resize
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 0), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 0), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 0), false));
 	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, (h - dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, (h - dy) * 0.5));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.75, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.5, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w * 0.25, h - dy));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx * 0.5, h));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0.5), false, null, 0, -dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, 0, -dy * 0.5));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.75, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0.25, 1), false, null, 0, -dy));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, dx * 0.5, 0));
 	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, dx * 0.5, 0));
 
 	return (constr);

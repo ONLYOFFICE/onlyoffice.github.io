@@ -1,7 +1,12 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addInfographicPalette = function()
 	{
+		var sb = this;
 		var w = 100;
 		var h = 100;
 		var s = 'whiteSpace=wrap;html=1;shape=mxgraph.infographic.';

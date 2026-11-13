@@ -1,4 +1,8 @@
-if (urlParams['dev'] == '1')
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
+if (urlParams['dev-tooltips'] == '1')
 {
 	(function()
 	{
@@ -12,7 +16,7 @@ if (urlParams['dev'] == '1')
 			var tip = graphGetTooltipForCell.apply(this, arguments);
 			var geo = this.getCellGeometry(cell);
 			
-			tip += ((tip.length > 0) ? '<br>' : '') + 'id=' + cell.id + '<br>';
+			tip += ((tip.length > 0) ? '<br>' : '') + '<div style="overflow-wrap: anywhere;">id=' + mxUtils.htmlEntities(cell.id) + '<br>';
 			
 			if (geo != null)
 			{
@@ -34,7 +38,7 @@ if (urlParams['dev'] == '1')
 					
 					for (var i = 0; i < state.absolutePoints.length; i++)
 					{
-						tip += parseFloat(state.absolutePoints[i].x) + ',' + parseFloat(state.absolutePoints[i].y) + ';';
+						tip += parseFloat(state.absolutePoints[i].x) + ',<wbr>' + parseFloat(state.absolutePoints[i].y) + ';<wbr>';
 					}
 					
 					tip += '<br>';
@@ -45,7 +49,7 @@ if (urlParams['dev'] == '1')
 						
 						for (var i = 0; i < geo.points.length; i++)
 						{
-							tip += parseFloat(geo.points[i].x) + ',' + parseFloat(geo.points[i].y) + ';';
+							tip += parseFloat(geo.points[i].x) + ',<wbr>' + parseFloat(geo.points[i].y) + ';<wbr>';
 						}
 					}
 				}
@@ -65,11 +69,11 @@ if (urlParams['dev'] == '1')
 				
 				if (cell.style != null)
 				{
-					tip += '<br>style=<div style="display:inline-block;vertical-align:bottom;white-space:nowrap;width:480px;overflow:hidden;text-overflow:ellipsis;">' + cell.style + '</span>';
+					tip += '<br>style=' + mxUtils.htmlEntities(cell.style);
 				}
 			}
 			
-			return tip;
+			return tip + '</div>';
 		};
 	})();
 }

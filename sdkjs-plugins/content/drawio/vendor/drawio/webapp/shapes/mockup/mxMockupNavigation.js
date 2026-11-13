@@ -1,6 +1,5 @@
 /**
- * $Id: mxMockupNavigation.js,v 1.5 2014/01/21 13:11:15 gaudenz Exp $
- * Copyright (c) 2006-2010, JGraph Ltd
+ * Copyright (c) 2006-2010, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -38,7 +37,7 @@ mxShapeMockupBreadcrumb.prototype.cst = {
  */
 mxShapeMockupBreadcrumb.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var textStrings = decodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupBreadcrumb.prototype.cst.MAIN_TEXT, 'Layer 1, Layer 2, Layer 3').toString()).split(',');
+	var textStrings = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupBreadcrumb.prototype.cst.MAIN_TEXT, 'Layer 1, Layer 2, Layer 3').toString()).split(',');
 	var fontColor = mxUtils.getValue(this.style, mxShapeMockupBreadcrumb.prototype.cst.TEXT_COLOR, '#666666');
 	var selectedFontColor = mxUtils.getValue(this.style, mxShapeMockupBreadcrumb.prototype.cst.TEXT_COLOR2, '#008cff');
 	var fontSize = mxUtils.getValue(this.style, mxShapeMockupBreadcrumb.prototype.cst.TEXT_SIZE, '17').toString();
@@ -88,16 +87,13 @@ mxShapeMockupBreadcrumb.prototype.separators = function(c, w, h, buttonNum, butt
 	var size = 5;
 	c.begin();
 
+	// Sum of the widths of the buttons before the separator
+	var sumWidth = 0;
+
 	for (var i = 1; i < buttonNum; i++)
 	{
-		var currWidth = 0;
-
-		for (var j = 0; j < i; j++)
-		{
-			currWidth += buttonWidths[j] + 2 * labelOffset;
-		}
-
-		currWidth = currWidth * w / minW;
+		sumWidth += buttonWidths[i - 1] + 2 * labelOffset;
+		var currWidth = sumWidth * w / minW;
 		c.moveTo(currWidth - size * 0.5, midY - size);
 		c.lineTo(currWidth + size * 0.5, midY);
 		c.lineTo(currWidth - size * 0.5, midY + size);
@@ -146,8 +142,9 @@ mxShapeMockupStepBar.prototype.cst = {
 mxShapeMockupStepBar.prototype.customProperties = [
 	{name: 'mainText', dispName: 'Text', type: 'string'},
 	{name: 'textSize', dispName: 'Text Size', type: 'float'},
-	{name: 'textColor', dispName: 'Text Color', type: 'color'},
-	{name: 'textColor2', dispName: 'Text2 Color', type: 'color'}
+	{name: 'textColor', dispName: 'Text Color', type: 'color', primary:true},
+	{name: 'textColor2', dispName: 'Text2 Color', type: 'color', primary:true},
+	{name: 'haloColor', dispName: 'Halo Color', defVal: '#ffffff', type: 'color', primary:true}
 ];
 
 /**
@@ -157,7 +154,7 @@ mxShapeMockupStepBar.prototype.customProperties = [
  */
 mxShapeMockupStepBar.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var textStrings = decodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupStepBar.prototype.cst.MAIN_TEXT, 'Step 1, Step 2, Step 3').toString()).split(',');
+	var textStrings = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupStepBar.prototype.cst.MAIN_TEXT, 'Step 1, Step 2, Step 3').toString()).split(',');
 	var fontColor = mxUtils.getValue(this.style, mxShapeMockupStepBar.prototype.cst.TEXT_COLOR, '#666666');
 	var currColor = mxUtils.getValue(this.style, mxShapeMockupStepBar.prototype.cst.TEXT_COLOR2, '#008cff');
 	var fontSize = mxUtils.getValue(this.style, mxShapeMockupStepBar.prototype.cst.TEXT_SIZE, '17').toString();
@@ -222,15 +219,13 @@ mxShapeMockupStepBar.prototype.stepLineBg = function(c, w, h, buttonNum, buttonW
 	var startX = 0;
 	var endX = 0;
 
+	// Sum of the widths of the buttons before the step
+	var sumWidth = 0;
+
 	for (var i = 0; i < buttonNum; i++)
 	{
-		var currWidth = 0;
-
-		for (var j = 0; j < i; j++)
-		{
-			currWidth += buttonWidths[j] + 2 * labelOffset;
-		}
-
+		var currWidth = sumWidth;
+		sumWidth += buttonWidths[i] + 2 * labelOffset;
 		currWidth += buttonWidths[i] * 0.5 + labelOffset;
 
 		currWidth = currWidth * w / minW;
@@ -264,15 +259,13 @@ mxShapeMockupStepBar.prototype.stepLineFg = function(c, w, h, buttonNum, buttonW
 	var endX = 0;
 	var strokeWidth = mxUtils.getValue(this.style, mxConstants.STYLE_STROKEWIDTH, '1');
 
+	// Sum of the widths of the buttons before the step
+	var sumWidth = 0;
+
 	for (var i = 0; i <= selectedButton; i++)
 	{
-		var currWidth = 0;
-
-		for (var j = 0; j < i; j++)
-		{
-			currWidth += buttonWidths[j] + 2 * labelOffset;
-		}
-
+		var currWidth = sumWidth;
+		sumWidth += buttonWidths[i] + 2 * labelOffset;
 		currWidth += buttonWidths[i] * 0.5 + labelOffset;
 
 		currWidth = currWidth * w / minW;
@@ -293,15 +286,13 @@ mxShapeMockupStepBar.prototype.stepLineFg = function(c, w, h, buttonNum, buttonW
 	c.fill();
 	c.setFillColor(bgColor);
 
+	// Sum of the widths of the buttons before the step
+	var sumWidth = 0;
+
 	for (var i = 0; i <= selectedButton; i++)
 	{
-		var currWidth = 0;
-
-		for (var j = 0; j < i; j++)
-		{
-			currWidth += buttonWidths[j] + 2 * labelOffset;
-		}
-
+		var currWidth = sumWidth;
+		sumWidth += buttonWidths[i] + 2 * labelOffset;
 		currWidth += buttonWidths[i] * 0.5 + labelOffset;
 
 		currWidth = currWidth * w / minW;
@@ -337,8 +328,9 @@ mxShapeMockupStepBar.prototype.stepLineFg = function(c, w, h, buttonNum, buttonW
 			c.fillAndStroke();
 
 			c.setStrokeWidth(strokeWidth);
-			c.setFillColor('#ffffff');
-			c.setStrokeColor('#ffffff');
+			var haloColor = mxUtils.getValue(this.style, 'haloColor', '#ffffff');
+			c.setFillColor(haloColor);
+			c.setStrokeColor(haloColor);
 			c.begin();
 			c.ellipse(currWidth - size, midY - size, 2 * size, 2 * size);
 			c.fillAndStroke();
@@ -470,8 +462,8 @@ mxShapeMockupScrollBar.prototype.cst = {
 
 mxShapeMockupScrollBar.prototype.customProperties = [
 	{name: 'barPos', dispName: 'Handle Position', type: 'float'},
-	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color'},
-	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color'}
+	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color', primary: true},
+	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color', primary: true}
 ];
 
 /**
@@ -593,7 +585,7 @@ mxShapeMockupPagination.prototype.cst = {
 */
 mxShapeMockupPagination.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var mainText = decodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupPagination.prototype.cst.MAIN_TEXT, '0-9 A B C D E F G H I J K L M N O P Q R S T U V X Y Z'));
+	var mainText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupPagination.prototype.cst.MAIN_TEXT, '0-9 A B C D E F G H I J K L M N O P Q R S T U V X Y Z'));
 	var textSize = mxUtils.getValue(this.style, mxShapeMockupPagination.prototype.cst.TEXT_SIZE, '17');
 	var textColor = mxUtils.getValue(this.style, mxShapeMockupPagination.prototype.cst.TEXT_COLOR, '#0000ff');
 
@@ -691,9 +683,9 @@ mxShapeMockupMapNavigator.prototype.cst = {
 };
 
 mxShapeMockupMapNavigator.prototype.customProperties = [
-	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color'},
-	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color'}
+	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color', primary: true},
+	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color', primary: true},
+	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color', primary: true}
 ];
 
 /**

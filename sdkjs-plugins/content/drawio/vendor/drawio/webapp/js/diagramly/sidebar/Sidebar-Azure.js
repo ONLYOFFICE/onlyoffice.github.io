@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addAzurePalette = function()
@@ -61,7 +65,7 @@
 			this.createVertexTemplateEntry(s + 'powershell_file;pointerEvents=1;', w, h, '', 'PowerShell File', null, null, this.getTagsForStencil(gn, 'powershell_file', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'queue_generic;pointerEvents=1;', w, h * 0.3, '', 'Queue Generic', null, null, this.getTagsForStencil(gn, 'queue_generic', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'rdp_remoting_file;pointerEvents=1;', w * 0.95, h, '', 'RDP Remoting File', null, null, this.getTagsForStencil(gn, 'rdp_remoting_file', dt).join(' ')),
-			this.createVertexTemplateEntry(s + 'scheduler;pointerEvents=1;', w * 0.8, h, '', 'Scheduler', null, null, this.getTagsForStencil(gn, 'scheduler', dt).join(' ')),
+			this.createVertexTemplateEntry(s + 'scheduler_2;pointerEvents=1;', w * 0.8, h, '', 'Scheduler', null, null, this.getTagsForStencil(gn, 'scheduler', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'script_file;pointerEvents=1;', w * 0.95, h, '', 'Script File', null, null, this.getTagsForStencil(gn, 'script_file', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'server;', w, h * 0.3, '', 'Server', null, null, this.getTagsForStencil(gn, 'server', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'server_rack;', w, h, '', 'Server Rack', null, null, this.getTagsForStencil(gn, 'server_rack', dt).join(' ')),

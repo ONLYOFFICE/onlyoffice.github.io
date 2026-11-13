@@ -1,6 +1,5 @@
 /**
- * $Id: mxElectrical.js,v 1.0 2016/10/25 17:05:39 mate Exp $
- * Copyright (c) 2006-2016, JGraph Ltd
+ * Copyright (c) 2006-2016, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -517,6 +516,13 @@ mxShapeElectricalLogicGate.prototype.customProperties = [
 ];
 
 /**
+ * Variable: maxInputs
+ *
+ * Maximum number of inputs. Default is 1000.
+ */
+mxShapeElectricalLogicGate.prototype.maxInputs = 1000;
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -524,7 +530,7 @@ mxShapeElectricalLogicGate.prototype.customProperties = [
 mxShapeElectricalLogicGate.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	c.translate(x, y);
-	var numInputs = parseInt(mxUtils.getValue(this.style, 'numInputs', '2'));
+	var numInputs = Math.min(parseInt(mxUtils.getValue(this.style, 'numInputs', '2')), this.maxInputs);
 	var spacing = h / numInputs;
 	var currH = spacing * 0.5;
 
@@ -608,7 +614,7 @@ mxShapeElectricalLogicGate.prototype.getConstraints = function(style)
 {
 	var constr = [new mxConnectionConstraint(new mxPoint(1, 0.5), false)];
 	
-	var numInputs = parseInt(mxUtils.getValue(style, 'numInputs', '2'));
+	var numInputs = Math.min(parseInt(mxUtils.getValue(style, 'numInputs', '2')), this.maxInputs);
 	var spacing = 1 / numInputs;
 	var currH = spacing * 0.5;
 
@@ -738,6 +744,25 @@ mxShapeElectricalDualInLineIC.prototype.customProperties = [
 ];
 
 /**
+ * Variable: maxPins
+ *
+ * Maximum number of pins per side. Default is 1000.
+ */
+mxShapeElectricalDualInLineIC.prototype.maxPins = 1000;
+
+/**
+ * Function: getPinLabel
+ *
+ * Returns the custom label of the pin with the given index or an empty
+ * string if there is none (e.g. for the negative pin numbers of a negative
+ * pinSpacing).
+ */
+mxShapeElectricalDualInLineIC.prototype.getPinLabel = function(labelNames, index)
+{
+	return (labelNames[index] != null) ? labelNames[index].toString() : '';
+};
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -749,7 +774,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 	c.setFontColor(fontColor);
 	var startPin = mxUtils.getValue(this.style, 'startPin', 'n');
 	var pinLabelType = mxUtils.getValue(this.style, 'pinLabelType', 'gen');
-	var labelNames = decodeURIComponent(mxUtils.getValue(this.style, 'labelNames', '').toString()).split(',');
+	var labelNames = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, 'labelNames', '').toString()).split(',');
 
 	c.begin();
 	
@@ -787,7 +812,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 		
 		if (startPin == 'n' || startPin == 's')
 		{
-			while (pinCount * pinSpacing <= h)
+			while (pinCount * pinSpacing <= h && pinCount <= this.maxPins)
 			{
 				c.moveTo(0, currH);
 				c.lineTo(10, currH);
@@ -809,7 +834,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 				}
 				else if (currPinNum - 1 < labelNames.length)
 				{
-					c.text(20, currH, 0, 0, labelNames[currPinNum - 1].toString(), mxConstants.ALIGN_LEFT, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+					c.text(20, currH, 0, 0, this.getPinLabel(labelNames, currPinNum - 1), mxConstants.ALIGN_LEFT, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 				}
 				
 				if (startPin == 'n')
@@ -827,7 +852,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 				}
 				else if (pc2 - 1 < labelNames.length)
 				{
-					c.text(w - 20, currH, 0, 0, labelNames[pc2 - 1].toString(), mxConstants.ALIGN_RIGHT, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+					c.text(w - 20, currH, 0, 0, this.getPinLabel(labelNames, pc2 - 1), mxConstants.ALIGN_RIGHT, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 				}
 				
 				currH = currH + pinSpacing;
@@ -836,7 +861,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 		}
 		else
 		{
-			while (pinCount * pinSpacing <= w)
+			while (pinCount * pinSpacing <= w && pinCount <= this.maxPins)
 			{
 				c.moveTo(currH, 0);
 				c.lineTo(currH, 10);
@@ -858,7 +883,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 				}
 				else if (currPinNum - 1 < labelNames.length)
 				{
-					c.text(currH, 20, 0, 0, labelNames[currPinNum - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+					c.text(currH, 20, 0, 0, this.getPinLabel(labelNames, currPinNum - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 				}
 				
 				if (startPin == 'e')
@@ -876,7 +901,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 				}
 				else if (pc2 - 1 < labelNames.length)
 				{
-					c.text(currH, h - 20, 0, 0, labelNames[pc2 - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+					c.text(currH, h - 20, 0, 0, this.getPinLabel(labelNames, pc2 - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 				}
 				
 				currH = currH + pinSpacing;
@@ -894,7 +919,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 
 		if (startPin == 'n' || startPin == 's')
 		{
-			while (pinCount * pinSpacing <= h)
+			while (pinCount * pinSpacing <= h && pinCount <= this.maxPins)
 			{
 				c.begin();
 				c.rect(0, currH - pinSpacing * 0.25, 10, pinSpacing * 0.5);
@@ -919,7 +944,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 				}
 				else if (currPinNum - 1 < labelNames.length)
 				{
-					c.text(5, currH + 1, 0, 0, labelNames[currPinNum - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+					c.text(5, currH + 1, 0, 0, this.getPinLabel(labelNames, currPinNum - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 				}
 				
 				if (startPin == 'n')
@@ -937,7 +962,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 				}
 				else if (pc2 - 1 < labelNames.length)
 				{
-					c.text(w - 5, currH + 1, 0, 0, labelNames[pc2 - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+					c.text(w - 5, currH + 1, 0, 0, this.getPinLabel(labelNames, pc2 - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 				}
 
 				currH = currH + pinSpacing;
@@ -946,7 +971,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 		}
 		else
 		{
-			while (pinCount * pinSpacing <= w)
+			while (pinCount * pinSpacing <= w && pinCount <= this.maxPins)
 			{
 				c.begin();
 				c.rect(currH - pinSpacing * 0.25, 0, pinSpacing * 0.5, 10);
@@ -971,7 +996,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 				}
 				else if (currPinNum - 1 < labelNames.length)
 				{
-					c.text(currH, 5, 0, 0, labelNames[currPinNum - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+					c.text(currH, 5, 0, 0, this.getPinLabel(labelNames, currPinNum - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 				}
 				
 				if (startPin == 'e')
@@ -989,7 +1014,7 @@ mxShapeElectricalDualInLineIC.prototype.paintVertexShape = function(c, x, y, w, 
 				}
 				else if (pc2 - 1 < labelNames.length)
 				{
-					c.text(currH, h - 5, 0, 0, labelNames[pc2 - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+					c.text(currH, h - 5, 0, 0, this.getPinLabel(labelNames, pc2 - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 				}
 
 				currH = currH + pinSpacing;
@@ -1050,7 +1075,7 @@ mxShapeElectricalDualInLineIC.prototype.getConstraints = function(style, w, h)
 	
 	if (startPin == 'n' || startPin == 's')
 	{
-		while (pinCount * pinSpacing <= h)
+		while (pinCount * pinSpacing <= h && pinCount <= this.maxPins)
 		{
 			constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, currH));
 			constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, currH));
@@ -1060,7 +1085,7 @@ mxShapeElectricalDualInLineIC.prototype.getConstraints = function(style, w, h)
 	}
 	else
 	{
-		while (pinCount * pinSpacing <= w)
+		while (pinCount * pinSpacing <= w && pinCount <= this.maxPins)
 		{
 			constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, currH, 0));
 			constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, currH, 0));
@@ -1120,6 +1145,22 @@ mxShapeElectricalQFPIC.prototype.customProperties = [
 ];
 
 /**
+ * Variable: maxPins
+ *
+ * Maximum number of pins per side. Default is 1000.
+ */
+mxShapeElectricalQFPIC.prototype.maxPins = 1000;
+
+/**
+ * Function: getPinLabel
+ *
+ * Returns the custom label of the pin with the given index or an empty
+ * string if there is none (e.g. for the negative pin numbers of a negative
+ * pinSpacing).
+ */
+mxShapeElectricalQFPIC.prototype.getPinLabel = mxShapeElectricalDualInLineIC.prototype.getPinLabel;
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -1143,7 +1184,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 	var pinSpacing = parseFloat(mxUtils.getValue(this.style, 'pinSpacing', '20'));
 	var pinStyle = mxUtils.getValue(this.style, 'pinStyle', 'line');
 	var pinLabelType = mxUtils.getValue(this.style, 'pinLabelType', 'gen');
-	var labelNames = decodeURIComponent(mxUtils.getValue(this.style, 'labelNames', '').toString()).split(',');
+	var labelNames = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, 'labelNames', '').toString()).split(',');
 	var fontSize = parseFloat(mxUtils.getValue(this.style, 'fontSize', '12'));
 	var fontColor = mxUtils.getValue(this.style, 'fontColor', '#000000');
 	c.setFontColor(fontColor);
@@ -1160,7 +1201,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 		var pinsVOne = parseInt((h - pinSpacing - 40) / pinSpacing) + 1;
 		var pinsHOne = parseInt((w - pinSpacing - 40) / pinSpacing) + 1;
 		
-		while (currH <= h - pinSpacing * 0.5 - 20)
+		while (currH <= h - pinSpacing * 0.5 - 20 && pinCount <= this.maxPins)
 		{
 			c.moveTo(0, currH);
 			c.lineTo(10, currH);
@@ -1188,7 +1229,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 			}
 			else if (currPinNum - 1 < labelNames.length)
 			{
-				c.text(20, currH, 0, 0, labelNames[currPinNum - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+				c.text(20, currH, 0, 0, this.getPinLabel(labelNames, currPinNum - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 			}
 			
 			//east pins
@@ -1212,7 +1253,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 			}
 			else if (pc2 - 1 < labelNames.length)
 			{
-				c.text(w - 20, currH, 0, 0, labelNames[pc2 - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+				c.text(w - 20, currH, 0, 0, this.getPinLabel(labelNames, pc2 - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 			}
 			
 			currH = currH + pinSpacing;
@@ -1222,7 +1263,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 		var pinCount = 1;
 		var currH = pinSpacing * 0.5 + 20;
 		
-		while (currH <= w - pinSpacing * 0.5 - 20)
+		while (currH <= w - pinSpacing * 0.5 - 20 && pinCount <= this.maxPins)
 		{
 			c.moveTo(currH, 0);
 			c.lineTo(currH, 10);
@@ -1250,7 +1291,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 			}
 			else if (currPinNum - 1 < labelNames.length)
 			{
-				c.text(currH, h - 20, 0, 0, labelNames[currPinNum - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+				c.text(currH, h - 20, 0, 0, this.getPinLabel(labelNames, currPinNum - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 			}
 
 			//north pins
@@ -1274,7 +1315,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 			}
 			else if (pc2 - 1 < labelNames.length)
 			{
-				c.text(currH, 20, 0, 0, labelNames[pc2 - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+				c.text(currH, 20, 0, 0, this.getPinLabel(labelNames, pc2 - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 			}
 			
 			currH = currH + pinSpacing;
@@ -1291,7 +1332,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 		var pinsVOne = parseInt((h - pinSpacing - 40) / pinSpacing) + 1;
 		var pinsHOne = parseInt((w - pinSpacing - 40) / pinSpacing) + 1;
 		
-		while (currH <= h - pinSpacing * 0.5 - 20)
+		while (currH <= h - pinSpacing * 0.5 - 20 && pinCount <= this.maxPins)
 		{
 			c.begin();
 			c.rect(0, currH - pinSpacing * 0.25, 10, pinSpacing * 0.5);
@@ -1322,7 +1363,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 			}
 			else if (currPinNum - 1 < labelNames.length)
 			{
-				c.text(5, currH + 1, 0, 0, labelNames[currPinNum - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+				c.text(5, currH + 1, 0, 0, this.getPinLabel(labelNames, currPinNum - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 			}
 			
 			//east pins
@@ -1346,7 +1387,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 			}
 			else if (pc2 - 1 < labelNames.length)
 			{
-				c.text(w - 5, currH + 1, 0, 0, labelNames[pc2 - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+				c.text(w - 5, currH + 1, 0, 0, this.getPinLabel(labelNames, pc2 - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 			}
 
 			currH = currH + pinSpacing;
@@ -1356,7 +1397,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 		var pinCount = 1;
 		var currH = pinSpacing * 0.5 + 20;
 		
-		while (currH <= w - pinSpacing * 0.5 - 20)
+		while (currH <= w - pinSpacing * 0.5 - 20 && pinCount <= this.maxPins)
 		{
 			c.begin();
 			c.rect(currH - pinSpacing * 0.25, 0, pinSpacing * 0.5, 10);
@@ -1387,7 +1428,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 			}
 			else if (currPinNum - 1 < labelNames.length)
 			{
-				c.text(currH, h - 4, 0, 0, labelNames[currPinNum - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+				c.text(currH, h - 4, 0, 0, this.getPinLabel(labelNames, currPinNum - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 			}
 
 			//north pins
@@ -1411,7 +1452,7 @@ mxShapeElectricalQFPIC.prototype.paintVertexShape = function(c, x, y, w, h)
 			}
 			else if (pc2 - 1 < labelNames.length)
 			{
-				c.text(currH, 6, 0, 0, labelNames[pc2 - 1].toString(), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
+				c.text(currH, 6, 0, 0, this.getPinLabel(labelNames, pc2 - 1), mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 			}
 
 			currH = currH + pinSpacing;
@@ -1452,22 +1493,26 @@ mxShapeElectricalQFPIC.prototype.getConstraints = function(style, w, h)
 	var constr = [];
 
 	var pinSpacing = parseFloat(mxUtils.getValue(this.style, 'pinSpacing', '20'));
+	var pinCount = 1;
 	var currH = pinSpacing * 0.5 + 20;
 	
-	while (currH <= h - pinSpacing * 0.5 - 20)
+	while (currH <= h - pinSpacing * 0.5 - 20 && pinCount <= this.maxPins)
 	{
 		constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 0, currH));
 		constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, currH));
 		currH = currH + pinSpacing;
+		pinCount++;
 	}
 	
+	var pinCount = 1;
 	var currH = pinSpacing * 0.5 + 20;
 	
-	while (currH <= w - pinSpacing * 0.5 - 20)
+	while (currH <= w - pinSpacing * 0.5 - 20 && pinCount <= this.maxPins)
 	{
 		constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, currH, 0));
 		constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, currH, 0));
 		currH = currH + pinSpacing;
+		pinCount++;
 	}
 	
 	
@@ -1508,6 +1553,13 @@ mxShapeElectricalMux.prototype.customProperties = [
 ];
 
 /**
+ * Variable: maxSelectorPins
+ *
+ * Maximum number of selector pins (2^n inputs or outputs). Default is 10.
+ */
+mxShapeElectricalMux.prototype.maxSelectorPins = 10;
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -1515,7 +1567,7 @@ mxShapeElectricalMux.prototype.customProperties = [
 mxShapeElectricalMux.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	c.translate(x, y);
-	var selectorPins = parseInt(mxUtils.getValue(this.style, 'selectorPins', '1'));
+	var selectorPins = Math.min(parseInt(mxUtils.getValue(this.style, 'selectorPins', '1')), this.maxSelectorPins);
 	var operation = mxUtils.getValue(this.style, 'operation', 'mux');
 	var fontSize = parseFloat(mxUtils.getValue(this.style, 'fontSize', '12'));
 	c.setFontSize(fontSize * 0.5);
@@ -1636,36 +1688,34 @@ mxCellRenderer.registerShape(mxShapeElectricalMux.prototype.cst.SHAPE_MUX, mxSha
 mxShapeElectricalMux.prototype.getConstraints = function(style, w, h)
 {
 	var constr = [];
-	var pinRange = (h - 16) / h;
-	var selectorPins = parseInt(mxUtils.getValue(this.style, 'selectorPins', '1'));
+	var selectorPins = Math.min(parseInt(mxUtils.getValue(this.style, 'selectorPins', '1')), this.maxSelectorPins);
 	var operation = mxUtils.getValue(this.style, 'operation', 'mux');
-	
+
 	var numInputs = 1;
 	var numOutputs = 1;
-	
+
 	if (operation == 'mux')
 	{
 		numInputs = Math.pow(2, selectorPins);
-		var spacing = pinRange / numInputs;
 	}
 	else
 	{
 		numOutputs = Math.pow(2, selectorPins);
-		var spacing = pinRange / numOutputs;
 	}
-	
-	var currH = spacing * 0.5;
-	
+
+	// Pin i of n is painted at 3 + (h - 16) * (i + 0.5) / n and selector pin i
+	// at 10 + (w - 20) * (i + 0.5) / n: relative points with the fixed margins
+	// as offsets, so edges follow a resize
 	if (numInputs == 1)
 	{
-		constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5 * (h - 10) / h), false, 0, 0));
+		constr.push(new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, 0, -5));
 	}
 	else
 	{
 		for (var i = 0; i < numInputs; i++)
 		{
-			constr.push(new mxConnectionConstraint(new mxPoint(0, currH), false, null, 0, 3));
-			currH = currH + spacing;
+			var f = (i + 0.5) / numInputs;
+			constr.push(new mxConnectionConstraint(new mxPoint(0, f), false, null, 0, 3 - 16 * f));
 		}
 	}
 
@@ -1677,18 +1727,15 @@ mxShapeElectricalMux.prototype.getConstraints = function(style, w, h)
 	{
 		for (var i = 0; i < numOutputs; i++)
 		{
-			constr.push(new mxConnectionConstraint(new mxPoint(1, currH), false, null, 0, 3));
-			currH = currH + spacing;
+			var f = (i + 0.5) / numOutputs;
+			constr.push(new mxConnectionConstraint(new mxPoint(1, f), false, null, 0, 3 - 16 * f));
 		}
 	}
 
-	var spacing = (w - 20) / (w * selectorPins);
-	var currW = spacing * 0.5;
-	
 	for (var i = 0; i < selectorPins; i++)
 	{
-		constr.push(new mxConnectionConstraint(new mxPoint(currW, 1), false, null, 10, 0));
-		currW = currW + spacing;
+		var f = (i + 0.5) / selectorPins;
+		constr.push(new mxConnectionConstraint(new mxPoint(f, 1), false, null, 10 - 20 * f, 0));
 	}
 
 	return (constr);
@@ -1719,6 +1766,13 @@ mxShapeElectricalBatteryStack.prototype.cst = {
 };
 
 /**
+ * Variable: maxCells
+ *
+ * Maximum number of painted cells. Default is 1000.
+ */
+mxShapeElectricalBatteryStack.prototype.maxCells = 1000;
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -1731,7 +1785,8 @@ mxShapeElectricalBatteryStack.prototype.paintVertexShape = function(c, x, y, w, 
 	var strokeColor = mxUtils.getValue(this.style, mxConstants.STYLE_STROKECOLOR, '#000000');
 	var dashed = mxUtils.getValue(this.style, mxConstants.STYLE_DASHED, '0');
 	
-	var bNum = Math.floor((w - 20) / bw);
+	// Limits the number of cells for tiny heights and huge widths
+	var bNum = Math.min(Math.floor((w - 20) / bw), this.maxCells);
 	var startX = (w - bNum * bw) * 0.5;
 
 	if (bNum > 0)

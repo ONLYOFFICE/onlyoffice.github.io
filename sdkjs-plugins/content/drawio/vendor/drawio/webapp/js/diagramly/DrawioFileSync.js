@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2006-2018, JGraph Ltd
- * Copyright (c) 2006-2018, Gaudenz Alder
+ * Copyright (c) 2006-2024, draw.io AG
+ * Copyright (c) 2006-2024, JGraph Holdings Ltd
  * 
  * Realtime collaboration for any file.
  */
@@ -31,14 +31,6 @@ DrawioFileSync = function(file)
 	mxEvent.addListener(window, 'offline', this.onlineListener);
 	mxEvent.addListener(window, 'online', this.onlineListener);
 
-    // Listens to realtime state changes
-	this.realtimeListener = mxUtils.bind(this, function()
-	{
-		this.updateOnlineState();
-	});
-
-	this.file.addListener('realtimeStateChanged', this.realtimeListener);
-
 	// Listens to autosave changes to update the realtime collab socket
 	this.autosaveListener = mxUtils.bind(this, function()
 	{
@@ -52,7 +44,7 @@ DrawioFileSync = function(file)
 	{
 		if (document.visibilityState == 'hidden')
 		{
-			if (this.isConnected())
+			if (this.isListening())
 			{
 				this.stop();
 			}
@@ -84,105 +76,105 @@ DrawioFileSync = function(file)
 
 	// Listens to fast sync activitiy
 	this.file.addListener('realtimeMessage', this.activityListener);
-
-	// Listens to errors in the pusher API
-	this.pusherErrorListener = mxUtils.bind(this, function(err)
-	{
-		if (err.error != null && err.error.data != null &&
-			err.error.data.code === 4004)
-		{
-			EditorUi.logError('Error: Pusher Limit', null, this.file.getId());
-		}
-	});
-
-    // Listens to connection state changes
-	this.connectionListener = mxUtils.bind(this, function()
-	{
-		this.updateOnlineState();
-		this.updateStatus();
-		
-		if (this.isConnected())
-		{
-			if (!this.announced && Editor.enableRealtimeCache &&
-				!Editor.p2pSyncNotify)
-			{
-				this.sendJoinMessage();
-			}
-			else if (this.announced)
-			{
-				// Catchup on any lost edits
-				this.fileChangedNotify(null, true);
-			}
-		}
-	});
-	
-	// Listens to messages
-	this.changeListener = mxUtils.bind(this, function(data)
-	{
-		this.file.stats.msgReceived++;
-		this.lastActivity = Date.now();
-
-		if (this.enabled && !this.file.inConflictState &&
-			!this.file.redirectDialogShowing)
-		{
-			try
-			{
-				var msg = this.stringToObject(data);
-				
-				if (msg != null)
-				{
-					EditorUi.debug('DrawioFileSync.message', [this], msg, data.length, 'bytes');
-
-					// Handles protocol mismatch
-					if (msg.v > DrawioFileSync.PROTOCOL)
-					{
-						this.file.redirectToNewApp(mxUtils.bind(this, function()
-						{
-							// Callback adds cancel option
-						}));
-					}
-					else if (msg.v === DrawioFileSync.PROTOCOL && msg.d != null)
-					{
-						this.handleMessageData(msg.d);
-					}
-				}
-			}
-			catch (e)
-			{
-				// Checks if file was changed
-				if (this.isConnected())
-				{
-					this.fileChangedNotify();
-				}
-				
-				// NOTE: Probably UTF16 in username for join/leave message causing this
-//				var len = (data != null) ? data.length : 'null';
-//				
-//				EditorUi.logError('Protocol Error ' + e.message,
-//					null, 'data_' + len + '_file_' + this.file.getHash() +
-//					'_client_' + this.clientId);
-//				
-//				if (window.console != null)
-//				{
-//					console.log(e);
-//				}
-			}
-		}
-	});
 };
 
 /**
  * Protocol version to be added to all communcations and diffs to check
  * if a client is out of date and force a refresh. Note that this must
- * be incremented if new messages are added or the format is changed.
+ * be incremented if new messages are added or the format is changed,
+ * and also if patch application semantics change such that older
+ * clients corrupt shared state: their saves are checksum-valid but
+ * wrong, which the file fallback cannot detect (eg. v7: the canonical
+ * order rebuild - v6 clients dropped pages under crossing page moves
+ * and reverted adopted pages on save).
  * This must be numeric to compare older vs newer protocol versions.
  */
-DrawioFileSync.PROTOCOL = 6;
+DrawioFileSync.PROTOCOL = 7;
+
+/**
+ * Compares two dotted app version strings numerically per segment
+ * (missing segments count as zero). Returns a negative, zero or
+ * positive number like a comparator, or null if either side is
+ * missing or not a dotted number (eg. development builds).
+ */
+DrawioFileSync.compareAppVersions = function(a, b)
+{
+	var result = null;
+
+	if (a != null && b != null)
+	{
+		var pa = String(a).split('.');
+		var pb = String(b).split('.');
+		result = 0;
+
+		for (var i = 0; i < Math.max(pa.length, pb.length) &&
+			result != null; i++)
+		{
+			var na = (i < pa.length) ? parseInt(pa[i], 10) : 0;
+			var nb = (i < pb.length) ? parseInt(pb[i], 10) : 0;
+
+			if (isNaN(na) || isNaN(nb))
+			{
+				result = null;
+			}
+			else if (result == 0)
+			{
+				result = na - nb;
+			}
+		}
+	}
+
+	return result;
+};
 
 /**
  * Enables socket connections.
  */
 DrawioFileSync.ENABLE_SOCKETS = urlParams['sockets'] != '0';
+
+/**
+ * Sends nothing to the realtime cache and no notifications while the relay's
+ * roster confirms that no other client is on the channel (see isAlone).
+ */
+DrawioFileSync.ALONE_CACHE = urlParams['alone-cache'] != '0';
+
+/**
+ * Specifies if the realtime cache alive check was scheduled.
+ */
+DrawioFileSync.cacheAliveChecked = false;
+
+/**
+ * Disables the realtime cache if the cache endpoint is not reachable,
+ * eg. on domains that serve embed mode but do not route the cache.
+ * Runs at most once per session when the first file starts to sync.
+ */
+DrawioFileSync.checkCacheAlive = function(ui)
+{
+	if (!DrawioFileSync.cacheAliveChecked && !mxClient.IS_CHROMEAPP &&
+		!EditorUi.isElectronApp && DrawioFile.SYNC == 'auto' &&
+		urlParams['local'] != '1' && urlParams['stealth'] != '1' &&
+		!ui.isOffline() && Editor.enableRealtimeCache &&
+		(!ui.editor.chromeless || ui.editor.editable))
+	{
+		DrawioFileSync.cacheAliveChecked = true;
+
+		// Switches to sync via sockets if cache is not reachable
+		var timeoutThread = window.setTimeout(function()
+		{
+			Editor.enableRealtimeCache = false;
+		}, Editor.cacheTimeout);
+
+		mxUtils.get(EditorUi.cacheUrl + '?alive', function(req)
+		{
+			Editor.enableRealtimeCache = req.getStatus() >= 200 && req.getStatus() <= 299;
+			window.clearTimeout(timeoutThread);
+		}, function()
+		{
+			Editor.enableRealtimeCache = false;
+			window.clearTimeout(timeoutThread);
+		});
+	}
+};
 
 //Extends mxEventSource
 mxUtils.extend(DrawioFileSync, mxEventSource);
@@ -191,12 +183,6 @@ mxUtils.extend(DrawioFileSync, mxEventSource);
  * Maximum size in bytes for cache values.
  */
 DrawioFileSync.prototype.maxCacheEntrySize = 1000000;
-
-/**
- * Maximum size in bytes for fast sync messages via Pusher.
- * Use 0 to disable message size check. Default is 9KB.
- */
-DrawioFileSync.prototype.maxSyncMessageSize = 9000;
 
 /**
  * Delay for fast sync message sending in ms. Larger
@@ -221,6 +207,18 @@ DrawioFileSync.prototype.syncReceiveMessageDelay = 50;
 DrawioFileSync.prototype.cleanupDelay = 15000;
 
 /**
+ * Grace period for content that arrived as a live diff. Such content
+ * is in the visible pages but reaches the own pages only with its
+ * sender's next save, and the cleanup converges the screen to the own
+ * pages - so without a grace period it is reverted on screen until
+ * that save arrives (measured: a collaborator's colours came, went and
+ * came back). Live content is therefore HELD for this long and only
+ * dropped once its sender demonstrably never saved it, which is also
+ * what expels content that no collaborator ever confirms.
+ */
+DrawioFileSync.prototype.remoteGraceDelay = 60000;
+
+/**
  * Counter for local message IDs.
  */
 DrawioFileSync.prototype.syncChangeCounter = 0;
@@ -236,17 +234,98 @@ DrawioFileSync.prototype.syncChangeCounter = 0;
 DrawioFileSync.prototype.channelId = null;
 
 /**
- * Holds the channel ID for sending and receiving change notifications.
+ * Holds the channel key of the file (see updateChannelKey), messages are
+ * encrypted with it. Null means that the channel is not encrypted.
  */
-DrawioFileSync.prototype.channel = null;
+DrawioFileSync.prototype.key = null;
 
 /**
- * Specifies if descriptor change events should be ignored.
+ * Holds the key that was in use before the last change of the channel key.
+ */
+DrawioFileSync.prototype.previousKey = null;
+
+/**
+ * Time of the last change of the channel key.
+ */
+DrawioFileSync.prototype.previousKeyTime = 0;
+
+/**
+ * Milliseconds after a change of the channel key during which messages with
+ * the previous key are still accepted. Peers switch when they read the new
+ * version of the file, until then they still send with the previous key.
+ */
+DrawioFileSync.prototype.previousKeyTimeout = 30000;
+
+/**
+ * Specifies if notifications on a channel with a random key are also sent
+ * with the legacy key of the file (see createLegacyNotification) so that
+ * clients from before random keys still read the saved changes. Can be
+ * removed once those clients are gone.
+ */
+DrawioFileSync.prototype.legacyKeyNotify = true;
+
+/**
+ * Minimum delay between two file checks for notifications from clients
+ * with the legacy channel key (see handleLegacyMessage).
+ */
+DrawioFileSync.prototype.legacyNotifyDelay = 5000;
+
+/**
+ * Time of the last file check for a notification with the legacy key.
+ */
+DrawioFileSync.prototype.lastLegacyNotify = 0;
+
+/**
+ * Specifies if the sync was started (see start) and not stopped since.
+ */
+DrawioFileSync.prototype.started = false;
+
+/**
+ * Specifies if a session on the relay socket was established before, so
+ * that a session after it catches up on what was missed (see socketJoined).
+ */
+DrawioFileSync.prototype.socketJoinedOnce = false;
+
+/**
+ * Modified times of the newest save ('save') and descriptor ('desc')
+ * notifications that were not sent while this client was alone (see notify),
+ * until a later one of the same kind is sent (see peerJoined).
+ */
+DrawioFileSync.prototype.skippedNotifications = null;
+
+/**
+ * Minimum delay between two resends of the skipped notifications. The joins
+ * meanwhile get the next one (see peerJoined).
+ */
+DrawioFileSync.prototype.resendDelay = 5000;
+
+/**
+ * Time of the last resend of the skipped notifications.
+ */
+DrawioFileSync.prototype.lastResend = 0;
+
+/**
+ * Timeout of the next resend of the skipped notifications.
+ */
+DrawioFileSync.prototype.resendThread = null;
+
+/**
+ * Modified times of the newest resent save ('save') and descriptor ('desc')
+ * notifications that this client took (see isRepeatedResend).
+ */
+DrawioFileSync.prototype.takenResends = null;
+
+/**
+ * Consecutive catchup attempts of the conflict episode that is being
+ * reconciled. Reset by a confirmed save (DrawioFile.fileSaved) and by
+ * the timeout below, never by a catchup that found nothing to do.
  */
 DrawioFileSync.prototype.catchupRetryCount = 0;
 
 /**
- * Specifies if descriptor change events should be ignored.
+ * Number of catchup attempts fileConflict makes before it reports a
+ * timeout to the caller. Integrations lower it (eg. the Confluence
+ * Cloud plugin uses 12).
  */
 DrawioFileSync.prototype.maxCatchupRetries = 15;
 
@@ -276,73 +355,63 @@ DrawioFileSync.prototype.inactivityTimeoutSeconds = 1800;
 DrawioFileSync.prototype.lastActivity = null;
 
 /**
+ * Specifies if a current page that does not hold the root of the model
+ * was reported in this session (see checkPageRoot).
+ */
+DrawioFileSync.pageRootReported = false;
+
+/**
+ * Error created by the local edit that left the current page without
+ * the root of the model, for the stack of the report in checkPageRoot.
+ */
+DrawioFileSync.prototype.pageRootError = null;
+
+/**
  * Adds all listeners.
  */
 DrawioFileSync.prototype.start = function()
 {
+	DrawioFileSync.checkCacheAlive(this.ui);
+
 	if (this.channelId == null)
 	{
 		this.channelId = this.file.getChannelId();
 	}
-	
-	if (this.key == null)
+
+	this.updateChannelKey();
+
+	// Keyed channels must encrypt, so realtime is never started when the
+	// CSPRNG that CryptoJS needs for the KDF salt is unreachable
+	if (!this.isEncryptionAvailable())
 	{
-		this.key = this.file.getChannelKey();
+		return;
 	}
-	
+
 	var updateStatus = false;
 
-	if (DrawioFileSync.PULLING_MODE && this.puller == null &&
-		document.visibilityState != 'hidden') 
+	if (this.file.isPolling())
 	{
-		if (this.puller == null)
+		if (document.visibilityState != 'hidden')
 		{
-			this.puller = new DrawioFilePuller(this.file, this);
-		}
+			if (this.polling == null)
+			{
+				this.polling = new DrawioFilePolling(this.file, this);
+			}
 
-		this.puller.start(this.file.getPullingInterval());
-		EditorUi.debug('DrawioFileSync.start (Pulling)', [this],
+			this.polling.start(this.file.getPollingInterval());
+			updateStatus = true;
+		}
+	}
+	// Only once until stop: start runs for every mouse move and key press
+	else if (!this.started && this.channelId != null &&
+		document.visibilityState != 'hidden')
+	{
+		this.started = true;
+		updateStatus = true;
+
+		EditorUi.debug('DrawioFileSync.start', [this],
 			'version', DrawioFileSync.PROTOCOL,
 			'rev', this.file.getCurrentRevisionId());
-		updateStatus = true;
-	}
-	else if (!DrawioFileSync.PULLING_MODE && this.pusher == null &&
-		this.channelId != null && document.visibilityState != 'hidden') 
-	{
-		this.pusher = this.ui.getPusher();
-		
-		if (this.pusher != null)
-		{
-			try
-			{
-				// Error listener must be installed before trying to create channel
-				if (this.pusher.connection != null)
-				{
-					this.pusher.connection.bind('error', this.pusherErrorListener);
-				}
-			}
-			catch (e)
-			{
-				// ignore
-			}
-			
-			try
-			{
-				this.pusher.connect();
-				this.channel = this.pusher.subscribe(this.channelId);
-				EditorUi.debug('DrawioFileSync.start', [this],
-					'version', DrawioFileSync.PROTOCOL,
-					'rev', this.file.getCurrentRevisionId());
-			}
-			catch (e)
-			{
-				// ignore
-			}
-
-			this.installListeners();
-		}
-
-		updateStatus = true;
 	}
 
 	if (updateStatus)
@@ -381,11 +450,33 @@ DrawioFileSync.prototype.updateRealtime = function()
 			this.resetRealtime();
 		}
 
-		if (DrawioFileSync.ENABLE_SOCKETS && this.file.isRealtime() &&
-			this.p2pCollab == null && this.channelId != null)
+		if (DrawioFileSync.ENABLE_SOCKETS)
 		{
-			this.p2pCollab = new P2PCollab(this.ui, this, this.channelId);
-			this.p2pCollab.joinFile();
+			// Clients without the realtime model (autosave off, realtime
+			// disabled for the file or the app) join to hear about saves,
+			// renames, comments and joins. The mode is fixed per session,
+			// so a switch replaces the session.
+			var notifyOnly = !this.file.isRealtime();
+
+			if (this.p2pCollab != null && this.p2pCollab.isNotifyOnly() != notifyOnly)
+			{
+				this.p2pCollab.destroy();
+				this.p2pCollab = null;
+			}
+
+			// Not while hidden: stop ends the session then. No notify-only
+			// session in lockdown, which talks to no draw.io server. No
+			// session on a channel that cannot be encrypted (see start,
+			// which the autosave listener does not pass through).
+			if (this.p2pCollab == null && this.channelId != null &&
+				!this.file.isPolling() && document.visibilityState != 'hidden' &&
+				(!notifyOnly || urlParams['lockdown'] != '1') &&
+				this.isEncryptionAvailable())
+			{
+				this.p2pCollab = new P2PCollab(this.ui, this,
+					this.channelId, notifyOnly);
+				this.p2pCollab.joinFile();
+			}
 		}
 		else if (!this.file.isRealtime() && this.p2pCollab != null)
 		{
@@ -404,7 +495,20 @@ DrawioFileSync.prototype.initRealtime = function()
 		this.ui.pages);
 	this.file.ownPages = this.ui.clonePages(
 		this.ui.pages);
-	this.snapshot = this.file.ownPages;
+
+	// Uses an independent copy for the snapshot as the own
+	// pages are patched in place, and a shared snapshot
+	// absorbs those changes so that sendLocalChanges sends
+	// reverts of remote changes with the next local diff
+	this.snapshot = this.ui.clonePages(
+		this.ui.pages);
+	this.snapshotVars = (this.ui.fileNode != null) ?
+		this.ui.fileNode.getAttribute('vars') : null;
+	this.snapshotAttributes = this.file.getSyncedFileAttributes();
+
+	// Pages with local changes since the last flush; null means all
+	// pages are considered changed (conservative fallback)
+	this.dirtyPageIds = Object.create(null);
 };
 
 /**
@@ -427,25 +531,39 @@ DrawioFileSync.prototype.resetRealtime = function()
 	this.file.theirPages = null;
 	this.file.ownPages = null;
 	this.snapshot = null;
+	this.snapshotVars = null;
+	this.snapshotAttributes = null;
+	this.dirtyPageIds = null;
 };
 
 /**
- * Draw function for the collaborator list.
+ * Returns true if this client hears about remote changes: its session on the
+ * relay socket is established, or the file is polled.
  */
 DrawioFileSync.prototype.isConnected = function()
 {
-	if (this.pusher != null && this.pusher.connection != null)
-	{
-		return this.pusher.connection.state == 'connected';
-	}
-	else if (this.puller != null)
-	{
-		return this.puller.isConnected();
-	}
-	else
-	{
-		return false;
-	}
+	return this.isSocketConnected() ||
+		(this.polling != null && this.polling.isConnected());
+};
+
+/**
+ * Returns true if the session on the relay socket is established, also a
+ * notify-only one (see updateRealtime).
+ */
+DrawioFileSync.prototype.isSocketConnected = function()
+{
+	return this.p2pCollab != null && this.p2pCollab.isFileJoined() &&
+		this.p2pCollab.getState() == 1 /* OPEN */;
+};
+
+/**
+ * Returns true if this sync listens for remote changes or tries to: the
+ * relay socket counts while it connects or rejoins too, so that the hidden
+ * and the idle stop end it before it joins in the background and stays.
+ */
+DrawioFileSync.prototype.isListening = function()
+{
+	return this.isConnected() || this.p2pCollab != null;
 };
 
 /**
@@ -459,94 +577,7 @@ DrawioFileSync.prototype.updateOnlineState = function()
 		return;
 	}
 
-	if (this.ui.toolbarContainer != null && this.collaboratorsElement == null)
-	{
-		this.collaboratorsElement = this.createCollaboratorsElement();
-		this.ui.toolbarContainer.appendChild(this.collaboratorsElement);
-	}
-
-	this.updateCollaboratorsElement();
-};
-
-/**
- * Updates the status bar with the latest change.
- */
-DrawioFileSync.prototype.updateCollaboratorsElement = function()
-{
-	if (this.collaboratorsElement != null)
-	{
-		var status = this.ui.getNetworkStatus();
-
-		if (status != null)
-		{
-			this.collaboratorsElement.style.backgroundImage = 'url(' +
-				Editor.syncProblemImage + ')';
-			this.collaboratorsElement.style.display = 'inline-block';
-			this.collaboratorsElement.setAttribute('title', status);
-		}
-		else
-		{
-			this.collaboratorsElement.style.display = 'none';
-		}
-	}
-};
-
-/**
- * Updates the status bar with the latest change.
- */
-DrawioFileSync.prototype.createCollaboratorsElement = function()
-{
-	var elt = document.createElement('a');
-	elt.className = 'geButton geAdaptiveAsset';
-	elt.style.position = 'absolute';
-	elt.style.display = 'inline-block';
-	elt.style.verticalAlign = 'bottom';
-	elt.style.color = '#666';
-	elt.style.top = '6px';
-	elt.style.right = (Editor.currentTheme != 'atlas') ? '70px' : '50px';
-	elt.style.padding = '2px';
-	elt.style.fontSize = '8pt';
-	elt.style.verticalAlign = 'middle';
-	elt.style.textDecoration = 'none';
-	elt.style.backgroundPosition = 'center center';
-	elt.style.backgroundRepeat = 'no-repeat';
-	elt.style.backgroundSize = '16px 16px';
-	elt.style.width = '16px';
-	elt.style.height = '16px';
-	elt.style.opacity = '0.6';
-	
-	// Prevents focus
-	mxEvent.addListener(elt, (mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown',
-		mxUtils.bind(this, function(evt)
-	{
-		evt.preventDefault();
-	}));
-
-	mxEvent.addListener(elt, 'click', mxUtils.bind(this, function(evt)
-	{
-		if (this.file.isRealtimeEnabled() && this.file.isRealtimeSupported())
-		{
-			var status = this.ui.getNetworkStatus();
-			this.ui.showError(mxResources.get('realtimeCollaboration'),
-				mxUtils.htmlEntities((status != null) ? status :
-				mxResources.get('online')));
-		}
-		else
-		{
-			this.enabled = !this.enabled;
-			this.ui.updateButtonContainer();
-			this.resetUpdateStatusThread();
-			this.updateOnlineState();
-			this.updateStatus();
-			
-			if (!this.file.inConflictState && this.enabled)
-			{
-				this.fileChangedNotify();
-			}
-		}
-	}));
-
-	return elt;
+	this.file.fireEvent(new mxEventObject('realtimeStateChanged'));
 };
 
 /**
@@ -554,7 +585,7 @@ DrawioFileSync.prototype.createCollaboratorsElement = function()
  */
 DrawioFileSync.prototype.updateStatus = function()
 {
-	if (this.isConnected() && this.lastActivity != null &&
+	if (this.isListening() && this.lastActivity != null &&
 		(Date.now() - this.lastActivity) / 1000 >
 		this.inactivityTimeoutSeconds)
 	{
@@ -568,40 +599,51 @@ DrawioFileSync.prototype.updateStatus = function()
 		if (this.enabled && this.ui.statusContainer != null)
 		{
 			// LATER: Write out modified date for more than 2 weeks ago
-			var str = this.ui.timeSince(new Date(this.lastModified));
-			
-			if (str == null)
+			this.ui.updateStatus(mxUtils.bind(this, function()
 			{
-				str = mxResources.get('lessThanAMinute');
-			}
-			
-			// Consumes and displays last message
-			var msg = this.lastMessage;
-			this.lastMessage = null;
-			
-			if (msg != null && msg.length > 40)
-			{
-				msg = msg.substring(0, 40) + '...';
-			}
+				var str = this.ui.timeSince(new Date(this.lastModified));
+				
+				if (str == null)
+				{
+					str = mxResources.get('lessThanAMinute');
+				}
+				
+				// Consumes and displays last message
+				var msg = this.lastMessage;
+				this.lastMessage = null;
+				
+				if (msg != null && msg.length > 40)
+				{
+					msg = msg.substring(0, 40) + '...';
+				}
 
-			var status = this.ui.getNetworkStatus();
-			var label = mxResources.get('lastChange', [str]);
-			var rev = (this.file.isRevisionHistorySupported()) ? 'data-action="revisionHistory" ' : '';
-			
-			this.ui.editor.setStatus('<div ' + rev + 'title="'+ mxUtils.htmlEntities(label) + '">' + mxUtils.htmlEntities(label) + '</div>' +
-				(!this.file.isEditable() ? '<div class="geStatusBox" title="' +
-					mxUtils.htmlEntities(mxResources.get('readOnly')) + '">' +
-					mxUtils.htmlEntities(mxResources.get('readOnly')) + '</div>' : '') +
-				(status != null ? '<div class="geStatusBox" title="' + mxUtils.htmlEntities(status) + '">' +
-					mxUtils.htmlEntities(status) + '</div>' : '') +
-				((msg != null) ? ' <div class="geStatusBox" data-effect="fade" title="' + mxUtils.htmlEntities(msg) + '">' +
-					mxUtils.htmlEntities(msg) + '</div>' : ''));
+				var status = this.ui.getNetworkStatus();
+				var label = mxResources.get('lastChange', [str]);
+				var rev = (this.file.isRevisionHistorySupported()) ? 'data-action="revisionHistory" ' : '';
+				var title = mxUtils.htmlEntities(label) + ((this.file.isRevisionHistorySupported()) ?
+					' - ' + mxUtils.htmlEntities(mxResources.get('revisionHistory')) : '');
+
+				this.ui.editor.setStatus('<div ' + rev + 'title="' + title + '">' +
+					mxUtils.htmlEntities(label) + '</div>' +
+					(!this.file.isEditable() ? '<div class="geStatusBox" title="' +
+						mxUtils.htmlEntities(mxResources.get('readOnly')) + '">' +
+						mxUtils.htmlEntities(mxResources.get('readOnly')) + '</div>' :
+					(this.file.isLocked() ? ' <img class="geToolbarButton geAdaptiveAsset" data-action="properties" ' +
+						'style="margin-left:4px;flex-shrink:0;" src="' + Editor.lockedImage + '"/>' : '')) +
+					(status != null ? '<div class="geStatusBox" title="' + mxUtils.htmlEntities(status) + '">' +
+						mxUtils.htmlEntities(status) + '</div>' : '') +
+					((msg != null) ? ' <div class="geStatusBox" data-effect="fade" title="' + mxUtils.htmlEntities(msg) + '">' +
+						mxUtils.htmlEntities(msg) + '</div>' : ''));
+			}));
 
 			this.resetUpdateStatusThread();
 		}
 		else
 		{
-			this.file.addAllSavedStatus();
+			this.ui.updateStatus(mxUtils.bind(this, function()
+			{
+				this.file.addAllSavedStatus();
+			}));
 		}
 	}
 };
@@ -615,8 +657,8 @@ DrawioFileSync.prototype.resetUpdateStatusThread = function()
 	{
 		window.clearInterval(this.updateStatusThread);
 	}
-	
-	if (this.channel != null)
+
+	if (this.p2pCollab != null)
 	{
 		this.updateStatusThread = window.setInterval(mxUtils.bind(this, function()
 		{
@@ -626,42 +668,205 @@ DrawioFileSync.prototype.resetUpdateStatusThread = function()
 };
 
 /**
- * Installs all required listeners for syncing the current file.
- */
-DrawioFileSync.prototype.installListeners = function()
-{
-	if (this.pusher != null && this.pusher.connection != null)
-	{
-		this.pusher.connection.bind('state_change', this.connectionListener);
-	}
-    
-	if (this.channel != null)
-    {
-    	this.channel.bind('changed', this.changeListener);
-    }
-};
-
-/**
  * Adds the listener for automatically saving the diagram for local changes.
  */
 DrawioFileSync.prototype.notify = function(msg)
 {
 	this.file.stats.msgSent++;
+	var alone = false;
 
-	if (Editor.enableRealtimeCache && !Editor.p2pSyncNotify)
+	// Skips notifications in polling mode
+	if (!this.file.isPolling())
 	{
-		mxUtils.post(EditorUi.cacheUrl, this.getIdParameters() +
-			'&msg=' + encodeURIComponent(this.objectToString(msg)));
-	}
-	else if (this.p2pCollab != null)
-	{
-		this.p2pCollab.sendNotification(msg);
+		var kind = this.getNotificationKind(msg);
+		alone = this.isAlone();
+
+		// Nobody receives it while alone. The newest save and descriptor
+		// notifications go to the clients that join later (see peerJoined).
+		if (alone)
+		{
+			if (kind != null)
+			{
+				this.skippedNotifications = this.skippedNotifications || {};
+				this.skippedNotifications[kind] = msg.p.m;
+			}
+		}
+		else
+		{
+			this.notificationSent(kind);
+			this.sendNotification(msg);
+		}
 	}
 
 	EditorUi.debug('DrawioFileSync.notify', [this],
-		'enableRealtimeCache', Editor.enableRealtimeCache,
-		'p2pSyncNotify', Editor.p2pSyncNotify,
-		'msg', msg);
+		'alone', alone, 'msg', msg);
+};
+
+/**
+ * Sends the given notification over the socket. The realtime cache sends
+ * the save notifications that come with a cache entry (see fileSaved).
+ */
+DrawioFileSync.prototype.sendNotification = function(msg)
+{
+	this.sendSocketNotification(msg, this.createLegacyNotification(msg));
+};
+
+/**
+ * Returns true if the relay's roster confirms on an open socket that no other
+ * client is on the channel (see P2PCollab.isAlone). Nobody then reads a cache
+ * entry or receives a notification, and a client that joins later loads the
+ * file, so saves and notifications skip the cache and the socket (one or two
+ * requests per save to the relay's shard). Clients that open no socket
+ * (sockets=0, or no realtime model before the notify-only sessions) are not
+ * in the roster and miss the notifications of a client that is alone.
+ */
+DrawioFileSync.prototype.isAlone = function()
+{
+	return DrawioFileSync.ALONE_CACHE && this.p2pCollab != null &&
+		this.p2pCollab.isAlone();
+};
+
+/**
+ * Returns 'save' for a save notification (including an optimistic one),
+ * 'desc' for a descriptor notification and null for all others (join,
+ * leave, comments, view), which only matter to the clients that are
+ * connected when they are sent.
+ */
+DrawioFileSync.prototype.getNotificationKind = function(msg)
+{
+	var p = (msg != null) ? msg.p : null;
+
+	return (p == null || p.m == null) ? null : (p.a == null) ?
+		'save' : (p.a == 'desc') ? 'desc' : null;
+};
+
+/**
+ * Forgets the skipped notification of the given kind once a later one
+ * was sent (see peerJoined).
+ */
+DrawioFileSync.prototype.notificationSent = function(kind)
+{
+	if (kind != null && this.skippedNotifications != null)
+	{
+		delete this.skippedNotifications[kind];
+	}
+};
+
+/**
+ * Invoked by P2PCollab when other clients joined the channel. Sends the
+ * newest save and descriptor notifications that were skipped while this
+ * client was alone: a client may have loaded the file before them, and the
+ * relay only gives a joining socket the newest notice that it stored.
+ * Repeated for every client that joins until a later notification of the
+ * same kind was sent, as the relay's notice is older until then, and for
+ * a roster that missed a client until it heals. The save notification is
+ * sent without its type: a client that is up to date only loads the
+ * descriptor, where an optimistic one would retry reading the file. Over
+ * the socket only, where the joining clients are, so that a client that
+ * joins over and over makes no cache requests.
+ *
+ * Anyone who knows the channel ID can join the relay without the key, and
+ * every resend goes to all clients in the channel, so the joins go into one
+ * resend per resendDelay (a client that joins meanwhile gets the next one)
+ * and receivers take each resend once (see isRepeatedResend). Otherwise
+ * joining and leaving in a loop made the collaborators load the descriptor
+ * for every join.
+ */
+DrawioFileSync.prototype.peerJoined = function()
+{
+	if (this.skippedNotifications != null && this.resendThread == null)
+	{
+		this.resendThread = window.setTimeout(mxUtils.bind(this, function()
+		{
+			this.resendThread = null;
+			this.resendSkippedNotifications();
+		}), Math.max(0, this.lastResend + this.resendDelay - Date.now()));
+	}
+};
+
+/**
+ * Sends the skipped notifications over the socket (see peerJoined), marked
+ * as a resend (r).
+ */
+DrawioFileSync.prototype.resendSkippedNotifications = function()
+{
+	var skipped = this.skippedNotifications;
+
+	if (skipped != null && this.isSocketConnected() && !this.isAlone())
+	{
+		var msgs = [];
+
+		if (skipped.save != null)
+		{
+			msgs.push(this.createMessage({m: skipped.save, r: 1}));
+		}
+
+		if (skipped.desc != null)
+		{
+			msgs.push(this.createMessage({a: 'desc', m: skipped.desc, r: 1}));
+		}
+
+		for (var i = 0; i < msgs.length; i++)
+		{
+			this.sendSocketNotification(msgs[i],
+				this.createLegacyNotification(msgs[i]));
+		}
+
+		if (msgs.length > 0)
+		{
+			this.lastResend = Date.now();
+		}
+
+		EditorUi.debug('DrawioFileSync.resendSkippedNotifications', [this],
+			'skipped', skipped);
+	}
+};
+
+/**
+ * Returns true if the given notification data is a resend (see
+ * resendSkippedNotifications) that is not newer than the last resend of the
+ * same kind that this client took, and records it otherwise. A resend goes
+ * out again for every client that joins, so it is taken once: this client
+ * checked the file or loaded the descriptor after the first one, which is
+ * after the change that it announces.
+ */
+DrawioFileSync.prototype.isRepeatedResend = function(data)
+{
+	var kind = (data.r != null && typeof data.m === 'number') ?
+		this.getNotificationKind({p: data}) : null;
+
+	if (kind != null)
+	{
+		this.takenResends = this.takenResends || {};
+
+		if (this.takenResends[kind] != null &&
+			this.takenResends[kind] >= data.m)
+		{
+			return true;
+		}
+
+		this.takenResends[kind] = data.m;
+	}
+
+	return false;
+};
+
+/**
+ * Sends the given notification and its optional copy with the legacy key
+ * (see createLegacyNotification) over the socket.
+ */
+DrawioFileSync.prototype.sendSocketNotification = function(msg, legacy)
+{
+	if (this.p2pCollab != null)
+	{
+		this.p2pCollab.sendNotification(msg);
+
+		if (legacy != null)
+		{
+			this.p2pCollab.sendNotification(legacy,
+				this.file.getLegacyChannelKey());
+		}
+	}
 };
 
 /**
@@ -683,18 +888,114 @@ DrawioFileSync.prototype.sendJoinMessage = function()
 		this.notify(this.createMessage(join));
 		this.announced = true;
 	}
-}
+};
+
+/**
+ * Invoked by P2PCollab when a session on the relay socket is established.
+ * The first session of this sync announces the client. A later one catches
+ * up on what was missed while the socket was away: a rejoin, or a new
+ * session after stop. The relay also sends a joining socket the newest save notice
+ * of the cache, right after the client list, and both end in one catchup:
+ * a request replaces the one whose timer has not fired (fileChangedNotify).
+ */
+DrawioFileSync.prototype.socketJoined = function()
+{
+	if (this.socketJoinedOnce)
+	{
+		this.fileChangedNotify(null, true);
+	}
+	else if (!this.announced)
+	{
+		this.sendJoinMessage();
+	}
+
+	this.socketJoinedOnce = true;
+	this.updateOnlineState();
+	this.updateStatus();
+};
+
+/**
+ * Applies the protocol and app version gates to an incoming message and
+ * dispatches its payload. EVERY transport must enter here: the payload of
+ * a client on another protocol is not safe to apply (a v6 save is checksum
+ * valid but semantically wrong, which is why the version was bumped), and
+ * gating one transport only leaves the class open on the other. Ignored
+ * senders degrade to the file fallback so their work is not lost.
+ */
+DrawioFileSync.prototype.handleRemoteMessage = function(msg)
+{
+	if (this.enabled && msg != null && !this.file.redirectDialogShowing)
+	{
+		if (!this.file.inConflictState)
+		{
+			// Handles protocol mismatch
+			if (msg.v > DrawioFileSync.PROTOCOL)
+			{
+				this.file.redirectToNewApp(mxUtils.bind(this, function()
+				{
+					// Callback adds cancel option
+				}));
+			}
+			else if (msg.v === DrawioFileSync.PROTOCOL && msg.p != null &&
+				!this.isRemoteAppOutdated(msg))
+			{
+				this.handleMessageData(msg.p, msg.c);
+			}
+			else if (this.isConnected())
+			{
+				// Message from an outdated client whose payload
+				// cannot be used so checks the file for changes
+				this.fileChangedNotify();
+			}
+		}
+		else if (msg.v === DrawioFileSync.PROTOCOL && msg.p != null &&
+			msg.p.a == 'change' && !this.isRemoteAppOutdated(msg))
+		{
+			// Live diffs are applied to the visible and the remote pages,
+			// which the save conflict does not touch, so they are
+			// delivered while a rejected save is being reconciled (412
+			// until the catchup's merge: a second or more, and two
+			// autosaving clients cross saves all the time). Dropping
+			// them here lost the content until the sender's save merged
+			// it into the own pages, and the screen then waited for the
+			// cleanup behind the grace period: a peer's insert arrived
+			// more than a minute late. Everything else keeps waiting for
+			// the conflict to resolve, a notify would start a second
+			// catchup chain (conflict-window-diff).
+			this.handleMessageData(msg.p, msg.c);
+		}
+	}
+};
 
 /**
  * Adds the listener for automatically saving the diagram for local changes.
  */
-DrawioFileSync.prototype.handleMessageData = function(data)
+DrawioFileSync.prototype.handleMessageData = function(data, clientId)
 {
-	if (data.a == 'desc')
+	if (this.isRepeatedResend(data))
+	{
+		EditorUi.debug('DrawioFileSync.handleMessageData: repeated resend',
+			[this], 'data', data);
+	}
+	else if (data.a == 'desc')
 	{
 		if (!this.file.savingFile)
 		{
 			this.reloadDescriptor();
+		}
+		else
+		{
+			// Defers the reload as the descriptor must
+			// not change while the file is being saved
+			this.remoteDescriptorChanged = true;
+		}
+	}
+	else if (data.a == 'comments')
+	{
+		// Ignores the echo of this client's own notification
+		if (clientId == null || clientId != this.clientId)
+		{
+			this.commentsChanged();
 		}
 	}
 	else if (data.a == 'join' || data.a == 'leave')
@@ -704,12 +1005,50 @@ DrawioFileSync.prototype.handleMessageData = function(data)
 			this.file.stats.joined++;
 		}
 		
+		if (data.a == 'leave' && this.ui.isFollowing(clientId))
+		{
+			this.ui.stopFollowing();
+		}
+
 		if (data.name != null)
 		{
-			this.lastMessage = mxResources.get((data.a == 'join') ?
-				'userJoined' : 'userLeft', [decodeURIComponent(data.name)]);
-			this.resetUpdateStatusThread();
-			this.updateStatus();
+			this.showMessage(mxResources.get((data.a == 'join') ?
+				'userJoined' : 'userLeft', [decodeURIComponent(data.name)]));
+		}
+	}
+	else if (data.a == 'view')
+	{
+		// Ignores the echo of this client's own notification
+		if (clientId == null || clientId != this.clientId)
+		{
+			if (data.present == 0)
+			{
+				if (this.ui.isFollowing(clientId))
+				{
+					this.ui.stopFollowing();
+					this.showMessage(mxResources.get('presentationEnded'));
+				}
+			}
+			else
+			{
+				// A presenter is never moved by another client
+				if (!this.ui.isPresenting())
+				{
+					this.applySharedView(data);
+
+					if (data.present == 1)
+					{
+						this.ui.startFollowing(clientId);
+					}
+				}
+
+				if (data.name != null)
+				{
+					this.showMessage(mxResources.get((data.present == 1) ?
+						'userPresenting' : 'userSharedView',
+						[decodeURIComponent(data.name)]));
+				}
+			}
 		}
 	}
 	else if (data.a == 'change')
@@ -719,15 +1058,160 @@ DrawioFileSync.prototype.handleMessageData = function(data)
 	else if (data.m != null)
 	{
 		var mod = new Date(data.m);
-		
-		// Ignores obsolete messages
+
+		// Ignores obsolete messages. Equal times are notified as
+		// two saves can share a modified date and the second one
+		// would otherwise be missed until the next event
 		if (this.lastMessageModified == null ||
-			this.lastMessageModified < mod)
+			this.lastMessageModified <= mod)
 		{
 			this.lastMessageModified = mod;
-			this.fileChangedNotify();
+			this.fileChangedNotify(data);
 		}
 	}
+};
+
+/**
+ * Returns the wire format for the given page and view.
+ */
+DrawioFileSync.prototype.createViewData = function(pageId, bounds)
+{
+	return {pageId: pageId, x: Math.round(bounds.x), y: Math.round(bounds.y),
+		w: Math.round(bounds.width), h: Math.round(bounds.height)};
+};
+
+/**
+ * Moves all collaborators to the given page and view. Pass 1 for present to
+ * make them follow this client until 0 is sent, or nothing for a one-off
+ * move. Clients that do not know the action ignore the message so the
+ * protocol version is not bumped.
+ */
+DrawioFileSync.prototype.sendSharedViewMessage = function(pageId, bounds, present)
+{
+	var user = this.file.getCurrentUser();
+	var msg = this.createViewData(pageId, bounds);
+	msg.a = 'view';
+
+	if (present != null)
+	{
+		msg.present = present;
+	}
+
+	if (user != null && user.displayName != null)
+	{
+		msg.name = encodeURIComponent(user.displayName);
+	}
+
+	this.notify(this.createMessage(msg));
+};
+
+/**
+ * Sends the current view, the state of presentation mode and the explorer
+ * (see EditorUi.getSharedViewMode) and the laser pointer (see
+ * EditorUi.getSharedLaser) to the clients that follow this one. Uses the
+ * cursor channel as these updates are frequent and may be dropped.
+ */
+DrawioFileSync.prototype.sendViewUpdate = function(pageId, bounds, mode, laser)
+{
+	if (this.p2pCollab != null)
+	{
+		var data = this.createViewData(pageId, bounds);
+		data.mode = (mode != null) ? mode : null;
+
+		if (laser !== undefined)
+		{
+			data.laser = laser;
+		}
+
+		this.p2pCollab.sendMessage('view', data);
+	}
+};
+
+/**
+ * Moves this client to the view of the client it follows. Ignored for all
+ * other clients so a second presenter cannot take over.
+ */
+DrawioFileSync.prototype.handleViewUpdate = function(data, clientId)
+{
+	if (this.enabled && !this.file.inConflictState &&
+		!this.file.redirectDialogShowing && this.ui.isFollowing(clientId))
+	{
+		// Updates are sent again while presentation mode or the explorer is
+		// open, so an unchanged view is not applied again
+		var key = [data.pageId, data.x, data.y, data.w, data.h].join(',');
+
+		if (key != this.ui.lastSharedView)
+		{
+			this.ui.lastSharedView = key;
+			this.applySharedView(data);
+		}
+
+		this.ui.applySharedViewMode(data.mode);
+		this.ui.applySharedLaser(data.laser);
+	}
+};
+
+/**
+ * Moves this client to the view in the given message data, which comes from
+ * a collaborator so invalid bounds are ignored.
+ */
+DrawioFileSync.prototype.applySharedView = function(data)
+{
+	var x = parseFloat(data.x);
+	var y = parseFloat(data.y);
+	var w = parseFloat(data.w);
+	var h = parseFloat(data.h);
+
+	this.ui.showSharedView(data.pageId, (isFinite(x) && isFinite(y) &&
+		isFinite(w) && isFinite(h) && w > 0 && h > 0) ?
+		new mxRectangle(x, y, w, h) : null);
+};
+
+/**
+ * Shows the given text as a temporary message in the status bar.
+ */
+DrawioFileSync.prototype.showMessage = function(text)
+{
+	this.lastMessage = text;
+	this.resetUpdateStatusThread();
+	this.updateStatus();
+};
+
+/**
+ * Delay before the comment cache is refreshed after a remote update.
+ */
+DrawioFileSync.prototype.commentsChangedDelay = 2000;
+
+/**
+ * Notifies collaborators that the comments of the file were changed.
+ * Clients that do not know the action ignore the message so the
+ * protocol version is not bumped.
+ */
+DrawioFileSync.prototype.sendCommentsChangedMessage = function()
+{
+	this.notify(this.createMessage({a: 'comments'}));
+};
+
+/**
+ * Schedules a refresh of the comment cache after a remote comment update.
+ * Debounced as updates often arrive in bursts (eg. resolve adds a reply).
+ */
+DrawioFileSync.prototype.commentsChanged = function()
+{
+	if (this.commentsChangedThread != null)
+	{
+		window.clearTimeout(this.commentsChangedThread);
+	}
+
+	this.commentsChangedThread = window.setTimeout(mxUtils.bind(this, function()
+	{
+		this.commentsChangedThread = null;
+
+		if (this.isValidState())
+		{
+			this.ui.refreshCommentCache();
+		}
+	}), this.commentsChangedDelay);
 };
 
 /**
@@ -736,7 +1220,7 @@ DrawioFileSync.prototype.handleMessageData = function(data)
 DrawioFileSync.prototype.isValidState = function()
 {
 	return this.ui.getCurrentFile() == this.file &&
-		this.file.sync == this && !this.file.invalidChecksum &&
+		this.file.sync == this && !this.file.invalidChecksum && !this.file.appUpgradeRequired &&
 		!this.file.redirectDialogShowing;
 };
 
@@ -782,9 +1266,16 @@ DrawioFileSync.prototype.optimisticSync = function(count)
 							}));
 						}
 					}
+					else
+					{
+						// Retries so the remote update is not lost
+						this.optimisticSync(count + 1);
+					}
 				}), mxUtils.bind(this, function()
 				{
+					// Retries so the remote update is not lost
 					this.reloadThread = null;
+					this.optimisticSync(count + 1);
 				}));
 			}), (count + 1) * this.file.optimisticSyncDelay);
 		}
@@ -803,14 +1294,22 @@ DrawioFileSync.prototype.fileChangedNotify = function(data, immediate)
 			'data', [data], 'immediate', immediate,
 			'saving', this.file.savingFile);
 
+		// Preserve the retry hint when the notification is deferred by
+		// an in-flight save. A later ordinary notice must not erase it.
+		if (data != null && data.type == 'optimistic')
+		{
+			this.remoteOptimisticChange = true;
+		}
+
 		if (this.file.savingFile)
 		{
 			this.remoteFileChanged = true;
 		}
 		else
 		{
-			if (data != null && data.type == 'optimistic')
+			if (this.remoteOptimisticChange)
 			{
+				this.remoteOptimisticChange = false;
 				this.optimisticSync();
 			}
 			else
@@ -835,18 +1334,33 @@ DrawioFileSync.prototype.fileChangedNotify = function(data, immediate)
 /**
  * Called after the file was changed locally to mark the file as changed.
  */
-DrawioFileSync.prototype.localFileChanged = function()
+DrawioFileSync.prototype.localFileChanged = function(edit, reactive)
 {
 	if (this.file.isRealtime())
 	{
-		window.clearTimeout(this.triggerSendThread);
+		// True while every pending change since the last flush is a
+		// reactive delta (eg. a layout recomputed after an incoming
+		// patch), ie. nothing pending was authored by the local user
+		this.reactiveOnlyPending = (reactive == true) &&
+			(!this.localFileWasChanged || this.reactiveOnlyPending);
 		this.localFileWasChanged = true;
+		this.markLocalChanges(edit);
+		this.trackPageRoot();
 		this.scheduleCleanup(true);
 
-		this.triggerSendThread = window.setTimeout(mxUtils.bind(this, function()
+		// Reactive deltas keep an armed trigger instead of resetting
+		// it so that a sustained message storm cannot postpone the
+		// flush on every delivery
+		if (reactive != true || this.triggerSendThread == null)
 		{
-			this.sendLocalChanges();
-		}), Math.min(this.file.autosaveDelay, this.syncSendMessageDelay - 20));
+			window.clearTimeout(this.triggerSendThread);
+
+			this.triggerSendThread = window.setTimeout(mxUtils.bind(this, function()
+			{
+				this.triggerSendThread = null;
+				this.sendLocalChanges();
+			}), Math.min(this.file.autosaveDelay, this.syncSendMessageDelay - 20));
+		}
 	}
 };
 
@@ -860,29 +1374,11 @@ DrawioFileSync.prototype.doSendLocalChanges = function(changes)
 		var changeId = this.clientId + '.' + (this.syncChangeCounter++);
 		var msg = this.createMessage({a: 'change', c: changes,
 			id: changeId, t: Date.now()});
-		var skipped = false;
-		
-		if (this.p2pCollab != null)
+		var skipped = this.p2pCollab == null;
+
+		if (!skipped)
 		{
 			this.p2pCollab.sendDiff(msg);
-		}
-		else if (urlParams['dev'] == '1')
-		{
-			var data = encodeURIComponent(this.objectToString(msg));
-
-			if (this.maxSyncMessageSize == 0 ||
-				data.length < this.maxSyncMessageSize)
-			{
-				mxUtils.post(EditorUi.cacheUrl, this.getIdParameters() + '&msg=' + data);
-			}
-			else
-			{
-				skipped = true;
-			}
-		}
-		else
-		{
-			skipped = true;
 		}
 
 		EditorUi.debug('DrawioFileSync.doSendLocalChanges', [this],
@@ -895,9 +1391,15 @@ DrawioFileSync.prototype.doSendLocalChanges = function(changes)
  */
 DrawioFileSync.prototype.receiveRemoteChanges = function(data)
 {
-	var changes = data.c;
+	// The list itself is remote JSON like everything below it: an
+	// object with a huge length property where the array belongs is
+	// walked index by index (ignorePatches, applyPatches), which spins
+	// the receiver synchronously inside the socket handler - no
+	// exception, so the receive latch cannot help. Anything that is
+	// not an array carries no intent that could be honored.
+	var changes = EditorUi.patchList(data.c);
 
-	if (!this.file.ignorePatches(changes))
+	if (changes != null && !this.file.ignorePatches(changes))
 	{
 		if (this.receivedData == null)
 		{
@@ -905,51 +1407,97 @@ DrawioFileSync.prototype.receiveRemoteChanges = function(data)
 
 			window.setTimeout(mxUtils.bind(this, function()
 			{
-				if (this.ui.getCurrentFile() == this.file)
+				// The latch below MUST be cleared even if applying a
+				// message throws: a single malformed patch would
+				// otherwise stop this client from ever processing live
+				// traffic again (every later message queues into an
+				// array nothing drains) while it keeps broadcasting
+				try
 				{
-					// Skips additional processing for single change
-					if (this.receivedData.length == 1)
+					if (this.ui.getCurrentFile() == this.file && !this.file.appUpgradeRequired)
 					{
-						this.doReceiveRemoteChanges(this.receivedData[0].c);
-					}
-					else
-					{
-						// Sorts by sender and remote counter
-						this.receivedData.sort(function(a, b)
+						// One failing message must not take the rest of its
+						// batch down: the loop below aborted at the first
+						// exception, so every message batched behind it in
+						// the same receive window was lost - silently for
+						// the screen, which the save merge and the cleanup
+						// caught up with later. The failure is reported and
+						// the remaining messages are applied.
+						var apply = mxUtils.bind(this, function(changes)
 						{
-							if (a.id < b.id)
+							try
 							{
-								return -1;
+								this.doReceiveRemoteChanges(changes);
 							}
-							else if (a.id > b.id)
+							catch (e)
 							{
-								return 1;
-							}
-							else
-							{
-								return 0;
+								var user = this.file.getCurrentUser();
+								// Hashed like sendErrorReport: no raw user or file ids in logs
+								var uid = (user != null) ? this.ui.hashValue(user.id) : 'unknown';
+
+								EditorUi.logError('Error in doReceiveRemoteChanges',
+									null, this.file.getMode() + '.' +
+									this.ui.hashValue(this.file.getId()), uid, e);
 							}
 						});
 
-						var lastDiff = null;
-
-						// Processes changes
-						for (var i = 0; i < this.receivedData.length; i++)
+						// Skips additional processing for single change
+						if (this.receivedData.length == 1)
 						{
-							// Ignores consecutive duplicates
-							var currentDiff = JSON.stringify(this.receivedData[i].c);
-
-							if (currentDiff != lastDiff)
+							apply(this.receivedData[0].c);
+						}
+						else
+						{
+							// Sorts by sender and message counter. The counter
+							// follows the last dot and is compared numerically
+							// as a string comparison sorts eg. "10" before "9"
+							this.receivedData.sort(function(a, b)
 							{
-								this.doReceiveRemoteChanges(this.receivedData[i].c);
-							}
+								var aId = (typeof a.id === 'string') ? a.id : '';
+								var bId = (typeof b.id === 'string') ? b.id : '';
+								var aDot = aId.lastIndexOf('.') + 1;
+								var bDot = bId.lastIndexOf('.') + 1;
+								var aSender = aId.substring(0, aDot);
+								var bSender = bId.substring(0, bDot);
 
-							lastDiff = currentDiff;
+								if (aSender < bSender)
+								{
+									return -1;
+								}
+								else if (aSender > bSender)
+								{
+									return 1;
+								}
+								else
+								{
+									// Counters that are no numbers are after the others
+									return mxUtils.compareNumbers(parseInt(aId.substring(aDot), 10),
+										parseInt(bId.substring(bDot), 10));
+								}
+							});
+
+							var lastDiff = null;
+
+							// Processes changes
+							for (var i = 0; i < this.receivedData.length; i++)
+							{
+								// Ignores consecutive duplicates
+								var currentDiff = JSON.stringify(this.receivedData[i].c);
+
+								if (currentDiff != lastDiff)
+								{
+									apply(this.receivedData[i].c);
+								}
+
+								lastDiff = currentDiff;
+							}
 						}
 					}
 				}
-
-				this.receivedData = null;
+				finally
+				{
+					this.receivedData = null;
+				}
 			}), this.syncReceiveMessageDelay);
 		}
 		else
@@ -962,17 +1510,38 @@ DrawioFileSync.prototype.receiveRemoteChanges = function(data)
 /**
  * Schedules a new cleanup if not lazy or one is pending
  */
-DrawioFileSync.prototype.scheduleCleanup = function(lazy)
+DrawioFileSync.prototype.scheduleCleanup = function(lazy, delayOverride)
 {
-	var delay = (lazy == false) ? 0 : this.cleanupDelay;
+	// Adds 2 secs per 10MB of file size to allow for remote save with
+	// local fastForward before cleanup is triggered
+	var sizeDelaySec = Math.min(15, Math.floor(this.file.getSize() / 5000000));
+	var delay = (delayOverride != null) ? delayOverride :
+		((lazy == false) ? 0 : this.cleanupDelay + sizeDelaySec * 1000);
 	var prev = this.cleanupThread;
 	
 	if (lazy != true || this.cleanupThread != null)
 	{
+		// An immediate request must not be postponed by ANY later
+		// request: under production timers the post-merge events
+		// (fileSaved, fileDataUpdated) rescheduled the immediate
+		// join-visibility cleanup to the full lazy delay, and every
+		// further event kept pushing it - merged content stayed
+		// invisible on an idle client indefinitely. Guarding only
+		// `lazy == true` left the same hole open for the far more
+		// common unlabelled schedulers (a delivered live diff, the
+		// post-merge reschedule), which pass undefined or null: they
+		// cleared the latch and re-armed at the full delay.
+		if (lazy != false && this.cleanupImmediatePending)
+		{
+			return;
+		}
+
+		this.cleanupImmediatePending = (lazy == false);
 		window.clearTimeout(this.cleanupThread);
 
 		this.cleanupThread = window.setTimeout(mxUtils.bind(this, function()
 		{
+			this.cleanupImmediatePending = false;
 			this.cleanup(null, mxUtils.bind(this, function(err)
 			{
 				this.file.handleFileError(err);
@@ -986,38 +1555,112 @@ DrawioFileSync.prototype.scheduleCleanup = function(lazy)
 };
 
 /**
- * Removes remote changes that have not been saved and merges
- * the latest version of the file if checkFile is true.
+ * Removes remote changes that have not been saved and updates
+ * the visible document to the state of the own pages.
  */
-DrawioFileSync.prototype.cleanup = function(success, error, checkFile)
+DrawioFileSync.prototype.cleanup = function(success, error)
 {
 	var thread = this.cleanupThread;
 	window.clearTimeout(this.cleanupThread);
 	this.cleanupThread = null;
 
-	if (this.isValidState() && !this.file.inConflictState &&
-		this.file.isRealtime() && !this.file.isModified())
+	// A pending immediate request is served by this very call, whether
+	// it came from its own timer or from a caller that runs the cleanup
+	// directly (synchronizeFile, resetRealtime): the latch must not
+	// outlive it, or every later lazy request returns early and the
+	// client stops reconciling until the next immediate one
+	this.cleanupImmediatePending = false;
+
+	try
 	{
-		var patches = [this.ui.diffPages(this.ui.pages,
-			this.file.ownPages)];
-		this.file.theirPages = this.ui.clonePages(
-			this.file.ownPages);
-		
-		if (urlParams['test'] == '1')
+		// Flushes pending local changes first: flushed changes are in
+		// the own pages and survive the reconciliation below, so the
+		// gate only needs to protect unflushed changes (gating on the
+		// modified state starved cleanup while reactive layout deltas
+		// kept the file modified, which blocked the adoption of the
+		// save-serialized child order that converges crossing reorders)
+		this.sendLocalChanges();
+
+		if (this.isValidState() && !this.file.inConflictState &&
+			this.file.isRealtime() && !this.localFileWasChanged)
 		{
-			EditorUi.debug('DrawioFileSync.cleanup',
-				[this], 'thread', thread, 'patches', patches,
-				'checkFile', checkFile, 'checksum',
-				this.ui.getHashValueForPages(this.ui.pages));
-		}
-		
-		if (!this.file.ignorePatches(patches))
-		{
-			this.file.patch(patches);
-		}
-		
-		if (!checkFile)
-		{
+			var patches = [this.ui.diffPages(this.ui.pages,
+				this.file.ownPages)];
+
+			// Content delivered as a live diff is on screen but not in
+			// the own pages until its sender saves, so converging the
+			// screen here would revert it (see remoteGraceDelay). It
+			// is held until the grace period has passed, which is long
+			// enough for the sender's save to confirm it and short
+			// enough to still expel content nobody ever confirms.
+			// A purely ADDITIVE patch cannot revert anything - it can
+			// only put content the own pages already carry onto a
+			// screen that lacks it, which is the join-visibility
+			// reconciliation and the opposite of what the grace window
+			// protects. Unconfirmed remote content is on the screen but
+			// NOT in the own pages, so it shows up as a remove or an
+			// update here - except an unconfirmed remote DELETE: the own
+			// pages still hold the deleted page or cell, so it shows up
+			// as an insert, for the last child of its parent a purely
+			// additive one. Re-inserting what a live diff removed is
+			// therefore held as well; any other additive-only patch
+			// proves there is no unconfirmed content, which is also why
+			// clearing the stamp below is then correct.
+			if (this.unconfirmedRemoteSince != null &&
+				!this.file.ignorePatches(patches) &&
+				(!this.isAdditiveOnly(patches[0]) ||
+				this.restoresUnconfirmedRemoves(patches[0])))
+			{
+				var age = new Date().getTime() - this.unconfirmedRemoteSince;
+
+				if (age < this.remoteGraceDelay)
+				{
+					EditorUi.debug('DrawioFileSync.cleanup', [this],
+						'holding unconfirmed remote content', 'age', age,
+						'grace', this.remoteGraceDelay);
+					this.scheduleCleanup(null,
+						this.remoteGraceDelay - age);
+
+					if (success != null)
+					{
+						success();
+					}
+
+					return;
+				}
+			}
+
+			this.unconfirmedRemoteSince = null;
+			this.unconfirmedRemoves = null;
+			this.file.theirPages = this.ui.clonePages(
+				this.file.ownPages);
+
+			if (urlParams['test'] == '1')
+			{
+				EditorUi.debug('DrawioFileSync.cleanup',
+					[this], 'thread', thread, 'patches', patches,
+					'checksum', this.ui.getHashValueForPages(this.ui.pages));
+			}
+
+			if (!this.file.ignorePatches(patches))
+			{
+				this.file.patch(patches);
+			}
+
+			// Replaces the incrementally patched snapshot with a copy
+			// of the pages so that drift has a bounded lifetime, except
+			// if local changes are pending (eg. reactive changes from
+			// the patch above) as they must remain diffable for the
+			// scheduled flush to reach own pages and collaborators
+			if (!this.localFileWasChanged)
+			{
+				this.snapshot = this.ui.clonePages(this.ui.pages);
+				this.snapshotVars = (this.ui.fileNode != null) ?
+					this.ui.fileNode.getAttribute('vars') : null;
+				this.snapshotAttributes = this.file.getSyncedFileAttributes();
+				this.dirtyPageIds = Object.create(null);
+			}
+
 			if (!document.hidden && urlParams['test'] == '1' &&
 				urlParams['checksum'] == '1')
 			{
@@ -1029,51 +1672,24 @@ DrawioFileSync.prototype.cleanup = function(success, error, checkFile)
 				success();
 			}
 		}
-		else
+		else if (success != null)
 		{
-			this.file.getLatestVersion(mxUtils.bind(this, function(newFile)
-			{
-				try
-				{
-					if (this.isValidState() && !this.file.inConflictState &&
-						this.file.isRealtime())
-					{
-						var pages = newFile.getShadowPages();
-						patches = [this.ui.diffPages(this.ui.pages, pages),
-							this.ui.diffPages(pages, this.file.ownPages)];
-						
-						if (!this.file.ignorePatches(patches))
-						{
-							this.file.patch(patches);
-						}
+			success();
 
-						EditorUi.debug('DrawioFileSync.cleanup',
-							[this], 'newFile', newFile,
-							'patches', patches);
-					}
-
-					if (success != null)
-					{
-						success();
-					}
-				}
-				catch (e)
-				{
-					if (error != null)
-					{
-						error(e);
-					}
-				}
-			}), error);
+			EditorUi.debug('DrawioFileSync.cleanup', [this],
+				'modified', this.file.isModified());
 		}
 	}
-	else if (success != null)
+	catch (e)
 	{
-		success();
-
-		EditorUi.debug('DrawioFileSync.cleanup',
-			[this], 'checkFile', checkFile,
-			'modified', this.file.isModified());
+		if (error != null)
+		{
+			error(e);
+		}
+		else
+		{
+			throw e;
+		}
 	}
 };
 
@@ -1131,6 +1747,164 @@ DrawioFileSync.prototype.testChecksum = function()
 };
 
 /**
+ * Returns true if the given pages patch only ADDS content, ie. carries
+ * no removes and no updates of existing state at any level. Such a
+ * patch cannot revert anything a collaborator just sent.
+ */
+DrawioFileSync.prototype.isAdditiveOnly = function(patch)
+{
+	if (patch == null)
+	{
+		return true;
+	}
+
+	var removes = EditorUi.patchList(patch[EditorUi.DIFF_REMOVE]);
+
+	if (removes != null && removes.length > 0)
+	{
+		return false;
+	}
+
+	var update = EditorUi.patchMap(patch[EditorUi.DIFF_UPDATE]);
+
+	if (update != null)
+	{
+		for (var id in update)
+		{
+			var pageDiff = update[id];
+
+			// Name, view state, view box, group, text alternative and order
+			// are existing state
+			if (pageDiff.name != null || pageDiff.view != null ||
+				pageDiff.viewBox != null || pageDiff.group != null ||
+				pageDiff.alt != null || pageDiff.previous != null)
+			{
+				return false;
+			}
+
+			var cells = pageDiff.cells;
+
+			if (cells != null)
+			{
+				var cellRemoves = EditorUi.patchList(
+					cells[EditorUi.DIFF_REMOVE]);
+
+				if (cellRemoves != null && cellRemoves.length > 0)
+				{
+					return false;
+				}
+
+				var cellUpdate = EditorUi.patchMap(
+					cells[EditorUi.DIFF_UPDATE]);
+
+				if (cellUpdate != null &&
+					!mxUtils.isEmptyObject(cellUpdate))
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+};
+
+/**
+ * Records the ids of the pages and cells the given live changes remove.
+ * The own pages keep them until the sender's save confirms the removal,
+ * so until then the cleanup diff puts them back as inserts (see cleanup).
+ */
+DrawioFileSync.prototype.addUnconfirmedRemoves = function(changes)
+{
+	for (var i = 0; changes != null && i < changes.length; i++)
+	{
+		var patch = changes[i];
+
+		if (patch == null || typeof patch != 'object')
+		{
+			continue;
+		}
+
+		// Null prototypes: keyed by ids taken verbatim from the patch
+		if (this.unconfirmedRemoves == null)
+		{
+			this.unconfirmedRemoves = {pages: Object.create(null),
+				cells: Object.create(null)};
+		}
+
+		var removes = EditorUi.patchList(patch[EditorUi.DIFF_REMOVE]);
+
+		for (var j = 0; removes != null && j < removes.length; j++)
+		{
+			this.unconfirmedRemoves.pages[removes[j]] = true;
+		}
+
+		var update = EditorUi.patchMap(patch[EditorUi.DIFF_UPDATE]);
+
+		for (var pageId in update)
+		{
+			var cells = update[pageId].cells;
+			var cellRemoves = (cells != null) ? EditorUi.patchList(
+				cells[EditorUi.DIFF_REMOVE]) : null;
+
+			for (var k = 0; cellRemoves != null && k < cellRemoves.length; k++)
+			{
+				if (this.unconfirmedRemoves.cells[pageId] == null)
+				{
+					this.unconfirmedRemoves.cells[pageId] = Object.create(null);
+				}
+
+				this.unconfirmedRemoves.cells[pageId][cellRemoves[k]] = true;
+			}
+		}
+	}
+};
+
+/**
+ * Returns true if the given pages patch inserts a page or cell that a
+ * live diff removed since the grace period started.
+ */
+DrawioFileSync.prototype.restoresUnconfirmedRemoves = function(patch)
+{
+	var removes = this.unconfirmedRemoves;
+
+	if (removes == null || patch == null)
+	{
+		return false;
+	}
+
+	var inserts = EditorUi.patchList(patch[EditorUi.DIFF_INSERT]);
+
+	for (var i = 0; inserts != null && i < inserts.length; i++)
+	{
+		if (inserts[i] != null && removes.pages[inserts[i].id])
+		{
+			return true;
+		}
+	}
+
+	var update = EditorUi.patchMap(patch[EditorUi.DIFF_UPDATE]);
+
+	for (var pageId in update)
+	{
+		var cells = update[pageId].cells;
+		var removed = removes.cells[pageId];
+		var cellInserts = (cells != null && removed != null) ?
+			EditorUi.patchList(cells[EditorUi.DIFF_INSERT]) : null;
+
+		for (var j = 0; cellInserts != null && j < cellInserts.length; j++)
+		{
+			if (cellInserts[j] != null && removed[cellInserts[j].id])
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+};
+
+/**
  * Extracts local changes by diffing remote pages and patched remote pages.
  */
 DrawioFileSync.prototype.extractLocal = function(patch)
@@ -1180,6 +1954,274 @@ DrawioFileSync.prototype.extractRemove = function(patch)
 };
 
 /**
+ * Returns a copy of the given pending patch without cell and page
+ * insert entries, except for cells and pages that are removed by the
+ * given patches. The pending patch is diffed against the own pages, so
+ * the cells of its insert entries exist in the target model and the
+ * inserts are never applied, but their previous references would take
+ * part in restoring the child order and scramble the order of
+ * colliding inserts merged from the given patches. Pending page insert
+ * entries collide with the local copy of the page as well, but
+ * insertPage merges colliding entries, so re-asserting them would
+ * merge the stale local copy of an adopted page back over the applied
+ * save patches. Inserts of cells and pages removed by the patches are
+ * kept so that pending local copies are restored like in the visible
+ * document (local change wins over remote remove).
+ */
+DrawioFileSync.prototype.stripPendingInserts = function(own, patches)
+{
+	var result = own;
+
+	if (own != null && (own[EditorUi.DIFF_UPDATE] != null ||
+		own[EditorUi.DIFF_INSERT] != null))
+	{
+		// Null prototypes as the lookups are keyed by remote IDs
+		var removedPages = Object.create(null);
+		var removed = Object.create(null);
+
+		for (var i = 0; i < patches.length; i++)
+		{
+			if (patches[i] != null)
+			{
+				// These patches come off the wire, so every list and map
+				// is normalized as everywhere else: a string where an
+				// array belongs would be iterated CHARACTER by
+				// character and every character would count as a
+				// removed id
+				var pageRemoves = EditorUi.patchList(
+					patches[i][EditorUi.DIFF_REMOVE]);
+
+				if (pageRemoves != null)
+				{
+					for (var j = 0; j < pageRemoves.length; j++)
+					{
+						removedPages[pageRemoves[j]] = true;
+					}
+				}
+
+				var update = EditorUi.patchMap(
+					patches[i][EditorUi.DIFF_UPDATE]);
+
+				if (update != null)
+				{
+					for (var id in update)
+					{
+						var cells = update[id].cells;
+						var cellRemoves = (cells != null) ?
+							EditorUi.patchList(cells[EditorUi.DIFF_REMOVE]) :
+							null;
+
+						if (cellRemoves != null)
+						{
+							for (var j = 0; j < cellRemoves.length; j++)
+							{
+								removed[cellRemoves[j]] = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (own[EditorUi.DIFF_INSERT] != null)
+		{
+			var pageInserts = [];
+
+			for (var i = 0; i < own[EditorUi.DIFF_INSERT].length; i++)
+			{
+				var entry = own[EditorUi.DIFF_INSERT][i];
+
+				if (entry != null && entry.id != null &&
+					removedPages[entry.id])
+				{
+					pageInserts.push(entry);
+				}
+			}
+
+			if (pageInserts.length < own[EditorUi.DIFF_INSERT].length)
+			{
+				result = {};
+
+				for (var key in own)
+				{
+					result[key] = own[key];
+				}
+
+				if (pageInserts.length > 0)
+				{
+					result[EditorUi.DIFF_INSERT] = pageInserts;
+				}
+				else
+				{
+					delete result[EditorUi.DIFF_INSERT];
+				}
+			}
+		}
+
+		var update = null;
+
+		for (var id in own[EditorUi.DIFF_UPDATE])
+		{
+			var pageDiff = own[EditorUi.DIFF_UPDATE][id];
+
+			if (pageDiff.cells != null &&
+				pageDiff.cells[EditorUi.DIFF_INSERT] != null)
+			{
+				var inserts = [];
+
+				for (var i = 0; i < pageDiff.cells[EditorUi.DIFF_INSERT].length; i++)
+				{
+					var entry = pageDiff.cells[EditorUi.DIFF_INSERT][i];
+
+					if (entry != null && entry.id != null && removed[entry.id])
+					{
+						inserts.push(entry);
+					}
+				}
+
+				if (inserts.length < pageDiff.cells[EditorUi.DIFF_INSERT].length)
+				{
+					// Copies the modified levels and shares the rest so
+					// that the input patch is not changed
+					if (update == null)
+					{
+						update = Object.create(null);
+
+						for (var pageId in own[EditorUi.DIFF_UPDATE])
+						{
+							update[pageId] = own[EditorUi.DIFF_UPDATE][pageId];
+						}
+
+						// Copies from result so a page insert strip
+						// above is not discarded
+						var copy = {};
+
+						for (var key in result)
+						{
+							copy[key] = result[key];
+						}
+
+						copy[EditorUi.DIFF_UPDATE] = update;
+						result = copy;
+					}
+
+					var cells = {};
+
+					for (var key in pageDiff.cells)
+					{
+						cells[key] = pageDiff.cells[key];
+					}
+
+					if (inserts.length > 0)
+					{
+						cells[EditorUi.DIFF_INSERT] = inserts;
+					}
+					else
+					{
+						delete cells[EditorUi.DIFF_INSERT];
+					}
+
+					var temp = {};
+
+					for (var key in pageDiff)
+					{
+						temp[key] = pageDiff[key];
+					}
+
+					temp.cells = cells;
+					update[id] = temp;
+				}
+			}
+		}
+	}
+
+	return result;
+};
+
+/**
+ * Extracts pending cell updates hidden inside an adopted page insert.
+ * The remote copy identifies the locally changed fields; a field that
+ * already differs on screen has a newer live value and must not be
+ * reasserted. Keep these updates separate from the page insert so the
+ * incoming save can still merge the rest of the page and its order.
+ * Unlike the cell-insert veto, this also works during disconnected file
+ * catchup: unchanged stale fields do not differ from the remote copy.
+ */
+DrawioFileSync.prototype.getPendingPageUpdates = function(own)
+{
+	var result = {};
+	var inserted = (own != null) ? own[EditorUi.DIFF_INSERT] : null;
+
+	if (inserted != null)
+	{
+		var update = Object.create(null);
+
+		for (var i = 0; i < inserted.length; i++)
+		{
+			var id = inserted[i].id;
+			var ownPage = this.ui.getPageById(id, this.file.ownPages);
+			var theirPage = this.ui.getPageById(id, this.file.theirPages);
+			var uiPage = this.ui.getPageById(id);
+
+			if (ownPage != null && theirPage != null && uiPage != null)
+			{
+				this.ui.updatePageRoot(ownPage);
+				this.ui.updatePageRoot(theirPage);
+				this.ui.updatePageRoot(uiPage);
+				var pending = this.ui.diffCells(theirPage.root, ownPage.root);
+				var changed = this.ui.diffCells(ownPage.root, uiPage.root);
+				var newer = changed[EditorUi.DIFF_UPDATE];
+				var visible = this.ui.createCellLookup(uiPage.root);
+				var cells = Object.create(null);
+
+				for (var cellId in pending[EditorUi.DIFF_UPDATE])
+				{
+					if (visible[cellId] != null)
+					{
+						var diff = pending[EditorUi.DIFF_UPDATE][cellId];
+						var live = (newer != null) ? newer[cellId] : null;
+						var fields = Object.create(null);
+						var valueChanged = live != null &&
+							(Object.prototype.hasOwnProperty.call(live, 'value') ||
+							Object.prototype.hasOwnProperty.call(live, 'xmlValue'));
+
+						for (var key in diff)
+						{
+							// value and xmlValue are two encodings of one
+							// field, so either live change supersedes both.
+							if ((live == null ||
+								!Object.prototype.hasOwnProperty.call(live, key)) &&
+								(!valueChanged || (key != 'value' && key != 'xmlValue')))
+							{
+								fields[key] = diff[key];
+							}
+						}
+
+						if (!mxUtils.isEmptyObject(fields))
+						{
+							cells[cellId] = fields;
+						}
+					}
+				}
+
+				if (!mxUtils.isEmptyObject(cells))
+				{
+					update[id] = {cells: {}};
+					update[id].cells[EditorUi.DIFF_UPDATE] = cells;
+				}
+			}
+		}
+
+		if (!mxUtils.isEmptyObject(update))
+		{
+			result[EditorUi.DIFF_UPDATE] = update;
+		}
+	}
+
+	return result;
+};
+
+/**
  * Updates the realtime models and saves pending local changes.
  * Immediate is passed through to scheduleCleanup.
  */
@@ -1189,21 +2231,106 @@ DrawioFileSync.prototype.patchRealtime = function(patches, backup, own, immediat
 
 	if (this.file.isRealtime())
 	{
-		// Gets pending changes that must be saved after remote
-		// changes are applied, ie. local remove of remote shape.
-		// TODO: Currently only implemented for pending removes as
-		// remote changes are not received in the order in which
-		// they are finally saved in the file.
+		// Gets pending local removes of remote shapes: a local
+		// delete must win over an incoming save that still contains
+		// the cell. This is intentionally limited to removes - all
+		// other pending local state is re-asserted by the second
+		// patch application below, with colliding inserts merged by
+		// the save patches and pending insert entries stripped on
+		// the cell and page level (see stripPendingInserts).
 		all = this.extractRemove(this.ui.diffPages(
 			this.file.getShadowPages(), this.ui.pages));
 		var local = this.extractRemove(this.extractLocal(all));
-		
-		// Applies incoming, own and local changes to own pages
-		var applied = ((own == null) ? patches :
-			patches.concat(own)).concat([local]);
-		this.file.ownPages = this.ui.applyPatches(
-			this.file.ownPages, applied, true,
-				backup);
+
+		// Cells whose pending local copy equals the visible state
+		// carry local edits that were flushed AFTER the incoming
+		// save was computed: the colliding insert merge below must
+		// skip them so the newer local edits win over the older
+		// saved value (edited-later race). Only with connected
+		// peers - without live traffic the own pages trivially
+		// equal the visible pages and the veto would disable the
+		// stale copy merge entirely.
+		var veto = null;
+
+		if (own != null && own[EditorUi.DIFF_UPDATE] != null &&
+			this.isRealtimeConnected())
+		{
+			for (var pageId in own[EditorUi.DIFF_UPDATE])
+			{
+				var pendingCells = own[EditorUi.DIFF_UPDATE][pageId].cells;
+
+				if (pendingCells != null &&
+					pendingCells[EditorUi.DIFF_INSERT] != null)
+				{
+					var ownPage = this.ui.getPageById(
+						pageId, this.file.ownPages);
+					var uiPage = this.ui.getPageById(pageId);
+
+					if (ownPage != null && uiPage != null)
+					{
+						var ownModel = new mxGraphModel(ownPage.root);
+						var uiModel = (uiPage == this.ui.currentPage) ?
+							this.ui.editor.graph.getModel() :
+							new mxGraphModel(uiPage.root);
+
+						for (var i = 0; i < pendingCells[
+							EditorUi.DIFF_INSERT].length; i++)
+						{
+							var entry = pendingCells[EditorUi.DIFF_INSERT][i];
+							var ownCell = (entry != null && entry.id != null) ?
+								ownModel.getCell(entry.id) : null;
+							var uiCell = (ownCell != null) ?
+								uiModel.getCell(entry.id) : null;
+
+							if (uiCell != null && mxUtils.isEmptyObject(
+								this.ui.diffCell(ownCell, uiCell)))
+							{
+								if (veto == null)
+								{
+									veto = Object.create(null);
+								}
+
+								veto[entry.id] = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// mergeFile supplies the same pending state as its resolver.
+		var pageUpdates = this.getPendingPageUpdates(own != null ? own : backup);
+		this.ui.realtimeMergeVeto = veto;
+
+		try
+		{
+			// Applies the incoming changes to the own pages, merging
+			// inserts that collide with pending local copies of the
+			// same cells (eg. a collaborator adopted and saved unsaved
+			// cells from this client, see resolveCrossReferences):
+			// ignoring such inserts would keep the stale local copies
+			// so that the next local save reverts the remote changes
+			this.file.ownPages = this.ui.applyPatches(
+				this.file.ownPages, patches, true,
+					backup, null, true, true);
+
+			// Applies own and local changes after the incoming changes
+			// so that pending local changes win. Pending inserts are
+			// dropped unless their cell was removed above: they always
+			// collide (the own pages are the base of the pending diff)
+			// so they are never applied, but their previous references
+			// would take part in restoring the child order and scramble
+			// the order established by the merged inserts above.
+			var applied = ((own == null) ? [] :
+				[this.stripPendingInserts(own, patches)]).concat([pageUpdates, local]);
+			this.file.ownPages = this.ui.applyPatches(
+				this.file.ownPages, applied, true,
+					backup);
+		}
+		finally
+		{
+			this.ui.realtimeMergeVeto = null;
+		}
 		
 		// Triggers a file change to save pending local
 		// changes or updates the UI and schedules a
@@ -1224,7 +2351,15 @@ DrawioFileSync.prototype.patchRealtime = function(patches, backup, own, immediat
 			'immediate', immediate);
 	}
 
-	return all;
+	// The caller (mergeFile) appends the returned patch to the
+	// visible patches so local deletes of remote shapes win on
+	// screen. Returning the raw shadow-vs-ui removes broke the
+	// offline catch-up: cells missed while disconnected are absent
+	// from the visible pages WITHOUT being locally deleted, and the
+	// raw removes stripped them right back out of the merge result.
+	// The theirPages filter (extractLocal) keeps exactly the locally
+	// deleted ones - missed cells never reached theirPages.
+	return (all != null) ? local : null;
 };
 
 /**
@@ -1236,6 +2371,571 @@ DrawioFileSync.prototype.isRealtimeActive = function()
 };
 
 /**
+ * Returns true if the realtime channel has an established session
+ * that delivers remote changes to the visible document, which a
+ * notify-only session does not (see updateRealtime).
+ */
+DrawioFileSync.prototype.isRealtimeConnected = function()
+{
+	return this.isSocketConnected() && !this.p2pCollab.isNotifyOnly();
+};
+
+/**
+ * Records the pages affected by the given edit for the dirty page
+ * tracking in sendLocalChanges. The literal 'currentPage' marks the
+ * current page (view state events carry no edit); an unknown source
+ * falls back to marking all pages via a null dirtyPageIds. A page is
+ * mapped to true if all its cells must be diffed, or to the IDs of the
+ * cells that were changed (see markChangedCell).
+ */
+DrawioFileSync.prototype.markLocalChanges = function(edit)
+{
+	if (this.dirtyPageIds != null)
+	{
+		try
+		{
+			if (edit == 'currentPage')
+			{
+				if (this.ui.currentPage != null)
+				{
+					this.dirtyPageIds[this.ui.currentPage.getId()] = true;
+				}
+			}
+			else if (edit != null && edit.pageId != null)
+			{
+				// An explicit page for changes that do not belong to
+				// the current one (eg. the edge repair, which covers
+				// every patched page - a patch is not limited to the
+				// page the user happens to be looking at). Wrapped in
+				// an object rather than passed as a bare id: a page id
+				// comes off the wire and one that reads 'currentPage'
+				// would otherwise take the branch above and mark the
+				// wrong page dirty
+				this.dirtyPageIds[edit.pageId] = true;
+			}
+			else if (edit != null && edit.changes != null)
+			{
+				// Undo and redo replays repair cells that are not part of
+				// the edit without a model change (eg. edges into a removed
+				// subtree, see the change wraps in EditorUi), so all cells
+				// of their pages are diffed
+				var replay = edit.undone || edit.redone;
+
+				for (var i = 0; i < edit.changes.length &&
+					this.dirtyPageIds != null; i++)
+				{
+					var id = this.getPageIdForChange(edit.changes[i]);
+
+					if (id != null)
+					{
+						if (replay)
+						{
+							this.dirtyPageIds[id] = true;
+						}
+						else
+						{
+							this.markChangedCell(id, edit.changes[i]);
+						}
+					}
+
+					// A child change moving a cell between pages (eg.
+					// an undo replay executed on another page) changes
+					// BOTH trees: the target page came from the
+					// child's root above, the SOURCE page resolves
+					// from the previous parent - missing it left the
+					// source page's snapshot holding the moved cell
+					var change = edit.changes[i];
+
+					if (this.dirtyPageIds != null &&
+						change instanceof mxChildChange &&
+						change.previous != null)
+					{
+						var source = change.previous;
+
+						while (source.getParent() != null)
+						{
+							source = source.getParent();
+						}
+
+						var sourcePage = this.getPageForRoot(source);
+
+						if (sourcePage != null &&
+							sourcePage.getId() != id)
+						{
+							this.dirtyPageIds[sourcePage.getId()] = true;
+						}
+					}
+				}
+			}
+			else
+			{
+				this.dirtyPageIds = null;
+			}
+		}
+		catch (e)
+		{
+			this.dirtyPageIds = null;
+		}
+	}
+};
+
+/**
+ * Adds the cell of the given change to the changed cells of the given page
+ * in dirtyPageIds, or marks all cells of the page if the change has no
+ * cell or is not a known cell change. Cells change only through the model,
+ * so the diff of the page in sendLocalChanges only compares the geometries,
+ * XML values and custom properties of these cells (see diffCells).
+ */
+DrawioFileSync.prototype.markChangedCell = function(pageId, change)
+{
+	var cell = this.getCellForChange(change);
+	var cells = this.dirtyPageIds[pageId];
+
+	if (cell == null || cell.getId() == null)
+	{
+		this.dirtyPageIds[pageId] = true;
+	}
+	else if (cells !== true)
+	{
+		if (cells == null)
+		{
+			// Null prototype: keyed by cell ids from the document
+			cells = Object.create(null);
+			this.dirtyPageIds[pageId] = cells;
+		}
+
+		cells[cell.getId()] = true;
+	}
+};
+
+/**
+ * Returns the cell whose properties the given change modifies, or null if
+ * the change is not one of the cell changes of mxGraphModel. These only
+ * change their cell (a child change also inserts, removes or moves the
+ * descendants of its child, which the diff finds by their IDs and order).
+ */
+DrawioFileSync.prototype.getCellForChange = function(change)
+{
+	if (change != null && change.constructor == mxChildChange)
+	{
+		return change.child;
+	}
+	else if (change != null && (change.constructor == mxTerminalChange ||
+		change.constructor == mxValueChange ||
+		change.constructor == mxStyleChange ||
+		change.constructor == mxGeometryChange ||
+		change.constructor == mxCollapseChange ||
+		change.constructor == mxVisibleChange ||
+		change.constructor == mxCellAttributeChange))
+	{
+		return change.cell;
+	}
+
+	return null;
+};
+
+/**
+ * Returns the ID of the page affected by the given undoable change,
+ * null for changes that need no cell diff (page order and selection),
+ * and sets dirtyPageIds to null for changes whose page cannot be
+ * determined so that all pages are diffed.
+ */
+DrawioFileSync.prototype.getPageIdForChange = function(change)
+{
+	if (change instanceof ChangePage)
+	{
+		// Checked BEFORE SelectPage, which ChangePage extends - the
+		// selection branch below swallowed every page insert and remove,
+		// so nothing was marked dirty. Harmless while a page id only
+		// ever appeared or vanished (the page arrays are always diffed),
+		// but a wholesale replacement (replaceFileData) brings a page of
+		// the SAME id back with different content, and its cell diff was
+		// skipped. The inserted or removed page is the one to diff; the
+		// select target is irrelevant here
+		if (change.relatedPage != null)
+		{
+			return change.relatedPage.getId();
+		}
+	}
+	else if (change instanceof SelectPage || change instanceof MovePage ||
+		change instanceof ChangePageGroup)
+	{
+		// Page order and groups are derived from the page arrays in
+		// diffPages and the selection is not synced
+		return null;
+	}
+	else if (change instanceof RenamePage || change instanceof ChangePageView ||
+		change instanceof ChangePageAlt || change instanceof ChangePageId)
+	{
+		if (change.page != null)
+		{
+			return change.page.getId();
+		}
+	}
+	else if (change instanceof ChangePageSetup)
+	{
+		if (this.ui.currentPage != null)
+		{
+			return this.ui.currentPage.getId();
+		}
+	}
+	else
+	{
+		// Resolves the page from the root of the changed cell; uses
+		// the previous parent for removed (detached) cells
+		var cell = (change.child != null) ? change.child : change.cell;
+
+		while (cell != null && cell.getParent() != null)
+		{
+			cell = cell.getParent();
+		}
+
+		if (cell != null && change.child != null && change.previous != null &&
+			this.getPageForRoot(cell) == null)
+		{
+			cell = change.previous;
+
+			while (cell.getParent() != null)
+			{
+				cell = cell.getParent();
+			}
+		}
+
+		var page = (cell != null) ? this.getPageForRoot(cell) : null;
+
+		if (page != null)
+		{
+			return page.getId();
+		}
+	}
+
+	this.dirtyPageIds = null;
+
+	return null;
+};
+
+/**
+ * Returns true if the current page holds the root of the model. The
+ * flush and the save diff the pages, so edits shown while the model has
+ * another root reach neither the collaborators nor the file (eg. a call
+ * to Editor.setGraphXml that does not update the page, jgraph/drawio#5795).
+ */
+DrawioFileSync.prototype.isPageRootInSync = function()
+{
+	return this.ui.currentPage == null ||
+		this.ui.currentPage.root === this.ui.editor.graph.model.root;
+};
+
+/**
+ * Keeps an error with the stack of the local edit that left the current
+ * page without the root of the model. Runs inside the call that made the
+ * edit, which the report in checkPageRoot cannot see from the flush.
+ * Callers that update the page right after replacing the model only pass
+ * through this state, so the flush reports nothing for them.
+ */
+DrawioFileSync.prototype.trackPageRoot = function()
+{
+	if (this.isPageRootInSync())
+	{
+		this.pageRootError = null;
+	}
+	else if (this.pageRootError == null)
+	{
+		// The caller is about ten frames up (endUpdate, listeners),
+		// where the default stack of V8 ends
+		var limit = Error.stackTraceLimit;
+
+		if (typeof limit === 'number')
+		{
+			Error.stackTraceLimit = Math.max(limit, 30);
+		}
+
+		try
+		{
+			this.pageRootError = new Error('Page root out of sync');
+		}
+		finally
+		{
+			if (typeof limit === 'number')
+			{
+				Error.stackTraceLimit = limit;
+			}
+		}
+	}
+};
+
+/**
+ * Reports a current page that does not hold the root of the model at
+ * flush time, once per session. Detection only: the page is not healed
+ * because this layer has no evidence yet which of the two roots is the
+ * one to keep in every case (see realtime-sync.md).
+ */
+DrawioFileSync.prototype.checkPageRoot = function()
+{
+	if (this.isPageRootInSync())
+	{
+		this.pageRootError = null;
+	}
+	else if (!DrawioFileSync.pageRootReported)
+	{
+		DrawioFileSync.pageRootReported = true;
+
+		// Never stops the flush it runs in
+		try
+		{
+			var err = (this.pageRootError != null) ? this.pageRootError :
+				new Error('Page root out of sync');
+			var user = this.file.getCurrentUser();
+			// Hashed like sendErrorReport: no raw user or file ids in logs
+			var uid = (user != null) ? this.ui.hashValue(user.id) : 'unknown';
+
+			EditorUi.debug('DrawioFileSync.checkPageRoot', [this],
+				'page', this.ui.currentPage, 'error', err);
+			EditorUi.logError('Page root out of sync', null,
+				this.file.getMode() + '.' +
+				this.ui.hashValue(this.file.getId()), uid, err);
+		}
+		catch (e)
+		{
+			// ignore
+		}
+	}
+};
+
+/**
+ * Returns the page whose root is the given cell.
+ */
+DrawioFileSync.prototype.getPageForRoot = function(root)
+{
+	for (var i = 0; i < this.ui.pages.length; i++)
+	{
+		if (this.ui.pages[i].root == root)
+		{
+			return this.ui.pages[i];
+		}
+	}
+
+	return null;
+};
+
+/**
+ * Disconnects edges from terminal objects that are no longer part of
+ * the given page. A local interaction can connect an edge to a cell
+ * that a concurrent remote patch has removed (eg. the connection
+ * handler holds the target object across the gesture): the resulting
+ * dangling reference cannot be represented in diffs or clones, so it
+ * would permanently diverge the model copies. Returns the IDs of the
+ * repaired edges, which change without a model change.
+ */
+DrawioFileSync.prototype.sanitizePageTerminals = function(page)
+{
+	// Null prototype: keyed by cell ids from the document
+	var repairedIds = Object.create(null);
+
+	if (page.root != null)
+	{
+		var lookup = Object.create(null);
+		var edges = [];
+
+		var index = function(cell)
+		{
+			if (cell.getId() != null)
+			{
+				lookup[cell.getId()] = cell;
+			}
+
+			if (cell.isEdge())
+			{
+				edges.push(cell);
+			}
+
+			for (var i = 0; i < cell.getChildCount(); i++)
+			{
+				index(cell.getChildAt(i));
+			}
+		};
+
+		index(page.root);
+		var revalidate = false;
+
+		for (var i = 0; i < edges.length; i++)
+		{
+			for (var j = 0; j < 2; j++)
+			{
+				var source = (j == 0);
+				var term = edges[i].getTerminal(source);
+
+				if (term != null && term.getId() != null &&
+					lookup[term.getId()] != term)
+				{
+					// A terminal that a patch cut out of the tree (its top
+					// ancestor is a shape) is placed only with the origin
+					// of its old parent that the patch kept (see
+					// disconnectTerminal). Without it the point would be
+					// read from the page origin, so the end keeps its
+					// point, or gets the fallback below.
+					var graphModel = this.ui.editor.graph.getModel();
+					var top = graphModel.getRoot(term);
+					var origins = EditorUi.removedCellOrigins;
+
+					// The point is computed from the terminal, so the
+					// disconnect runs before removeEdge, which nulls the
+					// terminal (the other order left the end with
+					// neither, and the edge vanished on every client)
+					if (top == graphModel.getRoot(edges[i]) ||
+						(!top.isVertex() && !top.isEdge()) ||
+						(origins != null && origins.get(top) != null))
+					{
+						this.ui.disconnectTerminal(edges[i], source, null);
+					}
+
+					term.removeEdge(edges[i], source);
+					repairedIds[edges[i].getId()] = true;
+					term = null;
+
+					if (page == this.ui.currentPage)
+					{
+						this.ui.editor.graph.view.invalidate(edges[i]);
+						revalidate = true;
+					}
+				}
+
+				if (term == null)
+				{
+					// An end that is neither a terminal nor a point
+					// cannot be drawn: the edge silently disappears
+					// from the screen while every model copy stays
+					// consistent, so no convergence verdict sees it.
+					// The exact patch paths must not invent a point
+					// (it would break the sender's checksum), so the
+					// repair happens here, before the flush, where it
+					// is a regular local change that propagates. This
+					// includes a disconnect above that found no point
+					// (a terminal that is a connector or has a relative
+					// geometry).
+					var geo = edges[i].getGeometry();
+
+					if (geo != null && geo.getTerminalPoint(source) == null)
+					{
+						var other = edges[i].getTerminal(!source);
+						var fallback = this.ui.getEdgeEndFallback(
+							edges[i], source, other);
+
+						if (fallback != null)
+						{
+							geo = geo.clone();
+							geo.setTerminalPoint(fallback, source);
+							edges[i].setGeometry(geo);
+							repairedIds[edges[i].getId()] = true;
+
+							if (page == this.ui.currentPage)
+							{
+								this.ui.editor.graph.view.invalidate(
+									edges[i], true, true);
+								revalidate = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Marking a cell invalid does not create its state - without a
+		// validation pass the repaired edge stays unrendered until the
+		// next unrelated model change (the silent render miss the
+		// render-consistency verdict reports as healsOnRevalidate)
+		if (revalidate)
+		{
+			this.ui.editor.graph.view.validate();
+		}
+
+		// This repair runs right before the flush diff, so it reaches
+		// the same adoption machinery as the one in DrawioFile.patch:
+		// an edge that only arrived as an unconfirmed live diff would
+		// be pulled into the own pages together with its ancestors and
+		// persisted by the next save. The screen keeps the repair, the
+		// outgoing diff does not.
+		this.file.absorbUnconfirmedRepairs(page, repairedIds,
+			!this.file.isEditable());
+	}
+
+	return repairedIds;
+};
+
+/**
+ * Re-sends every local change that no save has confirmed yet. Called
+ * when the FIRST other client appears in the roster: while no peer was
+ * connected the transport skips outgoing diffs (they have no consumer),
+ * but a client joining right after such a skip never learns about those
+ * changes - the diff is gone and only the next save would carry it.
+ * Two clients loading at the same time hit this reliably, as each
+ * roster is confirmed before the other client registers. The selection
+ * has always been flushed that way; the document content must not be
+ * weaker. The peer has just loaded the saved state, so the unsaved
+ * delta is exactly what it is missing.
+ */
+/**
+ * Routes a wholesale LOCAL replacement of the file data (eg. restoring
+ * a revision) through the sync layer. replaceFileData rebuilds the
+ * visible pages but leaves the sync snapshot at the pre-restore state,
+ * so flushing with all pages marked dirty sends the restore delta as a
+ * regular local change - own pages and collaborators converge like for
+ * any other edit. Without this the restore reached the peers only via
+ * the next save's shadow diff while the stale own pages made the next
+ * cleanup revert legitimate peer content from the screen.
+ */
+DrawioFileSync.prototype.fileRestored = function()
+{
+	if (this.file.isRealtime())
+	{
+		this.localFileWasChanged = true;
+		this.dirtyPageIds = null;
+		this.sendLocalChanges();
+	}
+};
+
+DrawioFileSync.prototype.sendUnconfirmedChanges = function()
+{
+	try
+	{
+		if (this.file.isRealtime() && this.isRealtimeActive() &&
+			this.file.ownPages != null)
+		{
+			// Pending local changes first: they must be in the own
+			// pages before the delta to the saved state is computed
+			this.sendLocalChanges();
+
+			var patch = this.ui.diffPages(
+				this.file.getShadowPages(), this.file.ownPages);
+
+			// Resend only this client's pending attribute. Comparing UI
+			// vars with shadow would also resend foreign unsaved values.
+			if (this.file.pendingFileVars != null)
+			{
+				patch[EditorUi.DIFF_FILE] = {vars: this.file.pendingFileVars.value};
+			}
+
+			if (!this.file.ignorePatches([patch]))
+			{
+				EditorUi.debug('DrawioFileSync.sendUnconfirmedChanges',
+					[this], 'patch', patch);
+
+				this.doSendLocalChanges([{}, patch]);
+			}
+		}
+	}
+	catch (e)
+	{
+		var user = this.file.getCurrentUser();
+		// Hashed like sendErrorReport: no raw user or file ids in logs
+		var uid = (user != null) ? this.ui.hashValue(user.id) : 'unknown';
+
+		EditorUi.logError('Error in sendUnconfirmedChanges', null,
+			this.file.getMode() + '.' + this.ui.hashValue(this.file.getId()), uid, e);
+	}
+};
+
+/**
  * Computes and sends the local changes if the file was changed.
  */
 DrawioFileSync.prototype.sendLocalChanges = function()
@@ -1244,16 +2944,111 @@ DrawioFileSync.prototype.sendLocalChanges = function()
 	{
 		if (this.file.isRealtime() && this.localFileWasChanged)
 		{
-			var snapshot = this.ui.clonePages(this.ui.pages);
-			var patch = this.ui.diffPages(this.snapshot, snapshot);
+			this.checkPageRoot();
+			var dirty = this.dirtyPageIds;
+
+			for (var i = 0; i < this.ui.pages.length; i++)
+			{
+				var id = this.ui.pages[i].getId();
+
+				if (dirty == null || dirty[id])
+				{
+					var repaired = this.sanitizePageTerminals(this.ui.pages[i]);
+
+					// Adds the repaired edges to the changed cells
+					if (dirty != null && dirty[id] !== true)
+					{
+						for (var cellId in repaired)
+						{
+							dirty[id][cellId] = true;
+						}
+					}
+				}
+			}
+
+			var newSnapshot = null;
+			var skip = null;
+			var patch = null;
+
+			if (dirty != null)
+			{
+				// Diffs only the pages with recorded local changes so
+				// the flush cost is bounded by the changed pages, not
+				// the file size
+				skip = Object.create(null);
+				var changed = Object.create(null);
+
+				for (var i = 0; i < this.snapshot.length; i++)
+				{
+					var id = this.snapshot[i].getId();
+
+					if (!dirty[id])
+					{
+						skip[id] = true;
+					}
+					else if (dirty[id] !== true)
+					{
+						// Compares geometries, XML values and custom
+						// properties only for the changed cells
+						changed[id] = dirty[id];
+					}
+				}
+
+				patch = this.ui.diffPages(this.snapshot,
+					this.ui.pages, skip, changed);
+			}
+			else
+			{
+				// Unknown changes: clones and diffs all pages
+				newSnapshot = this.ui.clonePages(this.ui.pages);
+				patch = this.ui.diffPages(this.snapshot, newSnapshot);
+			}
+
+			this.file.trackLocalFileVars();
+			var currentVars = (this.ui.fileNode != null) ?
+				this.ui.fileNode.getAttribute('vars') : null;
+
+			if (currentVars != this.snapshotVars)
+			{
+				patch[EditorUi.DIFF_FILE] = {vars: currentVars};
+			}
+
+			this.snapshotVars = currentVars;
+			var currentAttributes = this.file.getSyncedFileAttributes();
+
+			if (this.snapshotAttributes != null)
+			{
+				this.file.diffSyncedFileAttributes(patch,
+					this.snapshotAttributes, currentAttributes);
+			}
+
+			this.snapshotAttributes = currentAttributes;
+
 			this.file.ownPages = this.ui.patchPages(
 				this.file.ownPages, patch, true);
-			this.snapshot = snapshot;
+
+			// Advances the snapshot by applying the patch, as for remote
+			// changes, instead of cloning the changed pages (about 30 ms
+			// for 4,000 cells): the patch is the exact diff from the
+			// snapshot, so the result equals the pages (asserted under
+			// test=1 below), and it is decoded into new objects, so the
+			// snapshot shares no cells with the pages or the own pages
+			if (newSnapshot == null)
+			{
+				newSnapshot = this.ui.patchPages(this.snapshot, patch, false);
+			}
+
+			this.snapshot = newSnapshot;
 			
-			// Creates patch for cross references
+			// Creates patch for cross references, skipping the cell
+			// diffs that cannot change the result (in particular all
+			// pages if the own pages have all cells of the pages) and
+			// comparing only the cells it uses in full
 			var resolve = this.ui.resolveCrossReferences(
 				patch, this.ui.diffPages(this.file.ownPages,
-					this.ui.pages));
+					this.ui.pages, this.ui.getCrossReferenceSkip(
+						this.file.ownPages, this.ui.pages, patch, skip),
+					this.ui.getCrossReferenceCells(patch)));
 			
 			// Patches own pages to resolve cross references
 			this.file.ownPages = this.ui.patchPages(
@@ -1263,18 +3058,37 @@ DrawioFileSync.prototype.sendLocalChanges = function()
 			{
 				this.doSendLocalChanges([resolve, patch]);
 			}
+
+			// Verifies the dirty page tracking covered all local
+			// changes, ie. the snapshot must now equal the pages
+			if (skip != null && urlParams['test'] == '1')
+			{
+				var residue = this.ui.diffPages(this.snapshot, this.ui.pages);
+
+				if (!mxUtils.isEmptyObject(residue))
+				{
+					EditorUi.debug('DrawioFileSync.sendLocalChanges', [this],
+						'dirty page tracking missed changes', residue,
+						'dirty', dirty);
+					this.ui.alert('Dirty page tracking out of sync');
+				}
+			}
+
+			this.dirtyPageIds = Object.create(null);
 		}
 
 		this.localFileWasChanged = false;
+		this.reactiveOnlyPending = false;
 	}
 	catch (e)
 	{
 		var user = this.file.getCurrentUser();
-		var uid = (user != null) ? user.id : 'unknown';
+		// Hashed like sendErrorReport: no raw user or file ids in logs
+		var uid = (user != null) ? this.ui.hashValue(user.id) : 'unknown';
 
 		EditorUi.logError('Error in sendLocalChanges', null,
 			this.file.getMode() + '.' +
-			this.file.getId(), uid, e);
+			this.ui.hashValue(this.file.getId()), uid, e);
 	}
 };
 
@@ -1285,10 +3099,38 @@ DrawioFileSync.prototype.doReceiveRemoteChanges = function(changes)
 {
 	if (this.file.isRealtime() && this.isRealtimeActive())
 	{
-		this.sendLocalChanges();
-		this.file.patch(changes);
+		// Flushes pending user edits before the patch moves the diff
+		// base. Reactive-only deltas stay pending: the raw snapshot
+		// keeps them diffable across incoming patches, and flushing
+		// them per delivered message amplifies concurrent layout
+		// recomputation into a correction storm (jitter livelock),
+		// so they ride the debounced trigger instead
+		if (!this.reactiveOnlyPending)
+		{
+			this.sendLocalChanges();
+		}
+
+		// The existing wire pair is [resolve, patch]. A resolve insert
+		// only supplies missing cross references: an adopter can send
+		// an older copy than the receiver already holds. Actual changes
+		// still merge colliding inserts, especially a roster resend
+		// ([{}, patch]) carrying edits made during a network drop.
+		// Keep the pair in one patch transaction so reactive layouts
+		// and the snapshot see the same complete operation. Single
+		// patches from direct callers retain their merging behavior.
+		var mergeInserts = (changes.length == 2) ? [false, true] : true;
+		this.file.patch(changes, null, null, null, mergeInserts);
 		this.file.theirPages = this.ui.applyPatches(
-			this.file.theirPages, changes);
+			this.file.theirPages, changes, null, null, null, mergeInserts);
+
+		// Starts the grace period for content that is now on screen but
+		// not yet in the own pages (see cleanup)
+		if (this.unconfirmedRemoteSince == null)
+		{
+			this.unconfirmedRemoteSince = new Date().getTime();
+		}
+
+		this.addUnconfirmedRemoves(changes);
 		this.scheduleCleanup();
 		
 		EditorUi.debug('DrawioFileSync.doReceiveRemoteChanges',
@@ -1305,27 +3147,31 @@ DrawioFileSync.prototype.merge = function(patches, checksum, desc, success, erro
 	try
 	{
 		this.file.stats.merged++;
-		this.lastModified = new Date();
 		var target = this.file.getDescriptorRevisionId(desc);
 		var ignored = this.file.ignorePatches(patches);
 		
 		if (!ignored)
 		{
 			this.sendLocalChanges();
-
-			// Creates a patch for backup if the checksum fails
+			
+			// Computes local changes
 			var shadow = this.ui.clonePages(this.file.getShadowPages());
-			this.file.backupPatch = (this.file.isModified() &&
+			var changes = (this.file.isModified() &&
 				!this.file.isRealtime()) ? this.ui.diffPages(
 					shadow, this.ui.pages) : null;
-			var pending = (!this.file.isRealtime()) ? null :
+			// A non-editable client cannot have pending own changes:
+			// anything in ownPages beyond the shadow is residue (eg.
+			// from the revoke retraction window) that no own save can
+			// ever heal - re-asserting it would preserve it forever
+			var pending = (!this.file.isRealtime() ||
+				!this.file.isEditable()) ? null :
 				this.ui.diffPages(shadow, this.file.ownPages);
 			shadow = this.ui.applyPatches(shadow, patches);
 			var current = (checksum == null) ? null :
 				this.ui.getHashValueForPages(shadow);
 			
 			EditorUi.debug('DrawioFileSync.merge', [this], 'patches', patches,
-				'backup', this.file.backupPatch, 'pending', pending, 'checksum',
+				'changes', changes, 'pending', pending, 'checksum',
 				checksum, 'current', current, 'valid', checksum == current,
 				'attempt', this.catchupRetryCount, 'of', this.maxCatchupRetries,
 				'from', this.file.getCurrentRevisionId(), 'to', target,
@@ -1335,35 +3181,7 @@ DrawioFileSync.prototype.merge = function(patches, checksum, desc, success, erro
 			// Compares the checksum
 			if (checksum != null && checksum != current)
 			{
-				// Logs checksum error
-				var logError = mxUtils.bind(this, function(failed)
-				{
-					try
-					{
-						var user = this.file.getCurrentUser();
-						var uid = (user != null) ? user.id : 'unknown';
-						var id = (this.file.getId() != '') ? this.file.getId() :
-							('(' + this.ui.hashValue(this.file.getTitle()) + ')');
-						var bytes = JSON.stringify(patches).length;
-	
-						EditorUi.logError('Merge checksum fallback ' + (failed ?
-							'failed' : 'success') + ' ' + id, null,
-							this.file.getMode() + '.' + this.file.getId(),
-							'user_' + uid + '-client_' + this.clientId +
-							'-bytes_' + bytes + '-patches_' + patches.length +
-							'-size_' + this.file.getSize() +
-							((checksum != null) ? ('-expected_' + checksum) : '') +
-							((current != null) ? ('-current_' + current) : '') +
-							'-from_' + this.ui.hashValue(this.file.getCurrentRevisionId()) +
-							'-to_' + this.ui.hashValue(target));
-					}
-					catch (e)
-					{
-						// ignore
-					}
-				});
-
-				// Fallback to full reload with logging
+				// Fallback to full reload with mergeFile
 				this.reload(mxUtils.bind(this, function()
 				{
 					if (success != null)
@@ -1382,17 +3200,127 @@ DrawioFileSync.prototype.merge = function(patches, checksum, desc, success, erro
 				return;
 			}
 			else
-			{	
-				this.file.setShadowPages(shadow);
+			{
+				// Extracts target vars from patches for shadow
+				var targetVars = this.file.getShadowVars();
+
+				for (var i = 0; i < patches.length; i++)
+				{
+					if (patches[i] != null && patches[i][EditorUi.DIFF_FILE] != null &&
+						patches[i][EditorUi.DIFF_FILE].vars !== undefined)
+					{
+						targetVars = patches[i][EditorUi.DIFF_FILE].vars;
+					}
+				}
+
+				this.file.setShadowPages(shadow, targetVars,
+					this.file.patchSyncedFileAttributes(
+						this.file.getShadowAttributes(), patches));
+				this.file.acceptRemoteFileVars(patches);
 
 				// Patches the current document and own pages
 				if (this.patchRealtime(patches, null, pending, immediate) == null)
 				{
 					this.file.patch(patches,
 						(DrawioFile.LAST_WRITE_WINS) ?
-							this.file.backupPatch : null);
+							changes : null);
 				}
-				
+				else
+				{
+					// In realtime mode, file.patch() is not called so
+					// file-level changes must be applied separately
+					var oldVars = (this.ui.fileNode != null) ?
+						this.ui.fileNode.getAttribute('vars') : null;
+					this.ui.patchFileNode(patches);
+					var newVars = (this.ui.fileNode != null) ?
+						this.ui.fileNode.getAttribute('vars') : null;
+					this.snapshotAttributes = this.file.patchSyncedFileAttributes(
+						this.snapshotAttributes, patches);
+
+					if (oldVars != newVars)
+					{
+						this.ui.editor.graph.refresh();
+						this.snapshotVars = newVars;
+					}
+
+					// Patches the visible document if the realtime channel
+					// is not delivering remote changes (eg. session setup
+					// failed) as they otherwise only reach ownPages and
+					// stay invisible until cleanup, which is starved while
+					// the socket is reconnecting. Uses the diff to the own
+					// pages as they contain the merged remote and local
+					// changes (sendLocalChanges was called above), so this
+					// converges and cannot apply received changes twice.
+					if (!this.isRealtimeConnected())
+					{
+						var visible = [this.ui.diffPages(this.ui.pages,
+							this.file.ownPages)];
+
+						if (!this.file.ignorePatches(visible))
+						{
+							// Aligns remote state as in cleanup
+							this.file.theirPages = this.ui.clonePages(
+								this.file.ownPages);
+							this.file.patch(visible);
+						}
+					}
+					else if (!this.file.isModified() &&
+						!this.localFileWasChanged &&
+						!mxUtils.isEmptyObject(this.ui.diffPages(
+							this.ui.pages, this.file.ownPages)))
+					{
+						// Being connected NOW says nothing about having
+						// been connected WHEN the change was broadcast: a
+						// client that joined after a live diff never saw
+						// it, so the merge is the first time the content
+						// arrives - and it only reaches the own pages.
+						// Restricted to a client without pending state of
+						// its own: with local or reactive changes in
+						// flight the lazy cleanup is the load-bearing
+						// choreography (an immediate one races the layout
+						// recomputation, see adoption-race).
+						// Waiting for the lazy cleanup keeps it invisible
+						// for the full cleanup delay (measured: 15s of a
+						// stale label right after opening a file someone
+						// else is editing). The screen is reconciled
+						// through the regular cleanup instead of patching
+						// the visible pages here, which would revert live
+						// state that is newer than the save.
+						this.scheduleCleanup(false);
+					}
+				}
+
+				// A non-editable client mirrors the merged state
+				// wholesale: it has no pending own changes to protect
+				// and no save to heal residues with - minimal patches
+				// from a diverged base can keep an old order residue
+				// alive forever, so the realtime copies adopt the
+				// merged shadow exactly (the screen follows via the
+				// regular cleanup alignment)
+				if (!this.file.isEditable() && this.file.ownPages != null)
+				{
+					this.file.ownPages = this.ui.clonePages(shadow);
+					this.file.theirPages = this.ui.clonePages(shadow);
+				}
+
+				// The grace timestamp marks the OLDEST remote content
+				// that is on screen but not yet in the own pages. A save
+				// that brought all of it in ends the window here, so the
+				// next live diff starts a fresh one. Without this the
+				// timestamp survives every confirmation and later ages
+				// FRESH content out of its hold - the cleanup's
+				// convergence pass is the only other place that clears
+				// it, and a session with continuous traffic never lets
+				// one run (every delivery re-arms the lazy timer).
+				if (this.unconfirmedRemoteSince != null &&
+					this.file.ownPages != null &&
+					mxUtils.isEmptyObject(this.ui.diffPages(
+						this.ui.pages, this.file.ownPages)))
+				{
+					this.unconfirmedRemoteSince = null;
+					this.unconfirmedRemoves = null;
+				}
+
 				// Logs successull patch
 //				try
 //				{
@@ -1411,10 +3339,12 @@ DrawioFileSync.prototype.merge = function(patches, checksum, desc, success, erro
 			}
 		}
 
-		this.file.invalidChecksum = false;
-		this.file.inConflictState = false;
+		this.file.clearConflict();
 		this.file.patchDescriptor(this.file.getDescriptor(), desc);
-		this.file.backupPatch = null;
+
+		// The modified date of the merged revision, as after a save or a
+		// reload, instead of the local time of the merge
+		this.lastModified = this.file.getLastModifiedDate();
 		
 		if (success != null)
 		{
@@ -1423,8 +3353,7 @@ DrawioFileSync.prototype.merge = function(patches, checksum, desc, success, erro
 	}
 	catch (e)
 	{
-		this.file.inConflictState = true;
-		this.file.invalidChecksum = true;
+		this.file.setConflict(true);
 		this.file.descriptorChanged();
 		
 		if (error != null)
@@ -1434,26 +3363,13 @@ DrawioFileSync.prototype.merge = function(patches, checksum, desc, success, erro
 		
 		try
 		{
-			if (this.file.errorReportsEnabled)
-			{
-				var from = this.ui.hashValue(this.file.getCurrentRevisionId());
-				var to = this.ui.hashValue(target);
-				
-				this.file.sendErrorReport('Error in merge',
-					'From: ' + from + '\nTo: ' + to +
-					'\nChecksum: ' + checksum +
-					'\nPatches:\n' + this.file.compressReportData(
-						JSON.stringify(patches, null, 2)), e);
-			}
-			else
-			{
-				var user = this.file.getCurrentUser();
-				var uid = (user != null) ? user.id : 'unknown';
-				
-				EditorUi.logError('Error in merge', null,
-					this.file.getMode() + '.' +
-					this.file.getId(), uid, e);
-			}
+			var user = this.file.getCurrentUser();
+			// Hashed like sendErrorReport: no raw user or file ids in logs
+			var uid = (user != null) ? this.ui.hashValue(user.id) : 'unknown';
+			
+			EditorUi.logError('Error in merge', null,
+				this.file.getMode() + '.' +
+				this.ui.hashValue(this.file.getId()), uid, e);
 		}
 		catch (e2)
 		{
@@ -1521,8 +3437,18 @@ DrawioFileSync.prototype.fastForward = function(desc)
 {
 	this.file.patchDescriptor(this.file.getDescriptor(), desc);
 	this.file.setShadowPages(this.ui.clonePages(this.ui.pages));
-	this.file.theirPages = this.ui.clonePages(this.ui.pages);
-	this.file.ownPages = this.ui.clonePages(this.ui.pages);
+
+	if (this.file.isRealtime())
+	{
+		this.file.theirPages = this.ui.clonePages(this.ui.pages);
+		this.file.ownPages = this.ui.clonePages(this.ui.pages);
+	}
+
+	this.snapshotVars = (this.ui.fileNode != null) ?
+		this.ui.fileNode.getAttribute('vars') : null;
+	this.snapshotAttributes = this.file.getSyncedFileAttributes();
+	this.file.pendingFileVars = null;
+	this.file.savingFileVars = null;
 
 	var thread = this.cleanupThread;
 	window.clearTimeout(this.cleanupThread);
@@ -1560,12 +3486,12 @@ DrawioFileSync.prototype.reloadDescriptor = function()
 		}
 		else
 		{
-			this.file.inConflictState = true;
+			this.file.setConflict();
 			this.file.handleFileError();
 		}
 	}), mxUtils.bind(this, function(err)
 	{
-		this.file.inConflictState = true;
+		this.file.setConflict();
 		this.file.handleFileError(err);
 	}));
 };
@@ -1628,22 +3554,15 @@ DrawioFileSync.prototype.catchup = function(desc, success, error, abort, immedia
 		}
 		else
 		{
-			var checksum = this.file.getDescriptorChecksum(desc)
+			var descChecksum = this.file.getDescriptorChecksum(desc);
 			var secret = this.file.getDescriptorSecret(desc);
-			
-			if (checksum != null &&
-				checksum == this.ui.getHashValueForPages(this.ui.pages))
-			{
-				// Fast-forward to current state if checksum matches
-				this.fastForward(desc);
+			var noPatches = !Editor.enableRealtimeCache ||
+				secret == null || urlParams['lockdown'] == '1';
 
-				if (success != null)
-				{
-					success(true);
-				}
-			}
-			else if (!Editor.enableRealtimeCache || secret == null ||
-				urlParams['lockdown'] == '1')
+			// The content checksum excludes page metadata and file vars.
+			// Even a clean matching document needs the saved bytes when
+			// patches are unavailable, or a metadata-only save is lost.
+			if (noPatches)
 			{
 				this.reload(success, error, abort, null, immediate);
 			}
@@ -1739,10 +3658,11 @@ DrawioFileSync.prototype.catchup = function(desc, success, error, abort, immedia
 															break;
 														}
 														else if (value.v === DrawioFileSync.PROTOCOL &&
-															value.d != null)
+															value.p != null &&
+															!this.isRemoteAppOutdated(value))
 														{
-															checksum = value.d.checksum;
-															temp.push(value.d.patch);
+															checksum = value.p.checksum;
+															temp.push(value.p.patch);
 														}
 														else
 														{
@@ -1751,9 +3671,19 @@ DrawioFileSync.prototype.catchup = function(desc, success, error, abort, immedia
 															break;
 														}
 													}
+
+													// The cache does not authenticate writers, the
+													// descriptor checksum can only be written by
+													// writers of the file
+													if (descChecksum != null && temp.length > 0 &&
+														checksum != descChecksum)
+													{
+														failed = true;
+														temp = [];
+													}
 												}
 
-												EditorUi.debug('DrawioFileSync.doCatchup', [this], 
+												EditorUi.debug('DrawioFileSync.doCatchup', [this],
 													'response', [result], 'status',
 													(failed ? 'failed' : 'ok'),
 													'temp', temp, 'checksum', checksum);
@@ -1819,9 +3749,8 @@ DrawioFileSync.prototype.catchup = function(desc, success, error, abort, immedia
  */
 DrawioFileSync.prototype.reload = function(success, error, abort, shadow, immediate)
 {
-	EditorUi.debug('DrawioFileSync.reload',
-		[this], 'immediate', immediate);
-	
+	EditorUi.debug('DrawioFileSync.reload', [this], 'immediate', immediate);
+		
 	this.file.updateFile(mxUtils.bind(this, function()
 	{
 		this.lastModified = this.file.getLastModifiedDate();
@@ -1844,56 +3773,329 @@ DrawioFileSync.prototype.reload = function(success, error, abort, shadow, immedi
 /**
  * Invokes when the file descriptor was changed.
  */
-DrawioFileSync.prototype.descriptorChanged = function(source)
+DrawioFileSync.prototype.descriptorChanged = function()
 {
 	this.lastModified = this.file.getLastModifiedDate();
-	
+
+	// Only notifies: a metadata change keeps the revision ID, and
+	// receivers reload the descriptor for their current revision
 	if (this.channelId != null)
 	{
-		var msg = this.objectToString(this.createMessage({a: 'desc',
+		this.notify(this.createMessage({a: 'desc',
 			m: this.lastModified.getTime()}));
-		var target = this.file.getCurrentRevisionId();
-		var data = this.objectToString({});
-
-		mxUtils.post(EditorUi.cacheUrl, this.getIdParameters() +
-			'&from=' + encodeURIComponent(source) + '&to=' + encodeURIComponent(target) +
-			'&msg=' + encodeURIComponent(msg) + '&data=' + encodeURIComponent(data));
-		this.file.stats.bytesSent += data.length;
-		this.file.stats.msgSent++;
-
-		EditorUi.debug('DrawioFileSync.descriptorChanged',
-			[this], 'from', source, 'to', target);
 	}
-	
+
 	this.updateStatus();
 };
 
 /**
- * Converts the given object to an encrypted string.
+ * Switches to the current channel key of the file. OneDrive files and
+ * monday.com diagrams get a random key with the first save of a client that
+ * supports it, until then everyone uses the key derived from the file
+ * metadata. Every client in the session switches when it reads the version
+ * of the file with the new key, so the key only changes with a save. The
+ * previous key decodes for previousKeyTimeout so that messages from peers
+ * that have not switched yet are not lost. A random key is never replaced
+ * by a missing or the legacy key: a client from before random keys that had
+ * the file open when the key was written drops it with its next save, and
+ * this client writes it back with its own next save.
  */
-DrawioFileSync.prototype.objectToString = function(obj)
+DrawioFileSync.prototype.updateChannelKey = function()
 {
-	var data = Graph.compress(JSON.stringify(obj));
-	
-	if (this.key != null && typeof CryptoJS !== 'undefined')
+	var key = this.file.getChannelKey();
+
+	if (key != this.key && (this.key == null || (key != null &&
+		key != this.file.getLegacyChannelKey())))
 	{
-		data = CryptoJS.AES.encrypt(data, this.key).toString();
+		if (this.key != null)
+		{
+			this.previousKey = this.key;
+			this.previousKeyTime = Date.now();
+		}
+
+		this.key = key;
+
+		EditorUi.debug('DrawioFileSync.updateChannelKey', [this],
+			'previous', this.previousKey != null);
 	}
-	
+};
+
+/**
+ * Returns a short fingerprint of the channel key. Copies of notifications for
+ * clients with the legacy key carry it so that receivers can ignore the copies
+ * of messages they have already read with the channel key.
+ */
+DrawioFileSync.prototype.getKeyId = function()
+{
+	if (this.keyIdKey !== this.key)
+	{
+		this.keyIdKey = this.key;
+		this.keyId = (this.key != null && typeof CryptoJS !== 'undefined') ?
+			CryptoJS.MD5('channel-key-id:' + this.key).toString().substring(0, 12) : null;
+	}
+
+	return this.keyId;
+};
+
+/**
+ * Returns a copy of the given notification for clients with the legacy
+ * channel key of the file, or null if no copy is needed. Clients from before
+ * random keys cannot read notifications on a channel with a random key, and
+ * for them live changes stop. With the copy they still see when the file was
+ * saved and load the changes from the file, like a client with an outdated
+ * protocol. Only save and descriptor notifications are copied: they contain
+ * the modified time and no content, and anyone who can derive the legacy key
+ * sees that time from the relay anyway.
+ */
+DrawioFileSync.prototype.createLegacyNotification = function(msg)
+{
+	var legacy = (this.legacyKeyNotify) ? this.file.getLegacyChannelKey() : null;
+	var p = (msg != null) ? msg.p : null;
+
+	return (legacy != null && this.key != null && legacy != this.key &&
+		p != null && p.m != null && (p.a == null || p.a == 'desc')) ?
+		{v: msg.v, av: msg.av, p: p, c: msg.c, kid: this.getKeyId()} : null;
+};
+
+/**
+ * Decodes a message that was encrypted with the legacy channel key of the
+ * file while this client uses a random key. Such messages come from clients
+ * from before random keys and are the copies of notifications from
+ * createLegacyNotification. Returns null if the data is not such a message.
+ */
+DrawioFileSync.prototype.decodeLegacyMessage = function(data)
+{
+	var legacy = (typeof data === 'string') ? this.file.getLegacyChannelKey() : null;
+	var msg = null;
+
+	if (legacy != null && this.key != null && legacy != this.key)
+	{
+		try
+		{
+			msg = this.decodeString(data, legacy);
+		}
+		catch (e)
+		{
+			// Not encrypted with the legacy key
+		}
+	}
+
+	return (msg != null && typeof msg === 'object') ? msg : null;
+};
+
+/**
+ * Handles a message from decodeLegacyMessage. Anyone who can derive the
+ * legacy key can send one, so none of its content is used: a save or
+ * descriptor notification only makes this client check the file, which is
+ * where the changes of clients with the legacy key are read from. Copies of
+ * notifications that this client has already read are ignored and the checks
+ * are throttled to one per legacyNotifyDelay.
+ */
+DrawioFileSync.prototype.handleLegacyMessage = function(msg)
+{
+	var p = (msg != null && typeof msg === 'object') ? msg.p : null;
+
+	if (this.enabled && p != null && typeof p === 'object' && p.m != null &&
+		(p.a == null || p.a == 'desc') && (msg.kid == null ||
+		msg.kid !== this.getKeyId()))
+	{
+		this.legacyDescChanged = this.legacyDescChanged || p.a == 'desc';
+		this.legacyOptimistic = this.legacyOptimistic || p.type == 'optimistic';
+
+		if (this.legacyNotifyThread == null)
+		{
+			this.legacyNotifyThread = window.setTimeout(mxUtils.bind(this, function()
+			{
+				var desc = this.legacyDescChanged;
+				var optimistic = this.legacyOptimistic;
+				this.legacyNotifyThread = null;
+				this.legacyDescChanged = false;
+				this.legacyOptimistic = false;
+				this.lastLegacyNotify = Date.now();
+
+				if (!this.file.inConflictState && !this.file.redirectDialogShowing &&
+					this.isConnected())
+				{
+					EditorUi.debug('DrawioFileSync.handleLegacyMessage', [this],
+						'desc', desc, 'optimistic', optimistic);
+
+					if (desc)
+					{
+						this.handleMessageData({a: 'desc'});
+					}
+					else
+					{
+						this.fileChangedNotify((optimistic) ?
+							{type: 'optimistic'} : null);
+					}
+				}
+			}), Math.max(0, this.lastLegacyNotify +
+				this.legacyNotifyDelay - Date.now()));
+		}
+	}
+};
+
+/**
+ * Cached result of the CSPRNG probe in isEncryptionAvailable.
+ */
+DrawioFileSync.encryptionAvailable = null;
+
+/**
+ * Returns true if messages on this channel are encrypted, ie. the file has
+ * a channel key and CryptoJS is loaded. Every genuine message on such a
+ * channel is encrypted: the socket envelope (bytes) since 20.2.0 and the
+ * cache messages since the key was introduced in 2018. Neither the relay nor
+ * the cache authenticates the sender, anyone who knows the channel ID can
+ * post to it, so the key is the only proof that a message comes from a
+ * collaborator.
+ */
+DrawioFileSync.prototype.isEncrypted = function()
+{
+	return this.key != null && typeof CryptoJS !== 'undefined';
+};
+
+/**
+ * Returns true if messages for this file can be encrypted.
+ *
+ * CryptoJS takes the KDF salt for a passphrase key from crypto.getRandomValues and
+ * throws when no native CSPRNG is reachable, which an embedding page or a plugin can
+ * cause by redefining the global crypto object. Falling back to plaintext is not an
+ * option: the receiving peer still holds a channel key, so it would try to decrypt and
+ * get garbage, and the payload would reach the cache in the clear. Realtime sync is
+ * left off instead. Probed once per session, the result cannot change without a reload.
+ */
+DrawioFileSync.prototype.isEncryptionAvailable = function()
+{
+	// Nothing is encrypted without a channel key or without the library
+	if (!this.isEncrypted())
+	{
+		return true;
+	}
+
+	if (DrawioFileSync.encryptionAvailable == null)
+	{
+		try
+		{
+			CryptoJS.lib.WordArray.random(8);
+			DrawioFileSync.encryptionAvailable = true;
+		}
+		catch (e)
+		{
+			DrawioFileSync.encryptionAvailable = false;
+
+			// Hashed: no raw file ids in logs
+			EditorUi.logError('Error: No CSPRNG for realtime encryption',
+				null, this.ui.hashValue(this.file.getId()), null, e);
+		}
+	}
+
+	return DrawioFileSync.encryptionAvailable;
+};
+
+/**
+ * Converts the given object to an encrypted string. Returns null if
+ * the optional maxLength is exceeded before encryption. The optional
+ * key replaces the channel key (see createLegacyNotification).
+ */
+DrawioFileSync.prototype.objectToString = function(obj, maxLength, key)
+{
+	key = (key != null) ? key : this.key;
+	var data = JSON.stringify(obj);
+
+	// Wire encoding (since PROTOCOL 7): the JSON is deflated directly
+	// (pako encodes the string as UTF-8) - the legacy URI-encoding
+	// step expanded every JSON quote and non-ASCII character up to 3x
+	// before deflate and dominated encode time. The FILE format
+	// (Graph.compress) is unchanged. stringToObject still reads
+	// legacy payloads (cache entries written by older clients
+	// survive a deploy).
+	if (typeof pako !== 'undefined')
+	{
+		data = btoa(Graph.arrayBufferToString(
+			new Uint8Array(pako.deflateRaw(data))));
+	}
+
+	// Callers that drop oversized payloads (cache entries above
+	// maxCacheEntrySize) stop before encryption: it only grows the
+	// data, and the CryptoJS base64 encoder builds a per-character
+	// array that fails with a RangeError for very large payloads
+	if (maxLength != null && data.length > maxLength)
+	{
+		return null;
+	}
+
+	if (key != null && typeof CryptoJS !== 'undefined')
+	{
+		// Fails closed if the CSPRNG went away after start, rather than
+		// sending a message the peer cannot read and the cache can
+		if (!this.isEncryptionAvailable())
+		{
+			throw new Error('No CSPRNG for realtime encryption');
+		}
+
+		data = CryptoJS.AES.encrypt(data, key).toString();
+	}
+
 	return data;
 };
 
 /**
- * Converts the given encrypted string to an object.
+ * Converts the given encrypted string to an object. Messages with the
+ * previous channel key are accepted for previousKeyTimeout after the key
+ * changed (see updateChannelKey).
  */
 DrawioFileSync.prototype.stringToObject = function(data)
 {
-	if (this.key != null && typeof CryptoJS !== 'undefined')
+	// The data is remote JSON (socket envelope, cache entry) and CryptoJS
+	// takes a non-string argument as parsed cipher parameters: a message
+	// of about 100 bytes with a huge sigBytes blocked the receiver in the
+	// decrypt loop for seconds per message, before any key was checked
+	if (typeof data !== 'string')
 	{
-		data = CryptoJS.AES.decrypt(data, this.key).toString(CryptoJS.enc.Utf8);
+		throw new Error('Invalid message data');
 	}
-	
-	return JSON.parse(Graph.decompress(data));
+
+	try
+	{
+		return this.decodeString(data, this.key);
+	}
+	catch (e)
+	{
+		if (this.previousKey != null && this.previousKey != this.key &&
+			Date.now() - this.previousKeyTime < this.previousKeyTimeout)
+		{
+			return this.decodeString(data, this.previousKey);
+		}
+
+		throw e;
+	}
+};
+
+/**
+ * Decodes the given string with the given key, or without encryption if
+ * the key is null. Throws an error if the string cannot be decoded.
+ */
+DrawioFileSync.prototype.decodeString = function(data, key)
+{
+	if (key != null && typeof CryptoJS !== 'undefined')
+	{
+		data = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8);
+	}
+
+	if (typeof pako !== 'undefined')
+	{
+		data = Graph.zapGremlins(pako.inflateRaw(
+			Graph.stringToArrayBuffer(atob(data)), {to: 'string'}));
+
+		// Legacy payloads are URI-encoded JSON ('%7B' == '{'), the
+		// direct encoding above starts with '{' or '['
+		if (data != null && data.charAt(0) == '%')
+		{
+			data = decodeURIComponent(data);
+		}
+	}
+
+	return JSON.parse(data);
 };
 
 /**
@@ -1956,12 +4158,30 @@ DrawioFileSync.prototype.fileDataUpdated = function()
  * Invoked after a file was saved to add cache entry (which in turn notifies
  * collaborators).
  */
-DrawioFileSync.prototype.fileSaved = function(pages, lastDesc, success, error, token, checksum)
+DrawioFileSync.prototype.fileSaved = function(pages, lastDesc, success, error, token, checksum, savedVars, savedAttributes)
 {
 	this.lastModified = this.file.getLastModifiedDate();
 	this.resetUpdateStatusThread();
-	this.catchupRetryCount = 0;
+
+	// Callers with saved bytes pass the actual persisted attribute;
+	// preserve the historical fallback for direct integrations.
+	if (savedVars === undefined)
+	{
+		savedVars = (this.ui.fileNode != null) ?
+			this.ui.fileNode.getAttribute('vars') : null;
+	}
+
+	if (savedAttributes === undefined)
+	{
+		savedAttributes = this.file.getSyncedFileAttributes();
+	}
+
+	this.file.confirmFileVars(savedVars);
 	
+	// The notification branch completes the save itself (the cache
+	// branch once its request is done), every other path below
+	var notifying = false;
+
 	if (!this.ui.isOffline(true) && !this.file.inConflictState &&
 		!this.file.redirectDialogShowing)
 	{
@@ -1969,15 +4189,20 @@ DrawioFileSync.prototype.fileSaved = function(pages, lastDesc, success, error, t
 
 		if (this.channelId != null)
 		{
+			notifying = true;
+
 			// Computes diff and checksum
 			var secret = this.file.getDescriptorSecret(this.file.getDescriptor());
 			var msg = this.createMessage({m: this.lastModified.getTime()});
 			var source = this.file.getDescriptorRevisionId(lastDesc);
 			var target = this.file.getCurrentRevisionId();
 			
+			// Without a cache entry while alone (see isAlone): nobody would
+			// read it, and notify skips the notification as well
 			if (secret == null || token == null ||
 				urlParams['lockdown'] == '1' ||
-				!Editor.enableRealtimeCache)
+				!Editor.enableRealtimeCache ||
+				this.isAlone())
 			{
 				this.notify(msg);
 				
@@ -1992,61 +4217,89 @@ DrawioFileSync.prototype.fileSaved = function(pages, lastDesc, success, error, t
 			}
 			else
 			{
-				var diff = this.ui.diffPages(this.file.getShadowPages(), pages);
+				var diff = this.ui.diffSavedPages(this.file.getShadowPages(), pages);
+
+				var shadowVars = this.file.getShadowVars();
+				if (savedVars != shadowVars)
+				{
+					diff[EditorUi.DIFF_FILE] = {vars: savedVars};
+				}
+
+				this.file.diffSyncedFileAttributes(diff,
+					this.file.getShadowAttributes(), savedAttributes);
+
 				var lastSecret = this.file.getDescriptorSecret(lastDesc);
 				checksum = (checksum != null) ? checksum : this.ui.getHashValueForPages(pages);
 				
-				// Data is stored in cache and message is sent to all listeners
+				// Data is stored in cache and message is sent to all listeners;
+				// payloads above the cache entry limit are dropped before encryption
 				var data = this.objectToString(this.createMessage(
-					{patch: diff, checksum: checksum}));
-				this.file.stats.bytesSent += data.length;
+					{patch: diff, checksum: checksum}), this.maxCacheEntrySize);
+				var dataLength = (data != null) ? data.length : 0;
+				this.file.stats.bytesSent += dataLength;
 				this.file.stats.msgSent++;
 				
 				var acceptResponse = true;
-							
+
+				// The file is saved at this point. If the cache request fails or
+				// times out, peers miss the patch and reload the file on catchup,
+				// but they must still be notified if the request carried the
+				// notification.
+				var done = mxUtils.bind(this, function(status)
+				{
+					window.clearTimeout(timeoutThread);
+
+					if (acceptResponse)
+					{
+						var stored = status >= 200 && status <= 299;
+						acceptResponse = false;
+
+						if (Editor.p2pSyncNotify)
+						{
+							this.notify(msg);
+						}
+						else if (!stored && this.p2pCollab != null)
+						{
+							this.p2pCollab.sendNotification(msg);
+						}
+
+						EditorUi.debug('DrawioFileSync.fileSaved', [this],
+							'cache', (status != null) ? status : 'timeout');
+
+						if (success != null)
+						{
+							success();
+						}
+					}
+				});
+
 				var timeoutThread = window.setTimeout(mxUtils.bind(this, function()
 				{
-					acceptResponse = false;
-					error({code: App.ERROR_TIMEOUT, message: mxResources.get('timeout')});
+					done(null);
 				}), this.ui.timeout);
+
+				// The notification in socket format, which the cache sends on
+				// to the other clients' sockets once the patch is stored
+				var notice = (!Editor.p2pSyncNotify && this.p2pCollab != null) ?
+					this.p2pCollab.createNotification(msg) : null;
+				this.notificationSent('save');
 
 				mxUtils.post(EditorUi.cacheUrl, this.getIdParameters() +
 					'&from=' + encodeURIComponent(source) + '&to=' + encodeURIComponent(target) +
-					(!Editor.p2pSyncNotify ? '&msg=' + encodeURIComponent(this.objectToString(msg)) : '') +
+					((notice != null) ? '&notice=' + encodeURIComponent(notice) : '') +
 					((secret != null) ? '&secret=' + encodeURIComponent(secret) : '') +
 					((lastSecret != null) ? '&last-secret=' + encodeURIComponent(lastSecret) : '') +
-					((data.length < this.maxCacheEntrySize) ? '&data=' + encodeURIComponent(data) : '') +
+					((data != null && data.length < this.maxCacheEntrySize) ? '&data=' + encodeURIComponent(data) : '') +
 					((token != null) ? '&token=' + encodeURIComponent(token) : ''),
 					mxUtils.bind(this, function(req)
 				{
-					window.clearTimeout(timeoutThread);
-					
-					if (acceptResponse)
-					{
-						if (req.getStatus() >= 200 && req.getStatus() <= 299)
-						{
-							if (Editor.p2pSyncNotify)
-							{
-								this.notify(msg);
-							}
-
-							if (success != null)
-							{
-								success();
-							}
-						}
-						else
-						{
-							error({message: mxResources.get('realtimeCollaboration') +
-								((req.getStatus() != 0) ? ': ' + req.getStatus() : '')});
-						}
-					}
+					done(req.getStatus());
 				}));
 				
 				EditorUi.debug('DrawioFileSync.fileSaved', [this],
 					'from', source, 'to', target, 'etag',
-					this.file.getCurrentEtag(), 'diff',
-					diff, data.length, 'bytes',
+					this.file.getCurrentEtag(), 'diff', diff,
+					dataLength, 'bytes', 'msg', msg,
 					'checksum', checksum);
 			}
 			
@@ -2070,8 +4323,71 @@ DrawioFileSync.prototype.fileSaved = function(pages, lastDesc, success, error, t
 	
 	// Ignores cache response as clients
 	// load file if cache entry failed
-	this.file.setShadowPages(pages);
+	this.file.setShadowPages(pages, savedVars, savedAttributes);
+
+	// Replaces the incrementally patched snapshot with a copy of
+	// the pages so that drift has a bounded lifetime, except if
+	// local changes are pending as they must remain diffable
+	if (this.file.isRealtime() && !this.localFileWasChanged)
+	{
+		this.snapshot = this.ui.clonePages(this.ui.pages);
+		this.snapshotVars = (this.ui.fileNode != null) ?
+			this.ui.fileNode.getAttribute('vars') : null;
+		this.snapshotAttributes = this.file.getSyncedFileAttributes();
+		this.dirtyPageIds = Object.create(null);
+	}
 	this.scheduleCleanup();
+
+	this.flushRemoteDescriptor();
+
+	// The file is written at this point, so the save completes without
+	// a notification too (offline, newer-version dialog showing, no
+	// channel). The callers end the save there: status, save spinner,
+	// autosave of edits made during the save, save and exit and the embed
+	// save events. Without it the save never ended (save-ack-offline).
+	if (!notifying && success != null)
+	{
+		success();
+	}
+};
+
+/**
+ * Handles a descriptor change notification that arrived while the file
+ * was being saved. Deferring it is required (the descriptor must not
+ * change mid-save), but the deferral used to be picked up on the save
+ * SUCCESS path only: a save that failed dropped the notification, and
+ * nothing else re-triggers it - the client then works against a
+ * descriptor it already knows to be stale until some later save
+ * happens to succeed.
+ */
+DrawioFileSync.prototype.flushRemoteDescriptor = function()
+{
+	if (this.remoteDescriptorChanged && !this.file.savingFile &&
+		!this.file.inConflictState)
+	{
+		this.remoteDescriptorChanged = false;
+		this.reloadDescriptor();
+	}
+};
+
+/**
+ * Replays a file-changed notification that arrived during a save
+ * (fileChangedNotify defers it as remoteFileChanged). The success path
+ * picks it up in handleFileSuccess; a FAILED save dropped it, the
+ * twin of the descriptor case above: the peer's save was never merged,
+ * so the own pages lacked its content while the screen showed it as
+ * unconfirmed live content, and the cleanup expelled it after the
+ * grace period - came, went, and came back only with the client's next
+ * successful save (412, catchup). A conflict runs its own catchup.
+ */
+DrawioFileSync.prototype.flushRemoteFileChanged = function()
+{
+	if (this.remoteFileChanged && !this.file.savingFile &&
+		!this.file.inConflictState)
+	{
+		this.remoteFileChanged = false;
+		this.fileChangedNotify();
+	}
 };
 
 /**
@@ -2080,23 +4396,65 @@ DrawioFileSync.prototype.fileSaved = function(pages, lastDesc, success, error, t
 DrawioFileSync.prototype.getIdParameters = function()
 {
 	var result = 'id=' + this.channelId;
-	
-	if (this.pusher != null && this.pusher.connection != null &&
-		this.pusher.connection.socket_id != null)
+
+	// The socket client of this session, which the cache leaves out when
+	// it sends a save notice on
+	var cid = (this.p2pCollab != null) ? this.p2pCollab.getClientId() : null;
+
+	if (cid != null)
 	{
-		result += '&sid=' + this.pusher.connection.socket_id;
+		result += '&cid=' + encodeURIComponent(cid);
 	}
 	
 	return result;
 };
 
 /**
- * Creates the properties for the file descriptor.
+ * Creates the envelope for a sync message. The payload field is named
+ * p since PROTOCOL 7 (it was d before): a v6 client checks the
+ * protocol version only on the cache channel and hands socket
+ * payloads to receiveRemoteChanges and handleMessageData unchecked,
+ * so a v7 payload under the old name could be applied with incompatible
+ * semantics or corrupted percent text. Without d the old handlers throw
+ * and ignore the message. A cache-channel version prompt is possible only
+ * after successful decoding; it is not guaranteed and cannot retire old
+ * direct-provider writers. See docs/claude/realtime-rollout.md.
  */
 DrawioFileSync.prototype.createMessage = function(data)
 {
-	return {v: DrawioFileSync.PROTOCOL, d: data, c: this.clientId};
+	return {v: DrawioFileSync.PROTOCOL, av: EditorUi.VERSION,
+		p: data, c: this.clientId};
 };
+
+/**
+ * Returns true if the payload of the given message must be ignored
+ * because the sending app is older than minRemoteAppVersion. Callers
+ * degrade ignored senders to the file fallback so no diffs are
+ * silently lost. An unknown or unparsable remote version counts as
+ * outdated while a minimum is set.
+ */
+DrawioFileSync.prototype.isRemoteAppOutdated = function(msg)
+{
+	var result = false;
+
+	if (this.minRemoteAppVersion != null)
+	{
+		var delta = DrawioFileSync.compareAppVersions(
+			(msg != null) ? msg.av : null, this.minRemoteAppVersion);
+		result = delta == null || delta < 0;
+	}
+
+	return result;
+};
+
+/**
+ * Minimum app version required for processing incoming realtime
+ * payloads. Null accepts all clients on the current protocol. This is
+ * set by the realtime server's admission response and policy updates.
+ * The server also enforces the document's floor on open sockets, joins
+ * and relays. This receive filter does not govern provider writes.
+ */
+DrawioFileSync.prototype.minRemoteAppVersion = null;
 
 /**
  * Creates the properties for the file descriptor.
@@ -2139,41 +4497,42 @@ DrawioFileSync.prototype.fileConflict = function(desc, success, error)
  */
 DrawioFileSync.prototype.stop = function()
 {
-	if (this.pusher != null)
+	// Stops the status update interval as it is only restarted
+	// while a session exists, so it would keep running after
+	// the file is closed and repaint a stale status line
+	if (this.updateStatusThread != null)
 	{
-		EditorUi.debug('DrawioFileSync.stop', [this]);
-	
-		if (this.pusher.connection != null)
-		{
-			this.pusher.connection.unbind('state_change', this.connectionListener);
-			this.pusher.connection.unbind('error', this.pusherErrorListener);
-		}
-	
-		if (this.channel != null) 
-		{
-			this.channel.unbind('changed', this.changeListener);
-			
-			// See https://github.com/pusher/pusher-js/issues/75
-			// this.pusher.unsubscribe(this.channelId);
-			this.channel = null;
-		}
-		
-		this.pusher.disconnect();
-		this.pusher = null;
+		window.clearInterval(this.updateStatusThread);
+		this.updateStatusThread = null;
+	}
 
-		if (this.p2pCollab != null)
-		{
-			this.p2pCollab.destroy();
-			this.p2pCollab = null;
-		}
-	}
-	else if (this.puller != null)
+	if (this.polling != null)
 	{
-		EditorUi.debug('DrawioFileSync.stop (Pulling)', [this]);
-		this.puller.stop();
-		this.puller = null;
+		this.polling.stop();
+		this.polling = null;
 	}
-	
+
+	// The hidden and the idle stop end the session too, and start
+	// joins again (on the new channel after makeCopy)
+	if (this.p2pCollab != null)
+	{
+		this.p2pCollab.destroy();
+		this.p2pCollab = null;
+	}
+
+	if (this.started)
+	{
+		this.started = false;
+		EditorUi.debug('DrawioFileSync.stop', [this]);
+	}
+
+	// The client list of the next session starts it again (see peerJoined)
+	if (this.resendThread != null)
+	{
+		window.clearTimeout(this.resendThread);
+		this.resendThread = null;
+	}
+
 	this.updateOnlineState();
 	this.updateStatus();
 };
@@ -2183,6 +4542,10 @@ DrawioFileSync.prototype.stop = function()
  */
 DrawioFileSync.prototype.destroy = function()
 {
+	// The leave message ends the presentation for the followers
+	this.ui.setPresenting(false);
+	this.ui.stopFollowing();
+
 	if (this.channelId != null)
 	{
 		var user = this.file.getCurrentUser();
@@ -2196,7 +4559,19 @@ DrawioFileSync.prototype.destroy = function()
 
 		this.notify(this.createMessage(leave));
 	}
-	
+
+	if (this.commentsChangedThread != null)
+	{
+		window.clearTimeout(this.commentsChangedThread);
+		this.commentsChangedThread = null;
+	}
+
+	if (this.legacyNotifyThread != null)
+	{
+		window.clearTimeout(this.legacyNotifyThread);
+		this.legacyNotifyThread = null;
+	}
+
 	this.stop();
 
 	if (this.onlineListener != null)
@@ -2208,7 +4583,7 @@ DrawioFileSync.prototype.destroy = function()
 
 	if (this.autosaveListener != null)
 	{
-		this.ui.editor.addListener('autosaveChanged', this.autosaveListener);
+		this.ui.editor.removeListener(this.autosaveListener);
 		this.autosaveListener = null;
 	}
 
@@ -2233,12 +4608,6 @@ DrawioFileSync.prototype.destroy = function()
 		this.activityListener = null;
 	}
 	
-	if (this.collaboratorsElement != null)
-	{
-		this.collaboratorsElement.parentNode.removeChild(this.collaboratorsElement);
-		this.collaboratorsElement = null;
-	}
-
 	// This is not needed now as stop already destroyed it
 	if (this.p2pCollab != null)
 	{

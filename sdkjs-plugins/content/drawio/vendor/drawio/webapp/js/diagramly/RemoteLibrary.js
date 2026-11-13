@@ -1,4 +1,4 @@
-// Copyright (c) 2006-2020, JGraph Ltd
+// Copyright (c) 2006-2020, JGraph Holdings Ltd
 /**
  */
 RemoteLibrary = function(ui, data, libObj)

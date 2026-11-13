@@ -1,6 +1,5 @@
 /**
- * $Id: mxMockupText.js,v 1.4 2013/05/24 07:12:36 mate Exp $
- * Copyright (c) 2006-2010, JGraph Ltd
+ * Copyright (c) 2006-2010, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -177,18 +176,16 @@ mxShapeMockupLinkBar.prototype.background = function(c, w, h, rSize, buttonNum, 
 	c.setStrokeColor(separatorColor);
 	c.begin();
 
+	// Sum of the widths of the buttons before the separator
+	var sumWidth = 0;
+
 	for (var i = 1; i < buttonNum; i++)
 	{
+		sumWidth += buttonWidths[i - 1] + 2 * labelOffset;
+
 		if (i !== selectedButton && i !== (selectedButton + 1))
 		{
-			var currWidth = 0;
-
-			for (var j = 0; j < i; j++)
-			{
-				currWidth += buttonWidths[j] + 2 * labelOffset;
-			}
-
-			currWidth = currWidth * w / minW;
+			var currWidth = sumWidth * w / minW;
 			c.moveTo(currWidth, 0);
 			c.lineTo(currWidth, h);
 		}
@@ -782,6 +779,10 @@ mxShapeMockupCaptcha.prototype.cst = {
 		SHAPE_CAPTCHA : 'mxgraph.mockup.text.captcha'
 };
 
+mxShapeMockupCaptcha.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color', primary: true}
+];
+
 /**
  * Function: paintVertexShape
  * 
@@ -806,8 +807,9 @@ mxShapeMockupCaptcha.prototype.foreground = function(c, w, h)
 	var mainText = mxUtils.getValue(this.style, mxShapeMockupCaptcha.prototype.cst.MAIN_TEXT, 'Note line 1');
 	var fontColor = mxUtils.getValue(this.style, mxShapeMockupCaptcha.prototype.cst.TEXT_COLOR, '#666666');
 	var fontSize = mxUtils.getValue(this.style, mxShapeMockupCaptcha.prototype.cst.TEXT_SIZE, '25');
+	var fillColor2 = mxUtils.getValue(this.style, 'fillColor2', '#88aaff');
 
-	c.setFillColor('#88aaff');
+	c.setFillColor(fillColor2);
 	c.begin();
 	c.moveTo(0, 0);
 	c.lineTo(w * 0.35, 0);

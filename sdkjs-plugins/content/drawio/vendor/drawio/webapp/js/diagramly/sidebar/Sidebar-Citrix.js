@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addCitrixPalette = function()
@@ -9,7 +13,7 @@
 		var dt = '';
 		this.setCurrentSearchEntryLibrary('citrix');
 		
-		this.addPaletteFunctions('citrix', 'Citrix', false,
+		this.addPaletteFunctions('citrix', 'Citrix (legacy)', false,
 		[
 			this.createVertexTemplateEntry(s + '1u_2u_server;', w * 200, h * 78.2, '', '1U 2U Server', null, null, this.getTagsForStencil(gn, '1U 2U Server', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'access_card;', w * 111, h * 150, '', 'Access Card', null, null, this.getTagsForStencil(gn, 'Access Card', dt).join(' ')),

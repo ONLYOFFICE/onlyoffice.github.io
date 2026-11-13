@@ -1,6 +1,5 @@
 /**
- * $Id: mxArchiMate.js,v 1.0 2014/03/17 07:05:39 mate Exp $
- * Copyright (c) 2006-2014, JGraph Ltd
+ * Copyright (c) 2006-2014, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -779,6 +778,9 @@ mxArchiMateApplication.prototype.getConstraints = function(style, w, h)
 
 	return (constr);
 };
+
+// Product is a plain box like Application
+mxArchiMateProduct.prototype.getConstraints = mxArchiMateApplication.prototype.getConstraints;
 
 //**********************************************************************************************************************************************************
 //Tech

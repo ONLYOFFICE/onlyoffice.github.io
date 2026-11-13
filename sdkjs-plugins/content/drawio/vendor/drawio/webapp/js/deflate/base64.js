@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 
 /**
 *
@@ -99,15 +103,31 @@ var Base64 = {
 
 			var c = string.charCodeAt(n);
 
+			// Handle surrogate pairs for characters above U+FFFF (e.g. emoji)
+			if (c >= 0xD800 && c <= 0xDBFF) {
+				var c2 = string.charCodeAt(n + 1);
+
+				if (c2 >= 0xDC00 && c2 <= 0xDFFF) {
+					c = ((c & 0x3FF) << 10) + (c2 & 0x3FF) + 0x10000;
+					n++;
+				}
+			}
+
 			if (c < 128) {
 				utftext += String.fromCharCode(c);
 			}
-			else if((c > 127) && (c < 2048)) {
+			else if (c < 2048) {
 				utftext += String.fromCharCode((c >> 6) | 192);
 				utftext += String.fromCharCode((c & 63) | 128);
 			}
-			else {
+			else if (c < 65536) {
 				utftext += String.fromCharCode((c >> 12) | 224);
+				utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+				utftext += String.fromCharCode((c & 63) | 128);
+			}
+			else {
+				utftext += String.fromCharCode((c >> 18) | 240);
+				utftext += String.fromCharCode(((c >> 12) & 63) | 128);
 				utftext += String.fromCharCode(((c >> 6) & 63) | 128);
 				utftext += String.fromCharCode((c & 63) | 128);
 			}
@@ -136,11 +156,20 @@ var Base64 = {
 				string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
 				i += 2;
 			}
-			else {
+			else if (c < 240) {
 				c2 = utftext.charCodeAt(i+1);
 				c3 = utftext.charCodeAt(i+2);
 				string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
 				i += 3;
+			}
+			else {
+				c2 = utftext.charCodeAt(i+1);
+				c3 = utftext.charCodeAt(i+2);
+				var c4 = utftext.charCodeAt(i+3);
+				var cp = ((c & 7) << 18) | ((c2 & 63) << 12) | ((c3 & 63) << 6) | (c4 & 63);
+				// Lead bytes F4 to F7 can encode values above U+10FFFF in non-UTF-8 input
+				string += (cp <= 0x10FFFF) ? String.fromCodePoint(cp) : '\uFFFD';
+				i += 4;
 			}
 
 		}

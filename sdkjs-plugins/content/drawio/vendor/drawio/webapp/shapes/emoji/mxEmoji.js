@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 // Unicode Emoji shape
 function mxShapeEmoji(bounds, fill, stroke, strokewidth)
 {
@@ -1504,9 +1508,11 @@ mxShapeEmoji.prototype.emojis = {
 	'double_exclamation_mark': '‼️',
 	'exclamation_question_mark': '⁉️',
 	'red_question_mark': '❓',
+	'question_mark': '❓',
 	'white_question_mark': '❔',
 	'white_exclamation_mark': '❕',
 	'red_exclamation_mark': '❗',
+	'exclamation_mark': '❗',
 	'wavy_dash': '〰️',
 	'currency_exchange': '💱',
 	'heavy_dollar_sign': '💲',

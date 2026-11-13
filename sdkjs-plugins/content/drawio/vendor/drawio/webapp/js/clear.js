@@ -1,59 +1,81 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 try
 {
 	function write(text)
 	{
-		document.body.appendChild(document.createTextNode(text));
+		document.getElementById('content').appendChild(document.createTextNode(text));
 	};
 
 	function writeln(text)
 	{
 		write(text);
-		document.body.appendChild(document.createElement('br'));
+		document.getElementById('content').appendChild(document.createElement('br'));
 	};
-	
+
+	// No onclick attributes: the CSP of ac.draw.io and aj.draw.io blocks them
+	function addButton(label, fn)
+	{
+		var button = document.createElement('button');
+		button.style.margin = '4px';
+		button.appendChild(document.createTextNode(label));
+		button.addEventListener('click', fn);
+		document.getElementById('content').appendChild(button);
+	};
+
+	writeln('');
 	write('Clearing Cached version ' + EditorUi.VERSION + '...');
 
-	navigator.serviceWorker.getRegistrations().then(function(registrations)
+	if (navigator.serviceWorker != null)
 	{
-		if (registrations != null && registrations.length > 0)
+		navigator.serviceWorker.getRegistrations().then(function(registrations)
 		{
-			for (var i = 0; i < registrations.length; i++)
+			if (registrations != null && registrations.length > 0)
 			{
-				registrations[i].unregister();
+				for (var i = 0; i < registrations.length; i++)
+				{
+					registrations[i].unregister();
+				}
+
+				writeln('Done');
 			}
+			else
+			{
+				writeln('OK');
+			}
+			
+			writeln('');
+			addButton('Update', function()
+			{
+				window.location.reload();
+			});
 
-			writeln('Done');
-		}
-		else
-		{
-			writeln('OK');
-		}
-		
-		if ((/test\.draw\.io$/.test(window.location.hostname)) ||
-			(/stage\.diagrams\.net$/.test(window.location.hostname)) ||
-			(/app\.diagrams\.net$/.test(window.location.hostname)))
-		{
-			var link = document.createElement('a');
-			link.setAttribute('href', './');
-			link.appendChild(document.createTextNode('Start App'));
-			document.body.appendChild(link);
-		}
-	});
-
-	// Clears corresponding domain of current domain
-	var iframe = document.createElement('iframe');
-	iframe.style.display = 'none';
-
-	if (window.location.hostname == 'ac.draw.io')
-	{
-		iframe.src = 'https://clear.diagrams.net';
+			if ((/test\.draw\.io$/.test(window.location.hostname)) ||
+				(/preprod\.diagrams\.net$/.test(window.location.hostname)) ||
+				(/app\.diagrams\.net$/.test(window.location.hostname)))
+			{
+				addButton('Start App', function()
+				{
+					window.location.href = '/.';
+				});
+			}
+			// Opens the page for app.diagrams.net: a frame cannot clear it,
+			// browsers keep the storage of a frame per top-level site
+			else if (/^a[cj]\.draw\.io$/.test(window.location.hostname))
+			{
+				addButton('Clear app.diagrams.net', function()
+				{
+					window.open('https://clear.diagrams.net', '_blank', 'noopener');
+				});
+			}
+		});
 	}
 	else
 	{
-		iframe.src = 'https://clear.draw.io';
+		writeln('OK');
 	}
-
-	document.body.appendChild(iframe);
 }
 catch (e)
 {

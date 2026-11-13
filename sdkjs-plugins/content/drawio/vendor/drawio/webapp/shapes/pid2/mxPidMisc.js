@@ -1,6 +1,5 @@
 /**
- * $Id: mxPidMisc.js,v 1.4 2013/11/22 10:46:56 mate Exp $
- * Copyright (c) 2006-2013, JGraph Ltd
+ * Copyright (c) 2006-2013, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -153,6 +152,13 @@ mxShapePidColumn.prototype.customProperties = [
 ];
 
 /**
+ * Variable: maxRows
+ *
+ * Maximum number of rows of the fill. Default is 1000.
+ */
+mxShapePidColumn.prototype.maxRows = 1000;
+
+/**
  * Function: paintVertexShape
  * 
  * Paints the vertex shape.
@@ -191,7 +197,7 @@ mxShapePidColumn.prototype.foreground = function(c, x, y, w, h)
 
 		c.begin();
 
-		for (var i = 0; i <= range - step; i += step)
+		for (var i = 0, n = 0; i <= range - step && n < this.maxRows; i += step, n++)
 		{
 			c.moveTo(0, i + off + step * 0.1);
 			c.lineTo(w, i + off + step * 0.1);
@@ -215,7 +221,7 @@ mxShapePidColumn.prototype.foreground = function(c, x, y, w, h)
 		c.setDashed(true);
 		c.begin();
 
-		for (var i = 0; i <= range; i += step)
+		for (var i = 0, n = 0; i <= range && n < this.maxRows; i += step, n++)
 		{
 			c.moveTo(0, i + off);
 			c.lineTo(w, i + off);
@@ -256,7 +262,7 @@ mxShapePidColumn.prototype.foreground = function(c, x, y, w, h)
 
 		var counter = 0;
 
-		for (var i = off + stepY * 0.5; i < range + off - dot; i += stepY)
+		for (var i = off + stepY * 0.5; i < range + off - dot && counter < this.maxRows; i += stepY)
 		{
 			var startJ = stepX;
 			odd = counter % 2;
@@ -295,7 +301,7 @@ mxShapePidColumn.prototype.foreground = function(c, x, y, w, h)
 
 		c.begin();
 
-		for (var i = off + stepY * 0.5; i < range + off; i += stepY)
+		for (var i = off + stepY * 0.5; i < range + off && counter < this.maxRows; i += stepY)
 		{
 			odd = counter % 2;
 
@@ -347,7 +353,7 @@ mxShapePidColumn.prototype.foreground = function(c, x, y, w, h)
 		
 		c.begin();
 
-		for (var i = off + stepY * 0.5; i < range + off; i += stepY)
+		for (var i = off + stepY * 0.5, n = 0; i < range + off && n < this.maxRows; i += stepY, n++)
 		{
 				c.moveTo(0, i);
 				c.lineTo(w * 0.4, i);
@@ -378,7 +384,7 @@ mxShapePidColumn.prototype.foreground = function(c, x, y, w, h)
 		var dashed = mxUtils.getValue(this.style, mxConstants.STYLE_DASHED, 0);
 
 
-		for (var i = 0; i <= range - step; i += step)
+		for (var i = 0, n = 0; i <= range - step && n < this.maxRows; i += step, n++)
 		{
 			c.setDashed(true);
 			
@@ -449,6 +455,13 @@ mxShapePidConveyor.prototype.cst = {
 };
 
 /**
+ * Variable: maxHolders
+ *
+ * Maximum number of holders. Default is 1000.
+ */
+mxShapePidConveyor.prototype.maxHolders = 1000;
+
+/**
  * Function: paintVertexShape
  * 
  * Paints the vertex shape.
@@ -485,7 +498,7 @@ mxShapePidConveyor.prototype.background = function(c, x, y, w, h)
 	var startX = wheelSize * 0.9;
 	var step = wheelSize * 0.7;
 
-	for (var i = 0; i < dist; i = i + step)
+	for (var i = 0, n = 0; i < dist && n < this.maxHolders; i = i + step, n++)
 	{
 		c.rect(startX + i, 0, wheelSize * 0.2, wheelSize * 0.1);
 		c.fillAndStroke();

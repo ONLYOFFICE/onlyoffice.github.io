@@ -1,6 +1,5 @@
 /**
- * $Id: mxLeanMap.js,v 1.3 2013/05/30 14:19:14 mate Exp $
- * Copyright (c) 2006-2013, JGraph Ltd
+ * Copyright (c) 2006-2013, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -366,6 +365,13 @@ function mxLeanSharedProcess(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxLeanSharedProcess, mxShape);
 
 /**
+ * Variable: maxLines
+ *
+ * Maximum number of hatch lines. Default is 10000.
+ */
+mxLeanSharedProcess.prototype.maxLines = 10000;
+
+/**
  * Function: paintVertexShape
  * 
  * Paints the vertex shape.
@@ -396,15 +402,17 @@ mxLeanSharedProcess.prototype.foreground = function(c, w, h, fontSize)
 
 	var start = 0;
 	var i = 0;
+	var n = 0;
 	var s = 10;
 	var offset = 0;
 	c.begin();
 	var strokeWidth = parseFloat(mxUtils.getValue(this.style, mxConstants.STYLE_STROKEWIDTH, '2'));
 	c.setStrokeWidth(strokeWidth * 0.5);
 
-	while (start < h + w)
+	while (start < h + w && n < this.maxLines)
 	{
 		start = start + s;
+		n++;
 		if (start > lineH)
 		{
 			var startX = Math.max(0, start - h); 
@@ -1100,8 +1108,8 @@ mxLeanProductionKanban.prototype.getConstraints = function(style, w, h)
 {
 	var constr = [];
 
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 4, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, 25));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 4, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, 25));
 
 	return (constr);
 };
@@ -1189,8 +1197,8 @@ mxLeanWithdrawalKanban.prototype.getConstraints = function(style, w, h)
 {
 	var constr = [];
 
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 4, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, 25));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 4, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, 25));
 
 	return (constr);
 };
@@ -1255,8 +1263,8 @@ mxLeanSignalKanban.prototype.getConstraints = function(style, w, h)
 {
 	var constr = [];
 
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, 4, h));
-	constr.push(new mxConnectionConstraint(new mxPoint(0, 0), false, null, w, 15));
+	constr.push(new mxConnectionConstraint(new mxPoint(0, 1), false, null, 4, 0));
+	constr.push(new mxConnectionConstraint(new mxPoint(1, 0), false, null, 0, 15));
 
 	return (constr);
 };

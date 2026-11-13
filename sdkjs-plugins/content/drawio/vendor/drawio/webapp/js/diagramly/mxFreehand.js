@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 function mxFreehand(graph)
 {
 	// Graph must have a container
@@ -15,7 +19,7 @@ function mxFreehand(graph)
 	}));
 	
 	//Code inspired by https://stackoverflow.com/questions/40324313/svg-smooth-freehand-drawing
-	var bufferSize = mxFreehand.prototype.NORMAL_SMOOTHING;
+	var bufferSize = mxFreehand.prototype.MILD_SMOOTHING;
 	var path = null;
 	var partPathes = [];
 	var strPath;
@@ -86,9 +90,14 @@ function mxFreehand(graph)
 		selectInserted = value;
 	};
 
-	this.setSmoothing = function(smoothing)//TODO add smoothing settings
+	this.setSmoothing = function(smoothing)
 	{
 		bufferSize = smoothing;
+	};
+
+	this.getSmoothing = function()
+	{
+		return bufferSize;
 	};
 	
 	this.setPerfectFreehandMode = function(value)
@@ -117,7 +126,17 @@ function mxFreehand(graph)
 		graph.getRubberband().setEnabled(!isEnabled);
 		graph.graphHandler.setSelectEnabled(!isEnabled);
 		graph.graphHandler.setMoveEnabled(!isEnabled);
-		graph.container.style.cursor = (isEnabled) ? 'crosshair' : '';
+		graph.panningHandler.setPinchEnabled(!isEnabled);
+
+		if (isEnabled)
+		{
+			graph.container.classList.add('geFreehandMode');
+		}
+		else
+		{
+			graph.container.classList.remove('geFreehandMode');
+		}
+
 		graph.fireEvent(new mxEventObject('freehandStateChanged'));
 	};
 	
@@ -129,6 +148,11 @@ function mxFreehand(graph)
 	this.isDrawing = function()
 	{
 		return enabled;
+	};
+
+	this.isActive = function()
+	{
+		return path != null;
 	};
 	
 	var endPath = mxUtils.bind(this, function(e)
@@ -163,6 +187,12 @@ function mxFreehand(graph)
 			
 	        mxEvent.consume(e);
 	    }
+	});
+
+	// Keeps the stroke so far if the system cancels the gesture
+	graph.addListener(mxEvent.CANCEL_MOUSE_GESTURE, function(sender, evt)
+	{
+		endPath(evt.getProperty('event'));
 	});
 
 	// Used to retrieve default styles
@@ -342,20 +372,21 @@ function mxFreehand(graph)
         setEnabled(false);
 	};
 
-	// Stops all interactions if freehand is enabled
+	// Stops all shape interactions if freehand is enabled
 	graph.addListener(mxEvent.FIRE_MOUSE_EVENT, mxUtils.bind(this, function(sender, evt)
 	{
-		var evtName = evt.getProperty('eventName');
-		var me = evt.getProperty('event');
-		
-		if (evtName == mxEvent.MOUSE_MOVE && enabled)
+		if (enabled)
 		{
-			if (me.sourceState != null)
-			{
-				me.sourceState.setCursor('crosshair');
-			}
-			
-			me.consume();
+			evt.getProperty('event').consume();
+		}
+	}));
+
+	// Prevents pinch-zoom gestures while freehand drawing is active
+	graph.addListener(mxEvent.GESTURE, mxUtils.bind(this, function(sender, evt)
+	{
+		if (enabled)
+		{
+			mxEvent.consume(evt.getProperty('event'));
 		}
 	}));
 	
@@ -368,7 +399,12 @@ function mxFreehand(graph)
 		    {
 				var e = me.getEvent();
 				
-				if (!enabled || mxEvent.isPopupTrigger(e) || mxEvent.isMultiTouchEvent(e))
+				// Ignores gestures that started forced panning (eg. space+drag)
+				if (!enabled || mxEvent.isPopupTrigger(e) ||
+					mxEvent.isMiddleMouseButton(e) ||
+					mxEvent.isMultiTouchEvent(e) ||
+					(graph.panningHandler != null &&
+					graph.panningHandler.isActive()))
 				{
 					return;
 				}
@@ -379,6 +415,7 @@ function mxFreehand(graph)
 
 			    path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 			    path.setAttribute('fill', perfectFreehandMode? strokeColor : 'none');
+				path.setAttribute('pointer-events', 'none');
 			    path.setAttribute('stroke', strokeColor);
 			    path.setAttribute('stroke-width', strokeWidth);
 			    
@@ -409,7 +446,8 @@ function mxFreehand(graph)
 	    }),
 	    mouseMove: mxUtils.bind(this, function(sender, me)
 	    {
-		    if (path && graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
+		    if (path != null && graph.isEnabled() &&
+				!graph.isCellLocked(graph.getDefaultParent()))
 		    {
 	    		var e = me.getEvent();
 				var pt = getMousePosition(e);
@@ -427,7 +465,8 @@ function mxFreehand(graph)
 	    }),
 	    mouseUp: mxUtils.bind(this, function(sender, me)
 	    {
-			if (path && graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent())) 
+			if (path != null && graph.isEnabled() &&
+				!graph.isCellLocked(graph.getDefaultParent())) 
 			{
 				endPath(me.getEvent());
 				me.consume();

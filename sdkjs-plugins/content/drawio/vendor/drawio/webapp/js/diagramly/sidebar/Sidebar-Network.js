@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addNetworkPalette = function()
@@ -12,7 +16,7 @@
 		var dt = 'computer network ';
 		this.setCurrentSearchEntryLibrary('network');
 		
-		this.addPaletteFunctions('network', 'Network', false,
+		this.addPaletteFunctions('network', 'Network 2018', false,
 		[
 			this.addDataEntry(dt + 'ring bus', 100, 100, 'Ring Bus',
 				'7VfJboMwEP0arpWBkNJjgTanSpF66NmKJ2DVYDQ429/XYIclKi2Nkp5AQrLfrLzHsDh+nB9XSMvsTTIQjv/i+DFKqcwqP8YghOMRzhw/cTyP6NPxXkesbmMlJUUo1JQAzwTsqdiBQQxQqZOwQKZy3VbiOn605ULEUkhsLH7cHBqvFMpP6FmWYehGfm3JaFnn0VV5WelVVALyHBRgh647KEqRMq6bPycrZAE9OOEIG8Vl0ZhQZXVXsnPXtbfN0Xb1wVntlXgasRcLqOA4SlgDWbZWIHVjeNIuNsALTMRpuD3YKnoXGMZJBjzN1BCjldmnbd5OG72w8nwvlf+7VOM6AEvh3TpaSlHuCgZ1clI7FOwZUR46O6NV1pp7N8EYrXWJAamKYgpqcJ9N4BlBUMX3w1Tf8WZD15LrjK0+l0xXcocbsE4XZLdVJ/G/mPmfwH8YPAwnxF2cgdtLEsySTJDEJWSgyP1GZDnrcc2IdMDtJXmcJfnDW+P8zCJ3G5Fw1mPKI2vxjyPyNEvykyR3f2u4ZBbgmpm44ZeV3nb/nMa9/0v6BQ=='),

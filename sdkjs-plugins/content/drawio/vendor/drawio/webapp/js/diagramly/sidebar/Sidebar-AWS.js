@@ -1,6 +1,10 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
-	// Adds mockup shapes
+	// Adds AWS (legacy) shapes
 	Sidebar.prototype.addAWSPalette = function()
 	{
 		this.setCurrentSearchEntryLibrary('aws2', 'aws2Analytics');

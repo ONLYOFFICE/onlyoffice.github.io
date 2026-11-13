@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	// Adds electrical stencils
@@ -552,6 +556,10 @@
 					95, 100, '', 'NMOS', null, null, this.getTagsForStencil(gnmet, 'mosfet_ic_n', dtmet).join(' ')),
 			this.createVertexTemplateEntry(mef1 + 'mosfet_ic_p;',
 					95, 100, '', 'PMOS', null, null, this.getTagsForStencil(gnmet, 'mosfet_ic_p', dtmet).join(' ')),
+			this.createVertexTemplateEntry(mef1 + 'mosfet_ic_n_body_diode;',
+					95, 100, '', 'NMOS with Body Diode', null, null, this.getTagsForStencil(gnmet, 'mosfet_ic_n_body_diode', dtmet).join(' ')),
+			this.createVertexTemplateEntry(mef1 + 'mosfet_ic_p_body_diode;',
+					95, 100, '', 'PMOS with Body Diode', null, null, this.getTagsForStencil(gnmet, 'mosfet_ic_p_body_diode', dtmet).join(' ')),
 			this.createVertexTemplateEntry(mef1 + 'mosfet_n_no_bulk;', 
 					95, 100, '', 'MOSFET No Bulk (N)', null, null, this.getTagsForStencil(gnmet, 'mosfet_n_no_bulk', dtmet).join(' ')),
 			this.createVertexTemplateEntry(mef1 + 'mosfet_p_no_bulk;',
@@ -574,7 +582,7 @@
 		
 		this.addPaletteFunctions('electrical\Instruments', 'Electrical / Instruments', false,
 		[
-			this.createVertexTemplateEntry('verticalLabelPosition=middle;shadow=0;dashed=0;align=center;html=1;verticalAlign=middle;strokeWidth=1;shape=ellipse;aspect=fixed;fontSize=50;', 
+			this.createVertexTemplateEntry('verticalLabelPosition=middle;shadow=0;dashed=0;align=center;html=1;verticalAlign=middle;strokeWidth=1;shape=ellipse;perimeter=ellipsePerimeter;aspect=fixed;fontSize=50;', 
 					90, 90, 'A', 'Ammeter', null, null, this.getTagsForStencil(gnmein, 'ampermeter ammeter', dtmein).join(' ')),
 			this.createVertexTemplateEntry(mein + 'galvanometer;', 
 					90, 90, '', 'Galvanometer', null, null, this.getTagsForStencil(gnmein, 'galvanometer', dtmein).join(' ')),
@@ -582,7 +590,7 @@
 					90, 90, '', 'Oscilloscope', null, null, this.getTagsForStencil(gnmein, 'oscilloscope', dtmein).join(' ')),
 			this.createVertexTemplateEntry(mein + 'signal_generator;', 
 					90, 90, '', 'Signal Generator', null, null, this.getTagsForStencil(gnmein, 'signal_generator', dtmein).join(' ')),
-			this.createVertexTemplateEntry('verticalLabelPosition=middle;shadow=0;dashed=0;align=center;html=1;verticalAlign=middle;strokeWidth=1;shape=ellipse;aspect=fixed;fontSize=50;', 
+			this.createVertexTemplateEntry('verticalLabelPosition=middle;shadow=0;dashed=0;align=center;html=1;verticalAlign=middle;strokeWidth=1;shape=ellipse;perimeter=ellipsePerimeter;aspect=fixed;fontSize=50;', 
 					90, 90, 'V', 'Voltmeter', null, null, this.getTagsForStencil(gnmein, 'ampermeter ammeter', dtmein).join(' '))
 		]);
 
@@ -598,7 +606,7 @@
 					64.8, 69.78, '', 'Loop Antenna', null, null, this.getTagsForStencil(gnmer, 'loop_antenna', dtmer).join(' ')),
 			this.createVertexTemplateEntry(mem + 'loop_antenna', 
 					100, 100, '', 'Loop Antenna', null, null, this.getTagsForStencil(gnmess, 'loop antenna', dtmem).join(' ')),
-			this.createVertexTemplateEntry('verticalLabelPosition=middle;shadow=0;dashed=0;align=center;html=1;verticalAlign=middle;strokeWidth=1;shape=ellipse;aspect=fixed;fontSize=35;', 
+			this.createVertexTemplateEntry('verticalLabelPosition=middle;shadow=0;dashed=0;align=center;html=1;verticalAlign=middle;strokeWidth=1;shape=ellipse;perimeter=ellipsePerimeter;aspect=fixed;fontSize=35;', 
 					60, 60, 'M', 'Electrical Motor', null, null, this.getTagsForStencil(gnmeem, 'motor_1', dtmeem).join(' ')),
 			this.createVertexTemplateEntry(mxConstants.STYLE_SHAPE + '=mxgraph.electrical.electro-mechanical.motor_2;html=1;shadow=0;dashed=0;align=center;fontSize=30;strokeWidth=1;', 
 					100, 60, '', 'Motor Armature', null, null, this.getTagsForStencil(gnmeem, 'motor_2', dtmeem).join(' ')),
@@ -700,9 +708,9 @@
 			this.createVertexTemplateEntry(mess + 'equipotential;', 
 					90, 90, '', 'Equipotential', null, null, this.getTagsForStencil(gnmess, 'equipotential', dtmess).join(' ')),
 			this.createVertexTemplateEntry(mess + 'protective_earth;', 
-					25, 20, '', 'Equipotential', null, null, this.getTagsForStencil(gnmess, 'protective_earth', dtmess).join(' ')),
+					25, 20, '', 'Equipotential', null, null, this.getTagsForStencil(gnmess, 'protective_earth earth ground', dtmess).join(' ')),
 			this.createVertexTemplateEntry(mess + 'signal_ground;', 
-					45, 30, '', 'Ground', null, null, this.getTagsForStencil(gnmess, 'signal_ground', dtmess).join(' ')),
+					45, 30, '', 'Ground', null, null, this.getTagsForStencil(gnmess, 'signal_ground earth', dtmess).join(' ')),
 			this.createVertexTemplateEntry(mem + 'chassis;', 
 					65, 32, '', 'Chassis', null, null, this.getTagsForStencil(gnmess, 'chassis', dtmem).join(' ')),
 			this.createVertexTemplateEntry(mem + 'circuit_breaker;', 
@@ -974,7 +982,7 @@
 					130, 136, '', 'Overground Enclosure', null, null, this.getTagsForStencil(gnmetr, 'overground enclosure', dtmetr).join(' ')),
 			this.createVertexTemplateEntry(metr + 'optical_fiber2;', 
 					130, 80, '', 'Optical Fiber', null, null, this.getTagsForStencil(gnmetr, 'optical fiber', dtmetr).join(' ')),
-			this.createVertexTemplateEntry('verticalLabelPosition=bottom;shadow=0;dashed=0;align=center;html=1;verticalAlign=top;strokeWidth=1;shape=ellipse;', 
+			this.createVertexTemplateEntry('verticalLabelPosition=bottom;shadow=0;dashed=0;align=center;html=1;verticalAlign=top;strokeWidth=1;shape=ellipse;perimeter=ellipsePerimeter;',
 					10, 10, '', 'Terminal', null, null, this.getTagsForStencil(gnmetr, 'terminal', dtmetr).join(' ')),
 			this.createVertexTemplateEntry(metr + 'terminal_3_phase;pointerEvents=1;', 
 					43, 10, '', 'Terminal 3 Phase', null, null, this.getTagsForStencil(gnmetr, 'Terminal 3 Phase', dtmetr).join(' ')),

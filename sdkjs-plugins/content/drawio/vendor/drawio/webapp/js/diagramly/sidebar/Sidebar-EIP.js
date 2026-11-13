@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addEipPalette = function()
@@ -79,11 +83,11 @@
 			    
 			   	return sb.createVertexTemplateFromCells([edge1, bg1, bg2], 28, 30, 'Event Message');
 			}),
-		    this.createVertexTemplateEntry(s3 + 'messExp;html=1;verticalLabelPosition=bottom;verticalAlign=top', 
+		    this.createVertexTemplateEntry(s3 + 'messExp;handsColor=#808080;html=1;verticalLabelPosition=bottom;verticalAlign=top', 
 		    		48, 48, '', 'Message Expiration', null, null, this.getTagsForStencil(gn, '', dt + 'message expiration').join(' ')),
 			this.addDataEntry(dt + 'message sequence', 60, 24, 'Message Sequence',
 				'7ZbPb4MgFMf/Gu4KtvG6urWnJUt62Jnpm5KiGMSq++sHQlsM7bLDsmzZmjThfd8Pee+DRESyetxJ2laPogCOyAMimRRC2VU9ZsA5whErELlHGEf6j/D2hjeevVFLJTTqMwnYJhwp78EqVujUxJ2Q9/IIJjxGZANNcSelGLT5wkV+0FKlau68nZLiAJngQs65JM6ybRSdPc+sUJX2YFtpz97MM4i2pOibYn6KibZ7gKKERVud6GXupJWVFJUluE6TsPk50XW+A1GDkpMOkcCpYsdlddpZszzHuVTdMJ28gFawRnVe5Scj6IDR1Uv9keuFLXCyvJ1cpBnLdUTktyJah4hWPwRRgr8UURIgigNG4XgL2lXneVLOykavcz0Y0Gg2r6JRbvqpoVPR1qwl5Mp4GecexDTabtfZNbzR/DvVc9sxB2GomIJ9S2dag76AlufEdQRSwYhu3S032E3O6w7q4Hr2pApYWamldg2uR+hDAKsAQPiS/CEALuF0Lr+fxzrgQf554CT9Jh7avHxC2PvM/8J4Bw=='),
-		    this.createVertexTemplateEntry(s3 + 'retAddr;html=1;verticalLabelPosition=bottom;fillColor=#FFE040;verticalAlign=top;', 
+		    this.createVertexTemplateEntry(s3 + 'retAddr;stampColor=#EDEDED;html=1;verticalLabelPosition=bottom;fillColor=#FFE040;verticalAlign=top;', 
 		    		78, 48, '', 'Return Address', null, null, this.getTagsForStencil(gn, 'retAddr', dt + 'return address').join(' '))
 		];
 		  
@@ -176,18 +180,18 @@
 				'7ZbBbsIwDIafJvfQMMR1FMYJaRKHnbPWayvSGLmBwZ5+bhNKYaAxDTihqlL8O3aS72/VChWXmynpZT7DFIxQE6FiQnR+VG5iMEZEskiFGosoknyL6OVMttdk5VITWHdJQeQL1tqswCteqNzWBKFyhAt4K1KXsxAJNUp1lUPdQHKgTZFZHie8IhALH2jdvPiqq4cc5q7kU417PKxyvaxlgoQ3NwpLAznYnN1+I4W9TwFLcLTlKaGg708nt2FyOK3UlReytmLPgAcBw2kk6nckhCubtgTAps9E+MmhRQteCQR68phXl0dDNkaD1PRVQ1lfbabL3O8B0gwOUDlNGbgDLy+gR2C0K9aHrU4xC6WvWHDHH9R3FRWuKIEw6Qh0u+pF7Pt/Zs9A5iGJ5HLM0Goz2atdd94NJou72uPJ3Mue3VswOPLHPyTX8Ofp4c/1Xp/b2zV42PV/u4a3sovD/YfeT+/+B3wD'),
 		    this.createVertexTemplateEntry(s2 + 'channel_adapter;fillColor=#9ddbef;', 
 		    	45, 90, '', 'Channel Adapter', null, null, this.getTagsForStencil(gn, 'channel_adapter', dt + '').join(' ')),
-		    this.createVertexTemplateEntry(s3 + 'messageChannel;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 
+		    this.createVertexTemplateEntry(s3 + 'messageChannel;channelColor1=#e6e6e6;channelColor2=#808080;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 
 		    	100, 20, '', 'Message Channel', null, null, this.getTagsForStencil(gn, 'messageChannel', dt + '').join(' ')),
-		    this.createVertexTemplateEntry(s3 + 'dataChannel;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 
+		    this.createVertexTemplateEntry(s3 + 'dataChannel;channelColor1=#e6e6e6;channelColor2=#808080;markerColor=#fffbc0;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 
 		    	100, 20, '', 'Datatype Channel', null, null, this.getTagsForStencil(gn, 'dataChannel', dt + '').join(' ')),
-		    this.createVertexTemplateEntry(s3 + 'deadLetterChannel;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 
+		    this.createVertexTemplateEntry(s3 + 'deadLetterChannel;channelColor1=#e6e6e6;channelColor2=#808080;markerColor=#ff0000;markerIconColor=#ffffff;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 
 		    	100, 20, '', 'Dead Letter Channel', null, null, this.getTagsForStencil(gn, 'deadLetterChannel', dt + '').join(' ')),
-		    this.createVertexTemplateEntry(s3 + 'invalidMessageChannel;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 
+		    this.createVertexTemplateEntry(s3 + 'invalidMessageChannel;channelColor1=#e6e6e6;channelColor2=#808080;markerColor=#ffe040;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 
 		    	100, 20, '', 'Invalid Message Channel', null, null, this.getTagsForStencil(gn, 'invalidMessageChannel', dt + '').join(' ')),
 		    this.createVertexTemplateEntry(s2 + 'messaging_bridge;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#c0f5a9;', 
 	    		150, 90, '', 'Messaging Bridge', null, null, this.getTagsForStencil(gn, 'messaging_bridge', dt + '').join(' ')),
 			this.addDataEntry(dt + 'message bus', 120, 140, 'Message Bus',
-				'7ZbPb8IgFMf/Gq6Gwma8rtV5WrLEw84ob4VISwOodX/9oLBq/ZF5MJ5s0+S9L7xX+H5KUkSLqp0b1ogPzUEhOkO0MFq7GFVtAUohgiVHdIoIwf5B5P3KaNaN4oYZqN0tBSQWbJnaQFSiYN1eJcE6o9fwJbkTXiCI5lEptNKmm0Jxd/kRzqyA0DokTMmy9vHKrwX8zFy4ym9wmvnwW9duIX/CKyaho2BNiKu2DFaMQDajCqxlJRSC1XUwJk9LBeOgvbrdTkp7nYOuwJm9n7KPo+PoBt6l3YSC5BAWIEuRuvxpzMa87DsdvPRBsvOytfR/a4GXsEgpqKXezQ5Cfu670Zua9/ZCzd+M0TufLpVerbsSZtxFMXmdpcLjdMDsCNEZ5QkOdw8iLH6Awb+nBDf4rm4gY0AxJ7fDVpd8T6WfWvqOBLdDoglw9nJCzuqNWUEqOoHXr+Imni9Png/geXry7sfv9cnvgefx/vzGT34P4JfhewH06eE/Jk4//s35BQ==')
+				'7ZZNj4IwEIZ/zVxNaXeN1wXU0yabeNhzhVlKLC0pVXF//aa0foCa9aCepJfOO51peR9ICiyp2rnhtfjUOUpgU2CJ0dr6WdUmKCVQUubAUqCUAKVAZ1eyUZclNTeo7C0F1BdsuFyjV7zQ2J0MQmONXuF3mVsBLKXAYq8kWmrTLWGke4DFOW8EutYu4LIsFLA0Q2XRAIuFrSSwNAIW/2hlF+Wv22LiOgpeu3nVFs6KEZb1qMKm4QUmgivljIkzP+v2jfzGOHZjkKM+NyFuAIvDK6Kx2F61qZOCR3PUFVqzA0p2Pjv2LpJtcMEVBGeJwLIQocte442Pi0OnIwOgs4DhMhL2PxLMC1yEEOVSb6dHIT7nZfRa5QcsqPIPY/QWWLqUOlt1JdzYi2JgFIXC07DH+gTt2dcxAOEO38NguSlwb+DNZAxKbstNv9Ul30Pply6VBUraPtEAOHobkGv02mQYigbwDqe4iefbi+cTeNKH8Xt/8Xvi/3h/fuMXP/J4fhG5F0Cgs+P9xy8/vR79AQ==')
 		];
 		
 		this.addPalette('eipMessaging Channels', 'EIP / Messaging Channels', expand || false, mxUtils.bind(this, function(content)
@@ -248,7 +252,7 @@
 		    
 			this.addEntry(dt + 'message endpoint', function()
 			{
-				var bg1 = new mxCell('', new mxGeometry(0, 0, 150, 90), s + 'rect;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#c0f5a9;html=1;');
+				var bg1 = new mxCell('', new mxGeometry(0, 0, 150, 90), s + 'rect;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#c0f5a9;html=1;dropTarget=0;');
 				bg1.vertex = true;
 				var bg2 = new mxCell('', new mxGeometry(85, 25, 40, 40), s3 + 'rect;');
 				bg2.vertex = true;
@@ -259,7 +263,7 @@
 			    
 			this.addEntry(dt + 'message endpoint', function()
 			{
-				var bg1 = new mxCell('', new mxGeometry(0, 0, 150, 90), s + 'rect;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#c0f5a9;html=1;');
+				var bg1 = new mxCell('', new mxGeometry(0, 0, 150, 90), s + 'rect;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#c0f5a9;html=1;dropTarget=0;');
 				bg1.vertex = true;
 				var bg2 = new mxCell('', new mxGeometry(25, 25, 40, 40), s3 + 'rect');
 				bg2.vertex = true;
@@ -268,7 +272,7 @@
 			   	return sb.createVertexTemplateFromCells([bg1], bg1.geometry.width, bg1.geometry.height, 'Message Endpoint');
 			}),
 			this.addDataEntry(dt + 'message endpoint', 400, 90, 'Message Endpoint',
-				'zVZNb4JAEP013NcFGj0qWi9t0sRDzyuMsHFhyDJ+9dd3F1aFiK0mNhVCMvNmZj/emwU8P8r3cy3K7B0TUJ4/8/xII1Jj5fsIlPI4k4nnTz3OmXk8/nolOqijrBQaCrqlgDcFW6E20CANUNFBOaAijWv4lAllBuCeP0lElYEdgBlHKJkWxo7NjKANsMKCFvLLVg+NW2WitLaGmGxUKhWhQl0P7sdsFYqRTatnaUVYfZnIFjTJWKg3sQT1gZUkiXbCJRJh3koYu5UQlgbNKDdsTgfGdHs0abC/ylMNOZLmgDmQPpiUndu3zQgbLlkGMs1c2chhomr89FR6Zt0Yjvh+Efx7RRg8VoRVfT2DCLxfBFfAw6bi0HVbEgU9CgUPUCh4/mPyoH4/Uc0uyP2z/g+fv//vZTf4kd3hvzXyy+9UQ5LCwrmglribnYHJZZdr3BTJSQgokrHWuLOvBoXxui4Rmo5ggQUcMafPwNW13Y64Le4vBBoye/curNmY3U1HpQo3OobOi9csJgXq9OINJ0WDEiS33dHv0Ma45+98Hev8BnwD'),
+				'zZZNb+IwEIZ/zdyNDSt6bKD0spUqdaU9m2RIrDqZaDJ87a9fOTGQCLoLUlHrXOIZv/54H08UMLNy98y2Ll4oQw/mCcyMiaR7K3cz9B60chmYOWitQGvQiw+yozarastYyTUC3Qk21q+xi3SBRvY+BhphesffLpMCzFyDSTLbFBgmUGAS611egZmnWAkymGRFlby5P0E9BZM0ha3DO2MqIeu8n5Enbic3qVpN7EMY1q7Sy6i2gUk2yOJS63/aJfpXapw4CgsuSYTK3oDHuBOhGkxSSOnBzEdhv0z1L8s5StxzPDSy4O5D49pQdO0ZqUThPWi1jUaEEZPOXFWgy4soe4gx23T9/Cg9YQC9iCQuUzG3Uhl9LpVV2+5M5SoI+jKEKNCTTrEfdnuIxhcIjT+B0Pj71829CuDovTpz+24FMfn+BXHrzR7/093pl93sH/+3GrMc32IX/ZK2T6dAcn7tmdZVdgSBVfbITNvwrfCUvrcSy3IIVlThIRb5jKKu3x3A7Xl/BmiqwnNxY93BwmkGlBpac4qDL7Eciud0F6+oFEZvxW2Gs9/ABvTi9CfQ5gY/Cn8B'),
 			this.addDataEntry(dt + 'message', 28, 48, 'Message',
 				'5ZVNb8IwDIZ/Ta9TaEcFx1E+Tjtx2HaMqNtES5MqNbTs1y9pwkdFu01iY5MGQrJfx8F57DZBlBTNStOSPaoURBAtgijRSqGziiYBIYKQ8DSI5kEYEvMLwuVAdNRGSUk1SPxKQugSdlRswSlOqHAvvABpDmvvKo1M5UpSsTipM622MgW7IzEeNByfz+wXa9+NrSfTB61VbQSppM1MacWOiQwLc/75yJgVavUKiRJKt0VEE2K/x8gTT5GZSGgUV7CtssOgUlu98dLYSUh1Dh7L/SWpNtFjWoEqAPXeLNEgKPJdd3daOTc/rjtBNobn3M88+hfM4z/F/P5z5pen7JCigufS2BtTOxhCs0xJXPM3mz2xkBgtrW3+l5eVBZ1xIYZxHiK+K74+0AjN4LM8QKv2NdsV/lwMeM6wq13Db3wzfho22AdvuYyTvikl7eewny9n1B3tmnGEdUnb2azNy/ZK4IcEP+N7706ce4N2xL/cjiybTsnlLH/Ujr4enLXo+9sRxT/VDuOebug21rnA3wE='),
 	
@@ -294,7 +298,7 @@
 			{
 				var bg1 = new mxCell('', new mxGeometry(0, 0, 12, 12), s + 'ellipse;fillColor=#808080;strokeColor=none;');
 				bg1.vertex = true;
-				var bg2 = new mxCell('', new mxGeometry(16, 18, 12, 12), s2 + 'message_1;fillColor=#ff5500;fontStyle=1;whiteSpace=wrap;html=1;');
+				var bg2 = new mxCell('', new mxGeometry(16, 18, 12, 12), s2 + 'message_1;fillColor1=#ffff00;fillColor=#ff5500;fontStyle=1;whiteSpace=wrap;html=1;');
 				bg2.vertex = true;
 				var edge1 = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;endArrow=none;dashed=0;html=1;strokeColor=#808080;strokeWidth=2;');
 		    	edge1.geometry.relative = true;
@@ -309,7 +313,7 @@
 			{
 				var bg1 = new mxCell('', new mxGeometry(0, 0, 12, 12), s + 'ellipse;fillColor=#808080;strokeColor=none;');
 				bg1.vertex = true;
-				var bg2 = new mxCell('', new mxGeometry(16, 18, 12, 12), s2 + 'message_2;fillColor=#00cc00;fontStyle=1;whiteSpace=wrap;html=1;');
+				var bg2 = new mxCell('', new mxGeometry(16, 18, 12, 12), s2 + 'message_2;fillColor1=#ffff00;fillColor=#00cc00;fontStyle=1;whiteSpace=wrap;html=1;');
 				bg2.vertex = true;
 				var edge1 = new mxCell('', new mxGeometry(0, 0, 0, 0), 'edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=0;exitY=0.5;endArrow=none;dashed=0;html=1;strokeColor=#808080;strokeWidth=2;');
 		    	edge1.geometry.relative = true;

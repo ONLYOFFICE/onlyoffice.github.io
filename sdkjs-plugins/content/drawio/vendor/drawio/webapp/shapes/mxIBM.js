@@ -1,6 +1,5 @@
 /**
- * $Id: mxIBM.js,v 1.0 2018/08/21 13:05:39 mate Exp $
- * Copyright (c) 2006-2020, JGraph Ltd
+ * Copyright (c) 2006-2020, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -28,15 +27,16 @@ mxShapeIBMBox.prototype.cst = {
 };
 
 mxShapeIBMBox.prototype.customProperties = [
-	{name: 'prType', dispName: 'Box Type', defVal: 'cloud', type: 'enum', 
-		enumList: [{val: 'cloud', dispName: 'IBM Cloud'}, 
-				   {val: 'vpc', dispName: 'VPC'}, 
-				   {val: 'region', dispName: 'Region'}, 
-				   {val: 'zone', dispName: 'Zone'}, 
-				   {val: 'subnet', dispName: 'Subnet ACL'}, 
-				   {val: 'public', dispName: 'Public Network'}, 
-				   {val: 'enterprise', dispName: 'Enterprise Network'}, 
-				   {val: 'classic', dispName: 'Classic Infrastructure'}]}
+	{name: 'prType', dispName: 'Box Type', defVal: 'cloud', type: 'enum',
+		enumList: [{val: 'cloud', dispName: 'IBM Cloud'},
+				   {val: 'vpc', dispName: 'VPC'},
+				   {val: 'region', dispName: 'Region'},
+				   {val: 'zone', dispName: 'Zone'},
+				   {val: 'subnet', dispName: 'Subnet ACL'},
+				   {val: 'public', dispName: 'Public Network'},
+				   {val: 'enterprise', dispName: 'Enterprise Network'},
+				   {val: 'classic', dispName: 'Classic Infrastructure'}]},
+	{name: 'iconColor', dispName: 'Icon Color', defVal: '#ffffff', type: 'color', primary: true}
 ];
 
 /**

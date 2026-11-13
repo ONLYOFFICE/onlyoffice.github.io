@@ -1,5 +1,13 @@
-# drawio-i18n
+# draw.io translation resources
 
-This repo is auto-generated from the i18n spreadsheet https://docs.google.com/spreadsheets/d/1FoYdyEraEQuWofzbYCDPKN7EdKgS_2ZrsDrOA8scgwQ/edit#gid=0
+Internationalization resource files for [draw.io](https://github.com/jgraph/drawio).
 
-The repo is part of the JGraph SOC 2 process. All changes are reviewed when the sub-module is updated in drawio-dev.
+## Contributing
+
+Translation improvements and new language contributions are welcome via pull requests. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Structure
+
+- `dia.txt` - English (source language, defines all keys)
+- `dia_{lang}.txt` - Translations (e.g. `dia_fr.txt`, `dia_ja.txt`)
+- `dia_i18n.txt` - Key reference file

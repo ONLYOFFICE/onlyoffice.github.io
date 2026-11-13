@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006-2012, JGraph Ltd
+ * Copyright (c) 2006-2012, JGraph Holdings Ltd
  */
 /**
  * Construcs a new sidebar for the given editor.
@@ -8,10 +8,18 @@ function Sidebar(editorUi, container)
 {
 	this.editorUi = editorUi;
 	this.container = container;
+	// Sidebar background tooltip ("Click or drag and drop shapes. …") —
+	// the section titles now carry a more specific "Drag to reorder"
+	// hint, so the broader instruction lives on the container itself
+	// and surfaces when the user hovers over empty sidebar space.
+	this.container.setAttribute('title', mxResources.get('sidebarTooltip'));
 	this.palettes = new Object();
-	this.taglist = new Object();
+	// Null prototype as the taglist is looked up with user-typed search
+	// terms, eg. __proto__ must not resolve to inherited members
+	this.taglist = Object.create(null);
 	this.lastCreated = 0;
 	this.showTooltips = true;
+	this.recentShapes = [];
 	this.graph = editorUi.createTemporaryGraph(this.editorUi.editor.graph.getStylesheet());
     this.graph.cellRenderer.minSvgStrokeWidth = this.minThumbStrokeWidth;
 	this.graph.cellRenderer.antiAlias = this.thumbAntiAlias;
@@ -22,18 +30,13 @@ function Sidebar(editorUi, container)
 	// Uses the initial default style for rendering the sidebars
 	this.initialDefaultVertexStyle = mxUtils.clone(editorUi.editor.graph.defaultVertexStyle);
 	this.initialDefaultEdgeStyle = mxUtils.clone(editorUi.editor.graph.defaultEdgeStyle);
+	// Keys that do not identify a shape in the style to libraries map, eg. the
+	// label perimeter that is added to shapes with labels outside on insert
+	this.ignoredStyles = ['html', 'whiteSpace', 'aspect', 'points', 'verticalLabelPosition',
+		'labelPosition', 'outlineConnect', 'labelPerimeter'].concat(Graph.cellStyles);
 	
 	// Wrapper for entries and footer
-	this.container.style.overflow = 'visible';
 	this.wrapper = document.createElement('div');
-	this.wrapper.style.position = 'relative';
-	this.wrapper.style.overflowX = 'hidden';
-	this.wrapper.style.overflowY = 'auto';
-	this.wrapper.style.left = '0px';
-	this.wrapper.style.top = '0px';
-	this.wrapper.style.right = '0px';
-	this.wrapper.style.boxSizing = 'border-box';
-	this.wrapper.style.maxHeight = 'calc(100% - ' + this.moreShapesHeight + 'px)';
 	this.container.appendChild(this.wrapper);
 
 	var title = this.createMoreShapes();
@@ -50,19 +53,21 @@ function Sidebar(editorUi, container)
 		}
 	});
 
-	mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointerup' : 'mouseup', this.pointerUpHandler);
-
-	this.pointerDownHandler = mxUtils.bind(this, function()
+	this.pointerDownHandler = mxUtils.bind(this, function(evt)
 	{
 		if (this.tooltipCloseImage == null || this.tooltipCloseImage.style.display == 'none')
 		{
 			this.showTooltips = false;
 			this.hideTooltip();
 		}
+		// Closes closable tooltips on pointer events outside of the tooltip
+		else if (this.tooltip != null && this.tooltip.style.display != 'none' &&
+			!mxUtils.isAncestorNode(this.tooltip, mxEvent.getSource(evt)))
+		{
+			this.hideTooltip();
+		}
 	});
-	
-	mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown', this.pointerDownHandler);
-	
+
 	this.pointerMoveHandler = mxUtils.bind(this, function(evt)
 	{
 		if (Date.now() - this.lastCreated > 300 && (this.tooltipCloseImage == null ||
@@ -84,8 +89,6 @@ function Sidebar(editorUi, container)
 		}
 	});
 
-	mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointermove' : 'mousemove', this.pointerMoveHandler);
-
 	// Handles mouse leaving the window
 	this.pointerOutHandler = mxUtils.bind(this, function(evt)
 	{
@@ -95,7 +98,21 @@ function Sidebar(editorUi, container)
 		}
 	});
 	
-	mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointerout' : 'mouseout', this.pointerOutHandler);
+	// Adds listeners in capture phase to bypass blocking in other listeners
+	if (window.addEventListener)
+	{
+		document.addEventListener((mxClient.IS_POINTER) ? 'pointerup' : 'mouseup', this.pointerUpHandler, true)
+		document.addEventListener((mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown', this.pointerDownHandler, true)
+		document.addEventListener((mxClient.IS_POINTER) ? 'pointermove' : 'mousemove', this.pointerMoveHandler, true)
+		document.addEventListener((mxClient.IS_POINTER) ? 'pointerout' : 'mouseout', this.pointerOutHandler, true)
+	}
+	else
+	{
+		mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointerup' : 'mouseup', this.pointerUpHandler);
+		mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown', this.pointerDownHandler);
+		mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointermove' : 'mousemove', this.pointerMoveHandler);
+		mxEvent.addListener(document, (mxClient.IS_POINTER) ? 'pointerout' : 'mouseout', this.pointerOutHandler);
+	}
 
 	// Enables tooltips after scroll
 	mxEvent.addListener(container, 'scroll', mxUtils.bind(this, function()
@@ -103,7 +120,25 @@ function Sidebar(editorUi, container)
 		this.showTooltips = true;
 		this.hideTooltip();
 	}));
-	
+
+	// Stops dragging if escape is pressed
+	this.escapeListener = mxUtils.bind(this, function(sender, evt)
+	{
+		if (this.activeDragSource != null && this.activeDragSource.isActive())
+		{
+			this.activeDragSource.reset();
+		}
+	});
+
+	this.editorUi.editor.graph.addListener(mxEvent.ESCAPE, this.escapeListener);
+
+	this.refreshListener = mxUtils.bind(this, function(sender, evt)
+	{
+		this.refresh();
+	});
+
+	this.editorUi.addListener('sidebarTitlesChanged', this.refreshListener);
+	this.editorUi.addListener('languageChanged', this.refreshListener);
 	this.init();
 };
 
@@ -146,22 +181,12 @@ Sidebar.prototype.init = function()
 };
 
 /**
- * Sets the default font size.
- */
-Sidebar.prototype.collapsedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/collapsed.gif' : 'data:image/gif;base64,R0lGODlhDQANAIABAJmZmf///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozNUQyRTJFNjZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozNUQyRTJFNzZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjFERjc3MEUxNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjFERjc3MEUyNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAQAAAQAsAAAAAA0ADQAAAhSMj6lrwAjcC1GyahV+dcZJgeIIFgA7';
-
-/**
- * Sets the default font size.
- */
-Sidebar.prototype.expandedImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/expanded.gif' : 'data:image/gif;base64,R0lGODlhDQANAIABAJmZmf///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoxREY3NzBERjZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxREY3NzBFMDZGNUYxMUU1QjZEOThCNDYxMDQ2MzNCQiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjFERjc3MERENkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjFERjc3MERFNkY1RjExRTVCNkQ5OEI0NjEwNDYzM0JCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+Af/+/fz7+vn49/b19PPy8fDv7u3s6+rp6Ofm5eTj4uHg397d3Nva2djX1tXU09LR0M/OzczLysnIx8bFxMPCwcC/vr28u7q5uLe2tbSzsrGwr66trKuqqainpqWko6KhoJ+enZybmpmYl5aVlJOSkZCPjo2Mi4qJiIeGhYSDgoGAf359fHt6eXh3dnV0c3JxcG9ubWxramloZ2ZlZGNiYWBfXl1cW1pZWFdWVVRTUlFQT05NTEtKSUhHRkVEQ0JBQD8+PTw7Ojk4NzY1NDMyMTAvLi0sKyopKCcmJSQjIiEgHx4dHBsaGRgXFhUUExIREA8ODQwLCgkIBwYFBAMCAQAAIfkEAQAAAQAsAAAAAA0ADQAAAhGMj6nL3QAjVHIu6azbvPtWAAA7';
-
-/**
  * Specifies if tooltips should be visible. Default is true.
  */
 Sidebar.prototype.enableTooltips = true;
 
 /**
- * Specifies the delay for the tooltip. Default is 16 px.
+ * Specifies the border for the tooltip. Default is 16 px.
  */
 Sidebar.prototype.tooltipBorder = 16;
 
@@ -183,12 +208,12 @@ Sidebar.prototype.gearImage = STENCIL_PATH + '/clipart/Gear_128x128.png';
 /**
  * Specifies the width of the thumbnails.
  */
-Sidebar.prototype.thumbWidth = 42;
+Sidebar.prototype.thumbWidth = 38;
 
 /**
  * Specifies the height of the thumbnails.
  */
-Sidebar.prototype.thumbHeight = 42;
+Sidebar.prototype.thumbHeight = 38;
 
 /**
  * Specifies the width of the thumbnails.
@@ -201,37 +226,85 @@ Sidebar.prototype.minThumbStrokeWidth = 1;
 Sidebar.prototype.thumbAntiAlias = false;
 
 /**
- * Specifies the padding for the thumbnails. Default is 3.
- */
-Sidebar.prototype.thumbPadding = (document.documentMode >= 5) ? 2 : 3;
-
-/**
  * Specifies the delay for the tooltip. Default is 2 px.
  */
 Sidebar.prototype.thumbBorder = 2;
-
-/**
- * Allows for two buttons in the sidebar footer.
- */
-Sidebar.prototype.moreShapesHeight = 52;
 
 /**
  * Whether live preview should be enabled. Default is true.
  */
 Sidebar.prototype.livePreview = true;
 
+/**
+ * Whether closed libraries should be searched. Default is true.
+ */
+Sidebar.prototype.searchClosedLibraries = true;
+
+/**
+ * Opacity for search results from closed libraries. Default is null.
+ */
+Sidebar.prototype.closedLibraryOpacity = null;
+
+/**
+ * Optional map from library ID to a search ranking weight (default
+ * weight is 0). The weight breaks ties between equally scored search
+ * results, eg. to rank shapes from the latest library of a family
+ * above the same shapes from its superseded predecessors. Default
+ * is null (no weights).
+ */
+Sidebar.prototype.librarySearchWeights = null;
+
+/**
+ * Whether an image-only search (eg. via an external icon provider) is
+ * available. Default is false; subclassers that wire up an image search
+ * backend override this to surface the "Search Images" omnibox option.
+ */
+Sidebar.prototype.isImageSearchSupported = function()
+{
+	return false;
+};
+
 /*
  * Experimental smaller sidebar entries
  */
 if (urlParams['sidebar-entries'] != 'large')
 {
-	Sidebar.prototype.thumbPadding = (document.documentMode >= 5) ? 0 : 1;
 	Sidebar.prototype.thumbBorder = 1;
 	Sidebar.prototype.thumbWidth = 32;
 	Sidebar.prototype.thumbHeight = 30;
 	Sidebar.prototype.minThumbStrokeWidth = 1.3;
 	Sidebar.prototype.thumbAntiAlias = true;
 }
+
+/*
+ * Defers createThumb until the entry scrolls near the viewport via an
+ * IntersectionObserver. Off-screen palettes pay almost nothing even
+ * when expanded. Toggled off by callers (e.g. search) that need the
+ * thumb's inner DOM populated synchronously. Falls back to eager
+ * rendering (the historical behavior) on browsers without
+ * IntersectionObserver support (IE11, Safari <12.1).
+ */
+Sidebar.prototype.virtualThumbs = typeof IntersectionObserver != 'undefined';
+
+/*
+ * Defers a palette's content creation (onInit) until the expanded
+ * palette scrolls near the viewport — virtualThumbs at the palette
+ * level. Startup and Expand All then only pay for the palettes in
+ * view, even with every library expanded; the rest initialize on
+ * scroll. Falls back to eager init (the historical behavior) on
+ * browsers without IntersectionObserver support (IE11, Safari <12.1).
+ */
+Sidebar.prototype.virtualPalettes = typeof IntersectionObserver != 'undefined';
+
+/**
+ * Placeholder height (in px) for expanded palettes whose content
+ * creation is deferred. Callers that know their entry count refine
+ * this via setDeferredPaletteSize so that off-screen palettes occupy
+ * roughly their real height (a zero-height placeholder would sit at
+ * the same scroll offset as its neighbors and trigger the observer
+ * for all of them at once).
+ */
+Sidebar.prototype.deferredPaletteHeight = 60;
 
 /**
  * Specifies the size of the sidebar titles.
@@ -257,6 +330,11 @@ Sidebar.prototype.maxTooltipWidth = 400;
  * Specifies if titles in the tooltips should be enabled.
  */
 Sidebar.prototype.maxTooltipHeight = 400;
+
+/**
+ * Maximum zoom for scaled-down closable tooltips. Default is 2.
+ */
+Sidebar.prototype.maxTooltipZoom = 2;
 
 /**
  * Specifies if stencil files should be loaded and added to the search index
@@ -292,8 +370,12 @@ Sidebar.prototype.refresh = function()
 {
 	var graph = this.editorUi.editor.graph;
 	this.graph.stylesheet.styles = mxUtils.clone(
-		graph.getDefaultStylesheet().styles);
+		graph.getStylesheet().styles);
 	var scrollTop = this.wrapper.scrollTop;
+
+	// Drops pending lazy-render callbacks so the observers do not keep
+	// the DOM removed below alive; recreated lazily on next use
+	this.disconnectObservers();
 	this.wrapper.innerText = '';
 	var temp = this.palettes;
 	this.palettes = new Object();
@@ -384,35 +466,14 @@ Sidebar.prototype.getTooltipOffset = function(elt, bounds)
 Sidebar.prototype.createMoreShapes = function()
 {
 	var div =  this.editorUi.createDiv('geSidebarFooter');
-	div.style.position = 'absolute';
-	div.style.overflow = 'hidden';
-	div.style.display = 'inline-flex';
-	div.style.alignItems = 'center';
-	div.style.justifyContent = 'center';
-	div.style.width = '100%';
-	div.style.marginTop = '-1px';
-	div.style.height = this.moreShapesHeight+ 'px';
-	
 	var title = document.createElement('button');
 	title.className = 'geBtn gePrimaryBtn';
-	title.style.display = 'inline-flex';
-	title.style.alignItems = 'center';
-	title.style.whiteSpace = 'nowrap';
-	title.style.padding = '8px';
-	title.style.margin = '0px';
-	title.innerHTML = '<span>+</span>';
-	
-	var span = title.getElementsByTagName('span')[0];
-	span.style.fontSize = '18px';
-	span.style.marginRight = '5px';
 
-	mxUtils.write(title, mxResources.get('moreShapes'));
-
-	// Prevents focus
-	mxEvent.addListener(title, (mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown',
-		mxUtils.bind(this, function(evt)
+	this.editorUi.dependsOnLanguage(mxUtils.bind(this, function()
 	{
-		evt.preventDefault();
+		title.innerHTML = '<span>+</span>';
+		mxUtils.write(title, mxResources.get('moreShapes'));
+		title.setAttribute('title', mxResources.get('moreShapes'));
 	}));
 	
 	mxEvent.addListener(title, 'click', mxUtils.bind(this, function(evt)
@@ -420,7 +481,8 @@ Sidebar.prototype.createMoreShapes = function()
 		this.editorUi.actions.get('shapes').funct();
 		mxEvent.consume(evt);
 	}));
-	
+
+	mxEvent.preventDefault(title);
 	div.appendChild(title);
 	
 	return div;
@@ -433,7 +495,8 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 {
 	applyAllStyles = (applyAllStyles != null) ? applyAllStyles : true;
 	this.tooltipMouseDown = mouseDown;
-	
+	var graph = this.editorUi.editor.graph;
+
 	// Lazy creation of the DOM nodes and graph instance
 	if (this.tooltip == null)
 	{
@@ -443,13 +506,46 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 		this.tooltip.style.zIndex = mxPopupMenu.prototype.zIndex - 1;
 		document.body.appendChild(this.tooltip);
 
-		mxEvent.addMouseWheelListener(mxUtils.bind(this, function(evt)
+		mxEvent.addMouseWheelListener(mxUtils.bind(this, function(evt, up, pinch, cx, cy, ratio)
 		{
-			this.hideTooltip();
+			// Zooms tooltips that were scaled down to fit, hides others
+			if (this.tooltipZoomControls.style.display != 'none')
+			{
+				var factor = this.graph2.zoomFactor;
+
+				// Slower zoom for pinch gesture on trackpad
+				if (evt.deltaY != null && Math.abs(evt.deltaY) < 40 &&
+					Math.round(evt.deltaY) != evt.deltaY)
+				{
+					factor = 1 + (Math.abs(evt.deltaY) / 20) * (factor - 1);
+				}
+				// Pinch gesture on touch screens zooms by the change of the
+				// distance between the fingers
+				else if (ratio != null)
+				{
+					factor = (ratio > 1) ? ratio : 1 / ratio;
+				}
+
+				var rect = this.tooltipContent.getBoundingClientRect();
+				this.setTooltipZoom(this.tooltipZoom * ((up) ? factor : 1 / factor),
+					((cx != null) ? cx : mxEvent.getClientX(evt)) - rect.left,
+					((cy != null) ? cy : mxEvent.getClientY(evt)) - rect.top);
+				mxEvent.consume(evt);
+			}
+			else
+			{
+				this.hideTooltip();
+			}
 		}), this.tooltip);
-		
-		this.graph2 = new Graph(this.tooltip, null, null, this.editorUi.editor.graph.getStylesheet());
-		this.graph2.shapeBackgroundColor = 'transparent';
+
+		// Scrollable pane between the graph and the overlaid buttons and title
+		this.tooltipContent = document.createElement('div');
+		this.tooltipContent.style.width = '100%';
+		this.tooltipContent.style.height = '100%';
+		this.tooltip.appendChild(this.tooltipContent);
+
+		this.graph2 = new Graph(this.tooltipContent, null, null, this.editorUi.editor.graph.getStylesheet());
+		this.graph2.shapeBackgroundColor = this.graph.shapeBackgroundColor;
 		this.graph2.resetViewOnRootChange = false;
 		this.graph2.foldingEnabled = false;
 		this.graph2.gridEnabled = false;
@@ -458,6 +554,21 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 		this.graph2.setConnectable(false);
 		this.graph2.setPanning(false);
 		this.graph2.setEnabled(false);
+
+		// Renders oveflow on SVG
+		if (this.graph2.dialect == mxConstants.DIALECT_SVG)
+		{
+			var root = this.graph2.view.getDrawPane().ownerSVGElement;
+			
+			if (root != null)
+			{
+				root.style.overflow = 'visible';
+			}
+		}
+		else
+		{
+			this.graph2.view.canvas.style.overflow = 'visible';
+		}
 		
 		// Blocks all links
 		this.graph2.openLink = mxUtils.bind(this, function()
@@ -467,11 +578,16 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 		
 		mxEvent.addGestureListeners(this.tooltip, mxUtils.bind(this, function(evt)
 		{
+			if (mxUtils.isAncestorNode(this.tooltipZoomControls, mxEvent.getSource(evt)))
+			{
+				return;
+			}
+
 			if (this.tooltipMouseDown != null)
 			{
 				this.tooltipMouseDown(evt);
 			}
-			
+
 			window.setTimeout(mxUtils.bind(this, function()
 			{
 				if (this.tooltipCloseImage == null || this.tooltipCloseImage.style.display == 'none')
@@ -481,29 +597,107 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 			}), 0);
 		}), null, mxUtils.bind(this, function(evt)
 		{
-			this.hideTooltip();
+			// Keeps zoomed tooltips visible for scrolling and ignores
+			// clicks on the zoom controls
+			if (!this.isTooltipZoomed() && !mxUtils.isAncestorNode(
+				this.tooltipZoomControls, mxEvent.getSource(evt)))
+			{
+				this.hideTooltip();
+			}
 		}));
-		
-		if (!mxClient.IS_SVG)
+
+		// Pans a zoomed tooltip on drag inside its viewport
+		mxEvent.addGestureListeners(this.tooltipContent, mxUtils.bind(this, function(evt)
 		{
-			this.graph2.view.canvas.style.position = 'relative';
-		}
+			if (this.isTooltipZoomed() && evt.isPrimary != false &&
+				(!mxEvent.isMouseEvent(evt) || mxEvent.isLeftMouseButton(evt)))
+			{
+				var content = this.tooltipContent;
+				var rect = content.getBoundingClientRect();
+				var px = mxEvent.getClientX(evt);
+				var py = mxEvent.getClientY(evt);
+
+				// Ignores events over the scrollbars for native scrolling
+				if (px - rect.left < content.clientWidth &&
+					py - rect.top < content.clientHeight)
+				{
+					var sl = content.scrollLeft;
+					var st = content.scrollTop;
+					content.style.cursor = 'grabbing';
+
+					var move = function(evt2)
+					{
+						content.scrollLeft = sl - mxEvent.getClientX(evt2) + px;
+						content.scrollTop = st - mxEvent.getClientY(evt2) + py;
+						mxEvent.consume(evt2);
+					};
+
+					var end = mxUtils.bind(this, function(evt2)
+					{
+						mxEvent.removeGestureListeners(document, null, move, end);
+						content.style.cursor = (this.isTooltipZoomed()) ? 'grab' : '';
+					});
+
+					mxEvent.addGestureListeners(document, null, move, end);
+					mxEvent.consume(evt, true, false);
+				}
+			}
+		}));
 
 		var close = document.createElement('img');
-		close.setAttribute('src', Dialog.prototype.closeImage);
+		close.setAttribute('src', Editor.crossImage);
 		close.setAttribute('title', mxResources.get('close'));
-		close.style.position = 'absolute';
-		close.style.cursor = 'default';
-		close.style.padding = '8px';
-		close.style.right = '2px';
-		close.style.top = '2px';
+		close.className = 'geButton';
 		this.tooltip.appendChild(close);
 		this.tooltipCloseImage = close;
-		
+
 		mxEvent.addListener(close, 'click', mxUtils.bind(this, function(evt)
 		{
 			this.hideTooltip();
 			mxEvent.consume(evt);
+		}));
+
+		// Zoom controls for tooltips that were scaled down to fit
+		var controls = document.createElement('div');
+		controls.style.position = 'absolute';
+		controls.style.right = '26px';
+		controls.style.top = '2px';
+		controls.style.whiteSpace = 'nowrap';
+		this.tooltip.appendChild(controls);
+		this.tooltipZoomControls = controls;
+
+		var addZoomButton = mxUtils.bind(this, function(src, title, fn)
+		{
+			var btn = document.createElement('img');
+			btn.setAttribute('src', src);
+			btn.setAttribute('title', title);
+			btn.className = 'geButton';
+			btn.style.position = 'static';
+			controls.appendChild(btn);
+
+			mxEvent.addListener(btn, 'click', mxUtils.bind(this, function(evt)
+			{
+				fn();
+				mxEvent.consume(evt);
+			}));
+		});
+
+		addZoomButton(Editor.zoomInImage, mxResources.get('zoomIn'),
+			mxUtils.bind(this, function()
+		{
+			this.setTooltipZoom(this.tooltipZoom * this.graph2.zoomFactor);
+		}));
+
+		addZoomButton(Editor.zoomOutImage, mxResources.get('zoomOut'),
+			mxUtils.bind(this, function()
+		{
+			this.setTooltipZoom(this.tooltipZoom / this.graph2.zoomFactor);
+		}));
+
+		addZoomButton(Editor.zoomFitImage, mxResources.get('fit'),
+			mxUtils.bind(this, function()
+		{
+			this.setTooltipZoom(this.tooltipFitScale);
 		}));
 	}
 	
@@ -524,32 +718,35 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 	this.graph2.labelsVisible = (showLabel == null || showLabel);
 	var fo = mxClient.NO_FO;
 	mxClient.NO_FO = Editor.prototype.originalNoForeignObject;
-
-	// Ensures opaque background for edge labels
-	var style = mxUtils.getCurrentStyle(this.tooltip);
-	this.graph2.shapeBackgroundColor = style.backgroundColor;
-
+	
 	// Applies current style for preview
 	if (cells != null)
 	{
 		var temp = this.graph2.cloneCells(cells);
-		this.editorUi.insertHandler(temp, null, this.graph2.model,
-			(!applyAllStyles) ? this.editorUi.editor.graph.defaultVertexStyle : null,
-			(!applyAllStyles) ? this.editorUi.editor.graph.defaultEdgeStyle : null,
-			applyAllStyles, true);
+		this.graph2.pasteCellStyles(graph.includeDescendants(temp),
+			(!applyAllStyles) ? graph.defaultVertexStyle : graph.currentVertexStyle,
+			(!applyAllStyles) ? graph.defaultEdgeStyle : graph.currentEdgeStyle,
+			null, graph.pasteEdgeStyle, (applyAllStyles) ?
+				graph.pasteStylesToText : false);
 		this.graph2.addCells(temp);
 	}
 
 	mxClient.NO_FO = fo;
 	var bounds = this.graph2.getGraphBounds();
-	
+	this.tooltipFitScale = null;
+
 	// Maximum size applied with transform for faster repaint
 	if (maxSize && w > 0 && h > 0 && (bounds.width > w || bounds.height > h))
 	{
 		var s = Math.round(Math.min(w / bounds.width, h / bounds.height) * 100) / 100;
-		
+
 		if (!mxClient.NO_FO)
 		{
+			// Remembers fitted scale and unscaled size for setTooltipZoom
+			this.tooltipFitScale = s;
+			this.tooltipDocWidth = bounds.width + 2 * this.tooltipBorder + 4;
+			this.tooltipDocHeight = bounds.height + 2 * this.tooltipBorder;
+
 			this.graph2.view.getDrawPane().ownerSVGElement.style.transform = 'scale(' + s + ')';
 			this.graph2.view.getDrawPane().ownerSVGElement.style.transformOrigin = '0 0';
 			bounds.width *= s;
@@ -567,12 +764,27 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 	{
 		this.graph2.view.getDrawPane().ownerSVGElement.style.transform = '';
 	}
-	
+
+	// Resets zoom and scrollbars from the previous tooltip
+	this.tooltipZoom = this.tooltipFitScale;
+	this.tooltipZoomControls.style.display = (closable &&
+		this.tooltipFitScale != null) ? '' : 'none';
+	this.tooltipContent.style.overflow = 'visible';
+	this.tooltipContent.style.cursor = '';
+
+	if (!mxClient.NO_FO)
+	{
+		var root = this.graph2.view.getDrawPane().ownerSVGElement;
+		root.style.width = '100%';
+		root.style.height = '100%';
+	}
+
 	var width = bounds.width + 2 * this.tooltipBorder + 4;
 	var height = bounds.height + 2 * this.tooltipBorder;
-	
+
 	this.tooltip.style.overflow = 'visible';
 	this.tooltip.style.width = width + 'px';
+	this.tooltipContent.style.height = height + 'px';
 	var w2 = width;
 	
 	// Adds title for entry
@@ -581,7 +793,8 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 		if (this.tooltipTitle == null)
 		{
 			this.tooltipTitle = document.createElement('div');
-			this.tooltipTitle.style.borderTop = '1px solid gray';
+			this.tooltipTitle.style.borderTopStyle = 'solid';
+			this.tooltipTitle.style.borderTopWidth = '1px';
 			this.tooltipTitle.style.textAlign = 'center';
 			this.tooltipTitle.style.width = '100%';
 			this.tooltipTitle.style.overflow = 'hidden';
@@ -598,21 +811,14 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 		
 		this.tooltipTitle.style.display = '';
 		mxUtils.write(this.tooltipTitle, title);
+		this.tooltipTitle.setAttribute('title', title);
 		
 		// Allows for wider labels
 		w2 = Math.min(this.maxTooltipWidth, Math.max(width, this.tooltipTitle.scrollWidth + 4));
 		var ddy = this.tooltipTitle.offsetHeight + 10;
 		height += ddy;
 		
-		if (mxClient.IS_SVG)
-		{
-			this.tooltipTitle.style.marginTop = (2 - ddy) + 'px';
-		}
-		else
-		{
-			height -= 6;
-			this.tooltipTitle.style.top = (height - ddy) + 'px';	
-		}
+		this.tooltipTitle.style.marginTop = (2 - ddy) + 'px';
 	}
 	else if (this.tooltipTitle != null && this.tooltipTitle.parentNode != null)
 	{
@@ -628,42 +834,112 @@ Sidebar.prototype.createTooltip = function(elt, cells, w, h, title, showLabel, o
 	this.tooltip.style.height = height + 'px';
 	var x0 = -Math.round(bounds.x - this.tooltipBorder) +
 		((w2 > width) ? (w2 - width) / 2 : 0);
+
+	if (w2 > width && this.tooltipFitScale != null)
+	{
+		// Keeps the centered content inside the zoomed scroll range
+		this.tooltipDocWidth += (w2 - width) / 2;
+	}
+
 	var y0 = -Math.round(bounds.y - this.tooltipBorder);
 	off = (off != null) ? off : this.getTooltipOffset(elt, bounds);
 	var left = off.x;
 	var top = off.y;
 	
-	if (mxClient.IS_SVG)
+	// Remembers the content offset for setTooltipZoom
+	this.tooltipDx = x0;
+	this.tooltipDy = y0;
+
+	if (x0 != 0 || y0 != 0)
 	{
-		if (x0 != 0 || y0 != 0)
-		{
-			this.graph2.view.canvas.setAttribute('transform', 'translate(' + x0 + ',' + y0 + ')');
-		}
-		else
-		{
-			this.graph2.view.canvas.removeAttribute('transform');
-		}
+		this.graph2.view.canvas.setAttribute('transform', 'translate(' + x0 + ',' + y0 + ')');
 	}
 	else
 	{
-		this.graph2.view.drawPane.style.left = x0 + 'px';
-		this.graph2.view.drawPane.style.top = y0 + 'px';
+		this.graph2.view.canvas.removeAttribute('transform');
 	}
 	
 	// Workaround for ignored position CSS style in IE9
 	// (changes to relative without the following line)
 	this.tooltip.style.position = 'absolute';
-	this.tooltip.style.left = left + 'px';
-	this.tooltip.style.top = top + 'px';
+	this.tooltip.style.left = Math.max(0, left) + 'px';
+	this.tooltip.style.top = Math.max(0, top) + 'px';
 	
-	mxUtils.fit(this.tooltip);
+	mxUtils.fit(this.tooltip, this.tooltipBorder);
 	this.lastCreated = Date.now();
+};
+
+/**
+ * Returns true if the current tooltip is zoomed beyond its fitted scale.
+ */
+Sidebar.prototype.isTooltipZoomed = function()
+{
+	return this.tooltipFitScale != null && this.tooltipZoom > this.tooltipFitScale;
+};
+
+/**
+ * Sets the zoom of a tooltip that was scaled down to fit, adding scrollbars
+ * while the content is larger than the fitted tooltip size. The optional
+ * cx and cy define the fixpoint of the zoom in the tooltip viewport,
+ * defaulting to its center.
+ */
+Sidebar.prototype.setTooltipZoom = function(zoom, cx, cy)
+{
+	if (this.tooltipFitScale != null)
+	{
+		zoom = Math.max(this.tooltipFitScale, Math.min(this.maxTooltipZoom, zoom));
+		var root = this.graph2.view.getDrawPane().ownerSVGElement;
+		var content = this.tooltipContent;
+		cx = (cx != null) ? cx : content.clientWidth / 2;
+		cy = (cy != null) ? cy : content.clientHeight / 2;
+
+		// Keeps the fixpoint stable while zooming
+		var dx = (content.scrollLeft + cx) / this.tooltipZoom;
+		var dy = (content.scrollTop + cy) / this.tooltipZoom;
+		this.tooltipZoom = zoom;
+
+		if (this.isTooltipZoomed())
+		{
+			// Zooms via the canvas transform with the SVG sized to the visible
+			// diagram so that its layout size defines the exact scroll range
+			// (a CSS scale transform does not shrink the scrollable size)
+			this.graph2.view.canvas.setAttribute('transform', 'scale(' + zoom +
+				') translate(' + this.tooltipDx + ',' + this.tooltipDy + ')');
+			root.style.transform = '';
+			root.style.width = Math.ceil(this.tooltipDocWidth * zoom) + 'px';
+			root.style.height = Math.ceil(this.tooltipDocHeight * zoom) + 'px';
+			content.style.overflow = 'auto';
+			content.scrollLeft = Math.round(dx * zoom - cx);
+			content.scrollTop = Math.round(dy * zoom - cy);
+		}
+		else
+		{
+			// Restores the fitted view
+			if (this.tooltipDx != 0 || this.tooltipDy != 0)
+			{
+				this.graph2.view.canvas.setAttribute('transform',
+					'translate(' + this.tooltipDx + ',' + this.tooltipDy + ')');
+			}
+			else
+			{
+				this.graph2.view.canvas.removeAttribute('transform');
+			}
+
+			root.style.transform = 'scale(' + this.tooltipFitScale + ')';
+			root.style.transformOrigin = '0 0';
+			root.style.width = '100%';
+			root.style.height = '100%';
+			content.style.overflow = 'visible';
+		}
+
+		content.style.cursor = (this.isTooltipZoomed()) ? 'grab' : '';
+	}
 };
 
 /**
  * Adds all palettes to the sidebar.
  */
-Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel)
+Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel, off)
 {
 	if (this.enableTooltips && this.showTooltips)
 	{
@@ -674,10 +950,10 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel)
 				window.clearTimeout(this.thread);
 				this.thread = null;
 			}
-			
+
 			var show = mxUtils.bind(this, function()
 			{
-				this.createTooltip(elt, cells, w, h, title, showLabel);
+				this.createTooltip(elt, cells, w, h, title, showLabel, off);
 			});
 
 			if (this.tooltip != null && this.tooltip.style.display != 'none')
@@ -738,7 +1014,7 @@ Sidebar.prototype.addDataEntry = function(tags, width, height, title, data)
 /**
  * Adds the give entries to the search index.
  */
-Sidebar.prototype.addEntries = function(images)
+Sidebar.prototype.addEntries = function(images, defaultTags)
 {
 	for (var i = 0; i < images.length; i++)
 	{
@@ -750,6 +1026,11 @@ Sidebar.prototype.addEntries = function(images)
 			if (img.tags != null)
 			{
 				tags += ' ' + img.tags;
+			}
+
+			if (defaultTags != null)
+			{
+				tags += ' ' + defaultTags;
 			}
 
 			if (data != null && tags.length > 0)
@@ -794,45 +1075,1078 @@ Sidebar.prototype.setCurrentSearchEntryLibrary = function(id, lib)
 /**
  * Hides the current tooltip.
  */
+Sidebar.prototype.getKeyStyle = function(style)
+{
+	var newStyle = [];
+	
+	if (typeof style === 'string')
+	{
+		var tokens = style.split(';');
+
+		for (var i = 0; i < tokens.length; i++)
+		{
+			var tmp = tokens[i].split('=');
+
+			if (tmp.length > 1 && mxUtils.indexOf(this.ignoredStyles, tmp[0]) < 0)
+			{
+				newStyle.push(tmp[0] + '=' + tmp[1]);
+			}
+		}
+	}
+
+	return newStyle.join(';');
+};
+
+/**
+ * Hides the current tooltip.
+ */
+Sidebar.prototype.addLibForStyle = function(style, lib)
+{
+	if (style != '')
+	{
+		if (this.styleToLibs == null)
+		{
+			this.styleToLibs = {};
+		}
+
+		if (this.styleToLibs[style] == null)
+		{
+			this.styleToLibs[style] = [];
+		}
+
+		this.styleToLibs[style].push(lib);
+	}
+};
+
+/**
+ * Hides the current tooltip.
+ */
+Sidebar.prototype.getLibsForStyle = function(style)
+{
+	return (this.styleToLibs != null) ? this.styleToLibs[style] : null;
+};
+
+/**
+ * Returns the name of the shape of the given style for finding it in the
+ * palettes (see getShapeMatches): the value of shape or the named style at
+ * the start, eg. ellipse, and for images the image, which is the shape, or
+ * an empty string for the default shape.
+ */
+Sidebar.prototype.getShapeName = function(style)
+{
+	var tokens = (typeof style === 'string') ? style.split(';') : [];
+	var name = (tokens[0] != null && tokens[0].indexOf('=') < 0) ? tokens[0] : '';
+	var image = null;
+
+	for (var i = 0; i < tokens.length; i++)
+	{
+		var index = tokens[i].indexOf('=');
+
+		if (index > 0)
+		{
+			var key = tokens[i].substring(0, index);
+
+			if (key == mxConstants.STYLE_SHAPE)
+			{
+				name = tokens[i].substring(index + 1);
+			}
+			else if (key == mxConstants.STYLE_IMAGE)
+			{
+				image = tokens[i].substring(index + 1);
+			}
+		}
+	}
+
+	return (name == mxConstants.SHAPE_IMAGE && image != null) ? name + '\n' + image : name;
+};
+
+/**
+ * Adds the given library to the shapes with the given name and key (see
+ * getShapeName and getKeyStyle) for finding shapes in their palettes (see
+ * getShapeMatches). The default shape is only added with a key.
+ */
+Sidebar.prototype.addShapeForStyle = function(name, key, lib)
+{
+	if (name.length > 0 || key.length > 0)
+	{
+		if (this.shapeKeys == null)
+		{
+			this.shapeKeys = Object.create(null);
+		}
+
+		if (this.shapeKeys[name] == null)
+		{
+			this.shapeKeys[name] = Object.create(null);
+		}
+
+		if (this.shapeKeys[name][key] == null)
+		{
+			this.shapeKeys[name][key] = [];
+		}
+
+		this.shapeKeys[name][key].push(lib);
+		this.shapeMatches = null;
+
+		if (this.shapeIndexes != null)
+		{
+			delete this.shapeIndexes[name];
+		}
+	}
+};
+
+/**
+ * Maximum number of styles whose matches are kept (see getShapeMatches).
+ * Default is 10000.
+ */
+Sidebar.prototype.maxShapeMatches = 10000;
+
+/**
+ * Maximum number of keys of a shape that are visited for the values of a
+ * style and of keys with the fewest values that are compared (see
+ * getClosestKeys). The built-in palettes have at most a few hundred keys for
+ * a shape, crafted libraries can have many more. Default is 1000.
+ */
+Sidebar.prototype.maxClosestKeys = 1000;
+
+/**
+ * Maximum number of values that are counted for a style when keys are
+ * compared, the shorter of the values of each key and of the style (see
+ * getClosestKeys). Keys whose comparison does not fit are skipped. Default is
+ * 10000.
+ */
+Sidebar.prototype.maxClosestKeyValues = 10000;
+
+/**
+ * Returns the shapes of the palettes with the shape of the given style (see
+ * getShapeName) whose keys (see getKeyStyle) are closest to the key of the
+ * style (see getClosestKeys), the first shape of each library, as an array
+ * of objects with the name, the key and the library of each shape, or null
+ * if no palette has the shape. A shape is found in its palette if it was
+ * changed after it was inserted, eg. rotated or with another perimeter,
+ * except for the default shape, eg. rectangles, which are found with the
+ * same key only. The result is kept for each style until shapes are added to
+ * the libraries, in two generations of at most maxShapeMatches styles: a
+ * full generation becomes the old one, whose styles move to the new one when
+ * they are used again, so that the styles of a large selection stay kept and
+ * the styles of later files are kept too.
+ */
+Sidebar.prototype.getShapeMatches = function(style)
+{
+	if (this.shapeMatches == null)
+	{
+		this.shapeMatches = Object.create(null);
+		this.oldShapeMatches = null;
+		this.shapeMatchCount = 0;
+	}
+
+	var result = (typeof style === 'string') ? this.shapeMatches[style] : null;
+
+	if (result === undefined && this.oldShapeMatches != null)
+	{
+		result = this.oldShapeMatches[style];
+
+		if (result !== undefined)
+		{
+			this.addShapeMatch(style, result);
+		}
+	}
+
+	if (result === undefined)
+	{
+		var name = this.getShapeName(style);
+		var keys = (this.shapeKeys != null) ? this.shapeKeys[name] : null;
+		result = null;
+
+		if (keys != null)
+		{
+			var key = this.getKeyStyle(style);
+			var best = (keys[key] != null) ? [key] : [];
+
+			// Closest keys if the shape was changed, except for the default
+			// shape, which is found with the same key only
+			if (best.length == 0 && name.length > 0)
+			{
+				best = this.getClosestKeys(name, key);
+			}
+
+			if (best.length > 0)
+			{
+				var seen = Object.create(null);
+				result = [];
+
+				for (var i = 0; i < best.length; i++)
+				{
+					for (var j = 0; j < keys[best[i]].length; j++)
+					{
+						var lib = keys[best[i]][j];
+
+						if (seen[lib.id] == null)
+						{
+							seen[lib.id] = true;
+							result.push({name: name, key: best[i], lib: lib});
+						}
+					}
+				}
+			}
+		}
+
+		this.addShapeMatch(style, result);
+	}
+
+	return result;
+};
+
+/**
+ * Keeps the given matches of the given style (see getShapeMatches).
+ */
+Sidebar.prototype.addShapeMatch = function(style, result)
+{
+	if (this.shapeMatchCount >= this.maxShapeMatches)
+	{
+		this.oldShapeMatches = this.shapeMatches;
+		this.shapeMatches = Object.create(null);
+		this.shapeMatchCount = 0;
+	}
+
+	this.shapeMatches[style] = result;
+	this.shapeMatchCount++;
+};
+
+/**
+ * Returns the values of the given key of a style (see getKeyStyle) without
+ * the shape, which is part of the name of the shape (see getShapeName).
+ */
+Sidebar.prototype.getKeyValues = function(key)
+{
+	var tokens = key.split(';');
+	var result = [];
+
+	for (var i = 0; i < tokens.length; i++)
+	{
+		if (tokens[i].length > 0 && tokens[i].substring(0, 6) != 'shape=')
+		{
+			result.push(tokens[i]);
+		}
+	}
+
+	return result;
+};
+
+/**
+ * Returns the keys of the shapes with the given name (see addShapeForStyle)
+ * that have the fewest values that are not in both keys with the given key
+ * (see getKeyValues), in the order in which they were added. Only the keys
+ * that share values with the given key and the keys with the fewest values
+ * are compared (see getShapeIndex), with the values they share counted from
+ * their own values. maxClosestKeys and maxClosestKeyValues limit the keys
+ * that are visited and the values that are counted, so that the time for a
+ * style does not grow with the size of a library or the number of values.
+ */
+Sidebar.prototype.getClosestKeys = function(name, key)
+{
+	var index = this.getShapeIndex(name);
+	var values = this.getKeyValues(key);
+	var given = Object.create(null);
+	var seen = Object.create(null);
+	var keys = [];
+
+	for (var i = 0; i < values.length; i++)
+	{
+		given[values[i]] = (given[values[i]] || 0) + 1;
+	}
+
+	// Keys that share values with the given key, rare values first, as they
+	// tell the closest keys apart
+	var rare = values.slice();
+
+	rare.sort(function(a, b)
+	{
+		return ((index.keys[a] != null) ? index.keys[a].length : 0) -
+			((index.keys[b] != null) ? index.keys[b].length : 0);
+	});
+
+	for (var i = 0, visits = 0; i < rare.length && visits < this.maxClosestKeys; i++)
+	{
+		var temp = index.keys[rare[i]];
+
+		for (var j = 0; temp != null && j < temp.length && visits < this.maxClosestKeys; j++, visits++)
+		{
+			if (seen[temp[j]] == null)
+			{
+				seen[temp[j]] = true;
+				keys.push(temp[j]);
+			}
+		}
+	}
+
+	for (var i = 0; i < index.smallest.length; i++)
+	{
+		if (seen[index.smallest[i]] == null)
+		{
+			seen[index.smallest[i]] = true;
+			keys.push(index.smallest[i]);
+		}
+	}
+
+	var result = [];
+	var min = null;
+
+	var distinct = Object.keys(given);
+
+	for (var i = 0, counted = 0; i < keys.length && counted < this.maxClosestKeyValues; i++)
+	{
+		var temp = index.values[keys[i]];
+		var cost = Math.min(temp.length, distinct.length);
+
+		// Skips keys whose comparison does not fit into the remaining values
+		if (counted + cost > this.maxClosestKeyValues)
+		{
+			continue;
+		}
+
+		// Counts the shared values from the shorter list
+		var shared = 0;
+
+		if (temp.length <= distinct.length)
+		{
+			for (var j = 0; j < temp.length; j++)
+			{
+				shared += given[temp[j]] || 0;
+			}
+		}
+		else
+		{
+			var counts = this.getKeyValueCounts(index, keys[i]);
+
+			for (var j = 0; j < distinct.length; j++)
+			{
+				shared += given[distinct[j]] * (counts[distinct[j]] || 0);
+			}
+		}
+
+		counted += cost;
+		var dist = values.length + temp.length - 2 * shared;
+
+		if (min == null || dist < min)
+		{
+			min = dist;
+			result = [keys[i]];
+		}
+		else if (dist == min)
+		{
+			result.push(keys[i]);
+		}
+	}
+
+	result.sort(function(a, b)
+	{
+		return mxUtils.compareNumbers(index.order[a], index.order[b]);
+	});
+
+	return result;
+};
+
+/**
+ * Returns the number of times each value occurs in the given key of the given
+ * index (see getShapeIndex), created when it is first used and kept with the
+ * index (see getClosestKeys).
+ */
+Sidebar.prototype.getKeyValueCounts = function(index, key)
+{
+	if (index.counts == null)
+	{
+		index.counts = Object.create(null);
+	}
+
+	var counts = index.counts[key];
+
+	if (counts == null)
+	{
+		var values = index.values[key];
+		counts = Object.create(null);
+
+		for (var i = 0; i < values.length; i++)
+		{
+			counts[values[i]] = (counts[values[i]] || 0) + 1;
+		}
+
+		index.counts[key] = counts;
+	}
+
+	return counts;
+};
+
+/**
+ * Returns the index of the keys of the shapes with the given name (see
+ * addShapeForStyle) for finding the closest keys (see getClosestKeys): the
+ * keys for each value, the values and the order of each key, and the first
+ * maxClosestKeys keys with the fewest values. The index is created when a
+ * shape with the name is first compared and kept until shapes with the name
+ * are added.
+ */
+Sidebar.prototype.getShapeIndex = function(name)
+{
+	if (this.shapeIndexes == null)
+	{
+		this.shapeIndexes = Object.create(null);
+	}
+
+	var index = this.shapeIndexes[name];
+
+	if (index == null)
+	{
+		index = {keys: Object.create(null), values: Object.create(null),
+			order: Object.create(null), smallest: []};
+		var min = null;
+		var count = 0;
+
+		for (var key in this.shapeKeys[name])
+		{
+			var values = this.getKeyValues(key);
+			index.values[key] = values;
+			index.order[key] = count++;
+
+			for (var i = 0; i < values.length; i++)
+			{
+				if (index.keys[values[i]] == null)
+				{
+					index.keys[values[i]] = [];
+				}
+
+				index.keys[values[i]].push(key);
+			}
+
+			if (min == null || values.length < min)
+			{
+				min = values.length;
+				index.smallest = [key];
+			}
+			else if (values.length == min && index.smallest.length < this.maxClosestKeys)
+			{
+				index.smallest.push(key);
+			}
+		}
+
+		this.shapeIndexes[name] = index;
+	}
+
+	return index;
+};
+
+/**
+ * Specifies the maximum time in ms for each slice of the deferred update
+ * of the style to libraries map. Default is 8.
+ */
+Sidebar.prototype.styleToLibsSliceTime = 8;
+
+/**
+ * Returns true if all entries were added to the style to libraries map.
+ */
+Sidebar.prototype.isStyleToLibsLoaded = function()
+{
+	return this.pendingLibEntries == null;
+};
+
+/**
+ * Queues the given entry function for the style to libraries map. The
+ * styles are collected by running the function, which builds the cells
+ * for all shapes in all libraries, so this is done in idle time after
+ * startup (see updateStyleToLibs).
+ */
+Sidebar.prototype.addLibEntry = function(fn, lib)
+{
+	if (this.pendingLibEntries == null)
+	{
+		this.pendingLibEntries = [];
+		this.pendingLibIndex = 0;
+	}
+
+	this.pendingLibEntries.push({fn: fn, lib: lib});
+	this.scheduleStyleToLibsUpdate();
+
+	// Entry functions of each palette (see getPaletteCells)
+	var id = this.getPaletteIdForLibrary(lib);
+
+	if (this.paletteEntries == null)
+	{
+		this.paletteEntries = Object.create(null);
+	}
+
+	if (this.paletteEntries[id] == null)
+	{
+		this.paletteEntries[id] = [];
+	}
+
+	this.paletteEntries[id].push(fn);
+
+	if (this.paletteShapes != null)
+	{
+		delete this.paletteShapes[id];
+	}
+
+	// Palettes of each library (see getPickerShapes)
+	if (this.libraryPalettes == null)
+	{
+		this.libraryPalettes = Object.create(null);
+	}
+
+	if (this.libraryPalettes[lib.id] == null)
+	{
+		this.libraryPalettes[lib.id] = Object.create(null);
+	}
+
+	this.libraryPalettes[lib.id][id] = true;
+};
+
+/**
+ * Returns the ID of the palette of the given library of the style to
+ * libraries map (see getLibsForStyle).
+ */
+Sidebar.prototype.getPaletteIdForLibrary = function(lib)
+{
+	return (lib.lib != null) ? lib.lib : lib.id;
+};
+
+/**
+ * Returns the cells of the entries of the palette with the given ID (see
+ * getPaletteIdForLibrary) as objects with the cells, the width, the height
+ * and the title of each entry, without creating the templates (see
+ * updateStyleToLibs). Edges are ignored.
+ */
+Sidebar.prototype.getPaletteCells = function(id)
+{
+	var fns = (this.paletteEntries != null) ? this.paletteEntries[id] : null;
+	var result = [];
+
+	if (fns != null)
+	{
+		var createVertexTemplateFromCells = this.createVertexTemplateFromCells;
+		var createEdgeTemplateFromCells = this.createEdgeTemplateFromCells;
+
+		this.createVertexTemplateFromCells = function(cells, width, height, title)
+		{
+			if (cells != null)
+			{
+				result.push({cells: cells, width: width, height: height, title: title});
+			}
+		};
+
+		this.createEdgeTemplateFromCells = function()
+		{
+			// ignore
+		};
+
+		try
+		{
+			for (var i = 0; i < fns.length; i++)
+			{
+				try
+				{
+					fns[i]();
+				}
+				catch (e)
+				{
+					// ignore
+				}
+			}
+		}
+		finally
+		{
+			this.createVertexTemplateFromCells = createVertexTemplateFromCells;
+			this.createEdgeTemplateFromCells = createEdgeTemplateFromCells;
+		}
+	}
+
+	return result;
+};
+
+/**
+ * Returns the entries of the palette with the given ID that are a single
+ * vertex, which may have children, in the order of the palette (see
+ * getPaletteCells). Each entry has the cell, the name of its shape and the
+ * key of its style (see getShapeName and getKeyStyle) and the title, and is
+ * listed once for each shape and title as refresh adds the palettes again.
+ * The entries are kept until entries are added to the palette, so their
+ * cells must not be changed.
+ */
+Sidebar.prototype.getPaletteShapes = function(id)
+{
+	if (this.paletteShapes == null)
+	{
+		this.paletteShapes = Object.create(null);
+	}
+
+	var result = this.paletteShapes[id];
+
+	if (result == null)
+	{
+		var items = this.getPaletteCells(id);
+		var seen = Object.create(null);
+		result = [];
+
+		for (var i = 0; i < items.length; i++)
+		{
+			var cell = (items[i].cells.length == 1) ? items[i].cells[0] : null;
+
+			if (cell != null && this.graph.model.isVertex(cell) && typeof cell.style === 'string')
+			{
+				var name = this.getShapeName(cell.style);
+				var key = this.getKeyStyle(cell.style);
+				var title = items[i].title || '';
+
+				if (seen[name + '\n' + key + '\n' + title] == null)
+				{
+					seen[name + '\n' + key + '\n' + title] = true;
+					result.push({cell: cell, name: name, key: key, title: title});
+				}
+			}
+		}
+
+		this.paletteShapes[id] = result;
+	}
+
+	return result;
+};
+
+/**
+ * Returns the entry of the palette shapes (see getPaletteShapes) of the
+ * closest shape of the given style (see getShapeMatches) in a library that
+ * the given function accepts, or null.
+ */
+Sidebar.prototype.getPaletteShape = function(style, accept)
+{
+	var matches = this.getShapeMatches(style);
+	var result = null;
+
+	for (var i = 0; matches != null && i < matches.length && result == null; i++)
+	{
+		if (accept == null || accept(matches[i].lib))
+		{
+			result = this.getShapeEntry(matches[i].lib, matches[i].name, matches[i].key);
+		}
+	}
+
+	return result;
+};
+
+/**
+ * Returns the entry of the palette shapes (see getPaletteShapes) of the given
+ * library of the style to libraries map with the given name and key or null.
+ */
+Sidebar.prototype.getShapeEntry = function(lib, name, key)
+{
+	var shapes = this.getPaletteShapes(this.getPaletteIdForLibrary(lib));
+	var result = null;
+
+	for (var i = 0; i < shapes.length && result == null; i++)
+	{
+		if (shapes[i].name == name && shapes[i].key == key)
+		{
+			result = shapes[i];
+		}
+	}
+
+	return result;
+};
+
+/**
+ * Returns the entry of the palette shapes (see getPaletteShapes) with the
+ * given name and key in the palettes of the library with the given ID or
+ * null.
+ */
+Sidebar.prototype.getLibraryShape = function(id, name, key)
+{
+	var keys = (this.shapeKeys != null && typeof name === 'string') ? this.shapeKeys[name] : null;
+	var libs = (keys != null && typeof key === 'string') ? keys[key] : null;
+	var result = null;
+
+	for (var i = 0; libs != null && i < libs.length && result == null; i++)
+	{
+		if (libs[i].id == id)
+		{
+			result = this.getShapeEntry(libs[i], name, key);
+		}
+	}
+
+	return result;
+};
+
+/**
+ * Returns true if the library with the given ID has the basic shapes of the
+ * shape picker (see EditorUi.getCellsForShapePicker), ie. the General, Misc
+ * and Advanced palettes.
+ */
+Sidebar.prototype.isBasicLibrary = function(id)
+{
+	return id == 'general';
+};
+
+/**
+ * Maximum number of recent shapes of each library (see addRecentShapes).
+ * Default is 15.
+ */
+Sidebar.prototype.maxRecentShapes = 15;
+
+/**
+ * Maximum number of libraries with recent shapes (see addRecentShapes).
+ * Default is 10.
+ */
+Sidebar.prototype.maxRecentLibraries = 10;
+
+/**
+ * Maximum length of the name and key of a recent shape (see addRecentShapes),
+ * eg. images with data URIs are not recent shapes. Default is 300.
+ */
+Sidebar.prototype.maxRecentShapeLength = 300;
+
+/**
+ * Adds the shapes of palettes of the given cells that were inserted from the
+ * sidebar, the shape picker or the inline toolbar to the recent shapes of
+ * their libraries other than the basic library (see getShapeMatches and
+ * isBasicLibrary). The recent shapes are an array of objects with the ID of
+ * a library and its shapes as arrays of the name and the key, the most recent
+ * first. Fires recentShapesChanged on the UI if shapes were added, so that
+ * they can be stored, and returns true if shapes were added.
+ */
+Sidebar.prototype.addRecentShapes = function(cells)
+{
+	var model = this.editorUi.editor.graph.model;
+	var changed = false;
+
+	for (var i = 0; i < cells.length; i++)
+	{
+		var matches = (model.isVertex(cells[i])) ? this.getShapeMatches(model.getStyle(cells[i])) : null;
+		var seen = Object.create(null);
+
+		for (var j = 0; matches != null && j < matches.length; j++)
+		{
+			var id = matches[j].lib.id;
+
+			if (seen[id] == null && !this.isBasicLibrary(id) && matches[j].name.length +
+				matches[j].key.length <= this.maxRecentShapeLength)
+			{
+				seen[id] = true;
+				this.addRecentShape(id, matches[j].name, matches[j].key);
+				changed = true;
+			}
+		}
+	}
+
+	if (changed)
+	{
+		this.editorUi.fireEvent(new mxEventObject('recentShapesChanged'));
+	}
+
+	return changed;
+};
+
+/**
+ * Adds the shape with the given name and key to the recent shapes of the
+ * library with the given ID (see addRecentShapes).
+ */
+Sidebar.prototype.addRecentShape = function(id, name, key)
+{
+	var lib = {id: id, shapes: []};
+
+	for (var i = 0; i < this.recentShapes.length; i++)
+	{
+		if (this.recentShapes[i] != null && this.recentShapes[i].id == id)
+		{
+			lib = this.recentShapes.splice(i, 1)[0];
+			break;
+		}
+	}
+
+	var shapes = [[name, key]];
+
+	for (var i = 0; Array.isArray(lib.shapes) && i < lib.shapes.length &&
+		shapes.length < this.maxRecentShapes; i++)
+	{
+		if (Array.isArray(lib.shapes[i]) && (lib.shapes[i][0] != name || lib.shapes[i][1] != key))
+		{
+			shapes.push(lib.shapes[i]);
+		}
+	}
+
+	lib.shapes = shapes;
+	this.recentShapes.unshift(lib);
+
+	if (this.recentShapes.length > this.maxRecentLibraries)
+	{
+		this.recentShapes.length = this.maxRecentLibraries;
+	}
+};
+
+/**
+ * Returns the entries of the recent shapes of the library with the given ID
+ * (see addRecentShapes and getLibraryShape), the most recent first.
+ */
+Sidebar.prototype.getRecentShapes = function(id)
+{
+	var result = [];
+
+	for (var i = 0; i < this.recentShapes.length; i++)
+	{
+		var lib = this.recentShapes[i];
+
+		if (lib != null && lib.id == id && Array.isArray(lib.shapes))
+		{
+			for (var j = 0; j < lib.shapes.length; j++)
+			{
+				var entry = (Array.isArray(lib.shapes[j])) ? this.getLibraryShape(
+					id, lib.shapes[j][0], lib.shapes[j][1]) : null;
+
+				if (entry != null)
+				{
+					result.push(entry);
+				}
+			}
+		}
+	}
+
+	return result;
+};
+
+/**
+ * Sets the titles of the shapes of the library with the given ID (see
+ * setCurrentSearchEntryLibrary) for the shape picker, in the order of the
+ * shape picker (see getPickerShapes). A title that is given n times stands
+ * for the first n shapes with that title in the palettes of the library.
+ */
+Sidebar.prototype.setPickerShapes = function(id, titles)
+{
+	if (this.pickerShapes == null)
+	{
+		this.pickerShapes = Object.create(null);
+	}
+
+	this.pickerShapes[id] = titles;
+};
+
+/**
+ * Returns the entries of the shapes for the shape picker of the given library
+ * of the style to libraries map (see getPaletteShapes): the shapes with the
+ * titles of the library in the palettes of the library (see setPickerShapes)
+ * or, if there are no titles, the shapes of the palette of the library after
+ * the given entry, first the shapes of the same kind, eg. images or the
+ * resource icons of AWS, and then the others (see getShapeName).
+ */
+Sidebar.prototype.getPickerShapes = function(lib, entry)
+{
+	var titles = (this.pickerShapes != null) ? this.pickerShapes[lib.id] : null;
+	var result = [];
+
+	if (titles != null)
+	{
+		var byTitle = Object.create(null);
+		var count = Object.create(null);
+
+		for (var id in this.libraryPalettes[lib.id])
+		{
+			var shapes = this.getPaletteShapes(id);
+
+			for (var i = 0; i < shapes.length; i++)
+			{
+				if (byTitle[shapes[i].title] == null)
+				{
+					byTitle[shapes[i].title] = [];
+				}
+
+				byTitle[shapes[i].title].push(shapes[i]);
+			}
+		}
+
+		for (var i = 0; i < titles.length; i++)
+		{
+			var list = byTitle[titles[i]];
+			var n = count[titles[i]] || 0;
+			count[titles[i]] = n + 1;
+
+			if (list != null && n < list.length)
+			{
+				result.push(list[n]);
+			}
+		}
+	}
+	else
+	{
+		var shapes = this.getPaletteShapes(this.getPaletteIdForLibrary(lib));
+		var start = mxUtils.indexOf(shapes, entry) + 1;
+		var others = [];
+
+		// Images are one kind of shape
+		var getKind = function(name)
+		{
+			var index = name.indexOf('\n');
+
+			return (index >= 0) ? name.substring(0, index) : name;
+		};
+
+		var kind = (entry != null) ? getKind(entry.name) : null;
+
+		for (var i = 0; i < shapes.length; i++)
+		{
+			var shape = shapes[(start + i) % shapes.length];
+
+			if (getKind(shape.name) == kind)
+			{
+				result.push(shape);
+			}
+			else
+			{
+				others.push(shape);
+			}
+		}
+
+		result = result.concat(others);
+	}
+
+	return result;
+};
+
+/**
+ * Returns the title of the palette with the given ID.
+ */
+Sidebar.prototype.getPaletteTitle = function(id)
+{
+	var elts = this.palettes[id];
+
+	return (elts != null && elts[0] != null) ? mxUtils.trim(elts[0].textContent) : id;
+};
+
+/**
+ * Schedules the next slice of the update of the style to libraries map.
+ */
+Sidebar.prototype.scheduleStyleToLibsUpdate = function()
+{
+	if (!this.styleToLibsScheduled)
+	{
+		this.styleToLibsScheduled = true;
+
+		var update = mxUtils.bind(this, function(deadline)
+		{
+			this.styleToLibsScheduled = false;
+			var t0 = Date.now();
+
+			this.updateStyleToLibs(mxUtils.bind(this, function()
+			{
+				return Date.now() - t0 < this.styleToLibsSliceTime &&
+					(deadline == null || deadline.timeRemaining() > 0);
+			}));
+
+			if (!this.isStyleToLibsLoaded())
+			{
+				this.scheduleStyleToLibsUpdate();
+			}
+		});
+
+		if (typeof window.requestIdleCallback === 'function')
+		{
+			window.requestIdleCallback(update);
+		}
+		else
+		{
+			window.setTimeout(update, 0);
+		}
+	}
+};
+
+/**
+ * Adds the cell styles of the queued entries to the style to libraries
+ * map. If hasTime is given then entries are added until it returns false,
+ * with at least one entry per call. Otherwise all entries are added.
+ */
+Sidebar.prototype.updateStyleToLibs = function(hasTime)
+{
+	var entries = this.pendingLibEntries;
+
+	if (entries != null)
+	{
+		var self = this;
+		var lib = null;
+		var createVertexTemplateFromCells = this.createVertexTemplateFromCells;
+
+		// Collects the styles of the cells instead of creating the template
+		this.createVertexTemplateFromCells = function(cells, width, height, title, allowCellsInserted)
+		{
+			if (cells != null)
+			{
+				for (var i = 0; i < cells.length; i++)
+				{
+					var key = self.getKeyStyle(cells[i].style);
+					self.addLibForStyle(key, lib);
+					self.addShapeForStyle(self.getShapeName(cells[i].style), key, lib);
+				}
+			}
+		};
+
+		try
+		{
+			while (this.pendingLibIndex < entries.length)
+			{
+				var entry = entries[this.pendingLibIndex++];
+				lib = entry.lib;
+
+				try
+				{
+					entry.fn();
+				}
+				catch (e)
+				{
+					// ignore
+				}
+
+				if (hasTime != null && !hasTime())
+				{
+					break;
+				}
+			}
+		}
+		finally
+		{
+			this.createVertexTemplateFromCells = createVertexTemplateFromCells;
+		}
+
+		if (this.pendingLibIndex >= entries.length)
+		{
+			this.pendingLibEntries = null;
+			this.pendingLibIndex = 0;
+		}
+	}
+};
+
+/**
+ * Hides the current tooltip.
+ */
 Sidebar.prototype.addEntry = function(tags, fn)
 {
-	if (this.taglist != null && tags != null && tags.length > 0)
+	// Collects shape names for reverse lookup
+	if (this.currentSearchEntryLibrary != null)
+	{
+		this.addLibEntry(fn, this.currentSearchEntryLibrary);
+	}
+
+	if (this.taglist != null && typeof tags === 'string' && tags.length > 0)
 	{
 		if (this.currentSearchEntryLibrary != null)
 		{
 			fn.parentLibraries = [this.currentSearchEntryLibrary];
 		}
-		
+
 		// Replaces special characters
 		var tmp = tags.toLowerCase().replace(/[\/\,\(\)]/g, ' ').split(' ');
-		var tagList = [];
-		var hash = {};
 
-		// Finds unique tags
 		for (var i = 0; i < tmp.length; i++)
 		{
-			if (hash[tmp[i]] == null)
-			{
-				hash[tmp[i]] = true;
-				tagList.push(tmp[i]);
-			}
-			
+			this.addEntryForTag(tmp[i], fn);
+
 			// Adds additional entry with removed trailing numbers
-			var normalized = Editor.soundex(tmp[i].replace(/\.*\d*$/, ''));
+			var normalized = this.getNormalizedTag(tmp[i]);
 
 			if (normalized != tmp[i])
 			{
-				if (hash[normalized] == null)
-				{
-					hash[normalized] = true;
-					tagList.push(normalized);
-				}
+				this.addEntryForTag(normalized, fn);
 			}
-		}
-		
-		for (var i = 0; i < tagList.length; i++)
-		{
-			this.addEntryForTag(tagList[i], fn);
 		}
 	}
 
@@ -840,89 +2154,527 @@ Sidebar.prototype.addEntry = function(tags, fn)
 };
 
 /**
- * Hides the current tooltip.
+ * Returns the soundex of the given tag without trailing numbers. The
+ * results are cached since most tags are used by many entries.
+ */
+Sidebar.prototype.getNormalizedTag = function(tag)
+{
+	if (this.normalizedTags == null)
+	{
+		// Null prototype as tags may come from custom libraries
+		this.normalizedTags = Object.create(null);
+	}
+
+	var normalized = this.normalizedTags[tag];
+
+	if (normalized == null)
+	{
+		normalized = Editor.soundex(tag.replace(/\.*\d*$/, ''));
+		this.normalizedTags[tag] = normalized;
+	}
+
+	return normalized;
+};
+
+/**
+ * Adds the given entry function for the given tag. Repeated tags of an
+ * entry add the function only once as it is then the last entry.
  */
 Sidebar.prototype.addEntryForTag = function(tag, fn)
 {
 	if (tag != null && tag.length > 1)
 	{
 		var entry = this.taglist[tag];
-		
+
 		if (typeof entry !== 'object')
 		{
 			entry = {entries: []};
 			this.taglist[tag] = entry;
 		}
 
-		entry.entries.push(fn);
+		if (entry.entries[entry.entries.length - 1] !== fn)
+		{
+			entry.entries.push(fn);
+		}
 	}
+};
+/**
+ * Returns true if the entry should be ignored in search results.
+ */
+Sidebar.prototype.isEntryIgnored = function(entry, searchClosedLibraries)
+{
+	var ignored = !searchClosedLibraries;
+
+	if (entry.parentLibraries != null && ignored)
+	{
+		for (var j = 0; j < entry.parentLibraries.length; j++)
+		{
+			if (this.isEntryVisible(entry.parentLibraries[j].id))
+			{
+				ignored = false;
+
+				break;
+			}
+		}
+	}
+
+	return ignored;
+};
+
+/**
+ * Returns the search ranking weight for the given entry, ie. the
+ * highest librarySearchWeights value of its parent libraries.
+ * Returns 0 for entries without a weighted parent library.
+ */
+Sidebar.prototype.getEntrySearchWeight = function(entry)
+{
+	var weight = 0;
+
+	if (this.librarySearchWeights != null && entry.parentLibraries != null)
+	{
+		for (var i = 0; i < entry.parentLibraries.length; i++)
+		{
+			var temp = this.librarySearchWeights[entry.parentLibraries[i].id];
+			temp = (typeof temp === 'number') ? temp : 0;
+			weight = (i == 0) ? temp : Math.max(weight, temp);
+		}
+	}
+
+	return weight;
+};
+
+/**
+ * Splits a token on camelCase and letter-digit boundaries.
+ * e.g. "pid2misc" → ["pid", "misc"], "discInst" → ["disc", "inst"]
+ */
+Sidebar.prototype.splitCompoundToken = function(token)
+{
+	var parts = token.replace(/([a-z])([A-Z])/g, '$1 $2')
+		.replace(/([a-zA-Z])(\d)/g, '$1 $2')
+		.replace(/(\d)([a-zA-Z])/g, '$1 $2')
+		.toLowerCase().split(/\s+/);
+
+	return parts.filter(function(p) { return p.length >= 2; });
+};
+
+/**
+ * Returns true if the character before index in key is a word boundary,
+ * ie. the start of the key, a non-alphanumeric character (eg. "-") or
+ * a letter-digit transition.
+ */
+Sidebar.prototype.isTagMatchBoundary = function(key, index)
+{
+	if (index == 0)
+	{
+		return true;
+	}
+
+	var prev = key.charCodeAt(index - 1);
+	var curr = key.charCodeAt(index);
+	var prevDigit = prev >= 48 && prev <= 57;
+	var currDigit = curr >= 48 && curr <= 57;
+
+	// Non-alphanumeric characters are boundaries
+	if (!prevDigit && !(prev >= 97 && prev <= 122))
+	{
+		return true;
+	}
+
+	return prevDigit != currDigit;
+};
+
+/**
+ * Collects entries for tags that contain the given term, eg. "7050"
+ * matches the tag "dcs-7050qx-32" of a shape imported from a VSSX
+ * library. Matches at word boundaries within a tag are added to
+ * prefix, matches elsewhere to substring. Entries in seen are ignored
+ * and matched entries are added to seen.
+ */
+Sidebar.prototype.matchPartialEntries = function(term, seen, prefix, substring)
+{
+	// Requires longer terms for matches inside words to avoid noise
+	var minInnerLength = 4;
+
+	if (term.length >= 2)
+	{
+		for (var key in this.taglist)
+		{
+			var c = key.charCodeAt(0);
+
+			// Ignores Soundex keys (upper case first letter) and exact matches
+			if ((c >= 65 && c <= 90) || key === term)
+			{
+				continue;
+			}
+
+			var idx = key.indexOf(term);
+
+			if (idx >= 0)
+			{
+				var entry = this.taglist[key];
+
+				if (typeof entry === 'object' && entry.entries != null)
+				{
+					// Checks if any occurrence starts at a word boundary
+					var boundary = false;
+					var j = idx;
+
+					while (j >= 0 && !boundary)
+					{
+						boundary = this.isTagMatchBoundary(key, j);
+						j = (boundary) ? j : key.indexOf(term, j + 1);
+					}
+
+					if (boundary || term.length >= minInnerLength)
+					{
+						var target = (boundary) ? prefix : substring;
+						var arr = entry.entries;
+
+						for (var k = 0; k < arr.length; k++)
+						{
+							if (seen.get(arr[k]) == null)
+							{
+								seen.put(arr[k], true);
+								target.push(arr[k]);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+
+/**
+ * Collects entries matching a single term (exact, partial and Soundex).
+ * Returns { exact: [entries], prefix: [entries], substring: [entries],
+ * phonetic: [entries] }.
+ */
+Sidebar.prototype.matchTermEntries = function(term, reverseMap)
+{
+	var exact = [];
+	var prefix = [];
+	var substring = [];
+	var phonetic = [];
+	var english = null;
+
+	var found = this.taglist[term];
+
+	if (found != null)
+	{
+		exact = found.entries.slice();
+	}
+
+	// Checks English translation for localized search terms
+	if (reverseMap != null)
+	{
+		english = reverseMap[term];
+
+		if (english != null && english !== term)
+		{
+			found = this.taglist[english];
+
+			if (found != null)
+			{
+				for (var i = 0; i < found.entries.length; i++)
+				{
+					if (mxUtils.indexOf(exact, found.entries[i]) < 0)
+					{
+						exact.push(found.entries[i]);
+					}
+				}
+			}
+		}
+		else
+		{
+			english = null;
+		}
+	}
+
+	// Adds partial matches on tags, eg. for searching parts of shape
+	// names in imported libraries where the whole name is one tag
+	var seen = new mxDictionary();
+
+	for (var i = 0; i < exact.length; i++)
+	{
+		seen.put(exact[i], true);
+	}
+
+	this.matchPartialEntries(term, seen, prefix, substring);
+
+	// Tags may differ from the resource key in inflection, eg. the
+	// mockups resource key resolves to the singular mockup tag, so
+	// partial and Soundex matching must also run on the translation
+	if (english != null)
+	{
+		this.matchPartialEntries(english, seen, prefix, substring);
+	}
+
+	var normalized = Editor.soundex(term.replace(/\.*\d*$/, ''));
+
+	if (normalized.length > 0 && normalized !== term)
+	{
+		found = this.taglist[normalized];
+
+		if (found != null)
+		{
+			phonetic = found.entries.slice();
+		}
+	}
+
+	// Soundex of the raw term cannot match for non-Latin scripts, so
+	// localized terms rely on the Soundex of the translation
+	if (english != null)
+	{
+		var englishNormalized = Editor.soundex(english.replace(/\.*\d*$/, ''));
+
+		if (englishNormalized.length > 0 && englishNormalized !== english &&
+			englishNormalized !== normalized)
+		{
+			found = this.taglist[englishNormalized];
+
+			if (found != null)
+			{
+				for (var i = 0; i < found.entries.length; i++)
+				{
+					if (mxUtils.indexOf(phonetic, found.entries[i]) < 0)
+					{
+						phonetic.push(found.entries[i]);
+					}
+				}
+			}
+		}
+	}
+
+	return { exact: exact, prefix: prefix, substring: substring, phonetic: phonetic };
+};
+
+/**
+ * Returns a reverse lookup map from localized resource values to
+ * their resource keys (which are the English terms). Rebuilds
+ * the map when the language changes.
+ */
+Sidebar.prototype.getResourceReverseMap = function()
+{
+	var lang = mxClient.language || 'en';
+
+	if (this.resourceReverseMap == null || this.resourceReverseLang !== lang)
+	{
+		// Null prototype as the map is looked up with user-typed search terms
+		this.resourceReverseMap = Object.create(null);
+		this.resourceReverseLang = lang;
+
+		if (lang !== 'en' && mxResources.resources != null)
+		{
+			for (var key in mxResources.resources)
+			{
+				var value = mxResources.resources[key];
+
+				if (value != null && typeof value === 'string' && value !== key)
+				{
+					// Strips Unicode directional formatting characters that
+					// wrap the values in the RTL resource files as they never
+					// appear in typed search terms
+					var lower = value.replace(/[\u200e\u200f\u202a-\u202e]/g, '').toLowerCase();
+
+					if (lower.length > 0 && lower !== key && this.resourceReverseMap[lower] == null)
+					{
+						this.resourceReverseMap[lower] = key;
+					}
+				}
+			}
+		}
+	}
+
+	return this.resourceReverseMap;
 };
 
 /**
  * Adds shape search UI.
  */
-Sidebar.prototype.searchEntries = function(searchTerms, count, page, success, error)
+Sidebar.prototype.searchEntries = function(searchTerms, count, page, success, error, searchClosedLibraries, imagesOnly)
 {
 	if (this.taglist != null && searchTerms != null)
 	{
-		var tmp = searchTerms.toLowerCase().split(' ');
-		var dict = new mxDictionary();
-		var max = (page + 1) * count;
-		var results = [];
-		var index = 0;
-		
-		for (var i = 0; i < tmp.length; i++)
+		// Improves search for fully qualified names of the form mxgraph.foo.bar
+		if (searchTerms.substring(0, 8) == 'mxgraph.' && searchTerms.indexOf(' ') < 0 &&
+			searchTerms.lastIndexOf('.') > 8)
 		{
-			var normalized = Editor.soundex(tmp[i].replace(/\.*\d*$/, ''));
+			searchTerms = searchTerms.substring(8).replace(/\./g, ' ');
+		}
 
-			if (normalized.length > 0)
+		// Normalize: split compound tokens like "pid2misc" → ["pid", "misc"]
+		var rawTerms = searchTerms.toLowerCase().split(' ');
+		var tmp = [];
+		var seenTerms = Object.create(null);
+
+		for (var i = 0; i < rawTerms.length; i++)
+		{
+			var subTokens = this.splitCompoundToken(rawTerms[i]);
+
+			if (subTokens.length == 0 && rawTerms[i].length >= 2)
 			{
-				// Moves exact matches to start of array
-				var found = this.taglist[tmp[i]];
-				var arr = (found != null) ? found.entries.slice() : [];
+				subTokens = [rawTerms[i]];
+			}
 
-				// Adds results for normalized search term
-				found = this.taglist[normalized];
-				arr = (found != null) ? arr.concat(found.entries) : arr;
-
-				var tmpDict = new mxDictionary();
-				
-				if (arr.length > 0)
+			for (var j = 0; j < subTokens.length; j++)
+			{
+				if (!seenTerms[subTokens[j]])
 				{
-					results = [];
-
-					for (var j = 0; j < arr.length; j++)
-					{
-						var entry = arr[j];
-	
-						// NOTE Array does not contain duplicates
-						if (((index == 0) ==(dict.get(entry) == null)) &&
-							tmpDict.get(entry) == null)
-						{
-							tmpDict.put(entry, entry);
-							results.push(entry);
-							
-							if (i == tmp.length - 1 && results.length == max)
-							{
-								success(results.slice(page * count, max), max, true, tmp);
-								
-								return;
-							}
-						}
-					}
+					seenTerms[subTokens[j]] = true;
+					tmp.push(subTokens[j]);
 				}
-				else
-				{
-					results = [];
-				}
-				
-				dict = tmpDict;
-				index++;
 			}
 		}
-		
+
+		// Builds reverse map for localized search term translation
+		var reverseMap = this.getResourceReverseMap();
+
+		// Translates multi-word localized names as a whole, eg. "balon kata"
+		// (id) resolves to the callout tag while its single tokens do not.
+		// Soundex covers translations that only match a tag phonetically,
+		// eg. "miundo ya majaribio" (sw) resolves to the mockups resource
+		// key while the tag is the singular mockup
+		if (tmp.length > 1)
+		{
+			var english = reverseMap[searchTerms.toLowerCase().replace(/\s+/g, ' ').trim()];
+
+			if (english != null && !seenTerms[english] &&
+				(this.taglist[english] != null ||
+				this.taglist[Editor.soundex(english.replace(/\.*\d*$/, ''))] != null))
+			{
+				seenTerms[english] = true;
+				tmp.push(english);
+			}
+		}
+
+		var max = (page + 1) * count;
+
+		// Collect per-term match entries
+		var termMatches = [];
+
+		for (var i = 0; i < tmp.length; i++)
+		{
+			termMatches.push(this.matchTermEntries(tmp[i], reverseMap));
+		}
+
+		// Try strict AND to find the candidate set
+		var dict = new mxDictionary();
+		var andResults = null;
+		var index = 0;
+		var andFailed = false;
+
+		for (var i = 0; i < termMatches.length; i++)
+		{
+			var arr = termMatches[i].exact.concat(termMatches[i].prefix,
+				termMatches[i].substring, termMatches[i].phonetic);
+			var tmpDict = new mxDictionary();
+
+			if (arr.length > 0)
+			{
+				andResults = [];
+
+				for (var j = 0; j < arr.length; j++)
+				{
+					var entry = arr[j];
+
+					if (((index == 0) == (dict.get(entry) == null)) &&
+						tmpDict.get(entry) == null)
+					{
+						tmpDict.put(entry, entry);
+						andResults.push(entry);
+					}
+				}
+			}
+			else
+			{
+				andResults = [];
+			}
+
+			dict = tmpDict;
+			index++;
+
+			if (andResults.length == 0 && i < termMatches.length - 1)
+			{
+				andFailed = true;
+				break;
+			}
+		}
+
+		// Score candidates: +1.0 per exact match, +0.8 per match at a word
+		// boundary in a tag, +0.6 per match inside a tag, +0.5 per
+		// Soundex-only match. Each shape scores at most once per term
+		// (using its best tier)
+		var tierScores = [1.0, 0.8, 0.6, 0.5];
+		var scores = new mxDictionary();
+		var allEntries = new mxDictionary();
+		var candidateFilter = null;
+
+		// If AND succeeded, only score the AND results
+		if (!andFailed && andResults != null && andResults.length > 0)
+		{
+			candidateFilter = new mxDictionary();
+
+			for (var i = 0; i < andResults.length; i++)
+			{
+				candidateFilter.put(andResults[i], true);
+			}
+		}
+
+		for (var i = 0; i < termMatches.length; i++)
+		{
+			var matchedForTerm = new mxDictionary();
+			var tiers = [termMatches[i].exact, termMatches[i].prefix,
+				termMatches[i].substring, termMatches[i].phonetic];
+
+			for (var t = 0; t < tiers.length; t++)
+			{
+				for (var j = 0; j < tiers[t].length; j++)
+				{
+					var entry = tiers[t][j];
+
+					if ((candidateFilter == null || candidateFilter.get(entry) != null) &&
+						matchedForTerm.get(entry) == null)
+					{
+						var prev = scores.get(entry);
+
+						matchedForTerm.put(entry, true);
+						scores.put(entry, (prev || 0) + tierScores[t]);
+						allEntries.put(entry, entry);
+					}
+				}
+			}
+		}
+
+		// Collect and sort by score descending, using the library search
+		// weights to break ties so that entries from superseded libraries
+		// appear after equally scored entries from their replacements
+		var candidates = [];
+
+		allEntries.visit(mxUtils.bind(this, function(key, entry)
+		{
+			candidates.push({ entry: entry, score: scores.get(entry) || 0,
+				weight: this.getEntrySearchWeight(entry) });
+		}));
+
+		candidates.sort(function(a, b)
+		{
+			return (b.score - a.score) || (b.weight - a.weight);
+		});
+
+		var results = [];
+
+		for (var i = 0; i < candidates.length; i++)
+		{
+			if (!this.isEntryIgnored(candidates[i].entry, searchClosedLibraries))
+			{
+				results.push(candidates[i].entry);
+			}
+		}
+
 		var len = results.length;
-		success(results.slice(page * count, (page + 1) * count), len, false, tmp);
+		var more = (page + 1) * count < len;
+		success(results.slice(page * count, (page + 1) * count), len, more, tmp);
 	}
 	else
 	{
@@ -977,7 +2729,7 @@ Sidebar.prototype.cloneCell = function(cell, value)
  * Adds shape search UI.
  */
 Sidebar.prototype.showPopupMenuForEntry = function(elt, libs, evt)
-{												
+{
 	// Hook for subclassers
 };
 
@@ -986,6 +2738,8 @@ Sidebar.prototype.showPopupMenuForEntry = function(elt, libs, evt)
  */
 Sidebar.prototype.addSearchPalette = function(expand)
 {
+	var editorUi = this.editorUi;
+	var graph = editorUi.editor.graph;
 	var elt = document.createElement('div');
 	elt.style.visibility = 'hidden';
 	this.appendChild(elt);
@@ -1001,11 +2755,17 @@ Sidebar.prototype.addSearchPalette = function(expand)
 	var inner = document.createElement('div');
 	inner.style.whiteSpace = 'nowrap';
 	inner.style.textOverflow = 'clip';
-	inner.style.paddingBottom = '8px';
 	inner.style.cursor = 'default';
 
 	var input = document.createElement('input');
-	input.setAttribute('placeholder', mxResources.get('searchShapes'));
+	input.setAttribute('id', 'geOmniSearch');
+	// Reuse the placeholder text as the hover tooltip so the "Type /
+	// to search" hint is also discoverable while the input is focused
+	// (placeholders disappear once the user starts typing) and so the
+	// sidebar container's broader tooltip doesn't surface here.
+	var omniHint = mxResources.get('typeSlashToSearch');
+	input.setAttribute('placeholder', omniHint);
+	input.setAttribute('title', omniHint);
 	input.setAttribute('type', 'text');
 	inner.appendChild(input);
 
@@ -1013,36 +2773,458 @@ Sidebar.prototype.addSearchPalette = function(expand)
 	cross.setAttribute('src', Editor.magnifyImage);
 	cross.setAttribute('title', mxResources.get('search'));
 	cross.className = 'geAdaptiveAsset';
-	cross.style.position = 'relative';
-	cross.style.cursor = 'pointer';
-	cross.style.opacity = '0.5';
-	cross.style.height = '16px';
-	cross.style.left = '-20px';
-	cross.style.top = '4px';
 
-	// Needed to block event transparency in IE
-	cross.style.background = 'url(\'' + this.editorUi.editor.transparentImage + '\')';
-	
+	// A control for the keyboard only while it resets the search
+	Editor.initKeyboardButton(cross);
+	cross.setAttribute('tabindex', '-1');
+
 	var find;
 
 	inner.appendChild(cross);
 	div.appendChild(inner);
 
-	var center = document.createElement('center');
+	var consumeEvent = false;
+
+	mxEvent.addGestureListeners(input, mxUtils.bind(this, function(evt)
+	{
+		consumeEvent = false;
+
+		if (!mxClient.IS_TOUCH && mxEvent.getSource(evt) == input &&
+			document.activeElement != input)
+		{
+			input.focus();
+
+			if (mxClient.IS_GC || mxClient.IS_FF)
+			{
+				input.select();
+			}
+			else
+			{
+				document.execCommand('selectAll', false, null);
+			}
+
+			consumeEvent = true;
+		}
+	}), mxUtils.bind(this, function(evt)
+	{
+		if (mxEvent.getSource(evt) == input &&
+			consumeEvent)
+		{
+			mxEvent.consume(evt);
+		}
+	}), mxUtils.bind(this, function(evt)
+	{
+		if (consumeEvent)
+		{
+			mxEvent.consume(evt);
+			consumeEvent = false;
+		}
+	}));
+
+	var lastActions = [];
+
+	var executeAction = mxUtils.bind(this, function(action, args)
+	{
+		editorUi.hideCurrentMenu();
+		mxUtils.remove(action, lastActions);
+		lastActions.unshift(action);
+
+		if (lastActions.length > 5)
+		{
+			lastActions.pop();
+		}
+
+		action.funct.apply(this, args);
+		input.value = null;
+	});
+
+	// Focuses the diagram unless the action moved the focus, eg. into a dialog
+	function focusGraph()
+	{
+		var ae = document.activeElement;
+
+		if (ae == null || ae == input || ae == document.body)
+		{
+			graph.container.focus();
+		}
+	};
+
+	var hiddenActions = ['about', 'deleteAll', 'showBoundingBox',
+		'createSidebarEntry', 'downloadDesktop', 'toggleGoogleFonts'];
+	
+	var findAction = mxUtils.bind(this, function(value)
+	{
+		var bestMatch = null;
+		
+		for (var key in editorUi.actions.actions)
+		{
+			var action = (hiddenActions.indexOf(key) < 0 &&
+				key.substring(0, 4) != 'test') ?
+				editorUi.actions.get(key) : null;
+			
+			if (action != null && action.isEnabled() &&
+				action.visible)
+			{
+				if (key.toLowerCase() == value)
+				{
+					return action;
+				}
+				else
+				{
+					var tokens = value.toLowerCase().split(' ');
+					var matchTokens = 0;
+
+					for (var i = 0; i < tokens.length; i++)
+					{
+						if (tokens[i].length == 0)
+						{
+							matchTokens++;
+						}
+						else if ((key.toLowerCase().indexOf(tokens[i]) >= 0 ||
+							action.getTitle().toLowerCase().
+								indexOf(tokens[i]) >= 0))
+						{
+							matchTokens++;
+						}
+					}
+
+					if (matchTokens == tokens.length &&
+						(lastActions.indexOf(bestMatch) < 0 ||
+						bestMatch != null && !bestMatch.isEnabled()))
+					{
+						bestMatch = action;
+					}
+				}
+			}
+		}
+
+		return bestMatch;
+	});
+
+	var enterAction = null;
+	var ctrlEnterAction = null;
+	var selectedItem = null;
+
+	function setEnterAction(item, fn)
+	{
+		enterAction = fn;
+		var td = item.firstChild.nextSibling.nextSibling;
+		var span = document.createElement('span');
+		span.className = 'geMenuShortcut';
+		span.innerHTML = 'Enter';
+		td.appendChild(span);
+	};
+
+	var ctrlEnterSpan = null;
+
+	function setCtrlEnterAction(item, fn)
+	{
+		ctrlEnterAction = fn;
+
+		if (ctrlEnterSpan != null && ctrlEnterSpan.parentNode != null)
+		{
+			ctrlEnterSpan.parentNode.removeChild(ctrlEnterSpan);
+		}
+
+		var td = item.firstChild.nextSibling.nextSibling;
+		ctrlEnterSpan = document.createElement('span');
+		ctrlEnterSpan.className = 'geMenuShortcut';
+		ctrlEnterSpan.innerHTML = (mxClient.IS_MAC) ? 'Cmd+Enter' : 'Ctrl+Enter';
+		td.appendChild(ctrlEnterSpan);
+	};
+
+	// Consumes Shift keyup after Shift+Enter to prevent
+	// addMenuHandler's keyup handler from reopening the dropdown
+	var consumeNextShiftUp = false;
+
+	mxEvent.addListener(input, 'keyup', function(evt)
+	{
+		if (consumeNextShiftUp && evt.keyCode == 16 /* Shift */)
+		{
+			consumeNextShiftUp = false;
+			mxEvent.consume(evt);
+		}
+	});
+
+	editorUi.addMenuHandler(input, mxUtils.bind(this, function(menu, parent)
+	{
+		selectedItem = null;
+
+		// Wraps addItem to store action function on each menu item
+		var origAddItem = menu.addItem;
+
+		menu.addItem = function(title, image, funct, parent, iconCls, enabled, active, noHover)
+		{
+			var tr = origAddItem.apply(menu, arguments);
+			tr._action = funct;
+			tr._enabled = (enabled != false);
+			return tr;
+		};
+
+		var lc = input.value.toLowerCase();
+		enterAction = null;
+		ctrlEnterAction = null;
+
+		var item = menu.addItem(mxResources.get('searchShapes'), null, mxUtils.bind(this, function()
+		{
+			find(null, false);
+		}), parent);
+
+		setEnterAction(item, function()
+		{
+			find(null, false);
+		});
+
+		var openLibItem = menu.addItem(mxResources.get('searchShapesInOpenLibraries'), null, mxUtils.bind(this, function()
+		{
+			find(false, false);
+		}), parent);
+
+		var td = openLibItem.firstChild.nextSibling.nextSibling;
+		var span = document.createElement('span');
+		span.className = 'geMenuShortcut';
+		span.innerHTML = 'Shift+Enter';
+		td.appendChild(span);
+
+		// Separate image-only search (eg. via the icon provider); only
+		// offered when an image search backend is configured.
+		if (this.isImageSearchSupported())
+		{
+			menu.addItem(mxResources.get('searchImages'), null, mxUtils.bind(this, function()
+			{
+				find(null, true);
+			}), parent);
+		}
+
+		if (editorUi.isTemplateSearchSupported())
+		{
+			menu.addItem(mxResources.get('searchTemplates'), null, mxUtils.bind(this, function()
+			{
+				editorUi.hideCurrentMenu();
+				editorUi.searchTemplates(input.value);
+				input.value = '';
+			}), parent);
+		}
+
+		menu.addItem(mxResources.get('findInDiagram'), null, mxUtils.bind(this, function()
+		{
+			editorUi.hideCurrentMenu();
+			editorUi.showSearchWindow(true, input.value);
+			input.value = '';
+		}), parent);
+		
+		if (Editor.enableAi &&
+			!editorUi.isOffline() &&
+			editorUi.isOwnGDriveDomain() &&
+			editorUi.isExternalDataComms() &&
+			editorUi.getServiceName() == 'draw.io' &&
+			EditorUi.isMermaidSupported())
+		{
+			menu.addItem(mxResources.get('generate'), null, mxUtils.bind(this, function()
+			{
+				editorUi.openGenerateDialog(input.value);
+				input.value = '';
+			}), parent);
+		}
+
+		if (!editorUi.isOffline() &&
+			editorUi.isOwnGDriveDomain() &&
+			editorUi.isExternalDataComms())
+		{
+			menu.addItem(mxResources.get('help'), null, mxUtils.bind(this, function()
+			{
+				editorUi.searchHelp(input.value);
+				input.value = '';
+			}), parent);
+		}
+
+		menu.addSeparator();
+
+		var bestMatch = (input.value.length > 0) ?
+			findAction(lc) : null;
+
+		function addAction(action)
+		{
+			if (action != null && action.visible)
+			{
+				var item = menu.addItem(action.getTitle(), null,
+					function() {
+						executeAction(action, arguments);
+					}, parent, null, action.isEnabled());
+
+				// Adds checkmark image
+				if (action.toggleAction && action.isSelected())
+				{
+					menu.addCheckmark(item, Editor.checkmarkImage);
+				}
+
+				if (enterAction == null && action.isEnabled() &&
+					(input.value.length == 0 || bestMatch == action))
+				{
+					setEnterAction(item, function()
+					{
+						executeAction(action, arguments);
+						focusGraph();
+					});
+				}
+
+				if (ctrlEnterAction == null && action.isEnabled() &&
+					(bestMatch == action || input.value.length == 0))
+				{
+					setCtrlEnterAction(item, function()
+					{
+						executeAction(action, arguments);
+						focusGraph();
+					});
+				}
+			}
+		};
+
+		addAction(bestMatch);
+
+		for (var i = 0; i < lastActions.length; i++)
+		{
+			if (lastActions[i] != bestMatch)
+			{
+				addAction(lastActions[i]);
+			}
+		}
+
+		// Finds first matching page, preferring non-current page
+		if (lc.length > 0 && editorUi.pages != null)
+		{
+			menu.addSeparator();
+			var matchingPages = [];
+
+			for (var i = 0; i < editorUi.pages.length; i++)
+			{
+				var page = editorUi.pages[i];
+
+				if (page.getName() != null && ((lc.charAt(lc.length - 1) == ' ') ?
+					page.getName().toLowerCase() == lc.substring(0, lc.length - 1) :
+					page.getName().toLowerCase().indexOf(lc) >= 0))
+				{
+					matchingPages.push(page);
+				}
+			}
+
+			// Sorts non-current pages first
+			if (matchingPages.length > 1)
+			{
+				var currentPage = editorUi.currentPage;
+
+				matchingPages.sort(function(a, b)
+				{
+					if (a == currentPage) return 1;
+					if (b == currentPage) return -1;
+					return 0;
+				});
+			}
+
+			for (var i = 0; i < Math.min(4, matchingPages.length); i++)
+			{
+				(function(page, isFirst)
+				{
+					var fn = function()
+					{
+						editorUi.selectPage(page);
+						graph.container.focus();
+						input.value = '';
+					};
+
+					var item = menu.addItem(page.getName() +
+						' (' + mxResources.get('page') + ')',
+						null, fn, parent);
+
+					if (isFirst)
+					{
+						if (enterAction == null)
+						{
+							setEnterAction(item, fn);
+						}
+
+						setCtrlEnterAction(item, fn);
+					}
+				})(matchingPages[i], i == 0);
+			}
+		}
+		
+		// Finds first matching library
+		if (lc.length > 0 && editorUi.sidebar != null &&
+			editorUi.sidebar.entries != null)
+		{
+			menu.addSeparator();
+
+			for (var i = 0; i < editorUi.sidebar.entries.length; i++)
+			{
+				var entries = editorUi.sidebar.entries[i].entries;
+
+				for (var j = 0; j < entries.length; j++)
+				{
+					(function(entry)
+					{
+						var config = editorUi.sidebar.getConfigurationById(entry.id);
+						var tokens = entry.title.toLowerCase().split(' ');
+
+						if (config != null && mxUtils.indexOf(tokens, lc) >= 0)
+						{
+							var fn = function()
+							{
+								var elts = editorUi.sidebar.showPalettes(config.prefix || '',
+									config.libs || [config.id], true);
+								input.value = '';
+								
+								if (elts != null && elts.length > 1)
+								{
+									if (elts[1].firstChild != null &&
+										(elts[1].firstChild.firstChild == null ||
+										elts[1].firstChild.style.display == 'none'))
+									{
+										elts[0].click();
+									}
+
+									elts[0].scrollIntoView({behavior: 'smooth'});
+								}
+							};
+
+							var item = menu.addItem(entry.title + ' (' +
+								mxResources.get('openLibrary') + ')',
+								null, fn, parent);
+
+							if (enterAction == null)
+							{
+								setEnterAction(item, fn);
+							}
+
+							if (ctrlEnterAction == null)
+							{
+								setCtrlEnterAction(item, fn);
+							}
+						}
+
+						return true;
+					})(entries[j]);
+				}
+			}
+		}
+		
+	}), null, true);
+
+	var center = document.createElement('div');
+	center.style.display = 'none';
+	center.style.paddingTop = '8px';
+	center.style.alignItems = 'center';
+	center.style.justifyContent = 'center';
+
 	var button = mxUtils.button(mxResources.get('moreResults'), function()
 	{
 		find();
 	});
-	button.style.display = 'none';
 	
-	// Workaround for inherited line-height in quirks mode
-	button.style.lineHeight = 'normal';
-	button.style.fontSize = '12px';
-	button.style.padding = '6px 12px 6px 12px';
-	button.style.marginTop = '4px';
-	button.style.marginBottom = '8px';
-	center.style.paddingTop = '4px';
-	center.style.paddingBottom = '4px';
+	button.setAttribute('title', mxResources.get('moreResults'));
+	button.className = 'geBtn gePrimaryBtn';
+	button.style.borderRadius = '16px';
+	button.style.padding = '8px 12px';
 	
 	center.appendChild(button);
 	div.appendChild(center);
@@ -1079,7 +3261,8 @@ Sidebar.prototype.addSearchPalette = function(expand)
 	{
 		cross.setAttribute('src', Editor.magnifyImage);
 		cross.setAttribute('title', mxResources.get('search'));
-		button.style.display = 'none';
+		cross.setAttribute('tabindex', '-1');
+		center.style.display = 'none';
 		input.value = '';
 		searchTerm = '';
 		clearDiv();
@@ -1095,128 +3278,176 @@ Sidebar.prototype.addSearchPalette = function(expand)
 		input.focus();
 	});
 
-	find = mxUtils.bind(this, function()
+	var lastSearchClosedLibs = null;
+	var lastImagesOnly = null;
+
+	find = mxUtils.bind(this, function(searchClosedLibs, imagesOnly)
 	{
+		if (searchClosedLibs == null)
+		{
+			searchClosedLibs = this.searchClosedLibraries;
+		}
+
+		// Preserves the current mode for paging (eg. the More Results
+		// button) so an image search is not silently turned into a
+		// shape search; explicit callers (the omnibox items) pass a value.
+		if (imagesOnly == null)
+		{
+			imagesOnly = (lastImagesOnly != null) ? lastImagesOnly : false;
+		}
+
+		editorUi.hideCurrentMenu();
+
 		// Shows 4 rows (minimum 4 results)
 		count = 4 * Math.max(1, Math.floor(this.container.clientWidth / (this.thumbWidth + 10)));
 		this.hideTooltip();
-		
+
 		if (input.value != '')
 		{
 			if (center.parentNode != null)
 			{
-				if (searchTerm != input.value)
+				if (searchTerm != input.value || lastSearchClosedLibs != searchClosedLibs ||
+					lastImagesOnly != imagesOnly)
 				{
 					clearDiv();
 					searchTerm = input.value;
+					lastSearchClosedLibs = searchClosedLibs;
+					lastImagesOnly = imagesOnly;
 					hash = new Object();
 					complete = false;
 					page = 0;
 				}
-				
+
 				if (!active && !complete)
 				{
 					button.setAttribute('disabled', 'true');
-					button.style.display = '';
+					center.style.display = 'flex';
 					button.style.cursor = 'wait';
-					button.innerHTML = mxResources.get('loading') + '...';
+					button.innerHTML = '';
+					mxUtils.write(button, mxResources.get('loading') + '...');
 					active = true;
-					
+
 					// Ignores old results
 					var current = new Object();
 					this.currentSearch = current;
-					
-					this.searchEntries(searchTerm, count, page, mxUtils.bind(this, function(results, len, more, terms)
+
+					try
 					{
-						if (this.currentSearch == current)
+						this.searchEntries(searchTerm, count, page, mxUtils.bind(this, function(results, len, more, terms)
 						{
-							results = (results != null) ? results : [];
-							active = false;
-							page++;
-							this.insertSearchHint(div, searchTerm, count, page, results, len, more, terms);
-							
-							// Allows to repeat the search
-							if (results.length == 0 && page == 1)
+							if (this.currentSearch == current)
 							{
-								searchTerm = '';
-							}
+								results = (results != null) ? results : [];
+								active = false;
+								page++;
+								this.insertSearchHint(div, searchTerm, count, page, results, len, more, terms);
+								this.insertSearchResultsHeader(div, searchTerm, page);
 
-							if (center.parentNode != null)
-							{
-								center.parentNode.removeChild(center);
-							}
-							
-							for (var i = 0; i < results.length; i++)
-							{
-								(mxUtils.bind(this, function(result)
+								// Allows to repeat the search
+								if (results.length == 0 && page == 1)
 								{
-									try
-									{
-										var elt = result();
-										
-										// Avoids duplicates in results
-										if (hash[elt.innerHTML] == null)
-										{
-											hash[elt.innerHTML] = (result.parentLibraries != null) ?
-												result.parentLibraries.slice() : [];
-											div.appendChild(elt);
-										}
-										else if (result.parentLibraries != null)
-										{
-											hash[elt.innerHTML] = hash[elt.innerHTML].concat(result.parentLibraries);
-										}
+									searchTerm = '';
+								}
 
-										mxEvent.addGestureListeners(elt, null, null, mxUtils.bind(this, function(evt)
-										{
-											var libs = hash[elt.innerHTML];
-	
-											if (mxEvent.isPopupTrigger(evt))
-											{
-												this.showPopupMenuForEntry(elt, libs, evt);
-											}
-										}));
-										
-										// Disables the built-in context menu
-										mxEvent.disableContextMenu(elt);
-									}
-									catch (e)
+								if (center.parentNode != null)
+								{
+									center.parentNode.removeChild(center);
+								}
+
+								// Search results dedup and right-click menu key on
+								// elt.innerHTML, which would be empty for every
+								// virtual placeholder. Force synchronous thumbs
+								// for the search render loop.
+								var prevVirtualThumbs = this.virtualThumbs;
+								this.virtualThumbs = false;
+
+								for (var i = 0; i < results.length; i++)
+								{
+									(mxUtils.bind(this, function(result)
 									{
-										if (urlParams['test'] == '1')
+										try
 										{
-											if (window.console != null && !EditorUi.isElectronApp)
+											var elt = result();
+
+											if (this.closedLibraryOpacity != null &&
+												searchClosedLibs)
 											{
-												console.error(e);
+												if (this.isEntryIgnored(result, false))
+												{
+													elt.style.opacity = this.closedLibraryOpacity;
+												}
 											}
-											else
+
+											// Avoids duplicates in results
+											if (hash[elt.innerHTML] == null)
 											{
-												mxLog.show();
-												mxLog.debug(e.stack);
+												hash[elt.innerHTML] = (result.parentLibraries != null) ?
+													result.parentLibraries.slice() : [];
+												div.appendChild(elt);
+											}
+											else if (result.parentLibraries != null)
+											{
+												hash[elt.innerHTML] = hash[elt.innerHTML].concat(result.parentLibraries);
+											}
+
+											mxEvent.addGestureListeners(elt, null, null, mxUtils.bind(this, function(evt)
+											{
+												var libs = hash[elt.innerHTML];
+
+												if (mxEvent.isPopupTrigger(evt))
+												{
+													this.showPopupMenuForEntry(elt, libs, evt);
+												}
+											}));
+
+											// Disables the built-in context menu
+											mxEvent.disableContextMenu(elt);
+										}
+										catch (e)
+										{
+											if (urlParams['test'] == '1')
+											{
+												if (window.console != null && !EditorUi.isElectronApp)
+												{
+													console.error(e);
+												}
+												else
+												{
+													mxLog.show();
+													mxLog.debug(e.stack);
+												}
 											}
 										}
-									}
-								}))(results[i]);
+									}))(results[i]);
+								}
+
+								this.virtualThumbs = prevVirtualThumbs;
+
+								if (more)
+								{
+									button.removeAttribute('disabled');
+									button.innerHTML = '';
+									mxUtils.write(button, mxResources.get('moreResults'));
+								}
+								else
+								{
+									button.innerHTML = mxResources.get('reset');
+									center.style.display = 'none';
+									complete = true;
+								}
+
+								button.style.cursor = '';
+								div.appendChild(center);
 							}
-							
-							if (more)
-							{
-								button.removeAttribute('disabled');
-								button.innerHTML = mxResources.get('moreResults');
-							}
-							else
-							{
-								button.innerHTML = mxResources.get('reset');
-								button.style.display = 'none';
-								complete = true;
-							}
-							
+						}), mxUtils.bind(this, function()
+						{
 							button.style.cursor = '';
-							div.appendChild(center);
-						}
-					}), mxUtils.bind(this, function()
+						}), searchClosedLibs, imagesOnly);
+					}
+					catch (e)
 					{
-						// TODO: Error handling
-						button.style.cursor = '';
-					}));
+						editorUi.handleError(e);
+					}
 				}
 			}
 		}
@@ -1226,7 +3457,7 @@ Sidebar.prototype.addSearchPalette = function(expand)
 			input.value = '';
 			searchTerm = '';
 			hash = new Object();
-			button.style.display = 'none';
+			center.style.display = 'none';
 			complete = false;
 			input.focus();
 		}
@@ -1235,19 +3466,96 @@ Sidebar.prototype.addSearchPalette = function(expand)
 	this.searchShapes = function(value)
 	{
 		input.value = value;
-		find();
+		find(null, false);
 	};
 	
 	mxEvent.addListener(input, 'keydown', mxUtils.bind(this, function(evt)
 	{
-		if (evt.keyCode == 13 /* Enter */)
+		if (evt.keyCode == 13 /* Enter */ && evt.shiftKey)
 		{
-			find();
+			consumeNextShiftUp = true;
+			find(false, false);
+			mxEvent.consume(evt);
+		}
+		else if (evt.keyCode == 13 /* Enter */ && (evt.metaKey || evt.ctrlKey) &&
+			ctrlEnterAction != null)
+		{
+			ctrlEnterAction(evt, evt);
+			mxEvent.consume(evt);
+		}
+		else if (evt.keyCode == 13 /* Enter */ && enterAction != null)
+		{
+			enterAction(evt, evt);
+			mxEvent.consume(evt);
+		}
+		else if (evt.keyCode == 38 /* ArrowUp */ || evt.keyCode == 40 /* ArrowDown */)
+		{
+			var menu = editorUi.currentMenu;
+			var items = [];
+
+			// Shift+Arrow Up and Down only move the focus (see EditorUi.isArrowKeyEvent)
+			if (menu != null && menu.tbody != null && !mxEvent.isShiftDown(evt))
+			{
+				var children = menu.tbody.childNodes;
+
+				for (var i = 0; i < children.length; i++)
+				{
+					if (children[i].nodeName == 'TR' &&
+						children[i]._action != null &&
+						children[i]._enabled)
+					{
+						items.push(children[i]);
+					}
+				}
+			}
+
+			if (items.length > 0)
+			{
+				var idx = items.indexOf(selectedItem);
+
+				if (evt.keyCode == 40 /* ArrowDown */)
+				{
+					idx = (idx + 1) % items.length;
+				}
+				else
+				{
+					idx = (idx <= 0) ? items.length - 1 : idx - 1;
+				}
+
+				if (selectedItem != null)
+				{
+					selectedItem.className = 'mxPopupMenuItem';
+				}
+
+				selectedItem = items[idx];
+				selectedItem.className = 'mxPopupMenuItemHover';
+				selectedItem.scrollIntoView({block: 'nearest'});
+				enterAction = selectedItem._action;
+			}
+			// Moves the focus to the first result or to the control above or
+			// below without a menu
+			else if (!mxEvent.isAltDown(evt) && !mxEvent.isControlDown(evt) &&
+				!mxEvent.isMetaDown(evt) && (evt.keyCode != 40 || !this.focusFirstItem(div)))
+			{
+				editorUi.focusTabStopInDirection(input, evt.keyCode);
+			}
+
 			mxEvent.consume(evt);
 		}
 		else if (evt.keyCode == 27 /* Escape */)
 		{
-			resetSearch();
+			// Returns to the diagram if there is no search to reset
+			// and no menu to close (closed on keyup in addMenuHandler)
+			if (input.value == '' && searchTerm == '' && editorUi.currentMenu == null)
+			{
+				graph.container.focus();
+			}
+			else
+			{
+				resetSearch();
+			}
+
+			mxEvent.consume(evt);
 		}
 	}));
 
@@ -1259,32 +3567,38 @@ Sidebar.prototype.addSearchPalette = function(expand)
 			{
 				cross.setAttribute('src', Editor.magnifyImage);
 				cross.setAttribute('title', mxResources.get('search'));
+				cross.setAttribute('tabindex', '-1');
 			}
 			else
 			{
 				cross.setAttribute('src', Editor.crossImage);
 				cross.setAttribute('title', mxResources.get('reset'));
+				cross.setAttribute('tabindex', '0');
 			}
 			
 			if (input.value == '')
 			{
 				complete = true;
-				button.style.display = 'none';
+
+				// Deleting the term clears the results like Escape does
+				// (resetSearch also resets searchTerm so that repeating
+				// the previous search runs again)
+				resetSearch();
 			}
 			else if (input.value != searchTerm)
 			{
-				button.style.display = 'none';
+				center.style.display = 'none';
 				complete = false;
 			}
 			else if (!active)
 			{
 				if (complete)
 				{
-					button.style.display = 'none';
+					center.style.display = 'none';
 				}
 				else
 				{
-					button.style.display = '';
+					center.style.display = 'flex';
 				}
 			}
 		}), 0);
@@ -1332,14 +3646,23 @@ Sidebar.prototype.insertSearchHint = function(div, searchTerm, count, page, resu
 	if (results.length == 0 && page == 1)
 	{
 		var err = document.createElement('div');
-		err.className = 'geTitle';
-		err.style.cssText = 'background-color:transparent;border-color:transparent;' +
-			'padding:6px 0px 0px 0px !important;margin:4px 8px 4px 8px;text-align:center;' +
-			'cursor:default !important;font-size:11px;font-weight:normal;';
-		
-		mxUtils.write(err, mxResources.get('noResultsFor', [searchTerm]));
+		err.className = 'geSidebarText';
+		var temp = mxResources.get('noResultsFor', [searchTerm]);
+		err.setAttribute('title', temp);
+		mxUtils.write(err, temp);
 		div.appendChild(err);
 	}
+};
+
+/**
+ * Hook for a header above the search results (called with the page already
+ * incremented, so 1 is the first page). Does nothing here - the application
+ * layer overrides this (grapheditor must not know about specific search
+ * providers).
+ */
+Sidebar.prototype.insertSearchResultsHeader = function(div, searchTerm, page)
+{
+	// Overridden in the application
 };
 
 /**
@@ -1349,11 +3672,14 @@ Sidebar.prototype.addGeneralPalette = function(expand)
 {
 	var lineTags = 'line lines connector connectors connection connections arrow arrows ';
 	this.setCurrentSearchEntryLibrary('general', 'general');
+	var graph = this.editorUi.editor.graph;
 	var sb = this;
 
 	var temp = parseInt(this.initialDefaultVertexStyle['fontSize']);
 	var fontSize = !isNaN(temp) ? 'fontSize=' + Math.min(16, temp) + ';' : '';
-
+	// Label cells of edges inherit the text styles of the edge
+	var edgeLabelStyle = 'edgeLabel;resizable=0;html=1;' + Graph.createInheritedLabelStyle();
+	
 	// Reusable cells
 	var field = new mxCell('List Item', new mxGeometry(0, 0, 80, 30),
 		'text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;' +
@@ -1363,36 +3689,36 @@ Sidebar.prototype.addGeneralPalette = function(expand)
 
 	var fns = [
 	 	this.createVertexTemplateEntry('rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', null, null, 'rect rectangle box'),
-	 	this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', null, null, 'rounded rect rectangle box'),
-	 	// Explicit strokecolor/fillcolor=none is a workaround to maintain transparent background regardless of current style
-	 	this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
- 			60, 30, 'Text', 'Text', null, null, 'text textbox textarea label'),
-	 	this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;', 190, 120,
-			'<h1>Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
-			'Textbox', null, null, 'text textbox textarea'),
- 		this.createVertexTemplateEntry('ellipse;whiteSpace=wrap;html=1;', 120, 80, '', 'Ellipse', null, null, 'oval ellipse state'),
+	 	this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;', 120, 60, '', 'Rounded Rectangle', null, null, 'rounded rect rectangle box'),
+	 	this.createVertexTemplateEntry(graph.appendFontSize(Editor.defaultTextStyle, graph.vertexFontSize),
+			60, 30, 'Text', 'Text', null, null, 'text textbox textarea label'),
+	 	this.createVertexTemplateEntry('text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;', 180, 120,
+			'<h1 style="margin-top: 0px;">Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ' +
+			'ut labore et dolore magna aliqua.</p>', 'Textbox', null, null, 'text textbox textarea'),
+ 		this.createVertexTemplateEntry('ellipse;whiteSpace=wrap;html=1;shapeInside=1;', 120, 80, '', 'Ellipse', null, null, 'oval ellipse state'),
 		this.createVertexTemplateEntry('whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Square', null, null, 'square'),
-		this.createVertexTemplateEntry('ellipse;whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Circle', null, null, 'circle'),
+		this.createVertexTemplateEntry('ellipse;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;', 80, 80, '', 'Circle', null, null, 'circle'),
 	 	this.createVertexTemplateEntry('shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;', 120, 60, '', 'Process', null, null, 'process task'),
-	 	this.createVertexTemplateEntry('rhombus;whiteSpace=wrap;html=1;', 80, 80, '', 'Diamond', null, null, 'diamond rhombus if condition decision conditional question test'),
-	 	this.createVertexTemplateEntry('shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;', 120, 60, '', 'Parallelogram'),
-	 	this.createVertexTemplateEntry('shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;', 120, 80, '', 'Hexagon', null, null, 'hexagon preparation'),
-	 	this.createVertexTemplateEntry('triangle;whiteSpace=wrap;html=1;', 60, 80, '', 'Triangle', null, null, 'triangle logic inverter buffer'),
+	 	this.createVertexTemplateEntry('rhombus;whiteSpace=wrap;html=1;shapeInside=1;', 80, 80, '', 'Diamond', null, null, 'diamond rhombus if condition decision conditional question test'),
+	 	this.createVertexTemplateEntry('shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;', 120, 60, '', 'Parallelogram'),
+	 	this.createVertexTemplateEntry('shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;', 120, 80, '', 'Hexagon', null, null, 'hexagon preparation'),
+	 	this.createVertexTemplateEntry('triangle;whiteSpace=wrap;html=1;shapeInside=1;', 60, 80, '', 'Triangle', null, null, 'triangle logic inverter buffer'),
 	 	this.createVertexTemplateEntry('shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;', 60, 80, '', 'Cylinder', null, null, 'cylinder data database'),
-	 	this.createVertexTemplateEntry('ellipse;shape=cloud;whiteSpace=wrap;html=1;', 120, 80, '', 'Cloud', null, null, 'cloud network'),
+	 	this.createVertexTemplateEntry('ellipse;shape=cloud;whiteSpace=wrap;html=1;perimeter=cloudPerimeter;', 120, 80, '', 'Cloud', null, null, 'cloud network'),
 	 	this.createVertexTemplateEntry('shape=document;whiteSpace=wrap;html=1;boundedLbl=1;', 120, 80, '', 'Document'),
 	 	this.createVertexTemplateEntry('shape=internalStorage;whiteSpace=wrap;html=1;backgroundOutline=1;', 80, 80, '', 'Internal Storage'),
 	 	this.createVertexTemplateEntry('shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;', 120, 80, '', 'Cube'),
-	 	this.createVertexTemplateEntry('shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;', 120, 80, '', 'Step'),
-	 	this.createVertexTemplateEntry('shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;', 120, 60, '', 'Trapezoid'),
+	 	this.createVertexTemplateEntry('shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;', 120, 80, '', 'Step'),
+	 	this.createVertexTemplateEntry('shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;', 120, 60, '', 'Trapezoid'),
 	 	this.createVertexTemplateEntry('shape=tape;whiteSpace=wrap;html=1;', 120, 100, '', 'Tape'),
 	 	this.createVertexTemplateEntry('shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;', 80, 100, '', 'Note'),
 	    this.createVertexTemplateEntry('shape=card;whiteSpace=wrap;html=1;', 80, 100, '', 'Card'),
 	    this.createVertexTemplateEntry('shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;', 120, 80, '', 'Callout', null, null, 'bubble chat thought speech message'),
+	    this.createVertexTemplateEntry('shape=wedgeCallout;whiteSpace=wrap;html=1;', 120, 80, '', 'Wedge Callout', null, null, 'bubble chat thought speech message callout annotation pointer wedge'),
 	 	this.createVertexTemplateEntry('shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;', 30, 60, 'Actor', 'Actor', false, null, 'user person human stickman'),
-	 	this.createVertexTemplateEntry('shape=xor;whiteSpace=wrap;html=1;', 60, 80, '', 'Or', null, null, 'logic or'),
-	 	this.createVertexTemplateEntry('shape=or;whiteSpace=wrap;html=1;', 60, 80, '', 'And', null, null, 'logic and'),
-	 	this.createVertexTemplateEntry('shape=dataStorage;whiteSpace=wrap;html=1;fixedSize=1;', 100, 80, '', 'Data Storage'),
+	 	this.createVertexTemplateEntry('shape=xor;whiteSpace=wrap;html=1;shapeInside=1;', 60, 80, '', 'Or', null, null, 'logic or'),
+	 	this.createVertexTemplateEntry('shape=or;whiteSpace=wrap;html=1;shapeInside=1;', 60, 80, '', 'And', null, null, 'logic and'),
+	 	this.createVertexTemplateEntry('shape=dataStorage;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;', 100, 80, '', 'Data Storage'),
 		this.createVertexTemplateEntry('swimlane;startSize=0;', 200, 200, '', 'Container', null, null, 'container swimlane lane pool group'),
 		this.createVertexTemplateEntry('swimlane;whiteSpace=wrap;html=1;', 200, 200, 'Vertical Container', 'Container', null, null, 'container swimlane lane pool group'),
 		this.createVertexTemplateEntry('swimlane;horizontal=0;whiteSpace=wrap;html=1;', 200, 200, 'Horizontal Container', 'Horizontal Container', null, null, 'container swimlane lane pool group'),
@@ -1414,7 +3740,7 @@ Sidebar.prototype.addGeneralPalette = function(expand)
 		}),
 		this.addEntry('curve', mxUtils.bind(this, function()
 	 	{
-			var cell = new mxCell('', new mxGeometry(0, 0, 50, 50), 'curved=1;endArrow=classic;html=1;');
+			var cell = new mxCell('', new mxGeometry(0, 0, 50, 50), 'curved=1;curveGeometry=1;endArrow=classic;html=1;');
 			cell.geometry.setTerminalPoint(new mxPoint(0, 50), true);
 			cell.geometry.setTerminalPoint(new mxPoint(50, 0), false);
 			cell.geometry.points = [new mxPoint(50, 50), new mxPoint(0, 0)];
@@ -1439,7 +3765,7 @@ Sidebar.prototype.addGeneralPalette = function(expand)
 			edge.geometry.relative = true;
 			edge.edge = true;
 			
-	    	var cell0 = new mxCell('Label', new mxGeometry(0, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;');
+	    	var cell0 = new mxCell('Label', new mxGeometry(0, 0, 0, 0), edgeLabelStyle + ';align=center;verticalAlign=middle;');
 	    	cell0.geometry.relative = true;
 	    	cell0.setConnectable(false);
 	    	cell0.vertex = true;
@@ -1454,48 +3780,26 @@ Sidebar.prototype.addGeneralPalette = function(expand)
 			edge.geometry.setTerminalPoint(new mxPoint(160, 0), false);
 			edge.geometry.relative = true;
 			edge.edge = true;
-
-	    	var cell0 = new mxCell('Label', new mxGeometry(0, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;');
+			
+	    	var cell0 = new mxCell('Label', new mxGeometry(0, 0, 0, 0), edgeLabelStyle + ';align=center;verticalAlign=middle;');
 	    	cell0.geometry.relative = true;
 	    	cell0.setConnectable(false);
 	    	cell0.vertex = true;
 	    	edge.insert(cell0);
 	    	
-	    	var cell1 = new mxCell('Source', new mxGeometry(-1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;');
+	    	var cell1 = new mxCell('Source', new mxGeometry(-1, 0, 0, 0), edgeLabelStyle + ';align=left;verticalAlign=bottom;');
 	    	cell1.geometry.relative = true;
 	    	cell1.setConnectable(false);
 	    	cell1.vertex = true;
 	    	edge.insert(cell1);
 			
-			return this.createEdgeTemplateFromCells([edge], 160, 0, 'Connector with 2 Labels');
-		})),
-		this.addEntry(lineTags + 'edge title multiplicity', mxUtils.bind(this, function()
-		{
-			var edge = new mxCell('', new mxGeometry(0, 0, 0, 0), 'endArrow=classic;html=1;');
-			edge.geometry.setTerminalPoint(new mxPoint(0, 0), true);
-			edge.geometry.setTerminalPoint(new mxPoint(160, 0), false);
-			edge.geometry.relative = true;
-			edge.edge = true;
-			
-	    	var cell0 = new mxCell('Label', new mxGeometry(0, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;');
-	    	cell0.geometry.relative = true;
-	    	cell0.setConnectable(false);
-	    	cell0.vertex = true;
-	    	edge.insert(cell0);
-	    	
-	    	var cell1 = new mxCell('Source', new mxGeometry(-1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;');
-	    	cell1.geometry.relative = true;
-	    	cell1.setConnectable(false);
-	    	cell1.vertex = true;
-	    	edge.insert(cell1);
-			
-	    	var cell2 = new mxCell('Target', new mxGeometry(1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;');
+	    	var cell2 = new mxCell('Target', new mxGeometry(1, 0, 0, 0), edgeLabelStyle + ';align=right;verticalAlign=bottom;');
 	    	cell2.geometry.relative = true;
 	    	cell2.setConnectable(false);
 	    	cell2.vertex = true;
 	    	edge.insert(cell2);
 	    	
-			return this.createEdgeTemplateFromCells([edge], 160, 0, 'Connector with 3 Labels');
+			return this.createEdgeTemplateFromCells([edge], 160, 0, 'Connector with Labels');
 		})),
 	 	this.addEntry(lineTags + 'edge shape symbol message mail email', mxUtils.bind(this, function()
 		{
@@ -1527,33 +3831,17 @@ Sidebar.prototype.addMiscPalette = function(expand)
 	var sb = this;
 	var lineTags = 'line lines connector connectors connection connections arrow arrows '
 	this.setCurrentSearchEntryLibrary('general', 'misc');
+	var graph = this.editorUi.editor.graph;
+	var slantedTextStyle = 'text;html=1;strokeColor=none;fillColor=none;align=center;' +
+		'verticalAlign=middle;whiteSpace=wrap;';
+	var slantedTextTags = 'text slanted skewed isometric aws 3d face';
 
 	var fns = [
-   	 	this.createVertexTemplateEntry('text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;', 100, 40, 'Title', 'Title', null, null, 'text heading title'),
-	 	this.createVertexTemplateEntry('text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;', 100, 80,
- 			'<ul><li>Value 1</li><li>Value 2</li><li>Value 3</li></ul>', 'Unordered List'),
-	 	this.createVertexTemplateEntry('text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;', 100, 80,
- 			'<ol><li>Value 1</li><li>Value 2</li><li>Value 3</li></ol>', 'Ordered List'),
- 		this.addDataEntry('table', 180, 120, 'Table 1', '7VnbcpswEP0aXjtcYsd9NUnTh/Yl6Q8o1trSVEiMWAeTr+8KhGlSe2xwJpMSZvCMdtmVteccwY4IkjTb3VmWi5+GgwqS2yBJrTHYjLJdCkoFcSh5kNwEcRzSL4i/Hbkb1XfDnFnQeE5C3CQ8MbWFxtM4CqyUdxSC5W6I7NG5lgUyiw/y2flCsldGI5MaLNlRbSvF8kLW0U2EkIr/YJXZYjtPay3XlO0ni+Zk+/WARdgdral2+YLuwGSAtqKQUnIUPmLR1B0KkBvRpnkwQlY0js0+t4OIBh6lw4glPRG7NyWVJYyVzw4o5TF5jWJRykwxDd+B8VeupeHVPsua35AaZRzaUguw0qGIJvcRCtboh48G0WTesB6G8CBD3Jr8F7MbaEPWUqn2b7TRjvfcSI01cLMlXQRlGn6ZBTOqOCU76my6XLjF1GhaMYnDTQuswBKKwaTHw0i/egPOr87nnFaMkql7WCHTm3rDCMyU3xulkAgPOVu50JJ2fbN/tIvu2DjGsiGE1srp6UZIzkEfJqqfGGpawd4+QcNuNJSf5CQ/8570+Mk6LHvPxhSVphnSHtpqXvzD+X6dZ8lgNslgsAx2L0kbkSrmkyouVcX+xTwiWVxPfcKH6hOql6S/R9uwmJ4Mp+m6Hn3b8HWSwWAZjLdtiMJJFpfKYox9QxRNjcNHbBwW79g4RD2O5T7vsyE6fQz43z8Mepw2TkL4RM3DdCJ5uS5G0D2Q2X0rasL//pT0Bw=='),
- 		this.addDataEntry('table', 180, 120, 'Table 2', '7ZlLc9owEMc/ja8dP3jlimnSQ3pJOr0reMGayFqPvNSQT9+VLUMCOEDbyaTYM2ZGWq9e/99K7MheFGfrOyPy9DsmoLzoqxfFBpHqUraOQSkv9GXiRTMvDH3+eeFty9ugeuvnwoCmcxqEdYNfQq2gttSGgjbKGYpU5LZI4smapillPM1ZwMUylQSPuZjb9yUvgm0FCUOP8sWafK7PUZOQGoxrM0elRF7IqrPaI5UquRcbXFEzTFOz3qtM33P7wnkbLF9XF9y9Gy0YVcMbfIYYFdoBE1iIlbIduXWCIVi3alWZnFB3gBmQ2bBLKRNKncek1tNPQS7TppkT2RdFbVhu2+6k54JT/ziJ6EISD1haGGjki1VYOT325S9KmSmh4RuIZM80xWTjTIS5KylYkCs+IRFmjexuuf5RhInB/IcwS2hcFlKpBoJGbeMmR6mpEmg45Ycli/0vQ2/IK4u5Huzq/Fh3QzFq5snRY7sFUVAJBZ2ELnUKRp4NPfwz6IN/wHxwwPxnVQz9oBU+T52kUA8wJ6GX5+xI3oHaeu9wHaFzWQQga7pQNgJnqUwS0HtQwr+FEp2EMrqQietsp9vFvQlFYLQg3jgrnRQHoLfzPIv9sJV9+8bvNPv1W1JXFAqj1lCI+lB4JxS2/7tXFAvjPg34VGnA5i30j8gKJq3HwaDjx8H46rOCm1b2w559t7KCwG+NhVEfCx1LC4Kgzws+Y14w+cC8IDi8rGsOhHHHD4Tg9M3df38CHF4QNvQnPf2u5QbtN4c3fTBceXLA1d0Hotr99fej3w=='),
-		this.addDataEntry('table title', 180, 150, 'Table with Title 1', '7VnbbtswDP0avw6WXSfda5yue9he2v6AGjGRMFkyZKZO+vWjbOWyJVluQ9G6BmxApChaOudIIOQozYvFveOl/GkF6Ci9i9LcWYttq1jkoHWUxEpE6ThKkpjeKPl2oJc1vXHJHRg8ZUDSDnjheg6t54k/a2i9FS518FaSl76JTW86qpA7fFSv3pfG5JhYg1wZcORgja01LyvVhI+bCKm0+MGXdo6rRCuL0jn7C3KrrR8vYMrn2vunlDV8hQ3IDrMFh7A4uOLGFZZ7D7YAdEsKqZVAGSJuW1RiCWomV8Oy4ORV65itx24ApEbAcD+e6Q6e/4bywda0LGmdevUA6oDVNryNXatCcwPfgYu/XCMrlutR2ygqI8EpjyLaMkRomGJoPltEWwTDBRjivcwJZ8sn7mawCpkqrVefMdZ4QZRWGWyAy0b0EJR5/CWLMlpxTjbb2PT4cIe5NTRjEo1PC7zCGqqLSU/2k74MtARqj2ng5j9I4OZ0CdACUHH9ABPkZtZsLImFDluolgrhseQTH1rTEdFuM+OjN+QcIt0SYFPt5TWWSggw+3k7TxsNy+DuXqAlm11KV3p0jw7OpCck22B5djauaWmGI22puRHVDufreZ4kg6yXwcUyWPxJWodUMehVca0qWNI9WQz7suE9lg3DNywbbvuT4Thdw86XDV97GVwsg+6WDSzuZXGtLLpYNzDWFw7vsXBg7A0rB7Z7idcfDru3gsevBT/8aXDG7WMvhE9UPfRXktfrogPlA5mbP0tt+PaPp98='),
-		this.addDataEntry('table title', 180, 120, 'Table with Title 2', '7VhNb6MwEP01XFd8NNnmGtLtHrKXptq7Gw9grbGRmZSkv34HbEJ3CdtklaYoqgSSZxgP+L1nPwkvivPtvWFF9kNzkF5050Wx0RrtKN/GIKUX+oJ70cILQ59uL/w28DRonvoFM6DwmAmhnfDM5AZs5pE9SbDZEnfSZcuMFfUQm6fRvERmcCVe6lzkU2KtFTKhwFAiaGIpWVGKpnzRVGRC8iXb6Q22jdponogt8AddlW620dWSmpVuakLNV+5j/ObtRv+CWEtdv45DwjYS2zr7UcGUYrc4MAjbQYCalEPnHnQOaHZUUgmOmau4tSD6GYg0a6c5ZH1W2kS6n9vhTQMH+WH4ox78/0aeIKJlZdqIlxpvucejY6OJK5FLpuA7MP5Xaq75zqVQF24kIUE3fNKIOneBccv1DxLKjS4emUmhLUmElC0pSqtaJ4UWChuAJnO6CLLY/zLxJrSymOKgi+mqyw3GWhG/pKW6LbASKyixR7pQGRjx36SHh0nfOVoctW9pIDqDBG56EggGNUArQMHkA6yRqbTZiBnm0m2aKhMIq4Kt69KKjhS7LVVd3bF2gKTThKAJ2kTWQlxkgnNQLc1g7p7Bsh2cm6/ozU16cyI/rlmH5cndmKQlK4a0pzaKlz3S9995lA4mPR38bIahP3I9MClS0sDC1s5LeqFQ6dLOnA4I5hLi2P5J5evNfF6xHNXuvGqZfhrHGI1jekHj+NqTwLAGRnFQvPs5ML16k7gdNImRc//xJjEgjms2idmnSYzRJGYXNInA72kgGvdJ8e4HwezqXSIIBm1i5OR/vE0MqOOKbILC7v+iLX/9+/E3'),
-		this.addDataEntry('crossfunctional cross-functional cross functional flowchart swimlane table', 400, 400, 'Cross-Functional Flowchart',
-			'7ZnfbpswFMafhstN/EnS7nIhS3fRSlO2F3DhNFhzfJB90iR9+tlgkirgFUXtqjIkItmHY2O+84v1yQRJutnfKFYWd5iDCJJvQZIqRKpbm30KQgRxyPMgWQRxHJpfEC89d6PqblgyBZL6DIjrAY9MbKGOmIdr/Wm5lRlxlMwmLwXusoIpqpM1HYRL1gUrbZPYvQ3Ns4KL/JYdcEtNtOnNNZkZfvInmz8JbTIKwUrNq6ELG1GQbZXmj7ACXSfaKOxLJnPXeUDZTBLNTN+tHxTB3qtBFXIC3ABugNTBpOx4TkWdMQlrncIC+LqgsyDTdWB9HHuS1DScqt0KJy2Fv2aEyoSiv8u5wp15vwIVfzLvbApRC6B3fCOYhO/A8rPQHPODCxGWriXggZo8UvgbUhTm8cmCywIUt5W5RyLcNDVw72/bucLyF1NroOfqu/VWfS5EM59EaREokUuq9JrOzWUUTMPP02Bq3i81/ejUN5dNV5SiNEtjvCoXME070O9MTNxNzKEBox7xEkBR/AoATVoA/SiYhm6AHAm9OTkvqA+RDKWEzP3NfaV/x3ol3fXae+t1LE3vernZV1YGuRZwyXxMECjJyJRgK3PdwuC49F5kTL1kxCMZ/ciIZsNEY+ZFIxnR6IdGfD1MNK68hqRj1xgNyYcwJF3b2Ns5kusWQa+/p7T3Dh8sL+wp/7ZMV/+jD/ky8nAZD0N1H1E4EnEZEUM1HVHkdR0dhnR0HR/CdXTB+nauI2qfVY6bSiOw54Rz2L4jap+tjkT0I2KwzqN9Wjoi0Q+JgVgP0z19PqvTn39d+wM='),
-		
- 		this.addDataEntry('table', 280, 160, 'Table', '7Zpdc6IwFIZ/DfcksSqX1X7sxe6NdvY+ylEyjYQJsWp//QZIrDXSIkUdcZ3pTDiSNHmfHF5yRo8MF+tnSZPojwiBe+TRI0MphCpai/UQOPewz0KPPHgY+/rPw08l36L8Wz+hEmJVpQMuOrxRvoQicp+moNIinKoNN+FpxHj4m27EMhtX0QkHezWQMF3KlL3BCFL2nnXwdTRVUrzCUHAh8yFI0J/M9AzJYMY434nf94ZBB2c9IhqKlQ5mN5mJgVSwLl1cHjIrewaxACU3+pYVC1VkFtgvBPAjYPPIduuaIE2LwHzb90Mr3TByHZaOOBrp+Sdg1RllKxlEQrJ3ESvKt6pQqcY7Kq3YgtMYfgEN90IDEW5MSInEtDjMlGlOhFJiYS6kWV3WDqVIXqicgw1MBec0SdmE2397GBmsExrbacz0tMdmcS5PFkcgmXJpzvJPVYC4HkBCfs6v42z9F6b0arGP3N0v4himOdcvBayo0XbHU87msY5NtSAg90RH5nqn41P+yfaVWvBjEoV8q3NAjpPZDDbKZInnuW5Hjka5XnNMld7oyzhMHXbbeVbCeVeKE98MzvVn8Xd5dBqlW2G0Zul2S+m6j+GW00X9nov3ypO35+D9b64nM9fNZ6Lfei3+udf2Hb5/8+apvfYj6iTvKmIKxgmdZuOt9At4jUTt1XPVLwStkZh7ozWbmEEpuNO66mXAHemf9TlWGK1ZjsgvBXlaA70oyMpWeUUZidAteyWq7pWP90/4gTTjld27il6Jfu6VyK3J2FTtnClVm8hM9H1t5mDyfKFgjVTcG63hVCSlpO5aQOpIN6wPrsJoDYNzaz8WXLc94Cq73zWlnFvmuSH3u9BJMehWdL8GqrLIrfTY1OydKTX3FT/Ji2uxkVtdkUVuVcei7N8CyvZWY1F5PSe4IbJtrMQit+JzQwZ7oeMlsnW2c5wvcXkpyFaJruPtN6jnoFf0tovdWs8W1bkK56dE1d4Tpn1qHiLnPlCvllwLjpj68uPnVsXtu7/G+gc='),
-		
- 		this.addDataEntry('table', 180, 140, 'Table', '7ZhNc5swEIZ/DXc+HH9cTdv00F7sTu8yWoOmi8QIOUB+fSUjJXEwMbZzgcl4PKNdIVn7PlovkhfFef0oSZH9FhTQi757USyFUG0rr2NA9EKfUS/65oWhr79e+KOnNzj2+gWRwNWQAWE74IngAVpP6yhVg9aRZAzpL9KIg5lRkR2Cs9YSkoMs2RNsoGTPZoCvvWVGqKissWeIsUAhtc0FB9OvpPgHzumFUeybj+6xqwGpoO6N6Oiy4TyCyEHJRj9SMaoy+8SyjdrPgKWZGzazTlK2jvRl7KtAumE1Oq9XdFkvHX0BTqmN0WGdCcmeBVcEnUKKSLV9o1jFciQcfgKh71xrQRvrUqKwLYS9ss2dUErk1pA2XNOmUhR/iEzBORKBSIqS7dD97Hl8UBeEu2Xs9bK3NrgenIOghbdBmy3uZzbrMPt7bIZ+0N3sgnNIjug+1Oh0C1shzmhDkKVcm4kWArR/XWVMwbYgiZmp0nlvtofKzcYIhmoZXdRyfqWUdrKNCZ2nCNfPRlDHx4nS+/XAadnh87LOQcgeepGd+X8aMbL6VOAJEZz3EoymSDAIp4dw8VXa7iltzSmji5Vufn+lW/Ym3WycSbe4rdJ9IOUNSfZuts9NslUvsodJIbuy0o2IYOD3IpxPEeHgUjcmht2TwFetu77WraKBte4TTnVB9+rCpV33xWUUaRdcvtgY+ytl0L0/cdCW04I23ZNd0H+fspokwwmc7bT5eqfcPv72yvk/'),
-		
- 		this.addDataEntry('table', 180, 140, 'Table', '7ZhLc5swEMc/DXcejh9X3CY9tBe707uM1qCpkBixDpBPX2GkvLBi7LgHmBw8s1okof3/tF4kL1rn9YMiRfZLUuBe9N2L1kpK7Ky8XgPnXugz6kXfvDD09c8L7x1Pg+NTvyAKBA4ZEHYDHgk/QOfpHCU23DiSjHH6kzTy0M6IZMfBtmIFyUGV7BE2ULKndoCvvWVGqKxMY884X0sulW4LKXSf2LwTFELtXPfRZRb9ADIHVI3uUjGKmemx7GLzM2BpZofNjJOUnSN9HvsigzaMEqdVic6romMswOqxaaONM6nYkxRIuNUBicLtK10qlnMi4AcQ+s4VS9oYF8rCWBz2aMydRJS5aSgTbmtTJYvfRKVgHYnknBQl23H72tOQoC6IsMvY62VvTXAOaCUq+Resk4kMFMOhMMPrYM4Wn2c567H8czRDP+hvdSkEJEekH2rn0uKEbISzVOhmorUA7Y+rjCFsC5K0k1U68dudg3m7Z4KhckZn5ZxfqKaZbNNGL1IOl89GuI5PENRb+SBo2UP0vM5B1O6c1E78QY2bWv1W4wlBnDshRhOFGITTo7j4qn3/o/Y1b9mdLYXzz5fCpTMfZ6PNx8V1pfADNa/Iv3ez3Tb/Vk5qd1OjdmEpHBHEwHdSnE+U4uBaOCaM/TPDVzG8XTFcRQOL4Q3OhUH/6sNmZP+LZywZGZy/NRn752jQv5yx3JaT4zbds2HgvpdZTRXjBE6HuvlyOd11f313/Q8='),
-		
-	 	this.createVertexTemplateEntry('text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;', 180, 180,
- 			'<table border="1" width="100%" height="100%" cellpadding="4" style="width:100%;height:100%;border-collapse:collapse;">' +
- 			'<tr><th align="center"><b>Title</b></th></tr>' +
- 			'<tr><td align="center">Section 1.1\nSection 1.2\nSection 1.3</td></tr>' +
- 			'<tr><td align="center">Section 2.1\nSection 2.2\nSection 2.3</td></tr></table>', 'HTML Table 4'),
-
-	 	this.addEntry('link hyperlink', mxUtils.bind(this, function()
+		this.createVertexTemplateEntry(mxUtils.setStyle(mxUtils.setStyle(graph.appendFontSize(Editor.defaultTextStyle, graph.vertexFontSize), 'autosize', '1'), 'resizable', '0'),
+			60, 30, 'Text', 'Autosize Text', null, null, 'autosize text'),
+   	 	this.createVertexTemplateEntry('text;strokeColor=none;fillColor=none;html=1;fontSize=25;fontStyle=1;verticalAlign=middle;align=center;autosizeText=1;',
+			160, 40, 'Autosize Title', 'Autosize Title', null, null, 'text heading title'),
+		this.addEntry('link url hyperlink text label', mxUtils.bind(this, function()
 	 	{
 	 		var cell = new mxCell('Link', new mxGeometry(0, 0, 60, 40), 'text;html=1;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=middle;fontColor=#0000EE;fontStyle=4;');
 	 		cell.vertex = true;
@@ -1561,15 +3849,21 @@ Sidebar.prototype.addMiscPalette = function(expand)
 
 	 		return this.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Link');
 	 	})),
-	 	this.addEntry('timestamp date time text label', mxUtils.bind(this, function()
-	 	{
-	 		var cell = new mxCell('%date{ddd mmm dd yyyy HH:MM:ss}%', new mxGeometry(0, 0, 160, 20), 'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;');
-	 		cell.vertex = true;
-	 		this.graph.setAttributeForCell(cell, 'placeholders', '1');
-
-	 		return this.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Timestamp');
-	 	})),
-	 	this.addEntry('variable placeholder metadata hello world text label', mxUtils.bind(this, function()
+		this.createVertexTemplateEntry('shape=curvedText;noLabel=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;',
+			70, 50, 'Curved Text', 'Curved Text', null, null, 'text curved arc path'),
+		// Slanted text for the faces of isometric (30 degrees) diagrams via a CSS
+		// transform on a block in the HTML label, which the label editor keeps
+		// for the lines that are typed into it
+		this.createVertexTemplateEntry(slantedTextStyle, 100, 60,
+			'<div style="transform:skewY(30deg);">Text</div>', 'Slanted Text Left',
+			null, null, slantedTextTags + ' left'),
+		this.createVertexTemplateEntry(slantedTextStyle, 100, 60,
+			'<div style="transform:skewY(-30deg);">Text</div>', 'Slanted Text Right',
+			null, null, slantedTextTags + ' right'),
+		this.createVertexTemplateEntry(slantedTextStyle, 100, 60,
+			'<div style="transform:matrix(0.866,-0.5,0.866,0.5,0,0);">Text</div>',
+			'Slanted Text Top', null, null, slantedTextTags + ' top'),
+		this.addEntry('variable placeholder metadata hello world text label', mxUtils.bind(this, function()
 	 	{
 	 		var cell = new mxCell('%name% Text', new mxGeometry(0, 0, 80, 20), 'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;');
 	 		cell.vertex = true;
@@ -1578,11 +3872,38 @@ Sidebar.prototype.addMiscPalette = function(expand)
 
 	 		return this.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Variable');
 	 	})),
-		this.createVertexTemplateEntry('shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;', 120, 80, '', 'Double Rectangle', null, null, 'rect rectangle box double'),
-	 	this.createVertexTemplateEntry('shape=ext;double=1;rounded=1;whiteSpace=wrap;html=1;', 120, 80, '', 'Double Rounded Rectangle', null, null, 'rounded rect rectangle box double'),
- 		this.createVertexTemplateEntry('ellipse;shape=doubleEllipse;whiteSpace=wrap;html=1;', 100, 60, '', 'Double Ellipse', null, null, 'oval ellipse start end state double'),
-		this.createVertexTemplateEntry('shape=ext;double=1;whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Double Square', null, null, 'double square'),
-		this.createVertexTemplateEntry('ellipse;shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Double Circle', null, null, 'double circle'),
+		this.addEntry('timestamp date time text label', mxUtils.bind(this, function()
+	 	{
+	 		var cell = new mxCell('%date{ddd mmm dd yyyy HH:MM:ss}%', new mxGeometry(0, 0, 160, 20), 'text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;overflow=hidden;');
+	 		cell.vertex = true;
+	 		this.graph.setAttributeForCell(cell, 'placeholders', '1');
+
+	 		return this.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Timestamp');
+	 	})),
+		this.createVertexTemplateEntry('text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;', 100, 80,
+ 			'<ul><li>Value 1</li><li>Value 2</li><li>Value 3</li></ul>', 'Unordered List'),
+	 	this.createVertexTemplateEntry('text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;', 100, 80,
+ 			'<ol><li>Value 1</li><li>Value 2</li><li>Value 3</li></ol>', 'Ordered List'),
+		this.addDataEntry('vertical list', 60, 60, 'Vertical List',
+			'7ZjBbptAEIafZq/Vsmvc9grEaaX04vQFpt4xrLrsomVs7Dx9xYJx4pjIaRsfLE4ww8wA/z+fkGAyLXf3Hqrih1NomLxjMvXOUXdW7lI0hgmuFZMZE4IzIZhYjFyNwlVegUdLlzSIrmELZoNdpkvUtDd9oi6gak8JfrWpJByXaBV6JrOVMwaqGhWTSU3g6VE/tdWcyWTlLIG2oS4KcajVYU5XUWijHmDvNnS4wyFK1s4ehkVt91obkzrj2mnWWQw39O43niT7N0JPuBtVJaR6Se7RlUh+zwRvtKKiq5h3wvECdV7QyxzUXZwPnUeJmVj0Kp9XXL5T8aVrmEwK5/VTK6fplTvVum50acDiNwR1kkqc2g9dzwXTtkCv6awzyrvqJ/gcqU+ckb9y2lKQIk5YnHAmUv4pZnHGRMriJDrGcRbKPaXO1uRBBx8QamqwPjV7fqmJ4q9MjOJ/N3H2ysTvhCUTPBo1swJPGswSVwQ2DyQVVJoejabQhI8VrNrSxkPV4WPb6qMpY/a5Lfq1aRclK7RSaN/wC/3dFjvbohPhBZMJGJ1bJjOD63ZyXcFK2/whRFl8qTPyvzvTDzvK9+5pYAi9BcLEbayqX9k9POdFGxBPGH8wxvuXNl6B6vkY1WKietj5m6b680T1daiW/GpUfxmjWk5UDzt/01R/nSD+EIhn1/s0R3yM4tlE8bDjt0QxE4vjb5Cu/Plfkj8='),
+ 		this.createVertexTemplateEntry('shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;autosizeText=1;' +
+			'fontColor=#000000;darkOpacity=0.05;fillColor=#FFF9B2;strokeColor=none;fillStyle=solid;fontSize=20;' +
+			'direction=west;gradientDirection=north;gradientColor=#FFF2A1;shadow=1;size=20;pointerEvents=1;',
+			150, 150, 'The size of the font in this note will change so that it fits within the note shape', mxResources.get('note')),
+		this.addDataEntry('table', 180, 120, 'Table 1', '7ZlNktowEIVPo23KkjBDtjLDZJFsmFyggxqkipBccoNhTp+ybGB+M0AlLMArW+3XsvQ+q97CTBbLzUOE0vwIGh2T90wWMQRq75abAp1jIrOayTETImNCMDH54ClPT7MSIno6pkG0DWtwK2wrbaGiresKlYGyuSX41ZRUuk7Ra4xMjmfBOSgr1EyqiiDSo31q1BmTahY8gfVJx9M4aW2ap1UY6/R32IYV7d6wG6l58LvJ+JBJ1a0UI+Hmw92mUrfVBwxLpLhlIqutJtMpRq0jmUG7MLu2zqYMqraw2PcezGNi0vn3vpfyRC+noWZSmRDtU2OU6zx57WJV26UDj98Q9KuSCnq774rhNxbBhcZt6w1GS+96rmMof0JcIHWFuXVu1+iDbxiXwXpKVuSK5Spjosi+5CwfM1GwXPHDOB8neaQi+Ioi2EQCoaIaq7MxivMwDv4BxcHxFEuIZMFNcUbgF+lwGFq67muvjSV8LGHWSOsIZXsifKM+0PiIW1hjnLvmCxkbqzX6v4DCeL/Glhc/13H5qePDEw3vJju4c/Js4AijB0IVVl5Xbyju13kU2LwH+wzs5iWGK+I87Dm/5bwPuCsCfdfn7X/O2+1LjJeI39Ftnt67q4/frz3Ym4hfnvWgbyN/Oe8D+DIBPLpgAHNxm+eX86uPYC57tDcSwoOe9HWmMBOTw9+BVv7858Ef'),
+ 		this.addDataEntry('table', 180, 120, 'Table 2', '7ZnBctowEIafRteOJWEgV9slPaQX0ul9ixasqSx5ZBFDnr4j2YaExAOkLQc7J6T17sr8n3f+GZvwtNjdWyjz70agIvwr4ak1xjWrYpeiUoRFUhCeEcYiwhhhi56rNFyNSrCo3SUFrCl4ArXFJtIEKrdXbaDKofRLB798KAm/S9QCLeHZyigFZYWC8CR3hSI8o4QndS4dPpaw8pW1hZLwpHJg3aN89qGI8GRltAOpQxsa9qGVDMc0GblU4gH2Zuu6G+h2Pntb6AepsWqzralfbtdGd6fRaTjemt+YGmX8gQLXsFW+UasAWoe7XhVDqJXwHk2Bzu4Ji2opXN5mzBuloxzlJu/KWvkjqJrA5lB7hELYouXyPiN+JaOlqT0MY+WzV1i1epzKX9WyUKDxG4I4CSVG7A+QTqEIa8ofYDfoOqGlUp2s2mj/jJRGahf+cpyQOIkIS6MvMYkzwlISJ/S4j7OQbl1qdOUsyKA4QuVqrNxZjFLnaOXFGNnHME7+AcXJG4o/w5JFtBdnCdZJUEtcOdCbMH1nZmxltPbZR1zv0DFPaNfKPyVZLoVAfSIz+1uZ+VmZp1eq3DY7KnF1N1AOrQaHidlqUb1Bd7jPi2jGvTTZWGjuXms/ILjTXrh8ZHAP/jUgurNPO/3Pdrp/jfEW7jrvHdnJ4EZ2Nnh3veulGY+F5nDdlUa9dKcjoztEe6X0019v46/zG/orZb1DOxvc0FI6eIelvJfnfDQ8B+yx/W+b7saGdwAmS9ji+EmgSX/5xeAP'),
+		this.addDataEntry('table title', 180, 150, 'Table with Title 1', '7ZnPctowEMafRteOJWFIr7ZDemgvJC+wRQvWVEgeecGQp+9YFn9aICGZDAfwCevTrmx/P3a+g5nMF+snD1X5yyk0TD4ymXvnqLtarHM0holEKyYLJkTChGBifGaXh92kAo+WLmkQXcMKzBI75QV+G+zUmjYmqnUJVXtJYVdm4XeCVqFnspg6Y6CqUTGZ1QSenvVrWy0TJrOpswTahkIe1qFYh4OKUFFqo37Cxi1pe4vtKqvJuz+YO+PafoUzWJpWnzm7vQsfMpnF90BPuD7rRZCiEU/oFkh+w0TSaEVlrHjo/EpK1PNy25ZGEepOmO9699YyMY7unnZaHjn9tskT1zCZlc7r19ZAE706tDesG70wYPEHgvpPypza7LoOXdS2RK/pJAvlXfUCfo4UhZk2ZttonW3hV05bClakGUuzhIk8+ZaytGAiZ2nG9+u0COWecmdr8qADCYSaGqw/jVGcxriJRkdY71EdfAHUweVQK/CkwUxwSmDnYYhKWpg4FE2pCZ8rmLaljYeqGxzbVu/hnMPoVuhnpv3DFKVWCu0b3NA/rrDDxz8LQL47R8MPGh4P27vz4dPAEHoLhJlbWlUfUdw950Vg0x7sAdj1vxhuiPOw53zMmYvbAz3q4/c68Tu6Yvw+3Of0jm4+fr/3YO8ifnnSg76P/OW8D+DrBDDnV0xgLu5zgDm/+Qzmskd7Jyk86EnfZgwzMd5/S+jKDz81/AU='),
+		this.addDataEntry('table title', 180, 120, 'Table with Title 2', '7ZhNc9owEIZ/ja4dW4ppuNoO6YFeINP7Fi1YUyF55AVDfn3HsgxpDfnoMJ4O5GRptSvJ7+N9D2YiW+8eHZTFdytRM/HAROaspXa03mWoNeORkkzkjPOIcc745Mxq7FejEhwaek8Bbwu2oDfYRp7gp8Y2WtFeh2hVQNkMya+K1D9naCQ6JvKF1RrKCiUTaUXgaK6em2wRMZEurCFQxifGfu6Tld8o9xmF0nIKe7uh7ohuli7VDuXM1lWodraeKoNVKF1aQ/Nwzcif7uwvzKy2zXESl7DR1OW1l4pHTKThtdER7s5K50NBt0e0ayS3ZzyqlaQiZNy38kYFqlXRlQXNI6jawOpQeyTB+CTAOA1G9MC8zmRmaybSwjr13OitD3ocafh5rdYaDH5DkH+FUiv3HZAeIuls+QRuhdQJr7TuZDbWNN9EaZUh/8pJypI0YjyLviQsyRnPWJLGx3mS+3RHmTUVOVBecYSKaqyoh1GZAp36Z4z8NMZ9EDrAeouquADUux7U+CzVEhwp0DNcEJiVb7qC1jq0QV0ownkJiya1dlC2jWaa7CO1E5DsFt1SNx9LXigp0XTg0D1sseUXX5qAeLOR7j6oeNjsqM6HdwNN6AwQpnZjZNXDeLjnu8gmPbI//JBHgxMGrVaGiVzj0rdSCQtlVlM/y0dnPoEhcO/+hPOy4S6LPx6e/+jTroex69GAdv21B5X/D3Z9UbVHV2/N92etmd+eNY9uz5rHn9Y8jDWPB7TmOOpRFVfnzeOr9+Y4PmvO4vbMeXz15sz45Phvq01/+evrNw=='),
+		this.addDataEntry('crossfunctional cross-functional cross functional flowchart swimlane table', 400, 400, 'Cross-Functional Flowchart',
+			'7ZnfbtowFMafxpebYpvQ7nIJo7vYpIntBbzkjFgzPpF9KNCnn/IPqhK3EWrXKs0V8ck5Vvi+H9YnwmS62d84VRbfMQfD5BcmU4dIzdVmn4IxTEQ6Z3LBhIiYEEwsA3d5fTcqlQNLQwZEM3CrzBaaSurQ+w/Lrc1Io1VV89LgLiuUo6bZ08G0zb5QZXVJ6ndVSurPFdgcHJOLDI1RpYecySQrtMm/qQNuqevvVokn5einvqt2mkVVczOo600XVcVBtnVe38IKfNNYVWFfKpu3iz9ou034nMmk/WbgCPZBdepSK80N4AbIHZiIdjqnoumYRY2CUQF6XdCDovJNYX2cPYnNxLLVu197eab954zQMRHxx4Ve4Y7JpECn79CSMq0Afqc3Rln4Cip/UEowP3QlcvgXUjRYWaRtAU5XJuQOy1/KrYHu69k+Qb3WxnRjFm1ld4naUq1AnLA4iZhIo48xixdMpCxO+GkdL+p2RylaT07p2gBQnnbgX5kB0c/AobO6mXgKCS6eAYnZGRI/CuWhH4nW28HOPzQ0REKG1kLW/qRD1r+iX7Lfr33Qr6M1g/1qd19VMti1gUv2U4bAWUWQ4Nbm/gyD46MPIiMOkiEmMoaRwefjRGMeRENOaAxDQ1yPE42rYMQQU8R4MxGj72B6uYxxfcbE858S56dBiIknTon/a9PVe0wWnyYeLuNhrHmCRxMRlxEx1hjBeTBHyClHvJkc0Yffy+UILqZjIvi3In+PSYLLiYgLiRhtlphNSFyIxEjCBBPL0+uspv3+265/'),		
+ 		this.addDataEntry('table', 280, 160, 'Table', '7Zpdc6IwFIZ/DfcksSqX1X7sxe6NdvY+ylEyjYQJsWp//QZIrDXSIkUdcZ3pTDiSNHmfHF5yRo8MF+tnSZPojwiBe+TRI0MphCpai/UQOPewz0KPPHgY+/rPw08l36L8Wz+hEmJVpQMuOrxRvoQicp+moNIinKoNN+FpxHj4m27EMhtX0QkHezWQMF3KlL3BCFL2nnXwdTRVUrzCUHAh8yFI0J/M9AzJYMY434nf94ZBB2c9IhqKlQ5mN5mJgVSwLl1cHjIrewaxACU3+pYVC1VkFtgvBPAjYPPIduuaIE2LwHzb90Mr3TByHZaOOBrp+Sdg1RllKxlEQrJ3ESvKt6pQqcY7Kq3YgtMYfgEN90IDEW5MSInEtDjMlGlOhFJiYS6kWV3WDqVIXqicgw1MBec0SdmE2397GBmsExrbacz0tMdmcS5PFkcgmXJpzvJPVYC4HkBCfs6v42z9F6b0arGP3N0v4himOdcvBayo0XbHU87msY5NtSAg90RH5nqn41P+yfaVWvBjEoV8q3NAjpPZDDbKZInnuW5Hjka5XnNMld7oyzhMHXbbeVbCeVeKE98MzvVn8Xd5dBqlW2G0Zul2S+m6j+GW00X9nov3ypO35+D9b64nM9fNZ6Lfei3+udf2Hb5/8+apvfYj6iTvKmIKxgmdZuOt9At4jUTt1XPVLwStkZh7ozWbmEEpuNO66mXAHemf9TlWGK1ZjsgvBXlaA70oyMpWeUUZidAteyWq7pWP90/4gTTjld27il6Jfu6VyK3J2FTtnClVm8hM9H1t5mDyfKFgjVTcG63hVCSlpO5aQOpIN6wPrsJoDYNzaz8WXLc94Cq73zWlnFvmuSH3u9BJMehWdL8GqrLIrfTY1OydKTX3FT/Ji2uxkVtdkUVuVcei7N8CyvZWY1F5PSe4IbJtrMQit+JzQwZ7oeMlsnW2c5wvcXkpyFaJruPtN6jnoFf0tovdWs8W1bkK56dE1d4Tpn1qHiLnPlCvllwLjpj68uPnVsXtu7/G+gc='),		
+ 		this.addDataEntry('table', 180, 140, 'Table', '7ZhNc5swEIZ/DXc+HH9cTdv00F7sTu8yWoOmi8QIOUB+fSUjJXEwMbZzgcl4PKNdIVn7PlovkhfFef0oSZH9FhTQi757USyFUG0rr2NA9EKfUS/65oWhr79e+KOnNzj2+gWRwNWQAWE74IngAVpP6yhVg9aRZAzpL9KIg5lRkR2Cs9YSkoMs2RNsoGTPZoCvvWVGqKissWeIsUAhtc0FB9OvpPgHzumFUeybj+6xqwGpoO6N6Oiy4TyCyEHJRj9SMaoy+8SyjdrPgKWZGzazTlK2jvRl7KtAumE1Oq9XdFkvHX0BTqmN0WGdCcmeBVcEnUKKSLV9o1jFciQcfgKh71xrQRvrUqKwLYS9ss2dUErk1pA2XNOmUhR/iEzBORKBSIqS7dD97Hl8UBeEu2Xs9bK3NrgenIOghbdBmy3uZzbrMPt7bIZ+0N3sgnNIjug+1Oh0C1shzmhDkKVcm4kWArR/XWVMwbYgiZmp0nlvtofKzcYIhmoZXdRyfqWUdrKNCZ2nCNfPRlDHx4nS+/XAadnh87LOQcgeepGd+X8aMbL6VOAJEZz3EoymSDAIp4dw8VXa7iltzSmji5Vufn+lW/Ym3WycSbe4rdJ9IOUNSfZuts9NslUvsodJIbuy0o2IYOD3IpxPEeHgUjcmht2TwFetu77WraKBte4TTnVB9+rCpV33xWUUaRdcvtgY+ytl0L0/cdCW04I23ZNd0H+fspokwwmc7bT5eqfcPv72yvk/'),		
+ 		this.addDataEntry('table', 180, 140, 'Table', '7ZhLc5swEMc/DXcejh9X3CY9tBe707uM1qCpkBixDpBPX2GkvLBi7LgHmBw8s1okof3/tF4kL1rn9YMiRfZLUuBe9N2L1kpK7Ky8XgPnXugz6kXfvDD09c8L7x1Pg+NTvyAKBA4ZEHYDHgk/QOfpHCU23DiSjHH6kzTy0M6IZMfBtmIFyUGV7BE2ULKndoCvvWVGqKxMY884X0sulW4LKXSf2LwTFELtXPfRZRb9ADIHVI3uUjGKmemx7GLzM2BpZofNjJOUnSN9HvsigzaMEqdVic6romMswOqxaaONM6nYkxRIuNUBicLtK10qlnMi4AcQ+s4VS9oYF8rCWBz2aMydRJS5aSgTbmtTJYvfRKVgHYnknBQl23H72tOQoC6IsMvY62VvTXAOaCUq+Resk4kMFMOhMMPrYM4Wn2c567H8czRDP+hvdSkEJEekH2rn0uKEbISzVOhmorUA7Y+rjCFsC5K0k1U68dudg3m7Z4KhckZn5ZxfqKaZbNNGL1IOl89GuI5PENRb+SBo2UP0vM5B1O6c1E78QY2bWv1W4wlBnDshRhOFGITTo7j4qn3/o/Y1b9mdLYXzz5fCpTMfZ6PNx8V1pfADNa/Iv3ez3Tb/Vk5qd1OjdmEpHBHEwHdSnE+U4uBaOCaM/TPDVzG8XTFcRQOL4Q3OhUH/6sNmZP+LZywZGZy/NRn752jQv5yx3JaT4zbds2HgvpdZTRXjBE6HuvlyOd11f313/Q8='),
+	 	this.createVertexTemplateEntry('text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;', 180, 180,
+ 			'<table border="1" width="100%" height="100%" cellpadding="4" style="width:100%;height:100%;border-collapse:collapse;">' +
+ 			'<tr><th align="center"><b>Title</b></th></tr>' +
+ 			'<tr><td align="center">Section 1.1\nSection 1.2\nSection 1.3</td></tr>' +
+ 			'<tr><td align="center">Section 2.1\nSection 2.2\nSection 2.3</td></tr></table>', 'HTML Table 4'),
 		this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=4;hachureGap=8;hachureAngle=45;fillColor=#1ba1e2;sketch=1;', 120, 60, '', 'Rectangle Sketch', true, null, 'rectangle rect box text sketch comic retro'),
 		this.createVertexTemplateEntry('ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=2;hachureGap=8;fillColor=#990000;fillStyle=dots;sketch=1;', 120, 60, '', 'Ellipse Sketch', true, null, 'ellipse oval sketch comic retro'),
 		this.createVertexTemplateEntry('rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fillWeight=-1;hachureGap=8;fillStyle=cross-hatch;fillColor=#006600;sketch=1;', 120, 60, '', 'Diamond Sketch', true, null, 'diamond sketch comic retro'),
@@ -1617,13 +3938,15 @@ Sidebar.prototype.addMiscPalette = function(expand)
 		}),
 	 	this.createVertexTemplateEntry('shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=none;', 120, 60, '', 'Partial Rectangle'),
 		this.createVertexTemplateEntry('shape=partialRectangle;whiteSpace=wrap;html=1;bottom=0;top=0;fillColor=none;', 120, 60, '', 'Partial Rectangle'),
-		this.createVertexTemplateEntry('shape=partialRectangle;whiteSpace=wrap;html=1;bottom=0;right=0;fillColor=none;', 120, 60, '', 'Partial Rectangle'),
 		this.createVertexTemplateEntry('shape=partialRectangle;whiteSpace=wrap;html=1;bottom=1;right=1;left=1;top=0;fillColor=none;routingCenterX=-0.5;', 120, 60, '', 'Partial Rectangle'),
 		this.createVertexTemplateEntry('shape=waypoint;sketch=0;fillStyle=solid;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;', 20, 20, '', 'Waypoint'),
 		this.createEdgeTemplateEntry('edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;', 50, 50, '', 'Manual Line', null, lineTags + 'manual'),
 	 	this.createEdgeTemplateEntry('shape=filledEdge;curved=0;rounded=0;fixDash=1;endArrow=none;strokeWidth=10;fillColor=#ffffff;edgeStyle=orthogonalEdgeStyle;html=1;', 60, 40, '', 'Filled Edge'),
+	 	this.createEdgeTemplateEntry('shape=taperedArrow;startWidth=12;endWidth=2;endArrow=block;endFill=1;html=1;', 60, 40, '', 'Tapered Arrow', null, lineTags + 'tapered taper arrow wedge'),
 	 	this.createEdgeTemplateEntry('edgeStyle=elbowEdgeStyle;elbow=horizontal;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;', 50, 50, '', 'Horizontal Elbow', null, lineTags + 'elbow horizontal'),
-	 	this.createEdgeTemplateEntry('edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;', 50, 50, '', 'Vertical Elbow', null, lineTags + 'elbow vertical')
+	 	this.createEdgeTemplateEntry('edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;', 50, 50, '', 'Vertical Elbow', null, lineTags + 'elbow vertical'),
+	 	this.createVertexTemplateEntry('shape=mxgraph.basic.arc;html=1;startAngle=0.3;endAngle=0.1;endArrow=classic;endFill=1;', 50, 50, '', 'Arc', null, null, 'arc curve'),
+	 	this.createVertexTemplateEntry('shape=zigzag;html=1;fillColor=none;', 160, 20, '', 'Zigzag', null, null, 'zigzag wave sawtooth')
 	];
 
 	this.addPaletteFunctions('misc', mxResources.get('misc'), (expand != null) ? expand : true, fns);
@@ -1669,8 +3992,13 @@ Sidebar.prototype.createAdvancedShapes = function()
 	field.vertex = true;
 
 	return [
+		this.createVertexTemplateEntry('shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;', 120, 80, '', 'Double Rectangle', null, null, 'rect rectangle box double'),
+	 	this.createVertexTemplateEntry('shape=ext;double=1;rounded=1;whiteSpace=wrap;html=1;', 120, 80, '', 'Double Rounded Rectangle', null, null, 'rounded rect rectangle box double'),
+ 		this.createVertexTemplateEntry('ellipse;shape=doubleEllipse;whiteSpace=wrap;html=1;', 100, 60, '', 'Double Ellipse', null, null, 'oval ellipse start end state double'),
+		this.createVertexTemplateEntry('shape=ext;double=1;whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Double Square', null, null, 'double square'),
+		this.createVertexTemplateEntry('ellipse;shape=doubleEllipse;whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Double Circle', null, null, 'double circle'),
 	 	this.createVertexTemplateEntry('shape=tapeData;whiteSpace=wrap;html=1;perimeter=ellipsePerimeter;', 80, 80, '', 'Tape Data'),
-	 	this.createVertexTemplateEntry('shape=manualInput;whiteSpace=wrap;html=1;', 80, 80, '', 'Manual Input'),
+	 	this.createVertexTemplateEntry('shape=manualInput;boundedLbl=1;whiteSpace=wrap;html=1;', 80, 80, '', 'Manual Input'),
 	 	this.createVertexTemplateEntry('shape=loopLimit;whiteSpace=wrap;html=1;', 100, 80, '', 'Loop Limit'),
 	 	this.createVertexTemplateEntry('shape=offPageConnector;whiteSpace=wrap;html=1;', 80, 80, '', 'Off Page Connector'),
 	 	this.createVertexTemplateEntry('shape=delay;whiteSpace=wrap;html=1;', 80, 40, '', 'Delay'),
@@ -1750,15 +4078,24 @@ Sidebar.prototype.addUmlPalette = function(expand)
 	var divider = new mxCell('', new mxGeometry(0, 0, 40, 8), 'line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;');
 	divider.vertex = true;
 
-	var sequenceEdgeStyle = 'newEdgeStyle={"curved":0,"rounded":0};';
+	// Messages drawn from a lifeline or an activation bar are routed by
+	// mxEdgeStyle.SequenceMessage, which keeps them horizontal at their own y
+	// (libavoidRouting=0 keeps a current edge style with auto-routing, which
+	// would otherwise be pasted onto new and inserted edges, from routing them)
+	var sequenceEdgeStyle = 'edgeStyle=sequenceEdgeStyle;libavoidRouting=0;curved=0;rounded=0;';
+	var sequenceNewEdgeStyle = 'newEdgeStyle={"edgeStyle":"sequenceEdgeStyle","libavoidRouting":0,"curved":0,"rounded":0};';
 	var lifelineStyle = 'shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;' +
-		'collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;' + sequenceEdgeStyle;
+		'collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;' + sequenceNewEdgeStyle;
 	var activationStyle = 'html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;' +
-		'outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;' + sequenceEdgeStyle;
+		'outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;' + sequenceNewEdgeStyle;
+	var hr = '<hr size="1" style="border-style:solid;"/>';
 	
 	// Default tags
 	var dt = 'uml static class ';
 	this.setCurrentSearchEntryLibrary('uml');
+	this.setPickerShapes('uml', ['Class', 'Interface', 'Object', 'Package', 'Actor', 'Use Case',
+		'Component', 'Lifeline', 'Frame', 'Boundary Object', 'Entity Object', 'Control Object',
+		'Module', 'Block', 'End', 'Activation Bar']);
 	
 	var fns = [
    		this.createVertexTemplateEntry('html=1;whiteSpace=wrap;', 110, 50, 'Object', 'Object', null, null, dt + 'object instance'),
@@ -1826,7 +4163,7 @@ Sidebar.prototype.addUmlPalette = function(expand)
 		this.addEntry(dt + 'component', function()
 		{
 		    var cell = new mxCell('<p style="margin:0px;margin-top:6px;text-align:center;"><b>Component</b></p>' +
-				'<hr/><p style="margin:0px;margin-left:8px;">+ Attribute1: Type<br/>+ Attribute2: Type</p>', new mxGeometry(0, 0, 180, 90),
+				hr + '<p style="margin:0px;margin-left:8px;">+ Attribute1: Type<br/>+ Attribute2: Type</p>', new mxGeometry(0, 0, 180, 90),
 				'align=left;overflow=fill;html=1;dropTarget=0;whiteSpace=wrap;');
 		    cell.vertex = true;
 		    
@@ -1843,8 +4180,8 @@ Sidebar.prototype.addUmlPalette = function(expand)
 		this.createVertexTemplateEntry('shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;', 100, 50, 'Module', 'Module', null, null, dt + 'module component'),
 		this.createVertexTemplateEntry('shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;', 70, 50,
 		   	'package', 'Package', null, null, dt + 'package'),
-		this.createVertexTemplateEntry('verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;',
-			160, 90, '<p style="margin:0px;margin-top:4px;text-align:center;text-decoration:underline;"><b>Object:Type</b></p><hr/>' +
+		this.createVertexTemplateEntry('verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;',
+			160, 90, '<p style="margin:0px;margin-top:4px;text-align:center;text-decoration:underline;"><b>Object:Type</b></p>' + hr +
 			'<p style="margin:0px;margin-left:8px;">field1 = value1<br/>field2 = value2<br>field3 = value3</p>', 'Object',
 			null, null, dt + 'object instance'),
 		this.createVertexTemplateEntry('verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;',180, 90,
@@ -1856,8 +4193,8 @@ Sidebar.prototype.addUmlPalette = function(expand)
 		{
 		    var cell = new mxCell('<p style="margin:0px;margin-top:4px;text-align:center;">' +
 	    			'<b>Class</b></p>' +
-					'<hr size="1"/><div style="height:2px;"></div>', new mxGeometry(0, 0, 140, 60),
-					'verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;');
+					hr + '<div style="height:2px;"></div>', new mxGeometry(0, 0, 140, 60),
+					'verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;');
 		    cell.vertex = true;
 			
 			return sb.createVertexTemplateFromCells([cell.clone()], cell.geometry.width, cell.geometry.height, 'Class 3');
@@ -1866,8 +4203,8 @@ Sidebar.prototype.addUmlPalette = function(expand)
 		{
 		    var cell = new mxCell('<p style="margin:0px;margin-top:4px;text-align:center;">' +
 	    			'<b>Class</b></p>' +
-					'<hr size="1"/><div style="height:2px;"></div><hr size="1"/><div style="height:2px;"></div>', new mxGeometry(0, 0, 140, 60),
-					'verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;');
+					hr + '<div style="height:2px;"></div>' + hr + '<div style="height:2px;"></div>', new mxGeometry(0, 0, 140, 60),
+					'verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;');
 		    cell.vertex = true;
 			
 			return sb.createVertexTemplateFromCells([cell.clone()], cell.geometry.width, cell.geometry.height, 'Class 4');
@@ -1875,10 +4212,9 @@ Sidebar.prototype.addUmlPalette = function(expand)
 		this.addEntry(dt + 'object instance', function()
 		{
 		    var cell = new mxCell('<p style="margin:0px;margin-top:4px;text-align:center;">' +
-	    			'<b>Class</b></p>' +
-					'<hr size="1"/><p style="margin:0px;margin-left:4px;">+ field: Type</p><hr size="1"/>' +
+	    			'<b>Class</b></p>' + hr + '<p style="margin:0px;margin-left:4px;">+ field: Type</p>' + hr +
 					'<p style="margin:0px;margin-left:4px;">+ method(): Type</p>', new mxGeometry(0, 0, 160, 90),
-					'verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;');
+					'verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;');
 		    cell.vertex = true;
 			
 			return sb.createVertexTemplateFromCells([cell.clone()], cell.geometry.width, cell.geometry.height, 'Class 5');
@@ -1887,12 +4223,11 @@ Sidebar.prototype.addUmlPalette = function(expand)
 		{
 		    var cell = new mxCell('<p style="margin:0px;margin-top:4px;text-align:center;">' +
 	    			'<i>&lt;&lt;Interface&gt;&gt;</i><br/><b>Interface</b></p>' +
-					'<hr size="1"/><p style="margin:0px;margin-left:4px;">+ field1: Type<br/>' +
-					'+ field2: Type</p>' +
-					'<hr size="1"/><p style="margin:0px;margin-left:4px;">' +
+					hr + '<p style="margin:0px;margin-left:4px;">+ field1: Type<br/>' +
+					'+ field2: Type</p>' + hr + '<p style="margin:0px;margin-left:4px;">' +
 					'+ method1(Type): Type<br/>' +
 					'+ method2(Type, Type): Type</p>', new mxGeometry(0, 0, 190, 140),
-					'verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;');
+					'verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;');
 		    cell.vertex = true;
 			
 			return sb.createVertexTemplateFromCells([cell.clone()], cell.geometry.width, cell.geometry.height, 'Interface 2');
@@ -2012,7 +4347,7 @@ Sidebar.prototype.addUmlPalette = function(expand)
 	    	cell.vertex = true;
 	    	
 			var edge = new mxCell('dispatch', new mxGeometry(0, 0, 0, 0), 'html=1;verticalAlign=bottom;startArrow=oval;endArrow=block;' +
-				'startSize=8;curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;');
+				'startSize=8;' + sequenceEdgeStyle + 'entryX=0;entryY=0;entryDx=0;entryDy=5;');
 			edge.geometry.setTerminalPoint(new mxPoint(-70, 5), true);
 			edge.geometry.relative = true;
 			edge.edge = true;
@@ -2027,7 +4362,7 @@ Sidebar.prototype.addUmlPalette = function(expand)
 	    	cell.vertex = true;
 	    	
 			var edge1 = new mxCell('dispatch', new mxGeometry(0, 0, 0, 0), 'html=1;verticalAlign=bottom;endArrow=block;' +
-				'curved=0;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=5;');
+				sequenceEdgeStyle + 'entryX=0;entryY=0;entryDx=0;entryDy=5;');
 			edge1.geometry.setTerminalPoint(new mxPoint(-70, 5), true);
 			edge1.geometry.relative = true;
 			edge1.edge = true;
@@ -2035,7 +4370,7 @@ Sidebar.prototype.addUmlPalette = function(expand)
 			cell.insertEdge(edge1, false);
 			
 			var edge2 = new mxCell('return', new mxGeometry(0, 0, 0, 0), 'html=1;verticalAlign=bottom;endArrow=open;dashed=1;' +
-				'endSize=8;curved=0;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=-5;');
+				'endSize=8;' + sequenceEdgeStyle + 'exitX=0;exitY=1;exitDx=0;exitDy=-5;');
 			edge2.geometry.setTerminalPoint(new mxPoint(-70, 75), false);
 			edge2.geometry.relative = true;
 			edge2.edge = true;
@@ -2049,10 +4384,12 @@ Sidebar.prototype.addUmlPalette = function(expand)
 	    	var cell = new mxCell('', new mxGeometry(-5, 20, 10, 40), activationStyle);
 	    	cell.vertex = true;
 	
+			// A self-call leaves at the y of the first waypoint and returns at
+			// the y of the second (see mxEdgeStyle.SequenceMessage)
 			var edge = new mxCell('self call', new mxGeometry(0, 0, 0, 0), 'html=1;align=left;spacingLeft=2;endArrow=block;' +
-				'rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;');
+				sequenceEdgeStyle);
 			edge.geometry.setTerminalPoint(new mxPoint(0, 0), true);
-			edge.geometry.points = [new mxPoint(30, 30)];
+			edge.geometry.points = [new mxPoint(30, 0), new mxPoint(30, 30)];
 			edge.geometry.relative = true;
 			edge.edge = true;
 			
@@ -2066,7 +4403,7 @@ Sidebar.prototype.addUmlPalette = function(expand)
 			cell.vertex = true;
 
 			var edge1 = new mxCell('callback', new mxGeometry(0, 0, 0, 0), 'html=1;verticalAlign=bottom;endArrow=block;' +
-				'curved=0;rounded=0;entryX=1;entryY=0;entryDx=0;entryDy=5;');
+				sequenceEdgeStyle + 'entryX=1;entryY=0;entryDx=0;entryDy=5;');
 			edge1.geometry.setTerminalPoint(new mxPoint(80, 5), true);
 			edge1.geometry.relative = true;
 			edge1.edge = true;
@@ -2074,7 +4411,7 @@ Sidebar.prototype.addUmlPalette = function(expand)
 			cell.insertEdge(edge1, false);
 
 			var edge2 = new mxCell('return', new mxGeometry(0, 0, 0, 0), 'html=1;verticalAlign=bottom;endArrow=open;dashed=1;' +
-				'endSize=8;curved=0;rounded=0;exitX=1;exitY=1;exitDx=0;exitDy=-5;');
+				'endSize=8;' + sequenceEdgeStyle + 'exitX=1;exitY=1;exitDx=0;exitDy=-5;');
 			edge2.geometry.setTerminalPoint(new mxPoint(80, 75), false);
 			edge2.geometry.relative = true;
 			edge2.edge = true;
@@ -2086,15 +4423,15 @@ Sidebar.prototype.addUmlPalette = function(expand)
 		}),
 		this.createVertexTemplateEntry(activationStyle, 10, 80, '', 'Activation Bar', null, null, 'uml sequence activation bar'),
 	 	this.createEdgeTemplateEntry('html=1;verticalAlign=bottom;startArrow=oval;startFill=1;endArrow=block;startSize=8;' +
-		 	'curved=0;rounded=0;', 60, 0, 'dispatch', 'Found Message 1', null, 'uml sequence message call invoke dispatch'),
+		 	sequenceEdgeStyle, 60, 0, 'dispatch', 'Found Message 1', null, 'uml sequence message call invoke dispatch'),
 	 	this.createEdgeTemplateEntry('html=1;verticalAlign=bottom;startArrow=circle;startFill=1;endArrow=open;startSize=6;endSize=8;' +
-			 'curved=0;rounded=0;', 80, 0, 'dispatch', 'Found Message 2', null, 'uml sequence message call invoke dispatch'),
-	 	this.createEdgeTemplateEntry('html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;',
+			 sequenceEdgeStyle, 80, 0, 'dispatch', 'Found Message 2', null, 'uml sequence message call invoke dispatch'),
+	 	this.createEdgeTemplateEntry('html=1;verticalAlign=bottom;endArrow=block;' + sequenceEdgeStyle,
 			80, 0, 'dispatch', 'Message', null, 'uml sequence message call invoke dispatch'),
 		this.addEntry('uml sequence return message', function()
 		{
 			var edge = new mxCell('return', new mxGeometry(0, 0, 0, 0), 'html=1;verticalAlign=bottom;' +
-				'endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;');
+				'endArrow=open;dashed=1;endSize=8;' + sequenceEdgeStyle);
 			edge.geometry.setTerminalPoint(new mxPoint(80, 0), true);
 			edge.geometry.setTerminalPoint(new mxPoint(0, 0), false);
 			edge.geometry.relative = true;
@@ -2111,7 +4448,8 @@ Sidebar.prototype.addUmlPalette = function(expand)
 			edge.geometry.x = -1;
 			edge.edge = true;
 			
-	    	var cell = new mxCell('1', new mxGeometry(-1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;');
+	    	var cell = new mxCell('1', new mxGeometry(-1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;' +
+				Graph.createInheritedLabelStyle());
 	    	cell.geometry.relative = true;
 	    	cell.setConnectable(false);
 	    	cell.vertex = true;
@@ -2127,13 +4465,15 @@ Sidebar.prototype.addUmlPalette = function(expand)
 			edge.geometry.relative = true;
 			edge.edge = true;
 			
-	    	var cell1 = new mxCell('parent', new mxGeometry(-1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;');
+	    	var cell1 = new mxCell('parent', new mxGeometry(-1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=left;verticalAlign=bottom;' +
+				Graph.createInheritedLabelStyle());
 	    	cell1.geometry.relative = true;
 	    	cell1.setConnectable(false);
 	    	cell1.vertex = true;
 	    	edge.insert(cell1);
 			
-	    	var cell2 = new mxCell('child', new mxGeometry(1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;');
+	    	var cell2 = new mxCell('child', new mxGeometry(1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=right;verticalAlign=bottom;' +
+				Graph.createInheritedLabelStyle());
 	    	cell2.geometry.relative = true;
 	    	cell2.setConnectable(false);
 	    	cell2.vertex = true;
@@ -2173,13 +4513,15 @@ Sidebar.prototype.addUmlPalette = function(expand)
 			edge.geometry.relative = true;
 			edge.edge = true;
 			
-	    	var cell1 = new mxCell('0..n', new mxGeometry(-1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;');
+	    	var cell1 = new mxCell('0..n', new mxGeometry(-1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;' +
+				Graph.createInheritedLabelStyle());
 	    	cell1.geometry.relative = true;
 	    	cell1.setConnectable(false);
 	    	cell1.vertex = true;
 	    	edge.insert(cell1);
 			
-	    	var cell2 = new mxCell('1', new mxGeometry(1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=right;verticalAlign=top;');
+	    	var cell2 = new mxCell('1', new mxGeometry(1, 0, 0, 0), 'edgeLabel;resizable=0;html=1;align=right;verticalAlign=top;' +
+				Graph.createInheritedLabelStyle());
 	    	cell2.geometry.relative = true;
 	    	cell2.setConnectable(false);
 	    	cell2.vertex = true;
@@ -2208,11 +4550,49 @@ Sidebar.prototype.addUmlPalette = function(expand)
 Sidebar.prototype.createTitle = function(label)
 {
 	var elt = document.createElement('a');
-	elt.setAttribute('title', mxResources.get('sidebarTooltip'));
+	// Section titles can be dragged to reorder palettes — surface that
+	// affordance via the tooltip. The broader sidebar-tooltip text now
+	// lives on the container background.
+	elt.setAttribute('title', mxResources.get('reorder'));
 	elt.className = 'geTitle';
-	mxUtils.write(elt, label);
+
+	// Invisible overlay over the left-edge arrow icon (the icon itself
+	// is the title's background-image — see addFoldingHandler — so we
+	// can't add a child with the icon directly). The overlay only
+	// carries a tooltip; clicks bubble to the title and trigger the
+	// fold handler as before.
+	var iconHit = document.createElement('span');
+	iconHit.setAttribute('title', mxResources.get('collapseExpand',
+		null, 'Collapse/Expand'));
+	iconHit.style.cssText = 'position:absolute;left:0;top:0;' +
+		'width:24px;height:100%;cursor:pointer';
+	elt.appendChild(iconHit);
+
+	var span = document.createElement('span');
+	span.className = 'geTitleLabel';
+	mxUtils.write(span, label);
+	elt.appendChild(span);
 
 	return elt;
+};
+
+/**
+ * Replaces the text of the given title. The label keeps its element, which is
+ * the control for the keyboard (see addFoldingHandler), and the title its
+ * other children.
+ */
+Sidebar.prototype.setTitleText = function(title, text)
+{
+	var label = title.querySelector('.geTitleLabel');
+
+	if (label != null)
+	{
+		mxUtils.setTextContent(label, text);
+	}
+	else
+	{
+		mxUtils.setTextContent(title, text);
+	}
 };
 
 /**
@@ -2223,11 +4603,9 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	this.graph.labelsVisible = (showLabel == null || showLabel);
 	var fo = mxClient.NO_FO;
 	mxClient.NO_FO = Editor.prototype.originalNoForeignObject;
-
-	// Tries to avoid transparent color but can't use computed
-	// style due to async CSS
+	this.graph.shapeForegroundColor = 'light-dark(#000000, #ffffff)';
 	this.graph.shapeBackgroundColor = (bg != null) ? bg :
-		(Editor.isDarkMode() ? '#2a252f' : '#f1f3f4');
+		'light-dark(var(--ge-panel-color), var(--ge-dark-panel-color))';
 	this.graph.view.scaleAndTranslate((scale != null) ? scale : 1, 0, 0);
 	this.graph.addCells(cells);
 	var bounds = this.graph.getGraphBounds();
@@ -2249,7 +4627,6 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	{
 		node = this.graph.view.getCanvas().ownerSVGElement.cloneNode(true);
 	}
-	// LATER: Check if deep clone can be used for quirks if container in DOM
 	else
 	{
 		node = this.graph.container.cloneNode(false);
@@ -2258,13 +4635,11 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 
 	this.graph.getModel().clear();
 	this.graph.view.scaleAndTranslate(1, 0, 0);
-	this.graph.shapeBackgroundColor = (Editor.isDarkMode() ?
-		'#2a252f' : '#f1f3f4');
 	mxClient.NO_FO = fo;
 	
 	node.style.position = 'relative';
 	node.style.overflow = (scale != null) ? 'visible' : 'hidden';
-	node.style.left = ((border != null) ? border : this.thumbBorder) + 'px';
+	node.style.left = ((border != null) ? border : this.thumbBorder - 1) + 'px';
 	node.style.top = node.style.left;
 	node.style.width = width + 'px';
 	node.style.height = height + 'px';
@@ -2272,7 +4647,7 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 	node.style.minWidth = '';
 	node.style.minHeight = '';
 	this.disablePointerEvents(node);
-	
+
 	parent.appendChild(node);
 	
 	// Adds title for sidebar entries
@@ -2289,11 +4664,6 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 		div.style.overflow = 'hidden';
 		div.style.textOverflow = 'ellipsis';
 		
-		if (mxClient.IS_IE)
-		{
-			div.style.height = (this.sidebarTitleSize + 12) + 'px';
-		}
-
 		div.style.paddingTop = '4px';
 		mxUtils.write(div, title);
 		parent.appendChild(div);
@@ -2329,19 +4699,33 @@ Sidebar.prototype.createSection = function(title)
  */
 Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, width, height,
 	allowCellsInserted, showTooltip, clickFn, thumbWidth, thumbHeight, icon, startEditing,
-	sourceCell)
+	sourceCell, useElt, connectEdge)
 {
 	showTooltip = (showTooltip != null) ? showTooltip : true;
 	thumbWidth = (thumbWidth != null) ? thumbWidth : this.thumbWidth;
 	thumbHeight = (thumbHeight != null) ? thumbHeight : this.thumbHeight;
-	
-	var elt = document.createElement('a');
-	elt.className = 'geItem';
-	elt.style.overflow = 'hidden';
-	var border = 2 * this.thumbBorder;
-	elt.style.width = (thumbWidth + border) + 'px';
-	elt.style.height = (thumbHeight + border) + 'px';
-	elt.style.padding = this.thumbPadding + 'px';
+
+	var elt = useElt;
+
+	if (elt == null)
+	{
+		elt = document.createElement('a');
+		var border = 2 * this.thumbBorder;
+		elt.style.width = (thumbWidth + border) + 'px';
+		elt.style.height = (thumbHeight + border) + 'px';
+	}
+
+	// Suppress the sidebar container's tooltip ("Click or drag and drop
+	// shapes. …") from showing when hovering an individual thumb — the
+	// thumb has its own custom showTooltip (cell preview) and the
+	// container hint isn't relevant here. The broken-image branch below
+	// overrides this with the actual cell title.
+	elt.setAttribute('title', '');
+
+	if (title != null)
+	{
+		elt.setAttribute('aria-label', title);
+	}
 	
 	// Blocks default click action
 	mxEvent.addListener(elt, 'click', function(evt)
@@ -2356,28 +4740,53 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 	{
 		var originalCells = cells;
 		cells = this.graph.cloneCells(cells);
-		this.editorUi.insertHandler(originalCells, null, this.graph.model,
-			this.initialDefaultVertexStyle, this.initialDefaultEdgeStyle,
-			true, true);
+		this.graph.pasteCellStyles(this.graph.includeDescendants(originalCells),
+			this.initialDefaultVertexStyle, this.initialDefaultEdgeStyle);
 
 		if (icon != null)
 		{
+			elt.className = 'geButton';
 			elt.style.backgroundImage = 'url(' + icon + ')';
 			elt.style.backgroundRepeat = 'no-repeat';
 			elt.style.backgroundPosition = 'center';
 			elt.style.backgroundSize = '24px 24px';
 		}
-		else
+		else if (useElt == null)
 		{
-			this.createThumb(originalCells, thumbWidth, thumbHeight,
-				elt, title, showLabel, showTitle, width, height);
+			elt.className = 'geItem';
+
+			if (this.virtualThumbs)
+			{
+				// Pre-size the placeholder to match what createThumb
+				// would set, so layout is stable and the observer can
+				// actually decide which entries are off-screen. Without
+				// this, every thumb collapses to default height and the
+				// observer fires for all of them at once on insert.
+				if (this.sidebarTitles && title != null && showTitle != false)
+				{
+					elt.style.height = (this.thumbHeight +
+						this.sidebarTitleSize + 8) + 'px';
+				}
+
+				elt.renderThumbFn = mxUtils.bind(this, function()
+				{
+					this.createThumb(originalCells, thumbWidth, thumbHeight,
+						elt, title, showLabel, showTitle, width, height);
+				});
+				this.getThumbObserver().observe(elt);
+			}
+			else
+			{
+				this.createThumb(originalCells, thumbWidth, thumbHeight,
+					elt, title, showLabel, showTitle, width, height);
+			}
 		}
 		
 		if (cells.length > 1 || cells[0].vertex)
 		{
 			var ds = this.createDragSource(elt, this.createDropHandler(cells, true, allowCellsInserted,
-				bounds, startEditing, sourceCell), this.createDragPreview(width, height),
-				cells, bounds, startEditing);
+				bounds, startEditing, sourceCell, connectEdge), this.createDragPreview(width, height),
+				cells, bounds, startEditing, sourceCell);
 			this.addClickHandler(elt, ds, cells, clickFn, startEditing);
 		
 			// Uses guides for vertices only if enabled in graph
@@ -2389,33 +4798,127 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
 		else if (cells[0] != null && cells[0].edge)
 		{
 			var ds = this.createDragSource(elt, this.createDropHandler(cells, false, allowCellsInserted,
-				bounds, startEditing, sourceCell), this.createDragPreview(width, height),
+				bounds, startEditing, sourceCell, connectEdge), this.createDragPreview(width, height),
 				cells, bounds, startEditing);
 			this.addClickHandler(elt, ds, cells, clickFn);
 		}
-	}
 	
-	// Shows a tooltip with the rendered cell
-	if (!mxClient.IS_IOS && showTooltip)
-	{
-		mxEvent.addGestureListeners(elt, null, mxUtils.bind(this, function(evt)
+		// Shows a tooltip with the rendered cell
+		if (!mxClient.IS_IOS && showTooltip)
 		{
-			if (mxEvent.isMouseEvent(evt))
+			mxEvent.addGestureListeners(elt, null, mxUtils.bind(this, function(evt)
 			{
-				this.showTooltip(elt, cells, bounds.width, bounds.height, title, showLabel);
-			}
-		}));
+				if (mxEvent.isMouseEvent(evt))
+				{
+					// In embedInline mode the tooltip is anchored to the document
+					// body, but the editor is a small floating container, so the
+					// default element-relative offset collapses to the page origin.
+					// Anchor the preview near the cursor instead.
+					var off = (urlParams['embedInline'] == '1') ?
+						new mxPoint(evt.clientX + 16, evt.clientY + 16) : null;
+					this.showTooltip(elt, cells, bounds.width, bounds.height, title, showLabel, off);
+				}
+			}));
+		}
+	}
+	else if (useElt == null)
+	{
+		elt.style.backgroundImage = 'url(' + Editor.svgBrokenImage.src + ')';
+		elt.setAttribute('title', title);
 	}
 	
 	return elt;
 };
 
 /**
+ * Disables legacy anchor points on flipped shapes that have no edges connected,
+ * everything else is skipped to match the preview.
+ */
+Sidebar.prototype.prepareCellsForInsert = function(cells)
+{
+	if (cells != null && cells.length > 0)
+	{
+		var model = this.graph.getModel();
+
+		for (var i = 0; i < cells.length; i++)
+		{
+			this.prepareCellsForInsert(model.getChildren(cells[i]));
+
+			if (model.isVertex(cells[i]))
+			{
+				var edges = model.getEdges(cells[i]);
+				var style = this.graph.getCellStyle(cells[i]);
+
+				// Disables legacy anchor points for flipped shapes without edges
+				if ((edges == null || edges.length == 0) && style != null &&
+					(mxUtils.getValue(style, mxConstants.STYLE_FLIPV, 0) == 1 ||
+					mxUtils.getValue(style, mxConstants.STYLE_FLIPH, 0) == 1 ||
+					mxUtils.getValue(style, 'stencilFlipH', 0) == 1 ||
+					mxUtils.getValue(style, 'stencilFlipV', 0) == 1))
+				{
+					this.graph.setCellStyles('legacyAnchorPoints', '0', [cells[i]]);
+				}
+			}
+		}
+	}
+};
+
+/**
+ * Returns true if the given cells are a single plain text shape that should
+ * be added as a label of the given edge instead of splitting the edge.
+ */
+Sidebar.prototype.isEdgeLabelDrop = function(edge, cells)
+{
+	var graph = this.editorUi.editor.graph;
+	var geo = (cells != null && cells.length == 1) ?
+		graph.getCellGeometry(cells[0]) : null;
+
+	return graph.model.isEdge(edge) && geo != null && !geo.relative &&
+		graph.model.isVertex(cells[0]) &&
+		graph.model.getChildCount(cells[0]) == 0 &&
+		typeof cells[0].style === 'string' &&
+		cells[0].style.substring(0, 5) == 'text;';
+};
+
+/**
+ * Adds the given cell as a label of the given edge with the center at the
+ * given location in screen coordinates.
+ */
+Sidebar.prototype.addEdgeLabel = function(edge, cell, x, y)
+{
+	var graph = this.editorUi.editor.graph;
+	var state = graph.view.getState(edge);
+	var geo = graph.getCellGeometry(cell).clone();
+	geo.relative = true;
+	geo.x = 0;
+	geo.y = 0;
+	geo.offset = new mxPoint(0, 0);
+
+	if (state != null)
+	{
+		var pt = graph.view.getRelativePoint(state, x, y);
+		geo.x = Math.round(pt.x * 10000) / 10000;
+		geo.y = Math.round(pt.y);
+
+		// Puts the center of the cell at the given location
+		pt = graph.view.getPoint(state, geo);
+		var s = graph.view.scale;
+		geo.offset = new mxPoint(Math.round((x - pt.x) / s - geo.width / 2),
+			Math.round((y - pt.y) / s - geo.height / 2));
+	}
+
+	graph.model.setGeometry(cell, geo);
+	cell.setConnectable(false);
+	graph.addCells([cell], edge);
+};
+
+/**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInserted, bounds, startEditing, sourceCell)
+Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInserted, bounds, startEditing, sourceCell, connectEdge)
 {
 	allowCellsInserted = (allowCellsInserted != null) ? allowCellsInserted : true;
+	this.prepareCellsForInsert.call(this, cells);
 	
 	return mxUtils.bind(this, function(graph, evt, target, x, y, force)
 	{
@@ -2427,9 +4930,11 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
 		{
 			elt = elt.parentNode;
 		}
-		
+
 		if (elt == null && graph.isEnabled())
 		{
+			// Tab continues in the diagram, not from the dragged shape (see getTabStart)
+			this.editorUi.tabStart = null;
 			cells = graph.getImportableCells(cells);
 			
 			if (cells.length > 0)
@@ -2446,7 +4951,15 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
 				{
 					target = null;
 				}
-				
+
+				// When reconnecting an unconnected edge terminal to the dropped shape,
+				// ignores the drop target so the shape is inserted at the drop location
+				// and the terminal is connected (never splitting or nesting into it)
+				if (connectEdge != null)
+				{
+					target = null;
+				}
+
 				if (!graph.isCellLocked(target || graph.getDefaultParent()))
 				{
 					graph.model.beginUpdate();
@@ -2464,15 +4977,25 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
 							var ty = (y + tr.y) * s;
 							
 							var clones = graph.cloneCells(cells);
-							graph.splitEdge(target, clones, null,
-								x - bounds.width / 2, y - bounds.height / 2,
-								tx, ty);
+
+							// Adds plain text shapes as labels of the edge
+							if (this.isEdgeLabelDrop(target, clones))
+							{
+								this.addEdgeLabel(target, clones[0], tx, ty);
+							}
+							else
+							{
+								graph.splitEdge(target, clones, null,
+									x - bounds.width / 2, y - bounds.height / 2,
+									tx, ty);
+							}
+
 							select = clones;
 						}
 						else if (cells.length > 0)
 						{
 							select = graph.importCells(cells, x, y, target);
-							
+
 							if (graph.model.isVertex(sourceCell) && select.length == 1 &&
 								graph.model.isVertex(select[0]))
 							{
@@ -2484,6 +5007,21 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
 								if (graph.connectionHandler.insertBeforeSource)
 								{
 									graph.insertEdgeBeforeCell(edge, sourceCell);
+								}
+							}
+							// Reconnects an existing unconnected edge terminal to the dropped shape
+							else if (connectEdge != null && select.length == 1 &&
+								graph.model.isVertex(select[0]) &&
+								graph.model.contains(connectEdge.cell))
+							{
+								graph.model.setTerminal(connectEdge.cell, select[0], connectEdge.source);
+								var ceGeo = graph.getCellGeometry(connectEdge.cell);
+
+								if (ceGeo != null && ceGeo.getTerminalPoint(connectEdge.source) != null)
+								{
+									ceGeo = ceGeo.clone();
+									ceGeo.setTerminalPoint(null, connectEdge.source);
+									graph.model.setGeometry(connectEdge.cell, ceGeo);
 								}
 							}
 						}
@@ -2532,8 +5070,16 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
 	
 					if (select != null && select.length > 0)
 					{
-						graph.scrollCellToVisible(select[0]);
+						// Keeps the scroll position if any part of the
+						// dropped cell is visible, eg. for cells larger
+						// than the viewport or at high zoom levels
+						if (!graph.isCellVisibleInViewport(select[0]))
+						{
+							graph.scrollCellToVisible(select[0]);
+						}
+
 						graph.setSelectionCells(select);
+						this.addRecentShapes(select);
 					}
 
 					if (startEditing || (graph.editAfterInsert && evt != null &&
@@ -2562,8 +5108,129 @@ Sidebar.prototype.createDragPreview = function(width, height)
 	elt.className = 'geDragPreview';
 	elt.style.width = width + 'px';
 	elt.style.height = height + 'px';
-	
+
 	return elt;
+};
+
+/**
+ * Creates a live preview of the edge that connects the given source cell
+ * to the dropped cell (see createDropHandler) while dragging from the
+ * hover-icon shape picker. Reuses the connection handler's live preview
+ * (createEdgeState, updateEdgeState and createShape invoked on a minimal
+ * handler stand-in) so the previewed edge matches the edge inserted on
+ * drop, including the current edge style, the source's newEdgeStyle and
+ * preview routing overrides.
+ */
+Sidebar.prototype.createEdgePreview = function(graph, sourceCell, cell)
+{
+	var preview =
+	{
+		handler: null,
+		targetState: null,
+		shape: null
+	};
+
+	// Renders the preview edge from the source cell to the given preview
+	// rectangle (in view coordinates), creating the preview on demand
+	preview.update = function(x, y, w, h)
+	{
+		var sourceState = graph.view.getState(sourceCell);
+
+		if (sourceState == null)
+		{
+			preview.hide();
+			return;
+		}
+
+		if (preview.handler == null)
+		{
+			// Stand-in for the connection handler state read by
+			// createEdgeState, updateEdgeState and convertWaypoint
+			preview.handler = {graph: graph, previous: sourceState,
+				currentState: null, edgeState: null, sourceConstraint: null,
+				constraintHandler: null, waypoints: null,
+				convertWaypoint: mxConnectionHandler.prototype.convertWaypoint};
+			preview.handler.edgeState = mxConnectionHandler.prototype.
+				createEdgeState.call(preview.handler, null);
+
+			var targetCell = graph.cloneCell(cell);
+			preview.targetState = new mxCellState(graph.view, targetCell,
+				graph.getCellStyle(targetCell));
+			preview.handler.currentState = preview.targetState;
+		}
+
+		preview.handler.previous = sourceState;
+		var target = preview.targetState;
+		target.x = x;
+		target.y = y;
+		target.width = w;
+		target.height = h;
+
+		// Keeps the target geometry in model coordinates in sync for
+		// routers that inspect the cell rather than the state
+		var geo = target.cell.geometry;
+
+		if (geo != null)
+		{
+			var s = graph.view.scale;
+			var tr = graph.view.translate;
+			geo.x = x / s - tr.x;
+			geo.y = y / s - tr.y;
+			geo.width = w / s;
+			geo.height = h / s;
+		}
+
+		if (preview.shape == null)
+		{
+			preview.shape = mxConnectionHandler.prototype.createShape.call(
+				{graph: graph, livePreview: true,
+				edgeState: preview.handler.edgeState});
+			preview.shape.apply(preview.handler.edgeState);
+		}
+
+		mxConnectionHandler.prototype.updateEdgeState.call(preview.handler,
+			new mxPoint(x + w / 2, y + h / 2), null);
+
+		var edgeState = preview.handler.edgeState;
+		preview.shape.points = edgeState.absolutePoints;
+		preview.shape.scale = graph.view.scale;
+		edgeState.shape = preview.shape;
+		graph.cellRenderer.postConfigureShape(edgeState);
+		edgeState.shape = null;
+		preview.shape.node.style.display = '';
+		preview.shape.redraw();
+	};
+
+	preview.hide = function()
+	{
+		if (preview.shape != null)
+		{
+			preview.shape.node.style.display = 'none';
+		}
+	};
+
+	// Removes the preview and frees per-drag resources, the next call
+	// to update recreates the preview
+	preview.destroy = function()
+	{
+		if (preview.shape != null)
+		{
+			preview.shape.destroy();
+			preview.shape = null;
+		}
+
+		if (typeof LibavoidRouting !== 'undefined' &&
+			LibavoidRouting.endPreview != null)
+		{
+			// Drops the per-drag state of the libavoid connect preview
+			LibavoidRouting.endPreview(preview.handler);
+		}
+
+		preview.handler = null;
+		preview.targetState = null;
+	};
+
+	return preview;
 };
 
 /**
@@ -2574,7 +5241,21 @@ Sidebar.prototype.dropAndConnect = function(source, targets, direction, dropCell
 	var graph = this.editorUi.editor.graph;
 	var index = (graph.model.isEdge(source) || firstVertex != null) ? firstVertex : freeSourceEdge;
 	var geo = this.getDropAndConnectGeometry(source, targets[index], direction, targets);
-	
+
+	// Moves the drop geometry including the end of dangling edges
+	function translateGeometry(tx, ty)
+	{
+		geo.x += tx;
+		geo.y += ty;
+
+		var pt = geo.getTerminalPoint(false);
+
+		if (pt != null)
+		{
+			geo.setTerminalPoint(new mxPoint(pt.x + tx, pt.y + ty), false);
+		}
+	};
+
 	// Targets without the new edge for selection
 	var tmp = [];
 	
@@ -2609,8 +5290,8 @@ Sidebar.prototype.dropAndConnect = function(source, targets, direction, dropCell
 			var dx = 0;
 			var dy = 0;
 			
-			// Offsets by parent position
-			if (tmp != null)
+			// Offsets by parent position (geometry is absolute for relative sources)
+			if (tmp != null && (sourceGeo == null || !sourceGeo.relative))
 			{
 				var offset = tmp.origin;
 				dx = offset.x;
@@ -2627,7 +5308,9 @@ Sidebar.prototype.dropAndConnect = function(source, targets, direction, dropCell
 					return !graph.isContainer(state.cell);
 				});
 			
-			if (tempTarget != null && tempTarget != targetParent)
+			// Uses the parent of relative sources (eg. ports) if it is the container at the drop location
+			if (tempTarget != null && (tempTarget != targetParent || (!useParent && validLayout &&
+				!graph.isTableRow(source) && !graph.isTableCell(source))))
 			{
 				tmp = graph.view.getState(tempTarget);
 			
@@ -2640,15 +5323,13 @@ Sidebar.prototype.dropAndConnect = function(source, targets, direction, dropCell
 					
 					if (!graph.model.isEdge(source))
 					{
-						geo.x -= offset.x - dx;
-						geo.y -= offset.y - dy;
+						translateGeometry(dx - offset.x, dy - offset.y);
 					}
 				}
 			}
 			else if (!validLayout || graph.isTableRow(source) || graph.isTableCell(source))
 			{
-				geo.x += dx;
-				geo.y += dy;
+				translateGeometry(dx, dy);
 			}
 
 			dx = geo2.x;
@@ -2759,7 +5440,9 @@ Sidebar.prototype.dropAndConnect = function(source, targets, direction, dropCell
 		{
 			graph.model.endUpdate();
 		}
-		
+
+		this.addRecentShapes(targets);
+
 		if (graph.editAfterInsert && evt != null && mxEvent.isMouseEvent(evt) &&
 			editingCell != null)
 		{
@@ -2818,8 +5501,8 @@ Sidebar.prototype.getDropAndConnectGeometry = function(source, target, direction
 			if (geo.relative)
 			{
 				geo = geo.clone();
-				geo.x = (state.x - view.translate.x) / view.scale;
-				geo.y = (state.y - view.translate.y) / view.scale;
+				geo.x = state.x / view.scale - view.translate.x;
+				geo.y = state.y / view.scale - view.translate.y;
 			}
 			
 			var length = graph.defaultEdgeLength;
@@ -2934,13 +5617,14 @@ Sidebar.prototype.getDropAndConnectGeometry = function(source, target, direction
 };
 
 /**
- * Limits drop style to non-transparent source shapes.
+ * Limits drop style to non-transparent source shapes and groups.
  */
 Sidebar.prototype.isDropStyleEnabled = function(cells, firstVertex)
 {
 	var result = true;
 	
-	if (firstVertex != null && cells.length == 1)
+	if (firstVertex != null && cells.length == 1 &&
+		this.graph.model.getChildCount(cells[firstVertex]) == 0)
 	{
 		var vstyle = this.graph.getCellStyle(cells[firstVertex]);
 		
@@ -2964,13 +5648,216 @@ Sidebar.prototype.isDropStyleTargetIgnored = function(state)
 };
 
 /**
+ * Returns the state of the edge label at the given position for the given
+ * edge state, checking the labels of the child cells and the label of the
+ * edge itself, in which case the given state is returned.
+ */
+Sidebar.prototype.getEdgeLabelStateAt = function(state, x, y)
+{
+	var graph = state.view.graph;
+	var result = null;
+
+	var childCount = graph.model.getChildCount(state.cell);
+
+	for (var i = childCount - 1; i >= 0 && result == null; i--)
+	{
+		var child = graph.model.getChildAt(state.cell, i);
+
+		if (graph.model.isVertex(child))
+		{
+			var childState = graph.view.getState(child);
+
+			if (childState != null && (mxUtils.contains(childState, x, y) ||
+				(childState.text != null && childState.text.boundingBox != null &&
+				mxUtils.contains(childState.text.boundingBox, x, y))))
+			{
+				result = childState;
+			}
+		}
+	}
+
+	if (result == null && state.text != null && state.text.boundingBox != null &&
+		mxUtils.contains(state.text.boundingBox, x, y))
+	{
+		result = state;
+	}
+
+	return result;
+};
+
+/**
+ * Lazily creates a shared IntersectionObserver used to defer thumb
+ * rendering until the entry scrolls near the viewport. Used by the
+ * virtual thumbs path in createItem.
+ */
+Sidebar.prototype.getThumbObserver = function()
+{
+	if (this.thumbObserver == null)
+	{
+		this.thumbObserver = new IntersectionObserver(mxUtils.bind(this, function(entries)
+		{
+			for (var i = 0; i < entries.length; i++)
+			{
+				var entry = entries[i];
+
+				if (entry.isIntersecting)
+				{
+					var fn = entry.target.renderThumbFn;
+
+					if (fn != null)
+					{
+						entry.target.renderThumbFn = null;
+						this.thumbObserver.unobserve(entry.target);
+						fn();
+					}
+				}
+			}
+		}), {rootMargin: '200px 0px'});
+	}
+
+	return this.thumbObserver;
+};
+
+/**
+ * Lazily creates a shared IntersectionObserver used to defer palette
+ * content creation until the expanded palette scrolls near the
+ * viewport. Used by the virtual palettes path in deferPaletteInit.
+ */
+Sidebar.prototype.getPaletteObserver = function()
+{
+	if (this.paletteObserver == null)
+	{
+		this.paletteObserver = new IntersectionObserver(mxUtils.bind(this, function(entries)
+		{
+			for (var i = 0; i < entries.length; i++)
+			{
+				var entry = entries[i];
+
+				if (entry.isIntersecting)
+				{
+					var fn = entry.target.initPaletteFn;
+
+					if (fn != null)
+					{
+						this.paletteObserver.unobserve(entry.target);
+						fn();
+					}
+				}
+			}
+		// Viewport root like getThumbObserver — the sidebar wrapper has
+		// a zero-size rect in some themes (e.g. simple), which makes an
+		// element root never intersect
+		}), {rootMargin: '200px 0px'});
+	}
+
+	return this.paletteObserver;
+};
+
+/**
+ * Defers the given palette content creation until the content div
+ * first scrolls near the viewport. The pending initializer is kept on
+ * the content div so expand/collapse only toggles visibility — a
+ * collapsed (or hidden) palette never intersects and stays
+ * uninitialized until it is both expanded and scrolled into view.
+ */
+Sidebar.prototype.deferPaletteInit = function(content, title, onInit)
+{
+	if (content.style.minHeight == '')
+	{
+		content.style.minHeight = this.deferredPaletteHeight + 'px';
+	}
+
+	content.initPaletteFn = mxUtils.bind(this, function()
+	{
+		content.initPaletteFn = null;
+		content.style.minHeight = '';
+
+		var fo = mxClient.NO_FO;
+		mxClient.NO_FO = Editor.prototype.originalNoForeignObject;
+		onInit(content, title);
+		mxClient.NO_FO = fo;
+	});
+
+	this.getPaletteObserver().observe(content);
+};
+
+/**
+ * Refines the placeholder height of a deferred palette from its entry
+ * count so off-screen palettes occupy roughly their real height.
+ */
+Sidebar.prototype.setDeferredPaletteSize = function(content, count)
+{
+	if (content != null && content.initPaletteFn != null && count > 0)
+	{
+		// Nominal 200px content width; exact numbers don't matter, the
+		// estimate only spreads the palettes out so the observer can
+		// tell which ones are actually near the viewport
+		var perRow = Math.max(1, Math.floor(200 /
+			(this.thumbWidth + 2 * this.thumbBorder + 4)));
+		content.style.minHeight = (Math.ceil(count / perRow) *
+			(this.thumbHeight + 2 * this.thumbBorder + 6)) + 'px';
+	}
+};
+
+/**
+ * Stops observing the given DOM subtree (deferred palette content and
+ * thumb placeholders) before it is removed from the DOM, so the shared
+ * observers do not keep the detached nodes alive.
+ */
+Sidebar.prototype.unobserveElements = function(elt)
+{
+	if (elt.nodeType == mxConstants.NODETYPE_ELEMENT &&
+		(this.thumbObserver != null || this.paletteObserver != null))
+	{
+		var nodes = [elt].concat(Array.prototype.slice.call(
+			elt.querySelectorAll('.geItem, .geSidebar')));
+
+		for (var i = 0; i < nodes.length; i++)
+		{
+			if (this.thumbObserver != null && nodes[i].renderThumbFn != null)
+			{
+				nodes[i].renderThumbFn = null;
+				this.thumbObserver.unobserve(nodes[i]);
+			}
+
+			if (this.paletteObserver != null && nodes[i].initPaletteFn != null)
+			{
+				nodes[i].initPaletteFn = null;
+				this.paletteObserver.unobserve(nodes[i]);
+			}
+		}
+	}
+};
+
+/**
+ * Disconnects the shared thumb and palette observers, dropping all
+ * pending lazy-render callbacks. Used when the sidebar is rebuilt;
+ * the observers are recreated lazily on next use.
+ */
+Sidebar.prototype.disconnectObservers = function()
+{
+	if (this.thumbObserver != null)
+	{
+		this.thumbObserver.disconnect();
+		this.thumbObserver = null;
+	}
+
+	if (this.paletteObserver != null)
+	{
+		this.paletteObserver.disconnect();
+		this.paletteObserver = null;
+	}
+};
+
+/**
  * Creates a drag source for the given element.
  */
 Sidebar.prototype.disablePointerEvents = function(node)
 {
 	mxUtils.visitNodes(node, mxUtils.bind(this, function(node)
 	{
-		if (node.nodeType == mxConstants.NODETYPE_ELEMENT)
+		if (node.nodeType == mxConstants.NODETYPE_ELEMENT &&
+			node.style != null)
 		{
 			node.style.pointerEvents = 'none';
 			node.removeAttribute('pointer-events');
@@ -2981,7 +5868,7 @@ Sidebar.prototype.disablePointerEvents = function(node)
 /**
  * Creates a drag source for the given element.
  */
-Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, bounds, startEditing)
+Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, bounds, startEditing, sourceCell)
 {
 	// Checks if the cells contain any vertices
 	var ui = this.editorUi;
@@ -2991,6 +5878,12 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	var sidebar = this;
 	var count = 0;
 	var livePreview = this.livePreview;
+
+	// Previews the edge that createDropHandler inserts between the source
+	// cell and the dropped cell (hover-icon shape picker drags)
+	var edgePreview = (sourceCell != null && graph.model.isVertex(sourceCell) &&
+		cells.length == 1 && graph.model.isVertex(cells[0])) ?
+		this.createEdgePreview(graph, sourceCell, cells[0]) : null;
 
 	for (var i = 0; i < cells.length && livePreview; i++)
 	{
@@ -3016,6 +5909,10 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 		}
 	}
 	
+	// Checks if the replace source is a group
+	var groupSource = firstVertex != null &&
+		graph.model.getChildCount(cells[firstVertex]) > 0;
+
 	var dropStyleEnabled = this.isDropStyleEnabled(cells, firstVertex);
 	
 	var dragSource = mxUtils.makeDraggable(elt, graph, mxUtils.bind(this, function(graph, evt, target, x, y)
@@ -3027,9 +5924,18 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 		
 		if (cells != null && currentStyleTarget != null && activeArrow == styleTarget)
 		{
-			var tmp = graph.isCellSelected(currentStyleTarget.cell) ? graph.getSelectionCells() : [currentStyleTarget.cell];
-			graph.updateShapes((graph.model.isEdge(currentStyleTarget.cell)) ? cells[0] : cells[firstVertex], tmp, true);
-			graph.setSelectionCells(tmp);
+			// Replaces the shape of the edge label under the mouse
+			if (styleTargetLabel)
+			{
+				graph.setSelectionCell(graph.updateEdgeLabelShape(
+					cells[firstVertex], currentStyleTarget.cell));
+			}
+			else
+			{
+				var tmp = graph.isCellSelected(currentStyleTarget.cell) ? graph.getSelectionCells() : [currentStyleTarget.cell];
+				graph.updateShapes((graph.model.isEdge(currentStyleTarget.cell)) ? cells[0] : cells[firstVertex], tmp, true);
+				graph.setSelectionCells(tmp);
+			}
 		}
 		else if (cells != null && activeArrow != null && currentTargetState != null && activeArrow != styleTarget)
 		{
@@ -3067,8 +5973,9 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 			mxUtils.setOpacity(elt, 50);
 
 			var clones = graph.cloneCells(cells);
-			ui.insertHandler(clones, null, this.graph.model,
-				null, null, true, true);
+			this.graph.pasteCellStyles(graph.includeDescendants(clones),
+				graph.currentVertexStyle, graph.currentEdgeStyle,
+				null, graph.pasteEdgeStyle, graph.pasteStylesToText);
 			
 			sidebar.createThumb(clones, s * Math.max(1, bounds.width),
 				s * Math.max(1, bounds.height), elt, null, null, null,
@@ -3078,15 +5985,6 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 		});
 	}
 	
-	// Stops dragging if cancel is pressed
-	graph.addListener(mxEvent.ESCAPE, function(sender, evt)
-	{
-		if (dragSource.isActive())
-		{
-			dragSource.reset();
-		}
-	});
-
 	// Overrides mouseDown to ignore popup triggers
 	var mouseDown = dragSource.mouseDown;
 	
@@ -3123,6 +6021,8 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	var currentTargetState = null;
 	var currentStateHandle = null;
 	var currentStyleTarget = null;
+	var styleTargetBounds = null;
+	var styleTargetLabel = false;
 	var activeTarget = false;
 	
 	var arrowUp = createArrow(this.triangleUp, mxResources.get('connect'));
@@ -3156,6 +6056,14 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 		return bounds;
 	};
 	
+	// Returns the bounds of the round drop target at the given end of an edge
+	function getRoundDropBounds(pt)
+	{
+		return new mxRectangle(pt.x - sidebar.roundDrop.width / 2,
+			pt.y - sidebar.roundDrop.height / 2,
+			sidebar.roundDrop.width, sidebar.roundDrop.height);
+	};
+
 	// Hides guides and preview if target is active
 	var dsCreatePreviewElement = dragSource.createPreviewElement;
 	
@@ -3164,15 +6072,12 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 	{
 		var elt = dsCreatePreviewElement.apply(this, arguments);
 		
-		// Pass-through events required to tooltip on replace shape
-		if (mxClient.IS_SVG)
-		{
-			elt.style.pointerEvents = 'none';
-		}
-		
 		this.previewElementWidth = elt.style.width;
 		this.previewElementHeight = elt.style.height;
-		
+
+		// Pass-through events required to tooltip on replace shape
+		elt.style.pointerEvents = 'none';
+				
 		return elt;
 	};
 	
@@ -3186,6 +6091,16 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 		}
 		
 		dragEnter.apply(this, arguments);
+
+		// Uses the descendants of the drop target or the default parent as
+		// guides, like moving cells (see mxGraphHandler.getGuideContainer)
+		if (this.currentGuide != null)
+		{
+			this.currentGuide.isStateIgnored = mxUtils.bind(this, function(state)
+			{
+				return graph.isGuideStateOutside(state, this.currentDropTarget);
+			});
+		}
 	};
 	
 	var dragExit = dragSource.dragExit;
@@ -3195,7 +6110,12 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 		{
 			ui.hoverIcons.setDisplay('');
 		}
-		
+
+		if (edgePreview != null)
+		{
+			edgePreview.destroy();
+		}
+
 		dragExit.apply(this, arguments);
 	};
 	
@@ -3234,10 +6154,13 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 				
 				if (geo2 != null && !geo2.relative && graph.model.isVertex(parent) && parent != view.currentRoot)
 				{
+					// Uses the parent origin as the base of the child coordinate
+					// space since state.x/y of transparentBounds parents also
+					// contains the child-derived bounds offset
 					var pState = view.getState(parent);
-					
-					dx = pState.x;
-					dy = pState.y;
+
+					dx = view.scale * (view.translate.x + pState.origin.x);
+					dy = view.scale * (view.translate.y + pState.origin.y);
 				}
 				
 				var dx2 = geo3.x;
@@ -3269,7 +6192,8 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 				
 				this.previewElement.style.display = '';
 			}
-			else if (dragSource.currentHighlight.state != null &&
+			else if (dragSource.currentHighlight != null &&
+				dragSource.currentHighlight.state != null &&
 				graph.model.isEdge(dragSource.currentHighlight.state.cell))
 			{
 				// Centers drop cells when splitting edges
@@ -3291,12 +6215,36 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 					this.previewElement.className = '';
 				}
 			}
+
+			// Shows the connecting edge for drops that insert it: hidden
+			// while an arrow or replace target is active (dropAndConnect
+			// or style replace) and while splitting a highlighted edge
+			if (edgePreview != null)
+			{
+				if (activeArrow == null && currentStyleTarget == null &&
+					this.previewElement.style.display != 'none' &&
+					this.previewElement.style.visibility != 'hidden' &&
+					(dragSource.currentHighlight == null ||
+					dragSource.currentHighlight.state == null ||
+					!graph.model.isEdge(dragSource.currentHighlight.state.cell)))
+				{
+					edgePreview.update(parseFloat(this.previewElement.style.left),
+						parseFloat(this.previewElement.style.top),
+						parseFloat(this.previewElement.style.width),
+						parseFloat(this.previewElement.style.height));
+				}
+				else
+				{
+					edgePreview.hide();
+				}
+			}
 		}
 	};
 	
 	var startTime = new Date().getTime();
 	var timeOnTarget = 0;
 	var prev = null;
+	var lastMove = null;
 	
 	// Gets source cell style to compare shape below
 	var sourceCellStyle = this.editorUi.editor.graph.getCellStyle(cells[0]);
@@ -3335,6 +6283,7 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 		var state = graph.view.getState(cell);
 		activeArrow = null;
 		var bbox = null;
+		lastMove = {x: x, y: y, evt: evt};
 
 		// Time on target
 		if (prev != state)
@@ -3355,7 +6304,10 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 					if (activeArrow == null)
 					{
 						prev = state;
-						dragSource.getDropTarget(graph, x, y, evt);
+
+						// Uses the last mouse location since the mouse may have moved
+						// over the same cell, eg. from the end of an edge to its middle
+						dragSource.getDropTarget(graph, lastMove.x, lastMove.y, lastMove.evt);
 					}
 				}, this.dropTargetDelay + 10);
 			}
@@ -3365,58 +6317,81 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 			timeOnTarget = new Date().getTime() - startTime;
 		}
 
-		// Shift means disabled, delayed on cells with children, shows after this.dropTargetDelay, hides after 2500ms
-		if (dropStyleEnabled && (timeOnTarget < 2500) && state != null && !mxEvent.isShiftDown(evt) &&
-			// If shape is equal or target has no stroke, fill and gradient then use longer delay except for images
-			(((mxUtils.getValue(state.style, mxConstants.STYLE_SHAPE) != mxUtils.getValue(sourceCellStyle, mxConstants.STYLE_SHAPE) &&
+		// Uses the label of the edge or one of its children as the replace target
+		var labelState = (state != null && graph.model.isEdge(state.cell) &&
+			firstVertex != null && !groupSource && !graph.model.isEdge(cells[0])) ?
+			this.getEdgeLabelStateAt(state, x, y) : null;
+
+		// Shift means disabled, delayed on cells with children, shows after this.dropTargetDelay, hides after 3500ms
+		if (dropStyleEnabled && (timeOnTarget < 3500) && state != null && !mxEvent.isShiftDown(evt) &&
+			// If shape is equal or target has no stroke, fill and gradient then use longer delay except for images and groups
+			((((mxUtils.getValue(state.style, mxConstants.STYLE_SHAPE) != mxUtils.getValue(sourceCellStyle, mxConstants.STYLE_SHAPE) || groupSource) &&
 			(mxUtils.getValue(state.style, mxConstants.STYLE_STROKECOLOR, mxConstants.NONE) != mxConstants.NONE ||
 			mxUtils.getValue(state.style, mxConstants.STYLE_FILLCOLOR, mxConstants.NONE) != mxConstants.NONE ||
 			mxUtils.getValue(state.style, mxConstants.STYLE_GRADIENTCOLOR, mxConstants.NONE) != mxConstants.NONE)) ||
 			mxUtils.getValue(sourceCellStyle, mxConstants.STYLE_SHAPE) == 'image') ||
 			timeOnTarget > 1500 || graph.model.isEdge(state.cell)) && (timeOnTarget > this.dropTargetDelay) &&
-			!this.isDropStyleTargetIgnored(state) && ((graph.model.isVertex(state.cell) && firstVertex != null) ||
+			!this.isDropStyleTargetIgnored(state) && (labelState != null ||
+			(graph.model.isVertex(state.cell) && firstVertex != null) ||
 			(graph.model.isEdge(state.cell) && graph.model.isEdge(cells[0]))))
 		{
-			if (graph.isCellEditable(state.cell))
+			if (graph.isCellEditable((labelState != null) ? labelState.cell : state.cell))
 			{
-				currentStyleTarget = state;
-				var tmp = (graph.model.isEdge(state.cell)) ? graph.view.getPoint(state) :
-					new mxPoint(state.getCenterX(), state.getCenterY());
+				currentStyleTarget = (labelState != null) ? labelState : state;
+				styleTargetLabel = labelState != null;
+				var tmp = null;
+
+				// Places the icon at the center of the label
+				if (labelState != null && labelState.text != null &&
+					labelState.text.boundingBox != null)
+				{
+					tmp = new mxPoint(labelState.text.boundingBox.getCenterX(),
+						labelState.text.boundingBox.getCenterY());
+				}
+				else
+				{
+					tmp = (graph.model.isEdge(currentStyleTarget.cell)) ?
+						graph.view.getPoint(currentStyleTarget) :
+						new mxPoint(currentStyleTarget.getCenterX(),
+							currentStyleTarget.getCenterY());
+				}
+
 				tmp = new mxRectangle(tmp.x - this.refreshTarget.width / 2, tmp.y - this.refreshTarget.height / 2,
 					this.refreshTarget.width, this.refreshTarget.height);
-				
+
 				styleTarget.style.left = Math.floor(tmp.x) + 'px';
 				styleTarget.style.top = Math.floor(tmp.y) + 'px';
-				
+
 				if (styleTargetParent == null)
 				{
 					graph.container.appendChild(styleTarget);
 					styleTargetParent = styleTarget.parentNode;
 				}
-				
+
+				styleTargetBounds = tmp;
 				checkArrow(x, y, tmp, styleTarget);
 			}
 		}
-		// Does not reset on ignored edges
-		else if (currentStyleTarget == null || !mxUtils.contains(currentStyleTarget, x, y) ||
+		// Does not reset on ignored edges or inside the icon bounds
+		else if (currentStyleTarget == null || !(mxUtils.contains(currentStyleTarget, x, y) ||
+			(styleTargetBounds != null && mxUtils.contains(styleTargetBounds, x, y))) ||
 			(timeOnTarget > 1500 && !mxEvent.isShiftDown(evt)))
 		{
 			currentStyleTarget = null;
-			
+			styleTargetBounds = null;
+			styleTargetLabel = false;
+
 			if (styleTargetParent != null)
 			{
 				styleTarget.parentNode.removeChild(styleTarget);
 				styleTargetParent = null;
 			}
 		}
-		else if (currentStyleTarget != null && styleTargetParent != null)
+		else if (currentStyleTarget != null && styleTargetParent != null &&
+			styleTargetBounds != null)
 		{
 			// Sets active Arrow as side effect
-			var tmp = (graph.model.isEdge(currentStyleTarget.cell)) ? graph.view.getPoint(currentStyleTarget) :
-				new mxPoint(currentStyleTarget.getCenterX(), currentStyleTarget.getCenterY());
-			tmp = new mxRectangle(tmp.x - this.refreshTarget.width / 2, tmp.y - this.refreshTarget.height / 2,
-				this.refreshTarget.width, this.refreshTarget.height);
-			checkArrow(x, y, tmp, styleTarget);
+			checkArrow(x, y, styleTargetBounds, styleTarget);
 		}
 		
 		// Checks if inside bounds
@@ -3431,18 +6406,12 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 				
 				if (roundSource.parentNode != null)
 				{
-					var p0 = pts[0];
-					bbox.add(checkArrow(x, y, new mxRectangle(p0.x - this.roundDrop.width / 2,
-						p0.y - this.roundDrop.height / 2, this.roundDrop.width,
-						this.roundDrop.height), roundSource));
+					bbox.add(checkArrow(x, y, getRoundDropBounds(pts[0]), roundSource));
 				}
 				
 				if (roundTarget.parentNode != null)
 				{
-					var pe = pts[pts.length - 1];
-					bbox.add(checkArrow(x, y, new mxRectangle(pe.x - this.roundDrop.width / 2,
-						pe.y - this.roundDrop.height / 2, this.roundDrop.width,
-						this.roundDrop.height), roundTarget));
+					bbox.add(checkArrow(x, y, getRoundDropBounds(pts[pts.length - 1]), roundTarget));
 				}
 			}
 			else
@@ -3494,21 +6463,6 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 			{
 				bbox.grow(10);
 			}
-		}
-		
-		direction = mxConstants.DIRECTION_NORTH;
-		
-		if (activeArrow == arrowRight)
-		{
-			direction = mxConstants.DIRECTION_EAST;
-		}
-		else if (activeArrow == arrowDown || activeArrow == roundTarget)
-		{
-			direction = mxConstants.DIRECTION_SOUTH;
-		}
-		else if (activeArrow == arrowLeft)
-		{
-			direction = mxConstants.DIRECTION_WEST;
 		}
 		
 		if (currentStyleTarget != null && activeArrow == styleTarget)
@@ -3565,6 +6519,14 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 						if (graph.model.getTerminal(cell, false) == null)
 						{
 							graph.container.appendChild(roundTarget);
+						}
+
+						// Activates the end under the mouse at once since a drop
+						// before the next move would otherwise split the edge
+						if (activeArrow == null)
+						{
+							checkArrow(x, y, getRoundDropBounds(p0), roundSource);
+							checkArrow(x, y, getRoundDropBounds(pe), roundTarget);
 						}
 					}
 				}
@@ -3649,15 +6611,35 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 			}
 		}
 
+		direction = mxConstants.DIRECTION_NORTH;
+
+		if (activeArrow == arrowRight)
+		{
+			direction = mxConstants.DIRECTION_EAST;
+		}
+		else if (activeArrow == arrowDown || activeArrow == roundTarget)
+		{
+			direction = mxConstants.DIRECTION_SOUTH;
+		}
+		else if (activeArrow == arrowLeft)
+		{
+			direction = mxConstants.DIRECTION_WEST;
+		}
+
 		if (!activeTarget && currentStateHandle != null)
 		{
 			currentStateHandle.setHandlesVisible(true);
 		}
 		
-		// Handles drop target
+		// Handles drop target and looks through vertices that are no drop
+		// targets to find drop targets below (eg. containers under shapes)
 		var target = ((!mxEvent.isAltDown(evt) || mxEvent.isShiftDown(evt)) &&
 			!(currentStyleTarget != null && activeArrow == styleTarget)) ?
-			mxDragSource.prototype.getDropTarget.apply(this, arguments) : null;
+			graph.getCellAt(x, y, null, null, null, function(state)
+			{
+				return graph.model.isVertex(state.cell) &&
+					!graph.isValidDropTarget(state.cell, cells, evt);
+			}) : null;
 
 		if (target != null && (activeArrow != null ||
 			!graph.isSplitTarget(target, cells, evt)))
@@ -3668,10 +6650,21 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 		return target;
 	});
 	
+	// Sets active drag source
+	var startDrag = dragSource.startDrag;
+
+	dragSource.startDrag = function(evt)
+	{
+		sidebar.activeDragSource = this;
+		startDrag.apply(this, arguments);
+	};
+
+	// Clears active drag source
+	var stopDrag = dragSource.stopDrag;
+
 	dragSource.stopDrag = function()
 	{
-		mxDragSource.prototype.stopDrag.apply(this, arguments);
-		
+		stopDrag.apply(this, arguments);
 		var elts = [roundSource, roundTarget, styleTarget, arrowUp, arrowRight, arrowDown, arrowLeft];
 		
 		for (var i = 0; i < elts.length; i++)
@@ -3687,14 +6680,41 @@ Sidebar.prototype.createDragSource = function(elt, dropHandler, preview, cells, 
 			currentStateHandle.reset();
 		}
 		
+		sidebar.activeDragSource = null;
 		currentStateHandle = null;
 		currentTargetState = null;
 		currentStyleTarget = null;
+		styleTargetBounds = null;
+		styleTargetLabel = false;
 		styleTargetParent = null;
 		activeArrow = null;
 	};
 	
 	return dragSource;
+};
+
+/**
+ * Returns true if the given cells are a single unconnected edge and the
+ * selection consists of two connectable vertices.
+ */
+Sidebar.prototype.isConnectSelectedVertices = function(cells)
+{
+	var graph = this.editorUi.editor.graph;
+	var model = graph.model;
+
+	if (cells != null && cells.length == 1 && model.isEdge(cells[0]) &&
+		model.getTerminal(cells[0], true) == null &&
+		model.getTerminal(cells[0], false) == null &&
+		graph.getSelectionCount() == 2)
+	{
+		var sel = graph.getSelectionCells();
+
+		return sel[0] != sel[1] && model.isVertex(sel[0]) &&
+			model.isVertex(sel[1]) && graph.isCellConnectable(sel[0]) &&
+			graph.isCellConnectable(sel[1]);
+	}
+
+	return false;
 };
 
 /**
@@ -3704,30 +6724,69 @@ Sidebar.prototype.itemClicked = function(cells, ds, evt, elt)
 {
 	var graph = this.editorUi.editor.graph;
 	graph.container.focus();
+
+	// Tab continues in the diagram, not from the clicked shape (see getTabStart)
+	this.editorUi.tabStart = null;
 	
 	// Alt+Click inserts and connects
-	if (mxEvent.isAltDown(evt) && graph.getSelectionCount() == 1 &&
-		graph.model.isVertex(graph.getSelectionCell()))
+	if (mxEvent.isAltDown(evt) && graph.getSelectionCount() == 1)
 	{
+		var freeSourceEdge = null;
 		var firstVertex = null;
-		
-		for (var i = 0; i < cells.length && firstVertex == null; i++)
+
+		for (var i = 0; i < cells.length; i++)
 		{
-			if (graph.model.isVertex(cells[i]))
+			if (firstVertex == null && graph.model.isVertex(cells[i]))
 			{
 				firstVertex = i;
 			}
+			else if (freeSourceEdge == null && graph.model.isEdge(cells[i]) &&
+					graph.model.getTerminal(cells[i], true) == null)
+			{
+				freeSourceEdge = i;
+			}
+			
+			if (firstVertex != null && freeSourceEdge != null)
+			{
+				break;
+			}
 		}
 		
-		if (firstVertex != null)
+		var index = (freeSourceEdge == null) ? firstVertex : freeSourceEdge;
+		graph.setSelectionCells(this.dropAndConnect(graph.getSelectionCell(), cells,
+			(mxEvent.isMetaDown(evt) || mxEvent.isControlDown(evt)) ?
+			(mxEvent.isShiftDown(evt) ? mxConstants.DIRECTION_WEST : mxConstants.DIRECTION_NORTH) : 
+			(mxEvent.isShiftDown(evt) ? mxConstants.DIRECTION_EAST : mxConstants.DIRECTION_SOUTH),
+			index, evt, firstVertex, freeSourceEdge));
+		graph.scrollCellToVisible(graph.getSelectionCell());
+	}
+	// Click on edge connects two selected vertices (in selection order)
+	else if (!mxEvent.isAltDown(evt) && !mxEvent.isShiftDown(evt) &&
+		this.isConnectSelectedVertices(cells))
+	{
+		var sel = graph.getSelectionCells();
+		var edge = graph.cloneCell(cells[0]);
+		var geo = edge.geometry;
+
+		if (geo != null)
 		{
-			graph.setSelectionCells(this.dropAndConnect(graph.getSelectionCell(), cells,
-				(mxEvent.isMetaDown(evt) || mxEvent.isControlDown(evt)) ?
-				(mxEvent.isShiftDown(evt) ? mxConstants.DIRECTION_WEST : mxConstants.DIRECTION_NORTH) : 
-				(mxEvent.isShiftDown(evt) ? mxConstants.DIRECTION_EAST : mxConstants.DIRECTION_SOUTH),
-				firstVertex, evt));
-			graph.scrollCellToVisible(graph.getSelectionCell());
+			geo.setTerminalPoint(null, true);
+			geo.setTerminalPoint(null, false);
+			geo.points = null;
 		}
+
+		graph.model.beginUpdate();
+		try
+		{
+			edge = graph.addEdge(edge, null, sel[0], sel[1]);
+			graph.fireEvent(new mxEventObject('cellsInserted', 'cells', [edge]));
+		}
+		finally
+		{
+			graph.model.endUpdate();
+		}
+
+		graph.setSelectionCell(edge);
 	}
 	// Shift+Click updates shape
 	else if (mxEvent.isShiftDown(evt) && !graph.isSelectionEmpty())
@@ -3741,6 +6800,20 @@ Sidebar.prototype.itemClicked = function(cells, ds, evt, elt)
 		var pt = (mxEvent.isAltDown(evt)) ? graph.getFreeInsertPoint() :
 			graph.getCenterInsertPoint(graph.getBoundingBoxFromGeometry(cells, true));
 		ds.drop(graph, evt, null, pt.x, pt.y, true);
+
+		var sel = graph.getSelectionCells();
+
+		if (Editor.insertAnimations && sel.length == 1 &&
+			graph.model.isVertex(sel[0]))
+		{
+			graph.clearSelection();
+			var anims = graph.createPopAnimations(sel, true);
+
+			graph.executeAnimations(anims, function()
+			{
+				graph.setSelectionCells(sel);
+			}, 20, 10);
+		}
 	}
 };
 
@@ -3750,6 +6823,41 @@ Sidebar.prototype.itemClicked = function(cells, ds, evt, elt)
 Sidebar.prototype.addClickHandler = function(elt, ds, cells, clickFn)
 {
 	var graph = this.editorUi.editor.graph;
+
+	// Shapes are reached with the arrow keys instead of Tab, which would have to
+	// pass all of them, and insert their cells with Enter and Space like a click
+	elt.setAttribute('role', 'button');
+	elt.setAttribute('tabindex', '-1');
+	elt.setAttribute('data-sidebar-item', '1');
+
+	mxEvent.addListener(elt, 'keydown', mxUtils.bind(this, function(evt)
+	{
+		if (!mxEvent.isControlDown(evt) && !mxEvent.isMetaDown(evt))
+		{
+			if (evt.keyCode == 13 /* Enter */ || evt.keyCode == 32 /* Space */)
+			{
+				if (clickFn != null)
+				{
+					clickFn(evt);
+				}
+
+				if (!mxEvent.isConsumed(evt))
+				{
+					this.itemClicked(cells, ds, evt, elt);
+				}
+
+				mxEvent.consume(evt);
+			}
+			// Arrow keys without Shift scroll the shapes (see EditorUi.isInScrollArea)
+			else if (evt.keyCode >= 37 && evt.keyCode <= 40 && !mxEvent.isAltDown(evt) &&
+				(mxEvent.isShiftDown(evt) || !this.editorUi.isInScrollArea(elt)))
+			{
+				this.focusItemInDirection(elt, evt.keyCode);
+				mxEvent.consume(evt);
+			}
+		}
+	}));
+
 	var oldGetGraphForEvent = ds.getGraphForEvent;
 	var oldMouseDown = ds.mouseDown;
 	var oldMouseMove = ds.mouseMove;
@@ -3787,7 +6895,6 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells, clickFn)
 		if (this.dragElement != null)
 		{
 			this.dragElement.style.display = 'none';
-			mxUtils.setOpacity(elt, 50);
 		}
 	};
 	
@@ -3800,7 +6907,6 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells, clickFn)
 			this.dragElement.style.display == 'none')
 		{
 			this.dragElement.style.display = '';
-			mxUtils.setOpacity(elt, op * 100);
 		}
 		
 		oldMouseMove.apply(this, arguments);
@@ -3825,7 +6931,6 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells, clickFn)
 			}
 	
 			oldMouseUp.apply(ds, arguments);
-			mxUtils.setOpacity(elt, op * 100);
 			first = null;
 			
 			// Blocks tooltips on this element after single click
@@ -3876,14 +6981,23 @@ Sidebar.prototype.createVertexTemplate = function(style, width, height, value, t
 Sidebar.prototype.createVertexTemplateFromData = function(data, width, height, title, showLabel,
 	showTitle, allowCellsInserted, showTooltip)
 {
-	var doc = mxUtils.parseXml(Graph.decompress(data));
-	var codec = new mxCodec(doc);
+	var cells = null;
 
-	var model = new mxGraphModel();
-	codec.decode(doc.documentElement, model);
+	try
+	{
+		var doc = mxUtils.parseXml(Graph.decompress(data));
+		var codec = new mxCodec(doc);
+
+		var model = new mxGraphModel();
+		codec.decode(doc.documentElement, model);
+		
+		cells = this.graph.cloneCells(model.root.getChildAt(0).children);
+	}
+	catch (e)
+	{
+		title = mxResources.get('error') + ': ' + e.message;
+	}
 	
-	var cells = this.graph.cloneCells(model.root.getChildAt(0).children);
-
 	return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle,
 		allowCellsInserted, showTooltip);
 };
@@ -3893,12 +7007,16 @@ Sidebar.prototype.createVertexTemplateFromData = function(data, width, height, t
  */
 Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height, title, showLabel,
 	showTitle, allowCellsInserted, showTooltip, clickFn, thumbWidth, thumbHeight, icon, startEditing,
-	sourceCell)
+	sourceCell, connectEdge)
 {
 	// Use this line to convert calls to this function with lots of boilerplate code for creating cells
 	//console.trace('xml', Graph.compress(mxUtils.getXml(this.graph.encodeCells(cells))), cells);
+
+	// Edges end at the labels of new shapes with a label outside the shape
+	this.graph.addLabelPerimeters(cells);
+
 	return this.createItem(cells, title, showLabel, showTitle, width, height, allowCellsInserted,
-		showTooltip, clickFn, thumbWidth, thumbHeight, icon, startEditing, sourceCell);
+		showTooltip, clickFn, thumbWidth, thumbHeight, icon, startEditing, sourceCell, undefined, connectEdge);
 };
 
 /**
@@ -3945,26 +7063,38 @@ Sidebar.prototype.createEdgeTemplateFromCells = function(cells, width, height, t
  */
 Sidebar.prototype.addPaletteFunctions = function(id, title, expanded, fns)
 {
-	this.addPalette(id, title, expanded, mxUtils.bind(this, function(content)
+	var div = this.addPalette(id, title, expanded, mxUtils.bind(this, function(content)
 	{
 		for (var i = 0; i < fns.length; i++)
 		{
-			content.appendChild(fns[i](content));
+			var elt = fns[i](content);
+
+			if (elt != null)
+			{
+				content.appendChild(elt);
+			}
 		}
 	}));
+
+	this.setDeferredPaletteSize(div, fns.length);
+
+	return div;
 };
 
 /**
- * Adds the given palette.
+ * Adds the given palette. The optional eager flag forces the content
+ * to be created synchronously when expanded, bypassing the deferred
+ * virtualPalettes path — used for interactive palettes (user
+ * libraries, scratchpad) whose content is accessed programmatically.
  */
-Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
+Sidebar.prototype.addPalette = function(id, title, expanded, onInit, eager)
 {
 	var elt = this.createTitle(title);
 	this.appendChild(elt);
-	
+
 	var div = document.createElement('div');
 	div.className = 'geSidebar';
-	
+
 	// Disables built-in pan and zoom on touch devices
 	if (mxClient.IS_POINTER)
 	{
@@ -3973,14 +7103,22 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit)
 
 	if (expanded && this.expandLibraries)
 	{
-		onInit(div);
+		if (this.virtualPalettes && !eager)
+		{
+			this.deferPaletteInit(div, elt, onInit);
+		}
+		else
+		{
+			onInit(div, elt);
+		}
+
 		onInit = null;
 	}
 	else
 	{
 		div.style.display = 'none';
 	}
-	
+
     this.addFoldingHandler(elt, div, onInit);
 	
 	var outer = document.createElement('div');
@@ -4003,27 +7141,40 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 {
 	var initialized = false;
 
-	// Avoids mixed content warning in IE6-8
-	if (!mxClient.IS_IE || document.documentMode >= 8)
-	{
-		title.style.backgroundImage = (content.style.display == 'none') ?
-			'url(\'' + this.collapsedImage + '\')' : 'url(\'' + this.expandedImage + '\')';
-	}
-	
-	title.style.backgroundRepeat = 'no-repeat';
-	title.style.backgroundPosition = '4px 50%';
+	// The label is the control for the keyboard as the title of a library
+	// also contains its buttons (see Editor.addFocusRing)
+	var control = title.querySelector('.geTitleLabel') || title;
+
+	title.style.backgroundImage = (content.style.display == 'none') ?
+		'url(\'' + Editor.arrowRightImage + '\')' :
+		'url(\'' + Editor.arrowDownImage + '\')';
 
 	mxEvent.addListener(title, 'click', mxUtils.bind(this, function(evt)
 	{
-		if (mxEvent.getSource(evt) == title)
+		if (this._paletteDragging)
+		{
+			return;
+		}
+
+		if (title.contains(mxEvent.getSource(evt)))
 		{
 			if (content.style.display == 'none')
 			{
 				if (!initialized)
 				{
 					initialized = true;
-					
-					if (funct != null)
+
+					if (funct != null && this.virtualPalettes)
+					{
+						// Shows the palette immediately and lets the
+						// observer create the content when it scrolls
+						// into view (right away if the palette is in
+						// view, but Expand All stays cheap for the
+						// off-screen palettes)
+						this.deferPaletteInit(content, title, funct);
+						this.setContentVisible(content, true);
+					}
+					else if (funct != null)
 					{
 						// Wait cursor does not show up on Mac
 						title.style.cursor = 'wait';
@@ -4034,17 +7185,15 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 						for (var i = 0; i < title.children.length; i++)
 						{
 							children.push(title.children[i]);
-							title.removeChild(title.children[i]);
-						}			
+						}
 
-						var prev = title.innerHTML;
 						title.innerHTML = mxResources.get('loading') + '...';
-						
+
 						window.setTimeout(mxUtils.bind(this, function()
 						{
 							this.setContentVisible(content, true);
 							title.style.cursor = '';
-							title.innerHTML = prev;
+							title.innerHTML = '';
 
 							// Restores child nodes
 							for (var i = 0; i < children.length; i++)
@@ -4068,24 +7217,121 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
 					this.setContentVisible(content, true);
 				}
 				
-				title.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
+				title.style.backgroundImage = 'url(\'' + Editor.arrowDownImage + '\')';
+				control.setAttribute('aria-expanded', 'true');
 			}
 			else
 			{
-				title.style.backgroundImage = 'url(\'' + this.collapsedImage + '\')';
+				title.style.backgroundImage = 'url(\'' + Editor.arrowRightImage + '\')';
+				control.setAttribute('aria-expanded', 'false');
 				this.setContentVisible(content, false);
 			}
-			
+
 			mxEvent.consume(evt);
 		}
 	}));
-	
-	// Prevents focus
-	mxEvent.addListener(title, (mxClient.IS_POINTER) ? 'pointerdown' : 'mousedown',
-		mxUtils.bind(this, function(evt)
+
+	// Enter and Space collapse and expand the palette, Shift+Arrow Down moves
+	// into its shapes if it is expanded (see addClickHandler), and Arrow Down
+	// if the shapes do not scroll (see EditorUi.isInScrollArea). A click on
+	// the title keeps the focus where it is.
+	this.editorUi.initKeyboardButton(control);
+	control.setAttribute('aria-expanded', (content.style.display == 'none') ? 'false' : 'true');
+
+	if (control != title)
 	{
-		evt.preventDefault();
+		Editor.addFocusRing(control, title);
+		mxEvent.preventDefault(title);
+	}
+
+	mxEvent.addListener(title, 'keydown', mxUtils.bind(this, function(evt)
+	{
+		if (evt.keyCode == 40 /* Down */ && !mxEvent.isAltDown(evt) && !mxEvent.isControlDown(evt) &&
+			!mxEvent.isMetaDown(evt) && content.style.display != 'none' &&
+			(mxEvent.isShiftDown(evt) || !this.editorUi.isInScrollArea(title)) &&
+			this.focusFirstItem(content))
+		{
+			mxEvent.consume(evt);
+		}
 	}));
+};
+
+/**
+ * Returns the shapes in the given palette that the keyboard reaches (see
+ * addClickHandler).
+ */
+Sidebar.prototype.getKeyboardItems = function(content)
+{
+	var elts = content.querySelectorAll('[data-sidebar-item]');
+	var items = [];
+
+	for (var i = 0; i < elts.length; i++)
+	{
+		if (elts[i].getClientRects().length > 0)
+		{
+			items.push(elts[i]);
+		}
+	}
+
+	return items;
+};
+
+/**
+ * Moves the focus to the first shape in the given palette and returns true if
+ * the focus was moved.
+ */
+Sidebar.prototype.focusFirstItem = function(content)
+{
+	var items = this.getKeyboardItems(content);
+
+	if (items.length > 0)
+	{
+		items[0].focus();
+	}
+
+	return items.length > 0;
+};
+
+/**
+ * Moves the focus from the given shape to the nearest shape of its palette in
+ * the direction of the given arrow key or, if there is none, to the nearest
+ * control, eg. the title of the palette (see EditorUi.focusTabStopInDirection).
+ */
+Sidebar.prototype.focusItemInDirection = function(elt, keyCode)
+{
+	var ui = this.editorUi;
+	var picker = ui.shapePicker;
+	var items = this.getKeyboardItems((picker != null && mxUtils.isAncestorNode(picker, elt)) ?
+		picker : elt.parentNode);
+	var bounds = elt.getBoundingClientRect();
+	var dx = (keyCode == 37) ? -1 : ((keyCode == 39) ? 1 : 0);
+	var dy = (keyCode == 38) ? -1 : ((keyCode == 40) ? 1 : 0);
+	var next = null;
+	var min = null;
+
+	for (var i = 0; i < items.length; i++)
+	{
+		if (items[i] != elt)
+		{
+			var dist = ui.getDirectionalDistance(bounds,
+				items[i].getBoundingClientRect(), dx, dy);
+
+			if (dist != null && (min == null || dist < min))
+			{
+				next = items[i];
+				min = dist;
+			}
+		}
+	}
+
+	if (next != null)
+	{
+		next.focus();
+	}
+	else
+	{
+		ui.focusTabStopInDirection(elt, keyCode);
+	}
 };
 
 /**
@@ -4093,8 +7339,8 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct)
  */
 Sidebar.prototype.setContentVisible = function(content, visible)
 {
-	mxUtils.setPrefixedStyle(content.style, 'transition', 'all 0.2s linear');
-	mxUtils.setPrefixedStyle(content.style, 'transform-origin', 'top left');
+	var delay = Editor.transitionDelay;
+	mxUtils.setPrefixedStyle(content.style, 'transition', 'all ' + delay + 's linear');
 
 	if (visible)
 	{
@@ -4109,7 +7355,7 @@ Sidebar.prototype.setContentVisible = function(content, visible)
 			{
 				mxUtils.setPrefixedStyle(content.style, 'transform', null);
 				mxUtils.setPrefixedStyle(content.style, 'transition', null);
-			}), 200);
+			}), delay * 1000);
 		}), 0);
 	}
 	else
@@ -4121,7 +7367,7 @@ Sidebar.prototype.setContentVisible = function(content, visible)
 			mxUtils.setPrefixedStyle(content.style, 'transform', null);
 			mxUtils.setPrefixedStyle(content.style, 'transition', null);
 			content.style.display = 'none';
-		}), 200);
+		}), delay * 1000);
 	}
 };
 
@@ -4131,19 +7377,20 @@ Sidebar.prototype.setContentVisible = function(content, visible)
 Sidebar.prototype.removePalette = function(id)
 {
 	var elts = this.palettes[id];
-	
+
 	if (elts != null)
 	{
 		this.palettes[id] = null;
-		
+
 		for (var i = 0; i < elts.length; i++)
 		{
+			this.unobserveElements(elts[i]);
 			this.container.removeChild(elts[i]);
 		}
-		
+
 		return true;
 	}
-	
+
 	return false;
 };
 
@@ -4152,14 +7399,13 @@ Sidebar.prototype.removePalette = function(id)
  */
 Sidebar.prototype.addImagePalette = function(id, title, prefix, postfix, items, titles, tags)
 {
-	var showTitles = titles != null;
 	var fns = [];
 	
 	for (var i = 0; i < items.length; i++)
 	{
 		(mxUtils.bind(this, function(item, title, tmpTags)
 		{
-			if (tmpTags == null)
+			if (tmpTags == null && (prefix == null || prefix.substring(0, 17) != 'img/lib/clip_art/'))
 			{
 				var slash = item.lastIndexOf('/');
 				var dot = item.lastIndexOf('.');
@@ -4284,6 +7530,18 @@ Sidebar.prototype.destroy = function()
 		
 		this.graph.destroy();
 		this.graph = null;
+	}
+
+	if (this.escapeListener != null)
+	{
+		this.editorUi.editor.graph.removeListener(this.escapeListener);
+		this.escapeListener = null;
+	}
+	
+	if (this.refreshListener != null)
+	{
+		this.editorUi.removeListener(this.refreshListener);
+		this.refreshListener = null;
 	}
 	
 	if (this.pointerUpHandler != null)

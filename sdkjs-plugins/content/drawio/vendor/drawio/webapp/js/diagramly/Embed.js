@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function(stylesheet, stencils)
 {
 	// Callbacks:
@@ -32,28 +36,24 @@
 		// ignore
 	}
 
-	var mathJaxLoading = typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function';
+	var mathJaxLoading = typeof DrawioMathJax !== 'undefined' &&
+		typeof DrawioMathJax.typeset === 'function';
 	var mathJaxQueue = [];
 
 	function renderMath(nodes)
 	{
+		// Synchronous: the bundle contains every component and restarts
+		// without a retry (see etc/mathjax)
 		try
 		{
-			MathJax.typesetClear(nodes);
-			MathJax.typeset(nodes);
+			DrawioMathJax.typesetClear(nodes);
+			DrawioMathJax.typeset(nodes);
 		}
 		catch (e)
 		{
-			MathJax.typesetClear(nodes);
+			DrawioMathJax.typesetClear(nodes);
 
-			if (e.retry != null)
-			{
-				e.retry.then(function()
-				{
-					MathJax.typesetPromise(nodes);
-				});
-			}
-			else if (window.console != null)
+			if (window.console != null)
 			{
 				console.log('Error in MathJax: ' + e.toString());
 			}
@@ -62,12 +62,13 @@
 	
 	function loadMathJax()
 	{
-		// Uses existing configuration if MathJax already in page
 		if (!mathJaxLoading)
 		{
 			mathJaxLoading = true;
 
-			window.MathJax =
+			// The bundle's own global, as in Editor.initMath, so a MathJax
+			// that the page loads itself is never used or changed
+			window.DrawioMathJax =
 			{
 				options:
 				{
@@ -75,9 +76,8 @@
 				},
 				loader:
 				{
-					load: [(urlParams['math-output'] == 'html') ?
-						'output/chtml' : 'output/svg', 'input/tex',
-						'input/asciimath', 'ui/safe']
+					load: ['output/svg', 'input/tex', 'input/asciimath',
+						'ui/safe', '[tex]/html']
 				},
 				startup:
 				{
@@ -88,9 +88,11 @@
 				}
 			};
 
+			// Single file with everything preloaded and the TeX font as its
+			// default font, as in Editor.initMath
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
-			script.src = 'https://app.diagrams.net/math/es5/startup.js';
+			script.src = 'https://app.diagrams.net/math4/es5/drawio-mathjax.min.js';
 			document.getElementsByTagName('head')[0].appendChild(script);
 		}
 	};
@@ -98,7 +100,7 @@
 	function addMathJaxGraph(graph)
 	{
 		// Initial rendering when MathJax finished loading
-		if (typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function')
+		if (typeof DrawioMathJax !== 'undefined' && typeof DrawioMathJax.typeset === 'function')
 		{
 			renderMath([graph.container]);
 		}
@@ -222,7 +224,8 @@
 						{
 							if (name == 'page')
 							{
-								return diagrams[0].getAttribute('name') || 'Page-1';
+								return diagrams[0].getAttribute('name') ||
+									mxResources.get('pageWithNumber', [1], 'Page-1');
 							}
 							else if (name == 'pagenumber')
 							{
@@ -303,24 +306,7 @@
 							
 							graph.doResizeContainer = function(width, height)
 							{
-								// Fixes container size for different box models
-								if (mxClient.IS_IE)
-								{
-									if (document.documentMode >= 9)
-									{
-										width += 3;
-										height += 5;
-									}
-									else
-									{
-										width += 1;
-										height += 1;
-									}
-								}
-								else
-								{
-									height += 1;
-								}
+								height += 1;
 								
 								if (this.maximumContainerSize != null)
 								{

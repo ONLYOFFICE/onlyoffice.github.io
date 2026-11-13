@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addBasicPalette = function()
@@ -40,6 +44,7 @@
 			this.createVertexTemplateEntry(s2 + 'flash', w * 0.6, h, '', 'Flash', null, null, this.getTagsForStencil(gn, 'flash', dt).join(' ')),
 			this.createVertexTemplateEntry(s2 + 'half_circle', w, h * 0.5, '', 'Half Circle', null, null, this.getTagsForStencil(gn, 'half_circle', dt + ' semicircle').join(' ')),
 			this.createVertexTemplateEntry(s2 + 'heart', w, h, '', 'Heart', null, null, this.getTagsForStencil(gn, 'heart', dt).join(' ')),
+			this.createVertexTemplateEntry('shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;', w, h * 0.866, '', 'Regular Hexagon', null, null, 'hexagon regular polygon'),
 			this.createVertexTemplateEntry('html=1;shape=mxgraph.basic.isocube;isoAngle=15;', w, h, '', 'Isometric Cube', null, null, this.getTagsForStencil(gn, 'isometric cube', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'loud_callout', w, h * 0.6, '', 'Loud Callout', null, null, this.getTagsForStencil(gn, 'loud_callout', dt).join(' ')),
 			this.createVertexTemplateEntry(s2 + 'moon', w * 0.75, h, '', 'Moon', null, null, this.getTagsForStencil(gn, 'moon', dt).join(' ')),
@@ -64,7 +69,7 @@
 			this.createVertexTemplateEntry(s2 + 'diag_stripe;dx=10;', w, h * 0.6, '', 'Diagonal Stripe', null, null, this.getTagsForStencil(gn, 'diag_stripe', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'rectCallout;dx=30;dy=15;boundedLbl=1;', w, h * 0.6, '', 'Rectangular Callout', null, null, this.getTagsForStencil(gn, 'rectangular_callout', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'roundRectCallout;dx=30;dy=15;size=5;boundedLbl=1;', w, h * 0.6, '', 'Rounded Rectangular Callout', null, null, this.getTagsForStencil(gn, 'rectangular_callout', dt).join(' ')),
-			this.createVertexTemplateEntry(s2 + 'layered_rect;dx=10;outlineConnect=0;whiteSpace=wrap;', w, h * 0.6, '', 'Layered Rectangle', null, null, this.getTagsForStencil(gn, 'layered_rect', dt).join(' ')),
+			this.createVertexTemplateEntry(s + 'layered_rect;dx=10;outlineConnect=0;boundedLbl=1;', w, h * 0.6, '', 'Layered Rectangle', null, null, this.getTagsForStencil(gn, 'layered_rect', dt).join(' ')),
 			this.createVertexTemplateEntry(s2 + 'smiley', w, h, '', 'Smiley', null, null, this.getTagsForStencil(gn, 'smiley', dt).join(' ')),
 			this.createVertexTemplateEntry(s2 + 'star', w, h * 0.95, '', 'Star', null, null, this.getTagsForStencil(gn, 'star', dt).join(' ')),
 			this.createVertexTemplateEntry(s2 + 'sun', w, h, '', 'Sun', null, null, this.getTagsForStencil(gn, 'sun', dt).join(' ')),
@@ -77,7 +82,17 @@
 			this.createVertexTemplateEntry(s2 + 'arc;startAngle=0.3;endAngle=0.1;', w, h, '', 'Arc', null, null, this.getTagsForStencil(gn, 'arc', dt).join(' ')),
 			this.createVertexTemplateEntry(s2 + 'partConcEllipse;startAngle=0.25;endAngle=0.1;arcWidth=0.5;', w, h, '', 'Partial Concentric Ellipse', null, null, this.getTagsForStencil(gn, 'partConcEllipse', dt).join(' ')),
 		 	this.createVertexTemplateEntry('shape=message;html=1;html=1;outlineConnect=0;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;', 60, 40, '', 'Message', null, null, 'message mail'),
- 		 	this.createVertexTemplateEntry('shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;lid=0;', 60, 80, '', 'Cylinder Stack', null, null, 'cylinder data database stack tube')
+ 		 	this.createVertexTemplateEntry('shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;lid=0;', 60, 80, '', 'Cylinder Stack', null, null, 'cylinder data database stack tube'),
+			this.createVertexTemplateEntry('shape=mindmapBang;whiteSpace=wrap;html=1;perimeter=ellipsePerimeter;', 140, 80, '', 'Bang', null, null, 'mindmap explosion'),
+			this.createVertexTemplateEntry('shape=gitTag;tabSize=8;tabInset=4;holeSize=1;whiteSpace=wrap;html=1;', 80, 20, '', 'Tag', null, null, 'tag label git tag'),
+			this.createEdgeTemplateEntry('shape=mermaidSankeyLink;width=20;fillColor=#AF7AA1;gradientColor=#76B7B2;gradientDirection=east;opacity=50;strokeColor=none;bendable=0;html=1;', 100, 60, '', 'Sankey Link', null, 'sankey link flow band ribbon mermaid'),
+			this.createVertexTemplateEntry('shape=mermaidPerson;perimeter=mermaidPersonPerimeter;whiteSpace=wrap;html=1;', 100, 100, '', 'Person', null, null, 'person actor user human c4 mermaid'),
+			this.createVertexTemplateEntry('shape=mermaidUsecaseActor;actorType=normal;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;', 56, 72, '', 'Use Case Actor', null, null, 'actor user stick figure use case uml mermaid'),
+			this.createVertexTemplateEntry('shape=mermaidUsecaseActor;actorType=hollow;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;', 56, 72, '', 'Hollow Use Case Actor', null, null, 'actor user hollow figure use case uml mermaid'),
+			this.createVertexTemplateEntry('shape=mermaidUsecaseActor;actorType=awesome;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;', 56, 72, '', 'Awesome Use Case Actor', null, null, 'actor user silhouette bust use case uml mermaid'),
+			this.createVertexTemplateEntry('shape=smileyFace;aspect=fixed;smileyType=happy;perimeter=ellipsePerimeter;fillColor=#FFF8DC;strokeColor=#999999;strokeWidth=2;whiteSpace=wrap;html=1;', 40, 40, '', 'Smiley', null, null, 'smiley happy face emoticon emoji'),
+			this.createVertexTemplateEntry('shape=smileyFace;aspect=fixed;smileyType=neutral;perimeter=ellipsePerimeter;fillColor=#FFF8DC;strokeColor=#999999;strokeWidth=2;whiteSpace=wrap;html=1;', 40, 40, '', 'Neutral Smiley', null, null, 'smiley neutral face emoticon emoji'),
+			this.createVertexTemplateEntry('shape=smileyFace;aspect=fixed;smileyType=sad;perimeter=ellipsePerimeter;fillColor=#FFF8DC;strokeColor=#999999;strokeWidth=2;whiteSpace=wrap;html=1;', 40, 40, '', 'Sad Smiley', null, null, 'smiley sad face emoticon emoji')
 		]);
 		
 		this.setCurrentSearchEntryLibrary();

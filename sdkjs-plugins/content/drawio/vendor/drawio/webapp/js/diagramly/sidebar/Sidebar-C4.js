@@ -1,7 +1,12 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addC4Palette = function()
 	{
+		var sb = this;
 		var w = 100;
 		var h = 100;
 		var dt = 'c4 ';
@@ -88,11 +93,11 @@
 		    	bg.vertex = true;
 		    	bg.setValue(mxUtils.createXmlDocument().createElement('object'));
 		    	bg.setAttribute('placeholders', '1');
-		        bg.setAttribute('c4Type', 'Container name');
-		        bg.setAttribute('c4Container', 'Container');
+		        bg.setAttribute('c4Name', 'Container name');
+		        bg.setAttribute('c4Type', 'Container');
 		        bg.setAttribute('c4Technology', 'e.g. Oracle Database 12');
 		        bg.setAttribute('c4Description', 'Description of storage type container role/responsibility.');
-		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Type%</b></font><div>[%c4Container%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
+		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
 			    
 			   	return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Data Container');
 			}),				
@@ -103,11 +108,11 @@
 		    	bg.vertex = true;
 		    	bg.setValue(mxUtils.createXmlDocument().createElement('object'));
 		    	bg.setAttribute('placeholders', '1');
-		        bg.setAttribute('c4Type', 'Container name');
-		        bg.setAttribute('c4Container', 'Container');
+		        bg.setAttribute('c4Name', 'Container name');
+		        bg.setAttribute('c4Type', 'Container');
 		        bg.setAttribute('c4Technology', 'e.g. Micronaut, etc.');
 		        bg.setAttribute('c4Description', 'Description of microservice type container role/responsibility.');
-		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Type%</b></font><div>[%c4Container%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
+		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
 			    
 			   	return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Microservice Container');
 			}),				
@@ -118,11 +123,11 @@
 		    	bg.vertex = true;
 		    	bg.setValue(mxUtils.createXmlDocument().createElement('object'));
 		    	bg.setAttribute('placeholders', '1');
-		        bg.setAttribute('c4Type', 'Container name');
-		        bg.setAttribute('c4Container', 'Container');
+		        bg.setAttribute('c4Name', 'Container name');
+		        bg.setAttribute('c4Type', 'Container');
 		        bg.setAttribute('c4Technology', 'e.g. Apache Kafka, etc.');
 		        bg.setAttribute('c4Description', 'Description of message bus type container role/responsibility.');
-		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Type%</b></font><div>[%c4Container%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
+		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
 			    
 			   	return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Message Bus Container');
 			}),				
@@ -133,14 +138,29 @@
 		    	bg.vertex = true;
 		    	bg.setValue(mxUtils.createXmlDocument().createElement('object'));
 		    	bg.setAttribute('placeholders', '1');
-		        bg.setAttribute('c4Type', 'Container name');
-		        bg.setAttribute('c4Container', 'Container');
+		        bg.setAttribute('c4Name', 'Container name');
+		        bg.setAttribute('c4Type', 'Container');
 		        bg.setAttribute('c4Technology', 'e.g. JavaScript, Angular etc.');
 		        bg.setAttribute('c4Description', 'Description of web browser container role/responsibility.');
-		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Type%</b></font><div>[%c4Container%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
+		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
 			    
 			   	return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Web Browser Container');
-			}),				
+			}),
+			this.addEntry(dt + 'mobile device app phone container', function()
+		   	{
+			    var bg = new mxCell('',
+			    		new mxGeometry(0, 0, w * 2.4, h * 1.6), 'shape=mxgraph.c4.mobileDeviceContainer;whiteSpace=wrap;html=1;boundedLbl=1;rounded=0;labelBackgroundColor=none;fillColor=#23A2D9;strokeColor=#118ACD;strokeColor2=#0E7DAD;fontSize=12;fontColor=#ffffff;align=center;metaEdit=1;points=[[0.5,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.5,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];resizable=0;');
+		    	bg.vertex = true;
+		    	bg.setValue(mxUtils.createXmlDocument().createElement('object'));
+		    	bg.setAttribute('placeholders', '1');
+		        bg.setAttribute('c4Name', 'Container name');
+		        bg.setAttribute('c4Type', 'Container');
+		        bg.setAttribute('c4Technology', 'e.g. Swift, Kotlin etc.');
+		        bg.setAttribute('c4Description', 'Description of mobile app container role/responsibility.');
+		    	bg.setAttribute('label', '<font style="font-size: 16px"><b>%c4Name%</b></font><div>[%c4Type%:&nbsp;%c4Technology%]</div><br><div><font style="font-size: 11px"><font color="#E6E6E6">%c4Description%</font></div>');
+
+			   	return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Mobile Device Container');
+			}),
 			this.addEntry(dt + 'component', function()
 		   	{
 			    var bg = new mxCell('', 
@@ -274,7 +294,7 @@
 			   	return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Components diagram title');
 			}),
 			this.addDataEntry(dt + 'legend', 180, 210, 'Legend',
-				'7VnbbuIwEP2avK5yBx5LoN2HrrQq+wOGDIm1jh05bgP9+h07DmEJdGm1QimFi5Q5Hjv2nOMjxXGCpNg8SFLmP0QKzAnmTpBIIVRzVWwSYMzxXZo6wczxfRf/jn9/otUzrW5JJHB1Tge/6fBC2DM0yCNkwNMGrtSWWbjKSakvFVlqaFopItWCvmoscBFYCa4I5SAR8EzMGCkratJnJiOnLH0kW/Gs2oHaaLrG3nY0L8aYMJpxDBisdfMLSEVXhN1ZWIlSd6KMJYIJfUsueDMtKX7DAagHbyHHD8KZ/rY3tUvUU65KsqI8ezT3nMUdYhcgoaKvpFuQrR3ODTYn628gW/wHEAUoucWUmqYqtxnjhiM3B5rltpvvWZBUDZDt+nZ04oVl9Di7QY/dt3l9EjUuKxeSvmo2mV3nPtcmrmnBCIfvQNIDaCrS7a7XPhWU5yCp5tJwZzIacs3lUiglirbOtgzuURmlUpS/iMygTTkig1JQrkzhoin+sJSJ+y1yIlxxgrHXxdHMpEsUCMcZo4L1sEAqVUN1qEz/XNL946RvLS2W2n9pIPgPEgh7EvgJshL8pBBwGYoS9gQrRXhm9nquCma3SJ1TBQvcFTq1Rttqdj7X2R1Fp6gXWLY10yKb5TRNgR+wh5vTm4fuKHy3TAzhIOcv0PDuHWHuwFMOXOHefBDPJEkpdG2ts/xlDp7bQU92HuG56gg+ZglvycGO1rH2/uEIwwJyonAPP/O06olsN9OzdBfdrGeI1hNf0HringQWYq1qnCuii22loBiqCwVe7N/dX7cLRV/AhUY3FxqiC00u6ELjngSS3ZPKQN0n8omfjq/bfUZfwH0mN/cZovt4/gXtp32M/8t/ihLrhJMdqP+M0iWs/ev2n8kX8B/PuxnQIA0ouqQB9Y945xujMp017MOgeBmHo9F1G5H3wQPiz+VEt5PoYTrR+JJO1D+L3nOiT3M2NF6Ow0l85aZ0hUfUGHbvVZv0/deufwA=')
+				'7ZnRcqIwFIafJrc7kAjqZQHtXnRnduq+QCpHyGxImJCK9ul3EoJY0dZ2dhxq1RtychKS/D/fDAdE4mJzr2iZ/5IpcERmiMRKSt1cFZsYOEfYYykiCcLYQxgjPD/R69ter6QKhD5nAG4GrCl/hibyABmItAlXestduMppaS41fTKhqNJU6QV7MTHiIRItpdCUCVCIJL5tc07Litn0xGbkjKcPdCufdTtR24pWUrSz+SEiEeUsE4gkHFamew1KsyXldy6sZWkGMc5jyaW5pZCiWZaSf+EgaCZvQwiTUWL+7U3dFs2Sq5Iumcge7D2TsIu4DSio2AvtNuTODpSGzcnztyF3+PcgC9Bqi7BXs1TnLmPSaOTlwLLcDcO+C9KqCWS7sZ2cCM+dosfVJT1139b1UdaIRLlU7MWoyd0+97W27ZoVnAr4CTQ9CEUy3e5G7UvBRA6KGS2tdjajEddePkmtZdGeszsG76iNUiXLP1Rl0KYcsUEpmdD24IIIBZGHcOz9CFCQIByjIPK7dpDYdKVjKSqtKLO6Aa10DdWhM/G5ouPjom+dLE7a9zxA/oMFRj0L/AZVSXHSCCVVmlH+CEtNRWaf9VwX3D0idc40LEq6NKm1omXz5AuT3Ul0Snq5BrXixmRJztIUxIF6CBNvQubj4MM2sYKDmq2h0d0/otwBUw6oMLc/RKJM0ZRB19eS5RUcfK8LPbp1jM51B/kcEt6yg5utU+3j01GuQQmqIZLPIq16Jtut9CzfBTf0DBE94QXRE/YssJArXVNl3LnYVhqKoVLI90I/8q6bQsE3oND4RqEhUmh6QQpNehaId28qA6UPJnc4mV43fcbfgD7TG32GSB8fXxA/7Wv8K/4UpRRmsQPlT0ii2RxfN3+m34A/vn8D0CABFFwSQP0S72xjXWayhl0MCuNwNB5fN4j8TxaIvxaJbpXoYZJockkS9WvReyT6MrWhSTwZTcMrh9IVlqgRnnffVZv0/c+u/wA=')
 		]);
 		
 		this.setCurrentSearchEntryLibrary();

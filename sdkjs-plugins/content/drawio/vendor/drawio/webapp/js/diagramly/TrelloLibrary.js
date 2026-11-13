@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2006-2017, JGraph Ltd
- * Copyright (c) 2006-2017, Gaudenz Alder
+ * Copyright (c) 2006-2017, JGraph Holdings Ltd
+ * Copyright (c) 2006-2017, draw.io AG
  */
 TrelloLibrary = function(ui, data, meta)
 {
@@ -19,8 +19,7 @@ TrelloLibrary.prototype.doSave = function(title, success, error)
 };
 
 /**
- * Returns the location as a new object.
- * @type mx.Point
+ * Does nothing since libraries are not opened as diagrams.
  */
 TrelloLibrary.prototype.open = function()
 {

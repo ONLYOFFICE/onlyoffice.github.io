@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2006-2017, JGraph Ltd
- * Copyright (c) 2006-2017, Gaudenz Alder
+ * Copyright (c) 2006-2017, JGraph Holdings Ltd
+ * Copyright (c) 2006-2017, draw.io AG
  */
 TrelloClient = function(editorUi)
 {
@@ -17,6 +17,16 @@ TrelloClient.prototype.key = (window.location.hostname == 'test.draw.io') ?
 TrelloClient.prototype.baseUrl = 'https://api.trello.com/1/';
 
 TrelloClient.prototype.SEPARATOR = '|$|';
+
+/**
+ * Returns true if the given attachment URL is a Trello download URL that may
+ * receive the user's token. Link attachments can point to any host. Uses a
+ * prefix check since URL parsers disagree on https://trello.com\@host/.
+ */
+TrelloClient.prototype.isTrelloUrl = function(url)
+{
+	return typeof url === 'string' && /^https:\/\/(api\.)?trello\.com\//.test(url);
+};
 
 /**
  * Maximum attachment size of Trello.
@@ -122,15 +132,15 @@ TrelloClient.prototype.getFile = function(id, success, error, denyConvert, asLib
 		    if (acceptResponse)
 		    {
 				var binary = /\.png$/i.test(meta.name);
-				var headers = {
+				var headers = (this.isTrelloUrl(meta.url)) ? {
 					Authorization: 'OAuth oauth_consumer_key="' + Trello.key() + '", oauth_token="' + Trello.token() + '"'
-				};
+				} : null;
 				
 				// TODO Trello doesn't allow CORS requests to load attachments. Confirm that
 				// and make sure that only a proxy technique can work!
 				// Handles .vsdx, Gliffy and PNG+XML files by creating a temporary file
 				if (/\.v(dx|sdx?)$/i.test(meta.name) || /\.gliffy$/i.test(meta.name) ||
-					(!this.ui.useCanvasForExport && binary))
+					(!Editor.useCanvasForExport && binary))
 				{
 					this.ui.convertFile(PROXY_URL + '?url=' + encodeURIComponent(meta.url), meta.name, meta.mimeType,
 						this.extension, success, error, null, headers);
@@ -251,7 +261,7 @@ TrelloClient.prototype.insertFile = function(filename, data, success, error, asL
 			}), error);
 		});
 						
-		if (this.ui.useCanvasForExport && /(\.png)$/i.test(filename))
+		if (Editor.useCanvasForExport && /(\.png)$/i.test(filename))
 		{
 			this.ui.getEmbeddedPng(mxUtils.bind(this, function(pngData)
 			{
@@ -300,7 +310,7 @@ TrelloClient.prototype.saveFile = function(file, success, error)
 	
 	var callback = mxUtils.bind(this, function()
 	{
-		if (this.ui.useCanvasForExport && /(\.png)$/i.test(file.meta.name))
+		if (Editor.useCanvasForExport && /(\.png)$/i.test(file.meta.name))
 		{
 			this.ui.getEmbeddedPng(mxUtils.bind(this, function(data)
 			{
@@ -448,7 +458,6 @@ TrelloClient.prototype.showTrelloDialog = function(showFiles, fn)
 
 	var hd = document.createElement('h3');
 	mxUtils.write(hd, showFiles? mxResources.get('selectFile') : mxResources.get('selectCard'));
-	hd.style.cssText = 'width:100%;text-align:center;margin-top:0px;margin-bottom:12px';
 	content.appendChild(hd);
 
 	var div = document.createElement('div');
@@ -456,6 +465,7 @@ TrelloClient.prototype.showTrelloDialog = function(showFiles, fn)
 	div.style.overflow = 'auto';
 	div.style.height = '194px';
 	content.appendChild(div);
+	Editor.keepFocusInList(div);
 
 	var dlg = new CustomDialog(this.ui, content);
 	this.ui.showDialog(dlg.container, 340, 290, true, true);
@@ -475,7 +485,9 @@ TrelloClient.prototype.showTrelloDialog = function(showFiles, fn)
 		
 		if (preview != null)
 		{
+			// The name of the attachment follows the preview
 			var img = document.createElement('img');
+			img.setAttribute('alt', '');
 			img.src = preview.url;
 			img.width = preview.width;
 			img.height= preview.height;
@@ -485,6 +497,7 @@ TrelloClient.prototype.showTrelloDialog = function(showFiles, fn)
 		
 		mxUtils.write(link,  label);
 		mxEvent.addListener(link, 'click', fn);
+		Editor.initKeyboardButton(link);
 		
 		div.appendChild(link);
 		
@@ -583,6 +596,7 @@ TrelloClient.prototype.showTrelloDialog = function(showFiles, fn)
 		nextPageDiv.style.display = 'block';
 		nextPageDiv.style.cursor = 'pointer';
 		mxUtils.write(nextPageDiv, mxResources.get('more') + '...');
+		Editor.initKeyboardButton(nextPageDiv);
 		
 		var nextPage = mxUtils.bind(this, function()
 		{

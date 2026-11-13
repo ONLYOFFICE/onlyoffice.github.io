@@ -6,14 +6,21 @@
 	<!-- CSS for print output is needed for using current window -->
 	<style type="text/css">
 	  	.MathJax svg { shape-rendering: crispEdges; }
-	  	table.mxPageSelector { display: none; }
-	  	hr.mxPageBreak { display: none; }
+	</style>
+	<style type="text/css">
+		@media print {
+			body > div {
+				page-break-inside: avoid;
+				page-break-after: always;
+			}
+		}
 	</style>
 	<link rel="stylesheet" href="mxgraph/css/common.css" charset="UTF-8" type="text/css">
 	<link rel="stylesheet" href="export-fonts.css" charset="UTF-8" type="text/css">
     <script src="js/app.min.js"></script>
+	<script src="js/extensions.min.js"></script>
 	<script src="js/export.js"></script>
 </head>
-<body style="margin:0px;overflow:hidden;">
+<body style="margin: 0px; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
 </body>
 </html>

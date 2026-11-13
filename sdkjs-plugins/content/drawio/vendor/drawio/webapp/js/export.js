@@ -1,8 +1,43 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 var mxIsElectron = navigator.userAgent != null &&
 	navigator.userAgent.toLowerCase().indexOf(' electron/') > -1 && 
 	navigator.userAgent.indexOf(' draw.io/') > -1;
 var GOOGLE_APPS_MAX_AREA = 25000000;
-var GOOGLE_SHEET_MAX_AREA = 1048576; //1024x1024
+var GOOGLE_SHEET_MAX_AREA = 1000000; // The maximum number of pixels is 1 million.
+// Maximum number of pages in the print output so that extreme cell
+// coordinates cannot block the renderer with an excessive number of pages
+var MAX_PRINT_PAGE_COUNT = 1000;
+// Time in ms that the export waits for the traces of the outlines of images
+// (see Graph.waitForOutlines)
+var OUTLINE_TIMEOUT = 10000;
+var shadowBlocker = null;
+
+/**
+ * Adds shadow blocker style.
+ */
+function addShadowBlocker()
+{
+	if (shadowBlocker == null)
+	{
+		shadowBlocker = document.createElement('style');
+		shadowBlocker.setAttribute('type', 'text/css');
+		shadowBlocker.innerHTML = '@media print {\n' +
+			'    g[style*="filter: drop-shadow("] {\n' +
+			'        filter: none !important;\n' +
+			'    }\n' +
+			'}\n';
+		
+		var head = document.getElementsByTagName('head')[0];
+		
+		if (head != null)
+		{
+			head.appendChild(shadowBlocker);
+		}
+	}
+}
 
 /**
  * Adds meta tag to the page.
@@ -55,7 +90,9 @@ function mxscript(src, onLoad)
 
 if (mxIsElectron)
 {
-	mxmeta('default-src \'self\'; script-src \'self\'; connect-src \'self\' https://*.draw.io https://*.diagrams.net https://fonts.googleapis.com https://fonts.gstatic.com; img-src * data:; media-src *; font-src *; frame-src \'none\'; style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; base-uri \'none\';child-src \'self\';object-src \'none\';', 'Content-Security-Policy');
+	mxmeta('default-src \'self\'; script-src \'self\'; connect-src \'self\' https://*.draw.io https://*.diagrams.net https://fonts.googleapis.com ' +
+		'https://fonts.gstatic.com; img-src * data:; media-src *; font-src * data:; frame-src \'none\'; style-src \'self\' \'unsafe-inline\' ' +
+		'https://fonts.googleapis.com; base-uri \'none\';child-src \'self\';object-src \'none\';', 'Content-Security-Policy');
 	
 	// We can't use eval in Electron because of CSP, so load all shapes and disable eval
 	mxscript('js/stencils.min.js', function()
@@ -64,7 +101,15 @@ if (mxIsElectron)
 		{
 			if (window.pendingRequest != null)
 			{
-				render(window.pendingRequest);
+				try
+				{
+					render(window.pendingRequest);
+				}
+				catch(e)
+				{
+					console.log(e);
+					electron.sendMessage('render-finished', null);
+				}
 			}
 
 			window.shapesLoaded = true;
@@ -74,11 +119,163 @@ if (mxIsElectron)
 	// Disables eval for JS (uses shapes-14-6-5.min.js)
 	mxStencilRegistry.allowEval = false;
 }
-//TODO Add support for loading math from a local folder
-Editor.initMath((remoteMath? 'https://app.diagrams.net/' : '') + 'math/es5/startup.js');
+
+// TODO Add support for loading math from a local folder
+// Same single file as the default in Editor.initMath
+Editor.initMath((remoteMath? 'https://app.diagrams.net/' : '') + 'math4/es5/drawio-mathjax.min.js');
+
+// Marks individual font and CSS URLs as preloaded
+var fontPreload = {};
+var cssPreload = {};
+
+// Returns true if any page in the given diagram XML enables MathJax
+// typesetting (math="1"), decompressing diagram nodes as needed. Used to
+// decide whether the export must wait for MathJax to load. [jgraph/drawio#5564]
+function exportUsesMath(xml)
+{
+	try
+	{
+		var node = mxUtils.parseXml(xml).documentElement;
+
+		if (node.nodeName == 'mxfile')
+		{
+			var diagrams = node.getElementsByTagName('diagram');
+
+			for (var i = 0; i < diagrams.length; i++)
+			{
+				var model = Editor.parseDiagramNode(diagrams[i]);
+
+				if (model != null && model.getAttribute('math') == '1')
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		return node.getAttribute('math') == '1';
+	}
+	catch (e)
+	{
+		return false;
+	}
+};
+
+/**
+ * Returns the model nodes of the pages of the given mxfile or model node (see
+ * Editor.extractGraphModel) that have shapes with perimeter=outlinePerimeter
+ * (see Graph.isOutlinePerimeter), or null.
+ */
+function getOutlinePages(node)
+{
+	var pages = [];
+
+	try
+	{
+		var models = [node];
+
+		if (node.nodeName == 'mxfile')
+		{
+			var diagrams = node.getElementsByTagName('diagram');
+			models = [];
+
+			for (var i = 0; i < diagrams.length; i++)
+			{
+				models.push(Editor.parseDiagramNode(diagrams[i]));
+			}
+		}
+
+		for (var i = 0; i < models.length; i++)
+		{
+			var cells = (models[i] != null) ? models[i].getElementsByTagName('mxCell') : [];
+
+			for (var j = 0; j < cells.length; j++)
+			{
+				if (/(^|;)\s*perimeter=outlinePerimeter\s*(;|$)/.test(cells[j].getAttribute('style') || ''))
+				{
+					pages.push(models[i]);
+					break;
+				}
+			}
+		}
+	}
+	catch (e)
+	{
+		// Renders without waiting for outlines
+	}
+
+	return (pages.length > 0) ? pages : null;
+};
+
+/**
+ * Returns the given XML of a converted Mermaid diagram as a file whose page
+ * has the text alternative of the diagram as its Alt Text (see
+ * EditorUi.createMermaidPageXml), which the SVG export writes as its title.
+ * Checks the function as this file can be newer than app.min.js after a
+ * release.
+ */
+function getMermaidPageXml(editorUi, xml)
+{
+	return (typeof editorUi.createMermaidPageXml === 'function') ?
+		editorUi.createMermaidPageXml(xml) : xml;
+};
 
 function render(data)
 {
+	// Fixed-theme exports resolve adaptive light-dark() colors to the
+	// requested side while rendering, as EditorUi.exportSvg does in the app.
+	// This page is what PNG/JPEG/PDF exports capture, so this is also what
+	// applies the theme to those formats [jgraph/drawio-desktop#2295]
+	if (data.theme == 'dark' || data.theme == 'light')
+	{
+		mxUtils.lightDarkColorSupported = false;
+		mxUtils.preferDarkColor = data.theme == 'dark';
+	}
+
+	// Math typesetting must be available before the diagram is measured below,
+	// so the export crop follows the rendered math size rather than the raw
+	// formula source. MathJax is only loaded when needed (see Editor.initMath),
+	// so when the diagram uses math, load it and wait for it before rendering.
+	// Typesetting is synchronous once it has loaded (see etc/mathjax).
+	// [jgraph/drawio#5564]
+	if (Editor.mathOutputSize && data.xml != null && !data.mathChecked &&
+		exportUsesMath(data.xml))
+	{
+		// Computes exportUsesMath only once, then polls for MathJax readiness.
+		data.mathChecked = true;
+		var mathWaitStart = Date.now();
+
+		if (typeof Editor.loadMath === 'function')
+		{
+			Editor.loadMath();
+		}
+
+		var waitForMath = function()
+		{
+			// Falls back to rendering without waiting after a timeout so a
+			// missing or broken MathJax never blocks the export indefinitely.
+			if ((typeof DrawioMathJax !== 'undefined' && typeof DrawioMathJax.typeset === 'function') ||
+				Date.now() - mathWaitStart > 10000)
+			{
+				render(data);
+			}
+			else
+			{
+				window.setTimeout(waitForMath, 50);
+			}
+		};
+
+		waitForMath();
+
+		return;
+	}
+
+	if (data.shadows == '0')
+	{
+		addShadowBlocker();
+	}
+	
 	if (data.csv != null)
 	{
 		// CSV loads orgChart asynchronously and needs mxscript
@@ -93,11 +290,11 @@ function render(data)
 			{
 				s.setAttribute('id', id);
 			}
-			
+
 			if (onLoad != null)
 			{
 				var r = false;
-			
+
 				s.onload = s.onreadystatechange = function()
 				{
 					if (!r && (!this.readyState || this.readyState == 'complete'))
@@ -107,9 +304,9 @@ function render(data)
 					}
 				};
 			}
-			
+
 			var t = document.getElementsByTagName('script')[0];
-			
+
 			if (t != null)
 			{
 				t.parentNode.insertBefore(s, t);
@@ -117,12 +314,103 @@ function render(data)
 		};
 
 		var editorUi = new HeadlessEditorUi();
-		
+
 		editorUi.importCsv(data.csv, function()
 		{
 			data.xml = mxUtils.getXml(editorUi.editor.getGraphXml());
 			delete data.csv;
 			render(data);
+		});
+
+		return;
+	}
+
+	if (data.mermaid != null)
+	{
+		// Parse directly — the Mermaid and ELK bundles are loaded via the
+		// export3.html script tags. parseMermaidDiagram runs the ElkLayout
+		// post-pass for flowchart-elk diagrams, so CLI export matches what
+		// opening the file in the editor produces. Skip if the legacyMermaid
+		// flag is set (for reference/comparison testing).
+		if (!data.legacyMermaid && EditorUi.isMermaidSupported())
+		{
+			var editorUi = new HeadlessEditorUi();
+
+			editorUi.parseMermaidDiagram(data.mermaid, null, function(xml)
+			{
+				data.xml = getMermaidPageXml(editorUi, xml);
+				delete data.mermaid;
+				render(data);
+			}, function(e)
+			{
+				electron.sendMessage('export-error',
+					'Error parsing Mermaid: ' + (e.message || e));
+			});
+
+			return;
+		}
+
+		// Mermaid needs mxscript for loading extensions
+		window.mxscript = function (src, onLoad, id)
+		{
+			var s = document.createElement('script');
+			s.setAttribute('type', 'text/javascript');
+			s.setAttribute('src', src);
+
+			if (id != null)
+			{
+				s.setAttribute('id', id);
+			}
+
+			if (onLoad != null)
+			{
+				var r = false;
+
+				s.onload = s.onreadystatechange = function()
+				{
+					if (!r && (!this.readyState || this.readyState == 'complete'))
+					{
+						r = true;
+						onLoad();
+					}
+				};
+			}
+
+			var t = document.getElementsByTagName('script')[0];
+
+			if (t != null)
+			{
+				t.parentNode.insertBefore(s, t);
+			}
+		};
+
+		var editorUi = new HeadlessEditorUi();
+
+		// Load mermaid extensions and use legacy parser
+		editorUi.loadMermaid(function()
+		{
+			try
+			{
+				editorUi.parseMermaidDiagram(data.mermaid, null, function(xml)
+				{
+					data.xml = getMermaidPageXml(editorUi, xml);
+					delete data.mermaid;
+					render(data);
+				}, function(e)
+				{
+					electron.sendMessage('export-error',
+						'Error parsing Mermaid: ' + (e.message || e));
+				});
+			}
+			catch (e)
+			{
+				electron.sendMessage('export-error',
+					'Error parsing Mermaid: ' + (e.message || e));
+			}
+		}, function(e)
+		{
+			electron.sendMessage('export-error',
+				'Error loading Mermaid: ' + (e.message || e));
 		});
 
 		return;
@@ -144,10 +432,134 @@ function render(data)
 	document.body.appendChild(container);
 	
 	var graph = new Graph(container);
+	graph.enableFlowAnimation = true;
+
+	// Tags the rendered nodes of cells with tooltips and notes so their page
+	// positions can be measured in collectAnnotRects for PDF annotations
+	var collectTooltips = data.format == 'pdf' && !data.print;
+	var collectNotes = collectTooltips && data.icons == '1';
+
+	if (collectTooltips)
+	{
+		var cellRendererRedraw = graph.cellRenderer.redraw;
+
+		graph.cellRenderer.redraw = function(state)
+		{
+			cellRendererRedraw.apply(this, arguments);
+
+			if (state != null && state.cell != null && state.shape != null &&
+				state.shape.node != null)
+			{
+				if (graph.convertValueToTooltip != null)
+				{
+					var tip = Editor.convertHtmlToText(
+						graph.convertValueToTooltip(state.cell));
+
+					if (tip != null && tip != '')
+					{
+						state.shape.node.setAttribute('data-tooltip', tip);
+					}
+				}
+
+				if (collectNotes)
+				{
+					// Reads the attribute directly if the note accessors are
+					// missing, as this render window uses app.min.js which
+					// can be older than this file in development
+					var rawNote = (graph.getNoteForCell != null) ?
+						graph.getNoteForCell(state.cell) :
+						((state.cell.value != null && mxUtils.isNode(state.cell.value)) ?
+							state.cell.value.getAttribute('note') : null);
+
+					if (rawNote != null && rawNote != '')
+					{
+						var note = Editor.convertHtmlToText(
+							(graph.convertValueToNote != null) ?
+								graph.convertValueToNote(state.cell) : rawNote);
+
+						if (note != null && note != '')
+						{
+							state.shape.node.setAttribute('data-note', note);
+						}
+					}
+				}
+			}
+		};
+	}
+
+	// Returns the rects of the nodes tagged above in CSS pixels relative to
+	// their output page for the annotations in the PDF output. Page divs
+	// are the only children of the body in paged output except for the
+	// hidden LoadingComplete marker (the graph container is removed by
+	// mxPrintPreview).
+	function collectAnnotRects()
+	{
+		var result = [];
+
+		if (collectTooltips && graph.pdfPageVisible)
+		{
+			var page = 0;
+
+			for (var child = document.body.firstChild; child != null; child = child.nextSibling)
+			{
+				if (child.nodeName != null && child.nodeName.toLowerCase() == 'div' &&
+					child.id != 'LoadingComplete')
+				{
+					page++;
+					var pageRect = child.getBoundingClientRect();
+
+					if (pageRect.width > 0 && pageRect.height > 0)
+					{
+						var nodes = child.querySelectorAll('[data-tooltip], [data-note]');
+
+						for (var i = 0; i < nodes.length; i++)
+						{
+							var rect = nodes[i].getBoundingClientRect();
+							var x0 = Math.max(0, rect.left - pageRect.left);
+							var y0 = Math.max(0, rect.top - pageRect.top);
+							var x1 = Math.min(pageRect.width, rect.right - pageRect.left);
+							var y1 = Math.min(pageRect.height, rect.bottom - pageRect.top);
+
+							if (x1 > x0 && y1 > y0)
+							{
+								var types = ['tooltip', 'note'];
+
+								for (var j = 0; j < types.length; j++)
+								{
+									var tip = nodes[i].getAttribute('data-' + types[j]);
+
+									if (tip != null && tip != '')
+									{
+										result.push({type: types[j], page: page,
+											x: x0, y: y0, w: x1 - x0, h: y1 - y0,
+											pw: pageRect.width, ph: pageRect.height,
+											tip: tip});
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+	
 	data.border = parseInt(data.border) || 0;
 	data.w = parseFloat(data.w) || 0;
 	data.h = parseFloat(data.h) || 0;
 	data.scale = parseFloat(data.scale) || 1;
+
+	// Keeps the scale of the request separate as renderPage overwrites
+	// data.scale with the computed scale of each rendered page, so reading
+	// it back as the input scale compounded across the pages of a multi-page
+	// PDF export with fit page enabled and shrunk each page by the fit
+	// scale of the previous one [jgraph/drawio-desktop#2490]
+	if (data.reqScale == null)
+	{
+		data.reqScale = data.scale;
+	}
 	
 	var extras = null;
 	
@@ -168,7 +580,7 @@ function render(data)
 	}
 
 	var gridColor = null;
-	
+
 	if (extras != null && extras.grid != null)
 	{
 		graph.gridSize = extras.grid.size;
@@ -180,6 +592,16 @@ function render(data)
 	{
 		Graph.diagramLanguage = extras.diagramLanguage;
 		Graph.translateDiagram = true;
+	}
+
+	if (data.fileTitle != null)
+	{
+		document.title = data.fileTitle;
+	}
+	else if (extras != null && extras.globalVars != null &&
+		extras.globalVars.filename != null)
+	{
+		document.title = extras.globalVars.filename;
 	}
 	
 	// Overrides graph bounds to include background images
@@ -204,18 +626,269 @@ function render(data)
 		return bounds;
 	};
 	
-	//PNG+XML format
+	// PNG+XML format
 	if (data.xml.substring(0, 5) == 'iVBOR' || (extras != null && extras.isPng))
 	{
 		data.xml = Editor.extractGraphModelFromPng('data:image/png;base64,' + data.xml);
 	}
+
+	// PDF+XML format
+	if (data.xml.substring(0, 5) == 'JVBER' || (extras != null && extras.isPdf))
+	{
+		data.xml = Editor.extractGraphModelFromPdf('data:application/pdf;base64,' + data.xml);
+	}
 	
-	//IE11 sends incorrect xml
+	// IE11 sends incorrect xml
 	if (data.xml.substring(0, 11) == '<#document>')
 	{
 		data.xml = data.xml.substring(11, data.xml.length - 12);
 	}
-	
+
+	// --layout: run a layout on the diagram before rendering, so CLI export
+	// (and xml output) reflects the same auto-layout the editor applies on open.
+	// data.layout is either a MENU_PRESETS preset name (verticalFlow, ...) or
+	// the custom-layout-dialog JSON (an array of {layout, config}, starting with
+	// '[') — the latter runs a sequence and carries per-layout options. Lays out
+	// the first page (matching the editor's active-page behavior), preserves the
+	// remaining pages, then re-enters render() with the laid-out XML. Runs after
+	// PNG/PDF extraction so data.xml is real XML; the isPng/isPdf flags are
+	// cleared so the re-entry doesn't re-extract.
+	// --normalize shares this path: both work on the decoded model of the first
+	// page and hand the re-encoded XML back to render(). Normalization runs
+	// first, so a layout sees edges filed at their nearest common ancestor.
+	if (data.layout != null || data.normalize)
+	{
+		var layoutIsJson = false;
+		var layoutList = null;
+		var elkPreset = null;
+
+		if (data.layout != null)
+		{
+			if (typeof ElkLayout === 'undefined')
+			{
+				electron.sendMessage('export-error', 'Layout engine not available');
+				return graph;
+			}
+
+			layoutIsJson = mxUtils.trim(data.layout).charAt(0) == '[';
+
+			if (layoutIsJson)
+			{
+				try
+				{
+					layoutList = JSON.parse(data.layout);
+				}
+				catch (e)
+				{
+					electron.sendMessage('export-error', 'Invalid layout JSON: ' + (e.message || e));
+					return graph;
+				}
+			}
+			else if (typeof LibavoidRouting !== 'undefined' &&
+				mxUtils.trim(data.layout) === LibavoidRouting.LAYOUT_NAME)
+			{
+				// Bare libavoid shorthand -> JSON list, routed via createLayouts below.
+				layoutList = [{layout: LibavoidRouting.LAYOUT_NAME}];
+				layoutIsJson = true;
+			}
+			else
+			{
+				elkPreset = (ElkLayout.MENU_PRESETS != null) ? ElkLayout.MENU_PRESETS[data.layout] : null;
+
+				if (elkPreset == null)
+				{
+					electron.sendMessage('export-error', 'Unknown layout: ' + data.layout);
+					return graph;
+				}
+			}
+		}
+
+		var srcDoc = mxUtils.parseXml(data.xml);
+		var isMxfile = srcDoc.documentElement.nodeName == 'mxfile';
+		// allowMxFile must be false here: the layout path decodes modelNode
+		// directly via mxCodec, which requires the inner mxGraphModel. Passing
+		// true returns the mxfile wrapper, which decodes to an empty model and
+		// drops every cell from the laid-out output.
+		var modelNode = Editor.extractGraphModel(srcDoc.documentElement, false);
+
+		if (modelNode == null)
+		{
+			// Nothing to work on (e.g. empty file); render as-is.
+			delete data.layout;
+			delete data.normalize;
+			render(data);
+			return graph;
+		}
+
+		var layoutContainer = document.createElement('div');
+		layoutContainer.style.cssText = 'position:absolute;left:-99999px;top:-99999px;' +
+			'width:1200px;height:800px;visibility:hidden;';
+		document.body.appendChild(layoutContainer);
+
+		var layoutGraph = new Graph(layoutContainer);
+		layoutGraph.foldingEnabled = false;
+		layoutGraph.setEnabled(false);
+
+		var layoutCleanup = function()
+		{
+			try { layoutGraph.destroy(); } catch (e) { /* ignore */ }
+			layoutContainer.remove();
+		};
+
+		try
+		{
+			var layoutDec = new mxCodec(modelNode.ownerDocument);
+			layoutDec.decode(modelNode, layoutGraph.getModel());
+		}
+		catch (e)
+		{
+			layoutCleanup();
+			electron.sendMessage('export-error',
+				'Error loading diagram for layout: ' + (e.message || e));
+			return graph;
+		}
+
+		// Build the steps bound to the offscreen graph. Normalization is a
+		// plain execute(parent) step, so it rides the same sequence runner as
+		// the layouts. Layout JSON goes through createLayouts (same path as
+		// the dialog); a preset becomes a single ElkLayout with the menu's
+		// canonical edge treatment.
+		var layouts = [];
+
+		if (data.normalize)
+		{
+			layouts.push({execute: function()
+			{
+				layoutGraph.normalizeModel();
+			}});
+		}
+
+		try
+		{
+			if (data.layout != null)
+			{
+				layouts = layouts.concat(layoutIsJson ?
+					layoutGraph.createLayouts(layoutList) :
+					[new ElkLayout(layoutGraph, elkPreset.algorithm,
+						elkPreset.options, ElkLayout.CANONICAL_EDGE)]);
+			}
+		}
+		catch (e)
+		{
+			layoutCleanup();
+			electron.sendMessage('export-error', 'Invalid layout: ' + (e.message || e));
+			return graph;
+		}
+
+		var layoutParent = layoutGraph.getDefaultParent();
+		var layoutModel = layoutGraph.getModel();
+
+		var finishLayout = function()
+		{
+			var laidOutNode = null;
+
+			try
+			{
+				laidOutNode = new mxCodec().encode(layoutModel);
+			}
+			catch (e)
+			{
+				layoutCleanup();
+				electron.sendMessage('export-error', 'Layout failed: ' + (e.message || e));
+				return;
+			}
+
+			layoutCleanup();
+
+			if (laidOutNode == null)
+			{
+				electron.sendMessage('export-error', 'Layout failed: no output');
+				return;
+			}
+
+			if (isMxfile)
+			{
+				// Replace the first page's model in place; keep other pages.
+				var diagram = srcDoc.documentElement.getElementsByTagName('diagram')[0];
+
+				while (diagram.firstChild != null)
+				{
+					diagram.removeChild(diagram.firstChild);
+				}
+
+				diagram.removeAttribute('etag');
+				diagram.appendChild(srcDoc.importNode(laidOutNode, true));
+				data.xml = mxUtils.getXml(srcDoc);
+			}
+			else
+			{
+				data.xml = mxUtils.getXml(laidOutNode);
+			}
+
+			// Stop the re-entry from re-running PNG/PDF extraction on the
+			// now-plain XML.
+			if (extras != null && (extras.isPng || extras.isPdf))
+			{
+				extras.isPng = false;
+				extras.isPdf = false;
+				data.extras = JSON.stringify(extras);
+			}
+
+			delete data.layout;
+			delete data.normalize;
+			render(data);
+		};
+
+		// Runs the layouts in sequence. ELK layouts expose prepare() (async);
+		// the mxGraph layouts run synchronously via execute(). Mirrors
+		// EditorUi.executeLayouts but applies directly (no morph animation).
+		var runLayout = function(index)
+		{
+			if (index >= layouts.length)
+			{
+				finishLayout();
+				return;
+			}
+
+			var layout = layouts[index];
+
+			try
+			{
+				if (typeof layout.prepare === 'function')
+				{
+					layout.prepare(layoutParent, function(err, apply)
+					{
+						if (err != null)
+						{
+							layoutCleanup();
+							electron.sendMessage('export-error', 'Layout failed: ' + (err.message || err));
+							return;
+						}
+
+						layoutModel.beginUpdate();
+						try { apply(); } finally { layoutModel.endUpdate(); }
+						runLayout(index + 1);
+					});
+				}
+				else
+				{
+					layoutModel.beginUpdate();
+					try { layout.execute(layoutParent); } finally { layoutModel.endUpdate(); }
+					runLayout(index + 1);
+				}
+			}
+			catch (e)
+			{
+				layoutCleanup();
+				electron.sendMessage('export-error', 'Layout failed: ' + (e.message || e));
+			}
+		};
+
+		runLayout(0);
+
+		return graph;
+	}
+
 	// Parses XML
 	var doc = mxUtils.parseXml(data.xml);
 	var node = Editor.extractGraphModel(doc.documentElement, true);
@@ -239,10 +912,31 @@ function render(data)
 	var origXmlDoc = xmlDoc;
 	var diagrams = null;
 	var from = 0;
+	var singlePage = false;
+
+	// Returns an mxfile with only the exported page for explicit single
+	// page exports of multi-page files, so the embedded XML opens on the
+	// page shown in the exported image (draw.io always opens the first
+	// page of the embedded file) [jgraph/drawio-desktop#2365]
+	function getSinglePageNode()
+	{
+		if (singlePage && diagrams != null && diagrams.length > 1 &&
+			diagrams[from] != null)
+		{
+			var fileNode = origXmlDoc.documentElement.cloneNode(false);
+			fileNode.removeAttribute('pages');
+			fileNode.appendChild(diagrams[from].cloneNode(true));
+
+			return fileNode;
+		}
+
+		return null;
+	};
 
 	function getFileXml(uncompressed)
 	{
-		var xml = mxUtils.getXml(origXmlDoc);
+		var pageNode = getSinglePageNode();
+		var xml = mxUtils.getXml((pageNode != null) ? pageNode : origXmlDoc);
 		var editorUi = new HeadlessEditorUi();
 		var tmpFile = new LocalFile(editorUi, xml);
 		editorUi.setCurrentFile(tmpFile);
@@ -262,6 +956,51 @@ function render(data)
 		}
 		
 		return;
+	}
+
+	// Shapes with perimeter=outlinePerimeter end edges on the outline of what
+	// they paint, and the images of the outlines are traced asynchronously (see
+	// Graph.getImageOutline). Renders the pages once to start the traces and
+	// re-enters render() when they are done, so that the edges on all pages
+	// end on the outlines.
+	var outlinePages = (!data.outlinesTraced && typeof graph.waitForOutlines === 'function') ?
+		getOutlinePages(node) : null;
+
+	if (outlinePages != null)
+	{
+		data.outlinesTraced = true;
+
+		for (var i = 0; i < outlinePages.length; i++)
+		{
+			new mxCodec(outlinePages[i].ownerDocument).decode(outlinePages[i], graph.getModel());
+		}
+
+		if (graph.hasPendingOutlines())
+		{
+			// data.xml is the extracted XML and data.scale a number by now (see
+			// the PNG/PDF extraction and autoScale above)
+			if (extras != null && (extras.isPng || extras.isPdf))
+			{
+				extras.isPng = false;
+				extras.isPdf = false;
+				data.extras = JSON.stringify(extras);
+			}
+
+			if (autoScale)
+			{
+				data.scale = 'auto';
+			}
+
+			graph.waitForOutlines(function()
+			{
+				graph.destroy();
+				render(data);
+			}, OUTLINE_TIMEOUT);
+
+			return graph;
+		}
+
+		graph.getModel().clear();
 	}
 
 	// Handles mxfile
@@ -327,6 +1066,7 @@ function render(data)
 	};
 	
 	var preview = null;
+	var printPageCount = 0;
 	var waitCounter = 1;
 	var bounds;
 	var pageId;
@@ -334,14 +1074,100 @@ function render(data)
 	// Waits for all images to finish loading
 	var cache = new Object();
 	var math = false;
-	
+	// True if any rendered page enables math
+	var mathUsed = false;
+	// SVGs of the pages in SVG exports of all pages
+	var svgPages = null;
+
+	// Returns the SVG of the page in the graph (see EditorUi.exportSvg)
+	function getSvg()
+	{
+		// An explicit --transparent (data.bg == 'none') forces a transparent
+		// background; otherwise the page background is read from the diagram XML
+		// (graph.background is not populated in this headless renderer, as the
+		// model is decoded directly without setGraphXml) [jgraph/drawio-desktop#2469]
+		var bg = (data.bg == mxConstants.NONE) ? null :
+			xmlDoc.documentElement.getAttribute('background');
+
+		if (bg == mxConstants.NONE || bg == '')
+		{
+			bg = null;
+		}
+
+		var theme = 'auto';
+
+		if (data.theme != null)
+		{
+			theme = data.theme;
+		}
+
+		var linkTarget = null;
+
+		if (data.linkTarget == 'same-win')
+		{
+			linkTarget = '_top';
+		}
+		else if (data.linkTarget == 'new-win')
+		{
+			linkTarget = '_blank';
+		}
+
+		// Page-size export uses the page rectangle as the crop
+		// (see imagePageVisible in renderPage, which installs the
+		// getBackgroundPageBounds override that getSvg uses)
+		// Cell Metadata in the export dialog: adds the properties of
+		// the cells as data-meta-* attributes (see createSvgImageExport)
+		var imgExport = (data.embedCellMetadata == '1') ?
+			graph.createSvgImageExport(true) : null;
+
+		// getSvg adds the gradient of the page background only for
+		// the background color of the page (see
+		// Graph.getBackgroundGradient), which is not set here
+		var graphBackground = graph.background;
+		var svgRoot = null;
+		graph.background = bg;
+
+		try
+		{
+			svgRoot = graph.getSvg(bg, expScale, data.border, false, null,
+				true, null, imgExport, linkTarget, null, null, theme,
+				(data.exportType == 'page') ? 'page' : null);
+		}
+		finally
+		{
+			graph.background = graphBackground;
+		}
+
+		// Uses the attribute as the graph keeps the shadow of previous pages
+		if (xmlDoc.documentElement.getAttribute('shadow') == '1')
+		{
+			graph.addSvgShadow(svgRoot);
+		}
+
+		// Text alternative of the page (see DiagramPage.getAlt). Checks the
+		// function as this file can be newer than app.min.js after a release.
+		if (diagrams != null && diagrams[from] != null &&
+			typeof Graph.addSvgTitle === 'function')
+		{
+			Graph.addSvgTitle(svgRoot, diagrams[from].getAttribute('alt'));
+		}
+
+		return svgRoot;
+	};
+
 	// Decrements waitCounter and invokes callback when finished
 	function decrementWaitCounter()
 	{
 		if (--waitCounter < 1)
 		{
+			// Makes math selectable in PDF output, see Editor.addMathTextLayer
+			if (mathUsed && data.format == 'pdf' && typeof Editor.addMathTextLayer === 'function')
+			{
+				Editor.addMathTextLayer(document.body);
+			}
+
 			//Note: This code targets Chrome as it is the browser used by export server
-			//Ensure that all fonts has been loaded, this promise is never rejected
+			//Ensure that all fonts have been loaded, this promise is never rejected
 			document.fonts.ready.then(function() 
 			{
 				// Rewrite page links
@@ -360,51 +1186,19 @@ function render(data)
 				//Electron pdf export
 				if (mxIsElectron)
 				{
-					try 
+					try
 					{
 						electron.registerMsgListener('get-svg-data', (arg) => 
 						{
 							graph.mathEnabled = math; //Enable math such that getSvg works as expected
-							// Returns the exported SVG for the given graph (see EditorUi.exportSvg)
-							var bg = graph.background;
-								
-							if (bg == mxConstants.NONE)
-							{
-								bg = null;
-							}
-							
-							if (data.theme == 'dark')
-							{
-								// TODO Support enableCssDarkMode?
-								graph.shapeForegroundColor = Editor.lightColor;
-								graph.shapeBackgroundColor = Editor.darkColor;
-								graph.stylesheet = graph.getDefaultStylesheet();
-								graph.refresh();
-							}
+							var svgRoot = (svgPages != null) ?
+								Graph.createSvgWithViews(svgPages, 0) : getSvg();
 
-							var linkTarget = null;
-
-							if (data.linkTarget == 'same-win')
-							{
-								linkTarget = '_top';
-							}
-							else if (data.linkTarget == 'new-win')
-							{
-								linkTarget = '_blank';
-							}
-
-							var svgRoot = graph.getSvg(bg, expScale, 0, false, null, true, null, null, linkTarget);
-							
-							if (graph.shadowVisible)
-							{
-								graph.addSvgShadow(svgRoot);
-							}
-							
 							// TODO addFontCss cannot be used as it requires this
 							// Adds CSS
 							//Editor.prototype.addFontCss(svgRoot);
-							
-							if (math)
+
+							if (mathUsed)
 							{
 								Editor.prototype.addMathCss(svgRoot);
 							}
@@ -415,26 +1209,88 @@ function render(data)
 
 								if (editable)
 								{
-									svgRoot.setAttribute('content', getFileXml());
+									svgRoot.setAttribute('content', getFileXml(data.uncompressed));
 								}
 
-								electron.sendMessage('svg-data', Graph.xmlDeclaration + '\n' + ((editable) ? Graph.svgFileComment + '\n' : '') +
-															 Graph.svgDoctype + '\n' + mxUtils.getXml(svgRoot));
+								electron.sendMessage('svg-data',
+									Graph.xmlDeclaration + '\n' +
+									((editable) ? Graph.svgFileComment + '\n' : '') +
+									Graph.svgDoctype + '\n' + mxUtils.getXml(svgRoot));
 							};
 
-							if (data.embedImages == '1')
+							function embedFontsDone()
 							{
-								var tmpEditor = new Editor();
-								tmpEditor.convertImages(svgRoot, doSend);
+								if (data.embedImages == '1')
+								{
+									var tmpEditor = new Editor();
+									tmpEditor.convertImages(svgRoot, doSend);
+								}
+								else
+								{
+									doSend();
+								}
+							}
+
+							if (data.embedFonts == '1')
+							{
+								var extFonts = graph.getCustomFonts();
+		
+								// Adds external fonts
+								// TODO CSP will not allow external fonts!
+								if (extFonts.length > 0)
+								{
+									var svgDoc = svgRoot.ownerDocument;
+									var style = (svgDoc.createElementNS != null) ?
+										svgDoc.createElementNS(mxConstants.NS_SVG, 'style') : svgDoc.createElement('style');
+									(svgDoc.setAttributeNS != null) ? style.setAttributeNS('type', 'text/css') :
+										style.setAttribute('type', 'text/css');
+									
+									var prefix = '';
+									var postfix = '';
+											
+									for (var i = 0; i < extFonts.length; i++)
+									{
+										var fontName = extFonts[i].name, fontUrl = extFonts[i].url;
+										
+										if (Graph.isCssFontUrl(fontUrl))
+										{
+											prefix += '@import url("' + Graph.escapeCssString(
+												Graph.rewriteGoogleFontUrl(fontUrl)) + '");\n';
+										}
+										else
+										{
+											postfix += '@font-face {\n' +
+												'font-family: "' + Graph.escapeCssString(fontName) + '";\n' +
+												'src: url("' + Graph.escapeCssString(fontUrl) + '");\n}\n';
+										}				
+									}
+									
+									style.appendChild(svgDoc.createTextNode(prefix + postfix));
+									svgRoot.getElementsByTagName('defs')[0].appendChild(style);
+								}
+
+								EditorUi.prototype.replaceAlternateContent(svgRoot, null, embedFontsDone);
 							}
 							else
 							{
-								doSend();
+								embedFontsDone();
 							}
 						});
 						
 						//For some reason, Electron 9 doesn't send this object as is without stringifying. Usually when variable is external to function own scope
-						electron.sendMessage('render-finished', {bounds: JSON.stringify(bounds), pageCount: pageCount});
+						// Include the resolved diagram XML so the main process can embed it
+						// in PNG/PDF output (-e). For Mermaid/CSV/layout inputs the source
+						// file isn't draw.io XML, so the main process has no (or a pre-layout)
+						// args.xml; data.xml here is the real post-conversion model. For
+						// explicit single page exports only that page is embedded
+						// [jgraph/drawio-desktop#2365]
+						var annotRects = collectAnnotRects();
+						var pageNode = getSinglePageNode();
+
+						electron.sendMessage('render-finished', {bounds: JSON.stringify(bounds),
+							pageCount: pageCount, xml: (data.embedXml == '1') ? ((pageNode != null) ?
+								mxUtils.getXml(pageNode) : data.xml) : null,
+							annots: (annotRects.length > 0) ? JSON.stringify(annotRects) : null});
 					}
 					catch(e)
 					{
@@ -481,107 +1337,145 @@ function render(data)
 	// Adds MathJax rendering task
 	function renderMath(elt)
 	{
-		if (math && Editor.MathJaxRender != null)
+		if (Editor.MathJaxRender != null)
 		{
 			waitCounter++;
 			Editor.MathJaxRender(elt);
 		}
 	};
 
-	function loadExtFonts(extFonts)
+	// Waits for the given font
+	function waitForFont(url)
 	{
 		try
 		{
-			extFonts = extFonts.split('|').map(function(ef)
+			if (url != null && fontPreload[url] == null)
 			{
-				var parts = ef.split('^');
-				return {name: parts[0], url: parts[1]};
-			});
-		}
-		catch(e)
-		{
-			//ignore and return!
-			return;
-		}
-		
-		waitCounter += extFonts.length;
-
-		//Note: This code targets Chrome as it is the browser used by export server
-		for (var i = 0; i < extFonts.length; i++)
-		{
-			if (extFonts[i].url.indexOf(Editor.GOOGLE_FONTS) == 0 ||
-				extFonts[i].url.indexOf(Editor.GOOGLE_FONTS_CSS2) == 0)
-			{
-				var link = document.createElement('link');
-				
-				link.setAttribute('rel', 'stylesheet');
-				link.setAttribute('charset', 'UTF-8');
-				link.setAttribute('type', 'text/css');
-				
-				link.onload = decrementWaitCounter;
-				link.onerror = decrementWaitCounter;
-			
-				link.setAttribute('href', extFonts[i].url);
-				var head = document.getElementsByTagName('head')[0];
-				head.appendChild(link);
+				waitCounter++;
+				fontPreload[url] = true;
+				mxUtils.get(url, decrementWaitCounter,
+					decrementWaitCounter, false, 10000,
+					decrementWaitCounter);
 			}
-			else
-			{
-				//Relative urls doesn't work
-				if (extFonts[i].url.indexOf(PROXY_URL) == 0 && PROXY_URL.indexOf('http') == -1)
-				{
-					var href = window.location.href;
-					href = href.substring(0, href.lastIndexOf('/') + 1);
-					extFonts[i].url = href + extFonts[i].url;
-				}
-				
-				var font = new FontFace(extFonts[i].name, 'url(' + extFonts[i].url + ')');
-				
-				font.load().then(function(loadedFont)
-				{
-					document.fonts.add(loadedFont);
-					decrementWaitCounter();
-				}).catch(decrementWaitCounter);
-			}
+		}
+		catch (e)
+		{
+			// ignore font
 		}
 	};
 
-	function renderGrid()
+	// Waits for the fonts in the given CSS
+	function waitForFonts(fontCss)
 	{
-		if (gridColor == null) return;
-			
-		var view = graph.view;
-		var gridImage = btoa(unescape(encodeURIComponent(view.createSvgGrid(gridColor))));
-		gridImage = 'url(' + 'data:image/svg+xml;base64,' + gridImage + ')';
-		var phase = graph.gridSize * view.gridSteps * view.scale;
+		var parts = fontCss.split('url(');
 		
-		var x0 = 0;
-		var y0 = 0;
-		
-		if (view.backgroundPageShape != null)
+		for (var i = 1; i < parts.length; i++)
 		{
-			var bds = view.getBackgroundPageBounds();
-			
-			x0 = 1 + bds.x;
-			y0 = 1 + bds.y;
-		}
-		
-		// Computes the offset to maintain origin for grid
-		var position = -Math.round(phase - mxUtils.mod(view.translate.x * view.scale - x0, phase)) + 'px ' +
-			-Math.round(phase - mxUtils.mod(view.translate.y * view.scale - y0, phase)) + 'px';
-		
-		var pages = document.querySelectorAll('[id^=mxPage]');
-		
-		var cssTxt = 'margin: 0;padding: 0;background-image: ' + gridImage + ';background-position: ' + position
-						+ ';background-color: ' + document.body.style.backgroundColor;
-		document.body.style.cssText = cssTxt;
-
-		for (var i = 0; i < pages.length; i++)
-		{
-			pages[i].style.cssText = cssTxt;
+			try
+			{
+				var idx = parts[i].indexOf(')');
+				var url = Editor.trimCssUrl(parts[i].substring(0, idx));
+				waitForFont(url);
+			}
+			catch (e)
+			{
+				// ignore font css
+			}
 		}
 	};
-	
+
+	// Loads and processes the fonts in the given Google Font URL
+	function processGoogleFontCss(url)
+	{
+		try
+		{
+			if (Graph.isGoogleFontUrl(url) && cssPreload[url] == null)
+			{			
+				cssPreload[url] = true;
+
+				var link = document.createElement('link');
+				link.setAttribute('rel', 'preload');
+				link.setAttribute('as', 'style');
+				link.setAttribute('href', url);
+				document.getElementsByTagName('head')[0].appendChild(link);
+
+				// Loads the stylesheet to wait for fonts
+				waitCounter++;
+
+				mxUtils.get(url, mxUtils.bind(this, function(req)
+				{
+					try
+					{
+						if (req.getStatus() >= 200 && req.getStatus() <= 299)
+						{
+							waitForFonts(req.getText());
+						}
+
+						decrementWaitCounter();
+					}
+					catch(e)
+					{
+						decrementWaitCounter();
+					}
+				}), decrementWaitCounter, false, 10000, decrementWaitCounter);
+			}
+		}
+		catch (e)
+		{
+			// ignore stylesheet
+		}
+	};
+
+	// Waits for Google Font CSS imports in the given element
+	function waitForGoogleFontImports(elt)
+	{
+		var style = elt.getElementsByTagName('style');
+
+		for (var i = 0; i < style.length; i++)
+		{
+			var parts = style[i].innerHTML.split('@import url(');
+
+			for (var i = 1; i < parts.length; i++)
+			{
+				try
+				{
+					var idx = parts[i].indexOf(')');
+					var url = Editor.trimCssUrl(parts[i].substring(0, idx));
+					processGoogleFontCss(url);
+				}
+				catch (e)
+				{
+					// ignore import
+				}
+			}
+		}
+	};
+
+	// Intercepts loading of Google Fonts CSS
+	var origCreateFontElement = Graph.createFontElement;
+
+	Graph.createFontElement = function(name, url)
+	{
+		var elt = origCreateFontElement.apply(this, arguments);
+
+		try
+		{
+			if (elt != null && elt.nodeName.toLowerCase() == 'link' &&
+				elt.getAttribute('type') == 'text/css' &&
+				elt.getAttribute('rel') == 'stylesheet')
+			{
+				processGoogleFontCss(elt.getAttribute('href'));
+			}
+		}
+		catch (e)
+		{
+			// ignore stylesheet
+		}
+
+		return elt;
+	};
+
+	// Adds wait counter for loading fonts
 	var origAddFont = Graph.addFont;
 	
 	Graph.addFont = function(name, url)
@@ -589,20 +1483,103 @@ function render(data)
 		waitCounter++;
 		return origAddFont.call(this, name, url, decrementWaitCounter);	
 	};
-		
+	
+	/**
+	 * Returns the CSS image of the gradient of the page background for the
+	 * given background color, or null if the page has no gradient or the
+	 * color is not the background color of the page, eg. for a transparent
+	 * or white background (see Graph.getBackgroundGradient). The colors are
+	 * resolved like the background color for fixed themes. The CSS is only
+	 * created from validated colors (see Graph.createBackgroundGradientCss).
+	 */
+	function getBackgroundGradientCss(bg)
+	{
+		var attr = xmlDoc.documentElement.getAttribute('background');
+		var themed = data.theme == 'dark' || data.theme == 'light';
+
+		if (bg != null && attr != null && typeof Graph.createBackgroundGradient === 'function' &&
+			bg == ((themed) ? mxUtils.getLightDarkColor(attr).cssText : attr))
+		{
+			var gradient = Graph.createBackgroundGradient(attr,
+				graph.backgroundGradient, graph.backgroundGradientDirection);
+
+			return (gradient != null) ? Graph.createBackgroundGradientCss(gradient, themed) : null;
+		}
+
+		return null;
+	};
+
+	/**
+	 * Returns the CSS background of the pages of the print output for the
+	 * given background color (see Graph.getPrintBackground).
+	 */
+	function getPrintBackground(bg)
+	{
+		// The background color comes from the file and is used in the background
+		// shorthand of the pages, which also loads images (see mxPrintPreview)
+		if (bg != null && typeof Graph.isSafeCssColor === 'function' &&
+			!Graph.isSafeCssColor(bg))
+		{
+			return null;
+		}
+
+		var css = getBackgroundGradientCss(bg);
+
+		return (css != null) ? css + ' ' + bg : bg;
+	};
+
+	/**
+	 * Renders the given page or all pages.
+	 */
 	function renderPage(currentPageId)
 	{
-		// Enables math typesetting
-		math |= xmlDoc.documentElement.getAttribute('math') == '1';
-		
-		//Load external fonts
-		var extFonts = xmlDoc.documentElement.getAttribute('extFonts');
-		
-		if (extFonts)
+		// Configures math typesetting
+		math = xmlDoc.documentElement.getAttribute('math') == '1';
+		graph.mathEnabled = math;
+		mathUsed = mathUsed || math;
+
+		// Excludes the graph container from typesetting if the page disables
+		// math as renderMath below typesets the whole document. The container
+		// is reused for all pages and holds the output of image exports (pages
+		// in the print output are handled in addGraphFragment). Otherwise math
+		// delimiters in labels are typeset and escapes such as \\ and \$ are
+		// replaced, unlike in the editor.
+		if (math)
 		{
-			loadExtFonts(extFonts);
+			graph.container.classList.remove('geDisableMathJax');
 		}
-		
+		else
+		{
+			graph.container.classList.add('geDisableMathJax');
+		}
+
+		// Sets the drawing scale of the measure placeholders (the model is
+		// decoded directly, without Editor.readGraphState)
+		if (typeof graph.setMeasureScale === 'function')
+		{
+			graph.setMeasureScale(xmlDoc.documentElement.getAttribute('measureScale'));
+		}
+
+		// Sets the validated gradient of the page background (see
+		// getBackgroundGradientCss)
+		if (typeof graph.setBackgroundGradient === 'function')
+		{
+			graph.setBackgroundGradient(xmlDoc.documentElement.getAttribute('backgroundGradient'),
+				xmlDoc.documentElement.getAttribute('backgroundGradientDirection'));
+		}
+
+		// Sets grid size
+		var gs = xmlDoc.documentElement.getAttribute('gridSize');
+
+		if (gs != null)
+		{
+			graph.gridSize = parseFloat(gs);
+		}
+		else
+		{
+			graph.gridSize = mxGraph.prototype.gridSize;
+		}
+
 		// Configure graph
 		graph.foldingEnabled = false;
 		graph.setEnabled(false);
@@ -616,35 +1593,72 @@ function render(data)
 			graph.setBackgroundImage(new mxImage(bgImg.src, bgImg.width,
 				bgImg.height, bgImg.x, bgImg.y));
 		}
+		else
+		{
+			graph.setBackgroundImage(null);
+		}
 		
 		// Parses XML into graph
 		var codec = new mxCodec(xmlDoc);
 		var model = graph.getModel();
 		codec.decode(xmlDoc.documentElement, model);
 
+		// Sizes the export crop to the rendered MathJax output rather than the
+		// raw formula source. The diagram is decoded synchronously here, but the
+		// labels are only typeset later (see renderMath below), so the bounds
+		// computed in this function would otherwise reflect the much wider source
+		// text and crop the export with excessive margins. render() waits for
+		// MathJax to load before reaching this point (see the math gate at the
+		// top of render), and typesetting is synchronous, so refresh the bounds
+		// from this typeset. [jgraph/drawio#5564]
+		if (Editor.mathOutputSize && graph.mathEnabled &&
+			typeof DrawioMathJax !== 'undefined' && typeof DrawioMathJax.typeset === 'function')
+		{
+			try
+			{
+				DrawioMathJax.typeset([graph.container]);
+			}
+			catch (e)
+			{
+				// Bounds fall back to the source size and renderMath below
+				// typesets the final output
+			}
+
+			graph.refreshMathBounds();
+		}
+
 		var bg;
-		
+
 		if (data.format == 'pdf')
 		{
-			if (data.bg == 'none')
+			if (data.bg == 'none' || bg == '')
 			{
-				bg = null;	
+				bg = null;
 			}
 			else
 			{
 				bg = xmlDoc.documentElement.getAttribute('background');
-				
+
 				if (bg == 'none' || !bg)
 				{
 					bg = '#ffffff';
+				}
+
+				// Resolves the background to the requested fixed-theme side
+				// (the light-dark flags are set in render)
+				if (data.theme == 'dark' || data.theme == 'light')
+				{
+					bg = mxUtils.getLightDarkColor(bg).cssText;
 				}
 			}
 		}
 		else
 		{
-			// Loads background color
-			bg = (data.bg != null && data.bg.length > 0) ?
-				data.bg : xmlDoc.documentElement.getAttribute('background');
+			// Loads background color. An explicit transparent background
+			// (data.bg == 'none') overrides the diagram background as in
+			// the SVG and PDF paths [jgraph/drawio-desktop#1905]
+			bg = (data.bg == mxConstants.NONE) ? null :
+				xmlDoc.documentElement.getAttribute('background');
 
 			// Normalizes values for transparent backgrounds
 			if (bg == 'none' || bg == '')
@@ -656,18 +1670,47 @@ function render(data)
 			if (bg == null && data.format != 'gif' && data.format != 'png' && data.format != 'svg')
 			{
 				bg = '#ffffff';
-			}	
-		}
-		
-		// Sets background color on page
-		if (bg != null)
-		{
-			document.body.style.backgroundColor = bg;
+			}
+
+			// Fixed-theme exports use the default canvas color where the page
+			// would otherwise be transparent (unless explicitly transparent) and
+			// resolve the background to the requested side, so the captured
+			// pixels match the theme [jgraph/drawio-desktop#2295]
+			if (data.theme == 'dark' || data.theme == 'light')
+			{
+				if (bg == null && data.bg != 'none')
+				{
+					bg = graph.shapeBackgroundColor;
+				}
+
+				if (bg != null)
+				{
+					bg = mxUtils.getLightDarkColor(bg).cssText;
+				}
+			}
+
+			// Sets background color on page
+			if (bg != null)
+			{
+				document.body.style.backgroundColor = bg;
+
+				// Adds the gradient of the page background over the captured
+				// viewport, which has the size of the output
+				var gradientCss = getBackgroundGradientCss(bg);
+
+				if (gradientCss != null)
+				{
+					document.body.style.backgroundImage = gradientCss;
+					document.body.style.backgroundAttachment = 'fixed';
+					document.body.style.backgroundRepeat = 'no-repeat';
+					document.body.style.backgroundSize = '100% 100%';
+				}
+			}
 		}
 		
 		//handle layers
 		if (extras != null && ((extras.layers != null && extras.layers.length > 0) || 
-							   (extras.layerIds != null && extras.layerIds.length > 0)))
+			(extras.layerIds != null && extras.layerIds.length > 0)))
 		{
 			var childCount = model.getChildCount(model.root);
 			
@@ -697,112 +1740,140 @@ function render(data)
 				}
 			}
 		}
-		
-		// Sets initial value for PDF page background
-		graph.pdfPageVisible = false;
-		
-		// Handles PDF output where the output should match the page format if the page is visible
-		if (data.print || (data.format == 'pdf' && xmlDoc.documentElement.getAttribute('page') == '1' && data.w == 0 && data.h == 0 && data.scale == 1))
+
+		// Handle hidden tags
+		if (extras != null && extras.hiddenTags != null)
 		{
-			//Electron printing
-			var printScale = 1;
-			
-			if (data.print)
+			var pageTags = extras.hiddenTags[currentPageId] ||
+				extras.hiddenTags[0];
+
+			if (pageTags != null && pageTags.length > 0)
 			{
-				document.title = data.fileTitle;
-				
-				var gb = graph.getGraphBounds();
-				printScale = data.pageScale;
-		
-				if (isNaN(printScale))
-				{
-					printScale = 1;
-				}
-				
-				if (data.fit)
-				{
-					var h = parseInt(data.sheetsAcross);
-					var v = parseInt(data.sheetsDown);
-					
-					data.scale = Math.min((data.pageHeight * v) / (gb.height / graph.view.scale),
-							(data.pageWidth * h) / (gb.width / graph.view.scale));
-				}
-				else
-				{
-					data.scale = data.scale / graph.pageScale;
-					
-					if (isNaN(data.scale))
-					{
-						printScale = 1 / graph.pageScale;
-					}
-				}
+				graph.hiddenTags = pageTags;
 			}
-			
+			else
+			{
+				graph.hiddenTags = [];
+			}
+		}
+
+		// Sets initial value for PDF page background
+		var gb = graph.getGraphBounds();
+		graph.pdfPageVisible = false;
+
+		// Page-size image export: the output covers the page(s) spanned by the
+		// diagram instead of cropping to the content, as with Size: Page Size
+		// in the image export dialogs [jgraph/drawio-desktop#2481]
+		var imagePageVisible = data.exportType == 'page' && !data.print &&
+			(data.format == 'png' || data.format == 'jpg' ||
+			data.format == 'jpeg' || data.format == 'svg');
+
+		// Page format with the page scale applied for the print output below
+		var printPageFormat = null;
+
+		// Handles PDF output where the output should match the page format if the page is visible
+		if (data.print || data.format == 'pdf' || imagePageVisible)
+		{
+			var printScale = 1;
+
 			var pw = data.pageWidth || xmlDoc.documentElement.getAttribute('pageWidth');
 			var ph = data.pageHeight || xmlDoc.documentElement.getAttribute('pageHeight');
-			graph.pdfPageVisible = true;
-			
+			graph.pdfPageVisible = !imagePageVisible;
+
 			if (pw != null && ph != null)
 			{
 				graph.pageFormat = new mxRectangle(0, 0, parseFloat(pw), parseFloat(ph));
 			}
-			
+
 			var ps = data.pageScale || xmlDoc.documentElement.getAttribute('pageScale');
-			
+
 			if (ps != null)
 			{
 				graph.pageScale = ps;
 			}
-			
+
+			// The print pipeline pre-multiplies the page format by the page scale
+			// (the pages are rendered larger and shrunk to the paper size by the
+			// print scale factor), while image output uses the page size as shown
+			// in the editor, which getPageSize below derives from the unchanged
+			// page format. The page scale is applied to a copy of the page format
+			// without rounding, as in EditorUi.print, so that the printed page
+			// grid stays aligned with the page breaks on the canvas for fractional
+			// page formats and getPageSize does not apply the page scale twice
+			if (!imagePageVisible)
+			{
+				var pf = mxRectangle.fromRectangle(graph.pageFormat);
+				var temp = data.reqScale;
+				pf.width = pf.width * graph.pageScale;
+				pf.height = pf.height * graph.pageScale;
+				var scale = 1;
+
+				if (data.fit == '1' && data.sheetsAcross != null && data.sheetsDown != null)
+				{
+					var h = data.sheetsAcross;
+					var v = data.sheetsDown;
+
+					if (!isNaN(temp))
+					{
+						pf.width = Math.ceil(pf.width * temp);
+						pf.height = Math.ceil(pf.height * temp);
+					}
+
+					scale = Math.min((pf.height * v) / (gb.height / graph.view.scale),
+						(pf.width * h) / (gb.width / graph.view.scale));
+				}
+				else
+				{
+					scale = !isNaN(temp) ? temp : 1;
+				}
+
+				// Applies print scale
+				data.scale = scale * printScale;
+				printPageFormat = pf;
+			}
+
 			graph.getPageSize = function()
 			{
 				return new mxRectangle(0, 0, this.pageFormat.width * this.pageScale,
 					this.pageFormat.height * this.pageScale);
 			};
 			
-			graph.getPageLayout = function()
-			{
-				var size = this.getPageSize();
-				var bounds = this.getGraphBounds();
-
-				if (bounds.width == 0 || bounds.height == 0)
-				{
-					return new mxRectangle(0, 0, 1, 1);
-				}
-				else
-				{
-					// Computes untransformed graph bounds
-					var x = Math.ceil(bounds.x / this.view.scale - this.view.translate.x);
-					var y = Math.ceil(bounds.y / this.view.scale - this.view.translate.y);
-					var w = Math.floor(bounds.width / this.view.scale);
-					var h = Math.floor(bounds.height / this.view.scale);
-					
-					var x0 = Math.floor(x / size.width);
-					var y0 = Math.floor(y / size.height);
-					var w0 = Math.ceil((x + w) / size.width) - x0;
-					var h0 = Math.ceil((y + h) / size.height) - y0;
-					
-					return new mxRectangle(x0, y0, w0, h0);
-				}
-			};
-
 			// Fits the number of background pages to the graph
 			graph.view.getBackgroundPageBounds = function()
 			{
 				var layout = this.graph.getPageLayout();
 				var page = this.graph.getPageSize();
 				
-				return new mxRectangle(this.scale * (this.translate.x + layout.x * page.width),
+				return new mxRectangle(
+					this.scale * (this.translate.x + layout.x * page.width),
 					this.scale * (this.translate.y + layout.y * page.height),
 					this.scale * layout.width * page.width,
 					this.scale * layout.height * page.height);
 			};
 		}
 
+		// Disables page-based layout when width/height is specified
+		// to scale diagram to fit the given dimensions
+		if (graph.pdfPageVisible && (data.w > 0 || data.h > 0))
+		{
+			graph.pdfPageVisible = false;
+		}
+
 		if (!graph.pdfPageVisible)
 		{
 			var b = graph.getGraphBounds();
-			
+
+			// Uses the rectangle of the page(s) under the diagram as the export
+			// area (in unscaled graph coordinates, as the view is untransformed
+			// at this point)
+			if (imagePageVisible)
+			{
+				var layout = graph.getPageLayout();
+				var page = graph.getPageSize();
+				b = new mxRectangle(layout.x * page.width, layout.y * page.height,
+					layout.width * page.width, layout.height * page.height);
+			}
+
 			// Floor is needed to keep rendering crisp
 			if (data.w > 0 || data.h > 0)
 			{
@@ -851,11 +1922,14 @@ function render(data)
 						GOOGLE_APPS_MAX_AREA = GOOGLE_SHEET_MAX_AREA;
 					}
 					
-					//The image cannot exceed 25 MP to be included in Google Apps
-					if (b.width * s * b.height * s > GOOGLE_APPS_MAX_AREA)
+					//The image cannot exceed 25 MP to be included in Google Apps, including the border
+					var bw = b.width + 2 * data.border;
+					var bh = b.height + 2 * data.border;
+
+					if (bw * s * bh * s > GOOGLE_APPS_MAX_AREA)
 					{
 						//Subtracting 0.01 to prevent any other rounding that can make slightly over 25 MP 
-						s = Math.sqrt(GOOGLE_APPS_MAX_AREA / (b.width * b.height)) - 0.01;
+						s = Math.sqrt(GOOGLE_APPS_MAX_AREA / (bw * bh)) - 0.01;
 					}
 				}
 				
@@ -882,11 +1956,16 @@ function render(data)
 		}
 		
 		// Gets the diagram bounds and sets the document size
-		bounds = (graph.pdfPageVisible) ? graph.view.getBackgroundPageBounds() : graph.getGraphBounds();
-		bounds.width = Math.ceil(bounds.width + data.border) + 1; //The 1 extra pixels to prevent cutting the cells on the edges when crop is enabled
-		bounds.height = Math.ceil(bounds.height + data.border) + 1; //The 1 extra pixels to prevent starting a new page. TODO Not working in every case
+		bounds = (graph.pdfPageVisible || imagePageVisible) ?
+			graph.view.getBackgroundPageBounds() : graph.getGraphBounds();
+
+		// Right and bottom border, as wide as the left and top one: scaled with
+		// the diagram, except when it is fitted to a given width or height
+		var endBorder = (data.w > 0 || data.h > 0) ? data.border : data.border * graph.view.scale;
+		bounds.width = Math.ceil(bounds.width + endBorder) + 1; //The 1 extra pixels to prevent cutting the cells on the edges when crop is enabled
+		bounds.height = Math.ceil(bounds.height + endBorder) + 1; //The 1 extra pixels to prevent starting a new page. TODO Not working in every case
 		
-		//Print to pdf fails for 1x1 pages
+		// Print to pdf fails for 1x1 pages
 		if (bounds.width <= 1 && bounds.height <= 1)
 		{
 			bounds.width = 2;
@@ -898,22 +1977,23 @@ function render(data)
 		// Converts the graph to a vertical sequence of pages for PDF export
 		if (graph.pdfPageVisible)
 		{
-			var pf = graph.pageFormat || mxConstants.PAGE_FORMAT_A4_PORTRAIT;
-			var scale = data.print? data.scale : 1 / graph.pageScale;
-			var autoOrigin = (data.print && data.fit != null) ? data.fit : false;
+			var pf = (printPageFormat != null) ? printPageFormat : mxRectangle.fromRectangle(
+				graph.pageFormat || mxConstants.PAGE_FORMAT_A4_PORTRAIT);
+			var scale = (data.print || data.format == 'pdf') ? data.scale : 1 / graph.pageScale;
+			var autoOrigin = ((data.print || data.format == 'pdf') && data.fit == '1') ||
+				data.crop == '1' || xmlDoc.documentElement.getAttribute('page') != '1';
 			var border = 0;
 
 			// Negative coordinates are cropped or shifted if page visible
-			var gb = graph.getGraphBounds();
 			var x0 = 0;
 			var y0 = 0;
 	
-			// Applies print scale
-			pf = mxRectangle.fromRectangle(pf);
-			pf.width = Math.ceil(pf.width * printScale) + 1; //The 1 extra pixels to prevent cutting the cells on the right edge of the page
-			pf.height = Math.ceil(pf.height * printScale) + 1; //The 1 extra pixels to prevent starting a new page. TODO Not working in every case
-			scale *= printScale;	
-			
+			if (data.crop == '1')
+			{
+				pf.width = (gb.width + 1) * scale;
+				pf.height = (gb.height + 1) * scale;
+			}
+
 			// Starts at first visible page
 			if (!autoOrigin)
 			{
@@ -923,43 +2003,105 @@ function render(data)
 			}
 
 			var anchorId = (currentPageId != null) ? 'page/id,' + currentPageId : null;
-			
+
+			// Computes the number of pages in the output the same way as
+			// mxPrintPreview.open and stops the export if the total exceeds
+			// MAX_PRINT_PAGE_COUNT, so that extreme cell coordinates cannot
+			// block the renderer with an excessive number of pages
+			var pcb = graph.getGraphBounds();
+			var pcs = graph.view.scale / scale;
+			var pcw = pcb.width;
+			var pch = pcb.height;
+			var pcx = x0;
+			var pcy = y0;
+
+			if (!autoOrigin)
+			{
+				pcx -= graph.view.translate.x * scale;
+				pcy -= graph.view.translate.y * scale;
+				pcw += pcb.x;
+				pch += pcb.y;
+			}
+
+			printPageCount += Math.max(1, Math.ceil((pcw / pcs + pcx) / (pf.width + 1))) *
+				Math.max(1, Math.ceil((pch / pcs + pcy) / (pf.height + 1)));
+
+			if (printPageCount > MAX_PRINT_PAGE_COUNT)
+			{
+				throw new Error('Too many pages in print output: ' + printPageCount);
+			}
+
 			if (preview == null)
 			{
 				preview = new mxPrintPreview(graph, scale, pf, border, x0, y0);
 				preview.printBackgroundImage = true;
 				preview.autoOrigin = autoOrigin;
-				preview.backgroundColor = gridColor? 'transparent' : bg;
+				preview.backgroundColor = getPrintBackground(bg);
+				preview.pageMargin = (data.pageMargin != null) ?
+					parseInt(data.pageMargin) : ((data.crop == '1') ?
+						0 : preview.pageMargin);
+				
+				// Replaces background images with SVG subtrees
+				var previewDrawBackgroundImage = preview.drawBackgroundImage;
+				
+				preview.drawBackgroundImage = function(img)
+				{
+					previewDrawBackgroundImage.apply(this, arguments);
+
+					if (img.node != null)
+					{
+						EditorUi.embedSvgImages(img.node);
+
+						graph.disableSvgLinks(img.node, function(link)
+						{
+							link.setAttribute('href', 'javascript:void(0)');		
+						});
+					}
+				};
+
+				// Renders the grid and configures math
+				var previewAddGraphFragment = preview.addGraphFragment;
+
+				preview.addGraphFragment = function(dx, dy, scale, pageNumber, div, clip)
+				{
+					previewAddGraphFragment.apply(this, arguments);
+
+					// Disables math rendering in graph
+					if (!graph.mathEnabled)
+					{
+						div.classList.add('geDisableMathJax')
+					}
+					
+					// Adds shadow
+					if (xmlDoc.documentElement.getAttribute('shadow') == '1')
+					{
+						var svgs = div.getElementsByTagName('svg');
+						
+						for (var i = 0; i < svgs.length; i++)
+						{
+							graph.addSvgShadow(svgs[i]);
+						}
+					}
+					
+					waitForGoogleFontImports(div);
+				};
+
 				// Renders print output into this document and removes the graph container
-				preview.open(null, window, null, null, anchorId);
-				graph.container.parentNode.removeChild(graph.container);
+				preview.gridColor = gridColor;
+				preview.gridSize = graph.gridSize;
+				preview.gridSteps = graph.view.gridSteps;
+				preview.open(null, window, null, null, anchorId, pf);
 			}
 			else
 			{
-				preview.backgroundColor = bg;
+				preview.gridColor = gridColor;
+				preview.gridSize = graph.gridSize;
+				preview.gridSteps = graph.view.gridSteps;
+				preview.backgroundColor = getPrintBackground(bg);
 				preview.autoOrigin = autoOrigin; 
-				preview.appendGraph(graph, scale, x0, y0, null, null, anchorId);
+				preview.appendGraph(graph, scale, x0, y0, null, null, anchorId, pf);
 			}
 
-			// Adds shadow
-			// NOTE: Shadow rasterizes output
-			/*if (mxClient.IS_SVG && xmlDoc.documentElement.getAttribute('shadow') == '1')
-			{
-				var svgs = document.getElementsByTagName('svg');
-				
-				for (var i = 0; i < svgs.length; i++)
-				{
-					var svg = svgs[i];
-
-					var filter = graph.addSvgShadow(svg, null, true);
-					filter.setAttribute('id', 'shadow-' + i);
-					svg.appendChild(filter);
-					svg.setAttribute('filter', 'url(#' + 'shadow-' + i + ')');
-				}
-				
-				border = 7;
-			}*/
-			
 			bounds = new mxRectangle(0, 0, pf.width, pf.height);
 		}
 		else
@@ -986,13 +2128,11 @@ function render(data)
 			}
 
 			// Adds shadow
-			// NOTE: PDF shadow rasterizes output so it's disabled
-			if (data.format != 'pdf' && mxClient.IS_SVG && xmlDoc.documentElement.getAttribute('shadow') == '1')
+			if (xmlDoc.documentElement.getAttribute('shadow') == '1')
 			{
-				graph.addSvgShadow(graph.view.canvas.ownerSVGElement, null, true);
-				graph.setShadowVisible(true);
-				bounds.width += 7;
-				bounds.height += 7;
+				var size = graph.setShadowVisible(true);
+				bounds.width += size;
+				bounds.height += size;
 			}
 			
 			document.body.style.width = Math.ceil(bounds.x + bounds.width) + 'px';
@@ -1004,8 +2144,8 @@ function render(data)
 	{
 		var to = diagrams.length - 1;
 		
-		//Parameters to and all pages should not be sent with formats other than PDF with page view enabled
-		if (!data.allPages)
+		// Parameters to and all pages should not be sent with formats other than PDF with page view enabled
+		if (data.allPages != '1')
 		{
 			if (data.pageId != null)
 			{
@@ -1015,6 +2155,7 @@ function render(data)
 					{
 						from = i;
 						to = i;
+						singlePage = true;
 						break;
 					}
 				}
@@ -1025,6 +2166,7 @@ function render(data)
 				to = parseInt(data.to);
 				//If to is not defined, use from (so one page), otherwise, to is restricted to the range from "from" to diagrams.length - 1
 				to = isNaN(to)? from : Math.max(from, Math.min(to, diagrams.length - 1));
+				singlePage = !isNaN(parseInt(data.from)) && from == to;
 			}
 		}
 		
@@ -1047,26 +2189,119 @@ function render(data)
 			
 			return graphGetGlobalVariable.apply(this, arguments);
 		};
-			
-		for (var i = from; i <= to; i++) 
+
+		waitCounter += to - from + 1;
+
+		// Exports all pages into one SVG with a view for each page. Checks the
+		// function as this file can be newer than app.min.js after a release.
+		if (data.format == 'svg' && data.allPages == '1' &&
+			typeof Graph.createSvgWithViews === 'function')
 		{
-			if (diagrams[i] != null)
+			svgPages = [];
+		}
+
+		// Renders the page with the given index into the graph
+		var renderDiagram = function(i)
+		{
+			if (pageId == null)
 			{
-				if (pageId == null)
+				pageId = diagrams[i].getAttribute('id');
+			}
+
+			xmlDoc = Editor.parseDiagramNode(diagrams[i]);
+
+			if (xmlDoc != null)
+			{
+				xmlDoc = xmlDoc.ownerDocument;
+			}
+
+			graph.getModel().clear();
+			from = i;
+			renderPage(diagrams[i].getAttribute('id'));
+		};
+
+		// Takes the SVG of each page once the outlines of its images are traced,
+		// one page after the other. getSvg typesets the labels of a page with
+		// math, which decrements the wait counter (see Editor.onMathJaxDone).
+		// The pages share one deadline for the traces, as the next page waits
+		// again for a trace that the timeout of the previous page stopped.
+		var outlineDeadline = Date.now() + OUTLINE_TIMEOUT;
+
+		// Renders the page with the given index and returns true if its SVG is
+		// taken later, when its outlines are traced, and the next pages are
+		// rendered after that (see renderSvgPages)
+		var renderSvgPage = function(i)
+		{
+			var pending = true;
+			var later = false;
+
+			var next = function()
+			{
+				pending = false;
+
+				if (diagrams[i] != null)
 				{
-					pageId = diagrams[i].getAttribute('id');
-				}
-				
-				xmlDoc = Editor.parseDiagramNode(diagrams[i]);
-				
-				if (xmlDoc != null)
-				{
-					xmlDoc = xmlDoc.ownerDocument;
+					if (graph.mathEnabled)
+					{
+						waitCounter++;
+					}
+
+					svgPages.push({svg: getSvg(), id: diagrams[i].getAttribute('id'),
+						name: diagrams[i].getAttribute('name')});
 				}
 
-				graph.getModel().clear();
-				from = i;
-				renderPage(diagrams[i].getAttribute('id'));
+				decrementWaitCounter();
+
+				if (later)
+				{
+					renderSvgPages(i + 1);
+				}
+			};
+
+			if (diagrams[i] != null)
+			{
+				renderDiagram(i);
+			}
+
+			if (typeof graph.waitForOutlines === 'function')
+			{
+				graph.waitForOutlines(next, Math.max(0, outlineDeadline - Date.now()));
+			}
+			else
+			{
+				next();
+			}
+
+			later = pending;
+
+			return later;
+		};
+
+		// Renders the pages from the given index in a loop while their SVGs are
+		// taken at once, as a call from next would nest once for each page and
+		// overflow the stack for thousands of pages
+		var renderSvgPages = function(i)
+		{
+			while (i <= to && !renderSvgPage(i))
+			{
+				i++;
+			}
+		};
+
+		if (svgPages != null)
+		{
+			renderSvgPages(from);
+		}
+		else
+		{
+			for (var i = from; i <= to; i++)
+			{
+				if (diagrams[i] != null)
+				{
+					renderDiagram(i);
+				}
+
+				decrementWaitCounter();
 			}
 		}
 	}
@@ -1074,7 +2309,24 @@ function render(data)
 	{
 		renderPage();
 	}
-	
+
+	if (preview != null)
+	{
+		// Expands fill patterns to inline geometry for vector PDF output
+		if (Editor.expandPatternsForPrint)
+		{
+			var svgs = document.getElementsByTagName('svg');
+
+			for (var i = 0; i < svgs.length; i++)
+			{
+				Editor.expandSvgPatterns(svgs[i]);
+			}
+		}
+
+		preview.addPendingCss(document);
+		Graph.rewritePageLinks(document, true);
+	}
+
 	if (fallbackFont)
 	{
 		// Add a fallbackFont font to all labels in case the selected font doesn't support the character
@@ -1082,13 +2334,32 @@ function render(data)
 		// Use this with a custom font-face in export-fonts.css file
 		document.querySelectorAll('foreignObject div').forEach(d => d.style.fontFamily = (d.style.fontFamily || '') + ', ' + fallbackFont);
 	}
-	
-	renderGrid();
+
+	if (data.format == 'pdf')
+	{
+		graph.container.parentNode.removeChild(graph.container);
+	}
+
 	// Includes images in SVG and HTML labels
 	waitForImages('image', 'xlink:href');
 	waitForImages('img', 'src');
-	renderMath(document.body);
-	// Immediate return if not waiting for any content
+
+	// Skips typesetting if no page enables math so that the export does
+	// not process any labels and does not wait for MathJax to load
+	if (mathUsed)
+	{
+		renderMath(document.body);
+	}
+
+	// Waits for the outlines of images that the first pass did not trace
+	// (see getOutlinePages), eg. of images that depend on the theme
+	if (typeof graph.waitForOutlines === 'function')
+	{
+		waitCounter++;
+		graph.waitForOutlines(decrementWaitCounter, OUTLINE_TIMEOUT);
+	}
+
+	// Invokes callback
 	decrementWaitCounter();
 	
 	return graph;

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2017, CTI LOGIC
- * Copyright (c) 2006-2017, JGraph Ltd
- * Copyright (c) 2006-2017, Gaudenz Alder
+ * Copyright (c) 2006-2017, JGraph Holdings Ltd
+ * Copyright (c) 2006-2017, draw.io AG
  * 
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
  *
@@ -28,18 +28,18 @@ function mxRuler(editorUi, unit, isVertical, isSecondery)
     this.unit = unit;
     var style = (!Editor.isDarkMode()) ? {
     	bkgClr: '#ffffff',
-    	outBkgClr: '#e8e9ed',
-    	cornerClr: '#fbfbfb',
-    	strokeClr: '#dadce0',
-    	fontClr: '#BBBBBB',
-    	guideClr: '#0000BB'
+		outBkgClr: '#f1f3f4',
+		cornerClr: '#f1f3f4',
+		strokeClr: '#dadce0',
+		fontClr: '#BBBBBB',
+		guideClr: '#0000BB'
     } : {
     	bkgClr: '#202020',
-    	outBkgClr: Editor.darkColor,
-    	cornerClr: Editor.darkColor,
-    	strokeClr: '#505759',
-    	fontClr: '#BBBBBB',
-    	guideClr: '#0088cf'
+		outBkgClr: '#1B1D1E',
+		cornerClr: '#1B1D1E',
+		strokeClr: '#505759',
+		fontClr: '#BBBBBB',
+		guideClr: '#0088cf'
     };
 
     //create the container
@@ -49,26 +49,27 @@ function mxRuler(editorUi, unit, isVertical, isSecondery)
 	
 	function resizeRulerContainer()
 	{
-		var diagCont = editorUi.diagramContainer;
-		
-	    container.style.top = (diagCont.offsetTop - RULER_THICKNESS) + 'px';
-	    container.style.left = (diagCont.offsetLeft - RULER_THICKNESS) + 'px';
-	    container.style.width = ((isVertical? 0 : diagCont.offsetWidth) + RULER_THICKNESS) + 'px';
-	    container.style.height = ((isVertical? diagCont.offsetHeight : 0) + RULER_THICKNESS) + 'px';
+		var offset = editorUi.getDiagramContainerOffset();
+		var dg = editorUi.diagramContainer;
+
+	    container.style.top = (dg.offsetTop - offset.y) + 'px';
+	    container.style.left = (dg.offsetLeft - offset.x) + 'px';
+	    container.style.width = ((isVertical? 0 : dg.offsetWidth - 1) + RULER_THICKNESS) + 'px';
+	    container.style.height = ((isVertical? dg.offsetHeight : 0) + RULER_THICKNESS) + 'px';
 	};
     
 	// Hook for dark mode changes
 	this.updateStyle = mxUtils.bind(this, function()
 	{
 		style = (!Editor.isDarkMode()) ? {
-	    	outBkgClr: '#e8e9ed',
-	    	cornerClr: '#fbfbfb',
+	    	outBkgClr: '#f1f3f4',
+	    	cornerClr: '#f1f3f4',
 	    	strokeClr: '#dadce0',
 	    	fontClr: '#BBBBBB',
 	    	guideClr: '#0000BB'
 	    } : {
-	    	outBkgClr: Editor.darkColor,
-	    	cornerClr: Editor.darkColor,
+			outBkgClr: '#1B1D1E',
+			cornerClr: '#1B1D1E',
 	    	strokeClr: '#505759',
 	    	fontClr: '#BBBBBB',
 	    	guideClr: '#0088cf'
@@ -80,7 +81,10 @@ function mxRuler(editorUi, unit, isVertical, isSecondery)
 	
 	this.updateStyle();
 
+	// Class replaces :has(.geRuler) in the CSS, which restyled the
+	// page after every change of the DOM
 	editorUi.diagramContainer.appendChild(container);
+	editorUi.diagramContainer.classList.add('geRulerContainer');
 	mxEvent.disableContextMenu(container);
 
 	this.editorUiRefresh = editorUi.refresh;
@@ -183,6 +187,7 @@ function mxRuler(editorUi, unit, isVertical, isSecondery)
                 tickSize = [3,5,5,5,5,10,5,5,5,5];
                 break;
             case mxConstants.MILLIMETERS:
+            case mxConstants.CENTIMETERS:
                 len = 10;
                 tickStep = mxConstants.PIXELS_PER_MM;
                 tickSize = [5,3,3,3,3,6,3,3,3,3];
@@ -212,7 +217,7 @@ function mxRuler(editorUi, unit, isVertical, isSecondery)
     	}
         else if (scale <= 0.5)
     	{
-        	step = tickStep * (Math.floor((1 / scale) / 2) * (ruler.unit == mxConstants.MILLIMETERS? 2 : 1));
+        	step = tickStep * (Math.floor((1 / scale) / 2) * ((ruler.unit == mxConstants.MILLIMETERS || ruler.unit == mxConstants.CENTIMETERS)? 2 : 1));
     	}
 
         var lastTick = null;
@@ -257,8 +262,18 @@ function mxRuler(editorUi, unit, isVertical, isSecondery)
         
         //Draw ticks
         ctx.fillStyle = style.fontClr;
-        
-        for (var i = hasPageView? rStart : rStart % (step * scale); i <= rEnd; i += step * scale) 
+
+        var tickDist = step * scale;
+        var firstTick = hasPageView? rStart : rStart % tickDist;
+
+        //Starts at the first tick in the visible area, keeping the tick phase,
+        //so the loop is bounded when scrolled far into a large page layout
+        if (firstTick < RULER_THICKNESS - tickDist)
+    	{
+        	firstTick += Math.floor((RULER_THICKNESS - firstTick) / tickDist) * tickDist;
+    	}
+
+        for (var i = firstTick; i <= rEnd; i += tickDist)
         {
         	 var current = Math.round((i - rStart) / scale / step);
         	
@@ -543,6 +558,8 @@ mxRuler.prototype.formatText = function(pixels)
             return (pixels / mxConstants.PIXELS_PER_MM).toFixed(1);
         case mxConstants.METERS:
             return (pixels / (mxConstants.PIXELS_PER_MM * 1000)).toFixed(4);
+        case mxConstants.CENTIMETERS:
+            return parseFloat((pixels / (mxConstants.PIXELS_PER_MM * 10)).toFixed(2));
         case mxConstants.INCHES:
             return (pixels / mxConstants.PIXELS_PER_INCH).toFixed(2);
     }
@@ -555,14 +572,18 @@ mxRuler.prototype.destroy = function()
 	mxGuide.prototype.destroy = this.origGuideDestroy;
     this.graph.removeListener(this.sizeListener);
     this.graph.container.removeEventListener('scroll', this.scrollListener);
-    this.graph.view.removeListener('unitChanged', this.unitListener);
-    this.ui.removeListener('pageViewChanged', this.pageListener);
-    this.ui.removeListener('pageScaleChanged', this.pageListener);
-    this.ui.removeListener('pageFormatChanged', this.pageListener);
+    this.graph.view.removeListener(this.unitListener);
+    this.ui.removeListener(this.pageListener);
     
     if (this.container != null)
     {
-    	this.container.parentNode.removeChild(this.container);
+    	var parent = this.container.parentNode;
+    	parent.removeChild(this.container);
+
+    	if (parent.getElementsByClassName('geRuler').length == 0)
+    	{
+    		parent.classList.remove('geRulerContainer');
+    	}
     }
 };
 
@@ -608,7 +629,6 @@ function mxDualRuler(editorUi, unit)
 						editorUi.menus.addMenuItems(menu, ['points', 'inches', 'millimeters', 'meters'], parent);
 					}));
 					
-					menu.div.className += ' geMenubarMenu';
 					menu.smartSeparators = true;
 					menu.showDisabled = true;
 					menu.autoExpand = true;

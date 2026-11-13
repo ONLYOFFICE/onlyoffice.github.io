@@ -1,6 +1,5 @@
 /**
- * $Id: mxMockupContainers.js,v 1.10 2013/07/09 11:19:51 mate Exp $
- * Copyright (c) 2006-2010, JGraph Ltd
+ * Copyright (c) 2006-2010, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -36,10 +35,10 @@ mxShapeMockupVideoPlayer.prototype.cst = {
 };
 
 mxShapeMockupVideoPlayer.prototype.customProperties = [
-	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color'},
-	{name: 'textColor', dispName: 'Text Color', type: 'color'},
-	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color'},
+	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color', primary:true},
+	{name: 'textColor', dispName: 'Text Color', type: 'color', primary:true},
+	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color', primary:true},
 	{name: 'barPos', dispName: 'Handle Position', type: 'float', min:0, max:100, defVal:20},
 	{name: 'barHeight', dispName: 'Video Bar Height', type: 'float', min:0, defVal:30} 
 ];
@@ -56,7 +55,7 @@ mxShapeMockupVideoPlayer.prototype.paintVertexShape = function(c, x, y, w, h)
 	var frameColor = mxUtils.getValue(this.style, mxConstants.STYLE_STROKECOLOR, '#666666');
 	var filledColor = mxUtils.getValue(this.style, mxShapeMockupVideoPlayer.prototype.cst.STROKE_COLOR2, '#008cff');
 	var emptyColor = mxUtils.getValue(this.style, mxShapeMockupVideoPlayer.prototype.cst.STROKE_COLOR3, '#c4c4c4');
-	var barHeight = mxUtils.getValue(this.style, mxShapeMockupVideoPlayer.prototype.cst.BAR_HEIGHT, '30');
+	var barHeight = mxUtils.getNumber(this.style, mxShapeMockupVideoPlayer.prototype.cst.BAR_HEIGHT, 30);
 
 	w = Math.max(w, 5 * barHeight);
 	h = Math.max(h, barHeight + 10);
@@ -82,7 +81,7 @@ mxShapeMockupVideoPlayer.prototype.background = function(c, x, y, w, h, bgColor,
 
 mxShapeMockupVideoPlayer.prototype.otherShapes = function(c, x, y, w, h, buttonColor, frameColor, filledColor, emptyColor, barHeight)
 {
-	var barPos = mxUtils.getValue(this.style, mxShapeMockupVideoPlayer.prototype.cst.BAR_POS, '20');
+	var barPos = mxUtils.getNumber(this.style, mxShapeMockupVideoPlayer.prototype.cst.BAR_POS, 20);
 	barPos = Math.max(0, barPos);
 	barPos = Math.min(100, barPos);
 
@@ -432,8 +431,8 @@ mxShapeMockupBrowserWindow.prototype.cst = {
 };
 
 mxShapeMockupBrowserWindow.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color'}
+	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color', primary:true}
 ];
 
 /**
@@ -632,7 +631,7 @@ mxShapeMockupUserMale.prototype.cst = {
 };
 
 mxShapeMockupUserMale.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color'}
+	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color', primary:true}
 ];
 
 /**
@@ -831,7 +830,7 @@ mxShapeMockupUserFemale.prototype.cst = {
 };
 
 mxShapeMockupUserFemale.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color'}
+	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color', primary:true}
 ];
 
 /**
@@ -1111,8 +1110,8 @@ mxShapeMockupWindow.prototype.cst = {
 };
 
 mxShapeMockupWindow.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color'}
+	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color', primary:true}
 ];
 
 /**
@@ -1245,7 +1244,7 @@ mxShapeMockupHorTabBar.prototype.paintVertexShape = function(c, x, y, w, h)
 			selectedTab = i;
 		}
 
-		currW = mxUtils.getSizeForString(currLabel, fontSize, mxConstants.DEFAULT_FONTFAMILY).width;
+		var currW = mxUtils.getSizeForString(currLabel, fontSize, mxConstants.DEFAULT_FONTFAMILY).width;
 
 		if (currW === 0)
 		{

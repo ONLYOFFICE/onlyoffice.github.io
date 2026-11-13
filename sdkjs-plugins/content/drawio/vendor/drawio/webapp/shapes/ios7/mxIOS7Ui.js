@@ -1,6 +1,5 @@
 /**
- * $Id: mxIOS7Ui.js,v 1.6 2013/12/04 16:48:54 mate Exp $
- * Copyright (c) 2006-2013, JGraph Ltd
+ * Copyright (c) 2006-2013, JGraph Holdings Ltd
  */
 
 var mxIOS7C =
@@ -61,7 +60,7 @@ function mxShapeIOS7AppBar(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxShapeIOS7AppBar, mxShape);
 
 mxShapeIOS7AppBar.prototype.customProperties = [
-	{name: 'fillColor2', dispName: 'Fill Color 2', type: 'color'}
+	{name: 'fillColor2', dispName: 'Fill Color 2', type: 'color', primary: true}
 ];
 
 /**
@@ -170,8 +169,9 @@ mxShapeIOS7OnOffButton.prototype.customProperties = [
 		enumList: [{val: 'on', dispName: 'On'},
 				   {val: 'off', dispName: 'Off'}]
 	},
-	{name: 'strokeColor2', dispName: 'Stroke Color 2', type: 'color'},
-	{name: 'fillColor2', dispName: 'Fill Color 2', type: 'color'},
+	{name: 'strokeColor2', dispName: 'Stroke Color 2', type: 'color', primary:true},
+	{name: 'fillColor2', dispName: 'Fill Color 2', type: 'color', primary:true},
+	{name: 'handleColor', dispName: 'Handle Color', defVal: '#ffffff', type: 'color', primary:true}
 ];
 
 /**
@@ -208,7 +208,7 @@ mxShapeIOS7OnOffButton.prototype.background = function(c, x, y, w, h, state)
 
 mxShapeIOS7OnOffButton.prototype.foreground = function(c, x, y, w, h, state)
 {
-	c.setFillColor('#ffffff');
+	c.setFillColor(mxUtils.getValue(this.style, 'handleColor', '#ffffff'));
 
 	if (state === mxIOS7C.STATE_ON)
 	{
@@ -398,6 +398,11 @@ function mxShapeIOS7Icon(bounds, fill, stroke, strokewidth)
 */
 mxUtils.extend(mxShapeIOS7Icon, mxShape);
 
+mxShapeIOS7Icon.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Icon Top', defVal: '#00D0F0', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Icon Bottom', defVal: '#0080F0', type: 'color', primary:true}
+];
+
 /**
 * Function: paintVertexShape
 * 
@@ -412,7 +417,7 @@ mxShapeIOS7Icon.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeIOS7Icon.prototype.foreground = function(c, w, h)
 {
-	c.setGradient('#00D0F0', '#0080F0', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#00D0F0'), mxUtils.getValue(this.style, 'fillColor3', '#0080F0'), w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(0, 0, w, h, w * 0.1, h * 0.1);
 	c.fill();
 	
@@ -444,6 +449,10 @@ function mxShapeIOS7horButtonBar(bounds, fill, stroke, strokewidth)
 * Extends mxShape.
 */
 mxUtils.extend(mxShapeIOS7horButtonBar, mxShape);
+
+mxShapeIOS7horButtonBar.prototype.customProperties = [
+	{name: 'accentColor', dispName: 'Selected Button', defVal: '#0080F0', type: 'color', primary:true}
+];
 
 /**
 * Function: paintVertexShape
@@ -528,18 +537,16 @@ mxShapeIOS7horButtonBar.prototype.background = function(c, w, h, rSize, buttonNu
 	//draw the button separators
 	c.setStrokeColor(frameColor);
 	c.begin();
+	// Sum of the widths of the buttons before the separator
+	var sumWidth = 0;
+
 	for (var i = 1; i < buttonNum; i++)
 	{
+		sumWidth += buttonWidths[i - 1] + 2 * labelOffset;
+
 		if (i !== selectedButton && i !== (selectedButton + 1))
 		{
-			var currWidth = 0;
-
-			for (var j = 0; j < i; j++)
-			{
-				currWidth += buttonWidths[j] + 2 * labelOffset;
-			}
-
-			currWidth = currWidth * w / minW;
+			var currWidth = sumWidth * w / minW;
 			c.moveTo(currWidth, 0);
 			c.lineTo(currWidth, h);
 		}
@@ -559,7 +566,7 @@ mxShapeIOS7horButtonBar.prototype.background = function(c, w, h, rSize, buttonNu
 	buttonLeft = buttonLeft * w / minW;
 	var buttonRight = (buttonWidths[selectedButton] + 2 * labelOffset) * w / minW;
 	buttonRight += buttonLeft;
-	c.setFillColor('#0080F0');
+	c.setFillColor(mxUtils.getValue(this.style, 'accentColor', '#0080F0'));
 
 	if (selectedButton === 0)
 	{
@@ -703,6 +710,13 @@ mxShapeIOS7iconGrid.prototype.customProperties = [
 ];
 
 /**
+ * Variable: maxIcons
+ *
+ * Maximum number of icons. Default is 1000.
+ */
+mxShapeIOS7iconGrid.prototype.maxIcons = 1000;
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -710,14 +724,15 @@ mxShapeIOS7iconGrid.prototype.customProperties = [
 mxShapeIOS7iconGrid.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	c.translate(x, y);
-	var gridSize = decodeURIComponent(mxUtils.getValue(this.style, mxIOS7C.GRID_SIZE, '4,7').toString()).split(',');
+	var gridSize = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxIOS7C.GRID_SIZE, '4,7').toString()).split(',');
 
 	var boxSizeX = w / (parseInt(gridSize[0],10) + (gridSize[0]-1) * 0.1);
 	var boxSizeY = h / (parseInt(gridSize[1],10) + (gridSize[1]-1) * 0.1);
 	
-	for (var i = 0; i < gridSize[0]; i++)
+	// Limits the number of rows and icons for huge grid sizes
+	for (var i = 0, n = 0; i < gridSize[0] && i < this.maxIcons; i++)
 	{
-		for (var j = 0; j < gridSize[1]; j++)
+		for (var j = 0; j < gridSize[1] && n < this.maxIcons; j++, n++)
 		{
 			c.rect(boxSizeX * 1.1 * i, boxSizeY * 1.1 * j, boxSizeX, boxSizeY);
 			c.fill();
@@ -803,6 +818,10 @@ function mxShapeIOS7searchBox(bounds, fill, stroke, strokewidth)
 */
 mxUtils.extend(mxShapeIOS7searchBox, mxShape);
 
+mxShapeIOS7searchBox.prototype.customProperties = [
+	{name: 'fieldColor', dispName: 'Field Color', defVal: '#ffffff', type: 'color', primary:true}
+];
+
 /**
 * Function: paintVertexShape
 * 
@@ -830,7 +849,7 @@ mxShapeIOS7searchBox.prototype.foreground = function(c, w, h)
 	var fontSize = mxUtils.getValue(this.style, mxIOS7C.STYLE_TEXTSIZE, '17');
 	var rSize = Math.min(w, h) * 0.1;
 
-	c.setFillColor('#ffffff');
+	c.setFillColor(mxUtils.getValue(this.style, 'fieldColor', '#ffffff'));
 	c.roundrect(w * 0.05, h * 0.15, w * 0.5, h * 0.7, rSize, rSize);
 	c.fillAndStroke();
 	
@@ -870,6 +889,10 @@ function mxShapeIOS7URL(bounds, fill, stroke, strokewidth)
 */
 mxUtils.extend(mxShapeIOS7URL, mxShape);
 
+mxShapeIOS7URL.prototype.customProperties = [
+	{name: 'fieldColor', dispName: 'Field Color', defVal: '#d8d8d8', type: 'color', primary:true}
+];
+
 /**
 * Function: paintVertexShape
 * 
@@ -897,7 +920,7 @@ mxShapeIOS7URL.prototype.foreground = function(c, w, h)
 	var fontSize = mxUtils.getValue(this.style, mxIOS7C.STYLE_TEXTSIZE, '17');
 	var rSize = Math.min(w, h) * 0.1;
 
-	c.setFillColor('#d8d8d8');
+	c.setFillColor(mxUtils.getValue(this.style, 'fieldColor', '#d8d8d8'));
 	c.roundrect(w * 0.05, h * 0.15, w * 0.9, h * 0.7, rSize, rSize);
 	c.fill();
 	
@@ -943,6 +966,10 @@ function mxShapeIOS7Actiondialog(bounds, fill, stroke, strokewidth)
 */
 mxUtils.extend(mxShapeIOS7Actiondialog, mxShape);
 
+mxShapeIOS7Actiondialog.prototype.customProperties = [
+	{name: 'buttonColor', dispName: 'Button Color', defVal: '#e0e0e0', type: 'color', primary:true}
+];
+
 /**
 * Function: paintVertexShape
 * 
@@ -959,7 +986,7 @@ mxShapeIOS7Actiondialog.prototype.paintVertexShape = function(c, x, y, w, h)
 	
 	c.setShadow(false);
 	
-	c.setFillColor('#e0e0e0');
+	c.setFillColor(mxUtils.getValue(this.style, 'buttonColor', '#e0e0e0'));
 	c.roundrect(w * 0.05, h * 0.1, w * 0.9, h * 0.35, w * 0.025, h * 0.05);
 	c.fill();
 	c.roundrect(w * 0.05, h * 0.55, w * 0.9, h * 0.35, w * 0.025, h * 0.05);
@@ -1502,6 +1529,13 @@ mxShapeIOS7SelectBar.prototype.customProperties = [
 ];
 
 /**
+ * Variable: maxFields
+ *
+ * Maximum number of fields. Default is 10000.
+ */
+mxShapeIOS7SelectBar.prototype.maxFields = 10000;
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -1542,15 +1576,17 @@ mxShapeIOS7SelectBar.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.stroke();
 
 	var currDx = dx2;
+	var n = 0;
 	
 	c.begin();
 	
-	while (currDx < (w - Math.max(20, r)))
+	while (currDx < (w - Math.max(20, r)) && n < this.maxFields)
 	{
 		c.moveTo(currDx, 0);
 		c.lineTo(currDx, h);
 		
 		currDx = currDx + dx2;
+		n++;
 	}
 	
 	c.stroke();
@@ -1654,7 +1690,8 @@ mxShapeIOS7Slider2.prototype.cst = {
 
 mxShapeIOS7Slider2.prototype.customProperties = [
 	{name: 'barPos', dispName: 'Handle Position', type: 'float', min:0, max:1, defVal:20},
-	{name: 'handleSize', dispName: 'Handle Size', type: 'float', min:0, defVal:10}
+	{name: 'handleSize', dispName: 'Handle Size', type: 'float', min:0, defVal:10},
+	{name: 'barColor', dispName: 'Bar Color', defVal: '#bbbbbb', type: 'color', primary:true}
 ];
 
 /**
@@ -1678,7 +1715,7 @@ mxShapeIOS7Slider2.prototype.background = function(c, x, y, w, h)
 	barPos = Math.max(0, Math.min(1, barPos));
 
 	c.save();
-	c.setStrokeColor('#bbbbbb');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'barColor', '#bbbbbb'));
 	c.begin();
 	c.moveTo(0, h * 0.5);
 	c.lineTo(w, h * 0.5);
@@ -1691,7 +1728,7 @@ mxShapeIOS7Slider2.prototype.background = function(c, x, y, w, h)
 	c.lineTo(barPos * w, h * 0.5);
 	c.fillAndStroke();
 	
-	c.setStrokeColor('#bbbbbb');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'barColor', '#bbbbbb'));
 	c.begin();
 	c.ellipse(barPos * w - hSize * 0.5, h * 0.5 - hSize * 0.5, hSize, hSize);
 	c.fillAndStroke();

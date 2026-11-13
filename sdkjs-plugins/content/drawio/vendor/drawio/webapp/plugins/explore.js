@@ -1,30 +1,24 @@
 /**
- * Explore plugin.
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
+/**
+ * Explore plugin. Adds the built-in Explore action to the context menu of
+ * cells with connections and explores the clicked shape in chromeless mode.
  */
 Draw.loadPlugin(function(ui)
 {
-	// Adds resource for action
-	mxResources.parse('exploreFromHere=Explore from here...');
-	
 	var uiCreatePopupMenu = ui.menus.createPopupMenu;
 	ui.menus.createPopupMenu = function(menu, cell, evt)
 	{
 		uiCreatePopupMenu.apply(this, arguments);
-		
-		var graph = ui.editor.graph;
-		
-		if (graph.getEdges(graph.getSelectionCell()).length > 0)
+
+		if (ui.actions.get('explore').isEnabled())
 		{
-			this.addMenuItems(menu, ['-', 'exploreFromHere'], null, evt);
+			this.addMenuItems(menu, ['-', 'explore'], null, evt);
 		}
 	};
 
-	// Adds action
-	ui.actions.addAction('exploreFromHere', function()
-	{
-		Graph.exploreFromCell(ui.editor.graph, ui.editor.graph.getSelectionCell());
-	});
-	
 	// Click handler for chromeless mode
 	if (ui.editor.isChromelessView())
 	{

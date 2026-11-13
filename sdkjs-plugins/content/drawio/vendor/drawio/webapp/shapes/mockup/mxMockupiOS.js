@@ -1,6 +1,5 @@
 /**
- * $Id: mxMockupiOS.js,v 1.5 2013/11/12 06:25:46 mate Exp $
- * Copyright (c) 2006-2010, JGraph Ltd
+ * Copyright (c) 2006-2010, JGraph Holdings Ltd
  */
 
 var mxMockupC =
@@ -109,24 +108,28 @@ function mxShapeMockupiPhone(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxShapeMockupiPhone, mxShape);
 
 mxShapeMockupiPhone.prototype.customProperties = [
-	{name: 'bgStyle', dispName: 'Background', type: 'enum', 
-		enumList: [{val: 'bgGreen', dispName: 'Green'}, 
-			       {val: 'bgWhite', dispName: 'White'}, 
-			       {val: 'bgGray', dispName: 'Gray'}, 
-			       {val: 'bgFlat', dispName: 'Flat'}, 
-			       {val: 'bgMap', dispName: 'Map'}, 
-			       {val: 'bgStriped', dispName: 'Striped'}]}
+	{name: 'bgStyle', dispName: 'Background', type: 'enum',
+		enumList: [{val: 'bgGreen', dispName: 'Green'},
+			       {val: 'bgWhite', dispName: 'White'},
+			       {val: 'bgGray', dispName: 'Gray'},
+			       {val: 'bgFlat', dispName: 'Flat'},
+			       {val: 'bgMap', dispName: 'Map'},
+			       {val: 'bgStriped', dispName: 'Striped'}]},
+	{name: 'bodyColor', dispName: 'Body Color', defVal: '#000000', type: 'color', primary:true},
+	{name: 'homeButtonColor', dispName: 'Home Button', defVal: '#bbbbbb', type: 'color', primary:true},
+	{name: 'cameraColor', dispName: 'Camera', defVal: '#000099', type: 'color', primary:true},
+	{name: 'speakerColor', dispName: 'Speaker', defVal: '#444444', type: 'color', primary:true}
 ];
 
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiPhone.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	c.translate(x, y);
-	var rSize = 25;
+	var rSize = w < 100 ? 4 : 25;
 	this.background(c, x, y, w, h, rSize);
 	c.setShadow(false);
 	this.foreground(c, x, y, w, h, rSize);
@@ -134,18 +137,48 @@ mxShapeMockupiPhone.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiPhone.prototype.background = function(c, x, y, w, h, rSize)
 {
-	c.setFillColor('#000000');
-	c.setStrokeColor('#000000');
+	var bodyColor = mxUtils.getValue(this.style, 'bodyColor', '#000000');
+	c.setFillColor(bodyColor);
+	c.setStrokeColor(bodyColor);
 	c.roundrect(0, 0, w, h, rSize, rSize);
 	c.fillAndStroke();
+
+	// Adaptive depth: a faint white highlight fading down from the top and a
+	// faint black shadow fading up from the bottom, both always present. On a
+	// dark phone the white reads; on a light phone the black reads; mid-tones
+	// get a touch of each. No light/dark detection needed.
+	c.setGradient('#ffffff', '#ffffff', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 0.15, 0);
+	c.roundrect(0, 0, w, h, rSize, rSize);
+	c.fill();
+
+	c.setGradient('#000000', '#000000', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 0, 0.15);
+	c.roundrect(0, 0, w, h, rSize, rSize);
+	c.fill();
 };
 
 mxShapeMockupiPhone.prototype.foreground = function(c, x, y, w, h, rSize)
 {
+	var bodyColor = mxUtils.getValue(this.style, 'bodyColor', '#000000');
 	c.setStrokeWidth(1.5);
 
+	// Top bezel: two sheen overlays on top of the body's adaptive shading.
+	// 1) White sheen - visible against dark body colours (metallic highlight).
+	// 2) Black sheen - visible against light body colours (dark accent).
+	// Both fade to alpha 0 at the polygon's bottom edge, so neither creates a
+	// step when the polygon ends. No bodyColor base fill - that would mask the
+	// body shading underneath.
 	c.begin();
-	c.setGradient('#808080', '#000000', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient('#ffffff', '#ffffff', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 0.5, 0);
+	c.moveTo(w * 0.325, 0);
+	c.lineTo(w - rSize, 0);
+	c.arcTo(rSize, rSize, 0, 0, 1, w, rSize);
+	c.lineTo(w, h * 0.5);
+	c.lineTo(w * 0.7, h * 0.5);
+	c.close();
+	c.fill();
+
+	c.begin();
+	c.setGradient('#000000', '#000000', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 0.15, 0);
 	c.moveTo(w * 0.325, 0);
 	c.lineTo(w - rSize, 0);
 	c.arcTo(rSize, rSize, 0, 0, 1, w, rSize);
@@ -203,7 +236,8 @@ mxShapeMockupiPhone.prototype.foreground = function(c, x, y, w, h, rSize)
 		var i = 5;
 		c.begin();
 
-		while (i < w)
+		// Limits the number of stripes for huge widths
+		while (i < w && i <= 5 * 10000)
 		{
 			c.moveTo(i, 0);
 			c.lineTo(i, h);
@@ -598,29 +632,40 @@ mxShapeMockupiPhone.prototype.foreground = function(c, x, y, w, h, rSize)
 	c.roundrect(0, 0, w, h, rSize, rSize);
 	c.stroke();
 
-	rSize = 22.5;
-	c.begin();
-	c.setStrokeColor('#666666');
-	c.roundrect(5, 5, w - 10, h - 10, rSize, rSize);
-	c.stroke();
-
+	if (w > 50)
+	{
+		rSize = w < 100? 3 : 22.5;
+		c.begin();
+		c.setStrokeColor('#666666');
+		c.roundrect(5, 5, w - 10, h - 10, rSize, rSize);
+		c.stroke();
+	}
+	
 	c.setAlpha(1);
 	c.ellipse(w * 0.4875, h * 0.04125, w * 0.025, h * 0.0125);
 	c.setStrokeWidth(2.5);
 	c.setStrokeColor('#000000');
-	c.setFillColor('#000099');
+	c.setFillColor(mxUtils.getValue(this.style, 'cameraColor', '#000099'));
 	c.fillAndStroke();
 
 	c.begin();
 	c.setStrokeWidth(1.5);
-	c.setFillColor('#444444');
+	c.setFillColor(mxUtils.getValue(this.style, 'speakerColor', '#444444'));
 	c.setStrokeColor('#333333');
 	rSize = 4;
 
 	c.roundrect(w * 0.375, h * 0.075, w * 0.25, h * 0.01875, w * 0.02, h * 0.01);
 	c.fillAndStroke();
 
-	c.setGradient('#bbbbbb', '#000000', w * 0.4, h * 0.875, w * 0.2, h * 0.1, mxConstants.DIRECTION_SOUTH, 1, 1);
+	// Circle button is filled flat with homeButtonColor (tokenised) so it
+	// recolours entirely. A subtle vertical black gradient on top supplies the
+	// discreet depth (darker toward the bottom, like the original) and is NOT
+	// tokenised - it is fixed shading that scales over whatever colour is set.
+	c.setFillColor(mxUtils.getValue(this.style, 'homeButtonColor', '#bbbbbb'));
+	c.ellipse(w * 0.4, h * 0.875, w * 0.2, h * 0.1);
+	c.fill();
+
+	c.setGradient('#000000', '#000000', w * 0.4, h * 0.875, w * 0.2, h * 0.1, mxConstants.DIRECTION_SOUTH, 0, 0.3);
 	c.ellipse(w * 0.4, h * 0.875, w * 0.2, h * 0.1);
 	c.fill();
 
@@ -628,14 +673,17 @@ mxShapeMockupiPhone.prototype.foreground = function(c, x, y, w, h, rSize)
 	c.ellipse(w * 0.404, h * 0.876, w * 0.19, h * 0.095);
 	c.stroke();
 
+	// Glossy reflection: the geometric inverse of the original crescent
+	// (mirrored to the lower half), filled with a vertical white gradient -
+	// white at the top fading to transparent at the bottom.
+	c.setAlpha(1);
 	c.begin();
-	c.setAlpha(0.85);
-	c.setFillColor('#000000');
+	c.setGradient('#ffffff', '#ffffff', w * 0.4, h * 0.925, w * 0.2, h * 0.05, mxConstants.DIRECTION_SOUTH, 0.3, 0);
 	c.moveTo(w * 0.4025, h * 0.925);
-	c.arcTo(w * 0.0975, h * 0.04625, 0, 0, 1, w * 0.5975, h * 0.925);
+	c.arcTo(w * 0.0975, h * 0.04625, 0, 0, 0, w * 0.5975, h * 0.925);
 	c.arcTo(w * 0.2, h * 0.1, 0, 0, 1, w * 0.4025, h * 0.925);
 	c.close();
-	c.fillAndStroke();
+	c.fill();
 
 	c.begin();
 	c.setAlpha(0.7);
@@ -738,7 +786,8 @@ mxShapeMockupiBgStriped.prototype.foreground = function(c, x, y, w, h)
 	var i = 5;
 	c.begin();
 
-	while (i < w)
+	// Limits the number of stripes for huge widths
+	while (i < w && i <= 5 * 10000)
 	{
 		c.moveTo(i, 0);
 		c.lineTo(i, h);
@@ -1187,7 +1236,7 @@ mxShapeMockupiButtonBar.prototype.customProperties = [
  */
 mxShapeMockupiButtonBar.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var textStrings = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, '+Button 1, Button 2, Button 3').toString()).split(',');
+	var textStrings = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, '+Button 1, Button 2, Button 3').toString()).split(',');
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR, '#666666');
 	var selectedFontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#ffffff');
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '17').toString();
@@ -1396,9 +1445,21 @@ function mxShapeMockupiAppBar(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiAppBar, mxShape);
 
+mxShapeMockupiAppBar.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Bar Top', defVal: '#eeeeee', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Bar Bottom', defVal: '#999999', type: 'color', primary:true},
+	{name: 'signalColor', dispName: 'Signal Color', defVal: '#0099ff', type: 'color', primary:true},
+	{name: 'statusIconColor', dispName: 'Status Icons', defVal: '#999999', type: 'color', primary:true},
+	{name: 'statusIconAccentColor', dispName: 'Status Icon Accent', defVal: '#cccccc', type: 'color', primary:true},
+	{name: 'compassNeedleColor', dispName: 'Compass Needle', defVal: '#990000', type: 'color', primary:true},
+	{name: 'compassNeedleStroke', dispName: 'Compass Needle Stroke', defVal: '#333333', type: 'color', primary:true},
+	{name: 'callBtnGradient', dispName: 'Battery Highlight', defVal: '#E2FFEB', type: 'color', primary:true},
+	{name: 'callBtnColor', dispName: 'Battery Color', defVal: '#008215', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiAppBar.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -1411,14 +1472,14 @@ mxShapeMockupiAppBar.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiAppBar.prototype.background = function(c, x, y, w, h)
 {
-	c.setGradient('#eeeeee', '#999999', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#eeeeee'), mxUtils.getValue(this.style, 'fillColor3', '#999999'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.rect(0, 0, w, h);
 	c.fill();
 };
 
 mxShapeMockupiAppBar.prototype.foreground = function(c, x, y, w, h)
 {
-	c.setFillColor('#0099ff');
+	c.setFillColor(mxUtils.getValue(this.style, 'signalColor', '#0099ff'));
 	c.rect(5, h * 0.5 + 1.75, 1.5, 2.5);
 	c.fill();
 
@@ -1437,11 +1498,12 @@ mxShapeMockupiAppBar.prototype.foreground = function(c, x, y, w, h)
 	c.rect(15, h * 0.5 - 3.25, 1.5, 7.5);
 	c.fill();
 
-	c.setFillColor('#999999');
+	var statusIconColor = mxUtils.getValue(this.style, 'statusIconColor', '#999999');
+	c.setFillColor(statusIconColor);
 	c.ellipse(w - 56.5, h * 0.5 - 4, 8, 8);
 	c.fill();
 
-	c.setStrokeColor('#cccccc');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'statusIconAccentColor', '#cccccc'));
 	c.begin();
 	c.moveTo(w - 52.5, h * 0.5 - 3);
 	c.lineTo(w - 52.5, h * 0.5);
@@ -1449,8 +1511,8 @@ mxShapeMockupiAppBar.prototype.foreground = function(c, x, y, w, h)
 	c.stroke();
 
 	c.setStrokeWidth(0.5);
-	c.setStrokeColor('#333333');
-	c.setFillColor('#990000');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'compassNeedleStroke', '#333333'));
+	c.setFillColor(mxUtils.getValue(this.style, 'compassNeedleColor', '#990000'));
 	c.begin();
 	c.moveTo(w - 45.5, h * 0.5);
 	c.lineTo(w - 37.5, h * 0.5 - 5);
@@ -1459,8 +1521,8 @@ mxShapeMockupiAppBar.prototype.foreground = function(c, x, y, w, h)
 	c.close();
 	c.fillAndStroke();
 
-	c.setFillColor('#999999');
-	c.setStrokeColor('#999999');
+	c.setFillColor(statusIconColor);
+	c.setStrokeColor(statusIconColor);
 	c.begin();
 	c.moveTo(w - 28.5, h * 0.5 + 3.5);
 	c.arcTo(3.5, 3.5, 0, 1, 1, w - 26.5, h * 0.5 + 1);
@@ -1494,7 +1556,7 @@ mxShapeMockupiAppBar.prototype.foreground = function(c, x, y, w, h)
 	c.close();
 	c.fill();
 
-	c.setGradient('#E2FFEB', '#008215', w - 20, h * 0.5 - 3, 10, 6, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'callBtnGradient', '#E2FFEB'), mxUtils.getValue(this.style, 'callBtnColor', '#008215'), w - 20, h * 0.5 - 3, 10, 6, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.begin();
 	c.moveTo(w - 20, h * 0.5 - 3);
 	c.lineTo(w - 10, h * 0.5 - 3);
@@ -1722,9 +1784,14 @@ function mxShapeMockupiTopBarLocked(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiTopBarLocked, mxShape);
 
+mxShapeMockupiTopBarLocked.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Bar Color', defVal: '#000000', type: 'color', primary:true},
+	{name: 'statusIconColor', dispName: 'Status Icons', defVal: '#cccccc', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiTopBarLocked.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -1737,15 +1804,16 @@ mxShapeMockupiTopBarLocked.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiTopBarLocked.prototype.background = function(c, x, y, w, h)
 {
-	c.setFillColor('#000000');
+	c.setFillColor(mxUtils.getValue(this.style, 'fillColor2', '#000000'));
 	c.rect(0, 0, w, h);
 	c.fill();
 };
 
 mxShapeMockupiTopBarLocked.prototype.foreground = function(c, x, y, w, h)
 {
-	c.setFillColor('#cccccc');
-	c.setStrokeColor('#cccccc');
+	var statusIconColor = mxUtils.getValue(this.style, 'statusIconColor', '#cccccc');
+	c.setFillColor(statusIconColor);
+	c.setStrokeColor(statusIconColor);
 
 	c.rect(5, h * 0.5 + 1.75, 1.5, 2.5);
 	c.fill();
@@ -1825,7 +1893,7 @@ mxUtils.extend(mxShapeMockupiButton, mxShape);
  */
 mxShapeMockupiButton.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var mainText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
+	var mainText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#666666').toString();
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '8.5').toString();
 	c.translate(x, y);
@@ -1881,7 +1949,7 @@ mxUtils.extend(mxShapeMockupiButtonBack, mxShape);
  */
 mxShapeMockupiButtonBack.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var mainText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
+	var mainText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#666666').toString();
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '17').toString();
 	c.translate(x, y);
@@ -1896,7 +1964,7 @@ mxShapeMockupiButtonBack.prototype.background = function(c, x, y, w, h)
 	var fillColor2 = mxUtils.getValue(this.style, mxMockupC.STYLE_FILLCOLOR2, '').toString();
 	c.setGradient(fillColor, fillColor2, 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 
-	rSize = 2.5;
+	var rSize = 2.5;
 	c.begin();
 	c.moveTo(w, rSize);
 	c.arcTo(rSize, rSize, 0, 0, 0, w - rSize, 0);
@@ -1947,7 +2015,7 @@ mxUtils.extend(mxShapeMockupiButtonForward, mxShape);
  */
 mxShapeMockupiButtonForward.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var mainText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
+	var mainText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#666666').toString();
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '17').toString();
 	c.translate(x, y);
@@ -1962,7 +2030,7 @@ mxShapeMockupiButtonForward.prototype.background = function(c, x, y, w, h)
 	var fillColor2 = mxUtils.getValue(this.style, mxMockupC.STYLE_FILLCOLOR2, '').toString();
 	c.setGradient(fillColor, fillColor2, 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 
-	rSize = 2.5;
+	var rSize = 2.5;
 	c.begin();
 	c.moveTo(0, rSize);
 	c.arcTo(rSize, rSize, 0, 0, 1, rSize, 0);
@@ -2084,7 +2152,7 @@ mxUtils.extend(mxShapeMockupiTextInput, mxShape);
  */
 mxShapeMockupiTextInput.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var mainText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
+	var mainText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#000000').toString();
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '8').toString();
 	c.translate(x, y);
@@ -2140,7 +2208,7 @@ mxShapeMockupiRadioGroup.prototype.paintVertexShape = function(c, x, y, w, h)
 
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#666666').toString();
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '8').toString();
-	var optionText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Option 1').toString()).split(',');
+	var optionText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Option 1').toString()).split(',');
 	var optionNum = optionText.length;
 	var buttonSize = 5;
 	var lineH = Math.max(fontSize * 1.5, buttonSize);
@@ -2251,7 +2319,7 @@ mxShapeMockupiCheckboxGroup.prototype.paintVertexShape = function(c, x, y, w, h)
 
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#666666').toString();
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '8').toString();
-	var optionText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Option 1').toString()).split(',');
+	var optionText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Option 1').toString()).split(',');
 	var optionNum = optionText.length;
 	var buttonSize = 5;
 	var lineH = Math.max(fontSize * 1.5, buttonSize);
@@ -2355,14 +2423,21 @@ function mxShapeMockupiComboBox(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiComboBox, mxShape);
 
+mxShapeMockupiComboBox.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Dropdown End', defVal: '#3D5565', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Field Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Chevron Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'textColor2', dispName: 'Text Color', defVal: '#666666', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiComboBox.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var mainText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
+	var mainText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text'));
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#666666').toString();
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '8.5').toString();
 	c.translate(x, y);
@@ -2374,7 +2449,7 @@ mxShapeMockupiComboBox.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiComboBox.prototype.background = function(c, x, y, w, h)
 {
-	c.setFillColor('#ffffff');
+	c.setFillColor(mxUtils.getValue(this.style, 'fillColor3', '#ffffff'));
 	c.roundrect(0, 0, w, h, 2.5, 2.5);
 	c.fillAndStroke();
 };
@@ -2394,7 +2469,7 @@ mxShapeMockupiComboBox.prototype.foreground = function(c, x, y, w, h)
 	c.close();
 	c.fillAndStroke();
 
-	c.setFillColor('#ffffff');
+	c.setFillColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 	c.begin();
 	c.moveTo(w - 11, 5);
 	c.lineTo(w - 7.5, 10);
@@ -2434,7 +2509,13 @@ mxUtils.extend(mxShapeMockupiOnOffButton, mxShape);
 
 mxShapeMockupiOnOffButton.prototype.customProperties = [
 	{ name: 'buttonState', dispName: 'State', type: 'enum',
-		enumList: [{val: 'on', dispName: 'On'}, {val: 'off', dispName: 'Off'}]}
+		enumList: [{val: 'on', dispName: 'On'}, {val: 'off', dispName: 'Off'}]},
+	{name: 'onGradient', dispName: 'On Top', defVal: '#E2FFEB', type: 'color', primary:true},
+	{name: 'onColor', dispName: 'On Bottom', defVal: '#008215', type: 'color', primary:true},
+	{name: 'offGradient', dispName: 'Off Top', defVal: '#cc9999', type: 'color', primary:true},
+	{name: 'offColor', dispName: 'Off Bottom', defVal: '#881100', type: 'color', primary:true},
+	{name: 'handleGradient', dispName: 'Handle Top', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'handleColor', dispName: 'Handle Bottom', defVal: '#888888', type: 'color', primary:true}
 ];
 
 /**
@@ -2457,13 +2538,13 @@ mxShapeMockupiOnOffButton.prototype.background = function(c, x, y, w, h, state)
 {
 	if (state === mxMockupC.STATE_ON)
 	{
-		c.setGradient('#E2FFEB', '#008215', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+		c.setGradient(mxUtils.getValue(this.style, 'onGradient', '#E2FFEB'), mxUtils.getValue(this.style, 'onColor', '#008215'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 		c.roundrect(0, 0, w, h, h * 0.5, h * 0.5);
 		c.fillAndStroke();
 	}
 	else if (state === mxMockupC.STATE_OFF)
 	{
-		c.setGradient('#cc9999', '#881100', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+		c.setGradient(mxUtils.getValue(this.style, 'offGradient', '#cc9999'), mxUtils.getValue(this.style, 'offColor', '#881100'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 		c.roundrect(0, 0, w, h, h * 0.5, h * 0.5);
 		c.fillAndStroke();
 	}
@@ -2471,15 +2552,18 @@ mxShapeMockupiOnOffButton.prototype.background = function(c, x, y, w, h, state)
 
 mxShapeMockupiOnOffButton.prototype.foreground = function(c, x, y, w, h, state)
 {
+	var handleGradient = mxUtils.getValue(this.style, 'handleGradient', '#ffffff');
+	var handleColor = mxUtils.getValue(this.style, 'handleColor', '#888888');
+
 	if (state === mxMockupC.STATE_ON)
 	{
-		c.setGradient('#ffffff', '#888888', w - h, 0, h, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+		c.setGradient(handleGradient, handleColor, w - h, 0, h, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 		c.ellipse(w - h, 0, h, h);
 		c.fillAndStroke();
 	}
 	else
 	{
-		c.setGradient('#ffffff', '#888888', 0, 0, h, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+		c.setGradient(handleGradient, handleColor, 0, 0, h, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 		c.ellipse(0, 0, h, h);
 		c.fillAndStroke();
 	}
@@ -2488,7 +2572,7 @@ mxShapeMockupiOnOffButton.prototype.foreground = function(c, x, y, w, h, state)
 mxShapeMockupiOnOffButton.prototype.mainText = function(c, x, y, w, h, state)
 {
 	var mainText = mxUtils.getValue(this.style, 'mainText', null);
-	c.setFontColor('#ffffff');
+	c.setFontColor(mxUtils.getValue(this.style, mxConstants.STYLE_FONTCOLOR, '#ffffff'));
 	c.setFontSize(8.5);
 	
 	if (mainText != '')
@@ -2536,7 +2620,7 @@ mxShapeMockupiAlertBox.prototype.paintVertexShape = function(c, x, y, w, h)
 	w = Math.max(w, 15);
 	h = Math.max(h, 15);
 	c.translate(x, y);
-	rSize = 7.5;
+	var rSize = 7.5;
 	this.background(c, x, y, w, h, rSize);
 	c.setShadow(false);
 	this.foreground(c, x, y, w, h, rSize);
@@ -2553,7 +2637,7 @@ mxShapeMockupiAlertBox.prototype.background = function(c, x, y, w, h, rSize)
 
 mxShapeMockupiAlertBox.prototype.foreground = function(c, x, y, w, h, rSize)
 {
-	var mainText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text').toString()).split(',');
+	var mainText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text').toString()).split(',');
 
 	c.setStrokeColor('#497198');
 	c.setGradient('#497198', '#c5cee1', 0, 0, w, 22.5, mxConstants.DIRECTION_SOUTH, 1, 1);
@@ -2623,7 +2707,7 @@ mxShapeMockupiDialogBox.prototype.paintVertexShape = function(c, x, y, w, h)
 	w = Math.max(w, 15);
 	h = Math.max(h, 15);
 	c.translate(x, y);
-	rSize = 7.5;
+	var rSize = 7.5;
 	this.background(c, x, y, w, h, rSize);
 	c.setShadow(false);
 	this.foreground(c, x, y, w, h, rSize);
@@ -2640,7 +2724,7 @@ mxShapeMockupiDialogBox.prototype.background = function(c, x, y, w, h, rSize)
 
 mxShapeMockupiDialogBox.prototype.foreground = function(c, x, y, w, h, rSize)
 {
-	var mainText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text').toString()).split(',');
+	var mainText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Main Text').toString()).split(',');
 
 	c.setStrokeColor('#497198');
 	c.setGradient('#497198', '#c5cee1', 0, 0, w, 22.5, mxConstants.DIRECTION_SOUTH, 1, 1);
@@ -2704,9 +2788,20 @@ function mxShapeMockupiLockButton(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiLockButton, mxShape);
 
+mxShapeMockupiLockButton.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Panel Bottom', defVal: '#4A4F56', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Panel Top', defVal: '#70757B', type: 'color', primary:true},
+	{name: 'barGradient', dispName: 'Track Bottom', defVal: '#18232D', type: 'color', primary:true},
+	{name: 'barColor', dispName: 'Track Top', defVal: '#1F2933', type: 'color', primary:true},
+	{name: 'handleGradient', dispName: 'Handle Top', defVal: '#E9F3FD', type: 'color', primary:true},
+	{name: 'handleColor', dispName: 'Handle Bottom', defVal: '#ADB7C1', type: 'color', primary:true},
+	{name: 'arrowGradient', dispName: 'Arrow Top', defVal: '#AEB7C1', type: 'color', primary:true},
+	{name: 'arrowColor', dispName: 'Arrow Bottom', defVal: '#667079', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiLockButton.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -2715,24 +2810,24 @@ mxShapeMockupiLockButton.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.setShadow(false);
 
 	c.setAlpha(0.7);
-	c.setGradient('#4A4F56', '#70757B', 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#4A4F56'), mxUtils.getValue(this.style, 'fillColor3', '#70757B'), 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
 	c.rect(0, 0, w, h);
 	c.fill();
 
 	c.setAlpha(0.8);
-	c.setGradient('#18232D', '#1F2933', 10, 10, 154, 30, mxConstants.DIRECTION_NORTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'barGradient', '#18232D'), mxUtils.getValue(this.style, 'barColor', '#1F2933'), 10, 10, 154, 30, mxConstants.DIRECTION_NORTH, 1, 1);
 	c.roundrect(10, h * 0.5 - 15, w - 20, 30, 7.5, 7.5);
 	c.fill();
 
 	c.setAlpha(1);
-	c.setGradient('#E9F3FD', '#ADB7C1', 12.5, 12.5, 40, 25, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'handleGradient', '#E9F3FD'), mxUtils.getValue(this.style, 'handleColor', '#ADB7C1'), 12.5, 12.5, 40, 25, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(12.5, h * 0.5 - 12.5, 40, 25, 5, 5);
 	c.fill();
 
 	c.setAlpha(0.8);
 	c.setStrokeWidth(0.5);
 	c.setStrokeColor('#aabbbb');
-	c.setGradient('#AEB7C1', '#667079', 20, 17.5, 25, 15, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'arrowGradient', '#AEB7C1'), mxUtils.getValue(this.style, 'arrowColor', '#667079'), 20, 17.5, 25, 15, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.begin();
 	c.moveTo(20, h * 0.5 - 3.5);
 	c.lineTo(35, h * 0.5 - 3.5);
@@ -2743,13 +2838,13 @@ mxShapeMockupiLockButton.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.lineTo(20, h * 0.5 + 3.5);
 	c.close();
 	c.fillAndStroke();
-	
+
 	var mainText = mxUtils.getValue(this.style, 'mainText', null);
-	
+
 	if (mainText != '')
 	{
 		c.setFontSize(12.5);
-		c.setFontColor('#cccccc');
+		c.setFontColor(mxUtils.getValue(this.style, mxConstants.STYLE_FONTCOLOR, '#cccccc'));
 		c.text(w / 2 + 20.5, h / 2, 0, 0, 'slide to unlock', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 	}
 };
@@ -2953,9 +3048,13 @@ function mxShapeMockupiInfoIcon(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiInfoIcon, mxShape);
 
+mxShapeMockupiInfoIcon.prototype.customProperties = [
+	{name: 'iconColor', dispName: 'Icon Color', defVal: '#ffffff', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiInfoIcon.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -2984,7 +3083,7 @@ mxShapeMockupiInfoIcon.prototype.foreground = function(c, x, y, w, h, strokeColo
 {
 	c.setStrokeWidth(2.5);
 	c.begin();
-	c.setFillColor('#ffffff');
+	c.setFillColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 	c.moveTo(w * 0.47, h * 0.334);
 	c.arcTo(w * 0.1, h * 0.15, 60, 0, 1, w * 0.61, h * 0.42);
 	c.lineTo(w * 0.51, h * 0.7);
@@ -3063,7 +3162,6 @@ mxShapeMockupiSortFindIcon.prototype.foreground = function(c, x, y, w, h, stroke
 {
 	c.setStrokeWidth((Math.min(h, w)) / 20);
 	c.begin();
-	c.setFillColor('#ffffff');
 	c.moveTo(w * 0.1, h * 0.25);
 	c.lineTo(w * 0.9, h * 0.25);
 	c.moveTo(w * 0.1, h * 0.4);
@@ -3165,9 +3263,21 @@ function mxShapeMockupiKeybLetters(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiKeybLetters, mxShape);
 
+mxShapeMockupiKeybLetters.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Keyboard Top', defVal: '#8A97A7', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Keyboard Bottom', defVal: '#425163', type: 'color', primary:true},
+	{name: 'keyGradient', dispName: 'Key Top', defVal: '#EEF3F9', type: 'color', primary:true},
+	{name: 'keyColor', dispName: 'Key Bottom', defVal: '#DBE2E9', type: 'color', primary:true},
+	{name: 'modifierGradient', dispName: 'Modifier Top', defVal: '#8B98A8', type: 'color', primary:true},
+	{name: 'modifierColor', dispName: 'Modifier Bottom', defVal: '#677488', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Modifier Text', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'textColor', dispName: 'Letter Text', defVal: '#000000', type: 'color', primary:true},
+	{name: 'textColor2', dispName: 'Space Text', defVal: '#666666', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiKeybLetters.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -3180,7 +3290,7 @@ mxShapeMockupiKeybLetters.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiKeybLetters.prototype.background = function(c, x, y, w, h)
 {
-	c.setGradient('#8A97A7', '#425163', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#8A97A7'), mxUtils.getValue(this.style, 'fillColor3', '#425163'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 
 	c.rect(0, 0, w, h);
 	c.fill();
@@ -3188,11 +3298,11 @@ mxShapeMockupiKeybLetters.prototype.background = function(c, x, y, w, h)
 
 mxShapeMockupiKeybLetters.prototype.foreground = function(c, x, y, w, h, strokeColor)
 {
-	c.setGradient('#EEF3F9', '#DBE2E9', w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
-	rSizeX = w * 0.0144;
-	rSizeY = h * 0.025;
+	c.setGradient(mxUtils.getValue(this.style, 'keyGradient', '#EEF3F9'), mxUtils.getValue(this.style, 'keyColor', '#DBE2E9'), w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	var rSizeX = w * 0.0144;
+	var rSizeY = h * 0.025;
 	c.setFontSize(10.5);
-	c.setFontColor('#000000');
+	c.setFontColor(mxUtils.getValue(this.style, 'textColor', '#000000'));
 
 	c.roundrect(w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, rSizeX, rSizeY);
 	c.fill();
@@ -3302,22 +3412,22 @@ mxShapeMockupiKeybLetters.prototype.foreground = function(c, x, y, w, h, strokeC
 
 	c.roundrect(w * 0.2644, h * 0.78, w * 0.4799, h * 0.19, rSizeX, rSizeY);
 	c.fill();
-	c.setFontColor('#666666');
+	c.setFontColor(mxUtils.getValue(this.style, 'textColor2', '#666666'));
 	c.text(w * 0.5043, h * 0.875, 0, 0, 'space', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 
-	c.setFontColor('#ffffff');
+	c.setFontColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 
-	c.setGradient('#8B98A8', '#677488', w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'modifierGradient', '#8B98A8'), mxUtils.getValue(this.style, 'modifierColor', '#677488'), w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, rSizeX, rSizeY);
 	c.fill();
 
-	c.setGradient('#8B98A8', '#677488', w * 0.8736, h * 0.53, w * 0.115, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'modifierGradient', '#8B98A8'), mxUtils.getValue(this.style, 'modifierColor', '#677488'), w * 0.8736, h * 0.53, w * 0.115, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(w * 0.8736, h * 0.53, w * 0.115, h * 0.19, rSizeX, rSizeY);
 	c.fill();
-	c.setGradient('#8B98A8', '#677488', w * 0.0115, h * 0.78, w * 0.2299, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'modifierGradient', '#8B98A8'), mxUtils.getValue(this.style, 'modifierColor', '#677488'), w * 0.0115, h * 0.78, w * 0.2299, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(w * 0.0115, h * 0.78, w * 0.2299, h * 0.19, rSizeX, rSizeY);
 	c.fill();
-	c.setGradient('#8B98A8', '#677488', w * 0.7672, h * 0.78, w * 0.2213, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'modifierGradient', '#8B98A8'), mxUtils.getValue(this.style, 'modifierColor', '#677488'), w * 0.7672, h * 0.78, w * 0.2213, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(w * 0.7672, h * 0.78, w * 0.2213, h * 0.19, rSizeX, rSizeY);
 	c.fill();
 	c.text(w * 0.1264, h * 0.875, 0, 0, '.?123', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
@@ -3325,8 +3435,9 @@ mxShapeMockupiKeybLetters.prototype.foreground = function(c, x, y, w, h, strokeC
 
 	c.setShadow(false);
 	c.setLineJoin('round');
-	c.setStrokeColor('#ffffff');
-	c.setFillColor('#ffffff');
+	var iconColor = mxUtils.getValue(this.style, 'iconColor', '#ffffff');
+	c.setStrokeColor(iconColor);
+	c.setFillColor(iconColor);
 	c.setStrokeWidth(1.5);
 	c.begin();
 	c.moveTo(w * 0.0402, h * 0.635);
@@ -3348,7 +3459,7 @@ mxShapeMockupiKeybLetters.prototype.foreground = function(c, x, y, w, h, strokeC
 	c.close();
 	c.fillAndStroke();
 
-	c.setStrokeColor('#677488');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'modifierColor', '#677488'));
 	c.begin();
 	c.moveTo(w * 0.9224, h * 0.605);
 	c.lineTo(w * 0.9454, h * 0.645);
@@ -3379,9 +3490,21 @@ function mxShapeMockupiKeybNumbers(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiKeybNumbers, mxShape);
 
+mxShapeMockupiKeybNumbers.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Keyboard Top', defVal: '#8A97A7', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Keyboard Bottom', defVal: '#425163', type: 'color', primary:true},
+	{name: 'keyGradient', dispName: 'Key Top', defVal: '#EEF3F9', type: 'color', primary:true},
+	{name: 'keyColor', dispName: 'Key Bottom', defVal: '#DBE2E9', type: 'color', primary:true},
+	{name: 'modifierGradient', dispName: 'Modifier Top', defVal: '#8B98A8', type: 'color', primary:true},
+	{name: 'modifierColor', dispName: 'Modifier Bottom', defVal: '#677488', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Modifier Text', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'textColor', dispName: 'Number Text', defVal: '#000000', type: 'color', primary:true},
+	{name: 'textColor2', dispName: 'Space Text', defVal: '#666666', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiKeybNumbers.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -3394,7 +3517,7 @@ mxShapeMockupiKeybNumbers.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiKeybNumbers.prototype.background = function(c, x, y, w, h)
 {
-	c.setGradient('#8A97A7', '#425163', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#8A97A7'), mxUtils.getValue(this.style, 'fillColor3', '#425163'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 
 	c.rect(0, 0, w, h);
 	c.fill();
@@ -3402,11 +3525,11 @@ mxShapeMockupiKeybNumbers.prototype.background = function(c, x, y, w, h)
 
 mxShapeMockupiKeybNumbers.prototype.foreground = function(c, x, y, w, h, strokeColor)
 {
-	c.setGradient('#EEF3F9', '#DBE2E9', w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
-	rSizeX = w * 0.0144;
-	rSizeY = h * 0.025;
+	c.setGradient(mxUtils.getValue(this.style, 'keyGradient', '#EEF3F9'), mxUtils.getValue(this.style, 'keyColor', '#DBE2E9'), w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	var rSizeX = w * 0.0144;
+	var rSizeY = h * 0.025;
 	c.setFontSize(10.5);
-	c.setFontColor('#000000');
+	c.setFontColor(mxUtils.getValue(this.style, 'textColor', '#000000'));
 
 	c.roundrect(w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, rSizeX, rSizeY);
 	c.fill();
@@ -3511,11 +3634,11 @@ mxShapeMockupiKeybNumbers.prototype.foreground = function(c, x, y, w, h, strokeC
 
 	c.roundrect(w * 0.2644, h * 0.78, w * 0.4799, h * 0.19, rSizeX, rSizeY);
 	c.fill();
-	c.setFontColor('#666666');
+	c.setFontColor(mxUtils.getValue(this.style, 'textColor2', '#666666'));
 	c.text(w * 0.5043, h * 0.875, 0, 0, 'space', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 
-	c.setGradient('#8B98A8', '#677488', w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
-	c.setFontColor('#ffffff');
+	c.setGradient(mxUtils.getValue(this.style, 'modifierGradient', '#8B98A8'), mxUtils.getValue(this.style, 'modifierColor', '#677488'), w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setFontColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 
 	c.roundrect(w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, rSizeX, rSizeY);
 	c.fill();
@@ -3532,8 +3655,9 @@ mxShapeMockupiKeybNumbers.prototype.foreground = function(c, x, y, w, h, strokeC
 
 	c.setShadow(false);
 	c.setLineJoin('round');
-	c.setStrokeColor('#ffffff');
-	c.setFillColor('#ffffff');
+	var iconColor = mxUtils.getValue(this.style, 'iconColor', '#ffffff');
+	c.setStrokeColor(iconColor);
+	c.setFillColor(iconColor);
 	c.setStrokeWidth(1.5);
 	c.begin();
 	c.moveTo(w * 0.9109, h * 0.585);
@@ -3544,7 +3668,7 @@ mxShapeMockupiKeybNumbers.prototype.foreground = function(c, x, y, w, h, strokeC
 	c.close();
 	c.fillAndStroke();
 
-	c.setStrokeColor('#677488');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'modifierColor', '#677488'));
 	c.begin();
 	c.moveTo(w * 0.9224, h * 0.605);
 	c.lineTo(w * 0.9454, h * 0.645);
@@ -3580,6 +3704,18 @@ mxUtils.extend(mxShapeMockupiKeybSymbols, mxShape);
  * 
  * Paints the vertex shape.
  */
+mxShapeMockupiKeybSymbols.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Keyboard Top', defVal: '#8A97A7', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Keyboard Bottom', defVal: '#425163', type: 'color', primary:true},
+	{name: 'keyGradient', dispName: 'Key Top', defVal: '#EEF3F9', type: 'color', primary:true},
+	{name: 'keyColor', dispName: 'Key Bottom', defVal: '#DBE2E9', type: 'color', primary:true},
+	{name: 'modifierGradient', dispName: 'Modifier Top', defVal: '#8B98A8', type: 'color', primary:true},
+	{name: 'modifierColor', dispName: 'Modifier Bottom', defVal: '#677488', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Modifier Text', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'textColor', dispName: 'Symbol Text', defVal: '#000000', type: 'color', primary:true},
+	{name: 'textColor2', dispName: 'Space Text', defVal: '#666666', type: 'color', primary:true}
+];
+
 mxShapeMockupiKeybSymbols.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	c.translate(x, y);
@@ -3590,7 +3726,7 @@ mxShapeMockupiKeybSymbols.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiKeybSymbols.prototype.background = function(c, x, y, w, h)
 {
-	c.setGradient('#8A97A7', '#425163', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#8A97A7'), mxUtils.getValue(this.style, 'fillColor3', '#425163'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 
 	c.rect(0, 0, w, h);
 	c.fill();
@@ -3598,11 +3734,11 @@ mxShapeMockupiKeybSymbols.prototype.background = function(c, x, y, w, h)
 
 mxShapeMockupiKeybSymbols.prototype.foreground = function(c, x, y, w, h, strokeColor)
 {
-	c.setGradient('#EEF3F9', '#DBE2E9', w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
-	rSizeX = w * 0.0144;
-	rSizeY = h * 0.025;
+	c.setGradient(mxUtils.getValue(this.style, 'keyGradient', '#EEF3F9'), mxUtils.getValue(this.style, 'keyColor', '#DBE2E9'), w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	var rSizeX = w * 0.0144;
+	var rSizeY = h * 0.025;
 	c.setFontSize(10.5);
-	c.setFontColor('#000000');
+	c.setFontColor(mxUtils.getValue(this.style, 'textColor', '#000000'));
 
 	c.roundrect(w * 0.0086, h * 0.03, w * 0.0776, h * 0.19, rSizeX, rSizeY);
 	c.fill();
@@ -3706,11 +3842,11 @@ mxShapeMockupiKeybSymbols.prototype.foreground = function(c, x, y, w, h, strokeC
 
 	c.roundrect(w * 0.2644, h * 0.78, w * 0.4799, h * 0.19, rSizeX, rSizeY);
 	c.fill();
-	c.setFontColor('#666666');
+	c.setFontColor(mxUtils.getValue(this.style, 'textColor2', '#666666'));
 	c.text(w * 0.5043, h * 0.875, 0, 0, 'space', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 
-	c.setGradient('#8B98A8', '#677488', w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
-	c.setFontColor('#ffffff');
+	c.setGradient(mxUtils.getValue(this.style, 'modifierGradient', '#8B98A8'), mxUtils.getValue(this.style, 'modifierColor', '#677488'), w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setFontColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 
 	c.roundrect(w * 0.0115, h * 0.53, w * 0.1207, h * 0.19, rSizeX, rSizeY);
 	c.fill();
@@ -3727,8 +3863,9 @@ mxShapeMockupiKeybSymbols.prototype.foreground = function(c, x, y, w, h, strokeC
 
 	c.setShadow(false);
 	c.setLineJoin('round');
-	c.setStrokeColor('#ffffff');
-	c.setFillColor('#ffffff');
+	var iconColor = mxUtils.getValue(this.style, 'iconColor', '#ffffff');
+	c.setStrokeColor(iconColor);
+	c.setFillColor(iconColor);
 	c.setStrokeWidth(1.5);
 	c.begin();
 	c.moveTo(w * 0.9109, h * 0.585);
@@ -3739,7 +3876,7 @@ mxShapeMockupiKeybSymbols.prototype.foreground = function(c, x, y, w, h, strokeC
 	c.close();
 	c.fillAndStroke();
 
-	c.setStrokeColor('#677488');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'modifierColor', '#677488'));
 	c.begin();
 	c.moveTo(w * 0.9224, h * 0.605);
 	c.lineTo(w * 0.9454, h * 0.645);
@@ -3830,9 +3967,17 @@ function mxShapeMockupiDirection(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiDirection, mxShape);
 
+mxShapeMockupiDirection.prototype.customProperties = [
+	{name: 'strokeColor2', dispName: 'Ring Color', defVal: '#008cff', type: 'color', primary:true},
+	{name: 'directionColor', dispName: 'Direction Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Dot Stroke', defVal: '#006cdf', type: 'color', primary:true},
+	{name: 'dotGradient', dispName: 'Dot Gradient', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'fillColor2', dispName: 'Dot Color', defVal: '#007cef', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiDirection.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -3846,23 +3991,24 @@ mxShapeMockupiDirection.prototype.paintVertexShape = function(c, x, y, w, h)
 mxShapeMockupiDirection.prototype.background = function(c, x, y, w, h)
 {
 	c.setStrokeWidth(0.5);
-	c.setStrokeColor('#008cff');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'strokeColor2', '#008cff'));
 	c.ellipse(0, 0, w, h);
 	c.stroke();
 };
 
 mxShapeMockupiDirection.prototype.foreground = function(c, x, y, w, h)
 {
+	var directionColor = mxUtils.getValue(this.style, 'directionColor', '#ffffff');
 	c.setAlpha(1);
-	c.setGradient('#ffffff', '#ffffff', w * 0.29, h * 0.2, w * 0.42, h * 0.3, mxConstants.DIRECTION_NORTH, 1, 0);
+	c.setGradient(directionColor, directionColor, w * 0.29, h * 0.2, w * 0.42, h * 0.3, mxConstants.DIRECTION_NORTH, 1, 0);
 	c.begin();
 	c.moveTo(w * 0.29, h * 0.2);
 	c.lineTo(w * 0.5, h * 0.5);
 	c.lineTo(w * 0.71, h * 0.2);
 	c.fillAndStroke();
 
-	c.setStrokeColor('#006cdf');
-	c.setGradient('#ffffff', '#007cef', w * 0.47, h * 0.47, w * 0.06, h * 0.06, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setStrokeColor(mxUtils.getValue(this.style, 'strokeColor3', '#006cdf'));
+	c.setGradient(mxUtils.getValue(this.style, 'dotGradient', '#ffffff'), mxUtils.getValue(this.style, 'fillColor2', '#007cef'), w * 0.47, h * 0.47, w * 0.06, h * 0.06, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.setAlpha(1);
 	c.ellipse(w * 0.47, h * 0.47, w * 0.06, h * 0.06);
 	c.fillAndStroke();
@@ -3900,7 +4046,13 @@ mxShapeMockupiLocationBar.prototype.customProperties = [
 	{name: 'barPos', dispName: 'Callout Position', type: 'float', min:0, defVal:80},
 	{name: 'pointerPos', dispName: 'Callout Orientation', type: 'enum',
 		enumList: [{val: 'bottom', dispName: 'Bottom'}, {val: 'top', dispName: 'Top'}]
-	}
+	},
+	{name: 'fillColor2', dispName: 'Callout Bottom', defVal: '#000000', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Callout Top', defVal: '#888888', type: 'color', primary:true},
+	{name: 'strokeColor2', dispName: 'Callout Outline', defVal: '#000000', type: 'color', primary:true},
+	{name: 'buttonGradient', dispName: 'Button Top', defVal: '#8BbEff', type: 'color', primary:true},
+	{name: 'buttonColor', dispName: 'Button Bottom', defVal: '#135Ec8', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Chevron Color', defVal: '#ffffff', type: 'color', primary:true}
 ];
 
 /**
@@ -3927,13 +4079,13 @@ mxShapeMockupiLocationBar.prototype.background = function(c, x, y, w, h)
 	var virRange = w - 2 * deadzone;
 	var truePos = deadzone + virRange * barPos / 100;
 	c.setStrokeWidth(0.5);
-	c.setStrokeColor('#000000');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'strokeColor2', '#000000'));
 	c.setAlpha(0.7);
 	c.begin();
 
 	if (pointerPos === mxMockupC.POINTER_BOTTOM)
 	{
-		c.setGradient('#000000', '#888888', 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
+		c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#000000'), mxUtils.getValue(this.style, 'fillColor3', '#888888'), 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
 		c.moveTo(0, rSize);
 		c.arcTo(rSize, rSize, 0, 0, 1, rSize, 0);
 		c.lineTo(w - rSize, 0);
@@ -3948,7 +4100,7 @@ mxShapeMockupiLocationBar.prototype.background = function(c, x, y, w, h)
 	}
 	else if (pointerPos === mxMockupC.POINTER_TOP)
 	{
-		c.setGradient('#000000', '#888888', 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
+		c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#000000'), mxUtils.getValue(this.style, 'fillColor3', '#888888'), 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
 		c.moveTo(0, rSize + 7.5);
 		c.arcTo(rSize, rSize, 0, 0, 1, rSize, 7.5);
 		c.lineTo(truePos - 7.5, 7.5);
@@ -3969,7 +4121,7 @@ mxShapeMockupiLocationBar.prototype.background = function(c, x, y, w, h)
 mxShapeMockupiLocationBar.prototype.foreground = function(c, x, y, w, h)
 {
 	var pointerPos = mxUtils.getValue(this.style, mxMockupC.POINTER_POS, mxMockupC.POINTER_BOTTOM);
-	var locText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Some Location'));
+	var locText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Some Location'));
 	c.setAlpha(1);
 	c.setFontColor('#ffffff');
 	c.setFontSize(9.5);
@@ -3988,10 +4140,10 @@ mxShapeMockupiLocationBar.prototype.foreground = function(c, x, y, w, h)
 	w = 15;
 	h = 15;
 
-	c.setGradient('#8BbEff', '#135Ec8', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'buttonGradient', '#8BbEff'), mxUtils.getValue(this.style, 'buttonColor', '#135Ec8'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 
 	c.setStrokeWidth(1.5);
-	c.setStrokeColor('#ffffff');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 	c.ellipse(0, 0, w, h);
 	c.fillAndStroke();
 
@@ -4025,9 +4177,15 @@ function mxShapeMockupiCallDialog(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiCallDialog, mxShape);
 
+mxShapeMockupiCallDialog.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Dialog Color', defVal: '#000000', type: 'color', primary:true},
+	{name: 'strokeColor2', dispName: 'Border & Grid', defVal: '#888888', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Icon Color', defVal: '#ffffff', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiCallDialog.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -4042,9 +4200,9 @@ mxShapeMockupiCallDialog.prototype.paintVertexShape = function(c, x, y, w, h)
 mxShapeMockupiCallDialog.prototype.background = function(c, x, y, w, h, rSize)
 {
 	c.setAlpha(0.8);
-	c.setStrokeColor('#888888');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'strokeColor2', '#888888'));
 	c.setStrokeWidth(1.5);
-	c.setFillColor('#000000');
+	c.setFillColor(mxUtils.getValue(this.style, 'fillColor2', '#000000'));
 	c.roundrect(0, 0, w, h, rSize, rSize);
 	c.fillAndStroke();
 };
@@ -4062,7 +4220,7 @@ mxShapeMockupiCallDialog.prototype.foreground = function(c, x, y, w, h, rSize)
 	c.stroke();
 
 	c.setStrokeColor('#000000');
-	c.setFillColor('#ffffff');
+	c.setFillColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 	c.setStrokeWidth(0.5);
 	c.roundrect(w * 0.1433, h * 0.104, w * 0.0417, h * 0.148, w * 0.02, h * 0.024);
 	c.fill();
@@ -4125,7 +4283,7 @@ mxShapeMockupiCallDialog.prototype.foreground = function(c, x, y, w, h, rSize)
 	c.fill();
 
 	c.setStrokeWidth(1.5);
-	c.setStrokeColor('#ffffff');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 	c.begin();
 	c.moveTo(w * 0.8383, h * 0.16);
 	c.arcTo(w * 0.0533, h * 0.064, 0, 0, 1, w * 0.8383, h * 0.252);
@@ -4172,7 +4330,7 @@ mxShapeMockupiCallDialog.prototype.foreground = function(c, x, y, w, h, rSize)
 	c.close();
 	c.fill();
 
-	c.setFontColor('#ffffff');
+	c.setFontColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 	c.setFontSize(8.5);
 	c.text(w * 0.1667, h * 0.35, 0, 0, 'mute', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 	c.text(w * 0.5, h * 0.35, 0, 0, 'keypad', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
@@ -4217,9 +4375,21 @@ function mxShapeMockupiCallButtons(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiCallButtons, mxShape);
 
+mxShapeMockupiCallButtons.prototype.customProperties = [
+	{name: 'strokeColor2', dispName: 'Border & Grid', defVal: '#008cff', type: 'color', primary:true},
+	{name: 'fillColor2', dispName: 'Background Start', defVal: '#0F1B2B', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Background End', defVal: '#4F5B6B', type: 'color', primary:true},
+	{name: 'textColor', dispName: 'Number Text', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'textColor2', dispName: 'Letter Labels', defVal: '#bbbbbb', type: 'color', primary:true},
+	{name: 'callBtnGradient', dispName: 'Call Button Highlight', defVal: '#E2FFEB', type: 'color', primary:true},
+	{name: 'callBtnColor', dispName: 'Call Button Color', defVal: '#008215', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Icon Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Backspace X', defVal: '#0F1B2B', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiCallButtons.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -4233,8 +4403,8 @@ mxShapeMockupiCallButtons.prototype.paintVertexShape = function(c, x, y, w, h)
 mxShapeMockupiCallButtons.prototype.background = function(c, x, y, w, h)
 {
 	c.setStrokeWidth(0.5);
-	c.setStrokeColor('#008cff');
-	c.setGradient('#0F1B2B', '#4F5B6B', 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
+	c.setStrokeColor(mxUtils.getValue(this.style, 'strokeColor2', '#008cff'));
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#0F1B2B'), mxUtils.getValue(this.style, 'fillColor3', '#4F5B6B'), 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
 	c.rect(0, 0, w, h);
 	c.fillAndStroke();
 };
@@ -4259,7 +4429,7 @@ mxShapeMockupiCallButtons.prototype.foreground = function(c, x, y, w, h)
 	c.stroke();
 
 	c.setFontSize(15.5);
-	c.setFontColor('#ffffff');
+	c.setFontColor(mxUtils.getValue(this.style, 'textColor', '#ffffff'));
 	c.setFontStyle(mxConstants.FONT_BOLD);
 
 	c.text(w * 0.5, h * 0.0834, 0, 0, '(123) 456-7890', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
@@ -4282,7 +4452,7 @@ mxShapeMockupiCallButtons.prototype.foreground = function(c, x, y, w, h)
 	c.text(w * 0.5, h * 0.72, 0, 0, '0', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 	c.text(w * 0.8333, h * 0.75, 0, 0, '#', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 
-	c.setGradient('#E2FFEB', '#008215', w * 0.3333, h * 0.8333, w * 0.3333, h * 0.1667, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'callBtnGradient', '#E2FFEB'), mxUtils.getValue(this.style, 'callBtnColor', '#008215'), w * 0.3333, h * 0.8333, w * 0.3333, h * 0.1667, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.rect(w * 0.3333, h * 0.8333, w * 0.3333, h * 0.1667);
 	c.fillAndStroke();
 
@@ -4290,7 +4460,7 @@ mxShapeMockupiCallButtons.prototype.foreground = function(c, x, y, w, h)
 
 	c.setFontStyle(0);
 	c.setFontSize(8);
-	c.setFontColor('#bbbbbb');
+	c.setFontColor(mxUtils.getValue(this.style, 'textColor2', '#bbbbbb'));
 
 	c.text(w * 0.5, h * 0.28, 0, 0, 'ABC', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 	c.text(w * 0.8333, h * 0.28, 0, 0, 'DEF', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
@@ -4305,7 +4475,8 @@ mxShapeMockupiCallButtons.prototype.foreground = function(c, x, y, w, h)
 
 	c.text(w * 0.5, h * 0.78, 0, 0, '+', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 
-	c.setFillColor('#ffffff');
+	var iconColor = mxUtils.getValue(this.style, 'iconColor', '#ffffff');
+	c.setFillColor(iconColor);
 	c.begin();
 	c.moveTo(w * 0.1028, h * 0.9464);
 	c.arcTo(w * 0.0862, h * 0.0652, 0, 0, 1, w * 0.1402, h * 0.9333);
@@ -4321,7 +4492,7 @@ mxShapeMockupiCallButtons.prototype.foreground = function(c, x, y, w, h)
 	c.close();
 	c.fill();
 
-	c.setStrokeColor('#ffffff');
+	c.setStrokeColor(iconColor);
 	c.setStrokeWidth(2.5);
 	c.setLineJoin('round');
 	c.begin();
@@ -4333,7 +4504,7 @@ mxShapeMockupiCallButtons.prototype.foreground = function(c, x, y, w, h)
 	c.close();
 	c.fillAndStroke();
 
-	c.setStrokeColor('#0F1B2B');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'strokeColor3', '#0F1B2B'));
 	c.begin();
 	c.moveTo(w * 0.82, h * 0.907);
 	c.lineTo(w * 0.85, h * 0.933);
@@ -4369,7 +4540,10 @@ mxShapeMockupiOption.prototype.customProperties = [
 	{name: 'barPos', dispName: 'Callout Position', type: 'float', min:0, defVal:80},
 	{name: 'pointerPos', dispName: 'Callout Orientation', type: 'enum',
 		enumList: [{val: 'bottom', dispName: 'Bottom'}, {val: 'top', dispName: 'Top'}]
-	}
+	},
+	{name: 'fillColor2', dispName: 'Callout Bottom', defVal: '#000000', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Callout Top', defVal: '#888888', type: 'color', primary:true},
+	{name: 'strokeColor2', dispName: 'Callout Outline', defVal: '#000000', type: 'color', primary:true}
 ];
 
 /**
@@ -4396,13 +4570,13 @@ mxShapeMockupiOption.prototype.background = function(c, x, y, w, h)
 	var virRange = w - 2 * deadzone;
 	var truePos = deadzone + virRange * barPos / 100;
 	c.setStrokeWidth(0.5);
-	c.setStrokeColor('#000000');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'strokeColor2', '#000000'));
 	c.setAlpha(0.9);
 	c.begin();
 
 	if (pointerPos === mxMockupC.POINTER_BOTTOM)
 	{
-		c.setGradient('#000000', '#888888', 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
+		c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#000000'), mxUtils.getValue(this.style, 'fillColor3', '#888888'), 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
 		c.moveTo(0, rSize);
 		c.arcTo(rSize, rSize, 0, 0, 1, rSize, 0);
 		c.lineTo(w - rSize, 0);
@@ -4417,7 +4591,7 @@ mxShapeMockupiOption.prototype.background = function(c, x, y, w, h)
 	}
 	else if (pointerPos === mxMockupC.POINTER_TOP)
 	{
-		c.setGradient('#000000', '#888888', 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
+		c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#000000'), mxUtils.getValue(this.style, 'fillColor3', '#888888'), 0, 0, w, h, mxConstants.DIRECTION_NORTH, 1, 1);
 		c.moveTo(0, rSize + 7.5);
 		c.arcTo(rSize, rSize, 0, 0, 1, rSize, 7.5);
 		c.lineTo(truePos - 7.5, 7.5);
@@ -4437,12 +4611,12 @@ mxShapeMockupiOption.prototype.background = function(c, x, y, w, h)
 
 mxShapeMockupiOption.prototype.foreground = function(c, x, y, w, h)
 {
-	var locText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Some Location'));
+	var locText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, 'Some Location'));
 	var pointerPos = mxUtils.getValue(this.style, mxMockupC.POINTER_POS, mxMockupC.POINTER_BOTTOM);
 	c.setAlpha(1);
-	c.setFontColor('#ffffff');
+	c.setFontColor(mxUtils.getValue(this.style, mxConstants.STYLE_FONTCOLOR, '#ffffff'));
 	c.setFontSize(9.5);
-	
+
 	if (pointerPos === mxMockupC.POINTER_BOTTOM)
 	{
 		c.text(w * 0.5, (h - 7.5) * 0.5, 0, 0, locText, mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
@@ -4475,9 +4649,13 @@ function mxShapeMockupiAlphaList(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiAlphaList, mxShape);
 
+mxShapeMockupiAlphaList.prototype.customProperties = [
+	{name: 'iconColor', dispName: 'Color', defVal: '#999999', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiAlphaList.prototype.paintVertexShape = function(c, x, y, w, h)
@@ -4485,8 +4663,9 @@ mxShapeMockupiAlphaList.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.translate(x, y);
 	c.setShadow(false);
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '8');
+	var iconColor = mxUtils.getValue(this.style, 'iconColor', '#999999');
 
-	c.setFontColor('#999999');
+	c.setFontColor(iconColor);
 	c.setFontSize(fontSize);
 	c.text(w * 0.5, h * 0.069, 0, 0, 'A', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 	c.text(w * 0.5, h * 0.1035, 0, 0, 'B', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
@@ -4516,7 +4695,7 @@ mxShapeMockupiAlphaList.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.text(w * 0.5, h * 0.9315, 0, 0, 'Z', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 	c.text(w * 0.5, h * 0.966, 0, 0, '#', mxConstants.ALIGN_CENTER, mxConstants.ALIGN_MIDDLE, 0, null, 0, 0, 0);
 
-	c.setStrokeColor('#999999');
+	c.setStrokeColor(iconColor);
 	c.ellipse(w * 0.5 - 2.25, h * 0.0345 - 3.5, 4.5, 4.5);
 	c.stroke();
 
@@ -4562,7 +4741,7 @@ mxShapeMockupiHorButtonBar.prototype.customProperties = [
  */
 mxShapeMockupiHorButtonBar.prototype.paintVertexShape = function(c, x, y, w, h)
 {
-	var textStrings = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, '+Button 1, Button 2, Button 3').toString()).split(',');
+	var textStrings = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, '+Button 1, Button 2, Button 3').toString()).split(',');
 	var fontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR, '#666666');
 	var selectedFontColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR2, '#ffffff');
 	var fontSize = mxUtils.getValue(this.style, mxConstants.STYLE_FONTSIZE, '8.5').toString();
@@ -4640,18 +4819,16 @@ mxShapeMockupiHorButtonBar.prototype.background = function(c, w, h, rSize, butto
 	//draw the button separators
 	c.setStrokeColor(separatorColor);
 	c.begin();
+	// Sum of the widths of the buttons before the separator
+	var sumWidth = 0;
+
 	for (var i = 1; i < buttonNum; i++)
 	{
+		sumWidth += buttonWidths[i - 1] + 2 * labelOffset;
+
 		if (i !== selectedButton && i !== (selectedButton + 1))
 		{
-			var currWidth = 0;
-
-			for (var j = 0; j < i; j++)
-			{
-				currWidth += buttonWidths[j] + 2 * labelOffset;
-			}
-
-			currWidth = currWidth * w / minW;
+			var currWidth = sumWidth * w / minW;
 			c.moveTo(currWidth, 0);
 			c.lineTo(currWidth, h);
 		}
@@ -4764,8 +4941,9 @@ function mxShapeMockupiPin(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxShapeMockupiPin, mxShape);
 
 mxShapeMockupiPin.prototype.customProperties = [
-	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color'},
-	{name: 'fillColor3', dispName: 'Fill3 Color', type: 'color'}
+	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Fill3 Color', type: 'color', primary:true},
+	{name: 'pinStemColor', dispName: 'Pin Stem', defVal: '#666666', type: 'color', primary:true}
 ];
 
 /**
@@ -4782,7 +4960,7 @@ mxShapeMockupiPin.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.translate(x, y);
 
 	c.setStrokeWidth(1.5);
-	c.setStrokeColor('#666666');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'pinStemColor', '#666666'));
 	c.begin();
 	c.moveTo(w * 0.5, h * 0.4);
 	c.lineTo(w * 0.5, h);
@@ -4824,7 +5002,13 @@ function mxShapeMockupiVideoControls(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxShapeMockupiVideoControls, mxShape);
 
 mxShapeMockupiVideoControls.prototype.customProperties = [
-	{name: 'barPos', dispName: 'Handle Position', type: 'float', min:0, defVal:20}
+	{name: 'barPos', dispName: 'Handle Position', type: 'float', min:0, defVal:20},
+	{name: 'fillColor2', dispName: 'Panel Color', defVal: '#000000', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'Icon Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'barGradient', dispName: 'Bar Highlight', defVal: '#444444', type: 'color', primary:true},
+	{name: 'barColor', dispName: 'Bar Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'progressGradient', dispName: 'Progress Highlight', defVal: '#96D1FF', type: 'color', primary:true},
+	{name: 'progressColor', dispName: 'Progress Color', defVal: '#003377', type: 'color', primary:true}
 ];
 
 /**
@@ -4837,7 +5021,7 @@ mxShapeMockupiVideoControls.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.translate(x, y);
 	var rSize = 5;
 	c.setStrokeWidth(1);
-	c.setFillColor('#000000');
+	c.setFillColor(mxUtils.getValue(this.style, 'fillColor2', '#000000'));
 	c.setStrokeColor('#bbbbbb');
 	c.setAlpha(0.7);
 	c.roundrect(0, 0, w, h, rSize, rSize);
@@ -4861,8 +5045,9 @@ mxShapeMockupiVideoControls.prototype.foreground = function(c, w, h, rSize)
 	c.fill();
 
 	c.setAlpha(1);
-	c.setFillColor('#ffffff');
-	c.setStrokeColor('#ffffff');
+	var iconColor = mxUtils.getValue(this.style, 'iconColor', '#ffffff');
+	c.setFillColor(iconColor);
+	c.setStrokeColor(iconColor);
 	var iconX = w * 0.1;
 	var iconY = h * 0.35;
 
@@ -4941,7 +5126,7 @@ mxShapeMockupiVideoControls.prototype.foreground = function(c, w, h, rSize)
 	c.lineTo(iconX + 2, iconY);
 	c.stroke();
 
-	c.setGradient('#444444', '#ffffff', w * 0.1, h * 0.75 - 2.5, w * 0.8, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'barGradient', '#444444'), mxUtils.getValue(this.style, 'barColor', '#ffffff'), w * 0.1, h * 0.75 - 2.5, w * 0.8, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(w * 0.1, h * 0.75 - 2.5, w * 0.8, 5, 2.5, 2.5);
 	c.fill();
 
@@ -4952,7 +5137,7 @@ mxShapeMockupiVideoControls.prototype.foreground = function(c, w, h, rSize)
 	var virRange = w - 2 * deadzone;
 	var truePos = deadzone + virRange * barPos / 100;
 
-	c.setGradient('#96D1FF', '#003377', w * 0.1, h * 0.75 - 5, truePos - w * 0.1, 10, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'progressGradient', '#96D1FF'), mxUtils.getValue(this.style, 'progressColor', '#003377'), w * 0.1, h * 0.75 - 5, truePos - w * 0.1, 10, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.begin();
 	c.moveTo(truePos, h * 0.75 - 2.5);
 	c.lineTo(truePos, h * 0.75 + 2.5);
@@ -4962,7 +5147,7 @@ mxShapeMockupiVideoControls.prototype.foreground = function(c, w, h, rSize)
 	c.fill();
 
 	c.setStrokeColor('#999999');
-	c.setGradient('#444444', '#ffffff', truePos - 5, h * 0.75 - 5, 10, 10, mxConstants.DIRECTION_NORTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'barGradient', '#444444'), mxUtils.getValue(this.style, 'barColor', '#ffffff'), truePos - 5, h * 0.75 - 5, 10, 10, mxConstants.DIRECTION_NORTH, 1, 1);
 	c.ellipse(truePos - 5, h * 0.75 - 5, 10, 10);
 	c.fillAndStroke();
 
@@ -5008,16 +5193,27 @@ function mxShapeMockupiURLBar(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxShapeMockupiURLBar, mxShape);
 
+mxShapeMockupiURLBar.prototype.customProperties = [
+	{name: 'fillColor2', dispName: 'Bar Top', defVal: '#cccccc', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Bar Bottom', defVal: '#003377', type: 'color', primary:true},
+	{name: 'fieldColor', dispName: 'Field Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'fieldStroke', dispName: 'Field Outline', defVal: '#008cff', type: 'color', primary:true},
+	{name: 'cancelBtnGradient', dispName: 'Cancel Btn Top', defVal: '#cccccc', type: 'color', primary:true},
+	{name: 'cancelBtnColor', dispName: 'Cancel Btn Bottom', defVal: '#001144', type: 'color', primary:true},
+	{name: 'iconBgColor', dispName: 'X Icon Circle', defVal: '#bbbbbb', type: 'color', primary:true},
+	{name: 'iconColor', dispName: 'X Icon Color', defVal: '#ffffff', type: 'color', primary:true}
+];
+
 /**
  * Function: paintVertexShape
- * 
+ *
  * Paints the vertex shape.
  */
 mxShapeMockupiURLBar.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	c.translate(x, y);
 
-	c.setGradient('#cccccc', '#003377', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#cccccc'), mxUtils.getValue(this.style, 'fillColor3', '#003377'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.rect(0, 0, w, h);
 	c.fill();
 	c.setShadow(false);
@@ -5028,21 +5224,21 @@ mxShapeMockupiURLBar.prototype.paintVertexShape = function(c, x, y, w, h)
 mxShapeMockupiURLBar.prototype.foreground = function(c, w, h)
 {
 	c.setStrokeWidth(0.5);
-	c.setFillColor('#ffffff');
-	c.setStrokeColor('#008cff');
+	c.setFillColor(mxUtils.getValue(this.style, 'fieldColor', '#ffffff'));
+	c.setStrokeColor(mxUtils.getValue(this.style, 'fieldStroke', '#008cff'));
 	c.roundrect(w * 0.0287, h * 0.625 - 6.25, w * 0.7184, 12.5, 6.25, 6.25);
 	c.fillAndStroke();
 
-	c.setGradient('#cccccc', '#001144', w * 0.7816, h * 0.625 - 6.25, w * 0.1868, 12.5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'cancelBtnGradient', '#cccccc'), mxUtils.getValue(this.style, 'cancelBtnColor', '#001144'), w * 0.7816, h * 0.625 - 6.25, w * 0.1868, 12.5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.setStrokeColor('#000000');
 	c.roundrect(w * 0.7816, h * 0.625 - 6.25, w * 0.1868, 12.5, 2.5, 2.5);
 	c.fillAndStroke();
 
-	c.setFillColor('#bbbbbb');
+	c.setFillColor(mxUtils.getValue(this.style, 'iconBgColor', '#bbbbbb'));
 	c.ellipse(w * 0.7471 - 11.5, h * 0.625 - 5, 10, 10);
 	c.fill();
 
-	c.setStrokeColor('#ffffff');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'iconColor', '#ffffff'));
 	c.setStrokeWidth(1.5);
 	c.begin();
 	c.moveTo(w * 0.7471 - 8.5, h * 0.625 - 2.5);
@@ -5051,7 +5247,7 @@ mxShapeMockupiURLBar.prototype.foreground = function(c, w, h)
 	c.lineTo(w * 0.7471 - 3.5, h * 0.625 - 2.5);
 	c.stroke();
 
-	var fieldText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, '').toString()).split(',');
+	var fieldText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, '').toString()).split(',');
 	c.setFontColor('#425664');
 	c.setFontStyle(mxConstants.FONT_BOLD);
 	c.setFontSize(8);
@@ -5086,6 +5282,10 @@ mxUtils.extend(mxShapeMockupiSlider, mxShape);
 
 mxShapeMockupiSlider.prototype.customProperties = [
 	{name: 'barPos', dispName: 'Handle Position', type: 'float', min:0, defVal:20},
+	{name: 'barGradient', dispName: 'Bar Highlight', defVal: '#444444', type: 'color', primary:true},
+	{name: 'barColor', dispName: 'Bar Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'progressGradient', dispName: 'Progress Highlight', defVal: '#96D1FF', type: 'color', primary:true},
+	{name: 'progressColor', dispName: 'Progress Color', defVal: '#003377', type: 'color', primary:true}
 ];
 
 /**
@@ -5103,19 +5303,22 @@ mxShapeMockupiSlider.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiSlider.prototype.foreground = function(c, w, h)
 {
+	var barGradient = mxUtils.getValue(this.style, 'barGradient', '#444444');
+	var barColor = mxUtils.getValue(this.style, 'barColor', '#ffffff');
+
 	c.setStrokeWidth(0.5);
-	c.setGradient('#444444', '#ffffff', 0, h * 0.5 - 2.5, w, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(barGradient, barColor, 0, h * 0.5 - 2.5, w, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(0, h * 0.5 - 2.5, w, 5, 2.5, 2.5);
 	c.fill();
 
 	var barPos = mxUtils.getValue(this.style, mxMockupC.BAR_POS, '80');
 	barPos = Math.min(barPos, 100);
 	barPos = Math.max(barPos, 0);
-	var deadzone = 0; 
+	var deadzone = 0;
 	var virRange = w - 2 * deadzone;
 	var truePos = deadzone + virRange * barPos / 100;
 
-	c.setGradient('#96D1FF', '#003377', 2.5, h * 0.5 - 2.5, truePos - 2.5, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'progressGradient', '#96D1FF'), mxUtils.getValue(this.style, 'progressColor', '#003377'), 2.5, h * 0.5 - 2.5, truePos - 2.5, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.begin();
 	c.moveTo(truePos, h * 0.5 - 2.5);
 	c.lineTo(truePos, h * 0.5 + 2.5);
@@ -5125,7 +5328,7 @@ mxShapeMockupiSlider.prototype.foreground = function(c, w, h)
 	c.fill();
 
 	c.setStrokeColor('#999999');
-	c.setGradient('#444444', '#ffffff', truePos - 5, h * 0.5 - 5, 10, 10, mxConstants.DIRECTION_NORTH, 1, 1);
+	c.setGradient(barGradient, barColor, truePos - 5, h * 0.5 - 5, 10, 10, mxConstants.DIRECTION_NORTH, 1, 1);
 	c.ellipse(truePos - 5, h * 0.5 - 5, 10, 10);
 	c.fillAndStroke();
 };
@@ -5170,6 +5373,10 @@ mxUtils.extend(mxShapeMockupiProgressBar, mxShape);
 
 mxShapeMockupiProgressBar.prototype.customProperties = [
 	{name: 'barPos', dispName: 'Handle Position', type: 'float', min:0, defVal:40},
+	{name: 'fillColor2', dispName: 'Bar Top', defVal: '#444444', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Bar Bottom', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'progressGradient', dispName: 'Progress Highlight', defVal: '#96D1FF', type: 'color', primary:true},
+	{name: 'progressColor', dispName: 'Progress Color', defVal: '#003377', type: 'color', primary:true}
 ];
 
 /**
@@ -5188,18 +5395,18 @@ mxShapeMockupiProgressBar.prototype.paintVertexShape = function(c, x, y, w, h)
 mxShapeMockupiProgressBar.prototype.foreground = function(c, w, h)
 {
 	c.setStrokeWidth(0.5);
-	c.setGradient('#444444', '#ffffff', 0, h * 0.5 - 2.5, w, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#444444'), mxUtils.getValue(this.style, 'fillColor3', '#ffffff'), 0, h * 0.5 - 2.5, w, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.roundrect(0, h * 0.5 - 2.5, w, 5, 2.5, 2.5);
 	c.fill();
 
 	var barPos = mxUtils.getValue(this.style, mxMockupC.BAR_POS, '80');
 	barPos = Math.min(barPos, 100);
 	barPos = Math.max(barPos, 0);
-	var deadzone = 0; 
+	var deadzone = 0;
 	var virRange = w - 2 * deadzone;
 	var truePos = deadzone + virRange * barPos / 100;
 
-	c.setGradient('#96D1FF', '#003377', 2.5, h * 0.5 - 2.5, truePos - 2.5, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'progressGradient', '#96D1FF'), mxUtils.getValue(this.style, 'progressColor', '#003377'), 2.5, h * 0.5 - 2.5, truePos - 2.5, 5, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.begin();
 	c.moveTo(truePos, h * 0.5 - 2.5);
 	c.arcTo(2.5, 2.5, 0, 0, 1, truePos, h * 0.5 + 2.5);
@@ -5248,6 +5455,8 @@ mxUtils.extend(mxShapeMockupiCloudProgressBar, mxShape);
 
 mxShapeMockupiCloudProgressBar.prototype.customProperties = [
 	{name: 'barPos', dispName: 'Handle Position', type: 'float', min:0, defVal:20},
+	{name: 'fillColor2', dispName: 'Bar Color', defVal: '#5C6E86', type: 'color', primary:true},
+	{name: 'progressColor', dispName: 'Progress Color', defVal: '#8AD155', type: 'color', primary:true}
 ];
 
 /**
@@ -5266,18 +5475,18 @@ mxShapeMockupiCloudProgressBar.prototype.paintVertexShape = function(c, x, y, w,
 mxShapeMockupiCloudProgressBar.prototype.foreground = function(c, w, h)
 {
 	c.setStrokeWidth(0.5);
-	c.setFillColor('#5C6E86');
+	c.setFillColor(mxUtils.getValue(this.style, 'fillColor2', '#5C6E86'));
 	c.rect(0, h * 0.5 - 2.5, w, 5);
 	c.fill();
 
 	var barPos = mxUtils.getValue(this.style, mxMockupC.BAR_POS, '80');
 	barPos = Math.min(barPos, 100);
 	barPos = Math.max(barPos, 0);
-	var deadzone = 0; 
+	var deadzone = 0;
 	var virRange = w - 2 * deadzone;
 	var truePos = deadzone + virRange * barPos / 100;
 
-	c.setFillColor('#8AD155');
+	c.setFillColor(mxUtils.getValue(this.style, 'progressColor', '#8AD155'));
 	c.rect(0, h * 0.5 - 2.5, truePos, 5);
 	c.fill();
 };
@@ -5321,6 +5530,12 @@ mxUtils.extend(mxShapeMockupiDownloadBar, mxShape);
 
 mxShapeMockupiDownloadBar.prototype.customProperties = [
 	{name: 'barPos', dispName: 'Handle Position', type: 'float', min:0, defVal:30},
+	{name: 'fillColor2', dispName: 'Panel Top', defVal: '#00ccff', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Panel Bottom', defVal: '#0066cc', type: 'color', primary:true},
+	{name: 'barGradient', dispName: 'Track Highlight', defVal: '#96D1FF', type: 'color', primary:true},
+	{name: 'barColor', dispName: 'Track Color', defVal: '#003377', type: 'color', primary:true},
+	{name: 'progressGradient', dispName: 'Progress Highlight', defVal: '#aaaaaa', type: 'color', primary:true},
+	{name: 'progressColor', dispName: 'Progress Color', defVal: '#ffffff', type: 'color', primary:true}
 ];
 
 /**
@@ -5332,7 +5547,7 @@ mxShapeMockupiDownloadBar.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	c.translate(x, y);
 
-	c.setGradient('#00ccff', '#0066cc', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'fillColor2', '#00ccff'), mxUtils.getValue(this.style, 'fillColor3', '#0066cc'), 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.rect(0, 0, w, h);
 	c.fill();
 	c.setShadow(false);
@@ -5342,7 +5557,7 @@ mxShapeMockupiDownloadBar.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiDownloadBar.prototype.foreground = function(c, w, h)
 {
-	var fieldText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, ''));
+	var fieldText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, ''));
 	c.setFontColor('#ffffff');
 	c.setFontStyle(mxConstants.FONT_BOLD);
 	c.setFontSize(8);
@@ -5356,11 +5571,11 @@ mxShapeMockupiDownloadBar.prototype.foreground = function(c, w, h)
 	var truePos = deadzone + virRange * barPos / 100;
 
 	c.setStrokeWidth(0.5);
-	c.setGradient('#96D1FF', '#003377', deadzone, h * 0.65 - 2.5, w - 2 * deadzone, 5, mxConstants.DIRECTION_NORTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'barGradient', '#96D1FF'), mxUtils.getValue(this.style, 'barColor', '#003377'), deadzone, h * 0.65 - 2.5, w - 2 * deadzone, 5, mxConstants.DIRECTION_NORTH, 1, 1);
 	c.roundrect(deadzone, h * 0.65 - 2.5, w - 2 * deadzone, 5, 2.5, 2.5);
 	c.fill();
 
-	c.setGradient('#aaaaaa', '#ffffff', deadzone + 2.5, h * 0.65 - 2.5, truePos - deadzone - 2.5, 5, mxConstants.DIRECTION_NORTH, 1, 1);
+	c.setGradient(mxUtils.getValue(this.style, 'progressGradient', '#aaaaaa'), mxUtils.getValue(this.style, 'progressColor', '#ffffff'), deadzone + 2.5, h * 0.65 - 2.5, truePos - deadzone - 2.5, 5, mxConstants.DIRECTION_NORTH, 1, 1);
 	c.begin();
 	c.moveTo(truePos, h * 0.65 - 2.5);
 	c.arcTo(2.5, 2.5, 0, 0, 1, truePos, h * 0.65 + 2.5);
@@ -5433,7 +5648,7 @@ mxShapeMockupiScreenNameBar.prototype.foreground = function(c, w, h, rSize)
 	c.rect(0, 0, w, h * 0.5);
 	c.fill();
 
-	var fieldText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, ''));
+	var fieldText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, ''));
 	var textColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR, '#00ff00');
 	c.setFontColor(textColor);
 	c.setFontSize(9.5);
@@ -5467,6 +5682,13 @@ mxShapeMockupiIconGrid.prototype.customProperties = [
 ];
 
 /**
+ * Variable: maxIcons
+ *
+ * Maximum number of icons. Default is 1000.
+ */
+mxShapeMockupiIconGrid.prototype.maxIcons = 1000;
+
+/**
  * Function: paintVertexShape
  * 
  * Paints the vertex shape.
@@ -5474,7 +5696,7 @@ mxShapeMockupiIconGrid.prototype.customProperties = [
 mxShapeMockupiIconGrid.prototype.paintVertexShape = function(c, x, y, w, h)
 {
 	c.translate(x, y);
-	var gridSize = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.GRID_SIZE, '3,3').toString()).split(',');
+	var gridSize = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.GRID_SIZE, '3,3').toString()).split(',');
 	this.background(c, w, h, gridSize);
 	c.setShadow(false);
 
@@ -5491,9 +5713,10 @@ mxShapeMockupiIconGrid.prototype.background = function(c, w, h, gridSize)
 	var boxSizeX = w / (parseInt(gridSize[0],10) + (gridSize[0]-1) * 0.5);
 	var boxSizeY = h / (parseInt(gridSize[1],10) + (gridSize[1]-1) * 0.5);
 
-	for (var i = 0; i < gridSize[0]; i++)
+	// Limits the number of rows and icons for huge grid sizes
+	for (var i = 0, n = 0; i < gridSize[0] && i < this.maxIcons; i++)
 	{
-		for (var j = 0; j < gridSize[1]; j++)
+		for (var j = 0; j < gridSize[1] && n < this.maxIcons; j++, n++)
 		{
 			c.rect(boxSizeX * 1.5 * i, boxSizeY * 1.5 * j, boxSizeX, boxSizeY);
 			c.fillAndStroke();
@@ -5506,9 +5729,10 @@ mxShapeMockupiIconGrid.prototype.foreground = function(c, w, h, gridSize)
 	var boxSizeX = w / (parseInt(gridSize[0],10) + (gridSize[0]-1) * 0.5);
 	var boxSizeY = h / (parseInt(gridSize[1],10) + (gridSize[1]-1) * 0.5);
 
-	for (var i = 0; i < gridSize[0]; i++)
+	// Limits the number of rows and icons for huge grid sizes
+	for (var i = 0, n = 0; i < gridSize[0] && i < this.maxIcons; i++)
 	{
-		for (var j = 0; j < gridSize[1]; j++)
+		for (var j = 0; j < gridSize[1] && n < this.maxIcons; j++, n++)
 		{
 			c.begin();
 			c.moveTo(boxSizeX * 1.5 * i, boxSizeY * 1.5 * j);
@@ -5589,7 +5813,7 @@ mxShapeMockupiCopy.prototype.foreground = function(c, w, h, rSize)
 	c.close();
 	c.fill();
 
-	var fieldText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, ''));
+	var fieldText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, ''));
 	var textColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR, '#00ff00');
 	c.setFontColor(textColor);
 	c.setFontSize(8.5);
@@ -5708,7 +5932,7 @@ mxShapeMockupiCopyArea.prototype.foreground = function(c, w, h, rSize)
 	c.close();
 	c.fill();
 
-	var fieldText = decodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, ''));
+	var fieldText = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxMockupC.BUTTON_TEXT, ''));
 	var textColor = mxUtils.getValue(this.style, mxMockupC.STYLE_TEXTCOLOR, '#00ff00');
 	c.setFontColor(textColor);
 	c.setFontSize(8.5);
@@ -5840,9 +6064,12 @@ function mxShapeMockupiPad(bounds, fill, stroke, strokewidth)
 mxUtils.extend(mxShapeMockupiPad, mxShape);
 
 mxShapeMockupiPad.prototype.customProperties = [
-	{name: 'bgStyle', dispName: 'Background', type: 'enum', 
+	{name: 'bgStyle', dispName: 'Background', type: 'enum',
 		enumList: [{val: 'bgGreen', dispName: 'Green'}, {val: 'bgWhite', dispName: 'White'}, {val: 'bgGray', dispName: 'Gray'}, {val: 'bgFlat', dispName: 'Flat'}, {val: 'bgMap', dispName: 'Map'}, {val: 'bgStriped', dispName: 'Striped'}]
-	}
+	},
+	{name: 'bodyColor', dispName: 'Body Color', defVal: '#000000', type: 'color', primary:true},
+	{name: 'homeButtonColor', dispName: 'Home Button', defVal: '#bbbbbb', type: 'color', primary:true},
+	{name: 'cameraColor', dispName: 'Camera', defVal: '#000099', type: 'color', primary:true}
 ];
 
 /**
@@ -5861,10 +6088,22 @@ mxShapeMockupiPad.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupiPad.prototype.background = function(c, x, y, w, h, rSize)
 {
-	c.setFillColor('#000000');
-	c.setStrokeColor('#000000');
+	var bodyColor = mxUtils.getValue(this.style, 'bodyColor', '#000000');
+	c.setFillColor(bodyColor);
+	c.setStrokeColor(bodyColor);
 	c.roundrect(0, 0, w, h, rSize, rSize);
 	c.fillAndStroke();
+
+	// Adaptive depth: faint white highlight fading down from the top and faint
+	// black shadow fading up from the bottom, both always present so any body
+	// colour - light or dark - reads with depth.
+	c.setGradient('#ffffff', '#ffffff', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 0.15, 0);
+	c.roundrect(0, 0, w, h, rSize, rSize);
+	c.fill();
+
+	c.setGradient('#000000', '#000000', 0, 0, w, h, mxConstants.DIRECTION_SOUTH, 0, 0.15);
+	c.roundrect(0, 0, w, h, rSize, rSize);
+	c.fill();
 };
 
 mxShapeMockupiPad.prototype.foreground = function(c, x, y, w, h, rSize)
@@ -5872,17 +6111,32 @@ mxShapeMockupiPad.prototype.foreground = function(c, x, y, w, h, rSize)
 	c.setStrokeWidth(1.5);
 	c.setStrokeColor('#999999');
 
-	c.begin();
+	// Top bezel: two sheen overlays on top of the body's adaptive shading.
+	// 1) White sheen - visible against dark body colours (metallic highlight).
+	// 2) Black sheen - visible against light body colours (dark accent).
+	// Both fade to alpha 0 at the polygon's bottom edge, so neither creates a
+	// step when the polygon ends. No bodyColor base fill - that would mask the
+	// body shading underneath.
 	c.setStrokeColor('none');
-	c.setFillColor('#808080');
-	c.setGradient('#808080', '#000000', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 1, 1);
+	c.begin();
+	c.setGradient('#ffffff', '#ffffff', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 0.5, 0);
 	c.moveTo(w * 0.325, 0);
 	c.lineTo(w - rSize, 0);
 	c.arcTo(rSize, rSize, 0, 0, 1, w, rSize);
 	c.lineTo(w, h * 0.5);
 	c.lineTo(w * 0.7, h * 0.5);
 	c.close();
-	c.fillAndStroke();
+	c.fill();
+
+	c.begin();
+	c.setGradient('#000000', '#000000', w * 0.325, 0, w * 0.675, h * 0.5, mxConstants.DIRECTION_SOUTH, 0.15, 0);
+	c.moveTo(w * 0.325, 0);
+	c.lineTo(w - rSize, 0);
+	c.arcTo(rSize, rSize, 0, 0, 1, w, rSize);
+	c.lineTo(w, h * 0.5);
+	c.lineTo(w * 0.7, h * 0.5);
+	c.close();
+	c.fill();
 
 	c.begin();
 	c.setFillColor('#1f2923');
@@ -5939,7 +6193,8 @@ mxShapeMockupiPad.prototype.foreground = function(c, x, y, w, h, rSize)
 		var i = 7;
 		c.begin();
 
-		while (i < w)
+		// Limits the number of stripes for huge widths
+		while (i < w && i <= 7 * 10000)
 		{
 			c.moveTo(i, 0);
 			c.lineTo(i, h);
@@ -6362,25 +6617,33 @@ mxShapeMockupiPad.prototype.foreground = function(c, x, y, w, h, rSize)
 	c.ellipse(w * 0.4948, h * 0.0444, w * 0.0103, h * 0.008);
 	c.setStrokeWidth(2.5);
 	c.setStrokeColor('#000000');
-	c.setFillColor('#000099');
+	c.setFillColor(mxUtils.getValue(this.style, 'cameraColor', '#000099'));
 	c.fillAndStroke();
 
-	c.setGradient('#bbbbbb', '#000000', w * 0.4588, h * 0.912, w * 0.0825, h * 0.064, mxConstants.DIRECTION_SOUTH, 1, 1);
+	// Circle button: flat homeButtonColor (tokenised) so it recolours entirely,
+	// a subtle vertical black depth gradient, an offset rim, and a white
+	// reflection crescent hugging the lower rim - same construction as the
+	// iPhone home button.
+	c.setFillColor(mxUtils.getValue(this.style, 'homeButtonColor', '#bbbbbb'));
+	c.ellipse(w * 0.4588, h * 0.912, w * 0.0825, h * 0.064);
+	c.fill();
+
+	c.setGradient('#000000', '#000000', w * 0.4588, h * 0.912, w * 0.0825, h * 0.064, mxConstants.DIRECTION_SOUTH, 0, 0.3);
 	c.ellipse(w * 0.4588, h * 0.912, w * 0.0825, h * 0.064);
 	c.fill();
 
 	c.setAlpha(0.5);
-	c.ellipse(w * 0.4588, h * 0.912, w * 0.0825, h * 0.064);
+	c.ellipse(w * 0.4604, h * 0.9126, w * 0.0785, h * 0.0608);
 	c.stroke();
 
+	c.setAlpha(1);
 	c.begin();
-	c.setAlpha(0.85);
-	c.setFillColor('#000000');
+	c.setGradient('#ffffff', '#ffffff', w * 0.4588, h * 0.944, w * 0.0825, h * 0.032, mxConstants.DIRECTION_SOUTH, 0.3, 0);
 	c.moveTo(w * 0.4598, h * 0.944);
-	c.arcTo(w * 0.0402, h * 0.0296, 0, 0, 1, w * 0.5402, h * 0.944);
+	c.arcTo(w * 0.0402, h * 0.0296, 0, 0, 0, w * 0.5402, h * 0.944);
 	c.arcTo(w * 0.0825, h * 0.064, 0, 0, 1, w * 0.4598, h * 0.944);
 	c.close();
-	c.fillAndStroke();
+	c.fill();
 
 	c.begin();
 	c.setAlpha(0.7);

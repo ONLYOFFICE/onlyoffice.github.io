@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2020, JGraph Ltd
- * Copyright (c) 2020, Gaudenz Alder
+ * Copyright (c) 2020, JGraph Holdings Ltd
+ * Copyright (c) 2020, draw.io AG
  */
 EmbedFile = function(ui, data, desc)
 {
@@ -16,6 +16,16 @@ mxUtils.extend(EmbedFile, DrawioFile);
 EmbedFile.prototype.getMode = function()
 {
 	return this.mode;
+};
+
+EmbedFile.prototype.getDescriptor = function()
+{
+	return this.desc;
+};
+
+EmbedFile.prototype.setDescriptor = function(desc)
+{
+	this.desc = desc || {};
 };
 
 EmbedFile.prototype.getTitle = function()

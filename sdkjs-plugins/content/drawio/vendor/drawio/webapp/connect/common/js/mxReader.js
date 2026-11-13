@@ -1,4 +1,8 @@
 /**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
+/**
  * A Draw.io diagram viewer component with configurable toolbar buttons for editing, deleting and zooming buttons.
  * Parameters :
  * diagramName - name of the diagram
@@ -567,7 +571,7 @@ DrawioViewer.prototype.addToolbarButton = function(toolbar, drawioButton)
 		}
 		mxEvent.addListener(button, 'mouseover', function(evt)
 		{
-			button.className += ' diagramly-reader-toolbar-button-hover';
+			button.classList.add('diagramly-reader-toolbar-button-hover');
 		});
 		mxEvent.addListener(button, 'mouseout', function(evt)
 		{

@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	// Adds P&ID shapes
@@ -33,7 +37,7 @@
 			if (mxUtils.indexOf(pidLibs, pids[i]) < 0)
 			{
 				this.setCurrentSearchEntryLibrary('pid', 'pid' + pids[i]);
-				this.addStencilPalette('pid' + pids[i], 'Proc. Eng. / ' + pids[i],
+				this.addStencilPalette('pid' + pids[i], 'Process Engineering / ' + pids[i],
 					dir + '/pid/' + pids[i].toLowerCase().replace(' ', '_') + '.xml',
 					';html=1;pointerEvents=1;align=center;' + mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=bottom;' + mxConstants.STYLE_VERTICAL_ALIGN + '=top;dashed=0;',	
 					null, null, null, null, null, 'pid');
@@ -50,7 +54,7 @@
 		var gn = 'mxgraph.pid2inst';
 		var dt = 'pid process instrumentation engineering instrument engineering ';
 
-		this.addPaletteFunctions('pidInstruments', 'Proc. Eng. / Instruments', false,
+		this.addPaletteFunctions('pidInstruments', 'Process Engineering / Instruments', false,
 		[
 			this.createVertexTemplateEntry(s + 'inst.discInst;mounting=room',
 					50, 50, '<table cellpadding="4" cellspacing="0" border="0" style="font-size:1em;width:100%;height:100%;">' +
@@ -134,13 +138,14 @@
 	
 	Sidebar.prototype.addPidValvesPalette = function()
 	{
+		var sb = this;
 		var s = 'dashed=0;outlineConnect=0;html=1;' + mxConstants.STYLE_SHAPE + "=mxgraph.pid2";
 		var sv = mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=bottom;align=center;html=1;' + mxConstants.STYLE_VERTICAL_ALIGN + '=top;pointerEvents=1;dashed=0;' + mxConstants.STYLE_SHAPE + "=mxgraph.pid2valves.valve;valveType=";
 		var s = mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=bottom;align=center;html=1;' + mxConstants.STYLE_VERTICAL_ALIGN + '=top;pointerEvents=1;dashed=0;' + mxConstants.STYLE_SHAPE + "=mxgraph.pid2valves.";
 		var gn = 'mxgraph.pid2valves';
 		var dt = 'pid process instrumentation engineering ';
 
-		this.addPaletteFunctions('pidValves', 'Proc. Eng. / Valves', false,
+		this.addPaletteFunctions('pidValves', 'Process Engineering / Valves', false,
 		[
 			this.createVertexTemplateEntry(sv + 'gate', 100, 60, '', 'Gate Valve', null, null, this.getTagsForStencil(gn, 'valve', dt + 'gate').join(' ')),
 			this.createVertexTemplateEntry(sv + 'gate;defState=closed', 100, 60, '', 'Normally Closed Gate Valve', null, null, this.getTagsForStencil(gn, 'valve', dt + 'normally closed nc gate').join(' ')),
@@ -197,7 +202,7 @@
 		var gn = 'mxgraph.pid.compressors';
 		var dt = 'pid process instrumentation engineering ';
 		
-		this.addPaletteFunctions('pidCompressors', 'Proc. Eng. / Compressors', false,
+		this.addPaletteFunctions('pidCompressors', 'Process Engineering / Compressors', false,
 		[
 			this.createVertexTemplateEntry(s + 'ac_air_compressor', 100, 65, '', 'AC Air Compressor', null, null, this.getTagsForStencil(gn, 'ac_air_compressor', dt + '').join(' ')),
 			this.createVertexTemplateEntry(s + 'centrifugal_compressor', 70, 70, '', 'Centrifugal Compressor', null, null, this.getTagsForStencil(gn, 'centrifugal_compressor', dt + '').join(' ')),
@@ -227,7 +232,7 @@
 		var gn = 'mxgraph.pid.engines';
 		var dt = 'pid process instrumentation engine motor ';
 		
-		this.addPaletteFunctions('pidEngines', 'Proc. Eng. / Engines', false,
+		this.addPaletteFunctions('pidEngines', 'Process Engineering / Engines', false,
 		[
 			this.createVertexTemplateEntry(s + 'electric_motor;fontSize=45;', 100, 100, 'M', 'Electric Motor', null, null, this.getTagsForStencil(gn, 'electric_motor', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'electric_motor_(ac);fontSize=45;', 100, 100, 'M', 'Electric Motor (AC)', null, null, this.getTagsForStencil(gn, 'electric_motor_(ac)', dt).join(' ')),
@@ -247,7 +252,7 @@
 		var gn = 'mxgraph.pid.filters';
 		var dt = 'pid process instrumentation filter ';
 		
-		this.addPaletteFunctions('pidFilters', 'Proc. Eng. / Filters', false,
+		this.addPaletteFunctions('pidFilters', 'Process Engineering / Filters', false,
 		[
 			this.createVertexTemplateEntry(sb + 'filter;', 
 					50, 50, '', 'Filter', null, null, this.getTagsForStencil(gn, 'filter', dt).join(' ')),
@@ -290,7 +295,7 @@
 		var gn = 'mxgraph.pid.flow_sensors';
 		var dt = 'process instrumentation sensor ';
 		
-		this.addPaletteFunctions('pidFlow Sensors', 'Proc. Eng. / Flow Sensors', false,
+		this.addPaletteFunctions('pidFlow Sensors', 'Process Engineering / Flow Sensors', false,
 		[
 			this.createVertexTemplateEntry(s + 'averging_pitot_tube;', 
 					50, 50, '', 'Averging Pitot Tube', null, null, this.getTagsForStencil(gn, 'averging_pitot_tube', dt).join(' ')),
@@ -334,7 +339,7 @@
 		var gn = 'mxgraph.pid.piping';
 		var dt = 'process instrumentation piping ';
 		
-		this.addPaletteFunctions('pidPiping', 'Proc. Eng. / Piping', false,
+		this.addPaletteFunctions('pidPiping', 'Process Engineering / Piping', false,
 		[
 			this.createVertexTemplateEntry(sb + 'basket_strainer;', 50, 45, '', 'Basket Strainer', null, null, this.getTagsForStencil(gn, 'basket_strainer', dt).join(' ')),
 			this.createVertexTemplateEntry(sb + 'blank2;', 20, 60, '', 'Blank', null, null, this.getTagsForStencil(gn, 'blank', dt).join(' ')),
@@ -389,7 +394,7 @@
 		var gn = 'mxgraph.pid.crushers_grinding';
 		var dt = 'process instrumentation crushers grinding ';
 		
-		this.addPaletteFunctions('pidCrushers Grinding', 'Proc. Eng. / Crushers Grinding', false,
+		this.addPaletteFunctions('pidCrushers Grinding', 'Process Engineering / Crushers Grinding', false,
 		[
 			this.createVertexTemplateEntry(sb + 'crusher;', 100, 60, '', 'Crusher', null, null, this.getTagsForStencil(gn, 'crusher', dt).join(' ')),
 			this.createVertexTemplateEntry(sb + 'crusher_(cone);', 100, 60, '', 'Crusher (Cone)', null, null, this.getTagsForStencil(gn, 'crusher cone', dt).join(' ')),
@@ -413,7 +418,7 @@
 		var gn = 'mxgraph.pid.fittings';
 		var dt = 'process instrumentation fittings ';
 		
-		this.addPaletteFunctions('pidFittings', 'Proc. Eng. / Fittings', false,
+		this.addPaletteFunctions('pidFittings', 'Process Engineering / Fittings', false,
 		[
 			this.createVertexTemplateEntry(sb + 'blind_disc2;', 40, 140, '', 'Blind Disc', null, null, this.getTagsForStencil(gn, 'blind disc', dt).join(' ')),
 			this.createVertexTemplateEntry(sb + 'breakthrough2;', 38, 100, '', 'Breakthrough', null, null, this.getTagsForStencil(gn, 'breakthrough', dt).join(' ')),
@@ -454,7 +459,7 @@
 		var gn = 'mxgraph.pid.fittings';
 		var dt = 'process instrumentation separators separator ';
 		
-		this.addPaletteFunctions('pidSeparators', 'Proc. Eng. / Separators', false,
+		this.addPaletteFunctions('pidSeparators', 'Process Engineering / Separators', false,
 		[
 			this.createVertexTemplateEntry(sb + 'gravity_separator,_settling_chamber2;', 80, 120, '', 'Gravity Separator, Settling Chamber', null, null, this.getTagsForStencil(gn, 'gravity settling chamber', dt).join(' ')),
 			this.createVertexTemplateEntry(sb + 'impact_separator;', 80, 120, '', 'Impact Separator', null, null, this.getTagsForStencil(gn, 'impact', dt).join(' ')),
@@ -480,7 +485,7 @@
 		var gn = 'mxgraph.pid.misc';
 		var dt = 'process instrumentation ';
 		
-		this.addPaletteFunctions('pidMisc', 'Proc. Eng. / Misc', false,
+		this.addPaletteFunctions('pidMisc', 'Process Engineering / Misc', false,
 		[
 			this.createVertexTemplateEntry(s + 'misc.fan;fanType=common', 
 					50, 50, '', 'Fan', null, null, this.getTagsForStencil(gn, 'fan', dt).join(' ')),

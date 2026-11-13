@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
+// Standalone importer page (vsdxImporter.html). Nothing in this repo loads it,
+// but drawio-desktop's command-line export does (messages 'import',
+// 'import-success', 'import-error'), and so do headless tools that use the
+// hosted page (file input, #doneDiv, window.importResXML).
 var mxIsElectron = navigator.userAgent != null &&
 	navigator.userAgent.toLowerCase().indexOf(' electron/') > -1 && 
 	navigator.userAgent.indexOf(' draw.io/') > -1;
@@ -22,7 +30,7 @@ function mxmeta(content, httpEquiv)
 	}
 };
 
-function doImport(vsdxBuff, callback, error, file, customParam)
+function doImport(vsdxBuff, callback, error, file)
 {
 	EditorUi.prototype.createUi = function(){};
 	EditorUi.prototype.addTrees = function(){};
@@ -30,7 +38,7 @@ function doImport(vsdxBuff, callback, error, file, customParam)
 	var editorUi = new EditorUi();
 	var blob = file? file : new Blob([vsdxBuff], {type: 'application/octet-stream'});
 
-	editorUi.importVisio(blob, callback, error, file? file.name : null, customParam);		
+	editorUi.importVisio(blob, callback, error, file? file.name : null);		
 };
 
 
@@ -75,7 +83,7 @@ window.addEventListener('load', function()
 			{
 				console.log(err)
 				createDoneDiv('error');
-			}, curFiles[0], window.customParam);
+			}, curFiles[0]);
 		}
 	});
 });

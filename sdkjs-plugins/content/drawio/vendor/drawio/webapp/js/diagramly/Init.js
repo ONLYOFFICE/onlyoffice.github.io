@@ -1,51 +1,76 @@
 /**
- * Copyright (c) 2006-2021, JGraph Ltd
+ * Copyright (c) 2006-2021, JGraph Holdings Ltd
  * Copyright (c) 2006-2021, draw.io AG
  */
 
 // urlParams is null when used for embedding
 window.urlParams = window.urlParams || {};
 
+// mxIsElectron is false in embed mode (set by bootstrap.js for desktop)
+if (window.mxIsElectron == null || urlParams['embed'] == '1')
+{
+	window.mxIsElectron = false;
+}
+
 // isLocalStorage controls access to local storage
 window.isLocalStorage = window.isLocalStorage || false;
-
-// Disables loading settings in configured mode
-window.mxLoadSettings = window.mxLoadSettings || urlParams['configure'] != '1';
 
 // Checks for SVG support
 window.isSvgBrowser = true;
 
+// Checks for Mermaid support
+window.isMermaidEnabled = typeof structuredClone === 'function';
+
 // CUSTOM_PARAMETERS - URLs for save and export
 // Base URL defines cases where an absolute URL is needed (eg. embedding)
-window.DRAWIO_BASE_URL = window.DRAWIO_BASE_URL || ((/.*\.draw\.io$/.test(window.location.hostname)) || (/.*\.diagrams\.net$/.test(window.location.hostname)) ?
+window.DRAWIO_BASE_URL = window.DRAWIO_BASE_URL || ((/.*\.draw\.io$/.test(window.location.hostname)) ||
+	(/.*\.diagrams\.net$/.test(window.location.hostname)) ?
 	window.location.protocol + '//' + window.location.hostname : 'https://app.diagrams.net');
-window.DRAWIO_SERVER_URL = window.DRAWIO_SERVER_URL || (window.location.hostname == 'test.draw.io' ? 'https://ac.draw.io/' : '');
+window.DRAWIO_SERVER_URL = window.DRAWIO_SERVER_URL || window.location.origin +
+	window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/';
 window.DRAWIO_LIGHTBOX_URL = window.DRAWIO_LIGHTBOX_URL || 'https://viewer.diagrams.net';
-window.EXPORT_URL = window.EXPORT_URL || 'https://convert.diagrams.net/node/export';
-window.PLANT_URL = window.PLANT_URL || 'https://plant-aws.diagrams.net';
-window.DRAW_MATH_URL = window.DRAW_MATH_URL || 'math/es5';
-window.VSD_CONVERT_URL = window.VSD_CONVERT_URL || 'https://convert.diagrams.net/VsdConverter/api/converter';
-window.EMF_CONVERT_URL = window.EMF_CONVERT_URL || 'https://convert.diagrams.net/emf2png/convertEMF';
+// Defaults only if unset so that a pre-configuration can set null to disable
+// server-side export (see EditorUi.isRemoteExportEnabled)
+window.EXPORT_URL = (typeof window.EXPORT_URL === 'undefined') ?
+	'https://convert.diagrams.net/node/export' : window.EXPORT_URL;
+window.DRAW_MATH_URL = window.DRAW_MATH_URL || 'math4/es5';
 window.REALTIME_URL = window.REALTIME_URL || window.DRAWIO_SERVER_URL + 'cache';
 window.DRAWIO_GITLAB_URL = window.DRAWIO_GITLAB_URL || 'https://gitlab.com';
 window.DRAWIO_GITLAB_ID = window.DRAWIO_GITLAB_ID || '2b14debc5feeb18ba65358d863ec870e4cc9294b28c3c941cb3014eb4af9a9b4';
 window.DRAWIO_GITHUB_URL = window.DRAWIO_GITHUB_URL || 'https://github.com';
 window.DRAWIO_GITHUB_API_URL = window.DRAWIO_GITHUB_API_URL || 'https://api.github.com';
 window.DRAWIO_GITHUB_ID = window.DRAWIO_GITHUB_ID || 'Iv1.98d62f0431e40543';
-window.DRAWIO_DROPBOX_ID = window.DRAWIO_DROPBOX_ID || 'jg02tc0onwmhlgm';
 window.SAVE_URL = window.SAVE_URL || window.DRAWIO_SERVER_URL + 'save';
-window.OPEN_URL = window.OPEN_URL || window.DRAWIO_SERVER_URL + 'import';
 window.PROXY_URL = window.PROXY_URL || window.DRAWIO_SERVER_URL + 'proxy';
 window.DRAWIO_VIEWER_URL = window.DRAWIO_VIEWER_URL || null;
-window.NOTIFICATIONS_URL = window.NOTIFICATIONS_URL || window.DRAWIO_SERVER_URL + 'notifications';
+window.NOTIFICATIONS_URL = window.NOTIFICATIONS_URL || ((/.*\.draw\.io$/.test(window.location.hostname)) ||
+	(/.*\.diagrams\.net$/.test(window.location.hostname)) ?
+	window.DRAWIO_SERVER_URL + 'notifications' : null);
 window.RT_WEBSOCKET_URL = window.RT_WEBSOCKET_URL || ('wss://' + ((window.location.hostname == 'test.draw.io') ?
 	'app.diagrams.net' : window.location.hostname) + '/rt');
+// AI diagram generation (generate/v3 worker), on the own origin of the hosts
+// that route it and on www.draw.io for all others
+window.GENERATE_URL = window.GENERATE_URL || (((/^(www|ac|aj)\.draw\.io$/.test(window.location.hostname) ||
+	window.location.hostname == 'app.diagrams.net') ? window.location.origin :
+	'https://www.draw.io') + '/generate/v3');
+// Maximum AI prompt length on the Atlassian deployments (applied to
+// Editor.maxPublicPromptLength on ac.draw.io / aj.draw.io / Forge CDN hosts,
+// 0 disables the limit); must not exceed the generate/v3 worker's
+// MAX_PROMPT_LENGTH_ATLASSIAN, which enforces the server-side cap
+window.DRAWIO_ATLASSIAN_PROMPT_LENGTH = (window.DRAWIO_ATLASSIAN_PROMPT_LENGTH != null) ?
+	window.DRAWIO_ATLASSIAN_PROMPT_LENGTH : 100000;
 
 // Paths and files
 window.SHAPES_PATH = window.SHAPES_PATH || 'shapes';
 // Path for images inside the diagram
 window.GRAPH_IMAGE_PATH = window.GRAPH_IMAGE_PATH || 'img';
-window.ICONSEARCH_PATH = window.ICONSEARCH_PATH || (urlParams['dev'] && window.location.protocol != 'file:' ? 'iconSearch' : window.DRAWIO_SERVER_URL + 'iconSearch');
+window.ICONSEARCH_PATH = window.ICONSEARCH_PATH || (urlParams['dev'] && window.location.protocol != 'file:' ?
+	'iconSearch2' : window.DRAWIO_SERVER_URL + 'iconSearch2');
+// Grouped icon search service (v3): returns icon sets alongside results
+// and supports server-side data URI inlining. Takes precedence over
+// ICONSEARCH_PATH in the sidebar search when defined.
+window.ICON_SERVICE_PATH = window.ICON_SERVICE_PATH || (urlParams['dev'] && window.location.protocol != 'file:' ?
+	'api/icons' : window.DRAWIO_SERVER_URL + 'api/icons');
 window.TEMPLATE_PATH = window.TEMPLATE_PATH || 'templates';
 window.NEW_DIAGRAM_CATS_PATH = window.NEW_DIAGRAM_CATS_PATH || 'newDiagramCats';
 window.PLUGINS_BASE_PATH = window.PLUGINS_BASE_PATH || '';
@@ -138,6 +163,7 @@ window.mxLanguageMap = window.mxLanguageMap ||
 	'gl' : 'Galego',
 	'it' : 'Italiano',
 	'hu' : 'Magyar',
+	'kl' : 'Kalaallisut',
 	'lt' : 'Lietuvių',
 	'lv' : 'Latviešu',
 	'nl' : 'Nederlands',
@@ -158,6 +184,7 @@ window.mxLanguageMap = window.mxLanguageMap ||
 	'ar' : 'العربية',
 	'fa' : 'فارسی',
 	'th' : 'ไทย',
+	'ta' : 'தமிழ்',
 	'ko' : '한국어',
 	'ja' : '日本語',
 	'zh' : '简体中文',
@@ -249,7 +276,31 @@ if (urlParams['embedInline'] == '1')
 	urlParams['plugins'] = '0';
 	urlParams['proto'] = 'json';
 	urlParams['prefetchFonts'] = '1';
+
+	// Forces page view off by default so the inline editor matches the
+	// host page while the page setting stored in the file is preserved
+	// (see savedGraphState in Editor.setGraphXml/getGraphXml)
+	if (urlParams['pv'] == null)
+	{
+		urlParams['pv'] = '0';
+	}
 }
+
+// The configuration message (configure=1) is only accepted in embed mode,
+// where the host supplies and receives the diagram anyway. Otherwise any
+// opener could configure the app that has the user's storage and sign-ins.
+if (urlParams['configure'] == '1' && urlParams['embed'] != '1')
+{
+	delete urlParams['configure'];
+
+	if (window.console != null)
+	{
+		console.log('Ignored configure=1 without embed=1');
+	}
+}
+
+// Disables loading settings in configured mode
+window.mxLoadSettings = window.mxLoadSettings || urlParams['configure'] != '1';
 
 /**
  * Global function for loading local files via servlet
@@ -261,7 +312,7 @@ function setCurrentXml(data, filename)
 		window.parent.openFile.setData(data, filename);
 	}
 };
- 
+
 /**
  * Returns the global UI setting before running static draw.io code
  */
@@ -295,73 +346,56 @@ window.uiTheme = window.uiTheme || (function()
 		}
 	}
 	
-	// Uses simple theme on small screens in own domain standalone app
-	try
+	// Redirects dark UI parameter
+	if (urlParams['ui'] == 'dark' && urlParams['dark'] == null)
 	{
-		if (ui == null && urlParams['embed'] != '1' &&
-			(urlParams['dev'] == 1 || urlParams['test'] == 1 ||
-			window.location.hostname === 'test.draw.io' ||
-			window.location.hostname === 'www.draw.io' ||
-			window.location.hostname === 'preprod.diagrams.net' ||
-			window.location.hostname === 'app.diagrams.net' ||
-			window.location.hostname === 'jgraph.github.io'))
-		{
-			var iw = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-			var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-			if (iw <= 1024 ||  /android/i.test(userAgent) || (/iPad|iPhone|iPod/.test(userAgent) &&
-				!window.MSStream) || (navigator.userAgent.match(/Mac/) &&
-				navigator.maxTouchPoints && navigator.maxTouchPoints > 2))
-			{
-				ui = 'simple';
-			}
-		}
+		urlParams['dark'] = '1';
 	}
-	catch (e)
-	{
-		// ignore
-	}
-
+	
 	// Activates sketch mode in Confluence Cloud sketch theme
 	if (ui == 'sketch' && urlParams['sketch'] == null &&
 		window.location.hostname === 'ac.draw.io')
 	{
 		urlParams['sketch'] = '1';
 	}
-	else if (urlParams['dark'] == '1' && (ui == '' || ui == 'kennedy'))
-	{
-		ui = 'dark';
-	}
 	
 	return ui;
 })();
 
 /**
- * Overrides splash URL parameter via local storage
+ * Overrides splash URL parameter via configuration
  */
-(function() 
+(function()
 {
-	// Known issue: No JSON object at this point in quirks in IE8
 	if (typeof JSON !== 'undefined')
 	{
-		// Cannot use mxSettings here
-		if (isLocalStorage) 
+		// Cannot use mxSettings or Editor.config here
+		var showSplash = (window.DRAWIO_CONFIG != null) ?
+			window.DRAWIO_CONFIG.showSplashOnStart : null;
+
+		if (isLocalStorage)
 		{
+			// Handles lockdown and splash screen configuration
 			try
 			{
-				var key = (urlParams['sketch'] == '1') ? '.sketch-config' : '.drawio-config';
-				var value = localStorage.getItem(key);
-				var showSplash = true;
-				
+				var value = localStorage.getItem('.configuration');
+
 				if (value != null)
 				{
-					showSplash = JSON.parse(value).showStartScreen;
-				}
+					var config = JSON.parse(value);
 
-				// Undefined means true
-				if (showSplash == false)
-				{
-					urlParams['splash'] = '0';
+					if (config != null)
+					{
+						if (config.lockdown != null)
+						{
+							urlParams['lockdown'] = config.lockdown;
+						}
+
+						if (config.showSplashOnStart != null)
+						{
+							showSplash = config.showSplashOnStart;
+						}
+					}
 				}
 			}
 			catch (e)
@@ -369,22 +403,17 @@ window.uiTheme = window.uiTheme || (function()
 				// ignore
 			}
 		}
+
+		if (showSplash != true && urlParams['splash'] == null)
+		{
+			urlParams['splash'] = '0';
+		}
 	}
 	
-	// Customizes export URL
-	var ex = urlParams['export'];
-
-	if (ex != null)
-	{
-		ex = decodeURIComponent(ex);
-		
-		if (ex.substring(0, 7) != 'http://' &&  ex.substring(0, 8) != 'https://')
-		{
-			ex = 'http://' + ex;
-		}
-		
-		EXPORT_URL = ex;
-	}
+	// The export service is not taken from the URL. The export request carries
+	// the diagram, so a link that picked the service would send the diagram to
+	// whoever wrote the link as soon as the user exported [GHSA-ff67-v9r9-6877].
+	// A deployment sets window.EXPORT_URL in PreConfig.js, which loads first.
 
 	// Customizes gitlab URL
 	var glUrl = urlParams['gitlab'];
@@ -439,34 +468,24 @@ window.uiTheme = window.uiTheme || (function()
 	}
 })();
 
+// Enables stealth mode with Google Drive
+if (urlParams['gapi-stealth'] == '1')
+{
+	urlParams['stealth'] = '1';
+}
+
 // Enables offline mode
 if (urlParams['offline'] == '1' || urlParams['demo'] == '1' || 
 	urlParams['stealth'] == '1' || urlParams['local'] == '1' ||
 	urlParams['lockdown'] == '1')
 {
-	urlParams['picker'] = '0';
-	urlParams['gapi'] = '0';
-	urlParams['db'] = '0';
+	urlParams['picker'] = (urlParams['gapi-stealth'] == '1') ? '1' : '0';
+	urlParams['gapi'] = (urlParams['gapi-stealth'] == '1') ? '1' : '0';
 	urlParams['od'] = '0';
 	urlParams['gh'] = '0';
 	urlParams['gl'] = '0';
 	urlParams['tr'] = '0';
-}
-// Do not insert code between above and below blocks
-// se mode. Ensure this comes after the block above. 
-if (window.location.hostname == 'se.diagrams.net')
-{
-	urlParams['db'] = '0';
-	urlParams['od'] = '0';
-	urlParams['gh'] = '0';
-	urlParams['gl'] = '0';
-	urlParams['tr'] = '0';
-	urlParams['plugins'] = '0';
-	urlParams['mode'] = 'google';
-	urlParams['lockdown'] = '1'; // Do not want to apply lockdown true to above block
-
-	window.DRAWIO_GOOGLE_APP_ID = window.DRAWIO_GOOGLE_APP_ID || '184079235871';
-	window.DRAWIO_GOOGLE_CLIENT_ID = window.DRAWIO_GOOGLE_CLIENT_ID || '184079235871-pjf5nn0lff27lk8qf0770gmffiv9gt61.apps.googleusercontent.com';
+	urlParams['ms365'] = '0';
 }
 
 // Disables Trello client by default
@@ -486,4 +505,16 @@ if ((window.location.hash == null || window.location.hash.length <= 1) &&
 	urlParams['open'] != null)
 {
 	window.location.hash = urlParams['open'];
+}
+
+// TODO: One day we could remove this. It's just to stop mermaid throwing syntax error on startup for pre v98 browsers
+// Maybe remove in 2027
+if (typeof window.structuredClone !== 'function')
+{
+	window.structuredClone = function(value)
+	{
+		{
+			return value;
+		}
+	}
 }

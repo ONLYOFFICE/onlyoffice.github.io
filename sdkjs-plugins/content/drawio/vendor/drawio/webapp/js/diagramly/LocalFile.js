@@ -1,14 +1,11 @@
 // $Id = LocalFile.js,v 1.12 2010-01-02 09 =45 =14 gaudenz Exp $
-// Copyright (c) 2006-2014, JGraph Ltd
+// Copyright (c) 2006-2014, JGraph Holdings Ltd
 /**
- * Constructs a new point for the optional x and y coordinates. If no
- * coordinates are given, then the default values for <x> and <y> are used.
- * @constructor
- * @class Implements a basic 2D point. Known subclassers = {@link mxRectangle}.
- * @param {number} x X-coordinate of the point.
- * @param {number} y Y-coordinate of the point.
+ * Constructs a new file on the local device with the given data and title.
+ * Temporary files have no storage mode. The optional file handle and
+ * descriptor are used with the File System Access API.
  */
-LocalFile = function(ui, data, title, temp, fileHandle, desc)
+LocalFile = function(ui, data, title, temp, fileHandle, desc, editable)
 {
 	DrawioFile.call(this, ui, data);
 	
@@ -16,16 +13,14 @@ LocalFile = function(ui, data, title, temp, fileHandle, desc)
 	this.mode = (temp) ? null : App.MODE_DEVICE;
 	this.fileHandle = fileHandle;
 	this.desc = desc;
+	this.editable = editable;
 };
 
 //Extends mxEventSource
 mxUtils.extend(LocalFile, DrawioFile);
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns true if the file has a valid file handle and autosave is enabled.
  */
 LocalFile.prototype.isAutosave = function()
 {
@@ -42,10 +37,7 @@ LocalFile.prototype.isAutosaveOptional = function()
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns the storage mode of the file, which is null for temporary files.
  */
 LocalFile.prototype.getMode = function()
 {
@@ -53,10 +45,7 @@ LocalFile.prototype.getMode = function()
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns the title of the file.
  */
 LocalFile.prototype.getTitle = function()
 {
@@ -64,10 +53,7 @@ LocalFile.prototype.getTitle = function()
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns true since local files can be renamed.
  */
 LocalFile.prototype.isRenamable = function()
 {
@@ -75,40 +61,60 @@ LocalFile.prototype.isRenamable = function()
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns true if the file is editable and the editable flag is not false.
  */
-LocalFile.prototype.save = function(revision, success, error)
+LocalFile.prototype.isEditable = function()
 {
-	this.saveAs(this.title, success, error);
+	return DrawioFile.prototype.isEditable.apply(this, arguments) &&
+		(this.editable == null || this.editable);
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Sets the editable flag of the file and fires a descriptorChanged event.
  */
-LocalFile.prototype.saveAs = function(title, success, error)
+LocalFile.prototype.setEditable = function(editable)
 {
-	this.saveFile(title, false, success, error);
+	this.editable = editable;
+	this.descriptorChanged();
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Saves the file under its current title if it can be saved (see
+ * DrawioFile.getSaveError). The data is updated in saveFile, after the
+ * writable of the file handle was requested.
  */
-LocalFile.prototype.saveAs = function(title, success, error)
+LocalFile.prototype.save = function(revision, success, error, unloading, overwrite)
 {
-	this.saveFile(title, false, success, error);
+	var saveError = this.getSaveError(overwrite);
+
+	if (saveError != null)
+	{
+		if (error != null)
+		{
+			error(saveError);
+		}
+		else
+		{
+			throw new Error(saveError.message);
+		}
+	}
+	else
+	{
+		this.clearAutosave();
+		this.saveAs(this.title, success, error, unloading, overwrite);
+	}
 };
 
 /**
- * Adds all listeners.
+ * Saves the file with the given title.
+ */
+LocalFile.prototype.saveAs = function(title, success, error, unloading, overwrite)
+{
+	this.saveFile(title, false, success, error, null, unloading, overwrite);
+};
+
+/**
+ * Returns the descriptor of the file.
  */
 LocalFile.prototype.getDescriptor = function()
 {
@@ -124,10 +130,8 @@ LocalFile.prototype.setDescriptor = function(desc)
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Loads the latest version of the file from its file handle. Invokes error
+ * if the file has no file handle.
  */
 LocalFile.prototype.getLatestVersion = function(success, error)
 {
@@ -145,68 +149,117 @@ LocalFile.prototype.getLatestVersion = function(success, error)
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Saves the file with the given title. If the file has a file handle, the
+ * data is written to the local file unless it was changed on disk and
+ * overwrite is false. Otherwise the file is downloaded. A new title drops
+ * the file handle.
  */
-LocalFile.prototype.saveFile = function(title, revision, success, error, useCurrentData)
+LocalFile.prototype.saveFile = function(title, revision, success, error, useCurrentData, unloading, overwrite)
 {
 	if (title != this.title)
 	{
 		this.fileHandle = null;
 		this.desc = null;
+		this.editable = null;
 	}
-	
+
 	this.title = title;
 
-	// Updates data after changing file name
-	if (!useCurrentData)
+	// Updates data after changing file name, waits for the fonts to be
+	// loaded into the local cache for saving SVG files with embedded
+	// fonts and renders the PNG for binary files, keeps the synchronous
+	// flow during page unload
+	var generateData = mxUtils.bind(this, function(fn, fail)
 	{
-		this.updateFileData();
-	}
-	
-	var binary = this.ui.useCanvasForExport && /(\.png)$/i.test(this.getTitle());
-	this.setShadowModified(false);
-	var savedData = this.getData();
-	
+		var doGenerate = mxUtils.bind(this, function()
+		{
+			var binary = Editor.useCanvasForExport && /(\.png)$/i.test(this.getTitle());
+			this.setShadowModified(false);
+			var savedData = this.getData();
+
+			if (binary)
+			{
+				var p = this.ui.getPngFileProperties(this.ui.fileNode);
+
+				this.ui.getEmbeddedPng(mxUtils.bind(this, function(imageData)
+				{
+					fn(imageData, savedData, binary);
+				}), fail, (this.ui.getCurrentFile() != this) ?
+					savedData : null, p.scale, p.border);
+			}
+			else
+			{
+				fn(savedData, savedData, binary);
+			}
+		});
+
+		if (!useCurrentData && !unloading)
+		{
+			this.loadFonts(mxUtils.bind(this, function()
+			{
+				this.updateFileData();
+				doGenerate();
+			}));
+		}
+		else
+		{
+			if (!useCurrentData)
+			{
+				this.updateFileData();
+			}
+
+			doGenerate();
+		}
+	});
+
 	var done = mxUtils.bind(this, function()
 	{
 		this.setModified(this.getShadowModified());
 		this.contentChanged();
-		
+
 		if (success != null)
 		{
 			success();
 		}
 	});
-	
-	var doSave = mxUtils.bind(this, function(data)
+
+	if (this.fileHandle != null)
 	{
-		if (this.fileHandle != null)
+		// Sets shadow modified state during save
+		if (!this.savingFile)
 		{
-			// Sets shadow modified state during save
-			if (!this.savingFile)
+			this.savingFileTime = new Date();
+			this.savingFile = true;
+
+			var errorWrapper = mxUtils.bind(this, function(e, writable)
 			{
-				this.savingFileTime = new Date();
-				this.savingFile = true;
-				
-				var errorWrapper = mxUtils.bind(this, function(e)
+				this.savingFile = false;
+
+				// Discards the swap file for the aborted save
+				if (writable != null)
 				{
-					this.savingFile = false;
-					
-					if (error != null)
-					{
-						// Wraps error object to offer save status option
-						error({error: e});
-					}
-				});
-				
-				// Saves a copy as a draft while saving
-				this.saveDraft();
-				
-				this.fileHandle.createWritable().then(mxUtils.bind(this, function(writable)
+					writable.abort().then(function() { }, function() { });
+				}
+
+				if (error != null)
 				{
+					// Wraps error object to offer save status option
+					error({error: e});
+				}
+			});
+
+			// Creates the writable before the data is generated so that the
+			// write permission prompt is shown while the transient user
+			// activation of the event that triggered the save is valid, as
+			// generating the data can take longer than the lifespan of the
+			// user activation, in which case the prompt would be blocked
+			this.fileHandle.createWritable().then(mxUtils.bind(this, function(writable)
+			{
+				generateData(mxUtils.bind(this, function(data, savedData, binary)
+				{
+					// Saves a copy as a draft while saving
+					this.saveDraft(savedData);
+
 					this.fileHandle.getFile().then(mxUtils.bind(this, function(newDesc)
 					{
 						this.invalidFileHandle = null;
@@ -215,8 +268,8 @@ LocalFile.prototype.saveFile = function(title, revision, success, error, useCurr
 							'desc', [this.desc], 'newDesc', [newDesc],
 							'conflict', this.desc.lastModified !=
 								newDesc.lastModified);
-						
-						if (this.desc.lastModified == newDesc.lastModified)
+
+						if (overwrite || this.desc.lastModified == newDesc.lastModified)
 						{
 							writable.write((binary) ? this.ui.base64ToBlob(data, 'image/png') : data).then(mxUtils.bind(this, function()
 							{
@@ -230,7 +283,7 @@ LocalFile.prototype.saveFile = function(title, revision, success, error, useCurr
 											this.savingFile = false;
 											this.desc = desc;
 											this.fileSaved(savedData, lastDesc, done, errorWrapper);
-											
+
 											// Deletes draft after saving
 											this.removeDraft();
 										}
@@ -240,22 +293,37 @@ LocalFile.prototype.saveFile = function(title, revision, success, error, useCurr
 										}
 									}), errorWrapper);
 								}), errorWrapper);
-							}), errorWrapper);
+							}), mxUtils.bind(this, function(e)
+							{
+								errorWrapper(e, writable);
+							}));
 						}
 						else
 						{
-							this.inConflictState = true;
-							errorWrapper();
+							this.setConflict();
+							errorWrapper(null, writable);
 						}
 					}), mxUtils.bind(this, function(e)
 					{
 						this.invalidFileHandle = true;
-						errorWrapper(e);
+						errorWrapper(e, writable);
 					}));
-				}), errorWrapper);
-			}
+				}), mxUtils.bind(this, function(e)
+				{
+					errorWrapper(e, writable);
+				}));
+			}), errorWrapper);
 		}
-		else
+		else if (error != null)
+		{
+			// The file is saved again when the current save operation
+			// completes if it is still modified (see handleFileSuccess)
+			error({code: App.ERROR_BUSY, message: mxResources.get('busy')});
+		}
+	}
+	else
+	{
+		generateData(mxUtils.bind(this, function(data, savedData, binary)
 		{
 			if (this.ui.isOfflineApp() || this.ui.isLocalFileSave())
 			{
@@ -268,7 +336,7 @@ LocalFile.prototype.saveFile = function(title, revision, success, error, useCurr
 				{
 					var dot = title.lastIndexOf('.');
 					var format = (dot > 0) ? title.substring(dot + 1) : 'xml';
-	
+
 					// Do not update modified flag
 					new mxXmlRequest(SAVE_URL, 'format=' + format +
 						'&xml=' + encodeURIComponent(data) +
@@ -284,32 +352,14 @@ LocalFile.prototype.saveFile = function(title, revision, success, error, useCurr
 					}));
 				}
 			}
-			
-			done();
-		}
-	});
-	
-	if (binary)
-	{
-		var p = this.ui.getPngFileProperties(this.ui.fileNode);
 
-		this.ui.getEmbeddedPng(mxUtils.bind(this, function(imageData)
-		{
-			doSave(imageData);
-		}), error, (this.ui.getCurrentFile() != this) ?
-			savedData : null, p.scale, p.border);
-	}
-	else
-	{
-		doSave(savedData);
+			done();
+		}), error);
 	}
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Sets the title of the file and fires a descriptorChanged event.
  */
 LocalFile.prototype.rename = function(title, success, error)
 {

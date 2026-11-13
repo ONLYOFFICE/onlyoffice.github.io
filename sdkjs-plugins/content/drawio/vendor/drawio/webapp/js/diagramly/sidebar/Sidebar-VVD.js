@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addVVDPalette = function()
@@ -56,9 +60,9 @@
 					w * 0.73, h, '', 'Document', null, null, this.getTagsForStencil(gn, 'document', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'edge_gateway;',
 					w, h * 0.85, '', 'Edge Gateway', null, null, this.getTagsForStencil(gn, 'edge gateway', dt).join(' ')),
-			this.createVertexTemplateEntry(s2 + 'endpoint;fillColor=#ffffff;',
+			this.createVertexTemplateEntry(s2 + 'endpoint;accentColor=#079247;fillColor=#ffffff;',
 					w, h * 0.93, '', 'Endpoint White', null, null, this.getTagsForStencil(gn, 'endpoint', dt).join(' ')),
-			this.createVertexTemplateEntry(s + 'endpoint;',
+			this.createVertexTemplateEntry(s + 'endpoint;accentColor=#079247;',
 					w, h * 0.93, '', 'Endpoint', null, null, this.getTagsForStencil(gn, 'endpoint', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'ethernet_port;',
 					w, h, '', 'Ethernet Port', null, null, this.getTagsForStencil(gn, 'ethernet port', dt).join(' ')),

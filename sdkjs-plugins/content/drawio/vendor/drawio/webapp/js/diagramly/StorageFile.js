@@ -1,29 +1,33 @@
 /**
- * Copyright (c) 2006-2017, JGraph Ltd
- * Copyright (c) 2006-2017, Gaudenz Alder
+ * Copyright (c) 2006-2017, JGraph Holdings Ltd
+ * Copyright (c) 2006-2017, draw.io AG
  */
 /**
- * Constructs a new point for the optional x and y coordinates. If no
- * coordinates are given, then the default values for <x> and <y> are used.
- * @constructor
- * @class Implements a basic 2D point. Known subclassers = {@link mxRectangle}.
- * @param {number} x X-coordinate of the point.
- * @param {number} y Y-coordinate of the point.
+ * Constructs a new file in the browser storage with the given data and
+ * title.
  */
 StorageFile = function(ui, data, title)
 {
 	DrawioFile.call(this, ui, data);
 	
 	this.title = title;
+	this.etag = this.getEtag(data);
 };
 
 //Extends mxEventSource
 mxUtils.extend(StorageFile, DrawioFile);
 
 /**
- * Sets the delay for autosave in milliseconds. Default is 2000.
+ * Returns the etag for the given data, which is a hash of the data.
  */
-StorageFile.prototype.autosaveDelay = 2000;
+StorageFile.prototype.getEtag = function(data)
+{
+	return this.ui.hashValue((data != null) ? data : '');};
+
+/**
+ * Sets the delay for autosave in milliseconds. Default is 1000.
+ */
+StorageFile.prototype.autosaveDelay = 500;
 
 /**
  * Sets the delay for autosave in milliseconds. Default is 20000.
@@ -31,19 +35,67 @@ StorageFile.prototype.autosaveDelay = 2000;
 StorageFile.prototype.maxAutosaveDelay = 20000;
 
 /**
+ * Maximum number if attempts to automatically catchup on save.
+ */
+StorageFile.prototype.maxRetries = 5;
+
+/**
  * A differentiator of the stored object type (file or lib)
  */
 StorageFile.prototype.type = 'F';
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns App.MODE_BROWSER.
  */
 StorageFile.prototype.getMode = function()
 {
 	return App.MODE_BROWSER;
+};
+
+/**
+ * Returns true since files in the browser storage support synchronization.
+ */
+StorageFile.prototype.isSyncSupported = function()
+{
+	return true
+};
+
+/**
+ * Returns true if changes of the file are detected by polling, which is the
+ * case if sync is supported.
+ */
+StorageFile.prototype.isPolling = function()
+{
+	return this.isSyncSupported();
+};
+
+/**
+ * Returns the polling interval in milliseconds.
+ */
+StorageFile.prototype.getPollingInterval = function()
+{
+	return 10000;
+};
+
+/**
+ * Hook for subclassers to get the latest descriptor of this file
+ * and return it in the success handler.
+ */
+StorageFile.prototype.loadDescriptor = function(success, error)
+{
+	this.getLatestVersionId(success, error);
+};
+
+/**
+ * Hook for subclassers to get the latest version ID of this file
+ * and return it in the success handler.
+ */
+StorageFile.prototype.getLatestVersionId = function(success, error)
+{
+	StorageFile.getFileContent(this.ui, this.title, mxUtils.bind(this, function(data)
+	{
+		success(this.getEtag(data));
+	}), error);
 };
 
 /**
@@ -55,10 +107,8 @@ StorageFile.prototype.isAutosaveOptional = function()
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns the hash of the file, which is L followed by the URI-encoded
+ * title.
  */
 StorageFile.prototype.getHash = function()
 {
@@ -66,10 +116,7 @@ StorageFile.prototype.getHash = function()
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns the title of the file.
  */
 StorageFile.prototype.getTitle = function()
 {
@@ -77,10 +124,7 @@ StorageFile.prototype.getTitle = function()
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns true since files in the browser storage can be renamed.
  */
 StorageFile.prototype.isRenamable = function()
 {
@@ -88,44 +132,66 @@ StorageFile.prototype.isRenamable = function()
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns the descriptor of the file, which is the etag of its data.
+ */
+StorageFile.prototype.getDescriptor = function()
+{
+	return this.etag;
+};
+
+/**
+* Updates the descriptor of this file with the one from the given file.
+*/
+StorageFile.prototype.setDescriptor = function(etag)
+{
+	this.etag = etag;
+};
+
+/**
+ * Returns the etag from the given descriptor.
+ */
+StorageFile.prototype.getDescriptorEtag = function(desc)
+{
+	return desc;
+};
+
+/**
+ * Updates the file data and saves the file under its current title.
  */
 StorageFile.prototype.save = function(revision, success, error)
 {
-	this.saveAs(this.getTitle(), success, error);
+	DrawioFile.prototype.save.apply(this, [false, mxUtils.bind(this, function()
+	{
+		// The bytes were just updated: an edit made while the stored copy
+		// is checked before the write is not in them and keeps the file
+		// modified (see writeFile)
+		this.setShadowModified(false);
+		this.saveFile(this.getTitle(), false, success, error, null, true);
+	}), error]);
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Saves the file with the given title by renaming it.
  */
 StorageFile.prototype.saveAs = function(title, success, error)
 {
-	DrawioFile.prototype.save.apply(this, arguments);
-	this.saveFile(title, false, success, error);
+	this.rename(title, success, error);
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Inserts the given file, or a new file with the given title and data, into
+ * the browser storage.
  */
 StorageFile.insertFile = function(ui, title, data, success, error, file)
 {
-	StorageFile.doInsertFile(new StorageFile(ui, data, title), success, error);
+	StorageFile.doInsertFile((file != null) ? file :
+		new StorageFile(ui, data, title), success, error);
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Writes the given file to the browser storage and passes it to success.
+ * Asks the user to confirm before replacing an existing file with the same
+ * title.
  */
 StorageFile.doInsertFile = function(file, success, error)
 {
@@ -136,8 +202,7 @@ StorageFile.doInsertFile = function(file, success, error)
 	{
 		var fn = function()
 		{
-			// Inserts data into local storage
-			file.saveFile(title, false, function()
+			file.writeFile(title, function()
 			{
 				success(file);
 			}, error);
@@ -163,10 +228,10 @@ StorageFile.doInsertFile = function(file, success, error)
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Passes the data of the file with the given title in the browser storage
+ * to success, or null if it does not exist. Uses localStorage if no
+ * database is available. If the file is not in localStorage either, the
+ * error of the database is passed to error if it is not null.
  */
 StorageFile.getFileContent = function(ui, title, success, error)
 {
@@ -174,24 +239,33 @@ StorageFile.getFileContent = function(ui, title, success, error)
 	{
 		success(obj != null? obj.data : null);
 	}, 
-	mxUtils.bind(this, function()
+	mxUtils.bind(this, function(e)
 	{
 		if (ui.database == null) //fallback to localstorage
 		{
-			ui.getLocalData(title, success);
+			ui.getLocalData(title, function(data)
+			{
+				if (data == null && error != null)
+				{
+					error(e);
+				}
+				else
+				{
+					success(data);
+				}
+			});
 		}
 		else if (error != null)
 		{
-			error();
+			error(e);
 		}
 	}), 'files');
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Passes the info object of the file with the given title in the browser
+ * storage to success, or null if it does not exist. Uses localStorage if no
+ * database is available.
  */
 StorageFile.getFileInfo = function(ui, title, success, error)
 {
@@ -216,13 +290,15 @@ StorageFile.getFileInfo = function(ui, title, success, error)
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Writes the file to the browser storage with the given title, or with its
+ * title at the time of the write if current is true. If the stored file has
+ * changed, it is merged and the save is retried up to maxRetries times. Asks
+ * the user to confirm before replacing another file.
  */
-StorageFile.prototype.saveFile = function(title, revision, success, error)
+StorageFile.prototype.saveFile = function(title, revision, success, error, retry, current)
 {
+	retry = (retry != null) ? retry : 0;
+
 	if (!this.isEditable())
 	{
 		if (success != null)
@@ -232,66 +308,12 @@ StorageFile.prototype.saveFile = function(title, revision, success, error)
 	}
 	else
 	{
+		// A rename can complete while the stored copy is checked: a save that
+		// wrote the title it started with undid the rename and brought the
+		// old file back next to the renamed one (storage-inflight-edit)
 		var fn = mxUtils.bind(this, function()
 		{
-			if (this.isRenamable())
-			{
-				this.title = title;
-			}
-			
-			try
-			{
-				var saveDone = mxUtils.bind(this, function()
-				{
-					this.setModified(this.getShadowModified());
-					this.contentChanged();
-					
-					if (success != null)
-					{
-						success();
-					}
-		        });
-				
-				this.setShadowModified(false);
-				var data = this.getData();
-				
-				this.ui.setDatabaseItem(null, [{
-						title: this.title,
-						size: data.length,
-						lastModified: Date.now(),
-						type: this.type
-					}, {
-						title: this.title,
-						data: data
-					}], saveDone, mxUtils.bind(this, function()
-					{
-						if (this.ui.database == null) //fallback to localstorage
-						{
-							try
-							{
-								this.ui.setLocalData(this.title, data, saveDone);
-							}
-							catch (e)
-							{
-								if (error != null)
-								{
-									error(e);
-								}
-							}
-						}
-						else if (error != null)
-						{
-							error();
-						}
-					}), ['filesInfo', 'files']);
-			}
-			catch (e)
-			{
-				if (error != null)
-				{
-					error(e);
-				}
-			}
+			this.writeFile((current) ? this.getTitle() : title, success, error);
 		});
 		
 		// Checks for trailing dots
@@ -299,13 +321,56 @@ StorageFile.prototype.saveFile = function(title, revision, success, error)
 		{
 			error({message: mxResources.get('invalidName')});
 		}
+		else if (this instanceof StorageLibrary)
+		{
+			this.setShadowModified(false);
+			fn(); // No need to check for conflicts with libraries			
+		}
 		else
 		{
 			StorageFile.getFileInfo(this.ui, title, mxUtils.bind(this, function(data)
 			{
 				if (!this.isRenamable() || this.getTitle() == title || data == null)
 				{
-					fn();
+					this.getLatestVersion(mxUtils.bind(this, function(file)
+					{
+						EditorUi.debug('StorageFile.saveFile', [this], 'title', title,
+							'data', data, 'latestVersion', [file], 'descriptor',
+							this.getDescriptor(), 'latestVersionDescriptor',
+							file.getDescriptor());
+						
+						if (file.getDescriptor() != this.getDescriptor())
+						{
+							this.mergeFile(file, mxUtils.bind(this, function()
+							{
+								if (retry >= this.maxRetries ||
+									this.invalidChecksum ||
+									this.inConflictState)
+								{
+									this.setConflict();
+
+									if (error != null)
+									{
+										error();
+									}
+								}
+								else
+								{
+									this.retrySave(mxUtils.bind(this, function()
+									{
+										this.updateFileData();
+										this.setShadowModified(false);
+										this.saveFile((current) ? this.getTitle() : title,
+											revision, success, error, retry + 1, current);
+									}));
+								}
+							}), error);
+						}
+						else
+						{
+							fn();
+						}
+					}), error);
 				}
 				else
 				{
@@ -314,13 +379,109 @@ StorageFile.prototype.saveFile = function(title, revision, success, error)
 			}), error);
 		}
 	}
+
+	EditorUi.debug('StorageFile.saveFile', [this], 'title', title,
+		'revision', revision, 'retry', retry);
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Invokes the given function after a random delay of 300 to 600 ms.
+ */
+StorageFile.prototype.retrySave = function(fn)
+{
+	var delay = 300 + Math.random() * 300;
+	window.setTimeout(fn, delay);
+	
+	EditorUi.debug('StorageFile.retrySave', [this], 'delay', delay);
+};
+
+/**
+ * Writes the data of the file with the given title to the browser storage
+ * database, or to localStorage if no database is available, and updates the
+ * descriptor.
+ */
+StorageFile.prototype.writeFile = function(title, success, error)
+{
+	EditorUi.debug('StorageFile.writeFile', [this], 'title', title);
+
+	if (this.isRenamable())
+	{
+		this.title = title;
+	}
+	
+	try
+	{
+		var desc = this.getDescriptor();
+		var data = this.getData();
+
+		var saveDone = mxUtils.bind(this, function()
+		{
+			this.setModified(this.getShadowModified());
+			this.setDescriptor(this.getEtag(data));
+			this.contentChanged();
+
+			// Notifies other tabs to refresh the scratchpad
+			if (this.type == 'L' && this.title == '.scratchpad' &&
+				this.ui.scratchpadSaved != null)
+			{
+				this.ui.scratchpadSaved();
+			}
+
+			this.fileSaved(data, desc, success, error);
+		});
+		
+		// The shadow flag is cleared where the bytes are taken (save, its
+		// retry, libraries), not here after the asynchronous check of the
+		// stored copy: an edit made during the check is not in the bytes,
+		// and a rename writes the bytes of the last save, so its unsaved
+		// edits keep the file modified (storage-inflight-edit)
+		this.ui.setDatabaseItem(null, [{
+			title: this.title,
+			size: data.length,
+			lastModified: Date.now(),
+			type: this.type
+		}, {
+			title: this.title,
+			data: data
+		}], saveDone, mxUtils.bind(this, function(e)
+		{
+			if (this.ui.database == null) //fallback to localstorage
+			{
+				try
+				{
+					this.ui.setLocalData(this.title, data, saveDone);
+				}
+				catch (e)
+				{
+					if (error != null)
+					{
+						error(e);
+					}
+				}
+			}
+			else if (error != null)
+			{
+				// Passes on the error so that the failed write is reported
+				// to the user. Transaction errors are events with no message
+				// and a null error is ignored by App.createFile
+				// [jgraph/drawio-dev#672]
+				error((e != null && e.message != null) ? e :
+					{message: mxResources.get('errorSavingFile')});
+			}
+		}), ['filesInfo', 'files']);
+	}
+	catch (e)
+	{
+		if (error != null)
+		{
+			error(e);
+		}
+	}
+};
+
+/**
+ * Renames the file by saving it with the given title and deleting the file
+ * with the old title.
  */
 StorageFile.prototype.rename = function(title, success, error)
 {
@@ -328,32 +489,14 @@ StorageFile.prototype.rename = function(title, success, error)
 
 	if (oldTitle != title)
 	{
-		StorageFile.getFileInfo(this.ui, title, mxUtils.bind(this, function(data)
+		EditorUi.debug('StorageFile.rename', [this], 'oldTitle', oldTitle, 'newTitle', title);
+
+		this.saveFile(title, false, mxUtils.bind(this, function()
 		{
-			var fn = mxUtils.bind(this, function()
+			StorageFile.deleteFile(this.ui, oldTitle, mxUtils.bind(this, function()
 			{
-				this.title = title;
-				
-				// Updates the data if the extension has changed
-				if (!this.hasSameExtension(oldTitle, title))
-				{
-					this.setData(this.ui.getFileData());
-				}
-				
-				this.saveFile(title, false, mxUtils.bind(this, function()
-				{
-					this.ui.removeLocalData(oldTitle, success);
-				}), error);
-			});
-			
-			if (data != null)
-			{
-				this.ui.confirm(mxResources.get('replaceIt', [title]), fn, error);
-			}
-			else
-			{
-				fn();
-			}
+				this.ui.removeLocalData(oldTitle, success);
+			}, error));
 		}), error);
 	}
 	else
@@ -363,19 +506,7 @@ StorageFile.prototype.rename = function(title, success, error)
 };
 
 /**
- * Returns the location as a new object.
- * @type mx.Point
- */
-StorageFile.prototype.open = function()
-{
-	DrawioFile.prototype.open.apply(this, arguments);
-
-	// Immediately creates the storage entry
-	this.saveFile(this.getTitle());
-};
-
-/**
- * Adds the listener for automatically saving the diagram for local changes.
+ * Passes the latest version of the file in the browser storage to success.
  */
 StorageFile.prototype.getLatestVersion = function(success, error)
 {
@@ -386,24 +517,8 @@ StorageFile.prototype.getLatestVersion = function(success, error)
 };
 
 /**
- * Stops any pending autosaves and removes all listeners.
- */
-StorageFile.prototype.destroy = function()
-{
-	DrawioFile.prototype.destroy.apply(this, arguments);
-	
-	if (this.storageListener != null)
-	{
-		mxEvent.removeListener(window, 'storage', this.storageListener);
-		this.storageListener = null;
-	}
-};
-
-/**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns the info objects of the files and libraries in localStorage. The
+ * optional type (F for files or L for libraries) limits the result.
  */
 StorageFile.listLocalStorageFiles = function(type)
 {
@@ -436,10 +551,8 @@ StorageFile.listLocalStorageFiles = function(type)
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Copies all files and libraries, including the scratchpad, from
+ * localStorage to the given database.
  */
 StorageFile.migrate = function(db) 
 {
@@ -462,10 +575,9 @@ StorageFile.migrate = function(db)
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Passes the info objects of the files in the browser storage to success.
+ * The optional type (F for files or L for libraries) limits the result.
+ * Titles starting with a dot are ignored.
  */
 StorageFile.listFiles = function(ui, type, success, error)
 {
@@ -499,10 +611,7 @@ StorageFile.listFiles = function(ui, type, success, error)
 };
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Deletes the file with the given title from the browser storage.
  */
 StorageFile.deleteFile = function(ui, title, success, error)
 {

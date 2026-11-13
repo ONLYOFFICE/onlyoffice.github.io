@@ -1,6 +1,5 @@
 /**
- * $Id: mxMockupGraphics.js,v 1.5 2013/05/22 12:28:49 mate Exp $
- * Copyright (c) 2006-2010, JGraph Ltd
+ * Copyright (c) 2006-2010, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -32,10 +31,10 @@ mxShapeMockupBarChart.prototype.cst = {
 };
 
 mxShapeMockupBarChart.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color'},
-	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color'},
-	{name: 'fillColor3', dispName: 'Fill3 Color', type: 'color'}
+	{name: 'strokeColor2', dispName: 'Stroke2 Color', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Stroke3 Color', type: 'color', primary:true},
+	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Fill3 Color', type: 'color', primary:true}
 ];
 
 /**
@@ -133,10 +132,10 @@ mxShapeMockupColumnChart.prototype.cst = {
 };
 
 mxShapeMockupColumnChart.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Bar Stroke Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Coord System Color', type: 'color'},
-	{name: 'fillColor2', dispName: 'Bar1 Color', type: 'color'},
-	{name: 'fillColor3', dispName: 'Bar2 Color', type: 'color'}
+	{name: 'strokeColor2', dispName: 'Bar Stroke Color', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Coord System Color', type: 'color', primary:true},
+	{name: 'fillColor2', dispName: 'Bar1 Color', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Bar2 Color', type: 'color', primary:true}
 ];
 
 /**
@@ -234,9 +233,9 @@ mxShapeMockupLineChart.prototype.cst = {
 };
 
 mxShapeMockupLineChart.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Coord. System Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Line1 Color', type: 'color'},
-	{name: 'strokeColor4', dispName: 'Line2 Color', type: 'color'},
+	{name: 'strokeColor2', dispName: 'Coord. System Color', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Line1 Color', type: 'color', primary:true},
+	{name: 'strokeColor4', dispName: 'Line2 Color', type: 'color', primary:true}
 ];
 
 /**
@@ -331,7 +330,7 @@ mxShapeMockupPieChart.prototype.cst = {
 
 mxShapeMockupPieChart.prototype.customProperties = [
 	{name: 'partsCount', dispName: 'partsCount', type: 'int', defVal: 4, dependentProps: ['partColors', 'parts']},
-	{name: 'partColors', dispName: 'Part Colors', type: 'staticArr', subType: 'color', sizeProperty: 'partsCount', subDefVal: '#FFFFFF'},
+	{name: 'partColors', dispName: 'Part Colors', type: 'staticArr', subType: 'color', sizeProperty: 'partsCount', subDefVal: '#FFFFFF', primary: true},
 	{name: 'parts', dispName: 'Part Sizes', type: 'staticArr', subType: 'int', sizeProperty: 'partsCount', subDefVal: '10'},
 ];
 
@@ -358,14 +357,17 @@ mxShapeMockupPieChart.prototype.foreground = function(c, x, y, w, h)
 {
 	var parts = mxUtils.getValue(this.style, mxShapeMockupPieChart.prototype.cst.PARTS, '10,20,30').toString().split(',');
 	var partNum = parts.length;
-	var partColors = mxUtils.getValue(this.style, mxShapeMockupPieChart.prototype.cst.PART_COLORS, '#333333,#666666,#999999').toString().split(',');
+	var partColors = mxUtils.parseColorList(mxUtils.getValue(this.style, mxShapeMockupPieChart.prototype.cst.PART_COLORS,
+		'#333333,#666666,#999999').toString());
 	var total = 0;
 
 	for (var i = 0; i < partNum; i++)
 	{
 		total = total + parseInt(parts[i], 10);
 	}
-
+	
+	// Sum of the parts before the current part
+	var sumPerc = 0;
 
 	for (var i = 0; i < partNum; i++)
 	{
@@ -378,18 +380,14 @@ mxShapeMockupPieChart.prototype.foreground = function(c, x, y, w, h)
 			c.setFillColor('#ff0000');
 		}
 
-		var beginPerc = 0;
+		var beginPerc = sumPerc;
 		var endPerc = 0;
 		var currPerc = parseInt(parts[i], 10) / total;
+		sumPerc = sumPerc + currPerc;
 
 		if (currPerc === 0.5)
 		{
 			currPerc = 0.501;
-		}
-
-		for (var j = 0; j < i; j++)
-		{
-			beginPerc = beginPerc + parseInt(parts[j], 10) / total;
 		}
 
 		endPerc = currPerc + beginPerc;
@@ -445,6 +443,13 @@ mxShapeMockupIconGrid.prototype.cst = {
 };
 
 /**
+ * Variable: maxIcons
+ *
+ * Maximum number of icons. Default is 1000.
+ */
+mxShapeMockupIconGrid.prototype.maxIcons = 1000;
+
+/**
  * Function: paintVertexShape
  * 
  * Paints the vertex shape.
@@ -464,9 +469,10 @@ mxShapeMockupIconGrid.prototype.background = function(c, w, h, gridSize)
 	var boxSizeX = w / (parseInt(gridSize[0],10) + (gridSize[0]-1) * 0.5);
 	var boxSizeY = h / (parseInt(gridSize[1],10) + (gridSize[1]-1) * 0.5);
 
-	for (var i = 0; i < gridSize[0]; i++)
+	// Limits the number of rows and icons for huge grid sizes
+	for (var i = 0, n = 0; i < gridSize[0] && i < this.maxIcons; i++)
 	{
-		for (var j = 0; j < gridSize[1]; j++)
+		for (var j = 0; j < gridSize[1] && n < this.maxIcons; j++, n++)
 		{
 			c.rect(boxSizeX * 1.5 * i, boxSizeY * 1.5 * j, boxSizeX, boxSizeY);
 			c.fillAndStroke();
@@ -479,9 +485,10 @@ mxShapeMockupIconGrid.prototype.foreground = function(c, w, h, gridSize)
 	var boxSizeX = w / (parseInt(gridSize[0],10) + (gridSize[0]-1) * 0.5);
 	var boxSizeY = h / (parseInt(gridSize[1],10) + (gridSize[1]-1) * 0.5);
 
-	for (var i = 0; i < gridSize[0]; i++)
+	// Limits the number of rows and icons for huge grid sizes
+	for (var i = 0, n = 0; i < gridSize[0] && i < this.maxIcons; i++)
 	{
-		for (var j = 0; j < gridSize[1]; j++)
+		for (var j = 0; j < gridSize[1] && n < this.maxIcons; j++, n++)
 		{
 			c.begin();
 			c.moveTo(boxSizeX * 1.5 * i, boxSizeY * 1.5 * j);
@@ -524,10 +531,10 @@ mxShapeMockupBubbleChart.prototype.cst = {
 };
 
 mxShapeMockupBubbleChart.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Bubble Stroke Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Coord. System Color', type: 'color'},
-	{name: 'fillColor2', dispName: 'Bubble1 Color', type: 'color'},
-	{name: 'fillColor3', dispName: 'Bubble2 Color', type: 'color'}
+	{name: 'strokeColor2', dispName: 'Bubble Stroke Color', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Coord. System Color', type: 'color', primary:true},
+	{name: 'fillColor2', dispName: 'Bubble1 Color', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Bubble2 Color', type: 'color', primary:true}
 ];
 
 /**
@@ -651,8 +658,8 @@ mxShapeMockupGauge.prototype.cst = {
 };
 
 mxShapeMockupGauge.prototype.customProperties = [
-	{name: 'scaleColors', dispName: 'Scale Colors', type: 'string'},
-	{name: 'needleColor', dispName: 'Needle Color', type: 'color'},
+	{name: 'scaleColors', dispName: 'Scale Colors', type: 'string', primary:true},
+	{name: 'needleColor', dispName: 'Needle Color', type: 'color', primary:true},
 	{name: 'gaugePos', dispName: 'Needle Position', type: 'float', min:0, max:100, defVal:25}
 ];
 
@@ -678,7 +685,7 @@ mxShapeMockupGauge.prototype.background = function(c, w, h)
 mxShapeMockupGauge.prototype.foreground = function(c, w, h)
 {
 	var gaugePos = mxUtils.getValue(this.style, mxShapeMockupGauge.prototype.cst.GAUGE_POS, '0');
-	var scaleColors = decodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupGauge.prototype.cst.SCALE_COLORS, '#888888,#aaaaaa,#444444').toString()).split(',');
+	var scaleColors = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupGauge.prototype.cst.SCALE_COLORS, '#888888,#aaaaaa,#444444').toString()).split(',');
 	var gaugeLabels = mxUtils.getValue(this.style, mxShapeMockupGauge.prototype.cst.GAUGE_LABELS, 'CPU[%],0,100').toString().split(',');
 	var needleColor = mxUtils.getValue(this.style, mxShapeMockupGauge.prototype.cst.NEEDLE_COLOR, '#008cff');
 	var fillColor = mxUtils.getValue(this.style, mxConstants.STYLE_FILLCOLOR, '#ffffff');
@@ -813,9 +820,9 @@ mxShapeMockupPlotChart.prototype.cst = {
 };
 
 mxShapeMockupPlotChart.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Bubble Stroke Color', type: 'color'},
-	{name: 'strokeColor3', dispName: 'Coord. System Color', type: 'color'},
-	{name: 'fillColor2', dispName: 'Shapes Color', type: 'string'}
+	{name: 'strokeColor2', dispName: 'Bubble Stroke Color', type: 'color', primary:true},
+	{name: 'strokeColor3', dispName: 'Coord. System Color', type: 'color', primary:true},
+	{name: 'fillColor2', dispName: 'Shapes Color', type: 'string', primary:true}
 ];
 
 /**
@@ -849,7 +856,7 @@ mxShapeMockupPlotChart.prototype.foreground = function(c, x, y, w, h)
 {
 	var shapeStroke = mxUtils.getValue(this.style, mxShapeMockupPlotChart.prototype.cst.STROKE_COLOR2, '#dddddd');
 	var coordStroke = mxUtils.getValue(this.style, mxShapeMockupPlotChart.prototype.cst.STROKE_COLOR3, '#666666');
-	var shapesColors = decodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupPlotChart.prototype.cst.SHAPES_COLORS, '#00aaff,#0044ff,#008cff').toString()).split(',');
+	var shapesColors = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupPlotChart.prototype.cst.SHAPES_COLORS, '#00aaff,#0044ff,#008cff').toString()).split(',');
 
 	var strokeWidth = mxUtils.getValue(this.style, mxConstants.STYLE_STROKEWIDTH, '1');
 	var shapeSize = Math.min(w, h) * 0.03;
@@ -1029,7 +1036,7 @@ mxShapeMockupGanttChart.prototype.background = function(c, x, y, w, h, bgColor, 
 
 mxShapeMockupGanttChart.prototype.foreground = function(c, x, y, w, h)
 {
-	var shapesColors = decodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupGanttChart.prototype.cst.SHAPES_COLORS, '#888888,#bbbbbb').toString()).split(',');
+	var shapesColors = mxUtils.safeDecodeURIComponent(mxUtils.getValue(this.style, mxShapeMockupGanttChart.prototype.cst.SHAPES_COLORS, '#888888,#bbbbbb').toString()).split(',');
 	var textColor = mxUtils.getValue(this.style, mxShapeMockupGanttChart.prototype.cst.TEXT_COLOR, '#666666');
 	var textSize = mxUtils.getValue(this.style, mxShapeMockupGanttChart.prototype.cst.TEXT_SIZE, '#12');
 

@@ -27,3 +27,7 @@
 ## 1.0.6
 
 * Add the option to insert diagrams as SVG.
+
+## 1.0.7
+
+* Update draw.io version to 32.6.10

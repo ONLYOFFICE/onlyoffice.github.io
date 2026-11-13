@@ -1,4 +1,8 @@
 /**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
+/**
  * Handles paste from Lucidchart
  * 
  * TODO: Move to dynamic loading minimized plugin.
@@ -7,6 +11,43 @@
 LucidImporter = {};
 (function()
 {
+	// Cells and characters of the styles and labels of an import, at most
+	// MAX_OUTPUT_CELLS and MAX_OUTPUT_CHARS. A value of the file can be copied
+	// into many cells (eg. a font, an image or a stencil into the items of a
+	// block), and a block can create many cells (eg. lights or lines).
+	var MAX_OUTPUT_CELLS = 100000;
+	var MAX_OUTPUT_CHARS = 50000000;
+	var outputCells = 0;
+	var outputChars = 0;
+
+	// Org charts without an ID in an import (for the IDs of their nodes)
+	var orgCharts = 0;
+
+	// Adds the given cells and characters to the output of the import, which
+	// fails if the output is too large
+	function addOutput(cells, chars)
+	{
+		outputCells += cells;
+		outputChars += chars;
+
+		if (outputCells > MAX_OUTPUT_CELLS || outputChars > MAX_OUTPUT_CHARS)
+		{
+			throw new Error(((typeof mxResources !== 'undefined') ?
+				mxResources.get('drawingTooLarge') : null) || 'Drawing is too large');
+		}
+	};
+
+	// The cells of the import (new mxCell in this closure) count their style and
+	// label, and addAllStyles counts the styles it adds later
+	var mxCell = function(value, geometry, style)
+	{
+		window.mxCell.call(this, value, geometry, style);
+		addOutput(1, ((typeof style === 'string') ? style.length : 0) +
+			((typeof value === 'string') ? value.length : 0));
+	};
+
+	mxCell.prototype = window.mxCell.prototype;
+
 	// Global import transformation
 	var defaultFontSize = '13';
 	var defaultLucidFont = 'Liberation Sans';
@@ -3892,8 +3933,56 @@ LucidImporter = {};
 		return  Math.round(num * 10) / 10;	
 	};
 	
+	/**
+	 * Text style runs of the rich text converter. They are read in order, at the
+	 * read index or after it, and runs are inserted at the read index, as with
+	 * splice(index, 0, run) on an array, which takes time in the length of the
+	 * array. Inserted runs that are not read yet are kept on a stack in front of
+	 * the remaining runs, with the run at the read index on top.
+	 */
+	function RunList(runs)
+	{
+		this.runs = runs;
+		this.front = [];
+		this.start = 0;
+		this.inserted = 0;
+		this.version = 0;
+	};
+
+	RunList.prototype.length = function()
+	{
+		return this.runs.length + this.inserted + this.front.length;
+	};
+
+	RunList.prototype.get = function(index)
+	{
+		var d = index - this.start;
+
+		if (d >= 0 && d < this.front.length)
+		{
+			return this.front[this.front.length - 1 - d];
+		}
+
+		return this.runs[index - this.inserted - ((d >= 0) ? this.front.length : 0)];
+	};
+
+	// Inserts the given run at the given index, which is the read index
+	RunList.prototype.insert = function(index, run)
+	{
+		// Inserted runs before the read index have been read
+		while (this.start < index && this.front.length > 0)
+		{
+			this.front.pop();
+			this.start++;
+			this.inserted++;
+		}
+
+		this.start = index;
+		this.front.push(run);
+		this.version++;
+	};
+
 	// actual code start
-	//TODO This can be optimized more
 	function convertTxt2Html(txt, srcM, props)
 	{
 		var blockStyles = {'a': true, 'il': true, 'ir': true, 'mt': true, 'mb': true, 'p': true, 't': true, 'l': true};
@@ -3901,7 +3990,7 @@ LucidImporter = {};
 
 		srcM.sort(function(a, b)
 		{
-			return a.s - b.s;
+			return mxUtils.compareNumbers(a.s, b.s);
 		});
 		
 		var m = srcM.filter(function(m) 
@@ -3929,31 +4018,35 @@ LucidImporter = {};
 			newlines.push(nl);
 		}
 		
-		var expectedS = 0;
+		// Adds a block style for each line without one, in a new array (inserting
+		// into the array took quadratic time)
+		var expectedS = 0, withLines = [], g = 0;
 		
-		for (var i = 0; i < globalStyles.length; i++)
+		while (g < globalStyles.length)
 		{
-			if (globalStyles[i].s > newlines[expectedS])
+			if (globalStyles[g].s > newlines[expectedS])
 			{
-				globalStyles.splice(i, 0, {s: newlines[expectedS], n: 'a', v: props.TextAlign || 'center'});
+				withLines.push({s: newlines[expectedS], n: 'a', v: props.TextAlign || 'center'});
 			}
 			else
 			{
 				var skip = 0;
 				
-				while(i + skip < globalStyles.length && globalStyles[i + skip].s == newlines[expectedS])
+				while(g + skip < globalStyles.length && globalStyles[g + skip].s == newlines[expectedS])
 				{
 					skip++;
 				}
 				
-				if (skip > 1)
+				for (var next = g + Math.max(skip, 1); g < next; g++)
 				{
-					i += skip - 1; // -1 since loop will increment again
+					withLines.push(globalStyles[g]);
 				}
 			}
 			
 			expectedS++;
 		}
+		
+		globalStyles = withLines;
 		
 		if (newlines[expectedS] != null)
 		{
@@ -3964,8 +4057,44 @@ LucidImporter = {};
 
 		ends.sort(function(a, b)
 		{
-			return a.e - b.e;
+			return mxUtils.compareNumbers(a.e, b.e);
 		});
+
+		m = new RunList(m);
+		ends = new RunList(ends);
+		
+		// The last runs of the font size and color at the read index, which the
+		// items of lists take (until the read index or the runs change, as each
+		// item before the runs read them again)
+		var runStyles = null, runStylesIndex = -1, runStylesVersion = -1;
+		
+		function getRunStyles()
+		{
+			if (i != runStylesIndex || m.version != runStylesVersion)
+			{
+				var s = m.get(i), it = i, curS = s.s;
+				runStyles = {s: null, c: null};
+				
+				while(s != null && s.s == curS)
+				{
+					if (s.n == 's')
+					{
+						runStyles.s = s;
+					}
+					else if (s.n == 'c')
+					{
+						runStyles.c = s;
+					}
+					
+					s = m.get(++it);
+				}
+				
+				runStylesIndex = i;
+				runStylesVersion = m.version;
+			}
+			
+			return runStyles;
+		};
 
 		var i = 0, j = 0, k = 0, curStyles = {}, curBlockStyles = {}, openTags = [], openTagsCount = [], 
 			openBlockTags = [], blockActive = false, listActive = false, listType;
@@ -4069,25 +4198,20 @@ LucidImporter = {};
 					
 				try
 				{
-					var s = m[i], e = ends[j];
-					var it = i;
+					var s = m.get(i), e = ends.get(j);
 					
 					if (s && e && s.s < e.e) //s can be null when all starts are used, e ends after s BUT sometimes there are errors in the file
 					{
-						var curS = s.s;
-		
-						while(s != null && s.s == curS)
+						var last = getRunStyles();
+						
+						if (last.s != null)
 						{
-							if (s.n == 's')
-							{
-								fontSize = s.v;
-							}
-							else if (s.n == 'c')
-							{
-								color = s.v;
-							}
-							
-							s = m[++it];
+							fontSize = last.s.v;
+						}
+						
+						if (last.c != null)
+						{
+							color = last.c.v;
 						}
 					}					
 				}
@@ -4353,9 +4477,9 @@ LucidImporter = {};
 				blockActive = true;
 			}
 			
-			while(i >= j && (i < m.length || j < ends.length))
+			while(i >= j && (i < m.length() || j < ends.length()))
 			{
-				var s = m[i], e = ends[j];
+				var s = m.get(i), e = ends.get(j);
 	
 				if (s && e && s.s < e.e) //s can be null when all starts are used, e ends after s BUT sometimes there are errors in the file
 				{
@@ -4373,7 +4497,7 @@ LucidImporter = {};
 					while(s != null && s.s == curS)
 					{
 						curStyles[s.n] = s;
-						s = m[++i];
+						s = m.get(++i);
 					}
 					
 					html += startTag(curStyles);
@@ -4386,7 +4510,7 @@ LucidImporter = {};
 					do
 					{
 						delete curStyles[e.n];
-						e = ends[++j];
+						e = ends.get(++j);
 					}
 					while(e != null && e.e == curE);
 					
@@ -4396,8 +4520,8 @@ LucidImporter = {};
 					//Next start should be immidiately after this end or we add a dummy one
 					if (openTagsCount.length == 0 && (s == null || s.s != curE))
 					{
-						m.splice(i, 0, {s: curE, n: 'dummy', v: ''});
-						ends.splice(j, 0, {e: s? s.s : maxE, n: 'dummy', v: ''});
+						m.insert(i, {s: curE, n: 'dummy', v: ''});
+						ends.insert(j, {e: s? s.s : maxE, n: 'dummy', v: ''});
 					}
 				}
 				else
@@ -4483,7 +4607,8 @@ LucidImporter = {};
 		{
 			if (text.t != null)
 			{
-				var txt = text.t;
+				// Values of the file that are no strings (eg. numbers) are text as well
+				var txt = String(text.t);
 				txt = txt.replace(/\u2028/g, '\n'); //Special unicide line separator
 				var m = text.m;
 				
@@ -4527,7 +4652,7 @@ LucidImporter = {};
 			{
 				if (text.Value.t != null)
 				{
-					text.Value.t = text.Value.t.replace(/</g, '&lt;');
+					text.Value.t = String(text.Value.t).replace(/</g, '&lt;');
 					text.Value.t = text.Value.t.replace(/>/g, '&gt;');
 					
 					return text.Value.t;
@@ -4548,7 +4673,16 @@ LucidImporter = {};
 		return obj;
 	};
 		
+	// The text style runs of a block, at most MAX_STYLE_RUNS
 	function getTextM(properties)
+	{
+		var m = getAllTextM(properties);
+
+		return (!Array.isArray(m)) ? null :
+			((m.length > MAX_STYLE_RUNS) ? m.slice(0, MAX_STYLE_RUNS) : m);
+	};
+
+	function getAllTextM(properties)
 	{
 		if (properties.Text != null)
 		{
@@ -4703,6 +4837,8 @@ LucidImporter = {};
 		}
 
 		gFontFamilyStyle = '';
+		addOutput(0, s.length);
+
 		return s;
 	}
 	
@@ -5369,6 +5505,122 @@ LucidImporter = {};
 		return '';
 	}
 
+	// Largest number of items (lights, tabs, fields, empty rows, ...) of a block,
+	// of cells of a table (a span over all rows and columns visits each), of
+	// empty cells that fill the height of a table, of fields of org chart nodes
+	// (a line in each node) and of text style runs that the styles of a block
+	// are taken from (for each item). The counts are values of the file, which
+	// must not make the import loop (almost) forever.
+	var MAX_ITEMS = 1000;
+	var MAX_TABLE_CELLS = 100000;
+	var MAX_FILL_CELLS = 10000;
+	var MAX_ORG_FIELDS = 100;
+	var MAX_STYLE_RUNS = 1000;
+
+	// The given count, at most MAX_ITEMS. Values that are not numbers are
+	// returned as numbers, which compare like the values in the loops.
+	function limitCount(count)
+	{
+		return Math.min(count, MAX_ITEMS);
+	};
+
+	// Length of an array of the file, or 0 for other values (an object with a
+	// length property must not make the import loop)
+	function getLength(arr)
+	{
+		return (Array.isArray(arr)) ? arr.length : 0;
+	};
+
+	// Labels are measured in the page, which shows nothing during the import (eg.
+	// in the Lucidchart import of Confluence). Content that loads resources or
+	// applies style sheets to the page is removed for measuring (DOMPurify.sanitize
+	// with this config). Relative URLs in style attributes still load from the
+	// page, as Graph.sanitizeHtml only removes external URLs there.
+	var measureConfig = null;
+
+	// Labels without the tags and attributes of measureConfig are measured as
+	// they are (another DOMPurify.sanitize doubles the time for measuring)
+	var measureRemovePattern = new RegExp('<\\s*(style|link|img|image|feimage|picture|source|' +
+		'video|audio|track|iframe|frame|object|embed|input|svg|math)\\b|\\b(src|srcset|' +
+		'background|poster|data|href|xlink:href|action|formaction|ping)\\s*=', 'i');
+
+	// HTML of the given text of the file for measuring it as a label shows it
+	// (escaped, with line breaks)
+	function textToHtml(text)
+	{
+		return (text != null) ? mxUtils.htmlEntities(String(text), false).
+			replace(/\u2028|\n/g, '<br>') : text;
+	};
+
+	// Size of the given label HTML (see measureConfig)
+	function measureLabel(html, fontSize, fontFamily, textWidth)
+	{
+		if (measureConfig == null)
+		{
+			var config = window.DOM_PURIFY_CONFIG || {};
+			measureConfig = Object.assign({}, config, {IN_PLACE: false,
+				FORBID_TAGS: (config.FORBID_TAGS || []).concat(['style', 'link', 'img', 'image',
+					'feimage', 'picture', 'source', 'video', 'audio', 'track', 'iframe', 'frame',
+					'object', 'embed', 'input', 'svg', 'math']),
+				FORBID_ATTR: (config.FORBID_ATTR || []).concat(['src', 'srcset', 'background',
+					'poster', 'data', 'href', 'xlink:href', 'action', 'formaction', 'ping'])});
+		}
+
+		// Other values are measured as strings (eg. an array with markup)
+		if (html != null && typeof html !== 'number')
+		{
+			html = String(html);
+
+			if (measureRemovePattern.test(html))
+			{
+				html = DOMPurify.sanitize(html, measureConfig);
+			}
+		}
+
+		return mxUtils.getSizeForString(html, fontSize, fontFamily, textWidth);
+	};
+
+	// A color of the file for an attribute of an SVG image, or none for more than
+	// 100 characters (each path of a block repeats the colors of the block)
+	function getSvgColor(color)
+	{
+		color = String(color);
+
+		return (color.length <= 100) ? mxUtils.htmlEntities(color, false) : 'none';
+	};
+
+	// Value of a map for a key of the file, or null for keys that only the
+	// prototype of the map has (eg. constructor or toString)
+	function getMapValue(map, key)
+	{
+		return (key != null && Object.prototype.hasOwnProperty.call(map, key)) ? map[key] : null;
+	};
+
+	// The comparators of the sorts of the import are consistent. One that
+	// returns NaN, or calls a missing value equal to all others, makes the order
+	// depend on the engine (Chrome sorted the same text style runs differently
+	// once the code was optimized, so the same file imported differently).
+
+	// Compares the given values with < and > if both are numbers or both are
+	// strings, with numbers before strings and other values (eg. a missing
+	// value) after both
+	function compareOrder(a, b)
+	{
+		var rank = function(v)
+		{
+			return (typeof v === 'number' && !isNaN(v)) ? 0 : ((typeof v === 'string') ? 1 : 2);
+		};
+
+		var ra = rank(a), rb = rank(b);
+
+		if (ra != rb)
+		{
+			return ra - rb;
+		}
+
+		return (ra == 2) ? 0 : ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	};
+
 	function rgbToHex(color)
 	{
 		if (color)
@@ -5388,7 +5640,7 @@ LucidImporter = {};
 			
 			if (color.substring(0, 3) == 'rgb')
 			{
-				color = '#' + color.match(/\d+/g).map(function(n)
+				color = '#' + (color.match(/\d+/g) || []).map(function(n)
 				{
 					var s = parseInt(n).toString(16);
 					return (s.length == 1? '0' : '') + s;
@@ -5531,10 +5783,16 @@ LucidImporter = {};
 		{
 			imgUrl = properties.URL;
 		}
-		else if (action.Class == 'UserImage2Block' && properties.ImageFillProps != null &&
-				properties.ImageFillProps.url != null)
+		else if (action.Class == 'UserImage2Block')
 		{
-			imgUrl = properties.ImageFillProps.url;
+			if (properties.ImageFillProps != null && properties.ImageFillProps.url != null)
+			{
+				imgUrl = properties.ImageFillProps.url;
+			}
+			else if (properties.FillColor != null && properties.FillColor.url != null)
+			{
+				imgUrl = properties.FillColor.url;
+			}
 		}
 					
 		if (imgUrl != null)
@@ -5559,6 +5817,7 @@ LucidImporter = {};
 		}
 
 		replacePlaceholders(cell, graph);
+		var state = {counters: Object.create(null), value: null};
 		
 		for (var property in p)
 		{
@@ -5570,7 +5829,7 @@ LucidImporter = {};
 					var data = p[property];
 					var key = mxUtils.trim(data.Label).replace(/[^a-z0-9]+/ig, '_').
 						replace(/^\d+/, '').replace(/_+$/, '');
-					setAttributeForCell(cell, key, data.Value, graph);
+					setAttributeForCell(cell, key, data.Value, graph, state);
 				}
 				catch (e)
 				{
@@ -5583,7 +5842,8 @@ LucidImporter = {};
 		}
 	};
 	
-	var placeholderPattern = new RegExp('{{(date\{.*\}|[^%^\{^\}]+)}}', 'g');
+	// Date formats have no braces and line breaks (see Graph.placeholderPattern)
+	var placeholderPattern = new RegExp('{{(date\{[^{}\n\r\u2028\u2029]*\}|[^%^\{^\}]+)}}', 'g');
 	
 	function replacePlaceholders(cell, graph)
 	{
@@ -5595,6 +5855,8 @@ LucidImporter = {};
 		{
 			var last = 0;
 			
+			var match = null;
+
 			while (match = placeholderPattern.exec(str))
 			{
 				var val = match[0];
@@ -5652,10 +5914,16 @@ LucidImporter = {};
 		}
 	};
 	
-	function setAttributeForCell(cell, key, value, graph)
+	// The counters of the state have the last postfix of each key, so that many
+	// values with the same label do not try all postfixes again (attributes are
+	// only added), and its value is the value that this function created for the
+	// cell, which gets the next attributes in place (a clone for every attribute
+	// takes quadratic time). The graph of the import has no undo history.
+	function setAttributeForCell(cell, key, value, graph, state)
 	{
-		var currentKey = key;
-		var counter = 0;
+		var counter = (state != null && state.counters[key] != null) ? state.counters[key] : 0;
+		var currentKey = (counter > 0) ? key + '_' + counter : key;
+		value = (value != null) ? value : '';
 		
 		// Resolves conflicts by adding counter postfix
 		while (graph.getAttributeForCell(cell, currentKey) != null)
@@ -5664,7 +5932,20 @@ LucidImporter = {};
 			currentKey = key + '_' + counter;
 		}
 		
-		graph.setAttributeForCell(cell, currentKey, (value != null) ? value : '');
+		if (state != null && state.value != null && state.value === cell.value)
+		{
+			cell.value.setAttribute(currentKey, value);
+		}
+		else
+		{
+			graph.setAttributeForCell(cell, currentKey, value);
+		}
+		
+		if (state != null)
+		{
+			state.counters[key] = counter;
+			state.value = cell.value;
+		}
 	};
 	
 	function updateCell(cell, obj, graph, source, target, ignoreLabel)
@@ -5673,7 +5954,7 @@ LucidImporter = {};
 		
 		if (a != null)
 		{
-			var s = styleMap[a.Class];
+			var s = getMapValue(styleMap, a.Class);
 			
 			if (s != null)
 			{
@@ -5757,7 +6038,7 @@ LucidImporter = {};
 
 					if (p.Endpoint1.Style != null)
 					{
-						var startStyle = edgeStyleMap[p.Endpoint1.Style];
+						var startStyle = getMapValue(edgeStyleMap, p.Endpoint1.Style);
 						
 						if (startStyle != null)
 						{
@@ -5777,7 +6058,7 @@ LucidImporter = {};
 					
 					if (p.Endpoint2.Style != null)
 					{
-						var endStyle = edgeStyleMap[p.Endpoint2.Style];
+						var endStyle = getMapValue(edgeStyleMap, p.Endpoint2.Style);
 						
 						if (endStyle != null)
 						{
@@ -5797,34 +6078,99 @@ LucidImporter = {};
 
 					var waypoints = p.ElbowControlPoints != null && p.ElbowControlPoints.length > 0? p.ElbowControlPoints : p.Joints;
 
-					if (isCurved && p.BezierJoints != null && p.BezierJoints.length > 0)
+					if (isCurved)
 					{
-						waypoints = [];
-
-						//Last point sometimes has incorrect x,y value!
-						var lpt = p.BezierJoints[p.BezierJoints.length - 1];
-						lpt.p.x = p.Endpoint2.x;
-						lpt.p.y = p.Endpoint2.y;
-
-						for (var i = 0; i < p.BezierJoints.length; i++)
+						// Point where draw.io places the endpoint, in Lucid coordinates: the
+						// block-relative anchor if attached (Endpoint x, y is often stale for
+						// attached endpoints), else the endpoint coordinates
+						var effectivePoint = function(endpoint, terminal)
 						{
-							var pt = p.BezierJoints[i];
-							//TODO This is best-effort approximation (close enouhh but not exact)
-							waypoints.push({x: pt.p.x + pt.nt.x * pt.lcps * .75, y: pt.p.y + pt.nt.y * pt.lcps * .75});
-							waypoints.push({x: pt.p.x + pt.nt.x * pt.rcps * .75, y: pt.p.y + pt.nt.y * pt.rcps * .75});
-						}
+							if (terminal != null && terminal.geometry != null && !terminal.geometry.isRotated &&
+								endpoint.LinkX != null && endpoint.LinkY != null)
+							{
+								return {x: (terminal.geometry.x + endpoint.LinkX * terminal.geometry.width - dx) / scale,
+									y: (terminal.geometry.y + endpoint.LinkY * terminal.geometry.height - dy) / scale};
+							}
 
-						//remove first & last points
-						waypoints = waypoints.slice(1, waypoints.length - 1);
-					}
-					else if (isCurved) //Curved with the default waypoints
-					{
-						waypoints = [];
-						//TODO This is best-effort approximation (close enouhh but not exact)
-						waypoints.push({x: p.Endpoint1.x + (p.Endpoint1.LinkX < 0.1? -250 : (p.Endpoint1.LinkX > 0.9? 250 : 0) ), 
-										y: p.Endpoint1.y + (p.Endpoint1.LinkY < 0.1? -250 : (p.Endpoint1.LinkY > 0.9? 250 : 0) )});
-						waypoints.push({x: p.Endpoint2.x + (p.Endpoint2.LinkX < 0.1? -250 : (p.Endpoint2.LinkX > 0.9? 250 : 0) ), 
-										y: p.Endpoint2.y + (p.Endpoint2.LinkY < 0.1? -250 : (p.Endpoint2.LinkY > 0.9? 250 : 0) )});
+							return {x: endpoint.x, y: endpoint.y};
+						};
+
+						var ep1 = effectivePoint(p.Endpoint1, source);
+						var ep2 = effectivePoint(p.Endpoint2, target);
+
+						if (p.BezierJoints != null && p.BezierJoints.length > 1)
+						{
+							// BezierJoints describe a cubic spline: p is an on-curve point, nt a unit
+							// tangent and lcps/rcps the signed incoming/outgoing handle lengths along
+							// nt. The first and last joints are the endpoints but their p is often
+							// stale, so pin them to the points the terminals actually connect at.
+							var joints = p.BezierJoints;
+							joints[0].p = ep1;
+							joints[joints.length - 1].p = ep2;
+
+							// bezier=1 control points: [cp1, cp2, anchor, ..., cp1, cp2] with the
+							// terminals excluded (see mxPolyline.paintBezierLine)
+							waypoints = [];
+
+							for (var i = 0; i < joints.length - 1; i++)
+							{
+								var j0 = joints[i];
+								var j1 = joints[i + 1];
+
+								waypoints.push({x: j0.p.x + j0.nt.x * j0.rcps, y: j0.p.y + j0.nt.y * j0.rcps});
+								waypoints.push({x: j1.p.x + j1.nt.x * j1.lcps, y: j1.p.y + j1.nt.y * j1.lcps});
+
+								if (i < joints.length - 2)
+								{
+									waypoints.push(j1.p);
+								}
+							}
+
+							cell.style += 'bezier=1;';
+						}
+						else
+						{
+							// Curve without joints: single cubic leaving each endpoint along the
+							// outward perimeter normal of its attach point with handles of 0.4 x
+							// chord length (calibrated against Lucid renders), falling back to the
+							// chord direction for unattached or center attached endpoints
+							var curveTangent = function(endpoint, terminal, from, to)
+							{
+								var tx = 0, ty = 0;
+
+								if (terminal != null && terminal.geometry != null && !terminal.geometry.isRotated &&
+									endpoint.LinkX != null && endpoint.LinkY != null)
+								{
+									tx = (endpoint.LinkX - 0.5) / terminal.geometry.width;
+									ty = (endpoint.LinkY - 0.5) / terminal.geometry.height;
+								}
+
+								if (tx == 0 && ty == 0)
+								{
+									tx = to.x - from.x;
+									ty = to.y - from.y;
+								}
+
+								var len = Math.sqrt(tx * tx + ty * ty);
+
+								return (len > 0) ? {x: tx / len, y: ty / len} : {x: 0, y: 0};
+							};
+
+							var chord = Math.sqrt((ep2.x - ep1.x) * (ep2.x - ep1.x) +
+								(ep2.y - ep1.y) * (ep2.y - ep1.y));
+
+							if (chord > 0)
+							{
+								var t1 = curveTangent(p.Endpoint1, source, ep1, ep2);
+								var t2 = curveTangent(p.Endpoint2, target, ep2, ep1);
+
+								waypoints = [
+									{x: ep1.x + t1.x * 0.4 * chord, y: ep1.y + t1.y * 0.4 * chord},
+									{x: ep2.x + t2.x * 0.4 * chord, y: ep2.y + t2.y * 0.4 * chord}];
+
+								cell.style += 'bezier=1;';
+							}
+						}
 					}
 
 					if (waypoints != null)
@@ -5853,10 +6199,10 @@ LucidImporter = {};
 								Math.round(source.geometry.y + source.geometry.height * p.Endpoint1.LinkY));
 							var entry = new mxPoint(Math.round(target.geometry.x + target.geometry.width * p.Endpoint2.LinkX),
 								Math.round(target.geometry.y + target.geometry.height * p.Endpoint2.LinkY));
-							dx = (exit.x == entry.x) ? (Math.abs(exit.x - source.geometry.x) < source.geometry.width / 2? -20 : 20) : 0;
-							dy = (exit.y == entry.y) ? (Math.abs(exit.y - source.geometry.y) < source.geometry.height / 2? -20 : 20) : 0;
-							
-							var p1 = new mxPoint(exit.x + dx, exit.y + dy), p2 = new mxPoint(entry.x + dx, entry.y + dy);
+							var ldx = (exit.x == entry.x) ? (Math.abs(exit.x - source.geometry.x) < source.geometry.width / 2? -20 : 20) : 0;
+							var ldy = (exit.y == entry.y) ? (Math.abs(exit.y - source.geometry.y) < source.geometry.height / 2? -20 : 20) : 0;
+
+							var p1 = new mxPoint(exit.x + ldx, exit.y + ldy), p2 = new mxPoint(entry.x + ldx, entry.y + ldy);
 							p1.generated = true;
 							p2.generated = true;
 							cell.geometry.points = [p1, p2];
@@ -5906,9 +6252,8 @@ LucidImporter = {};
 		if (obj.id != null)
 		{
 			cell.style += ';lucidId=' + obj.id + ';';
+			LucidImporter.lucidchartObjects[obj.id] = obj;
 		}
-
-		cell.lucidchartObject = obj;
 	};
 	
 	function createVertex(obj, graph)
@@ -5922,7 +6267,7 @@ LucidImporter = {};
 			b.h = b.h - 20;
 		}
 		
-		v = new mxCell('', new mxGeometry(Math.round(b.x * scale + dx), Math.round(b.y * scale + dy),
+		var v = new mxCell('', new mxGeometry(Math.round(b.x * scale + dx), Math.round(b.y * scale + dy),
 				Math.round(b.w * scale), Math.round(b.h * scale)), vertexStyle);
 		v.vertex = true;
 		updateCell(v, obj, graph);
@@ -6044,7 +6389,7 @@ LucidImporter = {};
 					dy = Math.abs(obj.Endpoint1.y - obj.Endpoint2.y);
 				}
 				
-				var strSize = mxUtils.getSizeForString(lblTxt.replace(/\n/g, '<br>'));
+				var strSize = measureLabel(lblTxt.replace(/\n/g, '<br>'));
 				
 				if (dx == 0 || dx < dy)
 				{
@@ -6061,8 +6406,8 @@ LucidImporter = {};
 			}
 		} 
 
-		
-		lab.lucidchartObject = textArea;
+		// TODO Check if this is needed, textArea & lab have no ids
+		//LucidImporter.lucidchartObjects[lab.id] = textArea;
 		e.insert(lab);
 		
 		return e;
@@ -6184,7 +6529,7 @@ LucidImporter = {};
 				{
 					memberCells.push(v);
 				}
-				else if (blocksMap[key] != null)
+				else if (Object.prototype.hasOwnProperty.call(blocksMap, key) && blocksMap[key] != null)
 				{
 					memberCells.push(blocksMap[key]);
 					//Edges are not yet created, so, create a map for them
@@ -6194,10 +6539,12 @@ LucidImporter = {};
 			
 			memberCells.sort(function(a, b)
 			{
-				var ai = a.zOrder || a.ZOrder; // for edges we need ZOrder since they aren't created yet
-				var bi = b.zOrder || b.ZOrder;
+				// For edges we need ZOrder since they aren't created yet. A zOrder
+				// of 0 is no missing value.
+				var ai = (a.zOrder != null) ? a.zOrder : a.ZOrder;
+				var bi = (b.zOrder != null) ? b.zOrder : b.ZOrder;
 				
-				return (ai != null && bi != null) ? (ai > bi? 1 : (ai < bi? -1 : 0)) : 0; //ZOrder can be negative
+				return compareOrder(ai, bi); //ZOrder can be negative
 			});
 			
 			function updateMinMax(e, scaleIt)
@@ -6276,8 +6623,13 @@ LucidImporter = {};
 				group.visible = false;
 			}
 
-			group.lucidchartObject = obj;
-			
+			// TODO Check if this is needed, group & obj have no ids
+			/*if (obj.id != null)
+			{
+				group.style += ';lucidId=' + obj.id + ';';
+				LucidImporter.lucidchartObjects[obj.id] = obj;
+			}*/
+
 			return group;
 		}
 		catch(e)
@@ -6295,8 +6647,11 @@ LucidImporter = {};
 		try
 		{
 			var select = [];
-			var lookup = {};
-			var edgesGroups = {};
+			// Null prototypes as these are keyed by untrusted Lucidchart block
+			// ids (obj.id / Endpoint.Block) so an id such as __proto__ cannot
+			// resolve to Object.prototype (aborting the import) or swap the map.
+			var lookup = Object.create(null);
+			var edgesGroups = Object.create(null);
 			var blocksMap = {};
 			var queue = [];
 
@@ -6444,7 +6799,7 @@ LucidImporter = {};
 				var ai = (a.Properties != null) ? a.Properties.ZOrder : a.ZOrder;
 				var bi = (b.Properties != null) ? b.Properties.ZOrder : b.ZOrder;
 				
-				return (ai != null && bi != null) ? (ai > bi? 1 : (ai < bi? -1 : 0)) : 0; //ZOrder can be negative
+				return compareOrder(ai, bi); //ZOrder can be negative
 			});
 			
 			function addLine(obj, p)
@@ -6578,16 +6933,6 @@ LucidImporter = {};
 						normalizeGroup(graph, c);
 						normalizeStyle(graph, c);
 						normalizeEdge(graph, c);
-
-						if (urlParams['lucidchartObject'] == '1' &&
-							c.lucidchartObject != null)
-						{
-							setAttributeForCell(c, 'lucidchartObject',
-								JSON.stringify(c.lucidchartObject, null, 2),
-								graph);
-						}
-
-						delete c.lucidchartObject;
 						delete c.zOrder;
 					}
 				}
@@ -6605,6 +6950,22 @@ LucidImporter = {};
 			graph.getModel().endUpdate();
 		}	
 	};
+
+	function getLucidId(cell)
+	{
+		try
+		{
+			var m = cell.style.match(/;lucidId=([^;]*)/);
+
+			if (m != null)
+			{
+				return m[1];
+			}
+		}
+		catch(e) {}
+
+		return null;
+	}
 
 	// Optimizes edge routing and labels
 	function normalizeEdge(graph, cell)
@@ -6632,7 +6993,9 @@ LucidImporter = {};
 			}
 
 			// Fixes simple elbow routing
-			var lo = cell.lucidchartObject;
+			var lo = LucidImporter.lucidchartObjects[getLucidId(cell)];
+
+			lo = lo != null && lo.Action != null ? lo.Action.Properties : null;
 
 			if (lo != null && lo.Shape == 'elbow' &&
 				lo.ElbowControlPoints == null &&
@@ -6938,7 +7301,11 @@ LucidImporter = {};
 	{
 		dx = 0;
 		dy = 0;
-		LucidImporter.stencilsMap = {}; //Reset stencils cache
+		//Reset stencils cache. Null prototype: keyed by stencil ids from the file
+		LucidImporter.stencilsMap = Object.create(null);
+		outputCells = 0;
+		outputChars = 0;
+		orgCharts = 0;
 		LucidImporter.imgSrcRepl = imgSrcRepl; //Use LucidImporter object to store the map since it is used deep inside
 		LucidImporter.advImpConfig = advImpConfig;
 		LucidImporter.globalProps = {};
@@ -6947,9 +7314,10 @@ LucidImporter = {};
 		LucidImporter.hasOrgChart = false;
 		LucidImporter.hasTimeLine = false;
 		LucidImporter.hasExtImgs = false;
-		var xml = ['<?xml version=\"1.0\" encoding=\"UTF-8\"?>', '<mxfile type="Lucidchart-Import" version="' +
-			EditorUi.VERSION + '" host="' + mxUtils.htmlEntities(window.location.hostname) + 
-			'" agent="' + mxUtils.htmlEntities(navigator.appVersion) + 
+		// Null prototype: keyed by object ids from the file
+		LucidImporter.lucidchartObjects = Object.create(null);
+		var xml = ['<?xml version=\"1.0\" encoding=\"UTF-8\"?>', '<mxfile type="Lucidchart-Import"' +
+			' host="' + mxUtils.htmlEntities(window.location.hostname) +
 			'" modified="' + mxUtils.htmlEntities(new Date().toISOString()) + '">'];
 
 		if (advImpConfig && advImpConfig.transparentEdgeLabels)
@@ -6991,18 +7359,8 @@ LucidImporter = {};
 			
 			pages.sort(function(a, b)
 			{
-			    if (a.Properties.Order < b.Properties.Order)
-			    {
-			    	return -1;
-			    }
-			    else if (a.Properties.Order > b.Properties.Order)
-			    {
-			    	return 1;
-			    }
-			    else
-			    {
-			    	return 0;
-			    }
+				return compareOrder((a.Properties != null) ? a.Properties.Order : null,
+					(b.Properties != null) ? b.Properties.Order : null);
 			});
 			
 			for (var i = 0; i < pages.length; i++)
@@ -7129,6 +7487,136 @@ LucidImporter = {};
 	    icon1.geometry.offset = new mxPoint(5, -12);
     	icon1.vertex = true;
     	v.insert(icon1);
+	};
+	
+	function addIOSAccessoryIndicator(v, type, w, h)
+	{
+		switch (type)
+		{
+			case 'Disclosure' :
+				var icon1 = new mxCell('', new mxGeometry(w * 0.91, h * 0.35, h * 0.15, h * 0.3), 'shape=mxgraph.ios7.misc.right;strokeColor=#D2D2D6;');
+				icon1.vertex = true;
+				v.insert(icon1);
+
+				break;
+
+			case 'DetailDisclosure' :
+				var icon1 = new mxCell('', new mxGeometry(w * 0.91, h * 0.35, h * 0.15, h * 0.3), 'shape=mxgraph.ios7.misc.right;strokeColor=#D2D2D6;');
+				icon1.vertex = true;
+				v.insert(icon1);
+
+				var icon2 = new mxCell('', new mxGeometry(w * 0.79, h * 0.25, h * 0.5, h * 0.5), 'shape=mxgraph.ios7.icons.info;strokeColor=#007AFF;fillColor=#ffffff;');
+				icon2.vertex = true;
+				v.insert(icon2);
+
+				break;
+
+			case 'DetailIndicator' :
+				var icon2 = new mxCell('', new mxGeometry(w * 0.87, h * 0.25, h * 0.5, h * 0.5), 'shape=mxgraph.ios7.icons.info;strokeColor=#007AFF;fillColor=#ffffff;');
+				icon2.vertex = true;
+				v.insert(icon2);
+
+				break;
+
+			case 'CheckMark' :
+				var icon1 = new mxCell('', new mxGeometry(w * 0.89, h * 0.37, h * 0.4, h * 0.26), 'shape=mxgraph.ios7.misc.check;strokeColor=#007AFF;strokeWidth=2;');
+				icon1.vertex = true;
+				v.insert(icon1);
+
+				break;
+		}
+	};
+	
+	function addUI2WindowScrollBars(v, p, w, h)
+	{
+		if (p.vScroll == 1)
+		{
+			if (p.hScroll == 1)
+			{
+				var item3 = new mxCell('', new mxGeometry(1, 0, 20, h - 50), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
+			}
+			else
+			{
+				var item3 = new mxCell('', new mxGeometry(1, 0, 20, h - 30), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
+			}
+
+		   	item3.geometry.relative = true;
+		   	item3.geometry.offset = new mxPoint(-20, 30);
+			item3.vertex = true;
+			v.insert(item3);
+
+			v.style += 'spacingRight=20;';
+		}
+
+		if (p.hScroll == 1)
+		{
+			if (p.vScroll == 1)
+			{
+				var item4 = new mxCell('', new mxGeometry(0, 1, w - 20, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
+			}
+			else
+			{
+				var item4 = new mxCell('', new mxGeometry(0, 1, w, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
+			}
+
+		   	item4.geometry.relative = true;
+		   	item4.geometry.offset = new mxPoint(0, -20);
+			item4.vertex = true;
+			v.insert(item4);
+		}
+	};
+	
+	function addUI2TabBarScrollBars(v, p, a, w, h, itemH)
+	{
+		var fc2 = getStrokeColor(p, a);
+		fc2 = fc2.replace('strokeColor', 'fillColor2');
+
+		if (fc2 == '')
+		{
+			fc2 = 'fillColor2=#000000;'
+		}
+
+		if (p.vScroll == 1)
+		{
+			if (p.hScroll == 1)
+			{
+				var item2 = new mxCell('', new mxGeometry(1, 0, 20, h -20 - itemH), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
+			}
+			else
+			{
+				var item2 = new mxCell('', new mxGeometry(1, 0, 20, h - itemH), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
+			}
+
+		   	item2.geometry.relative = true;
+		   	item2.geometry.offset = new mxPoint(-20, itemH);
+			item2.vertex = true;
+			v.insert(item2);
+
+			v.style += 'spacingRight=20;';
+
+			item2.style += fc2;
+			item2.style += addAllStyles(item2.style, p, a, item2);
+		}
+
+		if (p.hScroll == 1)
+		{
+			if (p.vScroll == 1)
+			{
+				var item3 = new mxCell('', new mxGeometry(0, 1, w - 20, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
+			}
+			else
+			{
+				var item3 = new mxCell('', new mxGeometry(0, 1, w, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
+			}
+
+		   	item3.geometry.relative = true;
+		   	item3.geometry.offset = new mxPoint(0, -20);
+			item3.vertex = true;
+			v.insert(item3);
+
+			item3.style += fc2; 
+			item3.style += addAllStyles(item3.style, p, a, item3);
+		}
 	};
 	
 	function addGCP2UserDeviceCard(icon, scaleX, scaleY, w, h, v, p, a)
@@ -7261,7 +7749,7 @@ LucidImporter = {};
 			h = h + 20;
 		}
 
-		v = new mxCell('', new mxGeometry(x, y, w, h), vertexStyle);
+		var v = new mxCell('', new mxGeometry(x, y, w, h), vertexStyle);
 	    v.vertex = true;
 
 	    //Store z-order to use it in groups
@@ -7289,7 +7777,7 @@ LucidImporter = {};
 				var label = null;
 				var lbl = convertText(p);
 				//TODO Handle rotation of label correctly in all cases
-				var lblSize = p.Rotation? mxUtils.getSizeForString(lbl.replace(/\n/g, '<br>'), null, null, Math.abs(w - h * 0.125)) : {width: 0, height: 0};
+				var lblSize = p.Rotation? measureLabel(lbl.replace(/\n/g, '<br>'), null, null, Math.abs(w - h * 0.125)) : {width: 0, height: 0};
 				
 				if (isRightBrace)
 				{
@@ -7332,11 +7820,11 @@ LucidImporter = {};
 				
 				if (p.Lanes != null)
 				{
-					lanesNum = p.Lanes.length;
+					lanesNum = getLength(p.Lanes);
 				}
 				else if (p.PrimaryLane != null)
 				{
-					lanesNum = p.PrimaryLane.length;
+					lanesNum = getLength(p.PrimaryLane);
 
 					//In this format, boundingBox is not accurate!
 					w = 0, h = 0;
@@ -7346,7 +7834,7 @@ LucidImporter = {};
 						w += p.PrimaryLane[i];
 					}
 					
-					for (var i = 0; i < p.SecondaryLane.length; i++)
+					for (var i = 0; i < getLength(p.SecondaryLane); i++)
 					{
 						h += p.SecondaryLane[i];
 					}
@@ -7494,15 +7982,15 @@ LucidImporter = {};
 				
 				if (p.Rows != null && p.Columns != null)
 				{
-					rowsNum = p.Rows.length;
-					colsNum = p.Columns.length;
+					rowsNum = getLength(p.Rows);
+					colsNum = getLength(p.Columns);
 					var colStartSize = p.TitleHeight * scale || 25;
 					var rowStartSize = p.TitleWidth  * scale || 25;
 				}
 				else if (p.PrimaryLane != null && p.SecondaryLane != null)
 				{
-					rowsNum = p.SecondaryLane.length;
-					colsNum = p.PrimaryLane.length;
+					rowsNum = getLength(p.SecondaryLane);
+					colsNum = getLength(p.PrimaryLane);
 					var rowStartSize = p.SecondaryLaneTitleHeight  * scale || 25;
 					var colStartSize = p.PrimaryLaneTitleHeight * scale || 25;
 					
@@ -7938,7 +8426,7 @@ LucidImporter = {};
 					v.insert(lineH);
 				}
 				
-				var numItems = parseInt(p.Items);
+				var numItems = limitCount(parseInt(p.Items));
 				
 				if (numItems > 0)
 				{
@@ -7986,7 +8474,7 @@ LucidImporter = {};
 				break;
 				
 			case 'AndroidTabs' :
-				var numTabs = parseInt(p.Tabs);
+				var numTabs = limitCount(parseInt(p.Tabs));
 				var tabFullW = w;
 				
 				if (numTabs > 0)
@@ -8307,7 +8795,7 @@ LucidImporter = {};
 				break;
 				
 			case 'iOSSegmentedControl' :
-				var numTabs = parseInt(p.Tabs);
+				var numTabs = limitCount(parseInt(p.Tabs));
 				var tabFullW = w;
 				v.style += 'strokeColor=none;fillColor=none;';
 				
@@ -8415,7 +8903,7 @@ LucidImporter = {};
 				break;
 				
 			case 'iOSTabs' :
-				var numTabs = parseInt(p.Tabs);
+				var numTabs = limitCount(parseInt(p.Tabs));
 				var tabFullW = w;
 				v.style += 'shape=partialRectangle;right=0;left=0;bottom=0;strokeColor=#979797;';
 				v.style += addAllStyles(v.style, p, a, v);
@@ -8722,40 +9210,7 @@ LucidImporter = {};
 					getTextVerticalAlignment(p.text);
 				v.style += addAllStyles(v.style, p, a, v, isLastLblHTML);
 
-				switch (p.AccessoryIndicatorType) 
-				{
-					case 'Disclosure' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.91, h * 0.35, h * 0.15, h * 0.3), 'shape=mxgraph.ios7.misc.right;strokeColor=#D2D2D6;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						break;
-						
-					case 'DetailDisclosure' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.91, h * 0.35, h * 0.15, h * 0.3), 'shape=mxgraph.ios7.misc.right;strokeColor=#D2D2D6;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						var icon2 = new mxCell('', new mxGeometry(w * 0.79, h * 0.25, h * 0.5, h * 0.5), 'shape=mxgraph.ios7.icons.info;strokeColor=#007AFF;fillColor=#ffffff;');
-						icon2.vertex = true;
-						v.insert(icon2);
-						
-						break;
-						
-					case 'DetailIndicator' :
-						var icon2 = new mxCell('', new mxGeometry(w * 0.87, h * 0.25, h * 0.5, h * 0.5), 'shape=mxgraph.ios7.icons.info;strokeColor=#007AFF;fillColor=#ffffff;');
-						icon2.vertex = true;
-						v.insert(icon2);
-						
-						break;
-						
-					case 'CheckMark' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.89, h * 0.37, h * 0.4, h * 0.26), 'shape=mxgraph.ios7.misc.check;strokeColor=#007AFF;strokeWidth=2;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						break;
-				}
+				addIOSAccessoryIndicator(v, p.AccessoryIndicatorType, w, h);
 
 				break;
 				
@@ -8780,40 +9235,7 @@ LucidImporter = {};
 					getFontColor(p.text) + 
 					getFontStyle(p.text));
 
-				switch (p.AccessoryIndicatorType) 
-				{
-					case 'Disclosure' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.91, h * 0.35, h * 0.15, h * 0.3), 'shape=mxgraph.ios7.misc.right;strokeColor=#D2D2D6;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						break;
-						
-					case 'DetailDisclosure' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.91, h * 0.35, h * 0.15, h * 0.3), 'shape=mxgraph.ios7.misc.right;strokeColor=#D2D2D6;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						var icon2 = new mxCell('', new mxGeometry(w * 0.79, h * 0.25, h * 0.5, h * 0.5), 'shape=mxgraph.ios7.icons.info;strokeColor=#007AFF;fillColor=#ffffff;');
-						icon2.vertex = true;
-						v.insert(icon2);
-						
-						break;
-						
-					case 'DetailIndicator' :
-						var icon2 = new mxCell('', new mxGeometry(w * 0.87, h * 0.25, h * 0.5, h * 0.5), 'shape=mxgraph.ios7.icons.info;strokeColor=#007AFF;fillColor=#ffffff;');
-						icon2.vertex = true;
-						v.insert(icon2);
-						
-						break;
-						
-					case 'CheckMark' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.89, h * 0.37, h * 0.4, h * 0.26), 'shape=mxgraph.ios7.misc.check;strokeColor=#007AFF;strokeWidth=2;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						break;
-				}
+				addIOSAccessoryIndicator(v, p.AccessoryIndicatorType, w, h);
 
 				break;
 				
@@ -8915,40 +9337,7 @@ LucidImporter = {};
 					getFontColor(p.text) + 
 					getFontStyle(p.text));
 
-				switch (p.AccessoryIndicatorType) 
-				{
-					case 'Disclosure' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.91, h * 0.35, h * 0.15, h * 0.3), 'shape=mxgraph.ios7.misc.right;strokeColor=#D2D2D6;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						break;
-						
-					case 'DetailDisclosure' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.91, h * 0.35, h * 0.15, h * 0.3), 'shape=mxgraph.ios7.misc.right;strokeColor=#D2D2D6;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						var icon2 = new mxCell('', new mxGeometry(w * 0.79, h * 0.25, h * 0.5, h * 0.5), 'shape=mxgraph.ios7.icons.info;strokeColor=#007AFF;fillColor=#ffffff;');
-						icon2.vertex = true;
-						v.insert(icon2);
-						
-						break;
-						
-					case 'DetailIndicator' :
-						var icon2 = new mxCell('', new mxGeometry(w * 0.87, h * 0.25, h * 0.5, h * 0.5), 'shape=mxgraph.ios7.icons.info;strokeColor=#007AFF;fillColor=#ffffff;');
-						icon2.vertex = true;
-						v.insert(icon2);
-						
-						break;
-						
-					case 'CheckMark' :
-						var icon1 = new mxCell('', new mxGeometry(w * 0.89, h * 0.37, h * 0.4, h * 0.26), 'shape=mxgraph.ios7.misc.check;strokeColor=#007AFF;strokeWidth=2;');
-						icon1.vertex = true;
-						v.insert(icon1);
-						
-						break;
-				}
+				addIOSAccessoryIndicator(v, p.AccessoryIndicatorType, w, h);
 
 				break;
 				
@@ -9192,7 +9581,6 @@ LucidImporter = {};
 			case 'UMLProvidedInterfaceBlock' :
 			case 'UMLProvidedInterfaceBlockV2' :
 				var rotation = getRotation(p, a, v);
-				p.Rotatio = null;
 				var allStyle = addAllStyles(v.style, p, a, v, isLastLblHTML);
 				
 				if (allStyle.indexOf(mxConstants.STYLE_STROKEWIDTH) == -1)
@@ -9226,7 +9614,6 @@ LucidImporter = {};
 			case 'UMLAssemblyConnectorBlock':
 			case 'UMLAssemblyConnectorBlockV2':
 				var rotation = getRotation(p, a, v);
-				p.Rotatio = null;
 				var allStyle = addAllStyles(v.style, p, a, v, isLastLblHTML);
 				
 				if (allStyle.indexOf(mxConstants.STYLE_STROKEWIDTH) == -1)
@@ -9363,107 +9750,63 @@ LucidImporter = {};
 					iconX = -19;
 				}
 
-				if (p.bpmnActivityMarker1 != 0)
+				for (var i = 1; i <= 2; i++)
 				{
-					switch (p.bpmnActivityMarker1)
+					var marker = p['bpmnActivityMarker' + i];
+
+					if (i == 2 && numIcons == 2)
 					{
-						case 1:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=plus;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -20);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
-						case 2:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=mxgraph.bpmn.loop;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -20);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
-						case 3:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=parallelMarker;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -20);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
-						case 4:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=parallelMarker;direction=south;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -20);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
-						case 5:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 10), 'shape=mxgraph.bpmn.ad_hoc;strokeColor=none;flipH=1;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -17);
-							var fc = getStrokeColor(p, a);
-							fc = fc.replace('strokeColor', 'fillColor');
-							
-							if (fc == '')
-							{
-								fc = 'fillColor=#000000;'
-							}
-							
-							item1.style += fc;
-							break;
-						case 6:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 11), 'shape=mxgraph.bpmn.compensation;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -18);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
+						iconX = 5;
 					}
+
+					if (marker != 0)
+					{
+						switch (marker)
+						{
+							case 1:
+								var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=plus;part=1;');
+								item1.geometry.offset = new mxPoint(iconX, -20);
+								item1.style += getFillColor(p, a) + getStrokeColor(p, a);
+								break;
+							case 2:
+								var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=mxgraph.bpmn.loop;part=1;');
+								item1.geometry.offset = new mxPoint(iconX, -20);
+								item1.style += getFillColor(p, a) + getStrokeColor(p, a);
+								break;
+							case 3:
+								var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=parallelMarker;part=1;');
+								item1.geometry.offset = new mxPoint(iconX, -20);
+								item1.style += getFillColor(p, a) + getStrokeColor(p, a);
+								break;
+							case 4:
+								var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=parallelMarker;direction=south;part=1;');
+								item1.geometry.offset = new mxPoint(iconX, -20);
+								item1.style += getFillColor(p, a) + getStrokeColor(p, a);
+								break;
+							case 5:
+								var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 10), 'shape=mxgraph.bpmn.ad_hoc;strokeColor=none;flipH=1;part=1;');
+								item1.geometry.offset = new mxPoint(iconX, -17);
+								var fc = getStrokeColor(p, a);
+								fc = fc.replace('strokeColor', 'fillColor');
+							
+								if (fc == '')
+								{
+									fc = 'fillColor=#000000;'
+								}
+							
+								item1.style += fc;
+								break;
+							case 6:
+								var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 11), 'shape=mxgraph.bpmn.compensation;part=1;');
+								item1.geometry.offset = new mxPoint(iconX, -18);
+								item1.style += getFillColor(p, a) + getStrokeColor(p, a);
+								break;
+						}
 					
-					item1.geometry.relative = true;
-					item1.vertex = true;
-					v.insert(item1);
-				}
-				
-				if (numIcons == 2)
-				{
-					iconX = 5;
-				}
-
-				if (p.bpmnActivityMarker2 != 0)
-				{
-					switch (p.bpmnActivityMarker2)
-					{
-						case 1:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=plus;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -20);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
-						case 2:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=mxgraph.bpmn.loop;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -20);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
-						case 3:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=parallelMarker;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -20);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
-						case 4:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 15), 'shape=parallelMarker;direction=south;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -20);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
-						case 5:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 10), 'shape=mxgraph.bpmn.ad_hoc;strokeColor=none;flipH=1;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -17);
-							var fc = getStrokeColor(p, a);
-							fc = fc.replace('strokeColor', 'fillColor');
-							
-							if (fc == '')
-							{
-								fc = 'fillColor=#000000;'
-							}
-							
-							item1.style += fc;
-							break;
-						case 6:
-							var item1 = new mxCell('', new mxGeometry(0.5, 1, 15, 11), 'shape=mxgraph.bpmn.compensation;part=1;');
-							item1.geometry.offset = new mxPoint(iconX, -18);
-							item1.style += getFillColor(p, a) + getStrokeColor(p, a);
-							break;
+						item1.geometry.relative = true;
+						item1.vertex = true;
+						v.insert(item1);
 					}
-
-					item1.geometry.relative = true;
-					item1.vertex = true;
-					v.insert(item1);
 				}
 
 				v.style += addAllStyles(v.style, p, a, v);
@@ -9557,7 +9900,7 @@ LucidImporter = {};
 					var darkerClr = getDarkerClr(st, 0.75);
 					
 					var fz = getFontSize(p.Name).match(/\d+/);
-					var th = Math.max(mxUtils.getSizeForString(p.Name.t, fz? fz[0] : defaultFontSize, null, w - 10).height, 24);
+					var th = Math.max(measureLabel(textToHtml(p.Name.t), fz? fz[0] : defaultFontSize, null, w - 10).height, 24);
 					st = 'swimlaneFillColor=' + darkerClr + ';'
 					
 					v.value = convertText(p.Name);
@@ -9568,7 +9911,7 @@ LucidImporter = {};
 					
 					var curY = th;
 					var fz = getFontSize(p.TaskName).match(/\d+/);
-					var curH = p.TaskHeight? p.TaskHeight * scale : Math.max(mxUtils.getSizeForString(p.TaskName.t, fz? fz[0] : defaultFontSize, null, w - 10).height + 15, 24);
+					var curH = p.TaskHeight? p.TaskHeight * scale : Math.max(measureLabel(textToHtml(p.TaskName.t), fz? fz[0] : defaultFontSize, null, w - 10).height + 15, 24);
 					var task = new mxCell('', new mxGeometry(0, curY, w, curH), 'part=1;html=1;resizeHeight=0;spacingTop=-1;spacingLeft=3;spacingRight=3;');
 					task.value = convertText(p.TaskName);
 					task.vertex = true;
@@ -9579,11 +9922,11 @@ LucidImporter = {};
 					
 					var item = [];
 					
-					for (var i = 0; i < p.Fields; i++)
+					for (var i = 0; i < limitCount(p.Fields); i++)
 					{
 						var pTxt = p['Participant' + (i + 1)];
 						var fz = getFontSize(pTxt).match(/\d+/);
-						var curH =  Math.max(mxUtils.getSizeForString(pTxt.t, fz? fz[0] : defaultFontSize, null, w - 10).height, 24);
+						var curH =  Math.max(measureLabel(textToHtml(pTxt.t), fz? fz[0] : defaultFontSize, null, w - 10).height, 24);
 						item[i] = new mxCell('', new mxGeometry(0, curY, w, curH), 'part=1;html=1;resizeHeight=0;fillColor=none;spacingTop=-1;spacingLeft=3;spacingRight=3;');
 						curY += curH;
 						item[i].vertex = true;
@@ -9807,8 +10150,9 @@ LucidImporter = {};
 			case 'DefaultTableBlock' :
 				try
 				{
-					var rowsNum = p.RowHeights.length;
-					var colsNum = p.ColWidths.length;
+					var colsNum = getLength(p.ColWidths);
+					var rowsNum = Math.min(getLength(p.RowHeights),
+						Math.max(1, Math.floor(MAX_TABLE_CELLS / Math.max(1, colsNum))));
 					var rowHs = [], colWs = [];
 					
 					for (var i = 0; i < rowsNum; i++)
@@ -9881,28 +10225,31 @@ LucidImporter = {};
 							var ch = h;
 							var cw = w;
 							
-							//Spans
-							for (var k = i + 1; k < i + spans.h; k++)
+							//Spans end at the last row and column (no cells after them)
+							var spanH = Math.min(i + spans.h, rowsNum);
+							var spanW = Math.min(j + spans.w, colsNum);
+
+							for (var k = i + 1; k < spanH; k++)
 							{
 								if (rowHs[k] == null) continue;
 								
 								ch += rowHs[k];
 								skipCells[k + ',' + j] = true;
 								
-								for (var l = j + 1; l < j + spans.w; l++)
+								for (var l = j + 1; l < spanW; l++)
 								{
 									skipCells[k + ',' + l] = true;
 								}
 							}
 							
-							for (var k = j + 1; k < j + spans.w; k++)
+							for (var k = j + 1; k < spanW; k++)
 							{
 								if (colWs[k] == null) continue;
 								
 								cw += colWs[k];
 								skipCells[i + ',' + k] = true;
 								
-								for (var l = i + 1; l < i + spans.h; l++)
+								for (var l = i + 1; l < spanH; l++)
 								{
 									skipCells[l + ',' + k] = true;
 								}
@@ -10010,7 +10357,7 @@ LucidImporter = {};
 				
 				var itemFullH = h;
 				
-				var numItems = parseInt(p.Cells);
+				var numItems = limitCount(parseInt(p.Cells));
 
 				var st = addAllStyles('part=1;', p, a, v);
 
@@ -10044,7 +10391,7 @@ LucidImporter = {};
 				
 				var itemFullH = h;
 				
-				var numItems = parseInt(p.Cells);
+				var numItems = limitCount(parseInt(p.Cells));
 
 				var st = addAllStyles('part=1;fillColor=none;', p, a, v);
 
@@ -10300,14 +10647,14 @@ LucidImporter = {};
 			   	var cells = [cell];
 		    	var stepX = w / p.NumTopNodes;
 		    	
-			   	for (var i = 0; i < p.NumTopNodes; i++)
+			   	for (var i = 0; i < limitCount(p.NumTopNodes); i++)
 			   	{
 			   		addRouterEdge(stepX * 0.5 + i * stepX, 0, edge, select, graph, cells, v, cell);
 			   	}
 			   	
 		    	stepX = w / p.NumBottomNodes;
 		    	
-			   	for (var i = 0; i < p.NumBottomNodes; i++)
+			   	for (var i = 0; i < limitCount(p.NumBottomNodes); i++)
 			   	{
 			   		addRouterEdge(stepX * 0.5 + i * stepX, h, edge, select, graph, cells, v, cell);
 			   	}
@@ -10429,7 +10776,7 @@ LucidImporter = {};
 				v.insert(item1);
 				item1.style += addAllStyles(item1.style, p, a, item1);
 				
-				var messagesNum = p.Messages;
+				var messagesNum = limitCount(p.Messages);
 				var oneH = (h - 17) / messagesNum;
 				var item2 = new Array();
 				var edge = new Array();
@@ -10882,7 +11229,7 @@ LucidImporter = {};
 				edge4.geometry.points = [new mxPoint(x + 8.5, y + h - 10)];
 				select.push(graph.addCell(edge4, null, null, null, null));
 
-				var messagesNum = p.HistoryMessages;
+				var messagesNum = limitCount(p.HistoryMessages);
 				var oneH = (h - 75) / messagesNum;
 				var item2 = new Array();
 				var edge = new Array();
@@ -10963,7 +11310,7 @@ LucidImporter = {};
 				var lightW = (w - lightOffset * 2) / p.LightCount;
 				var trueW = lightW * 0.8;
 				
-				for (var i = 0; i < p.LightCount; i++)
+				for (var i = 0; i < limitCount(p.LightCount); i++)
 				{
 					item2[i] = new mxCell('', new mxGeometry(lightOffset + lightW * i + (lightW - trueW) / 2, h * 0.25, trueW, h * 0.75), 'ellipse;part=1;');
 					item2[i].vertex = true;
@@ -10980,7 +11327,7 @@ LucidImporter = {};
 				var item1 = new Array();
 				var sinkW = w / p.SinkCount;
 				
-				for (var i = 0; i < p.SinkCount; i++)
+				for (var i = 0; i < limitCount(p.SinkCount); i++)
 				{
 					item1[i] = new mxCell('', new mxGeometry(sinkW * i, 0, sinkW, h), 'part=1;shape=mxgraph.floorplan.sink_2;');
 					item1[i].vertex = true;
@@ -11022,7 +11369,7 @@ LucidImporter = {};
 				wallStyle += addAllStyles(wallStyle, p, a, v);
 				var otherStyle = addAllStyles('', p, a, v);
 				
-				for (var i = 0; i < p.StallCount; i++)
+				for (var i = 0; i < limitCount(p.StallCount); i++)
 				{
 					wall[i] = new mxCell('', new mxGeometry((i + 1) * stallW, 0, wallW, h), wallStyle);
 					wall[i].vertex = true;
@@ -11074,7 +11421,7 @@ LucidImporter = {};
 		    	var edge2 = new Array();
 		    	var endArrow = new Array();
 		    	
-		    	for (var i = 0; i < p.numLines; i++)
+		    	for (var i = 0; i < limitCount(p.numLines); i++)
 		    	{
 				   	edge2[i] = new mxCell('', new mxGeometry(0, 0, 0, 0), edgeStyle);
 				   	edge2[i].geometry.relative = true;
@@ -11112,7 +11459,7 @@ LucidImporter = {};
 		    	var edge2 = new Array();
 		    	var endArrow = new Array();
 		    	
-		    	for (var i = 0; i < p.numLines; i++)
+		    	for (var i = 0; i < limitCount(p.numLines); i++)
 		    	{
 				   	edge2[i] = new mxCell('', new mxGeometry(0, 0, 0, 0), edgeStyle);
 				   	edge2[i].geometry.relative = true;
@@ -11504,41 +11851,7 @@ LucidImporter = {};
 					getFontColor(p.Title) + 
 					getFontStyle(p.Title));
 
-				if (p.vScroll == 1)
-				{
-					if (p.hScroll == 1)
-					{
-						var item3 = new mxCell('', new mxGeometry(1, 0, 20, h - 50), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
-					}
-					else
-					{
-						var item3 = new mxCell('', new mxGeometry(1, 0, 20, h - 30), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
-					}
-					
-				   	item3.geometry.relative = true;
-				   	item3.geometry.offset = new mxPoint(-20, 30);
-					item3.vertex = true;
-					v.insert(item3);
-					
-					v.style += 'spacingRight=20;';
-				}
-				
-				if (p.hScroll == 1)
-				{
-					if (p.vScroll == 1)
-					{
-						var item4 = new mxCell('', new mxGeometry(0, 1, w - 20, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
-					}
-					else
-					{
-						var item4 = new mxCell('', new mxGeometry(0, 1, w, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
-					}
-					
-				   	item4.geometry.relative = true;
-				   	item4.geometry.offset = new mxPoint(0, -20);
-					item4.vertex = true;
-					v.insert(item4);
-				}
+				addUI2WindowScrollBars(v, p, w, h);
 
 				v.style += addAllStyles(v.style, p, a, v, isLastLblHTML);
 
@@ -11561,41 +11874,7 @@ LucidImporter = {};
 				item2.vertex = true;
 				item1.insert(item2);
 
-				if (p.vScroll == 1)
-				{
-					if (p.hScroll == 1)
-					{
-						var item3 = new mxCell('', new mxGeometry(1, 0, 20, h - 50), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
-					}
-					else
-					{
-						var item3 = new mxCell('', new mxGeometry(1, 0, 20, h - 30), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
-					}
-					
-				   	item3.geometry.relative = true;
-				   	item3.geometry.offset = new mxPoint(-20, 30);
-					item3.vertex = true;
-					v.insert(item3);
-					
-					v.style += 'spacingRight=20;';
-				}
-				
-				if (p.hScroll == 1)
-				{
-					if (p.vScroll == 1)
-					{
-						var item4 = new mxCell('', new mxGeometry(0, 1, w - 20, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
-					}
-					else
-					{
-						var item4 = new mxCell('', new mxGeometry(0, 1, w, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
-					}
-					
-				   	item4.geometry.relative = true;
-				   	item4.geometry.offset = new mxPoint(0, -20);
-					item4.vertex = true;
-					v.insert(item4);
-				}
+				addUI2WindowScrollBars(v, p, w, h);
 
 				v.style += addAllStyles(v.style, p, a, v);
 				p.Text = null;
@@ -11605,7 +11884,7 @@ LucidImporter = {};
 				var item1 = new Array();
 				var itemH = 25;
 				
-				for (var i = 0; i <= (p.Panels - 1); i++)
+				for (var i = 0; i <= (limitCount(p.Panels) - 1); i++)
 				{
 					if (i < (p.Selected - 1))
 					{
@@ -11728,7 +12007,7 @@ LucidImporter = {};
 				v.insert(bg);
 				bg.style += addAllStyles(bg.style, p, a, bg);
 				
-				for (var i = 0; i <= (p.Tabs - 1); i++)
+				for (var i = 0; i <= (limitCount(p.Tabs) - 1); i++)
 				{
 					if (i == (p.Selected - 1))
 					{
@@ -11763,55 +12042,7 @@ LucidImporter = {};
 					item2[i].style += addAllStyles(item2[i].style, p, a, item2[i]);
 				}
 				
-				var fc2 = getStrokeColor(p, a);
-				fc2 = fc2.replace('strokeColor', 'fillColor2');
-				
-				if (fc2 == '')
-				{
-					fc2 = 'fillColor2=#000000;'
-				}
-				
-				if (p.vScroll == 1)
-				{
-					if (p.hScroll == 1)
-					{
-						var item2 = new mxCell('', new mxGeometry(1, 0, 20, h -20 - itemH), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
-					}
-					else
-					{
-						var item2 = new mxCell('', new mxGeometry(1, 0, 20, h - itemH), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
-					}
-					
-				   	item2.geometry.relative = true;
-				   	item2.geometry.offset = new mxPoint(-20, itemH);
-					item2.vertex = true;
-					v.insert(item2);
-					
-					v.style += 'spacingRight=20;';
-					
-					item2.style += fc2;
-					item2.style += addAllStyles(item2.style, p, a, item2);
-				}
-				
-				if (p.hScroll == 1)
-				{
-					if (p.vScroll == 1)
-					{
-						var item3 = new mxCell('', new mxGeometry(0, 1, w - 20, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
-					}
-					else
-					{
-						var item3 = new mxCell('', new mxGeometry(0, 1, w, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
-					}
-					
-				   	item3.geometry.relative = true;
-				   	item3.geometry.offset = new mxPoint(0, -20);
-					item3.vertex = true;
-					v.insert(item3);
-
-					item3.style += fc2; 
-					item3.style += addAllStyles(item3.style, p, a, item3);
-				}
+				addUI2TabBarScrollBars(v, p, a, w, h, itemH);
 				
 				break;
 				
@@ -11829,7 +12060,7 @@ LucidImporter = {};
 				v.insert(bg);
 				bg.style += addAllStyles(bg.style, p, a, bg);
 				
-				for (var i = 0; i <= (p.Tabs - 1); i++)
+				for (var i = 0; i <= (limitCount(p.Tabs) - 1); i++)
 				{
 					if (i == (p.Selected - 1))
 					{
@@ -11863,55 +12094,7 @@ LucidImporter = {};
 					}
 				}
 				
-				var fc2 = getStrokeColor(p, a);
-				fc2 = fc2.replace('strokeColor', 'fillColor2');
-				
-				if (fc2 == '')
-				{
-					fc2 = 'fillColor2=#000000;'
-				}
-				
-				if (p.vScroll == 1)
-				{
-					if (p.hScroll == 1)
-					{
-						var item2 = new mxCell('', new mxGeometry(1, 0, 20, h -20 - itemH), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
-					}
-					else
-					{
-						var item2 = new mxCell('', new mxGeometry(1, 0, 20, h - itemH), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=95;direction=north;resizeHeight=1;');
-					}
-					
-				   	item2.geometry.relative = true;
-				   	item2.geometry.offset = new mxPoint(-20, itemH);
-					item2.vertex = true;
-					v.insert(item2);
-					
-					v.style += 'spacingRight=20;';
-					
-					item2.style += fc2;
-					item2.style += addAllStyles(item2.style, p, a, item2);
-				}
-				
-				if (p.hScroll == 1)
-				{
-					if (p.vScroll == 1)
-					{
-						var item3 = new mxCell('', new mxGeometry(0, 1, w - 20, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
-					}
-					else
-					{
-						var item3 = new mxCell('', new mxGeometry(0, 1, w, 20), 'part=1;shape=mxgraph.mockup.navigation.scrollBar;barPos=5;resizeWidth=1;');
-					}
-					
-				   	item3.geometry.relative = true;
-				   	item3.geometry.offset = new mxPoint(0, -20);
-					item3.vertex = true;
-					v.insert(item3);
-
-					item3.style += fc2; 
-					item3.style += addAllStyles(item3.style, p, a, item3);
-				}
+				addUI2TabBarScrollBars(v, p, a, w, h, itemH);
 				
 				break;
 				
@@ -11930,7 +12113,7 @@ LucidImporter = {};
 				v.insert(bg);
 				bg.style += addAllStyles(bg.style, p, a, bg);
 				
-				for (var i = 0; i <= (p.Tabs - 1); i++)
+				for (var i = 0; i <= (limitCount(p.Tabs) - 1); i++)
 				{
 					if (i == (p.Selected - 1))
 					{
@@ -12023,7 +12206,7 @@ LucidImporter = {};
 				var item1 = new Array(); //checkbox
 				var item2 = new Array(); //checkmark
 				
-				for (var i = 0; i < p.Options; i++)
+				for (var i = 0; i < limitCount(p.Options); i++)
 				{
 					item1[i] = new mxCell('', new mxGeometry(0, i * itemH + itemH * 0.5 - 5, 10, 10), 'labelPosition=right;part=1;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=3;');
 					item1[i].vertex = true;
@@ -12063,7 +12246,7 @@ LucidImporter = {};
 				var item1 = new Array(); //checkbox
 				var item2 = new Array(); //checkmark
 				
-				for (var i = 0; i < p.Options; i++)
+				for (var i = 0; i < limitCount(p.Options); i++)
 				{
 					item1[i] = new mxCell('', new mxGeometry(i * itemW, h * 0.5 - 5, 10, 10), 'labelPosition=right;part=1;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=3;');
 					item1[i].vertex = true;
@@ -12103,7 +12286,7 @@ LucidImporter = {};
 				var item1 = new Array(); //checkbox
 				var item2 = new Array(); //checkmark
 				
-				for (var i = 0; i < p.Options; i++)
+				for (var i = 0; i < limitCount(p.Options); i++)
 				{
 					item1[i] = new mxCell('', new mxGeometry(0, i * itemH + itemH * 0.5 - 5, 10, 10), 'ellipse;labelPosition=right;part=1;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=3;');
 					item1[i].vertex = true;
@@ -12142,7 +12325,7 @@ LucidImporter = {};
 				var item1 = new Array(); //checkbox
 				var item2 = new Array(); //checkmark
 				
-				for (var i = 0; i < p.Options; i++)
+				for (var i = 0; i < limitCount(p.Options); i++)
 				{
 					item1[i] = new mxCell('', new mxGeometry(i * itemW, h * 0.5 - 5, 10, 10), 'ellipse;labelPosition=right;part=1;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=3;');
 					item1[i].vertex = true;
@@ -12313,7 +12496,11 @@ LucidImporter = {};
 						emptyRow += ' , ';
 					}
 							
-					for (var i = csvLines.length; i < Math.ceil(h / 20); i++)
+					// Empty rows fill the height, at most MAX_ITEMS rows and MAX_FILL_CELLS cells
+					var fillRows = Math.min(limitCount(Math.ceil(h / 20)),
+						csvLines.length + Math.floor(MAX_FILL_CELLS / cols));
+
+					for (var i = csvLines.length; i < fillRows; i++)
 					{
 						csvLines.push(emptyRow)
 					}
@@ -12350,7 +12537,7 @@ LucidImporter = {};
 				var item2 = new Array();
 				var itemW = w / p.Buttons;
 					
-				for (var i = 0; i <= (p.Buttons - 1); i++)
+				for (var i = 0; i <= (limitCount(p.Buttons) - 1); i++)
 				{
 					if (i == (p.Selected - 1))
 					{
@@ -12389,7 +12576,7 @@ LucidImporter = {};
 				var item2 = new Array();
 				var itemH = h / p.Buttons;
 					
-				for (var i = 0; i <= (p.Buttons - 1); i++)
+				for (var i = 0; i <= (limitCount(p.Buttons) - 1); i++)
 				{
 					if (i == (p.Selected - 1))
 					{
@@ -12427,7 +12614,7 @@ LucidImporter = {};
 				var item2 = new Array();
 				var itemW = w / p.Links;
 					
-				for (var i = 0; i < (p.Links); i++)
+				for (var i = 0; i < limitCount(p.Links); i++)
 				{
 					if (i != 0)
 					{
@@ -12456,7 +12643,7 @@ LucidImporter = {};
 				var item2 = new Array();
 				var itemW = w / p.Links;
 					
-				for (var i = 0; i < (p.Links); i++)
+				for (var i = 0; i < limitCount(p.Links); i++)
 				{
 					item1[i] = new mxCell('', new mxGeometry(i * itemW, 0, itemW, h), 'fillColor=none;strokeColor=none;');
 					item1[i].vertex = true;
@@ -12466,7 +12653,7 @@ LucidImporter = {};
 						getLabelStyle(p['Link_' + (i + 1)], isLastLblHTML);
 				}
 				
-				for (var i = 1; i < (p.Links); i++)
+				for (var i = 1; i < limitCount(p.Links); i++)
 				{
 					item2[i] = new mxCell('', new mxGeometry(i / p.Links, 0.5, 6, 10), 'shape=mxgraph.ios7.misc.right;');
 					item2[i].geometry.relative = true;
@@ -12483,7 +12670,7 @@ LucidImporter = {};
 				var item1 = new Array();
 				var itemW = w / (p.Buttons + 1);
 					
-				for (var i = 0; i <= (p.Buttons - 1); i++)
+				for (var i = 0; i <= (limitCount(p.Buttons) - 1); i++)
 				{
 					if (i != (p.Selected - 1))
 					{
@@ -12518,7 +12705,7 @@ LucidImporter = {};
 			
 				v.value = convertText(p.Text_prev) + ' ';
 				
-				for (var i = 0; i < p.Links; i++)
+				for (var i = 0; i < limitCount(p.Links); i++)
 				{
 					v.value += convertText(p['Link_' + (i + 1)]) + ' ';
 				}
@@ -12536,7 +12723,7 @@ LucidImporter = {};
 				var itemH = h / p.Lines;
 				var st = null; 
 				
-				for (var i = 0; i < p.Lines; i++)
+				for (var i = 0; i < limitCount(p.Lines); i++)
 				{
 					//add label
 					if (p['Item_' + (i + 1)] != null)
@@ -12670,7 +12857,7 @@ LucidImporter = {};
 				
 				item3 = new Array();
 				
-				for (var i = 0; i < p.Buttons; i++)
+				for (var i = 0; i < limitCount(p.Buttons); i++)
 				{
 					item3[i] = new mxCell('', new mxGeometry(0.5, 1, bw, bh), 'part=1;html=1;');
 				   	item3[i].geometry.relative = true;
@@ -12708,7 +12895,7 @@ LucidImporter = {};
 					var currH = th / h;
 					var curY = th;
 					
-					for (var i = 0; i <= p.Attributes; i++)
+					for (var i = 0; i <= limitCount(p.Attributes); i++)
 					{
 						if (i > 0)
 						{
@@ -12795,7 +12982,7 @@ LucidImporter = {};
 				var currH = th / h;
 				var curY = th;
 				
-				for (var i = 0; i < p.Fields; i++)
+				for (var i = 0; i < limitCount(p.Fields); i++)
 				{
 					var itemH = 0;
 					var curH = p['Field' + (i + 1) + '_h'] * scale;
@@ -12857,7 +13044,7 @@ LucidImporter = {};
 					keyW = p.Column1 * scale;
 				}
 				
-				for (var i = 0; i < p.Fields; i++)
+				for (var i = 0; i < limitCount(p.Fields); i++)
 				{
 					var itemH = 0;
 
@@ -12939,7 +13126,7 @@ LucidImporter = {};
 					keyW = p.Column1 * scale;
 				}
 				
-				for (var i = 0; i < p.Fields; i++)
+				for (var i = 0; i < limitCount(p.Fields); i++)
 				{
 					var itemH = 0;
 
@@ -13028,7 +13215,7 @@ LucidImporter = {};
 					typeW = p.Column2 * scale;
 				}
 				
-				for (var i = 0; i < p.Fields; i++)
+				for (var i = 0; i < limitCount(p.Fields); i++)
 				{
 					var itemH = 0;
 
@@ -13296,6 +13483,13 @@ LucidImporter = {};
 					{
 						var dd = drawData[i];
 						var path = dd.a;
+
+						// Entries without a path paint nothing
+						if (typeof path !== 'string')
+						{
+							continue;
+						}
+
 						var sw = (dd.w == 'prop' || dd.w == null? strokeWidth : dd.w) / Math.min(w, h) * scale; //TODO Stroke width caclulationn needs review
 						var sc = dd.s == 'prop' || dd.s == null? strokeColor : dd.s;
 						var fc = dd.f == 'prop' || dd.f == null? fillColor : dd.f;
@@ -13310,13 +13504,14 @@ LucidImporter = {};
 							fc = Array.isArray(fc.cs)? fc.cs[0].c : fillColor; //Approximation TODO Handle it
 						}
 						
-						svg += '<path d="' + path + '" fill="' + fc + '" stroke="' + sc + '" stroke-width="' + sw + '"/>';
+						svg += '<path d="' + mxUtils.htmlEntities(path, false) + '" fill="' + getSvgColor(fc) +
+							'" stroke="' + getSvgColor(sc) + '" stroke-width="' + sw + '"/>';
 					}
 					
 					svg += '</svg>';
 
 					v.style = imgUrlStyle? imgUrlStyle : 'shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;' +
-						'verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,' + ((window.btoa) ? btoa(svg) : Base64.encode(svg, true)) + ';';
+						'verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,' + Graph.base64EncodeUnicode(svg) + ';';
 				}
 				catch(e){}
 				break;
@@ -13941,19 +14136,21 @@ LucidImporter = {};
 		try
 		{
 			//TODO Cell specific styles and chartType defaults
-			var defImg = 'https://cdn4.iconfinder.com/data/icons/basic-user-interface-elements/700/user-account-profile-human-avatar-face-head--128.png';
+			// The avatar of the app, which every viewer of the diagram can load
+			var defImg = 'img/lib/mscae/AvatarDefault.svg';
 			var chartType = props.OrgChartBlockType;
 			var pos = props.Location;
 			var x = pos.x * scale, y = pos.y * scale;
 			var chartGroup = new mxCell('', new mxGeometry(x, y, 200, 100), 'group');
 			chartGroup.vertex = true;
 			graph.addCell(chartGroup);
-			var fields = props.FieldNames;
+			var fields = (Array.isArray(props.FieldNames)) ?
+				props.FieldNames.slice(0, MAX_ORG_FIELDS) : [];
 			var layoutSettings = props.LayoutSettings;
 			var cellDefaultStyle = props.BlockItemDefaultStyle || {props: {}};
 			var edgeDefaultStyle = props.EdgeItemDefaultStyle;
 			var parents = {};
-			var idPrefix = (objId || Date.now()) + '_';
+			var idPrefix = (objId || ('orgChart' + (++orgCharts))) + '_';
 			
 			if (chartType == 4)
 			{
@@ -13994,7 +14191,7 @@ LucidImporter = {};
 						(dObj[fields[j]] || '&nbsp;') + '</div>';
 				}
 				
-				var size = mxUtils.getSizeForString(lbl);
+				var size = measureLabel(lbl);
 				//TODO Is image always in Image/018__ImageUrl__?
 				var imgUrl = mapImgUrl(dObj['Image'] || dObj['018__ImageUrl__']) || defImg;
 								
@@ -14075,7 +14272,9 @@ LucidImporter = {};
 					}
 				}
 				
-				var dupMap = {};
+				// Keys of the file, and a counter for new keys, which is the same in each
+				// import (unlike the time)
+				var dupMap = Object.create(null), dups = 0;
 				
 				for (var id in chartDataSrc)
 				{
@@ -14083,11 +14282,11 @@ LucidImporter = {};
 					var pk = d[primaryKey], fk = d[foreignKey];
 					
 					//Special case where these nodes has duplicate id and should be connected somehow!
+					//They get a new key, which is not shown in the node
 					if (pk == fk)
 					{
-						dupMap[pk] = pk + Date.now();
+						dupMap[pk] = pk + '#' + (++dups);
 						pk = dupMap[pk];
-						d[primaryKey] = pk;
 						createNode(pk, fk, d);
 					}
 					else

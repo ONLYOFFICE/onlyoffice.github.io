@@ -1,6 +1,5 @@
 /**
- * $Id: mxFloorplan.js,v 1.3 2014/02/17 17:05:39 mate Exp $
- * Copyright (c) 2006-2014, JGraph Ltd
+ * Copyright (c) 2006-2014, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -421,6 +420,13 @@ mxFloorplanStairs.prototype.cst = {
 };
 
 /**
+ * Variable: maxSteps
+ *
+ * Maximum number of steps. Default is 10000.
+ */
+mxFloorplanStairs.prototype.maxSteps = 10000;
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -442,7 +448,7 @@ mxFloorplanStairs.prototype.background = function(c, x, y, w, h)
 	
 	c.begin();
 	
-	for (var i = 25; i < w; i = i + step)
+	for (var i = 25, n = 0; i < w && n < this.maxSteps; i = i + step, n++)
 	{
 		c.moveTo(i, 0);
 		c.lineTo(i, h);
@@ -561,6 +567,13 @@ mxFloorplanStairsRest.prototype.cst = {
 };
 
 /**
+ * Variable: maxSteps
+ *
+ * Maximum number of steps. Default is 10000.
+ */
+mxFloorplanStairsRest.prototype.maxSteps = 10000;
+
+/**
 * Function: paintVertexShape
 * 
 * Paints the vertex shape.
@@ -583,7 +596,7 @@ mxFloorplanStairsRest.prototype.background = function(c, x, y, w, h)
 	
 	c.begin();
 	
-	for (var i = 25; i < w - h * 0.5; i = i + step)
+	for (var i = 25, n = 0; i < w - h * 0.5 && n < this.maxSteps; i = i + step, n++)
 	{
 		c.moveTo(i, 0);
 		c.lineTo(i, h);

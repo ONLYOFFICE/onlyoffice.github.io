@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	// Adds Android shapes
@@ -30,13 +34,13 @@
 					472, 686, '', 'Tab', null, null, dt + 'tab tablet portrait'),
 			this.createVertexTemplateEntry(s2 + 'tab2;strokeColor=#c0c0c0;direction=north;', 
 					686, 472, '', 'Tab (landscape)', null, null, dt + 'tab tablet landscape'),
-			this.createVertexTemplateEntry(s + 'action_bar;fillColor=#1A1A1A;strokeColor=#c0c0c0;strokeWidth=2;fontColor=#FFFFFF;whiteSpace=wrap;', 
+			this.createVertexTemplateEntry(s + 'action_bar;fillColor=#1A1A1A;strokeColor=none;strokeWidth=2;fontColor=#FFFFFF;whiteSpace=wrap;', 
 					185, 30, '', 'Action Bar', null, null, dt + 'action bar dark portrait'),
-			this.createVertexTemplateEntry(s + 'action_bar;fillColor=#E6E6E6;strokeColor=#c0c0c0;strokeWidth=2;whiteSpace=wrap;', 
+			this.createVertexTemplateEntry(s + 'action_bar;fillColor=#E6E6E6;strokeColor=none;strokeWidth=2;whiteSpace=wrap;', 
 					185, 30, '', 'Action Bar (Bright)', null, null, dt + 'action bar bright portrait'),
-			this.createVertexTemplateEntry(s + 'action_bar_landscape;fillColor=#1A1A1A;strokeColor=#c0c0c0;strokeWidth=2;fontColor=#FFFFFF;whiteSpace=wrap;', 
+			this.createVertexTemplateEntry(s + 'action_bar_landscape;fillColor=#1A1A1A;strokeColor=none;strokeWidth=2;fontColor=#FFFFFF;whiteSpace=wrap;', 
 					320, 30, '', 'Action Bar Landscape', null, null, dt + 'action bar landscape dark'),
-			this.createVertexTemplateEntry(s + 'action_bar_landscape;fillColor=#E6E6E6;strokeColor=#c0c0c0;strokeWidth=2;whiteSpace=wrap;', 
+			this.createVertexTemplateEntry(s + 'action_bar_landscape;fillColor=#E6E6E6;strokeColor=none;strokeWidth=2;whiteSpace=wrap;', 
 					320, 30, '', 'Action Bar Landscape (Bright)', null, null, dt + 'action bar bright landscape'),
 			this.createVertexTemplateEntry(s4 + '666666;align=center;strokeColor=#4D4D4D;fontColor=#ffffff;', 
 					sizeX * 0.5, sizeY * 0.04, 'Normal', 'Button (Normal)', null, null, dt + 'button normal'),
@@ -147,16 +151,16 @@
 			   	return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Radiobuttons');
 			}),
 						
-			this.createVertexTemplateEntry(s2 + 'contact_badge_focused;sketch=0;', 40, 40, '', 'Contact Badge Focused', null, null, dt + 'contact badge focused'),
-			this.createVertexTemplateEntry(s2 + 'contact_badge_focused;sketch=0;', 60, 60, '', 'Contact Badge Focused', null, null, dt + 'contact badge focused'),
-			this.createVertexTemplateEntry(s2 + 'contact_badge_normal;sketch=0;', 40, 40, '', 'Contact Badge Normal', null, null, dt + 'contact badge normal'),
-			this.createVertexTemplateEntry(s2 + 'contact_badge_normal;sketch=0;', 60, 60, '', 'Contact Badge Normal', null, null, dt + 'contact badge normal'),
-			this.createVertexTemplateEntry(s2 + 'contact_badge_pressed;sketch=0;', 40, 40, '', 'Contact Badge Pressed', null, null, dt + 'contact badge pressed'),
-			this.createVertexTemplateEntry(s2 + 'contact_badge_pressed;sketch=0;', 60, 60, '', 'Contact Badge Pressed', null, null, dt + 'contact badge pressed'),
+			this.createVertexTemplateEntry(s2 + 'contact_badge_focused;strokeColor=none;fillColor=none;sketch=0;', 40, 40, '', 'Contact Badge Focused', null, null, dt + 'contact badge focused'),
+			this.createVertexTemplateEntry(s2 + 'contact_badge_focused;strokeColor=none;fillColor=none;sketch=0;', 60, 60, '', 'Contact Badge Focused', null, null, dt + 'contact badge focused'),
+			this.createVertexTemplateEntry(s2 + 'contact_badge_focused;strokeColor=none;fillColor=none;sketch=0;', 40, 40, '', 'Contact Badge Normal', null, null, dt + 'contact badge normal'),
+			this.createVertexTemplateEntry(s2 + 'contact_badge_focused;strokeColor=none;fillColor=none;sketch=0;', 60, 60, '', 'Contact Badge Normal', null, null, dt + 'contact badge normal'),
+			this.createVertexTemplateEntry(s2 + 'contact_badge_focused;strokeColor=none;fillColor=none;sketch=0;', 40, 40, '', 'Contact Badge Pressed', null, null, dt + 'contact badge pressed'),
+			this.createVertexTemplateEntry(s2 + 'contact_badge_focused;strokeColor=none;fillColor=none;sketch=0;', 60, 60, '', 'Contact Badge Pressed', null, null, dt + 'contact badge pressed'),
 
 			this.addEntry(dt + 'contextual action bar dark portrait', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 30), s + 'contextual_action_bar;fillColor=#002E3E;sketch=0;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 30), s + 'contextual_action_bar;fillColor=#002E3E;strokeColor=none;sketch=0;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Action', new mxGeometry(40, 0, 100, 30), 'shape=transparent;align=left;fontStyle=1;fontColor=#ffffff;whiteSpace=wrap;html=1;');
 			   	text1.vertex = true;
@@ -167,7 +171,7 @@
 					
 			this.addEntry(dt + 'contextual action bar bright portrait', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 30), s + 'contextual_action_bar_white;fillColor=#E6E6E6;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 30), s + 'contextual_action_bar;fillColor=#E6E6E6;strokeColor=none;sketch=0;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Action', new mxGeometry(40, 0, 100, 30), 'shape=transparent;align=left;fontStyle=1;whiteSpace=wrap;html=1;');
 			   	text1.vertex = true;
@@ -178,7 +182,7 @@
 
 			this.addEntry(dt + 'contextual action bar landscape dark', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 30), s + 'contextual_action_bar_landscape;fillColor=#002E3E;sketch=0;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 30), s + 'contextual_action_bar_landscape;fillColor=#002E3E;strokeColor=none;sketch=0;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Action', new mxGeometry(40, 0, 100, 30), 'shape=transparent;align=left;fontStyle=1;fontColor=#ffffff;whiteSpace=wrap;html=1;');
 			   	text1.vertex = true;
@@ -189,7 +193,7 @@
 
 			this.addEntry(dt + 'contextual action bar landscape bright', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 30), s + 'contextual_action_bar_landscape_white;fillColor=#E6E6E6;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 30), s + 'contextual_action_bar_landscape;fillColor=#E6E6E6;strokeColor=none;sketch=0;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Action', new mxGeometry(40, 0, 100, 30), 'shape=transparent;align=left;fontStyle=1;whiteSpace=wrap;html=1;');
 			   	text1.vertex = true;
@@ -200,7 +204,7 @@
 
 			this.addEntry(dt + 'contextual split action bar dark', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 70), s + 'contextual_split_action_bar;fillColor=#002E3E;fontColor=#FFFFFF;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 70), s + 'contextual_split_action_bar;fillColor=#002E3E;strokeColor=none;sketch=0;fontColor=#FFFFFF;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Contextual', new mxGeometry(0, 0, 185, 30), 'shape=transparent;fontStyle=1;fontColor=#ffffff;whiteSpace=wrap;html=1;');
 			   	text1.vertex = true;
@@ -214,7 +218,7 @@
 
 			this.addEntry(dt + 'contextual split action bar bright', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 70), s + 'contextual_split_action_bar_white;fillColor=#E6E6E6;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 70), s + 'contextual_split_action_bar;fillColor=#E6E6E6;strokeColor=none;sketch=0;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Contextual', new mxGeometry(0, 0, 185, 30), 'shape=transparent;fontStyle=1;whiteSpace=wrap;html=1;');
 			   	text1.vertex = true;
@@ -228,7 +232,7 @@
 
 			this.addEntry(dt + 'contextual split action bar landscape dark', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 70), s + 'contextual_split_action_bar_landscape;fillColor=#002E3E;fontColor=#FFFFFF;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 70), s + 'contextual_split_action_bar_landscape;fillColor=#002E3E;strokeColor=none;sketch=0;fontColor=#FFFFFF;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Contextual', new mxGeometry(0, 0, 320, 30), 'shape=transparent;fontStyle=1;fontColor=#ffffff;whiteSpace=wrap;html=1;');
 			   	text1.vertex = true;
@@ -242,7 +246,7 @@
 
 			this.addEntry(dt + 'contextual split action bar landscape bright', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 70), s + 'contextual_split_action_bar_landscape_white;fillColor=#E6E6E6;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 70), s + 'contextual_split_action_bar_landscape_white;fillColor=#E6E6E6;strokeColor=none;sketch=0;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Contextual', new mxGeometry(0, 0, 320, 30), 'shape=transparent;fontStyle=1;whiteSpace=wrap;html=1;');
 			   	text1.vertex = true;
@@ -254,11 +258,11 @@
 	   			return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Contextual Split Action Bar Landscape (Bright)');
 			}),
 
-			this.createVertexTemplateEntry(s2 + 'indeterminate_progress_bar;strokeColor=#33B5E5;pointerEvents=1', 
+			this.createVertexTemplateEntry(s2 + 'indeterminate_progress_bar;strokeColor=#33B5E5;pointerEvents=1;fillColor=none', 
 					149, 5, '', 'Indeterminate Progress Bar', null, null, dt + 'indeterminate progress bar'),
 			this.createVertexTemplateEntry(s2 + 'indeterminateSpinner;', 
 					50, 50, '', 'Indeterminate Spinner', null, null, dt + 'indeterminate spinner'),
-			this.createVertexTemplateEntry(s2 + 'keyboard;sketch=0;', 
+			this.createVertexTemplateEntry(s2 + 'keyboard;sketch=0;strokeColor=none;', 
 					185, 100, '', 'Keyboard', null, null, dt + 'keyboard'),
 					
 			this.addEntry(dt + 'menu bar', function()
@@ -321,18 +325,18 @@
 					30, 320, '', 'Navigation Bar Vertical', null, null, dt + 'navigation bar vertical'),
 			this.createVertexTemplateEntry(s6 + 'navigation_bar_6;fillColor=#1A1A1A;strokeColor=#999999;sketch=0;', 
 					185, 30, '', 'Navigation Bar', null, null, dt + 'navigation bar horizontal'),
-			this.createVertexTemplateEntry(s2 + 'progressBar;strokeColor=#33b5e5;dx1=0.8;dx2=0.6;strokeWidth=2;', 
+			this.createVertexTemplateEntry(s2 + 'progressBar;strokeColor=#33b5e5;dx1=0.8;dx2=0.6;fillColor=none;strokeColor2=#444444;', 
 					185, 5, '', 'Progress Bar', null, null, dt + 'progress bar'),
-			this.createVertexTemplateEntry(s2 + 'progressScrubberDisabled;dx=0.3;fillColor=#33b5e5;', 
+			this.createVertexTemplateEntry(s2 + 'progressScrubberDisabled;dx=0.3;fillColor=#33b5e5;strokeColor=none;strokeColor2=#444444;', 
 					185, 16, '', 'Progress Scrubber Disabled', null, null, dt + 'progress scrubber disabled'),
-			this.createVertexTemplateEntry(s2 + 'progressScrubberFocused;dx=0.3;fillColor=#33b5e5;', 
+			this.createVertexTemplateEntry(s2 + 'progressScrubberFocused;dx=0.3;fillColor=#33b5e5;strokeColor2=#444444;strokeColor=none;', 
 					185, 16, '', 'Progress Scrubber Focused', null, null, dt + 'progress scrubber focused'),
-			this.createVertexTemplateEntry(s2 + 'progressScrubberPressed;dx=0.3;fillColor=#33b5e5;', 
+			this.createVertexTemplateEntry(s2 + 'progressScrubberPressed;dx=0.3;fillColor=#33b5e5;strokeColor2=#444444;strokeColor=none;', 
 					185, 16, '', 'Progress Scrubber Pressed', null, null, dt + 'progress scrubber pressed'),
-			this.createVertexTemplateEntry(s2 + 'quickscroll2;dy=0.5;fillColor=#33b5e5;strokeColor=#66D5F5;', 
+			this.createVertexTemplateEntry(s2 + 'quickscroll2;dy=0.5;fillColor=#33b5e5;strokeColor=#66D5F5;fillColor2=#cccccc;fillColor3=#666666;', 
 					58, 320, '', 'Quickscroll', null, null, dt + 'quickscroll quick scroll'),
 
-			this.createVertexTemplateEntry(s2 + 'quickscroll3;dy=0.5;fillColor=#33b5e5;strokeColor=#66D5F5;', 
+			this.createVertexTemplateEntry(s2 + 'quickscroll3;dy=0.5;fillColor=#33b5e5;strokeColor=#66D5F5;fillColor2=#cccccc;', 
 					6, 320, '', 'Quickscroll', null, null, dt + 'quickscroll quick scroll'),
 					
 			this.addEntry(dt + 'quick contact', function()
@@ -446,7 +450,7 @@
 			
 			this.addEntry(dt + 'split action bar dark', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 70), s + 'split_action_bar;fillColor=#1A1A1A;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 70), s + 'split_action_bar;fillColor=#1A1A1A;strokeColor=none;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Split', new mxGeometry(0, 0, 185, 30), s + 'anchor;fontStyle=1;fontColor=#ffffff;whiteSpace=wrap;');
 			   	text1.vertex = true;
@@ -460,7 +464,7 @@
 
 			this.addEntry(dt + 'split action bar bright', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 70), s + 'split_action_bar;fillColor=#E6E6E6;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 185, 70), s + 'split_action_bar;fillColor=#E6E6E6;strokeColor=none;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Split', new mxGeometry(0, 0, 185, 30), s + 'anchor;fontStyle=1;whiteSpace=wrap;');
 			   	text1.vertex = true;
@@ -474,7 +478,7 @@
 
 			this.addEntry(dt + 'split action bar landscape dark', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 70), s + 'split_action_bar_landscape;fillColor=#1A1A1A;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 70), s + 'split_action_bar_landscape;fillColor=#1A1A1A;strokeColor=none;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Split', new mxGeometry(0, 0, 320, 30), s + 'anchor;fontStyle=1;fontColor=#ffffff;whiteSpace=wrap;');
 			   	text1.vertex = true;
@@ -488,7 +492,7 @@
 
 			this.addEntry(dt + 'split action bar landscape bright', function()
 			{
-			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 70), s + 'split_action_bar_landscape;fillColor=#E6E6E6;');
+			   	var bg = new mxCell('', new mxGeometry(0, 0, 320, 70), s + 'split_action_bar_landscape;fillColor=#E6E6E6;strokeColor=none;');
 			   	bg.vertex = true;
 			   	var text1 = new mxCell('Split', new mxGeometry(0, 0, 320, 30), s + 'anchor;fontStyle=1;whiteSpace=wrap;');
 			   	text1.vertex = true;
@@ -500,17 +504,17 @@
 	   			return sb.createVertexTemplateFromCells([bg], bg.geometry.width, bg.geometry.height, 'Split Action Bar Landscape (Bright)');
 			}),
 
-			this.createVertexTemplateEntry(s + 'statusBar;align=center;fillColor=#000000;strokeColor=#ffffff;fontColor=#ffffff;fontSize=10;sketch=0;', 
+			this.createVertexTemplateEntry(s + 'statusBar;align=center;fillColor=#000000;strokeColor=#ffffff;fontColor=#ffffff;fontSize=10;batteryColor=#444444;sketch=0;', 
 					sizeX * 0.87, sizeY * 0.0375, '', 'Status bar (portrait)', null, null, dt + 'status bar portrait'),
-			this.createVertexTemplateEntry(s + 'statusBar;align=center;fillColor=#000000;strokeColor=#ffffff;fontColor=#ffffff;fontSize=10;sketch=0;', 
+			this.createVertexTemplateEntry(s + 'statusBar;align=center;fillColor=#000000;strokeColor=#ffffff;fontColor=#ffffff;fontSize=10;batteryColor=#444444;sketch=0;', 
 					sizeX * 1.517, sizeY * 0.0375, '', 'Status bar (landscape)', null, null, dt + 'status bar landscape'),
-			this.createVertexTemplateEntry(s2 + 'switch_off;fillColor=#666666;sketch=0;', 
+			this.createVertexTemplateEntry(s2 + 'switch_off;fillColor=#666666;sketch=0;strokeColor=none;', 
 					80, 20, '', 'Switch Off', null, null, dt + 'switch off'),
-			this.createVertexTemplateEntry(s2 + 'switch_off;fillColor=#E6E6E6;sketch=0;', 
+			this.createVertexTemplateEntry(s2 + 'switch_off;fillColor=#E6E6E6;sketch=0;strokeColor=none;',
 					80, 20, '', 'Switch Off', null, null, dt + 'switch off'),
-			this.createVertexTemplateEntry(s2 + 'switch_on;fillColor=#666666;sketch=0;', 
+			this.createVertexTemplateEntry(s2 + 'switch_on;fillColor=#666666;sketch=0;strokeColor=none;', 
 					80, 20, '', 'Switch On', null, null, dt + 'switch on'),
-			this.createVertexTemplateEntry(s2 + 'switch_on;fillColor=#E6E6E6;sketch=0;', 
+			this.createVertexTemplateEntry(s2 + 'switch_on;fillColor=#E6E6E6;sketch=0;strokeColor=none;', 
 					80, 20, '', 'Switch On', null, null, dt + 'switch on'),
 			this.addDataEntry(dt + 'tab tabulator bar dark', 185, 30, 'Tab Bar Dark',
 				'3ZZfb8IgEMA/Da8NhdY/r+02n/bkkj1jQSGjxVCc7T79KMVpp81qnG6RhIS744D7cVwAOM2rmSZr/qwokwA/ApxqpUw7yquUSQkQFBTgB4AQtB2gpx5r6KxwTTQrzBAH1Dq8E7lhraZVlKaWXlEard7Yq6CGW0UIcMJNLv2w5ISqrRWgFSgpOaNesJZ1s0JerZroAlJQrQQNtGaZPVqi5+KD+blLIWWqpNJuRxy51qzhtt5ZClVYh8SfmGnDqt6oncqHPGMqZ0bXdsrWR9HMmMStG2dixb0bbmlBUrby6st1z9AOPMbTSPER0heysIrw2mRJkfEGVLJUhZn7bUIvH+BdujaUJPqRZDQK0JVYRj0s/yZLv2PtZi2E02mW9WXtNe6gOuJ/m1uJ/2PRwHgRs/iiohGdxlz7SxgPZnw54lFP4uO7KiLeYYqCm+bvuAdudI9wQzwJxjfFOxlQHjwgKdzr7D7ZQwBUNC9fqMLqS7VpTv87UMJdytWdmnb4QYDHeND5eKy4/845W+e39wk='),
@@ -527,13 +531,13 @@
 					174, 30, '', 'Textfield Normal', null, null, dt + 'textfield normal'),
 			this.createVertexTemplateEntry(s + 'textfield;align=center;strokeColor=#33b5e5;pointerEvents=1', 
 					174, 30, '', 'Textfield Activated', null, null, dt + 'textfield activated'),
-			this.createVertexTemplateEntry(s2 + 'text_insertion_point;', 
+			this.createVertexTemplateEntry(s2 + 'text_insertion_point;fillColor=none;strokeColor=none;', 
 					20, 30, '', 'Text Insertion Point', null, null, dt + 'textfield insertion point'),
 			this.createVertexTemplateEntry(s2 + 'textSelHandles;fillColor=#33b5e5;strokeColor=#0099cc;', 
 					sizeX * 0.8, sizeY * 0.1, '', 'Text Selection Handles', null, null, dt + 'text selection handle'),
-			this.createVertexTemplateEntry(s2 + 'time_picker;sketch=0;', 
+			this.createVertexTemplateEntry(s2 + 'time_picker;sketch=0;fillColor=none;strokeColor=none;', 
 					150, 230, '', 'Time Picker (Bright)', null, null, dt + 'time picker bright'),
-			this.createVertexTemplateEntry(s2 + 'time_picker_dark;sketch=0;', 
+			this.createVertexTemplateEntry(s2 + 'time_picker_dark;sketch=0;fillColor=none;strokeColor=none;', 
 					150, 230, '', 'Time Picker (Dark)', null, null, dt + 'time picker dark'),
 			this.createVertexTemplateEntry(s3 + 'rect;fillColor=#33b5e5;', 
 					50, 50, '', 'Color', null, null, dt + 'color'),

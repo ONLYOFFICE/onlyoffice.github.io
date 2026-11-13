@@ -1,6 +1,5 @@
 /**
- * $Id: mxMockupForms.js,v 1.11 2013/05/24 05:21:33 mate Exp $
- * Copyright (c) 2006-2010, JGraph Ltd
+ * Copyright (c) 2006-2010, JGraph Holdings Ltd
  */
 
 //**********************************************************************************************************************************************************
@@ -278,7 +277,10 @@ mxShapeMockupColorPicker.prototype.cst = {
 };
 
 mxShapeMockupColorPicker.prototype.customProperties = [
-	{name: 'chosenColor', dispName: 'Current Color', type: 'color'}
+	{name: 'chosenColor', dispName: 'Current Color', defVal: '#aaddff', type: 'color', primary:true},
+	{name: 'frameStrokeColor', dispName: 'Frame Color', defVal: '#999999', type: 'color', primary:true},
+	{name: 'indicatorColor', dispName: 'Indicator Color', defVal: '#ffffff', type: 'color', primary:true},
+	{name: 'arrowColor', dispName: 'Arrow Color', defVal: '#999999', type: 'color', primary:true}
 ];
 
 /**
@@ -292,7 +294,7 @@ mxShapeMockupColorPicker.prototype.paintVertexShape = function(c, x, y, w, h)
 
 	c.translate(x, y);
 
-	c.setStrokeColor('#999999');
+	c.setStrokeColor(mxUtils.getValue(this.style, 'frameStrokeColor', '#999999'));
 	c.roundrect(0, 0, w, h, w * 0.05, h * 0.05);
 	c.fillAndStroke();
 	c.setShadow(false);
@@ -301,7 +303,7 @@ mxShapeMockupColorPicker.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.rect(w * 0.1, h * 0.1, w * 0.8, h * 0.8);
 	c.fill();
 
-	c.setFillColor('#ffffff');
+	c.setFillColor(mxUtils.getValue(this.style, 'indicatorColor', '#ffffff'));
 	c.begin();
 	c.moveTo(w * 0.75, h * 0.75);
 	c.lineTo(w * 0.75, h);
@@ -311,7 +313,7 @@ mxShapeMockupColorPicker.prototype.paintVertexShape = function(c, x, y, w, h)
 	c.close();
 	c.fill();
 
-	c.setFillColor('#999999');
+	c.setFillColor(mxUtils.getValue(this.style, 'arrowColor', '#999999'));
 	c.begin();
 	c.moveTo(w * 0.77, h * 0.77);
 	c.lineTo(w * 0.875, h * 0.98);
@@ -348,13 +350,17 @@ mxUtils.extend(mxShapeMockupComboBox, mxShape);
 mxShapeMockupComboBox.prototype.cst = {
 		MAIN_TEXT : 'mainText',
 		FILL_COLOR2 : 'fillColor2',
+		FILL_COLOR3 : 'fillColor3',
+		FILL_COLOR4 : 'fillColor4',
 		TEXT_COLOR : 'textColor',
 		TEXT_SIZE : 'textSize',
 		SHAPE_COMBO_BOX : 'mxgraph.mockup.forms.comboBox'
 };
 
 mxShapeMockupComboBox.prototype.customProperties = [
-	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color'}
+	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color', primary:true},
+	{name: 'fillColor3', dispName: 'Fill3 Color', type: 'color', primary:true, defVal:'#ffffff'},
+	{name: 'fillColor4', dispName: 'Fill4 Color', type: 'color', primary:true, defVal:'#ffffff'}
 ];
 
 /**
@@ -373,7 +379,8 @@ mxShapeMockupComboBox.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupComboBox.prototype.background = function(c, x, y, w, h)
 {
-	c.setFillColor('#ffffff');
+	var fillColor3 = mxUtils.getValue(this.style, mxShapeMockupComboBox.prototype.cst.FILL_COLOR3, '#ffffff').toString();
+	c.setFillColor(fillColor3);
 	c.roundrect(0, 0, w, h, 5, 5);
 	c.fillAndStroke();
 };
@@ -382,6 +389,7 @@ mxShapeMockupComboBox.prototype.foreground = function(c, x, y, w, h)
 {
 	var fillColor = mxUtils.getValue(this.style, mxConstants.STYLE_FILLCOLOR, '').toString();
 	var fillColor2 = mxUtils.getValue(this.style, mxShapeMockupComboBox.prototype.cst.FILL_COLOR2, '').toString();
+	var fillColor4 = mxUtils.getValue(this.style, mxShapeMockupComboBox.prototype.cst.FILL_COLOR4, '#ffffff').toString();
 	c.setGradient(fillColor, fillColor2, w - 30, 0, 30, h, mxConstants.DIRECTION_SOUTH, 1, 1);
 	c.begin();
 	c.moveTo(w - 30, 0);
@@ -393,7 +401,7 @@ mxShapeMockupComboBox.prototype.foreground = function(c, x, y, w, h)
 	c.close();
 	c.fillAndStroke();
 
-	c.setFillColor('#ffffff');
+	c.setFillColor(fillColor4);
 	c.begin();
 	c.moveTo(w - 22, h * 0.5 - 5);
 	c.lineTo(w - 15, h * 0.5 + 5);
@@ -451,6 +459,7 @@ mxShapeMockupSpinner.prototype.cst = {
 		ADJ_PLUSMINUS : 'plusMinus',
 		ADJ_ARROW : 'arrow',
 
+		FILL_COLOR2 : 'fillColor2',
 		MAIN_TEXT : 'mainText',
 		TEXT_COLOR : 'textColor',
 		TEXT_SIZE : 'textSize',
@@ -466,7 +475,8 @@ mxShapeMockupSpinner.prototype.customProperties = [
 	},
 	{name: 'adjStyle', dispName: 'Button Style', type: 'enum', 
 		enumList: [{val: 'triangle', dispName: 'Triangle'}, {val: 'plusMinus', dispName: '+/-'}, {val: 'arrow', dispName: 'Arrow'}]
-	}
+	},
+	{name: 'fillColor2', dispName: 'Fill2 Color', type: 'color', primary:true, defVal:'#ffffff'}
 ];
 
 /**
@@ -486,7 +496,8 @@ mxShapeMockupSpinner.prototype.paintVertexShape = function(c, x, y, w, h)
 
 mxShapeMockupSpinner.prototype.background = function(c, w, h)
 {
-	c.setFillColor('#ffffff');
+	var fillColor2 = mxUtils.getValue(this.style, mxShapeMockupSpinner.prototype.cst.FILL_COLOR2, '#ffffff');
+	c.setFillColor(fillColor2);
 	c.roundrect(0, 0, w, h, 10, 10);
 	c.fillAndStroke();
 };
@@ -1078,18 +1089,16 @@ mxShapeMockupMenuBar.prototype.background = function(c, w, h, rSize, buttonNum, 
 	c.setStrokeColor(separatorColor);
 	c.begin();
 
+	// Sum of the widths of the buttons before the separator
+	var sumWidth = 0;
+
 	for (var i = 1; i < buttonNum; i++)
 	{
+		sumWidth += buttonWidths[i - 1] + 2 * labelOffset;
+
 		if (i !== selectedButton && i !== (selectedButton + 1))
 		{
-			var currWidth = 0;
-
-			for (var j = 0; j < i; j++)
-			{
-				currWidth += buttonWidths[j] + 2 * labelOffset;
-			}
-
-			currWidth = currWidth * w / minW;
+			var currWidth = sumWidth * w / minW;
 			c.moveTo(currWidth, 0);
 			c.lineTo(currWidth, h);
 		}
@@ -1826,7 +1835,7 @@ mxShapeMockupSearchBox.prototype.cst = {
 };
 
 mxShapeMockupSearchBox.prototype.customProperties = [
-	{name: 'strokeColor2', dispName: 'Icon Color', type: 'color'},
+	{name: 'strokeColor2', dispName: 'Icon Color', type: 'color', primary:true},
 ];
 
 /**
@@ -2022,6 +2031,13 @@ mxShapeMockupCalendar.prototype.cst = {
 };
 
 /**
+ * Variable: maxDays
+ *
+ * Maximum number of painted days of the month. Default is 1000.
+ */
+mxShapeMockupCalendar.prototype.maxDays = 1000;
+
+/**
  * Function: paintVertexShape
  * 
  * Paints the vertex shape.
@@ -2059,10 +2075,13 @@ mxShapeMockupCalendar.prototype.foreground = function(c, w, h)
 	var dayNames = mxUtils.getValue(this.style, mxShapeMockupCalendar.prototype.cst.DAY_NAMES, 'Mo,Tu,We,Th,Fr,Sa,Su').toString().split(',');
 	var selDay = parseInt(mxUtils.getValue(this.style, mxShapeMockupCalendar.prototype.cst.SELECTED_DAY, '24'), 10);
 
-	fistDay = Math.max(firstDay, 0);
+	firstDay = Math.max(firstDay, 0);
 	startOn = Math.max(startOn, 0);
-	fistDay = Math.min(firstDay, 6);
+	firstDay = Math.min(firstDay, 6);
 	startOn = Math.min(startOn, 6);
+
+	// Limits the number of days for huge values
+	days = Math.min(days, this.maxDays);
 
 	//buttons
 	c.roundrect(w * 0.05, h * 0.0457, w * 0.1438, h * 0.1029, w * 0.025, h * 0.0229);

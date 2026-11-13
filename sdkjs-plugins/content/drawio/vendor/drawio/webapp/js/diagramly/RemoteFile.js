@@ -1,4 +1,4 @@
-// Copyright (c) 2006-2020, JGraph Ltd
+// Copyright (c) 2006-2020, JGraph Holdings Ltd
 /**
  */
 RemoteFile = function(ui, data, title)
@@ -13,10 +13,7 @@ RemoteFile = function(ui, data, title)
 mxUtils.extend(RemoteFile, DrawioFile);
 
 /**
- * Translates this point by the given vector.
- * 
- * @param {number} dx X-coordinate of the translation.
- * @param {number} dy Y-coordinate of the translation.
+ * Returns false since remote files are not saved automatically.
  */
 RemoteFile.prototype.isAutosave = function()
 {

@@ -1,6 +1,9 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
-	// Adds mockup shapes
 	Sidebar.prototype.addOfficePalette = function()
 	{
 		this.setCurrentSearchEntryLibrary('office', 'officeClouds');

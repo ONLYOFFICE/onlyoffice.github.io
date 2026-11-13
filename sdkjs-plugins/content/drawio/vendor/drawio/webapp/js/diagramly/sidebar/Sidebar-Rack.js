@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addRackPalette = function(rack, dir)
@@ -55,16 +59,16 @@
 		
 		this.addPaletteFunctions('rackGeneral', 'Rack / General', false,
 		[
-			this.createVertexTemplateEntry(s + 'shape=mxgraph.rackGeneral.rackCabinet3;fillColor2=#f4f4f4;container=1;collapsible=0;childLayout=rack;allowGaps=1;marginLeft=9;marginRight=9;marginTop=21;marginBottom=22;textColor=#666666;numDisp=off;', 180, 219, '', 'Rack Cabinet', null, null, dt + 'cabinet'),
-			this.createVertexTemplateEntry(s + 'shape=mxgraph.rackGeneral.rackCabinet3;fillColor2=#f4f4f4;container=1;collapsible=0;childLayout=rack;allowGaps=1;marginLeft=33;marginRight=9;marginTop=21;marginBottom=22;textColor=#666666;numDisp=ascend;', 204, 219, '', 'Numbered Rack Cabinet', null, null, dt + 'cabinet numbered'),
+			this.createVertexTemplateEntry(s + 'shape=mxgraph.rackGeneral.rackCabinet3;rackUnitSize=14.8;fillColor2=#f4f4f4;container=1;collapsible=0;childLayout=rack;allowGaps=1;marginLeft=9;marginRight=9;marginTop=21;marginBottom=22;textColor=#666666;numDisp=off;', 180, 219, '', 'Rack Cabinet', null, null, dt + 'cabinet'),
+			this.createVertexTemplateEntry(s + 'shape=mxgraph.rackGeneral.rackCabinet3;rackUnitSize=14.8;fillColor2=#f4f4f4;container=1;collapsible=0;childLayout=rack;allowGaps=1;marginLeft=33;marginRight=9;marginTop=21;marginBottom=22;textColor=#666666;numDisp=ascend;', 204, 219, '', 'Numbered Rack Cabinet', null, null, dt + 'cabinet numbered'),
 			this.createVertexTemplateEntry(sr + 'text;', 160, 15, '', 'Spacing', null, null, dt + 'spacing'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rackGeneral.plate;fillColor=#e8e8e8;', 160, 15, '', 'Cover Plate', null, null, dt + 'cover plate'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.general.1u_rack_server;', 160, 15, '', 'Server', null, null, dt + 'server'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rackGeneral.horCableDuct;', 160, 15, '', 'Horizontal Cable Duct', null, null, dt + 'horizontal cable duct'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rackGeneral.horRoutingBank;', 160, 20, '', 'Horizontal Routing Bank', null, null, dt + 'horizontal routing bank'),
-			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rackGeneral.neatPatch;', 160, 30, '', 'Neat-Patch', null, null, dt + 'neat patch'),
+			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rackGeneral.neatPatch;bodyColor=#666666;', 160, 30, '', 'Neat-Patch', null, null, dt + 'neat patch'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rackGeneral.shelf;container=1;collapsible=0', 160, 15, '', 'Shelf', null, null, dt + 'shelf'),
-			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rackGeneral.channelBase;', 200, 30, '', 'Channel Base', null, null, dt + 'channel base'),
+			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rackGeneral.channelBase;footColor=#000000;', 200, 30, '', 'Channel Base', null, null, dt + 'channel base'),
 			this.createVertexTemplateEntry('shape=mxgraph.rackGeneral.cabinetLeg;html=1;shadow=0;dashed=0;fillColor=#444444;strokeColor=#444444;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;', 50, 50, '', 'Cabinet Leg', null, null, dt + 'cabinet leg support'),
 
 			//stencils
@@ -138,9 +142,9 @@
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_c4140;', 162, 15, '', 'PowerEdge C4140', null, null, dt + 'poweredge c4140'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m1000e_enclosure;', 162, 150, '', 'PowerEdge M1000e Enclosure', null, null, dt + 'poweredge m1000e enclosure'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m420;', 20, 37, '', 'PowerEdge M420', null, null, dt + 'poweredge m420'),
-			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m520;', 20, 37, '', 'PowerEdge M520', null, null, dt + 'poweredge m520'),
-			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m610x;', 20, 37, '', 'PowerEdge M610x', null, null, dt + 'poweredge m610x'),
-			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m620;', 20, 37, '', 'PowerEdge M620', null, null, dt + 'poweredge m620'),
+			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m520;', 20, 74, '', 'PowerEdge M520', null, null, dt + 'poweredge m520'),
+			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m610x;', 20, 148, '', 'PowerEdge M610x', null, null, dt + 'poweredge m610x'),
+			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m620;', 20, 74, '', 'PowerEdge M620', null, null, dt + 'poweredge m620'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m820;', 20, 143, '', 'PowerEdge M820', null, null, dt + 'poweredge m820'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_m915;', 20, 143, '', 'PowerEdge M915', null, null, dt + 'poweredge m820'),
 			this.createVertexTemplateEntry(sr + 'shape=mxgraph.rack.dell.poweredge_r240;', 162, 15, '', 'PowerEdge R240', null, null, dt + 'poweredge r240'),
@@ -248,7 +252,7 @@
             this.createVertexTemplateEntry(s + 'j9777a_2530_8g_rear;', 87, 15, '', 'J9777A 2530-8G (rear)', null, null, dt + 'j9777a 2530 8g rear'),
             this.createVertexTemplateEntry(s + 'j9778a_2530_48_poeplus_front;', 142, 15, '', 'J9778A 2530-48 PoE+ (front)', null, null, dt + 'j9778a 2530 48 poeplus front'),
             this.createVertexTemplateEntry(s + 'j9780a_2530_8_poeplus_front;', 142, 15, '', 'J9780A 2530-8 PoE+ (front)', null, null, dt + 'j9780a 2530 poeplus front'),
-            this.createVertexTemplateEntry(s + 'j9780a_2530_8_poeplus_rear;', 142, 15, '', 'J9780A 2530-8 PoE+ (rear)', null, null, dt + 'j9780a 2530 poeplus rear'),
+            this.createVertexTemplateEntry(s + 'j9780a_2530_8_poeplus_rear;', 87, 15, '', 'J9780A 2530-8 PoE+ (rear)', null, null, dt + 'j9780a 2530 poeplus rear'),
             this.createVertexTemplateEntry(s + 'j9781a_2530_48_front;', 142, 15, '', 'J9781A 2530-48 (front)', null, null, dt + 'j9781a 2530 48 front'),
             this.createVertexTemplateEntry(s + 'j9782a_2530_24_front;', 142, 15, '', 'J9782A 2530-24 (front)', null, null, dt + 'j9782a 2530 24 front'),
             this.createVertexTemplateEntry(s + 'j9821a_540r_zl2_switch_rear;', 142, 56, '', 'J9821A 540R zl2 Switch (rear)', null, null, dt + 'j9821a 540r zl2 switch rear'),

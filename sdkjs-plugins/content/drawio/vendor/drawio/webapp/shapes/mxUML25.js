@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 //**********************************************************************************************************************************************************
 //Input Pin
 //**********************************************************************************************************************************************************
@@ -74,13 +78,20 @@ mxShapeUMLBehaviorAction.prototype.paintVertexShape = function(c, x, y, w, h)
 	var rounded = mxUtils.getValue(this.style, 'rounded', false);
 	var absArcSize = mxUtils.getValue(this.style, 'absoluteArcSize', false);
 	var arcSize = parseFloat(mxUtils.getValue(this.style, 'arcSize', this.arcSize));
+
+	// Uses the arc size of the shapes in the sidebar if none is defined
+	if (isNaN(arcSize))
+	{
+		arcSize = 10;
+		absArcSize = true;
+	}
 	
 	if (!absArcSize)
 	{
 		arcSize = Math.min(w, h) * arcSize;
 	}
 	
-	arcSize = Math.min(arcSize, w * 0.5, h * 0.5);
+	arcSize = Math.max(0, Math.min(arcSize, w * 0.5, h * 0.5));
 	
 	if (!rounded)
 	{
@@ -130,6 +141,43 @@ mxCellRenderer.registerShape(mxShapeUMLBehaviorAction.prototype.cst.BEHAVIOR_ACT
 
 mxShapeUMLBehaviorAction.prototype.constraints = null;
 
+// The side middles and the 45 degree points of the corners as painted
+mxShapeUMLBehaviorAction.prototype.getConstraints = function(style, w, h)
+{
+	var rounded = mxUtils.getValue(style, 'rounded', false);
+	var absArcSize = mxUtils.getValue(style, 'absoluteArcSize', false);
+	var arcSize = parseFloat(mxUtils.getValue(style, 'arcSize', this.arcSize));
+
+	if (isNaN(arcSize))
+	{
+		arcSize = 10;
+		absArcSize = true;
+	}
+
+	if (!absArcSize)
+	{
+		arcSize = Math.min(w, h) * arcSize;
+	}
+
+	arcSize = Math.max(0, Math.min(arcSize, w * 0.5, h * 0.5));
+
+	if (!rounded)
+	{
+		arcSize = 0;
+	}
+
+	var k = arcSize * (1 - Math.SQRT1_2);
+
+	return [new mxConnectionConstraint(new mxPoint(0.5, 0), false),
+		new mxConnectionConstraint(new mxPoint(0.5, 1), false),
+		new mxConnectionConstraint(new mxPoint(0, 0.5), false),
+		new mxConnectionConstraint(new mxPoint(1, 0.5), false),
+		new mxConnectionConstraint(new mxPoint(0, 0), false, null, k, k),
+		new mxConnectionConstraint(new mxPoint(1, 0), false, null, -k, k),
+		new mxConnectionConstraint(new mxPoint(1, 1), false, null, -k, -k),
+		new mxConnectionConstraint(new mxPoint(0, 1), false, null, k, -k)];
+};
+
 //**********************************************************************************************************************************************************
 //Action
 //**********************************************************************************************************************************************************
@@ -164,13 +212,20 @@ mxShapeUMLAction.prototype.paintVertexShape = function(c, x, y, w, h)
 
 	var absArcSize = mxUtils.getValue(this.style, 'absoluteArcSize', false);
 	var arcSize = parseFloat(mxUtils.getValue(this.style, 'arcSize', this.arcSize));
+
+	// Uses the arc size of the shapes in the sidebar if none is defined
+	if (isNaN(arcSize))
+	{
+		arcSize = 10;
+		absArcSize = true;
+	}
 	
 	if (!absArcSize)
 	{
 		arcSize = Math.min(w, h) * arcSize;
 	}
 	
-	arcSize = Math.min(arcSize, w * 0.5, h * 0.5);
+	arcSize = Math.max(0, Math.min(arcSize, w * 0.5, h * 0.5));
 	
 	c.begin();
 	c.moveTo(0, arcSize);
@@ -191,6 +246,40 @@ mxShapeUMLAction.prototype.paintVertexShape = function(c, x, y, w, h)
 mxCellRenderer.registerShape(mxShapeUMLAction.prototype.cst.ACTION, mxShapeUMLAction);
 
 mxShapeUMLAction.prototype.constraints = null;
+
+// The end of the pin on the right (flipped shapes are mirrored by the graph),
+// the middles of the other sides of the body and the 45 degree points of its
+// corners. Positions that depend on the size are relative, so edges follow a
+// resize; only the 10 px pin and the absolute corners are offsets.
+mxShapeUMLAction.prototype.getConstraints = function(style, w, h)
+{
+	var absArcSize = mxUtils.getValue(style, 'absoluteArcSize', false);
+	var arcSize = parseFloat(mxUtils.getValue(style, 'arcSize', this.arcSize));
+
+	if (isNaN(arcSize))
+	{
+		arcSize = 10;
+		absArcSize = true;
+	}
+
+	if (!absArcSize)
+	{
+		arcSize = Math.min(w, h) * arcSize;
+	}
+
+	arcSize = Math.max(0, Math.min(arcSize, w * 0.5, h * 0.5));
+
+	var k = arcSize * (1 - Math.SQRT1_2);
+
+	return [new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, -5, 0),
+		new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, -5, 0),
+		new mxConnectionConstraint(new mxPoint(0, 0.5), false),
+		new mxConnectionConstraint(new mxPoint(1, 0.5), false),
+		new mxConnectionConstraint(new mxPoint(0, 0), false, null, k, k),
+		new mxConnectionConstraint(new mxPoint(1, 0), false, null, -10 - k, k),
+		new mxConnectionConstraint(new mxPoint(1, 1), false, null, -10 - k, -k),
+		new mxConnectionConstraint(new mxPoint(0, 1), false, null, k, -k)];
+};
 
 //**********************************************************************************************************************************************************
 //Action with parameters
@@ -226,13 +315,20 @@ mxShapeUMLActionParams.prototype.paintVertexShape = function(c, x, y, w, h)
 
 	var absArcSize = mxUtils.getValue(this.style, 'absoluteArcSize', false);
 	var arcSize = parseFloat(mxUtils.getValue(this.style, 'arcSize', this.arcSize));
+
+	// Uses the arc size of the shapes in the sidebar if none is defined
+	if (isNaN(arcSize))
+	{
+		arcSize = 10;
+		absArcSize = true;
+	}
 	
 	if (!absArcSize)
 	{
 		arcSize = Math.min(w, h) * arcSize;
 	}
 	
-	arcSize = Math.min(arcSize, w * 0.5, h * 0.5);
+	arcSize = Math.max(0, Math.min(arcSize, w * 0.5, h * 0.5));
 	
 	c.begin();
 	c.moveTo(20, arcSize);
@@ -259,3 +355,37 @@ mxShapeUMLActionParams.prototype.paintVertexShape = function(c, x, y, w, h)
 mxCellRenderer.registerShape(mxShapeUMLActionParams.prototype.cst.ACTION_PARAMS, mxShapeUMLActionParams);
 
 mxShapeUMLActionParams.prototype.constraints = null;
+
+// The two input pins on the left, the middles of the other sides of the body
+// (which starts behind the parameter box) and the 45 degree points of its
+// corners
+mxShapeUMLActionParams.prototype.getConstraints = function(style, w, h)
+{
+	var absArcSize = mxUtils.getValue(style, 'absoluteArcSize', false);
+	var arcSize = parseFloat(mxUtils.getValue(style, 'arcSize', this.arcSize));
+
+	if (isNaN(arcSize))
+	{
+		arcSize = 10;
+		absArcSize = true;
+	}
+
+	if (!absArcSize)
+	{
+		arcSize = Math.min(w, h) * arcSize;
+	}
+
+	arcSize = Math.max(0, Math.min(arcSize, w * 0.5, h * 0.5));
+
+	var k = arcSize * (1 - Math.SQRT1_2);
+
+	return [new mxConnectionConstraint(new mxPoint(0.5, 0), false, null, 10, 0),
+		new mxConnectionConstraint(new mxPoint(0.5, 1), false, null, 10, 0),
+		new mxConnectionConstraint(new mxPoint(1, 0.5), false),
+		new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, 0, -8),
+		new mxConnectionConstraint(new mxPoint(0, 0.5), false, null, 0, 8),
+		new mxConnectionConstraint(new mxPoint(0, 0), false, null, 20 + k, k),
+		new mxConnectionConstraint(new mxPoint(1, 0), false, null, -k, k),
+		new mxConnectionConstraint(new mxPoint(1, 1), false, null, -k, -k),
+		new mxConnectionConstraint(new mxPoint(0, 1), false, null, 20 + k, -k)];
+};

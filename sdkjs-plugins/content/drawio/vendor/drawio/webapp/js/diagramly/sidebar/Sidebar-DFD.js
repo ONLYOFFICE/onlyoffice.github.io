@@ -1,7 +1,12 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 (function()
 {
 	Sidebar.prototype.addDFDPalette = function()
 	{
+		var sb = this;
 		var w = 100;
 		var h = 100;
 		var s = 'html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.';
@@ -18,7 +23,7 @@
 			this.createVertexTemplateEntry('shape=rhombus;html=1;dashed=0;whiteSpace=wrap;perimeter=rhombusPerimeter;', w * 0.6, h * 0.5, '', 'Decision / Entity Relationship', null, null, this.getTagsForStencil(gn, 'decision entity relationship', dt).join(' ')),
 			this.createVertexTemplateEntry('shape=ellipse;html=1;dashed=0;whiteSpace=wrap;aspect=fixed;perimeter=ellipsePerimeter;', w * 0.3, h * 0.3, '', 'Reference', null, null, this.getTagsForStencil(gn, 'reference', dt).join(' ')),
 			this.createVertexTemplateEntry('shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;dashed=0;', w, h * 0.5, '', 'Product / Result', null, null, this.getTagsForStencil(gn, 'product result', dt).join(' ')),
-			this.createVertexTemplateEntry('shape=manualInput;whiteSpace=wrap;html=1;dashed=0;size=15;', w, h * 0.5, '', 'Order / Command', null, null, this.getTagsForStencil(gn, 'order command', dt).join(' ')),
+			this.createVertexTemplateEntry('shape=manualInput;boundedLbl=1;whiteSpace=wrap;html=1;dashed=0;size=15;', w, h * 0.5, '', 'Order / Command', null, null, this.getTagsForStencil(gn, 'order command', dt).join(' ')),
 			this.createVertexTemplateEntry('shape=document;whiteSpace=wrap;html=1;boundedLbl=1;dashed=0;flipH=1;', w, h * 0.7, '', 'Information / Data Carrier / SOP', null, null, this.getTagsForStencil(gn, 'information data carrier sop', dt).join(' ')),
 			this.createVertexTemplateEntry('triangle;whiteSpace=wrap;html=1;dashed=0;direction=south;', w * 0.6, h * 0.6, '', 'Information/Data Carrier/SOP / Stop State', null, null, this.getTagsForStencil(gn, 'information data carrier sop', dt).join(' ')),
 			this.createVertexTemplateEntry(s + 'archive', w * 0.6, h * 0.6, '', 'Final Report / Archive', null, null, this.getTagsForStencil(gn, 'final report archive', dt).join(' ')),
