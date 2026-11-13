@@ -1,0 +1,6 @@
+Wikidata
+https://www.wikidata.org
+
+Name to Structure's dictionary (data/names/dictionary.tsv.gz) holds names, CAS registry numbers and structures of
+chemical compounds from Wikidata, read on 27 October 2026. Wikidata's data is under Creative Commons CC0 1.0
+(https://creativecommons.org/publicdomain/zero/1.0/): no rights reserved. Octet names Wikidata as the source.

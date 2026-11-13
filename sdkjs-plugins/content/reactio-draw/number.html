@@ -1,0 +1,70 @@
+<!doctype html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+     If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Number compounds</title>
+  <style>
+    /* the editor's colours (bridge.js sets them from ONLYOFFICE's theme); these are the light and dark defaults */
+    :root { --bg: #fff; --fg: #222; --muted: #5b6273; --border: #c5cad6; --field: #fff; --code: #eef1f8; --code-hover: #dfe5f4;
+            --link: #2448c4; --err: #8a1c13; }
+    :root[data-theme=dark] { --bg: #333; --fg: #e8e8e8; --muted: #a8aebb; --border: #666; --field: #2a2a2a; --code: #3d4352;
+            --code-hover: #4a5163; --link: #8fb0ff; --err: #ff8a80; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--fg);
+                 font: 13px -apple-system, "Segoe UI", Arial, sans-serif; }
+    main { padding: 14px 18px; }
+    p { margin: 0 0 10px; line-height: 1.45; }
+    code { font: 12px Menlo, Consolas, monospace; background: var(--code); border-radius: 3px; padding: 0 3px; }
+    .row { display: flex; gap: 18px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+    label { display: inline-flex; gap: 6px; align-items: center; }
+    input[type=text] { width: 90px; padding: 3px 5px; font: inherit; color: var(--fg); background: var(--field);
+                       border: 1px solid var(--border); border-radius: 3px; }
+    :root[data-theme=dark] input[type=checkbox] { color-scheme: dark; }
+    .hint { color: var(--muted); font-size: 12px; margin: -2px 0 8px; line-height: 1.5; }
+    .hint b { color: var(--fg); }
+    .hint a { color: var(--link); text-decoration: none; cursor: pointer; font: 12px Menlo, Consolas, monospace;
+              background: var(--code); border-radius: 3px; padding: 0 3px; }
+    .hint a:hover { background: var(--code-hover); }
+    .hint.buttons { margin-top: 10px; }
+    #status { margin-top: 10px; min-height: 18px; color: var(--link); }
+    #status.err { color: var(--err); }
+    /* Reactio Draw works out of sight: it draws each drawing again with its numbers */
+    #rd { position: absolute; left: -12000px; top: 0; width: 1200px; height: 800px; border: 0; }
+  </style>
+  <script src="../v1/plugins.js"></script>
+  <script>
+    if (!(window.Asc && window.Asc.plugin))
+      document.write('<script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"><\/script>');
+  </script>
+  <script src="bridge.js"></script>
+  <script src="number.js"></script>
+  <script src="winmode.js"></script>
+</head>
+<body>
+  <main>
+    <p>Write a mark where a compound's number goes, in the text and in Reactio Draw drawings:
+      <code>[[aldehyde]]</code> 1, <code>[[aldehyde.OMe]]</code> 1a, <code>[[aldehyde.OMe.num]]</code> 1.1,
+      <code>[[A:catalyst]]</code> A. The same key gets the same number everywhere; drawings count first, in their order.</p>
+    <div class="row">
+      <label>Style <input type="text" id="fmt" value="{n}" title="{n} the number, {a} a letter: S{n} gives S1, S2…"></label>
+      <label>From <input type="text" id="start" value="1" title="the first number (or letter)"></label>
+    </div>
+    <div class="hint">Style: <b>{n}</b> is the number, <b>{a}</b> a letter; the rest is written as it stands.
+      Click to use: <a data-f="{n}">{n}</a> 1, 2, 3 · <a data-f="S{n}">S{n}</a> S1, S2 · <a data-f="{a}">{a}</a> a, b, c ·
+      <a data-f="2-{n}">2-{n}</a> 2-1, 2-2 · <a data-f="({n})">({n})</a> (1), (2).<br>
+      From: the first number, or a letter (c: start at c).</div>
+    <div class="row">
+      <label><input type="checkbox" id="boldText"> Bold in the text</label>
+      <label><input type="checkbox" id="boldDraw"> Bold in the drawings</label>
+    </div>
+    <div class="hint buttons"><b>Number</b>: numbers in place of the marks (numbering again keeps them up to date).<br>
+      <b>Show marks</b>: the marks again, to see which key is which.<br>
+      <b>Remove marks</b>: the numbers stay as plain text, the marks go; the drawings can still be edited.<br>
+      <b>Final copy</b>: removes the marks and replaces the drawings with ordinary pictures, the copy to send.</div>
+    <div id="status"></div>
+  </main>
+  <iframe id="rd" title="Reactio Draw" aria-hidden="true"></iframe>
+  <div id="msg" style="display:none"></div>
+</body>
+</html>
