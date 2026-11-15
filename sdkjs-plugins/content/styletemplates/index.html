@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Plantilles d'estil</title>
+  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+  <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+  <link rel="stylesheet" href="resources/css/styles.css">
+  <script type="text/javascript" src="scripts/i18n.js"></script>
+  <script type="text/javascript" src="scripts/formats.js"></script>
+  <script type="text/javascript" src="scripts/code.js"></script>
+</head>
+<body>
+  <div id="st-root">
+
+    <section class="st-section">
+      <h3 data-i18n="saveTitle"></h3>
+      <label for="st-name" class="st-label" data-i18n="templateName"></label>
+      <input id="st-name" type="text" class="form-control st-input" maxlength="80">
+      <label class="st-check">
+        <input id="st-onlyUsed" type="checkbox">
+        <span data-i18n="onlyUsed"></span>
+      </label>
+      <button id="st-save" type="button" class="btn-text-default st-btn" data-i18n="saveBtn"></button>
+    </section>
+
+    <section class="st-section">
+      <h3 data-i18n="listTitle"></h3>
+      <label class="st-check">
+        <input id="st-createMissing" type="checkbox" checked>
+        <span data-i18n="createMissing"></span>
+      </label>
+      <div id="st-list" class="st-list"></div>
+    </section>
+
+    <section class="st-section">
+      <h3 data-i18n="importTitle"></h3>
+      <p class="st-hint" data-i18n="importHint"></p>
+      <input id="st-file" type="file" accept=".json,.dotx,.docx,.ott,.odt" class="st-hidden">
+      <button id="st-import" type="button" class="btn-text-default st-btn" data-i18n="importBtn"></button>
+    </section>
+
+    <div id="st-status" class="st-status" aria-live="polite"></div>
+  </div>
+</body>
+</html>
