@@ -1,0 +1,81 @@
+{
+	"name": "Random Cat",
+	"nameLocale": {
+		"ru": "Случайный кот",
+		"de": "Zufällige Katze",
+		"fr": "Chat aléatoire",
+		"es": "Gato aleatorio",
+		"it": "Gatto casuale",
+		"pt-BR": "Gato aleatório",
+		"cs": "Náhodná kočka",
+		"zh": "随机猫咪",
+		"ja": "ランダムな猫"
+	},
+	"offered": "Vladimir Prokofiev",
+	"guid": "asc.{A984F2D8-57FF-4DE5-A59D-09F0B06FCF39}",
+	"version": "2.0.0",
+
+	"variations": [
+		{
+			"description": "Insert a random cat picture into your document, spreadsheet or presentation.",
+			"descriptionLocale": {
+				"ru": "Вставляйте случайную фотографию кота в документ, таблицу или презентацию.",
+				"de": "Fügen Sie ein zufälliges Katzenbild in Ihr Dokument, Ihre Tabelle oder Präsentation ein.",
+				"fr": "Insérez une photo de chat aléatoire dans votre document, classeur ou présentation.",
+				"es": "Inserte una foto de gato aleatoria en su documento, hoja de cálculo o presentación.",
+				"it": "Inserisci una foto casuale di un gatto nel documento, nel foglio di calcolo o nella presentazione.",
+				"pt-BR": "Insira uma foto aleatória de gato no seu documento, planilha ou apresentação.",
+				"cs": "Vložte náhodný obrázek kočky do dokumentu, tabulky nebo prezentace.",
+				"zh": "在文档、电子表格或演示文稿中插入随机猫咪图片。",
+				"ja": "ドキュメント、スプレッドシート、プレゼンテーションにランダムな猫の写真を挿入します。"
+			},
+			"url": "index.html",
+
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
+				{
+					"style": "light",
+
+					"100%": { "normal": "resources/light/icon.png" },
+					"125%": { "normal": "resources/light/icon@1.25x.png" },
+					"150%": { "normal": "resources/light/icon@1.5x.png" },
+					"175%": { "normal": "resources/light/icon@1.75x.png" },
+					"200%": { "normal": "resources/light/icon@2x.png" }
+				},
+				{
+					"style": "dark",
+
+					"100%": { "normal": "resources/dark/icon.png" },
+					"125%": { "normal": "resources/dark/icon@1.25x.png" },
+					"150%": { "normal": "resources/dark/icon@1.5x.png" },
+					"175%": { "normal": "resources/dark/icon@1.75x.png" },
+					"200%": { "normal": "resources/dark/icon@2x.png" }
+				}
+			],
+
+			"isViewer": false,
+			"EditorsSupport": [ "word", "cell", "slide" ],
+
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+
+			"initDataType": "none",
+			"initData": "",
+
+			"isUpdateOleOnResize": false,
+
+			"store": {
+				"background": {
+					"light": "#F08A3C",
+					"dark": "#F08A3C"
+				},
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
+				},
+				"categories": [ "entertainment" ]
+			}
+		}
+	]
+}
