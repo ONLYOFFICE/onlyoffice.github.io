@@ -1,0 +1,14 @@
+{
+	"Another cat": "换一只猫",
+	"Insert": "插入",
+	"Image size": "图片大小",
+	"Small": "小",
+	"Medium": "中",
+	"Large": "大",
+	"Loading...": "加载中...",
+	"Failed to load a cat picture. Check your internet connection and try again.": "无法加载猫咪图片。请检查网络连接后重试。",
+	"The picture has been inserted.": "图片已插入。",
+	"Failed to insert the picture.": "图片插入失败。",
+	"Photos provided by": "图片来源：",
+	"Random cat picture": "随机猫咪图片"
+}
