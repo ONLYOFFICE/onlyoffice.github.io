@@ -1,4 +1,4 @@
-/* Traduccions de la interficie. Idioma per defecte: catala. */
+/* Traduccions de la interficie. Default/fallback language: English. */
 (function (window) {
   "use strict";
 
@@ -97,16 +97,16 @@
       working: "Working\u2026"
     }
   };
-  var current = "ca";
+  var current = "en";
 
   function setLang(code) {
     var c = String(code || "").toLowerCase().slice(0, 2);
-    current = STRINGS[c] ? c : "ca";
+    current = STRINGS[c] ? c : "en";
     return current;
   }
 
   function t(key) {
-    var s = (STRINGS[current] && STRINGS[current][key]) || STRINGS.ca[key] || key;
+    var s = (STRINGS[current] && STRINGS[current][key]) || STRINGS.en[key] || key;
     for (var i = 1; i < arguments.length; i++) {
       s = s.split("{" + (i - 1) + "}").join(String(arguments[i]));
     }

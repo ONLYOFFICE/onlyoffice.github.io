@@ -19,10 +19,25 @@
 
   /* ---------------- Emmagatzematge ---------------- */
 
+  /* Keep only well-formed styles/templates (imported files may be malformed) */
+  function cleanStyles(styles) {
+    if (!Array.isArray(styles)) return [];
+    return styles.filter(function (s) {
+      return s && typeof s === "object" && typeof s.name === "string" && s.name !== "";
+    });
+  }
+  function cleanTemplates(data) {
+    if (!Array.isArray(data)) return [];
+    var out = [];
+    data.forEach(function (x) {
+      if (!x || typeof x !== "object" || typeof x.name !== "string" || !x.name) return;
+      out.push({ name: x.name, created: typeof x.created === "string" ? x.created : "", styles: cleanStyles(x.styles) });
+    });
+    return out;
+  }
   function loadTemplates() {
     try {
-      var data = JSON.parse(window.localStorage.getItem(STORE_KEY) || "[]");
-      return Array.isArray(data) ? data : [];
+      return cleanTemplates(JSON.parse(window.localStorage.getItem(STORE_KEY) || "[]"));
     } catch (e) { return []; }
   }
   function saveTemplates(list) {
@@ -348,8 +363,9 @@
     if (!file) return;
     setStatus(t("working"));
     window.STFormats.importFile(file).then(function (res) {
-      if (!res.styles.length) { setStatus(t("noStyles"), "err"); return; }
-      var name = res.name;
+      var name = typeof res.name === "string" ? res.name.trim() : "";
+      res.styles = cleanStyles(res.styles);
+      if (!name || !res.styles.length) { setStatus(t("noStyles"), "err"); return; }
       if (templateExists(name) && !window.confirm(t("overwrite"))) return;
       upsertTemplate({ name: name, created: new Date().toISOString(), styles: res.styles });
       renderList();
@@ -366,7 +382,7 @@
 
   window.Asc.plugin.init = function () {
     var info = window.Asc.plugin.info || {};
-    window.STI18n.setLang(info.lang || "ca");
+    window.STI18n.setLang(info.lang || "en");
 
     el.name = byId("st-name");
     el.onlyUsed = byId("st-onlyUsed");

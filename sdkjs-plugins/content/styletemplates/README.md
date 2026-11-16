@@ -1,51 +1,40 @@
-# Plantilles d'estil (Style Templates) per a ONLYOFFICE
+# Style Templates
 
-Plugin per a l'editor de documents d'ONLYOFFICE (inclòs el de kDrive d'Infomaniak) que permet:
+Style Templates lets you reuse the look of a document. Save the styles of one document as a template, then apply that template to any other document with one click.
 
-- **Desar** els estils d'un document (Normal, Títols 1-9, Cita, etc. i els estils personalitzats) com a plantilla.
-- **Aplicar** una plantilla desada a qualsevol altre document.
-- **Importar** plantilles de Word (`.dotx`, `.docx`) i OpenOffice/LibreOffice (`.ott`, `.odt`).
-- **Exportar** plantilles a `.dotx`, `.ott` o `.json`.
+## Features
 
-Idiomes: català (per defecte), castellà i anglès.
+- **Save** the styles of the current document (Normal, Headings 1-9, Title, Quote, custom styles, etc.) as a named template.
+- **Apply** a saved template to another document. Existing styles are updated and, optionally, missing ones are created.
+- **Import** templates from Word (`.dotx`, `.docx`) and OpenOffice/LibreOffice (`.ott`, `.odt`) files, or from `.json` files exported by this plugin.
+- **Export** templates to `.dotx`, `.ott` or `.json` to share them or keep a backup.
+- Available in English, Spanish and Catalan.
 
-## Estructura
+## How to use
 
-```
-onlyoffice-styletemplates/
-├── config.json              Manifest del plugin
-├── index.html               Interfície del panell
-├── scripts/
-│   ├── i18n.js              Traduccions (ca / es / en)
-│   ├── formats.js           Lectura/escriptura .dotx, .ott, .json (ZIP sense dependències)
-│   └── code.js              Lògica: capturar, aplicar, desar, importar, exportar
-└── resources/
-    ├── css/styles.css
-    ├── light/icon.png, icon@2x.png    (40x40 i 80x80)
-    ├── dark/icon.png, icon@2x.png
-    └── store/icons/icon.svg
-```
+1. Open a document in the text editor and open **Style Templates** from the **Plugins** tab.
+2. To save: type a name, optionally tick *Only styles used in this document*, and click **Save styles from the current document**.
+3. To apply: open another document, find the template in **My templates** and click **Apply**.
+4. To import or export, use **Import a template…** or the **Export as…** menu on each template.
 
-## Propietats que es desen per estil
+No setup is needed.
 
-| Text | Paràgraf |
+## What is saved
+
+| Text | Paragraph |
 |---|---|
-| Font, mida, negreta, cursiva, subratllat, ratllat, majúscules, versaletes, color, espaiat entre caràcters | Alineació, sagnies (esquerra, dreta, primera línia/francesa), espai abans/després, interlineat, nivell d'esquema, mantenir amb el següent, mantenir línies juntes |
+| Font, size, bold, italic, underline, strikethrough, caps, small caps, color, character spacing | Alignment, indents, spacing before/after, line spacing, outline level, keep with next, keep lines together |
 
-També es desa l'herència (`basedOn`).
+The style inheritance (based on) is also saved.
 
-## Limitacions conegudes
+## Limitations
 
-- Les plantilles es guarden al `localStorage` del navegador: són per usuari i per navegador. Per compartir-les o fer-ne còpia, exporta-les.
-- No es desen numeracions/llistes, vores, ombrejats, tabulacions ni estils de taula.
-- La importació de `.dotx`/`.ott` necessita un navegador amb `DecompressionStream` (Chrome 80+, Edge 80+, Firefox 113+, Safari 16.4+).
-- Les exportacions són fitxers mínims amb només els estils i un paràgraf de mostra per estil.
+- Templates are stored in the browser (`localStorage`), so they are per user and per browser. Export them to share them or back them up.
+- Numbering/lists, borders, shading, tab stops and table styles are not saved.
+- Importing `.dotx`/`.ott` requires a browser with `DecompressionStream` support (Chrome/Edge 80+, Firefox 113+, Safari 16.4+).
+- Exported files are minimal: they contain only the styles and a sample paragraph per style.
+- Requires ONLYOFFICE 9.4 or later.
 
-## Llicència
+## License
 
-AGPL-3.0 (vegeu `LICENSE`), la mateixa que el repositori del marketplace d'ONLYOFFICE.
-
-## Instal·lació i publicació
-
-- **Prova local (Desktop):** comprimeix el contingut del repo (amb `config.json` a l'arrel del ZIP), reanomena'l a `.plugin` i instal·la'l des del Gestor de connectors d'ONLYOFFICE Desktop.
-- **kDrive d'Infomaniak:** no permet pujar plugins propis; cal publicar-lo al marketplace d'ONLYOFFICE. Vegeu [`docs/TUTORIAL-GITHUB.md`](docs/TUTORIAL-GITHUB.md).
+AGPL-3.0, see `LICENSE`.
