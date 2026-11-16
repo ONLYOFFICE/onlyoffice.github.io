@@ -26,9 +26,9 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 
 ## How to use
 
-1. Open the **Plugins** tab and click **Originality.ai**.
+1. Open the **Plugins** tab and click **AI & Plagiarism Checker**.
 2. Click the gear button next to **Scan document**, enter your API key and choose the checks, then click the back arrow.
-3. Click **Scan document**. To scan a part of the text, select at least 100 words: the button turns into **Scan selection**. You can also right-click the selection and choose **Scan with Originality.ai**.
+3. Click **Scan document**. To scan a part of the text, select at least 100 words: the button turns into **Scan selection**. You can also right-click the selection and choose **Check for AI and plagiarism**.
 4. To record your writing, click **Writing record**, turn on **Record my writing** and keep the panel open while you write. While it records, the **Writing record** button shows a blinking dot. The page shows the record of the selected writer; click **Watch replay** to replay it, and the back arrow to go back.
 5. After a scan, click **Export report** to save its report.
 

@@ -58,16 +58,16 @@ const ReportDocument = Object.freeze({
 	 */
 	render(model, tr) {
 		const e = ReportDocument._escape;
-		const title = tr("Originality report") + " — " + (model.documentTitle || tr("Untitled document"));
+		const title = tr("AI and plagiarism report") + " — " + (model.documentTitle || tr("Untitled document"));
 
 		return "<!DOCTYPE html>\n<html><head><meta charset=\"UTF-8\"><title>" + e(title) + "</title>"
 			+ "<style>" + ReportDocument._styles + "</style></head><body>"
-			+ "<header><h1>" + e(tr("Originality report")) + "</h1>"
+			+ "<header><h1>" + e(tr("AI and plagiarism report")) + "</h1>"
 			+ "<p class=\"meta\">" + e(model.documentTitle || tr("Untitled document")) + "<br>"
 			+ e(tr("Generated")) + ": " + e(Format.dateTime(model.generatedAt))
 			+ (model.generatedBy ? " · " + e(model.generatedBy) : "") + "</p></header>"
 			+ ReportDocument._scan(model, tr)
-			+ "<footer>" + e(tr("Made with the Originality.ai plugin for ONLYOFFICE.")) + "</footer>"
+			+ "<footer>" + e(tr("Made with the AI & Plagiarism Checker plugin for ONLYOFFICE.")) + "</footer>"
 			+ "</body></html>";
 	},
 

@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/refs/heads/master/schemas/config.schema.json",
-	"name" : "Originality.ai",
+	"name" : "AI & Plagiarism Checker",
 	"guid" : "asc.{CF9942BA-02C3-4AB7-B88E-77C26000E93A}",
 	"version" : "1.0.0",
 	"minVersion" : "9.2.0",
@@ -40,8 +40,8 @@
 
 			"store" : {
 				"background" : {
-					"light" : "#8760FB",
-					"dark"  : "#8760FB"
+					"light" : "#7B5CF0",
+					"dark"  : "#7B5CF0"
 				},
 				"screenshots" : [
 					"resources/store/screenshots/screen_1.png",

@@ -75,7 +75,7 @@ class ReportService {
 			generatedBy   : (info && info.userName) || "",
 			scan          : this._scan,
 		};
-		const name = plugin.tr("Originality report") + " - " + (model.documentTitle || plugin.tr("Untitled document"))
+		const name = plugin.tr("AI and plagiarism report") + " - " + (model.documentTitle || plugin.tr("Untitled document"))
 			+ " - " + new Date(model.generatedAt).toISOString().slice(0, 10);
 		ReportDownload.save(ReportDocument.render(model, (text) => plugin.tr(text)), name);
 	}

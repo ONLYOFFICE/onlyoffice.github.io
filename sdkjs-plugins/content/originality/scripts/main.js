@@ -170,7 +170,7 @@
 		reviews.refresh();
 
 		selection.attach();
-		new SelectionMenu().attach(window.Asc.plugin.tr("Scan with Originality.ai"), () => {
+		new SelectionMenu().attach(window.Asc.plugin.tr("Check for AI and plagiarism"), () => {
 			if (scanView && pages) {
 				pages.showMain();
 				scanView.scanSelection();
