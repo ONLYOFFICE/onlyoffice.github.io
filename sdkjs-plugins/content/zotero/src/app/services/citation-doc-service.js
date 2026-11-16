@@ -223,6 +223,86 @@ class CitationDocService {
     }
 
     /**
+     * The number of the footnote or endnote each field is in, 0 for a field
+     * in the text: citeproc's noteIndex.
+     *
+     * The editor tells no field's note without selecting it, so the fields'
+     * text is found in the text of the notes instead. The fields come in
+     * document order, a note's ones where its reference is, so each is
+     * looked for from where the one before was found on. A field found in
+     * no note ahead is in the text. One in the text whose very text a later
+     * note holds is taken for that note's.
+     * @param {Array<AddinFieldData>} fields - in document order
+     * @returns {Promise<Array<number>>}
+     */
+    async getNoteNumbers(fields) {
+        const notes = await this.#getNoteTexts();
+        /** @param {string} text */
+        const normalize = (text) => text.replace(/\s+/g, " ");
+        const kinds = [notes.footnotes, notes.endnotes].map((texts) => ({
+            texts: texts.map(normalize),
+            note: 0,
+            offset: 0,
+        }));
+
+        return fields.map((field) => {
+            const text = normalize(field.Content || "").trim();
+            if (!text) return 0;
+            // Where each kind of note holds the text next, and how many of
+            // its notes lie before that: the nearer is taken.
+            let best = null;
+            for (const kind of kinds) {
+                for (let note = kind.note; note < kind.texts.length; note++) {
+                    const from = note === kind.note ? kind.offset : 0;
+                    const at = kind.texts[note].indexOf(text, from);
+                    if (at === -1) continue;
+                    const skipped = note - kind.note;
+                    if (!best || skipped < best.skipped) {
+                        best = { kind: kind, note: note, at: at, skipped: skipped };
+                    }
+                    break;
+                }
+            }
+            if (!best) return 0;
+            best.kind.note = best.note;
+            best.kind.offset = best.at + text.length;
+            return best.note + 1;
+        });
+    }
+
+    /**
+     * The text of every footnote and every endnote, in document order.
+     * @returns {Promise<{footnotes: Array<string>, endnotes: Array<string>}>}
+     */
+    #getNoteTexts() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    /** @param {Array<ApiParagraph>} firstParagraphs */
+                    function readNotes(firstParagraphs) {
+                        return firstParagraphs.map(function (first) {
+                            let text = "";
+                            // The paragraphs after the first end with the note.
+                            for (let p = /** @type {ApiParagraph|null} */ (first); p; p = p.GetNext()) {
+                                text += p.GetText() + "\n";
+                            }
+                            return text;
+                        });
+                    }
+                    const doc = Api.GetDocument();
+                    return {
+                        footnotes: readNotes(doc.GetFootnotesFirstParagraphs()),
+                        endnotes: readNotes(doc.GetEndNotesFirstParagraphs()),
+                    };
+                },
+                false,
+                false,
+                (result) => resolve(result || { footnotes: [], endnotes: [] }),
+            );
+        });
+    }
+
+    /**
      * Scans the document body, footnotes and endnotes for paragraphs whose
      * ENTIRE text is a complex field's raw instruction text (e.g. "ADDIN
      * ZOTERO_ITEM CSL_CITATION {json}") exposed as visible content instead
@@ -593,8 +673,11 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async convertNotesToText(fields) {
+        /** @type {Array<AddinFieldData>} */
+        const keptInNotes = [];
+        const currentTexts = await this.#getCurrentFieldTexts();
         const formats = this.#makeFormattingPositions(fields);
-    
+
         for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
             if (!field.FieldId) {
@@ -604,8 +687,22 @@ class CitationDocService {
 
             const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
-            const isReferenceSelected = await this.#selectFieldReference();
-            if (!isReferenceSelected) continue;
+            if (await this.#getNoteStyle()) {
+                // Taking the citation out of its note deletes the note with
+                // all it holds; one with more than this citation is kept,
+                // and the citation updated in it.
+                const isAlone = await this.#isAloneInNote(
+                    currentTexts.get(field.FieldId) || "",
+                );
+                if (!isAlone) {
+                    keptInNotes.push(field);
+                    continue;
+                }
+                const isReferenceSelected = await this.#selectFieldReference();
+                if (!isReferenceSelected) continue;
+            }
+            // The note reference, or the field itself, is selected: it is
+            // replaced by the field in the text.
             await this.#removeSuperscript();
             await this.#removeSelectedContent();
             await this.#addAddinField(field);
@@ -619,6 +716,7 @@ class CitationDocService {
                 await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
             }
         }
+        await this.#updateFieldsInPlace(keptInNotes, formats);
     }
 
     /**
@@ -658,13 +756,7 @@ class CitationDocService {
     async convertNotesStyle(fields, notesStyle) {
         /** @type {Array<AddinFieldData>} */
         const editedFields = [];
-        // What the fields read now, to tell a note that holds nothing but
-        // its citation; the fields given carry the new text.
-        /** @type {Map<string, string>} */
-        const currentTexts = new Map();
-        (await this.#getAllAddinFields()).forEach(function (field) {
-            if (field.FieldId) currentTexts.set(field.FieldId, field.Content || "");
-        });
+        const currentTexts = await this.#getCurrentFieldTexts();
         const formats = this.#makeFormattingPositions(fields);
 
         for (let i = 0; i < fields.length; i++) {
@@ -698,11 +790,12 @@ class CitationDocService {
                 }
                 const isReferenceSelected = await this.#selectFieldReference();
                 if (!isReferenceSelected) continue;
-                await this.#removeSuperscript();
-                await this.#removeSelectedContent();
             }
-
-            // Field is inline or its note is gone - put it in a new note
+            // The note reference, or the field itself in the text, is
+            // selected: it goes, and a new note takes its place. A note
+            // added over a selection would only follow it.
+            await this.#removeSuperscript();
+            await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
@@ -715,24 +808,53 @@ class CitationDocService {
                 await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
             }
         }
-        if (editedFields.length) {
-            await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod(
-                    "UpdateAddinFields",
-                    [editedFields],
-                    resolve,
-                );
-            });
-            // Apply formatting (italic, bold, etc.) after updating fields
-            for (const field of editedFields) {
-                const formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                const selectFieldResult = await this.#selectField(field.FieldId);
-                if (!selectFieldResult) continue;
-                await CslDocFormatter.formatAfterUpdate(
-                    formatting,
-                );
-            }
+        await this.#updateFieldsInPlace(editedFields, formats);
+    }
+
+    /**
+     * What the fields of the document read now, by field id, to tell a
+     * note that holds nothing but its citation.
+     * @returns {Promise<Map<string, string>>}
+     */
+    async #getCurrentFieldTexts() {
+        /** @type {Map<string, string>} */
+        const texts = new Map();
+        (await this.#getAllAddinFields()).forEach(function (field) {
+            if (field.FieldId) texts.set(field.FieldId, field.Content || "");
+        });
+        return texts;
+    }
+
+    /**
+     * Gives fields their new text where they are, formatted as the style
+     * says: the formatting of the old text is cleared first, as the new
+     * text takes it on otherwise.
+     * @param {Array<AddinFieldData>} fields - with plain text, as
+     *  #makeFormattingPositions leaves them
+     * @param {Map<string, {text: string, formatting: Array<FormattingPositions>}>} formats
+     * @returns {Promise<void>}
+     */
+    async #updateFieldsInPlace(fields, formats) {
+        if (!fields.length) return;
+        for (const field of fields) {
+            if (!field.Content) continue;
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            await CslDocFormatter.clearFormatting();
+        }
+        await new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod(
+                "UpdateAddinFields",
+                [fields],
+                resolve,
+            );
+        });
+        for (const field of fields) {
+            const formatting = formats.get(field.FieldId);
+            if (!formatting) continue;
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            await CslDocFormatter.formatAfterUpdate(formatting);
         }
     }
 

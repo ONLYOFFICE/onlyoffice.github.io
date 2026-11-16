@@ -303,6 +303,14 @@ class CSLCitation {
     }
 
     /**
+     * The number of the note the citation is in, 0 for one in the text.
+     * @returns {number}
+     */
+    getNoteIndex() {
+        return Number(this._properties.noteIndex) || 0;
+    }
+
+    /**
      * @param {string} plainCitation
      * @returns
      */

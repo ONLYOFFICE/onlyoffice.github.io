@@ -992,7 +992,7 @@ class CitationService {
         CSLCitation.resetUsedIDs();
         return this.citationDocService
             .getAddinZoteroFields()
-            .then(function (/** @type {AddinFieldData[]} */ arrFields) {
+            .then(async function (/** @type {AddinFieldData[]} */ arrFields) {
                 let numOfItems = 0;
                 let bibFieldValue = " ";
                 self.#bibliographyEdits = new BibliographyEdits();
@@ -1018,7 +1018,9 @@ class CitationService {
                         field.Value.indexOf(self._citPrefix) !== -1
                     );
                 });
-                let fieldsWithCitations = fields.map(function (field) {
+                const noteNumbers =
+                    await self.citationDocService.getNoteNumbers(fields);
+                let fieldsWithCitations = fields.map(function (field, index) {
                     let citationObject = self.#extractField(field);
 
                     let citationID = ""; // old format
@@ -1033,6 +1035,7 @@ class CitationService {
                         numOfItems +=
                             cslCitation.fillFromObject(citationObject);
                     }
+                    cslCitation.setNoteIndex(noteNumbers[index]);
                     self._storage.addCslCitation(cslCitation);
 
                     return { field: { ...field }, cslCitation: cslCitation };
@@ -1416,7 +1419,8 @@ class CitationService {
 
     /**
      * @param {Array<SearchResultItem>} items
-     * @returns {Promise<boolean>}
+     * @returns {Promise<{hasNotes: boolean, citationID: string}>} whether a
+     *  note was made for the citation, and the id of the citation
      */
     async insertSelectedCitations(items) {
         const self = this;
@@ -1435,9 +1439,20 @@ class CitationService {
             items.forEach(function (item) {
                 cslCitation.fillFromObject(item);
             });
+            // Its place is not known before it is in the document: it is
+            // taken for the last, in a note after the last one, and updated
+            // where it is once inserted.
+            const isNoteStyle =
+                "note" === this._cslStylesManager.getLastUsedFormat();
+            cslCitation.setNoteIndex(
+                isNoteStyle ? this._storage.getLastNoteIndex() + 1 : 0,
+            );
             this._storage.addCslCitation(cslCitation);
             return self.#formatInsertLink(cslCitation);
-        });
+        }).then((hasNotes) => ({
+            hasNotes: hasNotes,
+            citationID: cslCitation.citationID,
+        }));
     }
 
     /**
@@ -1552,8 +1567,11 @@ class CitationService {
      * Rewrites the document's citations. By default it reformats the data the
      * document already stores; with refreshItems it first re-reads every cited
      * item from Zotero and replaces that data.
+     * A citation just inserted is given as insertedCitationID: it was
+     * formatted as the last one of the document, its place there unknown,
+     * so it is updated even when the other citations are skipped.
      * @param {boolean|undefined} bOverwriteManualEdits
-     * @param {{skipCitations?: boolean, skipBibliography?: boolean, refreshItems?: boolean, onProgress?: RefreshProgressCallback}} [options]
+     * @param {{skipCitations?: boolean, skipBibliography?: boolean, refreshItems?: boolean, onProgress?: RefreshProgressCallback, insertedCitationID?: string}} [options]
      * @returns {Promise<Array<string>>}
      */
     async updateCslItems(bOverwriteManualEdits, options) {
@@ -1578,11 +1596,20 @@ class CitationService {
                 options && options.skipBibliography
             );
 
-            if (!bSkipCitations && typeof bOverwriteManualEdits === "boolean") {
-                updatedFields = await this.#getUpdatedFields(
-                    fieldsWithCitations,
-                    bOverwriteManualEdits,
-                );
+            if (typeof bOverwriteManualEdits === "boolean") {
+                const insertedCitationID = options && options.insertedCitationID;
+                const fieldsToUpdate = bSkipCitations
+                    ? fieldsWithCitations.filter(function (item) {
+                        return !!insertedCitationID &&
+                            item.cslCitation.citationID === insertedCitationID;
+                    })
+                    : fieldsWithCitations;
+                if (fieldsToUpdate.length) {
+                    updatedFields = await this.#getUpdatedFields(
+                        fieldsToUpdate,
+                        bOverwriteManualEdits,
+                    );
+                }
             }
 
             if (!bSkipBibliography && bibField) {
@@ -1610,6 +1637,7 @@ class CitationService {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
+            this.#numberAsInNotes(fieldsWithCitations);
 
             await this.#prepareStorageForCurrentStyle(options);
 
@@ -1701,6 +1729,9 @@ class CitationService {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
+            if (notesStyle) {
+                this.#numberAsInNotes(fieldsWithCitations);
+            }
 
             await this.#prepareStorageForCurrentStyle();
 
@@ -1735,6 +1766,28 @@ class CitationService {
     }
 
     /**
+     * Numbers the citations as they will be once those in the text are put
+     * into notes of their own, as a notes style has them: each takes the
+     * note after the last one before it, and the notes after it move up.
+     * @param {{cslCitation: CSLCitation}[]} fieldsWithCitations - in
+     *  document order
+     */
+    #numberAsInNotes(fieldsWithCitations) {
+        let added = 0;
+        let lastNote = 0;
+        fieldsWithCitations.forEach(function ({ cslCitation }) {
+            const note = cslCitation.getNoteIndex();
+            if (note === 0) {
+                added++;
+                cslCitation.setNoteIndex(lastNote + added);
+            } else {
+                lastNote = note;
+                cslCitation.setNoteIndex(note + added);
+            }
+        });
+    }
+
+    /**
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
@@ -1742,6 +1795,7 @@ class CitationService {
         try {
             const { fieldsWithCitations } =
                 await this.#synchronizeStorageWithDocItems();
+            this.#numberAsInNotes(fieldsWithCitations);
 
             await this.#prepareStorageForCurrentStyle();
 

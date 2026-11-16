@@ -616,9 +616,12 @@ import "../styles.css";
                     });
             }
 
+            /** @type {string} */
+            let insertedCitationID = "";
             return citationService.insertSelectedCitations(items)
-                .then(function (hasNotes) {
-                    bHasNotes = hasNotes;
+                .then(function (inserted) {
+                    bHasNotes = inserted.hasNotes;
+                    insertedCitationID = inserted.citationID;
                     selectCitation.removeItems(Object.keys(items));
                     return citationService.getCurrentField();
                 })
@@ -629,8 +632,13 @@ import "../styles.css";
                             !AutoUpdatePreferences.shouldUpdateCitations(),
                         skipBibliography:
                             !AutoUpdatePreferences.shouldUpdateBibliography(),
+                        insertedCitationID: insertedCitationID,
                     };
-                    if (bHasNotes) {
+                    // By the style, not by the note made: a citation put
+                    // into a note that is already there makes none.
+                    const bIsNotesFormat =
+                        settings.getStyleManager().getLastUsedFormat() === "note";
+                    if (bIsNotesFormat) {
                         return citationService.updateCslItems(false, updateOptions);
                     }
                     return citationService.updateCslItems(undefined, updateOptions);

@@ -97,3 +97,13 @@
 * Search in collections: the library filter shows the collections of each library as a tree, loaded when a library is opened. A checked library or collection is searched whole, subcollections included; a partly checked one only in its checked collections.
 * Refresh restores the citations of a document Zotero converted for moving between word processors ("Switch to a Different Word Processor…"): the links become citations again and the document's citation style and language are applied.
 * Add "Keep sources sorted" to the citation editing window. Dragging a source unchecks it, so the order set by hand is kept instead of being sorted by the style.
+* Keep the changes made to the bibliography with Zotero in Word or LibreOffice: sources added to it or removed from it, and entries whose text was edited.
+* Fix the year of a citation when the date in Zotero is written as month/year, such as 11/2022: the citation and the bibliography showed the year 11.
+* Fix citations that took the item type, the authors or the date from Zotero's raw item data over its citation data: a source could change its type, list its authors twice or under another role, and repeat name particles such as "van".
+* Fix Refresh keeping outdated data of sources already formatted, such as their order in the bibliography or the letters that tell apart works of the same author and year.
+* Fix styles that failed to apply, such as AMA 11th edition.
+* Fix a citation in the text being doubled when citations are refreshed or edited in a footnote style.
+* Fix switching from a footnote style to an in-text style deleting footnotes together with the text and the other citations they held.
+* Fix italic or bold formatting left over on footnote citations updated in place.
+* Fix a new citation being formatted as the last one in the document when updating the other citations is turned off: footnote styles could show "Ibid." at the first mention, and numeric styles a wrong number.
+* Fix inserting a citation into an existing footnote not updating the other citations.
