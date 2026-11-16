@@ -38,6 +38,7 @@
  * and `CitationItemData.prototype.fillFromObject` (ingests raw Zotero item
  * data directly) - both need the same mapping, just on different input
  * shapes, so keep it in one place rather than two copies drifting apart.
+ * As Zotero's own schema maps them (zotero-schema, csl.types).
  * @type {Object<string, string>}
  */
 const ZOTERO_TYPE_TO_CSL = {
@@ -50,10 +51,11 @@ const ZOTERO_TYPE_TO_CSL = {
     "case": "legal_case",
     "computerProgram": "software",
     "conferencePaper": "paper-conference",
+    "dataset": "dataset",
     "dictionaryEntry": "entry-dictionary",
     "document": "document",
     "email": "personal_communication",
-    "encyclopediaEntry": "entry-encyclopedia",
+    "encyclopediaArticle": "entry-encyclopedia",
     "film": "motion_picture",
     "forumPost": "post",
     "hearing": "hearing",
@@ -66,10 +68,12 @@ const ZOTERO_TYPE_TO_CSL = {
     "map": "map",
     "newspaperArticle": "article-newspaper",
     "patent": "patent",
-    "podcast": "song",
+    "podcast": "broadcast",
+    "preprint": "article",
     "presentation": "speech",
     "radioBroadcast": "broadcast",
     "report": "report",
+    "standard": "standard",
     "statute": "legislation",
     "thesis": "thesis",
     "tvBroadcast": "broadcast",

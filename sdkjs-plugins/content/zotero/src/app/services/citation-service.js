@@ -75,11 +75,6 @@ class CitationService {
      * @type {string|null}
      */
     #formatterCacheKey = null;
-    /**
-     * The URL setting the items in this._formatter were read with: citeproc
-     * keeps the items it has read, so a change of it needs them read again.
-     */
-    #formatterSkipsUrl = false;
     /** @type {boolean} */
     #skipUrlForPaperArticles;
     /** @type {AbbreviationsManager} */
@@ -1273,14 +1268,14 @@ class CitationService {
             bAbbreviate;
 
         if (this._formatter && this.#formatterCacheKey === cacheKey) {
-            if (this.#formatterSkipsUrl !== this.#skipUrlForPaperArticles) {
-                // The items were read with the other URL setting, and
-                // updateItems() reads only the items the engine does not
-                // know yet, so it has to forget them first. This costs far
-                // less than building a new engine.
-                this._formatter.updateItems([]);
-                this.#formatterSkipsUrl = this.#skipUrlForPaperArticles;
-            }
+            // citeproc reads only the items it does not know yet, and keeps
+            // what it worked out for the others: year suffixes, which
+            // names tell authors apart, sort keys. The items may have
+            // changed since - fetched from Zotero, read with the other URL
+            // setting, edited by a co-author, taken back by an undo - so
+            // it forgets them first. This costs far less than building a
+            // new engine.
+            this._formatter.updateItems([]);
             if (arrIds.length) {
                 this._formatter.updateItems(arrIds);
             }
@@ -1325,7 +1320,6 @@ class CitationService {
             true,
         );
         this.#formatterCacheKey = cacheKey;
-        this.#formatterSkipsUrl = this.#skipUrlForPaperArticles;
         if (arrIds.length) {
             this._formatter.updateItems(arrIds);
         }

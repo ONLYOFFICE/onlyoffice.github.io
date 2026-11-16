@@ -517,12 +517,21 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
             "chair": "_chair",
             "editorialDirector": "_editorialDirector",
             "executiveProducer": "_executiveProducer",
-            "originalAuthor": "_originalAuthor",
+            "originalCreator": "_originalAuthor",
             "seriesCreator": "_seriesCreator",
             "castMember": "_performer",
             "podcaster": "_host",
         };
-        itemDataObject.creators.forEach(function (
+        // Zotero's CSL copy of the item already sorts its creators into
+        // CSL roles by Zotero's own rules: the main creator of the type is
+        // the author, and particles such as "van" are split off. The json
+        // copy merged over it is read only when no creator is known, or
+        // the same person would turn up again in another role, or twice.
+        const hasNames = Object.keys(creatorTypeMap).some(function (type) {
+            const list = /** @type {any} */ (self)[creatorTypeMap[type]];
+            return Array.isArray(list) && list.length > 0;
+        });
+        if (!hasNames) itemDataObject.creators.forEach(function (
             /** @type {{firstName: string, lastName: string, name?: string, creatorType?: string}} */ creator
         ) {
             let name = {};
@@ -619,7 +628,12 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "numPages")) {
         this._numberOfPages = itemDataObject.numPages;
     }
-    if (Object.hasOwnProperty.call(itemDataObject, "itemType") && !Object.hasOwnProperty.call(itemDataObject, "type")) {
+    // As with the creators: the type from Zotero's CSL copy stands.
+    if (
+        Object.hasOwnProperty.call(itemDataObject, "itemType") &&
+        !Object.hasOwnProperty.call(itemDataObject, "type") &&
+        !this._type
+    ) {
         this._type = ZOTERO_TYPE_TO_CSL[itemDataObject.itemType] || itemDataObject.itemType;
     }
     if (Object.hasOwnProperty.call(itemDataObject, "extra")) {
