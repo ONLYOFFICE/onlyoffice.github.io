@@ -597,13 +597,20 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "pages")) {
         this._page = itemDataObject.pages;
     }
-    if (Object.hasOwnProperty.call(itemDataObject, "date") && !Object.hasOwnProperty.call(itemDataObject, "issued")) {
+    if (
+        Object.hasOwnProperty.call(itemDataObject, "date") &&
+        !Object.hasOwnProperty.call(itemDataObject, "issued") &&
+        Object.keys(this._issued).length === 0
+    ) {
         var dateStr = itemDataObject.date;
-        if (typeof dateStr === "string" && dateStr) {
-            var parts = dateStr.replace(/\//g, "-").split("-").map(Number).filter(function (n) { return !isNaN(n); });
-            if (parts.length) {
-                this._issued = { "date-parts": [parts] };
-            }
+        var dateMatch = typeof dateStr === "string"
+            ? /^(-?\d{1,4})(?:[-/](\d{1,2}))?(?:[-/](\d{1,2}))?$/.exec(dateStr.trim())
+            : null;
+        if (dateMatch) {
+            var parts = [Number(dateMatch[1])];
+            if (dateMatch[2]) parts.push(Number(dateMatch[2]));
+            if (dateMatch[3]) parts.push(Number(dateMatch[3]));
+            this._issued = { "date-parts": [parts] };
         }
     }
     if (Object.hasOwnProperty.call(itemDataObject, "url") && !Object.hasOwnProperty.call(itemDataObject, "URL")) {
