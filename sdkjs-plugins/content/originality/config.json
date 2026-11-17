@@ -1,6 +1,22 @@
 {
 	"$schema": "https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/refs/heads/master/schemas/config.schema.json",
-	"name" : "AI & Plagiarism Checker",
+	"name" : "Authorship Check",
+	"nameLocale" : {
+		"cs": "Kontrola autorství",
+		"de": "Autorschaft prüfen",
+		"es": "Verificar autoría",
+		"fr": "Vérifier l'auteur",
+		"it": "Verifica autore",
+		"ja-JA": "著者チェック",
+		"nl": "Auteur controleren",
+		"pt": "Verificar autoria",
+		"pt-BR": "Verificar autoria",
+		"ru": "Проверка авторства",
+		"zh": "作者身份检查",
+		"sq-AL": "Kontroll autorësie",
+		"sr-Cyrl-RS": "Провера ауторства",
+		"sr-Latn-RS": "Provera autorstva"
+	},
 	"guid" : "asc.{CF9942BA-02C3-4AB7-B88E-77C26000E93A}",
 	"version" : "1.0.0",
 	"minVersion" : "9.2.0",

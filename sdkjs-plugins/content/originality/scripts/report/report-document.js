@@ -67,7 +67,7 @@ const ReportDocument = Object.freeze({
 			+ e(tr("Generated")) + ": " + e(Format.dateTime(model.generatedAt))
 			+ (model.generatedBy ? " · " + e(model.generatedBy) : "") + "</p></header>"
 			+ ReportDocument._scan(model, tr)
-			+ "<footer>" + e(tr("Made with the AI & Plagiarism Checker plugin for ONLYOFFICE.")) + "</footer>"
+			+ "<footer>" + e(tr("Made with the Authorship Check plugin for ONLYOFFICE.")) + "</footer>"
 			+ "</body></html>";
 	},
 
