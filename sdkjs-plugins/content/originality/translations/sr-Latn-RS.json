@@ -21,7 +21,6 @@
 	"Original": "Originalno",
 	"AI": "VI",
 	"Sentences that look AI-generated": "Rečenice koje izgledaju kao da ih je generisala VI",
-	"Score without an AI allowance": "Ocena bez tolerancije za VI",
 	"Plagiarism": "Plagijat",
 	"matching text": "podudarnog teksta",
 	"No matching sources found.": "Nisu pronađeni podudarni izvori.",
@@ -51,11 +50,6 @@
 	"Credits": "Krediti",
 	"subscription": "pretplata",
 	"AI detection model": "Model za otkrivanje VI",
-	"Standard (English)": "Standardni (engleski)",
-	"Multilingual": "Višejezični",
-	"AI allowance": "Tolerancija za VI",
-	"0% — any AI use counts": "0% — računa se svaka upotreba VI",
-	"How much AI-assisted writing is acceptable before text counts as AI-generated.": "Koliko pisanja uz pomoć VI je prihvatljivo pre nego što se tekst smatra generisanim pomoću VI.",
 	"Checks": "Provere",
 	"Store scans on Originality.ai": "Čuvaj provere na Originality.ai",
 	"Stored scans can be opened on Originality.ai and shared with a link.": "Sačuvane provere mogu se otvoriti na Originality.ai i podeliti putem linka.",
@@ -172,5 +166,9 @@
 	"The key works.": "Ključ radi.",
 	"The key was not accepted": "Ključ nije prihvaćen",
 	"An API key has Latin letters and digits only. Check the keyboard layout.": "API ključ sadrži samo latinična slova i cifre. Proverite raspored tastature.",
-	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Ključ nije proveren: Originality.ai nije odgovorio. Proverite internet vezu."
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Ključ nije proveren: Originality.ai nije odgovorio. Proverite internet vezu.",
+	"Mixed writing": "Mešovit tekst",
+	"Model": "Model",
+	"Model 5.0 Max is more accurate but slower, and uses ten times the credits. Both models detect the language of the text.": "Model 5.0 Max je precizniji, ali sporiji i troši deset puta više kredita. Oba modela sama prepoznaju jezik teksta.",
+	"Originality.ai answered in a form the plugin could not read.": "Originality.ai je odgovorio u obliku koji dodatak nije mogao da pročita."
 }

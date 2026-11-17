@@ -100,6 +100,22 @@ const Format = Object.freeze({
 	},
 
 	/**
+	 * @param {AiVerdict} verdict
+	 * @returns {string} untranslated
+	 */
+	aiVerdict(verdict) {
+		return { original: "Likely original", mixed: "Mixed writing", ai: "Likely AI-generated" }[verdict];
+	},
+
+	/**
+	 * @param {string} model - as the API names it
+	 * @returns {string} its name for people; an unknown one as it is
+	 */
+	aiModel(model) {
+		return { "model-5.0": "Model 5.0", "model-5.0-max": "Model 5.0 Max" }[model] || model;
+	},
+
+	/**
 	 * The usual bands of the Flesch reading-ease score.
 	 * @param {number} score
 	 * @returns {string} untranslated

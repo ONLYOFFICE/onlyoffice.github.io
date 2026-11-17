@@ -6,7 +6,7 @@ The plugin works in the ONLYOFFICE Document Editor, version 9.2 or later. It is 
 
 ## Features
 
-* **AI detection.** The share of original and AI-generated text, with the sentences that look AI-written. The AI allowance sets how much AI-assisted writing is acceptable.
+* **AI detection** with Originality.ai Model 5.0 or 5.0 Max. The share of AI-generated text, a verdict (likely original, mixed or likely AI) and the sentences that look AI-written. The language of the text is detected automatically. 5.0 Max is more accurate and uses ten times the credits.
 * **Plagiarism check.** The share of text found elsewhere and the sources, with the matching phrases.
 * **Readability and fact checking**, if you turn them on.
 * **Marks in the document.** Click a finding to go to its text. The ONLYOFFICE Docs Developer Edition and the desktop editors also highlight the findings in the text.

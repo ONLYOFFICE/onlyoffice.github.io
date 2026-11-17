@@ -21,7 +21,6 @@
 	"Original": "Origjinal",
 	"AI": "IA",
 	"Sentences that look AI-generated": "Fjali që duken të gjeneruara nga IA",
-	"Score without an AI allowance": "Rezultati pa tolerancë për IA",
 	"Plagiarism": "Plagjiatura",
 	"matching text": "tekst që përputhet",
 	"No matching sources found.": "Nuk u gjetën burime që përputhen.",
@@ -51,11 +50,6 @@
 	"Credits": "Kredite",
 	"subscription": "abonim",
 	"AI detection model": "Modeli i zbulimit të IA-së",
-	"Standard (English)": "Standard (anglisht)",
-	"Multilingual": "Shumëgjuhësh",
-	"AI allowance": "Toleranca për IA",
-	"0% — any AI use counts": "0% — çdo përdorim i IA-së llogaritet",
-	"How much AI-assisted writing is acceptable before text counts as AI-generated.": "Sa shkrim me ndihmën e IA-së është i pranueshëm përpara se teksti të llogaritet si i gjeneruar nga IA.",
 	"Checks": "Kontrollet",
 	"Store scans on Originality.ai": "Ruaj kontrollet në Originality.ai",
 	"Stored scans can be opened on Originality.ai and shared with a link.": "Kontrollet e ruajtura mund të hapen në Originality.ai dhe të ndahen me një lidhje.",
@@ -172,5 +166,9 @@
 	"The key works.": "Çelësi funksionon.",
 	"The key was not accepted": "Çelësi nuk u pranua",
 	"An API key has Latin letters and digits only. Check the keyboard layout.": "Një çelës API ka vetëm shkronja latine dhe shifra. Kontrolloni paraqitjen e tastierës.",
-	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Çelësi nuk u kontrollua: Originality.ai nuk u përgjigj. Kontrolloni lidhjen me internetin."
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Çelësi nuk u kontrollua: Originality.ai nuk u përgjigj. Kontrolloni lidhjen me internetin.",
+	"Mixed writing": "Tekst i përzier",
+	"Model": "Modeli",
+	"Model 5.0 Max is more accurate but slower, and uses ten times the credits. Both models detect the language of the text.": "Model 5.0 Max është më i saktë, por më i ngadalshëm dhe përdor dhjetë herë më shumë kredite. Të dy modelet e dallojnë vetë gjuhën e tekstit.",
+	"Originality.ai answered in a form the plugin could not read.": "Originality.ai u përgjigj në një formë që shtojca nuk mundi ta lexonte."
 }

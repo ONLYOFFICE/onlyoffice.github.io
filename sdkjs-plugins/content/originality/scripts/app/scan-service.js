@@ -130,13 +130,21 @@ class ScanService {
 			checkReadability : settings.checkReadability,
 			checkFacts       : settings.checkFacts,
 			aiModel          : settings.aiModel,
-			aiAllowance      : settings.aiAllowance,
 			storeScan        : settings.storeScan,
 			excludedUrls     : settings.excludedUrls,
 		});
 
-		const allowance = settings.checkAi && settings.aiModel === "standard" ? settings.aiAllowance : null;
-		return ScanResult.fromResponse(response, allowance);
+		/** @type {ScanFeature[]} */
+		const requested = [];
+		if (settings.checkAi)
+			requested.push("ai");
+		if (settings.checkPlagiarism)
+			requested.push("plagiarism");
+		if (settings.checkReadability)
+			requested.push("readability");
+		if (settings.checkFacts)
+			requested.push("facts");
+		return ScanResult.fromResponse(response, requested);
 	}
 
 	/**

@@ -89,8 +89,8 @@ const ReportDocument = Object.freeze({
 			html += "<h3>" + e(tr("AI detection")) + "</h3><table>"
 				+ ReportDocument._row(tr("Original"), (100 - ai) + "%")
 				+ ReportDocument._row(tr("AI"), ai + "%")
-				+ ReportDocument._row(tr("Verdict"), tr(result.ai.ai >= 0.5 ? "Likely AI-generated" : "Likely original"))
-				+ ReportDocument._row(tr("AI allowance"), result.ai.allowance === null ? "—" : result.ai.allowance + "%")
+				+ ReportDocument._row(tr("Verdict"), tr(Format.aiVerdict(result.ai.verdict)))
+				+ (result.ai.model ? ReportDocument._row(tr("Model"), Format.aiModel(result.ai.model)) : "")
 				+ "</table>";
 			const flagged = findings.ai.filter((f) => f.flagged);
 			if (flagged.length) {
@@ -119,11 +119,21 @@ const ReportDocument = Object.freeze({
 				+ (r.fleschReadingEase !== null ? ReportDocument._row(tr("Flesch reading ease"), r.fleschReadingEase + " — " + tr(Format.readingEase(r.fleschReadingEase))) : "")
 				+ (r.fleschGradeLevel !== null ? ReportDocument._row(tr("Grade level"), String(r.fleschGradeLevel)) : "")
 				+ "</table>";
+		} else if (result.errors.readability) {
+			html += ReportDocument._failed(tr("Readability"), result.errors.readability, tr);
 		}
 
 		if (result.facts && result.facts.length) {
 			html += "<h3>" + e(tr("Fact check")) + "</h3><ol>" + result.facts.map((f) =>
-				"<li><b>" + e(f.truthfulness) + "</b> " + e(f.fact) + "<br><span class=\"muted\">" + e(f.explanation) + "</span></li>").join("") + "</ol>";
+				"<li><b>" + e(f.classification) + (f.confidence !== null ? " · " + Math.round(f.confidence * 100) + "%" : "") + "</b> " + e(f.claim)
+				+ "<br><span class=\"muted\">" + e(f.explanation) + "</span>"
+				+ (f.sources.length ? "<br>" + f.sources.map((s) => ReportDocument._link(s.url, s.title)).join(" · ") : "")
+				+ "</li>").join("") + "</ol>";
+		} else if (result.facts) {
+			// checked, and the text holds nothing to check
+			html += "<h3>" + e(tr("Fact check")) + "</h3><p class=\"muted\">" + e(tr("No statements to check.")) + "</p>";
+		} else if (result.errors.facts) {
+			html += ReportDocument._failed(tr("Fact check"), result.errors.facts, tr);
 		}
 
 		const details = [];
@@ -156,7 +166,7 @@ const ReportDocument = Object.freeze({
 	 */
 	_failed(check, message, tr) {
 		const e = ReportDocument._escape;
-		return "<h3>" + e(check) + "</h3><p class=\"error\">" + e(tr("This check failed")) + ": " + e(message) + "</p>";
+		return "<h3>" + e(check) + "</h3><p class=\"error\">" + e(tr("This check failed")) + ": " + e(tr(message)) + "</p>";
 	},
 
 	/**

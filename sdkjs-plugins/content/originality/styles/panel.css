@@ -152,6 +152,10 @@ a {
 	color: #3a9d3a;
 }
 
+.verdict--mixed {
+	color: #d68a1a;
+}
+
 .score {
 	display: flex;
 	justify-content: space-between;
@@ -244,12 +248,26 @@ a {
 }
 
 .fact-list__truth {
-	flex: 0 0 34px;
+	flex: 0 0 auto;
+	min-width: 34px;
 	font-weight: 700;
+}
+
+.fact-list__body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
 }
 
 .fact-list__text {
 	line-height: 1.4;
+}
+
+.fact-list__source {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .result-footer {

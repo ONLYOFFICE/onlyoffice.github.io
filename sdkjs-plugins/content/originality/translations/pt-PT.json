@@ -21,7 +21,6 @@
 	"Original": "Original",
 	"AI": "IA",
 	"Sentences that look AI-generated": "Frases que parecem geradas por IA",
-	"Score without an AI allowance": "Pontuação sem tolerância de IA",
 	"Plagiarism": "Plágio",
 	"matching text": "texto correspondente",
 	"No matching sources found.": "Não foram encontradas fontes correspondentes.",
@@ -51,11 +50,6 @@
 	"Credits": "Créditos",
 	"subscription": "subscrição",
 	"AI detection model": "Modelo de deteção de IA",
-	"Standard (English)": "Padrão (inglês)",
-	"Multilingual": "Multilingue",
-	"AI allowance": "Tolerância de IA",
-	"0% — any AI use counts": "0% — qualquer utilização de IA conta",
-	"How much AI-assisted writing is acceptable before text counts as AI-generated.": "Quanta escrita assistida por IA é aceitável antes de o texto contar como gerado por IA.",
 	"Checks": "Verificações",
 	"Store scans on Originality.ai": "Guardar verificações no Originality.ai",
 	"Stored scans can be opened on Originality.ai and shared with a link.": "As verificações guardadas podem ser abertas no Originality.ai e partilhadas através de uma ligação.",
@@ -172,5 +166,9 @@
 	"The key works.": "A chave funciona.",
 	"The key was not accepted": "A chave não foi aceite",
 	"An API key has Latin letters and digits only. Check the keyboard layout.": "Uma chave de API tem apenas letras latinas e dígitos. Verifique o esquema do teclado.",
-	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "A chave não foi verificada: o Originality.ai não respondeu. Verifique a ligação à Internet."
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "A chave não foi verificada: o Originality.ai não respondeu. Verifique a ligação à Internet.",
+	"Mixed writing": "Texto misto",
+	"Model": "Modelo",
+	"Model 5.0 Max is more accurate but slower, and uses ten times the credits. Both models detect the language of the text.": "O Model 5.0 Max é mais preciso, mas mais lento, e usa dez vezes mais créditos. Ambos os modelos detetam o idioma do texto.",
+	"Originality.ai answered in a form the plugin could not read.": "O Originality.ai respondeu numa forma que o plugin não conseguiu ler."
 }

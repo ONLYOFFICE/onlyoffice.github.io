@@ -40,7 +40,7 @@ const { OriginalityClient, OriginalityApiError } = loadScripts(
 
 const request = {
 	title: "t", content: "text", checkAi: true, checkPlagiarism: true, checkReadability: false, checkFacts: false,
-	aiModel: "standard", aiAllowance: 15, storeScan: true, excludedUrls: [],
+	aiModel: "model-5.0", storeScan: true, excludedUrls: [],
 };
 
 /**
@@ -117,4 +117,22 @@ test("a key with anything but printable Latin characters is refused before any r
 	assert.strictEqual(OriginalityClient.acceptsKey("abc def"), false);
 	assert.strictEqual(OriginalityClient.acceptsKey(""), false);
 	await assert.rejects(new OriginalityClient().getBalance("ключ"), (e) => e instanceof OriginalityApiError && e.status === 0 && !e.mayHaveRun);
+});
+
+test("a scan asks for the chosen 5.0 model and nothing of the retired AI allowance", async () => {
+	const realFetch = globalThis.fetch;
+	/** @type {any} */
+	let sent = null;
+	globalThis.fetch = (url, init) => {
+		sent = JSON.parse(String(/** @type {RequestInit} */ (init).body));
+		return Promise.resolve(json(200, { results: {} }));
+	};
+	try {
+		await new OriginalityClient().scan("key", Object.assign({}, request, { aiModel: "model-5.0-max" }));
+	} finally {
+		globalThis.fetch = realFetch;
+	}
+	assert.strictEqual(sent.aiModelVersion, "model-5.0-max");
+	assert.strictEqual(sent.check_ai_allowance, undefined);
+	assert.strictEqual(sent.ai_allowance_threshold, undefined);
 });

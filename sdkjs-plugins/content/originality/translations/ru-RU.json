@@ -21,7 +21,6 @@
 	"Original": "Оригинал",
 	"AI": "ИИ",
 	"Sentences that look AI-generated": "Предложения, похожие на сгенерированные ИИ",
-	"Score without an AI allowance": "Оценка без допуска ИИ",
 	"Plagiarism": "Плагиат",
 	"matching text": "совпадающего текста",
 	"No matching sources found.": "Совпадающих источников не найдено.",
@@ -51,11 +50,6 @@
 	"Credits": "Кредиты",
 	"subscription": "по подписке",
 	"AI detection model": "Модель определения ИИ",
-	"Standard (English)": "Стандартная (английский)",
-	"Multilingual": "Мультиязычная",
-	"AI allowance": "Допуск ИИ",
-	"0% — any AI use counts": "0% — учитывается любое использование ИИ",
-	"How much AI-assisted writing is acceptable before text counts as AI-generated.": "Какая доля помощи ИИ допустима, прежде чем текст будет считаться сгенерированным.",
 	"Checks": "Проверки",
 	"Store scans on Originality.ai": "Сохранять проверки на Originality.ai",
 	"Stored scans can be opened on Originality.ai and shared with a link.": "Сохранённые проверки можно открыть на Originality.ai и поделиться ими по ссылке.",
@@ -172,5 +166,9 @@
 	"The key works.": "Ключ работает.",
 	"The key was not accepted": "Ключ не принят",
 	"An API key has Latin letters and digits only. Check the keyboard layout.": "API-ключ состоит только из латинских букв и цифр. Проверьте раскладку клавиатуры.",
-	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Ключ не проверен: Originality.ai не ответил. Проверьте подключение к интернету."
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Ключ не проверен: Originality.ai не ответил. Проверьте подключение к интернету.",
+	"Mixed writing": "Смешанный текст",
+	"Model": "Модель",
+	"Model 5.0 Max is more accurate but slower, and uses ten times the credits. Both models detect the language of the text.": "Model 5.0 Max точнее, но медленнее и тратит в десять раз больше кредитов. Обе модели сами определяют язык текста.",
+	"Originality.ai answered in a form the plugin could not read.": "Originality.ai ответил в форме, которую плагин не смог прочитать."
 }

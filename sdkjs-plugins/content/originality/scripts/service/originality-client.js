@@ -43,7 +43,6 @@
  * @property {boolean} checkReadability
  * @property {boolean} checkFacts
  * @property {AiModel} aiModel
- * @property {number} aiAllowance - ignored by the multilingual model
  * @property {boolean} storeScan
  * @property {string[]} excludedUrls
  */
@@ -136,28 +135,19 @@ class OriginalityClient {
 	 * @private
 	 */
 	_toWire(request) {
-		const isMultilang = request.aiModel === "multilang";
-
 		/** @type {Record<string, unknown>} */
 		const body = {
-			title                : request.title,
-			content              : request.content,
-			check_ai             : request.checkAi,
-			check_plagiarism     : request.checkPlagiarism,
-			check_facts          : request.checkFacts,
-			check_readability    : request.checkReadability,
-			check_grammar        : false,
-			check_contentQuality : false,
-			storeScan            : request.storeScan,
-			// the English models are retired in favour of the AI allowance; "lite" is what the
-			// documentation's own example still sends next to an allowance threshold
-			aiModelVersion       : isMultilang ? "multilang" : "lite",
+			title             : request.title,
+			content           : request.content,
+			check_ai          : request.checkAi,
+			check_plagiarism  : request.checkPlagiarism,
+			check_facts       : request.checkFacts,
+			check_readability : request.checkReadability,
+			check_grammar     : false,
+			storeScan         : request.storeScan,
+			aiModelVersion    : request.aiModel,
 		};
 
-		if (request.checkAi && !isMultilang) {
-			body.check_ai_allowance = true;
-			body.ai_allowance_threshold = request.aiAllowance;
-		}
 		if (request.checkPlagiarism && request.excludedUrls.length)
 			body.excludedUrls = request.excludedUrls;
 

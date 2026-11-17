@@ -33,16 +33,16 @@
 // @ts-check
 
 /**
- * @typedef {"standard" | "multilang"} AiModel
- * `standard` is Originality's current English model, tuned by the AI allowance; `multilang` is
- * their multilingual model, which takes no allowance.
+ * @typedef {"model-5.0" | "model-5.0-max"} AiModel
+ * Originality's AI detection models: 5.0, and 5.0 Max, more accurate, slower and ten times the
+ * credits. Both tell the language of the text themselves. The earlier English models with their
+ * AI allowance, and the separate multilingual one, are retired.
  */
 
 /**
  * @typedef {Object} PluginSettings
  * @property {string} apiKey
  * @property {AiModel} aiModel
- * @property {number} aiAllowance - per cent of AI-assisted text tolerated: 0, 5, 15, 25 or 40
  * @property {boolean} checkAi
  * @property {boolean} checkPlagiarism
  * @property {boolean} checkReadability
@@ -59,14 +59,10 @@
  */
 class SettingsStore {
 
-	/** the AI allowance levels Originality.ai documents */
-	static allowanceLevels = Object.freeze([0, 5, 15, 25, 40]);
-
 	/** @type {Readonly<PluginSettings>} */
 	static defaults = Object.freeze({
 		apiKey           : "",
-		aiModel          : /** @type {AiModel} */ ("standard"),
-		aiAllowance      : 15,
+		aiModel          : /** @type {AiModel} */ ("model-5.0"),
 		checkAi          : true,
 		checkPlagiarism  : true,
 		checkReadability : false,
@@ -130,9 +126,8 @@ class SettingsStore {
 
 		return {
 			apiKey           : typeof value.apiKey === "string" ? value.apiKey.trim() : d.apiKey,
-			aiModel          : value.aiModel === "multilang" ? "multilang" : "standard",
-			aiAllowance      : SettingsStore.allowanceLevels.indexOf(Number(value.aiAllowance)) !== -1
-				? Number(value.aiAllowance) : d.aiAllowance,
+			// a model stored before 5.0 ("standard", "multilang") is retired: 5.0 takes its place
+			aiModel          : value.aiModel === "model-5.0-max" ? "model-5.0-max" : d.aiModel,
 			checkAi          : bool(value.checkAi, d.checkAi),
 			checkPlagiarism  : bool(value.checkPlagiarism, d.checkPlagiarism),
 			checkReadability : bool(value.checkReadability, d.checkReadability),

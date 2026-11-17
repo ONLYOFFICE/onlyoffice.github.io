@@ -38,20 +38,24 @@ const { ScanResult, ScanFindings } = loadScripts(
 	["domain/scan-result", "domain/scan-findings"],
 	["ScanResult", "ScanFindings"]);
 
-// the shape of `POST /api/v3/scan`, cut down to what the plugin reads
+const all = ["ai", "plagiarism", "readability", "facts"];
+
+// the shape of `POST /api/v3/scan` with the 5.0 models, as the API documentation shows it, cut down
+// to what the plugin reads
 const response = {
 	results: {
 		properties : { publicLink: "https://app.originality.ai/share/abc" },
 		credits    : { used: 9 },
 		ai         : {
-			confidence : { AI: 0.95, Original: 0.05 },
-			blocks     : [
-				{ text: "First sentence. ", result: { fake: 0.9, real: 0.1 } },
-				{ text: "Second sentence.", result: { fake: 0.2, real: 0.8 } },
+			model               : "model-5.0",
+			prediction_label    : "human",
+			ai_assisted_percent : 35,
+			sentences           : [
+				{ start_index: 0, end_index: 16, text: "First sentence. ", ai_score: 0.9 },
+				{ start_index: 16, end_index: 32, text: "Second sentence." },
 			],
 		},
-		aiAllowance : { 15: { confidence: { AI: 0.03, Original: 0.97 }, blocks: [] } },
-		plagiarism  : {
+		plagiarism : {
 			score   : 50,
 			results : [
 				{ phrase: "First sentence.", results: [
@@ -64,42 +68,86 @@ const response = {
 			],
 		},
 		readability : { readability: { fleschReadingEase: 61.2, fleschGradeLevel: 8.1 }, text_stats: { sentenceCount: 2 } },
-		facts       : { error: "not selected" },
+		facts       : { 0: {
+			claim          : "Water boils at 100 °C at sea level.",
+			classification : "True",
+			confidence     : 0.72,
+			explanation    : "At standard pressure.",
+			sources        : [
+				{ title: "Boiling point", url: "https://example.com/boiling", date: "2026-01-01" },
+				{ title: "Not a page", url: "file:///etc/passwd" },
+			],
+			rewrite        : null,
+		} },
+		aiAllowance : { error: "not selected" },
 	},
 };
 
-test("the AI score follows the requested allowance", () => {
-	assert.strictEqual(ScanResult.fromResponse(response, null).ai.ai, 0.95);
-	const allowed = ScanResult.fromResponse(response, 15).ai;
-	assert.strictEqual(allowed.ai, 0.03);
-	assert.strictEqual(allowed.allowance, 15);
-	// an allowance the API did not answer for falls back to the plain score
-	assert.strictEqual(ScanResult.fromResponse(response, 40).ai.allowance, null);
+test("the AI share is read from the 5.0 answer, with a score for each sentence", () => {
+	const ai = ScanResult.fromResponse(response, all).ai;
+	assert.strictEqual(ai.ai, 0.35);
+	assert.strictEqual(ai.original, 0.65);
+	assert.strictEqual(ai.verdict, "mixed");
+	assert.strictEqual(ai.model, "model-5.0");
+	// a sentence without a score is taken as human
+	assert.deepStrictEqual(ai.blocks.map((b) => b.ai), [0.9, 0]);
+});
+
+test("the verdict follows Originality's bands: under 10% original, over 80% AI", () => {
+	assert.strictEqual(ScanResult.verdictOf(0.09), "original");
+	assert.strictEqual(ScanResult.verdictOf(0.1), "mixed");
+	assert.strictEqual(ScanResult.verdictOf(0.8), "mixed");
+	assert.strictEqual(ScanResult.verdictOf(0.81), "ai");
 });
 
 test("plagiarism is grouped by source, and only web pages become sources", () => {
-	const plagiarism = ScanResult.fromResponse(response, null).plagiarism;
+	const plagiarism = ScanResult.fromResponse(response, all).plagiarism;
 	assert.strictEqual(plagiarism.score, 50);
 	assert.deepStrictEqual(plagiarism.sources.map((s) => [s.url, s.matches.length]), [["https://example.com/a", 2]]);
 });
 
-test("a feature that was not asked for is neither a result nor an error", () => {
-	const result = ScanResult.fromResponse(response, null);
+test("fact checks are read from the numbered list, with web sources only", () => {
+	const facts = ScanResult.fromResponse(response, all).facts;
+	assert.deepStrictEqual(facts, [{
+		claim          : "Water boils at 100 °C at sea level.",
+		classification : "True",
+		confidence     : 0.72,
+		explanation    : "At standard pressure.",
+		sources        : [{ title: "Boiling point", url: "https://example.com/boiling" }],
+	}]);
+	assert.strictEqual(ScanResult.fromResponse({ results: { facts: [] } }, ["facts"]).facts.length, 0);
+});
+
+test("a check that was not asked for is neither a result nor an error", () => {
+	const result = ScanResult.fromResponse({ results: { facts: { error: "not selected" } } }, []);
 	assert.strictEqual(result.facts, null);
 	assert.deepStrictEqual(result.errors, {});
-	assert.deepStrictEqual(ScanResult.fromResponse({ results: { ai: { error: "quota" } } }, null).errors, { ai: "quota" });
+	assert.deepStrictEqual(ScanResult.fromResponse({ results: { ai: { error: "quota" } } }, ["ai"]).errors, { ai: "quota" });
+});
+
+test("a requested check the answer says nothing readable about is reported, not left blank", () => {
+	// the answer of a model before 5.0: no share of AI the plugin can read
+	const old = { results: { ai: { confidence: { AI: 0.95, Original: 0.05 } }, plagiarism: {} } };
+	const result = ScanResult.fromResponse(old, ["ai", "plagiarism", "readability"]);
+	assert.strictEqual(result.ai, null);
+	assert.deepStrictEqual(result.errors, {
+		ai          : ScanResult.unreadable,
+		plagiarism  : ScanResult.unreadable,
+		readability : ScanResult.unreadable,
+	});
+	assert.deepStrictEqual(ScanResult.fromResponse(null, ["facts"]).errors, { facts: ScanResult.unreadable });
 });
 
 test("readability, credits and the report link are read", () => {
-	const result = ScanResult.fromResponse(response, null);
+	const result = ScanResult.fromResponse(response, all);
 	assert.deepStrictEqual(result.readability, { fleschReadingEase: 61.2, fleschGradeLevel: 8.1, sentenceCount: 2 });
 	assert.strictEqual(result.creditsUsed, 9);
 	assert.strictEqual(result.publicLink, "https://app.originality.ai/share/abc");
-	assert.strictEqual(ScanResult.fromResponse({ results: { properties: { publicLink: "removed" } } }, null).publicLink, null);
+	assert.strictEqual(ScanResult.fromResponse({ results: { properties: { publicLink: "removed" } } }, []).publicLink, null);
 });
 
 test("findings flag AI sentences and list each plagiarised phrase once", () => {
-	const findings = ScanFindings.fromResult(ScanResult.fromResponse(response, null));
+	const findings = ScanFindings.fromResult(ScanResult.fromResponse(response, all));
 	assert.deepStrictEqual(findings.ai.map((f) => f.flagged), [true, false]);
 	assert.deepStrictEqual(findings.plagiarism.map((f) => [f.text, f.sources.length]),
 		[["First sentence.", 1], ["Second sentence.", 1]]);

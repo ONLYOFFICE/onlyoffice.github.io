@@ -21,7 +21,6 @@
 	"Original": "Originál",
 	"AI": "AI",
 	"Sentences that look AI-generated": "Věty, které vypadají jako vygenerované AI",
-	"Score without an AI allowance": "Skóre bez tolerance AI",
 	"Plagiarism": "Plagiátorství",
 	"matching text": "shodného textu",
 	"No matching sources found.": "Nebyly nalezeny žádné shodné zdroje.",
@@ -51,11 +50,6 @@
 	"Credits": "Kredity",
 	"subscription": "předplatné",
 	"AI detection model": "Model detekce AI",
-	"Standard (English)": "Standardní (angličtina)",
-	"Multilingual": "Vícejazyčný",
-	"AI allowance": "Tolerance AI",
-	"0% — any AI use counts": "0% — počítá se jakékoli použití AI",
-	"How much AI-assisted writing is acceptable before text counts as AI-generated.": "Jaký podíl psaní s pomocí AI je přijatelný, než se text považuje za vygenerovaný AI.",
 	"Checks": "Kontroly",
 	"Store scans on Originality.ai": "Ukládat kontroly na Originality.ai",
 	"Stored scans can be opened on Originality.ai and shared with a link.": "Uložené kontroly lze otevřít na Originality.ai a sdílet pomocí odkazu.",
@@ -172,5 +166,9 @@
 	"The key works.": "Klíč funguje.",
 	"The key was not accepted": "Klíč nebyl přijat",
 	"An API key has Latin letters and digits only. Check the keyboard layout.": "Klíč API obsahuje jen latinská písmena a číslice. Zkontrolujte rozložení klávesnice.",
-	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Klíč nebyl ověřen: Originality.ai neodpověděl. Zkontrolujte připojení k internetu."
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Klíč nebyl ověřen: Originality.ai neodpověděl. Zkontrolujte připojení k internetu.",
+	"Mixed writing": "Smíšený text",
+	"Model": "Model",
+	"Model 5.0 Max is more accurate but slower, and uses ten times the credits. Both models detect the language of the text.": "Model 5.0 Max je přesnější, ale pomalejší a spotřebuje desetkrát více kreditů. Oba modely samy rozpoznají jazyk textu.",
+	"Originality.ai answered in a form the plugin could not read.": "Originality.ai odpověděl ve formě, kterou plugin nedokázal přečíst."
 }

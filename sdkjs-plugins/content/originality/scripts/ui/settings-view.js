@@ -34,6 +34,7 @@
 
 /// <reference path="../settings/settings-store.js" />
 /// <reference path="../service/originality-client.js" />
+/// <reference path="./format.js" />
 
 /**
  * The settings page: shows the stored settings in the controls of `index.html` and stores every
@@ -111,20 +112,12 @@ class SettingsView {
 
 		this._model = new SelectBox("ai-model", { placeholder: "" });
 		this._model.addItems([
-			["standard", tr("Standard (English)")],
-			["multilang", tr("Multilingual")],
+			["model-5.0", Format.aiModel("model-5.0")],
+			["model-5.0-max", Format.aiModel("model-5.0-max")],
 		], this._settings.aiModel);
 		this._model.subscribe((event) => {
 			if (event.type === "selectbox:change")
-				this._update({ aiModel: String(event.detail.current) === "multilang" ? "multilang" : "standard" });
-		});
-
-		this._allowance = new SelectBox("ai-allowance", { placeholder: "" });
-		this._allowance.addItems(SettingsStore.allowanceLevels.map((level) => [String(level), this._allowanceText(level)]),
-			String(this._settings.aiAllowance));
-		this._allowance.subscribe((event) => {
-			if (event.type === "selectbox:change")
-				this._update({ aiAllowance: Number(event.detail.current) });
+				this._update({ aiModel: String(event.detail.current) === "model-5.0-max" ? "model-5.0-max" : "model-5.0" });
 		});
 
 		this._bindCheckbox("check-ai", tr("AI detection"), "checkAi");
@@ -167,12 +160,11 @@ class SettingsView {
 	}
 
 	/**
-	 * The allowance applies to the standard model's AI score only.
+	 * The model matters to the AI detection only.
 	 * @private
 	 */
 	_syncAvailability() {
-		const allowanceApplies = this._settings.checkAi && this._settings.aiModel === "standard";
-		allowanceApplies ? this._allowance.enable() : this._allowance.disable();
+		this._settings.checkAi ? this._model.enable() : this._model.disable();
 		this._settings.apiKey ? this._balanceButton.enable() : this._balanceButton.disable();
 	}
 
@@ -246,15 +238,5 @@ class SettingsView {
 		} finally {
 			this._balanceButton.stopLoading();
 		}
-	}
-
-	/**
-	 * @param {number} level
-	 * @returns {string}
-	 * @private
-	 */
-	_allowanceText(level) {
-		const tr = window.Asc.plugin.tr;
-		return level === 0 ? tr("0% — any AI use counts") : level + "%";
 	}
 }

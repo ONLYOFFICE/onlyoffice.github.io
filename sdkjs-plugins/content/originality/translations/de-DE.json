@@ -21,7 +21,6 @@
 	"Original": "Original",
 	"AI": "KI",
 	"Sentences that look AI-generated": "Sätze, die KI-generiert wirken",
-	"Score without an AI allowance": "Bewertung ohne KI-Toleranz",
 	"Plagiarism": "Plagiat",
 	"matching text": "übereinstimmender Text",
 	"No matching sources found.": "Keine übereinstimmenden Quellen gefunden.",
@@ -51,11 +50,6 @@
 	"Credits": "Credits",
 	"subscription": "Abonnement",
 	"AI detection model": "KI-Erkennungsmodell",
-	"Standard (English)": "Standard (Englisch)",
-	"Multilingual": "Mehrsprachig",
-	"AI allowance": "KI-Toleranz",
-	"0% — any AI use counts": "0% — jede KI-Nutzung zählt",
-	"How much AI-assisted writing is acceptable before text counts as AI-generated.": "Wie viel KI-unterstütztes Schreiben zulässig ist, bevor ein Text als KI-generiert gilt.",
 	"Checks": "Prüfungen",
 	"Store scans on Originality.ai": "Prüfungen auf Originality.ai speichern",
 	"Stored scans can be opened on Originality.ai and shared with a link.": "Gespeicherte Prüfungen können auf Originality.ai geöffnet und per Link geteilt werden.",
@@ -172,5 +166,9 @@
 	"The key works.": "Der Schlüssel funktioniert.",
 	"The key was not accepted": "Der Schlüssel wurde nicht akzeptiert",
 	"An API key has Latin letters and digits only. Check the keyboard layout.": "Ein API-Schlüssel besteht nur aus lateinischen Buchstaben und Ziffern. Prüfen Sie das Tastaturlayout.",
-	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Der Schlüssel wurde nicht geprüft: Originality.ai hat nicht geantwortet. Prüfen Sie die Internetverbindung."
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "Der Schlüssel wurde nicht geprüft: Originality.ai hat nicht geantwortet. Prüfen Sie die Internetverbindung.",
+	"Mixed writing": "Gemischter Text",
+	"Model": "Modell",
+	"Model 5.0 Max is more accurate but slower, and uses ten times the credits. Both models detect the language of the text.": "Model 5.0 Max ist genauer, aber langsamer und verbraucht zehnmal so viele Credits. Beide Modelle erkennen die Sprache des Textes selbst.",
+	"Originality.ai answered in a form the plugin could not read.": "Originality.ai hat in einer Form geantwortet, die das Plugin nicht lesen konnte."
 }

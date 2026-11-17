@@ -21,7 +21,6 @@
 	"Original": "Origineel",
 	"AI": "AI",
 	"Sentences that look AI-generated": "Zinnen die door AI gegenereerd lijken",
-	"Score without an AI allowance": "Score zonder AI-tolerantie",
 	"Plagiarism": "Plagiaat",
 	"matching text": "overeenkomende tekst",
 	"No matching sources found.": "Geen overeenkomende bronnen gevonden.",
@@ -51,11 +50,6 @@
 	"Credits": "Credits",
 	"subscription": "abonnement",
 	"AI detection model": "AI-detectiemodel",
-	"Standard (English)": "Standaard (Engels)",
-	"Multilingual": "Meertalig",
-	"AI allowance": "AI-tolerantie",
-	"0% — any AI use counts": "0% — elk AI-gebruik telt",
-	"How much AI-assisted writing is acceptable before text counts as AI-generated.": "Hoeveel AI-ondersteund schrijven acceptabel is voordat tekst als door AI gegenereerd geldt.",
 	"Checks": "Controles",
 	"Store scans on Originality.ai": "Scans opslaan op Originality.ai",
 	"Stored scans can be opened on Originality.ai and shared with a link.": "Opgeslagen scans kunnen op Originality.ai worden geopend en via een link worden gedeeld.",
@@ -172,5 +166,9 @@
 	"The key works.": "De sleutel werkt.",
 	"The key was not accepted": "De sleutel is niet geaccepteerd",
 	"An API key has Latin letters and digits only. Check the keyboard layout.": "Een API-sleutel bevat alleen Latijnse letters en cijfers. Controleer de toetsenbordindeling.",
-	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "De sleutel is niet gecontroleerd: Originality.ai gaf geen antwoord. Controleer de internetverbinding."
+	"The key was not checked: Originality.ai did not answer. Check the internet connection.": "De sleutel is niet gecontroleerd: Originality.ai gaf geen antwoord. Controleer de internetverbinding.",
+	"Mixed writing": "Gemengde tekst",
+	"Model": "Model",
+	"Model 5.0 Max is more accurate but slower, and uses ten times the credits. Both models detect the language of the text.": "Model 5.0 Max is nauwkeuriger maar trager en gebruikt tien keer zoveel credits. Beide modellen herkennen de taal van de tekst zelf.",
+	"Originality.ai answered in a form the plugin could not read.": "Originality.ai antwoordde in een vorm die de plug-in niet kon lezen."
 }

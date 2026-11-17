@@ -97,11 +97,8 @@ class ScanResultView {
 
 		const aiPercent = Math.round(ai.ai * 100);
 		const originalPercent = 100 - aiPercent;
-		const isLikelyAi = ai.ai >= 0.5;
 
-		card.appendChild(this._verdict(
-			isLikelyAi ? tr("Likely AI-generated") : tr("Likely original"),
-			isLikelyAi ? "verdict--ai" : "verdict--original"));
+		card.appendChild(this._verdict(tr(Format.aiVerdict(ai.verdict)), "verdict--" + ai.verdict));
 
 		const scores = Cards.element("div", "score");
 		scores.appendChild(this._scoreLabel(originalPercent + "%", tr("Original"), "score__label--original"));
@@ -114,9 +111,8 @@ class ScanResultView {
 		bar.appendChild(fill);
 		card.appendChild(bar);
 
-		card.appendChild(Cards.note(ai.allowance !== null
-			? tr("AI allowance") + ": " + ai.allowance + "%"
-			: tr("Score without an AI allowance")));
+		if (ai.model)
+			card.appendChild(Cards.note(tr("Model") + ": " + Format.aiModel(ai.model)));
 
 		const flagged = this._findings.ai.filter((finding) => finding.flagged);
 		if (this._findings.ai.length) {
@@ -224,10 +220,21 @@ class ScanResultView {
 		const list = Cards.element("ul", "fact-list");
 		facts.forEach((fact) => {
 			const item = Cards.element("li", "fact-list__item");
-			item.appendChild(Cards.element("span", "fact-list__truth", fact.truthfulness));
-			const text = Cards.element("span", "fact-list__text", fact.fact);
+			item.appendChild(Cards.element("span", "fact-list__truth", fact.classification
+				+ (fact.confidence !== null ? " · " + Math.round(fact.confidence * 100) + "%" : "")));
+			const body = Cards.element("div", "fact-list__body");
+			const text = Cards.element("div", "fact-list__text", fact.claim);
 			text.title = fact.explanation;
-			item.appendChild(text);
+			body.appendChild(text);
+			fact.sources.forEach((source) => {
+				const link = /** @type {HTMLAnchorElement} */ (Cards.element("a", "fact-list__source", source.title));
+				link.href = source.url;
+				link.target = "_blank";
+				link.rel = "noopener noreferrer";
+				link.title = source.url;
+				body.appendChild(link);
+			});
+			item.appendChild(body);
 			list.appendChild(item);
 		});
 		card.appendChild(list);
@@ -326,6 +333,6 @@ class ScanResultView {
 	_error(apiMessage) {
 		const tr = window.Asc.plugin.tr;
 		return Cards.element("p", "result-note result-note--error",
-			tr("This check failed") + (apiMessage ? ": " + apiMessage : "."));
+			tr("This check failed") + (apiMessage ? ": " + tr(apiMessage) : "."));
 	}
 }

@@ -48,7 +48,7 @@ function serviceOver(text) {
 	const reader = { readDocument: async () => text, readSelection: async () => text };
 	const client = { scan: async (/** @type {string} */ key, /** @type {{ content: string }} */ request) => (sent.push(request.content), {}) };
 	const settings = { load: () => ({ apiKey: "key", checkAi: true, checkPlagiarism: false, checkReadability: false, checkFacts: false,
-		aiModel: "standard", aiAllowance: 0, storeScan: false, excludedUrls: [] }) };
+		aiModel: "model-5.0", storeScan: false, excludedUrls: [] }) };
 	return { service: new ScanService(reader, client, settings), sent: sent };
 }
 

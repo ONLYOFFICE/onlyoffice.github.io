@@ -34,16 +34,21 @@
 
 /**
  * @typedef {Object} AiBlock
- * @property {string} text - a stretch of the scanned text, about a sentence, with its trailing space
+ * @property {string} text - a sentence of the scanned text
  * @property {number} ai - how likely it is AI-written, 0..1
  */
 
 /**
+ * @typedef {"original" | "mixed" | "ai"} AiVerdict
+ */
+
+/**
  * @typedef {Object} AiDetection
- * @property {number} original - confidence the text is original, 0..1
- * @property {number} ai - confidence the text is AI-written, 0..1
+ * @property {number} ai - the share of the text that involves AI, 0..1
+ * @property {number} original - the rest, 0..1
+ * @property {AiVerdict} verdict
+ * @property {string} model - the model that scored it, as the API names it
  * @property {AiBlock[]} blocks
- * @property {number | null} allowance - the AI allowance the score was computed with, if any
  */
 
 /**
@@ -74,11 +79,18 @@
  */
 
 /**
+ * @typedef {Object} FactSource
+ * @property {string} title
+ * @property {string} url
+ */
+
+/**
  * @typedef {Object} FactCheck
- * @property {string} fact
- * @property {string} truthfulness - as the API words it, e.g. "85%"
+ * @property {string} claim
+ * @property {string} classification - as the API words it, e.g. "True"
+ * @property {number | null} confidence - 0..1
  * @property {string} explanation
- * @property {string[]} links
+ * @property {FactSource[]} sources - web pages only
  */
 
 /**
@@ -91,6 +103,16 @@
  * and, if it failed, has an entry in `errors`.
  */
 class ScanResult {
+
+	/**
+	 * Where the share of AI moves the verdict, as Originality.ai puts it for its 5.0 models:
+	 * under 10% likely original, up to 80% mixed, above that likely AI.
+	 */
+	static mixedFrom = 0.1;
+	static aiAbove = 0.8;
+
+	/** the error of a requested check the answer has neither a result nor an error for */
+	static unreadable = "Originality.ai answered in a form the plugin could not read.";
 
 	constructor() {
 		/** @type {AiDetection | null} */
@@ -111,10 +133,11 @@ class ScanResult {
 
 	/**
 	 * @param {unknown} response - the body of `POST /scan`
-	 * @param {number | null} allowance - the AI allowance that was requested, if any
+	 * @param {ScanFeature[]} requested - the checks that were asked for: one the answer says
+	 *   nothing readable about gets {@link ScanResult.unreadable} as its error
 	 * @returns {ScanResult}
 	 */
-	static fromResponse(response, allowance) {
+	static fromResponse(response, requested) {
 		const result = new ScanResult();
 		const results = ScanResult._object(ScanResult._object(response).results);
 
@@ -127,45 +150,51 @@ class ScanResult {
 		if (typeof credits.used === "number")
 			result.creditsUsed = credits.used;
 
-		result._readAi(results, allowance);
+		result._readAi(results.ai);
 		result._readPlagiarism(results.plagiarism);
 		result._readReadability(results.readability);
 		result._readFacts(results.facts);
 
+		requested.forEach((feature) => {
+			if (result[feature] === null && result.errors[feature] === undefined)
+				result.errors[feature] = ScanResult.unreadable;
+		});
 		return result;
 	}
 
 	/**
-	 * The allowance result replaces the plain one when it is there: that is the score the user
-	 * asked for.
-	 * @param {Record<string, unknown>} results
-	 * @param {number | null} allowance
+	 * @param {number} ai - the share of the text that involves AI, 0..1
+	 * @returns {AiVerdict}
+	 */
+	static verdictOf(ai) {
+		if (ai > ScanResult.aiAbove)
+			return "ai";
+		return ai >= ScanResult.mixedFrom ? "mixed" : "original";
+	}
+
+	/**
+	 * The 5.0 models give the share of AI in per cent and a score for each sentence; a sentence
+	 * without a score is taken as human.
+	 * @param {unknown} source
 	 * @private
 	 */
-	_readAi(results, allowance) {
-		const byAllowance = ScanResult._object(results.aiAllowance);
-		const allowanceKey = allowance === null ? null : String(allowance);
-		const source = allowanceKey !== null && byAllowance[allowanceKey] !== undefined
-			? byAllowance[allowanceKey]
-			: results.ai;
-
+	_readAi(source) {
 		if (this._recordError("ai", source))
 			return;
 
 		const ai = ScanResult._object(source);
-		const confidence = ScanResult._object(ai.confidence);
-		if (typeof confidence.AI !== "number" && typeof confidence.Original !== "number")
+		if (typeof ai.ai_assisted_percent !== "number" || !isFinite(ai.ai_assisted_percent))
 			return;
 
-		const aiScore = ScanResult._number(confidence.AI, 1 - ScanResult._number(confidence.Original, 1));
+		const share = Math.min(1, Math.max(0, ai.ai_assisted_percent / 100));
 		this.ai = {
-			ai        : aiScore,
-			original  : ScanResult._number(confidence.Original, 1 - aiScore),
-			allowance : source === results.ai ? null : allowance,
-			blocks    : ScanResult._array(ai.blocks).map((block) => {
-				const b = ScanResult._object(block);
-				const r = ScanResult._object(b.result);
-				return { text: String(b.text || ""), ai: ScanResult._number(r.fake, 0) };
+			ai       : share,
+			original : 1 - share,
+			verdict  : ScanResult.verdictOf(share),
+			model    : String(ai.model || ""),
+			blocks   : ScanResult._array(ai.sentences).map((sentence) => {
+				const s = ScanResult._object(sentence);
+				return { text: String(s.text || ""), ai: ScanResult._number(s.ai_score, 0) };
 			}),
 		};
 	}
@@ -243,24 +272,34 @@ class ScanResult {
 	}
 
 	/**
+	 * The documentation shows the claims as a list keyed by number, so a list and an object of
+	 * them are read alike.
 	 * @param {unknown} source
 	 * @private
 	 */
 	_readFacts(source) {
 		if (this._recordError("facts", source))
 			return;
-		if (!Array.isArray(source))
+		if (!source || typeof source !== "object")
 			return;
 
-		this.facts = source.map((entry) => {
+		const entries = Array.isArray(source) ? source : Object.values(source);
+		this.facts = entries.map((entry) => {
 			const f = ScanResult._object(entry);
 			return {
-				fact         : String(f.fact || ""),
-				truthfulness : String(f.truthfulness || ""),
-				explanation  : String(f.explanation || ""),
-				links        : ScanResult._array(f.links).map(String),
+				claim          : String(f.claim || ""),
+				classification : String(f.classification || ""),
+				confidence     : typeof f.confidence === "number" && isFinite(f.confidence) ? f.confidence : null,
+				explanation    : String(f.explanation || ""),
+				sources        : ScanResult._array(f.sources)
+					.map((s) => {
+						const o = ScanResult._object(s);
+						return { title: String(o.title || o.url || ""), url: String(o.url || "") };
+					})
+					// a source is a web page; anything else is not shown as a link
+					.filter((s) => /^https?:\/\//i.test(s.url)),
 			};
-		});
+		}).filter((fact) => fact.claim !== "");
 	}
 
 	/**
