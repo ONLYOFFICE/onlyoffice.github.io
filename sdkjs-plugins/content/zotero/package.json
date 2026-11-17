@@ -18,7 +18,7 @@
     "devDependencies": {
         "@babel/core": "^7.29.13",
         "@babel/plugin-transform-class-properties": "^7.29.7",
-        "@babel/preset-env": "^7.29.7",
+        "@babel/preset-env": "^7.29.14",
         "@onlyoffice/doceditor-plugin-types": "^10.0.0",
         "@rollup/plugin-babel": "^7.1.0",
         "autoprefixer": "^10.6.2",
