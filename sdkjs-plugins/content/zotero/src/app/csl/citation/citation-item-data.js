@@ -462,8 +462,19 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "URL")) {
         this._URL = itemDataObject.URL;
     }
-    if (Object.hasOwnProperty.call(itemDataObject, "versionNumber")) {
-        this._version = itemDataObject.versionNumber;
+    // "version" is the version of the work in CSL, but the sync version of
+    // the record in Zotero's json data (the one with itemType), which gives
+    // the work's own as versionNumber. The sync version, a number, got into
+    // the fields of documents before; a CSL version is text.
+    if (Object.hasOwnProperty.call(itemDataObject, "itemType")) {
+        if (
+            Object.hasOwnProperty.call(itemDataObject, "versionNumber") &&
+            !this._version
+        ) {
+            this._version = itemDataObject.versionNumber;
+        }
+    } else if (typeof itemDataObject.version === "string") {
+        this._version = itemDataObject.version;
     }
     if (Object.hasOwnProperty.call(itemDataObject, "volume")) {
         this._volume = itemDataObject.volume;

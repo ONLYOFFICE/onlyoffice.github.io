@@ -209,11 +209,17 @@ CslStylesManager.prototype.getStyle = function (
                     // A style the repository does not have, such as one the
                     // user added on another computer, may still have come
                     // along with the document.
-                    const copy =
-                        !resp.ok && fromRepository
-                            ? self._getStyleCopy(styleName)
-                            : null;
-                    return copy ? copy.content : resp.text();
+                    if (resp.ok) {
+                        return resp.text();
+                    }
+                    const copy = fromRepository
+                        ? self._getStyleCopy(styleName)
+                        : null;
+                    if (copy) {
+                        return copy.content;
+                    }
+                    // The error page is no style.
+                    throw "The style " + styleName + " was not found.";
                 },
                 function (error) {
                     const copy = fromRepository

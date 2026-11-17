@@ -107,3 +107,6 @@
 * Fix italic or bold formatting left over on footnote citations updated in place.
 * Fix a new citation being formatted as the last one in the document when updating the other citations is turned off: footnote styles could show "Ibid." at the first mention, and numeric styles a wrong number.
 * Fix inserting a citation into an existing footnote not updating the other citations.
+* Fix the version of software and datasets disappearing from citations and the bibliography.
+* Keep the abstract of a source in its citation whatever the style, as before. A style that prints abstracts asks Zotero for a missing one once a session instead of on every action.
+* Keep Zotero's document preferences set in Word, such as storing citations as bookmarks or delaying citation updates. After the style is changed here, Zotero in Word sets the paragraph style of the bibliography for the new style again.

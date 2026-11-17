@@ -31,6 +31,7 @@
     "Please insert some citation into the document.": "Пожалуйста, вставьте цитату в документ.",
     "Omit Author": "Не выводить автора",
     "Keep sources sorted": "Сортировать источники автоматически",
+    "The citation style of this document is not available. Your current style is used instead.": "Стиль цитирования этого документа недоступен. Вместо него используется ваш текущий стиль.",
     "Connection to Zotero failed": "Не удалось установить соединение с Zotero",
     "Connection to Zotero failed. Make sure Zotero is running": "Не удалось установить соединение с Zotero. Убедитесь, что Zotero запущен",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Не удалось установить соединение с Zotero. Пожалуйста, включите внешние соединения в Zotero. Сделайте это в разделе \"Правка → Настройки → Расширенные\": включите галочку \"Allow other applications on this computer to communicate with Zotero\"",

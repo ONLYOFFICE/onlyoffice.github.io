@@ -31,6 +31,7 @@
     "Please insert some citation into the document.": "文書にいくつかの引用を挿入してください。",
     "Omit Author": "著者を省略する",
     "Keep sources sorted": "出典を自動的に並べ替える",
+    "The citation style of this document is not available. Your current style is used instead.": "この文書の引用スタイルは利用できません。代わりに現在のスタイルが使用されます。",
     "Connection to Zotero failed": "Zoteroへの接続に失敗しました",
     "Connection to Zotero failed. Make sure Zotero is running": "Zoteroへの接続に失敗しました。Zoteroが起動していることを確認してください。",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Zoteroへの接続に失敗しました。Zoteroで外部接続を有効にしてください：編集 → 設定 → 詳細設定 → \"Allow other applications on this computer to communicate with Zotero\"をチェック",

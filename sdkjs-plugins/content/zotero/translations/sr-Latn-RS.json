@@ -31,6 +31,7 @@
     "Please insert some citation into the document.": "Molimo ubacite neki citat u dokument.",
     "Omit Author": "Izostavi autora",
     "Keep sources sorted": "Automatski sortiraj izvore",
+    "The citation style of this document is not available. Your current style is used instead.": "Stil citiranja ovog dokumenta nije dostupan. Umesto njega se koristi vaš trenutni stil.",
     "Connection to Zotero failed": "Neuspelo povezivanje na Zotero",
     "Connection to Zotero failed. Make sure Zotero is running": "Neuspelo povezivanje na Zotero. Molimo proverite da Zotero radi.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Neuspelo povezivanje na Zotero. Molimo omogucite vanjske veze u Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"",

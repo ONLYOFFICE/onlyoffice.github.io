@@ -56,6 +56,7 @@ import { translate } from "./translate-service";
 import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { CitationItem } from "../csl/citation/citation-item";
 import { BibliographyEdits, customEntryToHtml } from "../csl/bibliography";
+import { updateDocumentPrefs } from "../csl/document-prefs";
 import { AdditionalWindow } from "../pages/additional-window";
 import { collectItemKeys } from "../shared/item-keys";
 
@@ -99,6 +100,12 @@ class CitationService {
      * @type {Map<string, CitationItem | null>}
      */
     #uncitedItems = new Map();
+    /**
+     * The items asked from Zotero for their abstract this session: one
+     * that has none there is not asked again on every action.
+     * @type {Set<string>}
+     */
+    #abstractsAskedFor = new Set();
 
     /**
      * @param {LocalesManager} localesManager
@@ -134,11 +141,11 @@ class CitationService {
     }
 
     /**
-     * Persist abstracts only for CSL styles that explicitly reference them.
-     * When the style does not use the variable, storing it only bloats field payloads.
+     * Whether the style in use prints abstracts; so it is taken if the
+     * style is not loaded yet.
      * @returns {boolean}
      */
-    #shouldPersistAbstract() {
+    #styleUsesAbstract() {
         const styleId = this._cslStylesManager.getLastUsedStyleIdOrDefault();
         const styleContent = this._cslStylesManager.cached(styleId);
 
@@ -152,37 +159,14 @@ class CitationService {
     }
 
     /**
-     * @param {any} citationObject
-     * @returns {void}
-     */
-    #stripAbstractFromCitation(citationObject) {
-        if (!citationObject || !Array.isArray(citationObject.citationItems)) {
-            return;
-        }
-
-        citationObject.citationItems.forEach(function (citationItem) {
-            if (
-                citationItem &&
-                citationItem.itemData &&
-                Object.hasOwnProperty.call(citationItem.itemData, "abstract")
-            ) {
-                delete citationItem.itemData.abstract;
-            }
-        });
-    }
-
-    /**
+     * The citation as its field keeps it. The item data stays whole, the
+     * abstract too, whatever the style prints: the document may outlive
+     * the item in Zotero, and Zotero in Word keeps it as well.
      * @param {CSLCitation} cslCitation
      * @returns {any}
      */
     #serializeCitation(cslCitation) {
-        const citationObject = cslCitation.toJSON();
-
-        if (!this.#shouldPersistAbstract()) {
-            this.#stripAbstractFromCitation(citationObject);
-        }
-
-        return citationObject;
+        return cslCitation.toJSON();
     }
 
     /**
@@ -518,16 +502,24 @@ class CitationService {
 
     /** @returns {Promise<boolean>} whether anything was fetched */
     async #hydrateMissingAbstracts() {
-        if (!this.#shouldPersistAbstract()) {
+        if (!this.#styleUsesAbstract()) {
             return false;
         }
 
         return this.#refreshStoredItems((item, id) => {
+            if (this.#abstractsAskedFor.has(id)) {
+                return false;
+            }
             const flatItem = item.toFlatJSON(this._storage.getItemIndex(id));
-            return !(
+            const hasAbstract =
                 Object.hasOwnProperty.call(flatItem, "abstract") &&
-                flatItem.abstract !== ""
-            );
+                flatItem.abstract !== "";
+            if (!hasAbstract) {
+                // Asked once: an item with no abstract in Zotero keeps
+                // having none, and a refresh reads it again anyway.
+                this.#abstractsAskedFor.add(id);
+            }
+            return !hasAbstract;
         }, "json");
     }
 
@@ -876,6 +868,13 @@ class CitationService {
             if (this.#skipUrlForPaperArticles) {
                 this.#updateFormatter();
             }
+            // The citations of the document as they are now: the engine may
+            // still hold those of an earlier action, and updateUncitedItems
+            // drops every item they do not cite - a citation pasted in or
+            // added by a co-author since would miss from the bibliography.
+            this._formatter.rebuildProcessorState(
+                this._storage.getAllCitationsInJson(),
+            );
             // Given anew each time: citeproc keeps the uncited items of
             // the previous bibliography otherwise.
             const citedIds = this.#getCitedItemIds();
@@ -2001,7 +2000,7 @@ class CitationService {
 
         await this.citationDocService.removeTransferHeader();
         if (preferences) {
-            this.#applyDocumentPreferences(preferences, styleManager);
+            await this.#applyDocumentPreferences(preferences, styleManager);
         }
         return { imported, failed, hasPreferences: !!preferences };
     }
@@ -2041,16 +2040,20 @@ class CitationService {
 
         if (!prefXml) return;
 
-        this.#applyDocumentPreferences(prefXml, styleManager);
+        await this.#applyDocumentPreferences(prefXml, styleManager);
     }
 
     /**
      * Saves the style, the language and the note type of Zotero's document
-     * preferences as the ones to use.
+     * preferences as the ones to use. A style that cannot be had - one made
+     * or changed in Zotero that the repository does not know, or one out of
+     * reach offline - is not taken: the style in use stays, and the user is
+     * told.
      * @param {string} prefXml - as Zotero writes it in ZOTERO_PREF
      * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @returns {Promise<void>}
      */
-    #applyDocumentPreferences(prefXml, styleManager) {
+    async #applyDocumentPreferences(prefXml, styleManager) {
         try {
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(prefXml, "text/xml");
@@ -2060,8 +2063,18 @@ class CitationService {
                 const locale = styleEl.getAttribute("locale") || "";
                 if (styleUrl) {
                     const styleId = styleUrl.replace(/^.*\/styles\//, "");
-                    if (styleId) {
+                    const isAvailable = !!styleId && await styleManager
+                        .getStyle(styleId, false)
+                        .then(
+                            (style) => !!style.content,
+                            () => false,
+                        );
+                    if (isAvailable) {
                         localStorage.setItem("zoteroStyleId", styleId);
+                    } else if (styleId !== styleManager.getLastUsedStyleId()) {
+                        this.showWarningMessage(
+                            "The citation style of this document is not available. Your current style is used instead.",
+                        );
                     }
                 }
                 if (locale) {
@@ -2098,28 +2111,20 @@ class CitationService {
         const format = styleManager.getLastUsedFormat();
         const notesStyle = styleManager.getLastUsedNotesStyle();
 
-        let noteTypeValue = "0";
+        let noteType = 0;
         if (format === "note") {
-            noteTypeValue = notesStyle === "endnotes" ? "2" : "1";
+            noteType = notesStyle === "endnotes" ? 2 : 1;
         }
 
-        const hasBib = styleManager.isLastUsedStyleContainBibliography() ? "1" : "0";
-
-        const prefXml =
-            '<data data-version="3" zotero-version="5.0.96">' +
-            '<style id="http://www.zotero.org/styles/' + styleId + '"' +
-            ' locale="' + locale + '"' +
-            ' hasBibliography="' + hasBib + '"' +
-            ' bibliographyStyleHasBeenSet="1"/>' +
-            '<prefs>' +
-            '<pref name="fieldType" value="Field"/>' +
-            '<pref name="automaticJournalAbbreviations" value="true"/>' +
-            '<pref name="noteType" value="' + noteTypeValue + '"/>' +
-            '</prefs>' +
-            '</data>';
-
+        // What Zotero in Word keeps there of its own stays as it is.
         const savedPrefXml = await this.citationDocService.loadStyleFromDocument();
-        if (prefXml !== savedPrefXml) {
+        const prefXml = updateDocumentPrefs(savedPrefXml, {
+            styleId: styleId,
+            locale: locale,
+            hasBibliography: styleManager.isLastUsedStyleContainBibliography(),
+            noteType: noteType,
+        });
+        if (prefXml !== null) {
             await this.#savePrefXmlToDocument(prefXml);
         }
         await this.#saveEmbeddedStyle(styleManager);

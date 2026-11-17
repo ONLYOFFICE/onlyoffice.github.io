@@ -219,7 +219,10 @@ Checkbox.prototype = {
             e.preventDefault();
             if (!self._options.disabled && self._container) {
                 self.toggle();
-                self._container.focus();
+                // The input takes the focus, as with Tab: the container is
+                // no tab stop, so keys (Space, Ctrl+A in a list) go on to
+                // work from the clicked checkbox.
+                if (self._input) self._input.focus();
             }
         };
 

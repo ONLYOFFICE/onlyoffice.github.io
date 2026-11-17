@@ -31,6 +31,7 @@
     "Please insert some citation into the document.": "Si prega di inserire qualche citazione nel documento.",
     "Omit Author": "Ometti Autore",
     "Keep sources sorted": "Mantieni le fonti ordinate",
+    "The citation style of this document is not available. Your current style is used instead.": "Lo stile di citazione di questo documento non è disponibile. Verrà usato lo stile corrente.",
     "Connection to Zotero failed": "Connessione a Zotero non riuscita",
     "Connection to Zotero failed. Make sure Zotero is running": "Connessione a Zotero non riuscita. Assicurati che Zotero sia in esecuzione",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Connessione a Zotero non riuscita. Abilita le connessioni esterne in Zotero: Modifica → Impostazioni → Avanzate → Seleziona \"Allow other applications on this computer to communicate with Zotero\"",
