@@ -68,7 +68,8 @@
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"
 				},
-				"categories" : ["specAbilities", "work"]
+				"categories" : ["specAbilities", "work"],
+				"keywords"   : ["Originality.ai", "AI detector", "plagiarism"]
 			}
 		}
 	]
