@@ -40,6 +40,12 @@
 		window.Asc.plugin.sendToPlugin("onDoc2MdMessage");	
 	};
 
+	window.Asc.plugin.onThemeChanged = function(theme) {
+		window.Asc.plugin.onThemeChangedBase(theme);
+		if (theme["border-regular-control"])
+			document.documentElement.style.setProperty('--table-border-color', theme["border-regular-control"]);
+	};
+
 	function createLoader() {
 		$('#loader-container').removeClass( "hidden" );
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
@@ -166,6 +172,15 @@
 		}
 	};
 
+	function openLinksOutside(oNode) {
+		for (const oLink of oNode.querySelectorAll('a[href]')) {
+			if (oLink.getAttribute('href').startsWith('#'))
+				continue;
+			oLink.setAttribute('target', '_blank');
+			oLink.setAttribute('rel', 'noopener noreferrer');
+		}
+	};
+
 	window.Asc.plugin.attachEvent("onDoc2MdData", function(message) {
 		let result = message.data;
 		if (message.type === 'markdown') {
@@ -173,7 +188,9 @@
 			const lexed = marked.lexer(message.data, options);
 			result = marked.parser(lexed, options);
 		}
-		document.getElementById('preview').replaceChildren(sanitizeHtml(result));
+		let oContent = sanitizeHtml(result);
+		openLinksOutside(oContent);
+		document.getElementById('preview').replaceChildren(oContent);
 		Ps && Ps.update();
 		destroyLoader();
 	});

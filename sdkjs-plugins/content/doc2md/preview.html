@@ -50,6 +50,20 @@
 				border: none !important;
 				height: fit-content;
 			}
+			#preview table {
+				border-collapse: collapse;
+				margin-bottom: 8px;
+			}
+			#preview th, #preview td {
+				border: 1px solid var(--table-border-color, #cfcfcf);
+				padding: 4px 8px;
+			}
+			#preview th > :first-child, #preview td > :first-child {
+				margin-top: 0;
+			}
+			#preview th > :last-child, #preview td > :last-child {
+				margin-bottom: 0;
+			}
 			#container {
 				width: 100%;
 				height: 100%;

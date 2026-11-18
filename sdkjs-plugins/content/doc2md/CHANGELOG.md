@@ -21,3 +21,8 @@
 ## 1.0.4
 
 * Sanitize the preview to prevent script execution from document content.
+
+## 1.0.5
+
+* Show table borders in the preview, colored by the editor theme.
+* Open external links from the preview in a new tab instead of the preview window.
