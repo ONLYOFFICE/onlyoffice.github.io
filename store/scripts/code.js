@@ -30,7 +30,7 @@
  *
  */
 
-/// <reference path="../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
 /// <reference path="./types.js" />
 /// <reference path="./marketplace/ui.js" />
 /// <reference path="./marketplace/storage.js" />
@@ -518,6 +518,7 @@ window.addEventListener('message', function(event) {
 		case 'Error':             _onMessageError(message);     break;
 		case 'Theme':             _onMessageTheme(message);     break;
 		case 'onExternalMouseUp': _onMessageMouseUp();          break;
+		case 'onClickOutside':    _onMessageClickOutside();     break;
 		case 'onClickBack':       PluginCardController.goBackToMarketplace();  break;
 	}
 }, false);
@@ -653,13 +654,20 @@ function _onMessageTheme(message) {
 	// todo change header background color and change icons for plugin cards and for plugin window
 }
 function _onMessageMouseUp() {
+	// Since 1.0.6 the plugin card is a window of its own; a click outside it arrives as 'onClickOutside'.
 	if (pluginVersion > 1000005) {
-		//MarketplacePluginService.closePluginCard();
 		return;
 	}
 	let evt = document.createEvent('MouseEvents');
 	evt.initMouseEvent('mouseup', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 	document.dispatchEvent(evt);
+}
+function _onMessageClickOutside() {
+	// click from the end of a window drag
+	if (pluginVersion < 1000007) {
+		return;
+	}
+	MarketplacePluginService.closePluginCard();
 }
 
 function updateCategories() {

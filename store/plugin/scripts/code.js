@@ -58,6 +58,42 @@
 	/** @type {PluginWindow | null} */
 	let developerWindow = null;
 	let removeGuid = '';
+
+	/** Tells the host's mouse-ups that are clicks outside the plugin windows from the rest. */
+	const OutsideClick = {
+		/** A mouse-up this soon after a drag or resize ends is the one that ended it. */
+		DRAG_END_GRACE_MS: 300,
+		isDragging: false,
+		dragEndedAt: 0,
+		/** @type {Object<string, boolean>} */
+		openDialogs: {},
+		/** @param {boolean} isEnabled */
+		onEnableMouseEvent: function(isEnabled) {
+			this.isDragging = isEnabled;
+			if (!isEnabled)
+				this.dragEndedAt = Date.now();
+		},
+		/** @param {PluginWindow} dialog */
+		onDialogShown: function(dialog) {
+			this.openDialogs[dialog.id] = true;
+		},
+		/** @param {string} windowID */
+		onDialogClosed: function(windowID) {
+			delete this.openDialogs[windowID];
+		},
+		/** @returns {boolean} */
+		isClick: function() {
+			if (this.isDragging || Date.now() - this.dragEndedAt < this.DRAG_END_GRACE_MS)
+				return false;
+			return Object.keys(this.openDialogs).length === 0;
+		}
+	};
+
+	/** @param {string} windowID */
+	function closeDialog(windowID) {
+		OutsideClick.onDialogClosed(windowID);
+		window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+	};
 	let editorVersion = '';
 	let marketplaceURl = '';
 	let pluginOptions = {};
@@ -94,6 +130,13 @@
 
 		applyMarketplaceUrl();
 		applyDevModeButton();
+
+		const baseOnEnableMouseEvent = window.Asc.plugin.onEnableMouseEvent;
+		window.Asc.plugin.onEnableMouseEvent = function(isEnabled) {
+			if (baseOnEnableMouseEvent)
+				baseOnEnableMouseEvent.call(this, isEnabled);
+			OutsideClick.onEnableMouseEvent(isEnabled);
+		};
 
 		// resize window
 		window.Asc.plugin.resizeWindow(winSizes.width, winSizes.height, winSizes.minWidth, winSizes.minHeight, 0, 0);
@@ -268,12 +311,12 @@
 					postMessage( {type: 'Removed', guid: ''} );
 					break;
 			}
-			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+			closeDialog(windowID);
 		} else if (developerWindow && developerWindow.id == windowID) {
 			if (id == 0)
 				developerWindow.command('onClickBtn');
 			else
-				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+				closeDialog(windowID);
 		} else if (PluginCard.window && PluginCard.window.id == windowID) {
 			PluginCard.hide();
 		} else if (id == 'back') {
@@ -343,6 +386,8 @@
 		// mouse up event outside the plugin window
 		if (iframe && iframe.contentWindow) {
 			postMessage( { type: 'onExternalMouseUp' } );
+			if (OutsideClick.isClick())
+				postMessage( { type: 'onClickOutside' } );
 		}
 	};
 
@@ -473,10 +518,11 @@
 				warningWindow = new window.Asc.PluginWindow();
 			}
 			warningWindow.show(variation);
+			OutsideClick.onDialogShown(warningWindow);
 		} else {
 			if (!developerWindow) {
 				developerWindow = new window.Asc.PluginWindow();
-				developerWindow.attachEvent('onWindowMessage', function(message) {
+				developerWindow.attachEvent('onWindowMessage', /** @param {{type: string, url: string}} message */ function(message) {
 					if (message.type == 'SetURL') {
 						const notificationElement = document.getElementById('notification');
 						if (!notificationElement) {
@@ -492,13 +538,14 @@
 						iframe.src = marketplaceURl + window.location.search;
 					}
 					if (developerWindow) {
-						window.Asc.plugin.executeMethod('CloseWindow', [developerWindow.id]);
+						closeDialog(developerWindow.id);
 					}
 				});
 			}
 			developerWindow.show(variation);
+			OutsideClick.onDialogShown(developerWindow);
 		}
-		
+
 	};
 
 	/** @param {boolean} backup */
