@@ -57,6 +57,7 @@ import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { CitationItem } from "../csl/citation/citation-item";
 import { BibliographyEdits, customEntryToHtml } from "../csl/bibliography";
 import { updateDocumentPrefs } from "../csl/document-prefs";
+import { numberAsInNotes } from "../csl/citation/note-numbers";
 import { AdditionalWindow } from "../pages/additional-window";
 import { collectItemKeys } from "../shared/item-keys";
 
@@ -1772,17 +1773,11 @@ class CitationService {
      *  document order
      */
     #numberAsInNotes(fieldsWithCitations) {
-        let added = 0;
-        let lastNote = 0;
-        fieldsWithCitations.forEach(function ({ cslCitation }) {
-            const note = cslCitation.getNoteIndex();
-            if (note === 0) {
-                added++;
-                cslCitation.setNoteIndex(lastNote + added);
-            } else {
-                lastNote = note;
-                cslCitation.setNoteIndex(note + added);
-            }
+        const numbers = numberAsInNotes(
+            fieldsWithCitations.map(({ cslCitation }) => cslCitation.getNoteIndex()),
+        );
+        fieldsWithCitations.forEach(({ cslCitation }, index) => {
+            cslCitation.setNoteIndex(numbers[index]);
         });
     }
 

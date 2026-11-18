@@ -40,6 +40,7 @@
 
 import { CslHtmlParser } from "./csl-html-parser";
 import { CslDocFormatter } from "./csl-doc-formatter";
+import { findNoteNumbers } from "../csl/citation/note-numbers";
 
 /** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiParagraph} ApiParagraph */
 /** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiHyperlink} ApiHyperlink */
@@ -224,50 +225,17 @@ class CitationDocService {
 
     /**
      * The number of the footnote or endnote each field is in, 0 for a field
-     * in the text: citeproc's noteIndex.
-     *
-     * The editor tells no field's note without selecting it, so the fields'
-     * text is found in the text of the notes instead. The fields come in
-     * document order, a note's ones where its reference is, so each is
-     * looked for from where the one before was found on. A field found in
-     * no note ahead is in the text. One in the text whose very text a later
-     * note holds is taken for that note's.
+     * in the text: citeproc's noteIndex. Told from the fields' text, as
+     * findNoteNumbers says.
      * @param {Array<AddinFieldData>} fields - in document order
      * @returns {Promise<Array<number>>}
      */
     async getNoteNumbers(fields) {
         const notes = await this.#getNoteTexts();
-        /** @param {string} text */
-        const normalize = (text) => text.replace(/\s+/g, " ");
-        const kinds = [notes.footnotes, notes.endnotes].map((texts) => ({
-            texts: texts.map(normalize),
-            note: 0,
-            offset: 0,
-        }));
-
-        return fields.map((field) => {
-            const text = normalize(field.Content || "").trim();
-            if (!text) return 0;
-            // Where each kind of note holds the text next, and how many of
-            // its notes lie before that: the nearer is taken.
-            let best = null;
-            for (const kind of kinds) {
-                for (let note = kind.note; note < kind.texts.length; note++) {
-                    const from = note === kind.note ? kind.offset : 0;
-                    const at = kind.texts[note].indexOf(text, from);
-                    if (at === -1) continue;
-                    const skipped = note - kind.note;
-                    if (!best || skipped < best.skipped) {
-                        best = { kind: kind, note: note, at: at, skipped: skipped };
-                    }
-                    break;
-                }
-            }
-            if (!best) return 0;
-            best.kind.note = best.note;
-            best.kind.offset = best.at + text.length;
-            return best.note + 1;
-        });
+        return findNoteNumbers(
+            fields.map((field) => field.Content || ""),
+            notes,
+        );
     }
 
     /**

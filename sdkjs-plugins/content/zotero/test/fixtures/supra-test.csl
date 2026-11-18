@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A note style that prints where a source was first cited, as "supra n."
+     or OSCOLA's "(n 2)" do: "ibid", "Family (n N)", or "Family, Title". -->
+<style xmlns="http://purl.org/net/xbiblio/csl" class="note" version="1.0">
+  <info>
+    <title>Supra test</title>
+    <id>http://www.zotero.org/styles/supra-test</id>
+    <updated>2026-01-01T00:00:00+00:00</updated>
+  </info>
+  <macro name="author">
+    <names variable="author">
+      <name form="short"/>
+    </names>
+  </macro>
+  <citation>
+    <layout delimiter="; ">
+      <choose>
+        <if position="ibid">
+          <text value="ibid"/>
+        </if>
+        <else-if position="subsequent">
+          <text macro="author"/>
+          <text variable="first-reference-note-number" prefix=" (n " suffix=")"/>
+        </else-if>
+        <else>
+          <text macro="author"/>
+          <text variable="title" prefix=", "/>
+        </else>
+      </choose>
+    </layout>
+  </citation>
+</style>
