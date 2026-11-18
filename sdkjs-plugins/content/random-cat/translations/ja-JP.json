@@ -1,0 +1,14 @@
+{
+	"Another cat": "別の猫",
+	"Insert": "挿入",
+	"Image size": "画像サイズ",
+	"Small": "小",
+	"Medium": "中",
+	"Large": "大",
+	"Loading...": "読み込み中...",
+	"Failed to load a cat picture. Check your internet connection and try again.": "猫の写真を読み込めませんでした。インターネット接続を確認して、もう一度お試しください。",
+	"The picture has been inserted.": "画像を挿入しました。",
+	"Failed to insert the picture.": "画像を挿入できませんでした。",
+	"Photos provided by": "写真提供：",
+	"Random cat picture": "ランダムな猫の写真"
+}
