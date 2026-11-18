@@ -95,7 +95,15 @@
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"
 				},
-				"categories": ["specAbilities"]
+				"categories": ["specAbilities"],
+				"keywords": {
+					"en": ["citation", "cite", "bibliography", "references", "sources", "reference manager"],
+					"ru": ["цитирование", "цитаты", "библиография", "список литературы", "ссылки на источники", "источники"],
+					"de": ["Zitation", "Zitat", "Literaturverzeichnis", "Bibliografie", "Quellen", "Quellenangabe"],
+					"fr": ["citation", "bibliographie", "références", "sources"],
+					"es": ["cita", "citas", "bibliografía", "referencias", "fuentes"],
+					"pt-BR": ["citação", "bibliografia", "referências", "fontes"]
+				}
 			}
 		}
 	]
