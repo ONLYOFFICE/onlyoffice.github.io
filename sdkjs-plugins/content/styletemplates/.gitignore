@@ -1,0 +1,5 @@
+node_modules/
+*.plugin
+*.zip
+scripts/test.js
+.DS_Store
