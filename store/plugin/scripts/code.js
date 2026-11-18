@@ -31,7 +31,7 @@
  */
 
 /// <reference path="../../scripts/types.js" />
-/// <reference path="../../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
 
 (function(window, undefined) {
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
@@ -215,7 +215,7 @@
 		/** @param {IframeMessage} data*/
 		getInstalled: function(data) {
 			return new Promise(function(fResolve) {
-				window.Asc.plugin.executeMethod('GetInstalledPlugins', null, function(result) {
+				window.Asc.plugin.executeMethod('GetInstalledPlugins', [], function(result) {
 					fResolve(result);
 				});
 			}).then(function(result) {
@@ -225,7 +225,7 @@
 		/** @param {IframeMessage} data*/
 		install: function(data) {
 			return new Promise(function(fResolve) {
-				window.Asc.plugin.executeMethod('InstallPlugin', [data.config, data.guid], fResolve);
+				window.Asc.plugin.executeMethod('InstallPlugin', [data.config], fResolve);
 			}).then(function(result) {
 				postMessage(result);
 			});
@@ -243,7 +243,7 @@
 		/** @param {IframeMessage} data*/
 		update: function(data) {
 			return new Promise(function(fResolve) {
-				window.Asc.plugin.executeMethod('UpdatePlugin', [data.config, data.guid], fResolve);
+				window.Asc.plugin.executeMethod('UpdatePlugin', [data.config], fResolve);
 			}).then(function(result) {
 				postMessage(result);
 			});
@@ -263,7 +263,7 @@
 
 		// send message that plugin is ready
 		const pluginVersionPromise = new Promise(function(fResolve) {
-			window.Asc.plugin.executeMethod('GetVersion', null, fResolve);
+			window.Asc.plugin.executeMethod('GetVersion', [], fResolve);
 		}).then(function(version) {
 			editorVersion = version;
 		});

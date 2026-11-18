@@ -651,7 +651,7 @@ const PluginCard = {
             pdf: { icon: 'pdf', title: Utils.getTranslated('PDF Editor') }
         };
         let icons = '';
-        ['word', 'cell', 'slide', 'pdf'].forEach(function(type) {
+        /** @type {EditorType[]} */ (['word', 'cell', 'slide', 'pdf']).forEach(function(type) {
             if (editorsSupport.indexOf(type) === -1) {
                 return;
             }

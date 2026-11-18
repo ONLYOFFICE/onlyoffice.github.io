@@ -31,7 +31,7 @@
  */
 
 /// <reference path="../types.js" />
-/// <reference path="../../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
 
 /**
  * @typedef {Object} Messages

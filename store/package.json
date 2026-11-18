@@ -5,6 +5,9 @@
 	"private": true,
 	"dependencies": {
 	  "google-closure-compiler": "20210106.0.0"
+	},
+	"devDependencies": {
+	  "@onlyoffice/doceditor-plugin-types": "^10.0.0"
 	}
   }
   
