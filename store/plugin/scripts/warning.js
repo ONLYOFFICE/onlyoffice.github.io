@@ -31,7 +31,14 @@
  */
 (function(window, undefined) {	
 
-    window.Asc.plugin.init = function() {};
+    window.Asc.plugin.init = function() {
+		window.focus();
+	};
+
+	window.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape')
+			window.Asc.plugin.sendToPlugin('onWindowMessage', {type: 'Close'});
+	});
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		window.Asc.plugin.onThemeChangedBase(theme);

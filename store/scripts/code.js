@@ -519,6 +519,7 @@ window.addEventListener('message', function(event) {
 		case 'Theme':             _onMessageTheme(message);     break;
 		case 'onExternalMouseUp': _onMessageMouseUp();          break;
 		case 'onClickBack':       PluginCardController.goBackToMarketplace();  break;
+		case 'Focus':             window.focus();               break;
 	}
 }, false);
 

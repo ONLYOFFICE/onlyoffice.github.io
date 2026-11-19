@@ -82,6 +82,9 @@
 		 */
 		_CLOSE_ON_CLICK_OUTSIDE_DELAY_MS: 100,
 
+		/** @type {(function(string): void) | null} called with the window ID after a dialog closes */
+		onClose: null,
+
 		/** @type {PluginWindow | null} */
 		_warningWindow: null,
 		/** @type {PluginWindow | null} */
@@ -93,8 +96,10 @@
 
 		/** Asks the user whether to keep a backup of the plugin being removed. */
 		showWarning: function() {
-			if (!this._warningWindow)
+			if (!this._warningWindow) {
 				this._warningWindow = new window.Asc.PluginWindow();
+				this._listen(this._warningWindow);
+			}
 			this._show(this._warningWindow, 'warning.html', window.Asc.plugin.tr('Warning'), [350, 100], ['Yes', 'No']);
 		},
 		/**
@@ -102,14 +107,9 @@
 		 * @param {function({type: string, url: string}): void} onMessage
 		 */
 		showDeveloper: function(onMessage) {
-			const self = this;
 			if (!this._developerWindow) {
 				this._developerWindow = new window.Asc.PluginWindow();
-				this._developerWindow.attachEvent('onWindowMessage', /** @param {{type: string, url: string}} message */ function(message) {
-					onMessage(message);
-					if (self._developerWindow)
-						self.close(self._developerWindow.id);
-				});
+				this._listen(this._developerWindow, onMessage);
 			}
 			this._show(this._developerWindow, 'developer.html', window.Asc.plugin.tr('Developer Mode'), [500, 150], ['Ok', 'Cancel']);
 		},
@@ -136,6 +136,8 @@
 			this.cancelCloseOnClickOutside(windowID);
 			delete this._openDialogBoxes[windowID];
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+			if (this.onClose)
+				this.onClose(windowID);
 		},
 		/** @returns {boolean} */
 		hasOpenDialogs: function() {
@@ -152,7 +154,7 @@
 				timer: window.setTimeout(function() {
 					self._pendingClose = null;
 					if (self._openDialogBoxes[windowID])
-						window.Asc.plugin.button(-1, windowID);
+						self._closeAsCross(windowID);
 				}, this._CLOSE_ON_CLICK_OUTSIDE_DELAY_MS)
 			};
 		},
@@ -162,6 +164,32 @@
 				return;
 			window.clearTimeout(this._pendingClose.timer);
 			this._pendingClose = null;
+		},
+		/**
+		 * Closes the dialog the same way as the cross in its header: the host sends button(-1) for it,
+		 * so the warning cancels the removal and the rest just close.
+		 * @param {string} windowID
+		 */
+		_closeAsCross: function(windowID) {
+			window.Asc.plugin.button(-1, windowID);
+		},
+		/**
+		 * Esc in a dialog sends {type: 'Close'}: the dialog closes the same way as the cross in its header.
+		 * Any other message goes to onMessage, and then the dialog closes.
+		 * @param {PluginWindow} dialog
+		 * @param {function({type: string, url: string}): void} [onMessage]
+		 */
+		_listen: function(dialog, onMessage) {
+			const self = this;
+			dialog.attachEvent('onWindowMessage', /** @param {{type: string, url: string}} message */ function(message) {
+				if (message.type == 'Close') {
+					self._closeAsCross(dialog.id);
+					return;
+				}
+				if (onMessage)
+					onMessage(message);
+				self.close(dialog.id);
+			});
 		},
 		/**
 		 * @param {PluginWindow} dialog
@@ -189,6 +217,12 @@
 			dialog.show(variation);
 			this._openDialogBoxes[dialog.id] = true;
 		}
+	};
+
+	// the editor gives the focus back to where it was before the dialog, e.g. to the header button
+	// that opened it; the marketplace needs it for its keydown handlers (Escape)
+	Dialogs.onClose = function() {
+		postMessage( { type: 'Focus' } );
 	};
 
 	let editorVersion = '';

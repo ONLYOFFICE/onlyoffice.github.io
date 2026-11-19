@@ -39,7 +39,13 @@
 		document.getElementById('lbl_reset').onclick = function() {
 			document.getElementById('inp_url').value = '';
 		};
+		window.focus();
 	};
+
+	window.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape')
+			sendPluginMessage({type: 'Close'});
+	});
 
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		window.Asc.plugin.onThemeChangedBase(theme);
