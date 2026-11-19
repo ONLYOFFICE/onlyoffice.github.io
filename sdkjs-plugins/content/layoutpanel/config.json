@@ -1,0 +1,61 @@
+{
+  "name": "Layout Panel",
+  "offered": "Axel Kirbach, digital-systems.org",
+  "guid": "asc.{C38E05DF-DD96-4508-94C2-ACA1DA943B1E}",
+  "baseUrl": "",
+  "version": "1.0",
+  "minVersion": "7.0.0",
+  "variations": [
+    {
+      "description": "Layout Panel - a plug in for Only Office Presentation Editor that quickly provides size, position and alignment controls for the selected object without digging through menus. Alignment and distribution are not supported for line selections.",
+      "url": "index.html",
+      "icons": [
+        "resources/classic/light/icon.png",
+        "resources/classic/dark/icon.png"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": { "normal": "resources/classic/light/icon.png" },
+          "125%": { "normal": "resources/classic/light/icon@1.25x.png" },
+          "150%": { "normal": "resources/classic/light/icon@1.5x.png" },
+          "175%": { "normal": "resources/classic/light/icon@1.75x.png" },
+          "200%": { "normal": "resources/classic/light/icon@2x.png" }
+        },
+        {
+          "style": "dark",
+          "100%": { "normal": "resources/classic/dark/icon.png" },
+          "125%": { "normal": "resources/classic/dark/icon@1.25x.png" },
+          "150%": { "normal": "resources/classic/dark/icon@1.5x.png" },
+          "175%": { "normal": "resources/classic/dark/icon@1.75x.png" },
+          "200%": { "normal": "resources/classic/dark/icon@2x.png" }
+        }
+      ],
+      "EditorsSupport": ["slide"],
+      "isViewer": false,
+      "initDataType": "none",
+      "initOnSelectionChanged": false,
+      "type": "panel",
+      "translations": [
+        "translations/langs.json",
+        "translations/de-DE.json",
+        "translations/en-US.json"
+      ],
+      "store": {
+        "background": {
+          "light": "linear-gradient(45deg, rgb(8, 65, 108) 0%, rgb(113, 189, 140) 100%)",
+          "dark": "linear-gradient(45deg, rgb(8, 65, 108) 0%, rgb(113, 189, 140) 100%)"
+        },
+        "categories": ["work"],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "screenshots": [
+          "resources/store/screenshots/Screenshot Layout Panel Detail.png",
+          "resources/store/screenshots/screen_1.png"
+        ]
+      }
+    }
+  ]
+}
