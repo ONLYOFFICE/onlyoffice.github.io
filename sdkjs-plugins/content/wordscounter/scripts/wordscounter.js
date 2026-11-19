@@ -31,11 +31,12 @@
  */
 (function(window, undefined)
 {
-	var isInit = false;
+	var isCounted = false;        // the panel shows counts of a selection
+	var isSelectionAsked = false; // GetSelectedText is in flight
+	var isAskAgain = false;       // the target moved again while it was in flight
 
 	window.Asc.plugin.init = function(text)
 	{
-		isInit = true;
 		var str = text
 		var REGEX_CHINESE = /[\u3131-\uD79D]|[\u3000-\u303f]|[\u3040-\u309f]|[\u30a0-\u30ff]|[\uff00-\uff9f]|[\u4e00-\u9faf]|[\u4e00-\u9fff]|[\u3400-\u4dbf]|[\u{20000}-\u{2a6df}]|[\u{2a700}-\u{2b73f}]|[\u{2b740}-\u{2b81f}]|[\u{2b820}-\u{2ceaf}]|[\uf900-\ufaff]|[\u3300-\u33ff]|[\ufe30-\ufe4f]|[\uf900-\ufaff]|[\u{2f800}-\u{2fa1f}]/u;
 		var REPLACE_REGEX = /[\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3131-\uD79D\u4e00-\u9fff\u3400-\u4dbf\u{20000}-\u{2a6df}\u{2a700}-\u{2b73f}\u{2b740}-\u{2b81f}\u{2b820}-\u{2ceaf}\uf900-\ufaff\u3300-\u33ff\ufe30-\ufe4f\uf900-\ufaff\u{2f800}-\u{2fa1f}]/gu;
@@ -57,6 +58,7 @@
 	};
 
 	function showResults (charsNoSpaces, chars, words, lines) {
+		isCounted = (chars !== 0 || lines !== 0);
 		document.getElementById("charsNoSpaces").innerHTML = charsNoSpaces;
 		document.getElementById("chars").innerHTML         = chars;
 		document.getElementById("words").innerHTML         = words;
@@ -71,10 +73,29 @@
 
 	window.Asc.plugin.event_onTargetPositionChanged = function()
 	{
-		if (!isInit)
-			showResults(0, 0, 0, 0);
-		else
-			isInit = false;
+		if (!isCounted)
+			return;
+
+		if (isSelectionAsked)
+		{
+			isAskAgain = true;
+			return;
+		}
+
+		isSelectionAsked = true;
+		window.Asc.plugin.executeMethod("GetSelectedText", [{}], function(text)
+		{
+			isSelectionAsked = false;
+
+			if (!text)
+				showResults(0, 0, 0, 0);
+
+			if (isAskAgain)
+			{
+				isAskAgain = false;
+				window.Asc.plugin.event_onTargetPositionChanged();
+			}
+		});
 	};
 
 	window.Asc.plugin.onTranslate = function()
