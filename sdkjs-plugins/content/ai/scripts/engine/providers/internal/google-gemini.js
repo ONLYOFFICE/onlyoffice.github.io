@@ -60,6 +60,17 @@ class Provider extends AI.Provider {
 		if (model.inputTokenLimit)
 			model.options.max_input_tokens = model.inputTokenLimit;
 
+		// Nano Banana / Gemini 2.5 Flash Image and Imagen: expose Image capability
+		let isImageModel = (-1 !== model.id.indexOf("imagen-")) || (-1 !== model.id.indexOf("image") && -1 !== model.id.indexOf("flash")) || (-1 !== model.id.indexOf("gemini-2.5-flash-image")) || (-1 !== model.id.indexOf("nano-banana"));
+		if (isImageModel) {
+			model.endpoints.push(AI.Endpoints.Types.v1.Images_Generations);
+			model.endpoints.push(AI.Endpoints.Types.v1.Chat_Completions);
+			let caps = AI.CapabilitiesUI.Image | AI.CapabilitiesUI.Chat;
+			if (-1 !== model.id.indexOf("vision"))
+				caps |= AI.CapabilitiesUI.Vision;
+			return caps;
+		}
+
 		if (Array.isArray(model.supportedGenerationMethods) && 
 			model.supportedGenerationMethods.includes("generateContent"))
 		{
