@@ -185,6 +185,37 @@ const Utils = {
         return plugin.name;
     },
     /**
+     * The names and keywords the marketplace search looks at: the interface language ones, plus the
+     * English ones when asked. Keywords live in variations[0].store.keywords, either one array for
+     * every language or an object of arrays keyed like nameLocale.
+     * @param {PluginInfo} plugin
+     * @param {boolean} withEnglish
+     * @returns {{names: string[], keywords: string[]}}
+     */
+    getSearchTexts: function(plugin, withEnglish) {
+        const name = this.getTranslatedName(plugin);
+        const names = [name];
+        if (withEnglish && plugin.name && plugin.name !== name) {
+            names.push(plugin.name);
+        }
+
+        const variation = plugin.variations && plugin.variations[0];
+        /** @type {{keywords?: string[] | Object<string, string[]>} | undefined} */
+        const store = /** @type {any} */ (variation && variation.store);
+        const keywords = store && store.keywords;
+        /** @type {any} */
+        let words = [];
+        if (Array.isArray(keywords)) {
+            words = keywords;
+        } else if (keywords && typeof keywords === 'object') {
+            words = keywords[this.lang] || keywords[this.shortLang] || [];
+            if (withEnglish && Array.isArray(keywords.en) && words !== keywords.en) {
+                words = Array.isArray(words) ? words.concat(keywords.en) : keywords.en;
+            }
+        }
+        return { names: names, keywords: Array.isArray(words) ? words : [] };
+    },
+    /**
      * @param {any} variation
      */
     getTranslatedDescription: function(variation) {

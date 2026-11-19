@@ -120,6 +120,7 @@
 				buttons : [],
 				isVisual : true,
 				isModal : true,
+				isViewer : true,
 				EditorsSupport : ["word", "cell", "slide", "pdf"],
 				size : [680, 600],
 				fixedSize : true,
