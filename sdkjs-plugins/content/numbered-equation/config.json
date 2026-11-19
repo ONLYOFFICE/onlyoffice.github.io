@@ -1,0 +1,52 @@
+{
+    "name": "Numbered equation",
+    "nameLocale": {
+        "pt-BR": "Equação numerada",
+        "pt": "Equação numerada"
+    },
+    "guid": "asc.{3E4C8286-0B6A-425C-BD55-34D53CBC4F48}",
+    "version": "1.0.0",
+    "offered": "Diogo Rossi",
+    "baseUrl": "",
+    "variations": [
+        {
+            "description": "Adds buttons to insert numbered equations",
+            "url": "index.html",
+            "icons": [
+                "resources/img/icon.png",
+                "resources/img/icon@2x.png"
+            ],
+            "isViewer": false,
+            "EditorsSupport": [
+                "word"
+            ],
+            "type": "background",
+            "isVisual": false,
+            "isModal": false,
+            "isInsideMode": false,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [],
+            "events": [
+                "onToolbarMenuClick"
+            ],
+            "store": {
+                "background": {
+                    "light": "#5390F5",
+                    "dark": "#5390F5"
+                },
+                "screenshots": [
+                    "resources/store/screenshots/screen_1.png",
+                    "resources/store/screenshots/screen_2.png",
+                    "resources/store/screenshots/screen_3.png"
+                ],
+                "icons": {
+                    "light": "resources/store/icons",
+                    "dark": "resources/store/icons"
+                },
+                "categories": ["specAbilities", "work"]
+            }
+        }
+    ]
+}
