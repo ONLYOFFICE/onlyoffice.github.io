@@ -15,5 +15,8 @@
 	"lmstudio",
 	"gpt4all",
 
-	"zhipu"
+	"zhipu",
+
+	"opencode",
+	"opencode-go"
 ]
