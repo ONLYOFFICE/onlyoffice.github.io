@@ -53,47 +53,144 @@
 	// create iframe
 	const iframe = document.createElement('iframe');
 
-	/** @type {PluginWindow | null} */
-	let warningWindow = null;
-	/** @type {PluginWindow | null} */
-	let developerWindow = null;
 	let removeGuid = '';
 
-	/** Tells the host's mouse-ups that are clicks outside the plugin windows from the rest. */
-	const OutsideClick = {
+	/** Tells the host's mouse-ups that end a drag or resize of a plugin window from clicks. */
+	const WindowDragTracker = {
 		/** A mouse-up this soon after a drag or resize ends is the one that ended it. */
-		DRAG_END_GRACE_MS: 300,
-		isDragging: false,
-		dragEndedAt: 0,
-		/** @type {Object<string, boolean>} */
-		openDialogs: {},
-		/** @param {boolean} isEnabled */
-		onEnableMouseEvent: function(isEnabled) {
-			this.isDragging = isEnabled;
-			if (!isEnabled)
-				this.dragEndedAt = Date.now();
-		},
-		/** @param {PluginWindow} dialog */
-		onDialogShown: function(dialog) {
-			this.openDialogs[dialog.id] = true;
-		},
-		/** @param {string} windowID */
-		onDialogClosed: function(windowID) {
-			delete this.openDialogs[windowID];
+		_DRAG_END_GRACE_MS: 300,
+		_isDragging: false,
+		_dragEndedAt: 0,
+
+		/** @param {boolean} isDragging */
+		onDragChange: function(isDragging) {
+			this._isDragging = isDragging;
+			if (!isDragging)
+				this._dragEndedAt = Date.now();
 		},
 		/** @returns {boolean} */
 		isClick: function() {
-			if (this.isDragging || Date.now() - this.dragEndedAt < this.DRAG_END_GRACE_MS)
-				return false;
-			return Object.keys(this.openDialogs).length === 0;
+			return !this._isDragging && Date.now() - this._dragEndedAt >= this._DRAG_END_GRACE_MS;
 		}
 	};
 
-	/** @param {string} windowID */
-	function closeDialog(windowID) {
-		OutsideClick.onDialogClosed(windowID);
-		window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+	/** Shows the warning and Developer Mode dialogs, keeps track of the open ones and closes them. */
+	const Dialogs = {
+		/**
+		 * The footer buttons are the host's DOM: a click on them first arrives as a mouse-up outside
+		 * and only then as button(). The close waits this long so that button() can cancel it.
+		 */
+		_CLOSE_ON_CLICK_OUTSIDE_DELAY_MS: 100,
+
+		/** @type {PluginWindow | null} */
+		_warningWindow: null,
+		/** @type {PluginWindow | null} */
+		_developerWindow: null,
+		/** @type {Object<string, boolean>} */
+		_openDialogBoxes: {},
+		/** @type {{windowID: string, timer: number} | null} */
+		_pendingClose: null,
+
+		/** Asks the user whether to keep a backup of the plugin being removed. */
+		showWarning: function() {
+			if (!this._warningWindow)
+				this._warningWindow = new window.Asc.PluginWindow();
+			this._show(this._warningWindow, 'warning.html', window.Asc.plugin.tr('Warning'), [350, 100], ['Yes', 'No']);
+		},
+		/**
+		 * Asks the user for a marketplace address. The dialog closes after any message from it.
+		 * @param {function({type: string, url: string}): void} onMessage
+		 */
+		showDeveloper: function(onMessage) {
+			const self = this;
+			if (!this._developerWindow) {
+				this._developerWindow = new window.Asc.PluginWindow();
+				this._developerWindow.attachEvent('onWindowMessage', /** @param {{type: string, url: string}} message */ function(message) {
+					onMessage(message);
+					if (self._developerWindow)
+						self.close(self._developerWindow.id);
+				});
+			}
+			this._show(this._developerWindow, 'developer.html', window.Asc.plugin.tr('Developer Mode'), [500, 150], ['Ok', 'Cancel']);
+		},
+		/** @param {string} [windowID] */
+		isWarning: function(windowID) {
+			return !!this._warningWindow && this._warningWindow.id == windowID;
+		},
+		/** @param {string} [windowID] */
+		isDeveloper: function(windowID) {
+			return !!this._developerWindow && this._developerWindow.id == windowID;
+		},
+		/**
+		 * @param {string} windowID
+		 * @param {string} command
+		 */
+		sendCommand: function(windowID, command) {
+			if (this.isDeveloper(windowID) && this._developerWindow)
+				this._developerWindow.command(command);
+			else if (this.isWarning(windowID) && this._warningWindow)
+				this._warningWindow.command(command);
+		},
+		/** @param {string} windowID */
+		close: function(windowID) {
+			this.cancelCloseOnClickOutside(windowID);
+			delete this._openDialogBoxes[windowID];
+			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+		},
+		/** @returns {boolean} */
+		hasOpenDialogs: function() {
+			return Object.keys(this._openDialogBoxes).length !== 0;
+		},
+		closeOnClickOutside: function() {
+			const windowID = Object.keys(this._openDialogBoxes).pop();
+			if (!windowID)
+				return;
+			this.cancelCloseOnClickOutside();
+			const self = this;
+			this._pendingClose = {
+				windowID: windowID,
+				timer: window.setTimeout(function() {
+					self._pendingClose = null;
+					if (self._openDialogBoxes[windowID])
+						window.Asc.plugin.button(-1, windowID);
+				}, this._CLOSE_ON_CLICK_OUTSIDE_DELAY_MS)
+			};
+		},
+		/** @param {string} [windowID] cancels only a close pending for this window */
+		cancelCloseOnClickOutside: function(windowID) {
+			if (!this._pendingClose || (windowID && this._pendingClose.windowID !== windowID))
+				return;
+			window.clearTimeout(this._pendingClose.timer);
+			this._pendingClose = null;
+		},
+		/**
+		 * @param {PluginWindow} dialog
+		 * @param {string} fileName
+		 * @param {string} description
+		 * @param {number[]} size
+		 * @param {string[]} buttonTexts the first one is the primary button
+		 */
+		_show: function(dialog, fileName, description, size, buttonTexts) {
+			const location = window.location;
+			const file = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+			/** @type {VariationConfig} */
+			const variation = {
+				url : location.href.replace(file, fileName),
+				description : description,
+				isVisual : true,
+				isModal : true,
+				isViewer: true,
+				EditorsSupport : ['word', 'cell', 'slide', 'pdf'],
+				size : size,
+				buttons : buttonTexts.map(function(text, index) {
+					return { 'text': window.Asc.plugin.tr(text), 'primary': index === 0 };
+				})
+			};
+			dialog.show(variation);
+			this._openDialogBoxes[dialog.id] = true;
+		}
 	};
+
 	let editorVersion = '';
 	let marketplaceURl = '';
 	let pluginOptions = {};
@@ -132,10 +229,11 @@
 		applyDevModeButton();
 
 		const baseOnEnableMouseEvent = window.Asc.plugin.onEnableMouseEvent;
-		window.Asc.plugin.onEnableMouseEvent = function(isEnabled) {
+		// the host turns mouse events on while a plugin window is dragged or resized and off when it ends
+		window.Asc.plugin.onEnableMouseEvent = function(isDragging) {
 			if (baseOnEnableMouseEvent)
-				baseOnEnableMouseEvent.call(this, isEnabled);
-			OutsideClick.onEnableMouseEvent(isEnabled);
+				baseOnEnableMouseEvent.call(this, isDragging);
+			WindowDragTracker.onDragChange(isDragging);
 		};
 
 		// resize window
@@ -238,7 +336,7 @@
 			else if ( !data.backup )
 				removePlugin(!!data.backup);
 			else
-				createWindow('warning');
+				Dialogs.showWarning();
 		},
 		/** @param {IframeMessage} data*/
 		update: function(data) {
@@ -299,7 +397,9 @@
 	 * @param {string} windowID 
 	 */
 	window.Asc.plugin.button = function(id, windowID) {
-		if (warningWindow && warningWindow.id == windowID) {
+		// a click on a footer button has already scheduled the close as a click outside
+		Dialogs.cancelCloseOnClickOutside(windowID);
+		if (Dialogs.isWarning(windowID)) {
 			switch (id) {
 				case 0:
 					removePlugin(false);
@@ -311,12 +411,12 @@
 					postMessage( {type: 'Removed', guid: ''} );
 					break;
 			}
-			closeDialog(windowID);
-		} else if (developerWindow && developerWindow.id == windowID) {
+			Dialogs.close(windowID);
+		} else if (Dialogs.isDeveloper(windowID)) {
 			if (id == 0)
-				developerWindow.command('onClickBtn');
+				Dialogs.sendCommand(windowID, 'onClickBtn');
 			else
-				closeDialog(windowID);
+				Dialogs.close(windowID);
 		} else if (PluginCard.window && PluginCard.window.id == windowID) {
 			PluginCard.hide();
 		} else if (id == 'back') {
@@ -324,11 +424,28 @@
 			if (iframe && iframe.contentWindow)
 				postMessage( { type: 'onClickBack' } );
 		} else if (id == 'developer') {
-			createWindow('developer');
+			Dialogs.showDeveloper(onDeveloperMessage);
 		} else {
 			this.executeCommand('close', '');
 		}
 	};
+
+	/** @param {{type: string, url: string}} message */
+	function onDeveloperMessage(message) {
+		if (message.type != 'SetURL')
+			return;
+		const notificationElement = document.getElementById('notification');
+		if (!notificationElement)
+			return;
+		MarketplaceUrlManager.setDeveloperUrl(message.url);
+		applyMarketplaceUrl();
+		if (isDeveloperMarketplace)
+			notificationElement.classList.remove('hidden');
+		else
+			notificationElement.classList.add('hidden');
+		applyDevModeButton();
+		iframe.src = marketplaceURl + window.location.search;
+	}
 
 	window.addEventListener('message', function(message) {
 		// getting messages from marketplace
@@ -386,9 +503,13 @@
 		// mouse up event outside the plugin window
 		if (iframe && iframe.contentWindow) {
 			postMessage( { type: 'onExternalMouseUp' } );
-			if (OutsideClick.isClick())
-				postMessage( { type: 'onClickOutside' } );
 		}
+		if (!WindowDragTracker.isClick())
+			return;
+		if (Dialogs.hasOpenDialogs())
+			Dialogs.closeOnClickOutside();
+		else
+			PluginCard.hide();
 	};
 
 	/** @param {AscTheme} theme */
@@ -465,87 +586,6 @@
 				}, 5000);
 			}
 		}
-	};
-
-	/** @param {string} type */
-	function createWindow(type) {
-		let fileName = type + '.html';
-		let description = window.Asc.plugin.tr('Warning');
-		let size = [350, 100];
-		let buttons = [
-			{
-				'text': window.Asc.plugin.tr('Yes'),
-				'primary': true
-			},
-			{
-				'text': window.Asc.plugin.tr('No'),
-				'primary': false
-			}
-		];
-		if (type == 'developer') {
-			fileName = 'developer.html';
-			description = window.Asc.plugin.tr('Developer Mode');
-			size = [500, 150];
-			buttons = [
-				{
-					'text': window.Asc.plugin.tr('Ok'),
-					'primary': true
-				},
-				{
-					'text': window.Asc.plugin.tr('Cancel'),
-					'primary': false
-				}
-			];
-		}
-		let location = window.location;
-		let start = location.pathname.lastIndexOf('/') + 1;
-		let file = location.pathname.substring(start);
-		
-		/** @type {VariationConfig} */
-		let variation = {
-			url : location.href.replace(file, fileName),
-			description : description,
-			isVisual : true,
-			isModal : true,
-			isViewer: true,
-			EditorsSupport : ['word', 'cell', 'slide', 'pdf'],
-			size : size,
-			buttons : buttons
-		};
-		
-		if (type == 'warning') {
-			if (!warningWindow) {
-				warningWindow = new window.Asc.PluginWindow();
-			}
-			warningWindow.show(variation);
-			OutsideClick.onDialogShown(warningWindow);
-		} else {
-			if (!developerWindow) {
-				developerWindow = new window.Asc.PluginWindow();
-				developerWindow.attachEvent('onWindowMessage', /** @param {{type: string, url: string}} message */ function(message) {
-					if (message.type == 'SetURL') {
-						const notificationElement = document.getElementById('notification');
-						if (!notificationElement) {
-							return;
-						}
-						MarketplaceUrlManager.setDeveloperUrl(message.url);
-						applyMarketplaceUrl();
-						if (isDeveloperMarketplace)
-							notificationElement.classList.remove('hidden');
-						else
-							notificationElement.classList.add('hidden');
-						applyDevModeButton();
-						iframe.src = marketplaceURl + window.location.search;
-					}
-					if (developerWindow) {
-						closeDialog(developerWindow.id);
-					}
-				});
-			}
-			developerWindow.show(variation);
-			OutsideClick.onDialogShown(developerWindow);
-		}
-
 	};
 
 	/** @param {boolean} backup */
