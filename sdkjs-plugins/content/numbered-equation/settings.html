@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Numbered equation settings</title>
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"
+    ></script>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --text: #444444;
+        --border: #c0c0c0;
+        --primary: #4473ca;
+        --primary-text: #ffffff;
+        --error: #d9534f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 12px 16px;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          12px Arial,
+          Helvetica,
+          sans-serif;
+      }
+      fieldset {
+        border: none;
+        margin: 0 0 10px;
+        padding: 0;
+      }
+      legend {
+        font-weight: bold;
+        margin-bottom: 4px;
+        padding: 0;
+      }
+      label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-right: 12px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 4px 0 4px 20px;
+      }
+      input[type='number'] {
+        width: 60px;
+      }
+      input[type='text'] {
+        flex: 1;
+        min-width: 0;
+      }
+      input[type='text'],
+      input[type='number'] {
+        height: 22px;
+        padding: 0 4px;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        background: var(--bg);
+        color: var(--text);
+        font: inherit;
+      }
+      input:disabled {
+        opacity: 0.5;
+      }
+      #error {
+        min-height: 14px;
+        color: var(--error);
+      }
+      #error.info {
+        color: var(--text);
+      }
+      .buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      button {
+        min-width: 80px;
+        height: 24px;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        background: var(--bg);
+        color: var(--text);
+        font: inherit;
+        cursor: pointer;
+      }
+      button.primary {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--primary-text);
+      }
+    </style>
+  </head>
+  <body>
+    <form id="form">
+      <fieldset>
+        <legend>Table</legend>
+        <div class="row" style="margin-left: 0">
+          Number column width (%)
+          <input type="number" id="numberWidth" min="1" max="49" />
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Automatic bookmarks</legend>
+        <label>
+          <input type="checkbox" id="autoBookmark" />
+          Create a bookmark when the name is empty
+        </label>
+        <div class="row">
+          Prefix
+          <input type="text" id="autoPrefix" maxlength="30" placeholder="eq_" />
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Typed bookmark names</legend>
+        <div class="row" style="margin-left: 0">
+          Prefix
+          <input
+            type="text"
+            id="manualPrefix"
+            maxlength="30"
+            placeholder="empty = no prefix"
+          />
+        </div>
+      </fieldset>
+
+      <div id="error"></div>
+
+      <div class="buttons">
+        <button type="button" id="reset" style="margin-right: auto">Reset to defaults</button>
+        <button type="button" id="cancel">Cancel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+
+    <script type="text/javascript" src="settings-store.js"></script>
+    <script type="text/javascript" src="window-fit.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+  </body>
+</html>
