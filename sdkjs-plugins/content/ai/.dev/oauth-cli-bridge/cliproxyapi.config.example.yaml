@@ -1,0 +1,76 @@
+config-version: 8
+server:
+  host: "127.0.0.1"
+  port: 8317
+  discovery:
+    enabled: false
+management:
+  allow-remote: false
+  secret-key: ""
+  disable-control-panel: true
+access:
+  api-keys:
+    - "REPLACE_WITH_YOUR_LOCAL_CLIENT_KEY"
+oauth:
+  model-alias:
+    codex:
+      - name: "gpt-6.1-sol"
+        alias: "codex-oauth-gpt-6.1-sol"
+        fork: true
+    claude:
+      - name: "claude-sonnet-5-5"
+        alias: "claude-oauth-sonnet-5-5"
+        fork: true
+  auth-dir: "./auth"
+observability:
+  logs:
+    debug: false
+api-keys:
+  openai-compatibility:
+    - name: "onlyoffice-lmstudio"
+      base-url: "http://127.0.0.1:1234/v1"
+      keys:
+        - api-key: ""
+      models:
+        - name: "halo/qwen3.8-27b-q6-fast"
+          alias: "onlyoffice-lmstudio-qwen"
+    - name: "onlyoffice-ollama"
+      prefix: "ollama"
+      base-url: "http://127.0.0.1:11434/v1"
+      keys:
+        - api-key: ""
+      models:
+        - name: "qwen3.8:27b-q6_K"
+        - name: "qwen3.8:27b-q4_K_M"
+        - name: "qwen3-coder:30b-a3b-q4_K_M"
+        - name: "qwen3.6:35b-a3b-q4_K_M"
+        - name: "deepseek-v4-pro:0813-cloud"
+        - name: "nemotron-3-super:cloud"
+        - name: "gpt-oss:20b-cloud"
+        - name: "kimi-k2.6:cloud"
+        - name: "nemotron-3-ultra:cloud"
+        - name: "gemma4:31b-cloud"
+        - name: "qwen3.5:397b-cloud"
+        - name: "minimax-m2.7:cloud"
+        - name: "minimax-m3:cloud"
+        - name: "kimi-k2.7-code:cloud"
+        - name: "deepseek-v4.1-flash:cloud"
+        - name: "glm-5.1:cloud"
+        - name: "mistral-large-3:675b-cloud"
+        - name: "gpt-oss:120b-cloud"
+        - name: "nemotron-3-nano:30b-cloud"
+        - name: "glm-5.3-flash:cloud"
+        - name: "deepseek-v4-flash:0731-cloud"
+        - name: "glm-5.3:cloud"
+        - name: "kimi-k3:cloud"
+        - name: "glm-5.2:cloud"
+requests:
+  payload:
+    default:
+      - models:
+          - name: "halo/qwen3.8-27b-q6-fast"
+            protocol: "openai"
+          - name: "onlyoffice-lmstudio-qwen"
+            protocol: "openai"
+        params:
+          reasoning_effort: "none"

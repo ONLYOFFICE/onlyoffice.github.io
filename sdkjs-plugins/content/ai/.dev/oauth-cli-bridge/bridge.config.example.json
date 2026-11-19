@@ -1,0 +1,19 @@
+{
+  "port": 18741,
+  "models": {
+    "codex-oauth-gpt-6.1-sol": {
+      "cli": "codex.exe",
+      "model": "gpt-6.1-sol",
+      "kind": "codex"
+    },
+    "claude-oauth-sonnet-5-5": {
+      "cli": "claude.exe",
+      "model": "claude-sonnet-5-5",
+      "kind": "claude"
+    }
+  },
+  "lmStudio": {
+    "url": "http://127.0.0.1:1234",
+    "requestDefaults": {}
+  }
+}
