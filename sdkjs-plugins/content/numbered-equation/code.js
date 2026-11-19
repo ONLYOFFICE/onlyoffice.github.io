@@ -322,7 +322,7 @@
                             type: "button",
                             text: "Numbered equation",
                             hint: "Insert a numbered equation in a table (centered 1x3 or left 1x2)",
-                            icons: "resources/buttons/equation.png",
+                            icons: "resources/buttons/%theme-type%(light|dark)/equation%scale%(default).png", // light/dark, 100% to 200%
                             lockInViewMode: true,
                             enableToggle: false,
                             separator: true, // separates our buttons from the other plugins
@@ -332,7 +332,7 @@
                             type: "button",
                             text: "Equation settings",
                             hint: "Numbered equation settings (number column width, bookmarks)",
-                            icons: "resources/buttons/settings.png",
+                            icons: "resources/buttons/%theme-type%(light|dark)/settings%scale%(default).png",
                             lockInViewMode: true,
                             enableToggle: false,
                             separator: false,
