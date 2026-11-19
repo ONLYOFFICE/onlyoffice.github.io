@@ -14,7 +14,7 @@
   "dependencies": {
     "child_process": "^1.0.2",
     "fs-extra": "^11.3.1",
-    "glob": "^11.0.3",
+    "glob": "^14.0.2",
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
