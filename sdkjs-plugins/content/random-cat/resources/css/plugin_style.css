@@ -1,0 +1,190 @@
+/*
+ * Random Cat plugin for ONLYOFFICE editors.
+ * Licensed under the MIT License. See the LICENSE file for details.
+ */
+
+:root {
+	/* Fallback values (light theme). They are replaced with the editor theme
+	   colors in window.Asc.plugin.onThemeChanged. */
+	--rc-background: #ffffff;
+	--rc-background-alt: #f7f7f7;
+	--rc-text: #444444;
+	--rc-text-secondary: #a5a5a5;
+	--rc-border: #cbcbcb;
+	--rc-error: #d9534f;
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+	color: var(--rc-text);
+	background-color: var(--rc-background);
+}
+
+.main {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+	padding: 12px;
+}
+
+.preview {
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
+	height: 240px;
+	flex: 0 0 auto;
+	border: 1px solid var(--rc-border);
+	border-radius: 2px;
+	background-color: var(--rc-background-alt);
+	overflow: hidden;
+}
+
+.cat-image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.preview-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 12px;
+	text-align: center;
+	line-height: 1.4;
+	background-color: var(--rc-background-alt);
+}
+
+.preview.state-loading .cat-image,
+.preview.state-error .cat-image {
+	visibility: hidden;
+}
+
+.preview.state-loading .loader,
+.preview.state-error .error {
+	display: flex;
+}
+
+.loader {
+	color: var(--rc-text-secondary);
+}
+
+.error {
+	color: var(--rc-error);
+}
+
+.spinner {
+	width: 20px;
+	height: 20px;
+	margin-bottom: 8px;
+	border: 2px solid var(--rc-border);
+	border-top-color: var(--rc-text);
+	border-radius: 50%;
+	animation: rc-spin 0.8s linear infinite;
+}
+
+@keyframes rc-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.spinner {
+		animation-duration: 2.4s;
+	}
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	margin-top: 12px;
+}
+
+.row-label {
+	flex: 0 1 auto;
+	margin-right: 8px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.size-select {
+	flex: 1 1 0;
+	min-width: 0;
+	height: 22px;
+	padding: 0 2px;
+	cursor: pointer;
+}
+
+.buttons {
+	display: flex;
+	margin-top: 12px;
+}
+
+.buttons .btn-text-default {
+	flex: 1 1 0;
+	min-width: 0;
+	width: auto;
+	height: 24px;
+	padding: 0 8px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.buttons .btn-text-default + .btn-text-default {
+	margin-left: 8px;
+}
+
+.buttons .btn-text-default:disabled {
+	opacity: 0.5;
+	cursor: default;
+	pointer-events: none;
+}
+
+.status {
+	min-height: 16px;
+	margin-top: 8px;
+	line-height: 16px;
+	color: var(--rc-text-secondary);
+}
+
+.status.is-error {
+	color: var(--rc-error);
+}
+
+.footer {
+	margin-top: auto;
+	padding-top: 12px;
+	color: var(--rc-text-secondary);
+}
+
+.size-select {
+	color: var(--rc-text);
+	background-color: var(--rc-background);
+	border-color: var(--rc-border);
+}
+
+.footer .link {
+	color: var(--rc-text);
+	text-decoration: underline;
+}
