@@ -56,6 +56,7 @@
     { "name": "quicktranslator", "discussion": ""},
     { "name": "marinamoji", "discussion": ""},
 	{ "name": "scroll-manager", "discussion": "" },
-	{ "name": "vn-document-format", "discussion": "" },
 	{ "name": "styletemplates", "discussion": "" }
+	{ "name": "vn-document-format", "discussion": "" },
+	{ "name": "serbian-text-converter", "discussion": "" }
 ]
