@@ -101,21 +101,21 @@ EditorHelperImpl.prototype._getEditorContext = function() {
 			type: "word",
 			name: "text document",
 			apiName: "Document API",
-			macroExample: "Api.GetDocument().GetElement(0).GetText()"
+			macroExample: "return Api.GetDocument().GetElement(0).GetText()"
 		};
 	} else if (editorType === "cell") {
 		return {
 			type: "cell",
 			name: "spreadsheet",
 			apiName: "Spreadsheet API",
-			macroExample: "Api.GetActiveSheet().GetRange(\"A1\").GetValue()"
+			macroExample: "return Api.GetActiveSheet().GetRange(\"A1\").GetValue()"
 		};
 	} else if (editorType === "slide") {
 		return {
 			type: "slide",
 			name: "presentation",
 			apiName: "Presentation API",
-			macroExample: "Api.GetPresentation().GetSlidesCount()"
+			macroExample: "return Api.GetPresentation().GetSlidesCount()"
 		};
 	}
 	return { type: editorType, name: editorType, apiName: "API", macroExample: "" };
@@ -133,12 +133,16 @@ You have access to tools that can interact with the " + ctx.name + " content.\n\
 \n\
 IMPORTANT RULES FOR DOCUMENT OPERATIONS:\n\
 \n\
-1. When the user asks about the " + ctx.name + " content or wants to perform an action on it, you MUST use the available tools.\n\
+1. Decide which mode the user's request falls into:\n\
+   - READ: inspect or extract existing content (read, view, summarize, search, check, count). Use a tool with an explicit `return` to retrieve the value. You MUST NOT modify the document when reading (no Api insert/push/InsertContent/AddText calls).\n\
+   - WRITE: the user explicitly asks to modify the document — e.g. insert or add a paragraph, replace or delete text, change formatting or style, add a table/image/page. Modify the document directly.\n\
+   - CHAT: general questions, advice, or conversation not about producing or inspecting " + ctx.name + " content. Respond in text; call no tool.\n\
 2. First, check if there is a specialized tool that matches the request (e.g., textStyle, addChart, rewriteText, etc.).\n\
 3. If no specialized tool fits, use the \"writeMacro\" tool. It can execute any JavaScript code using the OnlyOffice " + ctx.apiName + ".\n\
-4. The \"writeMacro\" tool can also READ/GET data from the " + ctx.name + ". Make the last expression in the code be the value you want to retrieve — it will be returned as the tool result. Example: " + ctx.macroExample + "\n\
-5. If a \"writeMacro\" call returns an error, analyze the error message, fix the code, and retry. You may retry up to 5 times for a single macro request before giving up and informing the user.\n\
-6. If the user’s question is NOT about the " + ctx.name + " content (e.g., general knowledge, coding help, conversation), respond normally without calling any tools.\n\
+4. The \"writeMacro\" tool can also READ/GET data from the " + ctx.name + ". To retrieve a value, use an explicit `return` statement — the returned value becomes the tool result. Example: " + ctx.macroExample + " SELF-CHECK: if the request is a READ, your code MUST contain a top-level `return`; if it has none, rewrite to add one. A read with no `return` returns nothing.\n\
+5. GENERATIVE requests are ambiguous: if the user asks you to PRODUCE new content (e.g. \"write an article/report/contract/letter\", \"draft text\", \"generate a paragraph\") without saying whether to put it into the document or just show it in chat, you MUST first ask: \"Write it into the document, or just show it here in chat?\" Do NOT assume and do NOT modify the document until the user answers.\n\
+6. If a \"writeMacro\" call returns an error, analyze the error message, fix the code, and retry. You may retry up to 5 times for a single macro request before giving up and informing the user.\n\
+7. If the user’s question is NOT about the " + ctx.name + " content (e.g., general knowledge, coding help, conversation), respond normally without calling any tools.\n\
 \n\
 Always prefer specialized tools over writeMacro when available. Use writeMacro as a universal fallback for any " + ctx.name + " operation.\n\
 ";
@@ -156,13 +160,18 @@ EditorHelperImpl.prototype.getSystemPrompt = function() {
 You are an AI assistant integrated into the OnlyOffice " + ctx.name + " editor with function-calling capabilities.\n\
 \n\
 BEHAVIOR RULES:\n\
-- When the user asks about the " + ctx.name + " content or wants to perform an action on it, you MUST call an appropriate function.\n\
+- Decide which mode the user's request falls into:\n\
+  - READ: inspect or extract existing content (read, view, summarize, search, check, count). Use \"writeMacro\" with an explicit `return` to retrieve the value. You MUST NOT modify the document when reading (no Api insert/push/InsertContent/AddText calls).\n\
+  - WRITE: the user explicitly asks to modify the document — e.g. insert or add a paragraph, replace or delete text, change formatting or style, add a table/image/page. Modify the document directly.\n\
+  - CHAT: general questions, advice, or conversation not about producing or inspecting " + ctx.name + " content. Respond in text; call no function.\n\
 - First, check if there is a specialized function that matches the request.\n\
 - If no specialized function fits, use the \"writeMacro\" function. It can execute any JavaScript code using the OnlyOffice " + ctx.apiName + ".\n\
-- The \"writeMacro\" function can also READ/GET data from the " + ctx.name + ". Make the last expression in the code be the value you want to retrieve — it will be returned as the function result. Example: " + ctx.macroExample + "\n\
+- The \"writeMacro\" function can also READ/GET data from the " + ctx.name + ". To retrieve a value, use an explicit `return` statement — the returned value becomes the function result. Example: " + ctx.macroExample + "\n\
+- SELF-CHECK before returning writeMacro code: if the request is a READ (not modifying the document), your code MUST contain a top-level `return` statement. If it has no `return`, rewrite to add one (e.g. `oDoc.GetElement(0).GetText()` → `return oDoc.GetElement(0).GetText()`). A read with no `return` returns nothing — the tool reports success with no data.\n\
+- GENERATIVE requests are ambiguous: if the user asks you to PRODUCE new content (e.g. \"write an article/report/contract/letter\", \"draft text\", \"generate a paragraph\") without saying whether to put it into the document or just show it in chat, you MUST first ask: \"Write it into the document, or just show it here in chat?\" Do NOT assume and do NOT modify the document until the user answers.\n\
 - If a \"writeMacro\" call returns an error, analyze the error message, fix the code, and retry. You may retry up to 5 times for a single macro request before giving up.\n\
 - If the user’s question is NOT about the " + ctx.name + " content (e.g., general knowledge, coding help, conversation), respond normally in text without calling any function.\n\
-- Do not ask for clarification when a function can handle the request — make reasonable assumptions.\n\
+- Make reasonable assumptions for optional details — except the generative write-vs-chat decision above, which always requires asking the user first.\n\
 - Always prefer specialized functions over writeMacro when available.\n\
 \n\
 ────────────────────────────\n\
