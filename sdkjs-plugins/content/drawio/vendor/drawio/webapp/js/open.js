@@ -1,8 +1,10 @@
+/**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
 // Handles form-submit by preparing to process response
 function handleSubmit()
 {
-	var form = window.openForm || document.getElementById('openForm');
-	
 	if (window.parent.openNew && window.parent.baseUrl != null)
 	{
 		window.parent.openFile.setConsumer(null);
@@ -18,8 +20,11 @@ function handleSubmit()
 // Hides this dialog
 function hideWindow(cancel)
 {
-	window.parent.openFile.cancel(cancel);
-}
+	if (window.parent.openFile != null)
+	{
+		window.parent.openFile.cancel(cancel);
+	}
+};
 
 function fileChanged()
 {
@@ -34,7 +39,7 @@ function fileChanged()
 	{
 		openButton.setAttribute('disabled', 'disabled');
 	}		
-}
+};
 
 function main()
 {
@@ -43,8 +48,8 @@ function main()
 		document.body.innerText = '';
 		var div = document.createElement('div');
 		div.style.fontFamily = 'Arial';
-		var darkMode = typeof window.parent.Editor.isDarkMode === 'function' &&
-			window.parent.Editor.isDarkMode();
+		var darkMode = (typeof window.parent.Editor.isDarkMode === 'function' &&
+			window.parent.Editor.isDarkMode());
 
 		window.parent.listBrowserFiles(function(filesInfo)
 		{
@@ -98,7 +103,7 @@ function main()
 							row.style.color = (darkMode) ? '#cccccc' : '';
 							table.appendChild(row);
 							
-							if (i & 1 == 1)
+							if ((i & 1) == 1)
 							{
 								row.style.backgroundColor = (darkMode) ? '#000' : '#E6E6E6';
 							}
@@ -129,10 +134,12 @@ function main()
 							var ctrlTd = document.createElement('td');
 							row.appendChild(ctrlTd);
 							ctrlTd.style.textAlign = 'center';
-							var img = document.createElement('span');
-							img.className = 'geSprite geSprite-delete';
+							var img = document.createElement('img');
+							img.src = window.parent.Editor.trashImage;
 							img.style.cursor = 'pointer';
 							img.style.display = 'inline-block';
+							img.style.width = '18px';
+							img.setAttribute('title', window.parent.mxResources.get('delete'));
 							ctrlTd.appendChild(img);
 							
 							if (darkMode)
@@ -165,7 +172,7 @@ function main()
 										{
 											if (window.parent != null)
 											{
-												window.parent.openWindow(window.parent.baseUrl + '#L' + encodeURIComponent(k), function()
+												window.parent.geOpenWindow(window.parent.baseUrl + '#L' + encodeURIComponent(k), function()
 												{
 													of.cancel(false);
 												}, function()
@@ -182,7 +189,10 @@ function main()
 									{
 										window.parent.openBrowserFile(k, function(data)
 										{
-											window.parent.openFile.setData(data, k);
+											if (window.parent != null)
+											{
+												window.parent.openFile.setData(data, k);
+											}
 										}, function()
 										{
 											//TODO add error

@@ -720,7 +720,7 @@ function _showEmptyNotification(bDirectLoad) {
  */
 function updateListOfPlugins(bDirectLoad) {
 	MarketplaceStorage.excludeAiPluginIfNeeded();
-	let arr = MarketplaceStorage.getFilteredPlugins(Utils.getTranslatedName.bind(Utils));
+	let arr = MarketplaceStorage.getFilteredPlugins(Utils.getSearchTexts.bind(Utils));
 	if (arr.length && Utils.isSamePlugins(founded, arr) && !bDirectLoad) {
 		UI.toggleLoader(false);
 		return arr.length;

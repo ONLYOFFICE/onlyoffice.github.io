@@ -1,0 +1,94 @@
+{
+  "name": "Style Templates",
+  "nameLocale": {
+    "ca": "Plantilles d'estil",
+    "es": "Plantillas de estilo",
+    "en": "Style Templates"
+  },
+  "guid": "asc.{6B1D4E2A-9C37-4F8B-A1E5-3D7C2F90B4A6}",
+  "version": "1.0.0",
+  "minVersion": "9.4.0",
+  "offered": "Sergi Curero",
+  "variations": [
+    {
+      "description": "Save the styles of a document as a template and apply them to other documents. Import and export .dotx, .ott and .json.",
+      "descriptionLocale": {
+        "ca": "Desa els estils d'un document com a plantilla i aplica'ls a altres documents. Importa i exporta .dotx, .ott i .json.",
+        "es": "Guarda los estilos de un documento como plantilla y aplícalos a otros documentos. Importa y exporta .dotx, .ott y .json.",
+        "en": "Save the styles of a document as a template and apply them to other documents. Import and export .dotx, .ott and .json."
+      },
+      "url": "index.html",
+      "icons": [
+        "resources/light/icon.png",
+        "resources/light/icon@2x.png"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/light/icon.png"
+          },
+          "125%": {
+            "normal": "resources/light/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/light/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/light/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/light/icon@2x.png"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/dark/icon.png"
+          },
+          "125%": {
+            "normal": "resources/dark/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/dark/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/dark/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/dark/icon@2x.png"
+          }
+        }
+      ],
+      "isViewer": false,
+      "EditorsSupport": [
+        "word"
+      ],
+      "isVisual": true,
+      "isModal": false,
+      "isInsideMode": true,
+      "type": "panel",
+      "initDataType": "none",
+      "initData": "",
+      "isUpdateOleOnResize": false,
+      "buttons": [],
+      "store": {
+        "background": {
+          "light": "#F5F5F5",
+          "dark": "#444444"
+        },
+        "screenshots": [
+          "resources/store/screenshots/screen_light.png",
+          "resources/store/screenshots/screen_dark.png"
+        ],
+        "icons": {
+          "light": "resources/store/icons/light",
+          "dark": "resources/store/icons/dark"
+        },
+        "categories": [
+          "work"
+        ]
+      }
+    }
+  ]
+}

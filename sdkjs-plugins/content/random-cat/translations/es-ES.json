@@ -1,0 +1,14 @@
+{
+	"Another cat": "Otro gato",
+	"Insert": "Insertar",
+	"Image size": "Tamaño de la imagen",
+	"Small": "Pequeño",
+	"Medium": "Mediano",
+	"Large": "Grande",
+	"Loading...": "Cargando...",
+	"Failed to load a cat picture. Check your internet connection and try again.": "No se pudo cargar la foto del gato. Compruebe su conexión a Internet e inténtelo de nuevo.",
+	"The picture has been inserted.": "La imagen se ha insertado.",
+	"Failed to insert the picture.": "No se pudo insertar la imagen.",
+	"Photos provided by": "Fotos proporcionadas por",
+	"Random cat picture": "Foto de gato aleatoria"
+}

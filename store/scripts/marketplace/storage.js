@@ -162,10 +162,10 @@ const MarketplaceStorage = {
         return this._categories;
     },
     /**
-     * @param {function(PluginInfo): string} translateName
+     * @param {function(PluginInfo, boolean): {names: string[], keywords: string[]}} getSearchTexts
      * @returns {Array<PluginInfo>}
      */
-    getFilteredPlugins: function(translateName) {
+    getFilteredPlugins: function(getSearchTexts) {
         const category = this.categoryFilter;
         const searchQuery = this.searchQuery;
 
@@ -198,10 +198,25 @@ const MarketplaceStorage = {
         if (searchQuery.trim() === "") {
             return filteredPlugins;
         }
-        return filteredPlugins.filter(function(plugin) {
-            let name = translateName(plugin);
-            return name.toLowerCase().includes(searchQuery);
+        // A query typed in Latin letters is also looked up among the English names and keywords.
+        const withEnglish = /^[\x00-\x7F]*$/.test(searchQuery);
+        /** @param {string} text */
+        const matches = function(text) {
+            return String(text).toLowerCase().includes(searchQuery);
+        };
+        /** @type {Array<PluginInfo>} */
+        let byName = [];
+        /** @type {Array<PluginInfo>} */
+        let byKeyword = [];
+        filteredPlugins.forEach(function(plugin) {
+            const texts = getSearchTexts(plugin, withEnglish);
+            if (texts.names.some(matches)) {
+                byName.push(plugin);
+            } else if (texts.keywords.some(matches)) {
+                byKeyword.push(plugin);
+            }
         });
+        return byName.concat(byKeyword);
 
     },
     /** @returns {Array<PluginInfo>} */

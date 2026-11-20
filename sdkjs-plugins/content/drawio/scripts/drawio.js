@@ -148,7 +148,7 @@
 			if (editor)
 				editor.isChanged = true;
 		}
-		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&dev=1&spin=0'], closePlugin, onEditorLoaded);
+		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&spin=0'], closePlugin, onEditorLoaded);
 		// an existing diagram keeps its own format until the user switches it
 		if (bNewDiagram)
 			editor.setElementFormat(getPreferredFormat());

@@ -1,0 +1,76 @@
+{
+	"$schema": "https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/refs/heads/master/schemas/config.schema.json",
+	"name" : "Authorship Check",
+	"nameLocale" : {
+		"cs": "Kontrola autorství",
+		"de": "Autorschaft prüfen",
+		"es": "Verificar autoría",
+		"fr": "Vérifier l'auteur",
+		"it": "Verifica autore",
+		"ja-JA": "著者チェック",
+		"nl": "Auteur controleren",
+		"pt": "Verificar autoria",
+		"pt-BR": "Verificar autoria",
+		"ru": "Проверка авторства",
+		"zh": "作者身份检查",
+		"sq-AL": "Kontroll autorësie",
+		"sr-Cyrl-RS": "Провера ауторства",
+		"sr-Latn-RS": "Provera autorstva"
+	},
+	"guid" : "asc.{CF9942BA-02C3-4AB7-B88E-77C26000E93A}",
+	"version" : "0.9.0",
+	"minVersion" : "9.2.0",
+	"offered" : "Ascensio System SIA",
+
+	"variations" : [
+		{
+			"description" : "Check documents for AI-generated text and plagiarism with Originality.ai.",
+			"descriptionLocale": {
+				"ru": "Проверка документа на сгенерированный ИИ текст и плагиат через Originality.ai.",
+				"cs": "Kontrolujte dokumenty na text vygenerovaný AI a plagiáty pomocí Originality.ai.",
+				"de": "Prüfen Sie Dokumente mit Originality.ai auf KI-generierten Text und Plagiate.",
+				"es": "Compruebe si los documentos contienen texto generado por IA o plagio con Originality.ai.",
+				"fr": "Vérifiez si vos documents contiennent du texte généré par l'IA ou du plagiat avec Originality.ai.",
+				"it": "Verifica se i documenti contengono testo generato dall'IA o plagio con Originality.ai.",
+				"ja-JA": "Originality.aiで文書のAI生成テキストと盗用をチェックします。",
+				"nl": "Controleer documenten met Originality.ai op door AI gegenereerde tekst en plagiaat.",
+				"pt": "Verifique se os documentos têm texto gerado por IA e plágio com o Originality.ai.",
+				"pt-BR": "Verifique se os documentos contêm texto gerado por IA e plágio com o Originality.ai.",
+				"zh": "使用Originality.ai检查文档中的AI生成文本和抄袭。",
+				"sq-AL": "Kontrolloni dokumentet për tekst të gjeneruar nga IA dhe plagjiaturë me Originality.ai.",
+				"sr-Cyrl-RS": "Проверите да ли документи садрже текст генерисан помоћу ВИ и плагијат уз Originality.ai.",
+				"sr-Latn-RS": "Proverite da li dokumenti sadrže tekst generisan pomoću VI i plagijat uz Originality.ai."
+			},
+			"url" : "index.html",
+
+			"icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
+			"isViewer"            : true,
+			"EditorsSupport"      : ["word"],
+			"isVisual"            : true,
+			"isModal"             : false,
+			"isInsideMode"        : true,
+			"isUpdateOleOnResize" : false,
+			"initDataType"        : "none",
+			"initData"            : "",
+			"buttons"             : [],
+
+			"store" : {
+				"background" : {
+					"light" : "#7B5CF0",
+					"dark"  : "#7B5CF0"
+				},
+				"screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png"
+				],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories" : ["specAbilities", "work"],
+				"keywords"   : ["Originality.ai", "AI detector", "plagiarism"]
+			}
+		}
+	]
+}

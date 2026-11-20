@@ -1,0 +1,343 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2026
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
+// @ts-check
+
+/// <reference path="../app/scan-service.js" />
+/// <reference path="../app/highlight-service.js" />
+/// <reference path="../domain/scan-findings.js" />
+/// <reference path="./scan-result-view.js" />
+
+/**
+ * The scan page: the scan button, which scans the selection when one is long enough and the whole
+ * document otherwise, progress while a scan runs, and then either the result or
+ * why there is none. The findings of the result are marked in the document where the editor can
+ * do that, and choosing one in the panel selects it in the text.
+ */
+class ScanView {
+
+	/**
+	 * @param {ScanService} service
+	 * @param {HighlightService} highlights
+	 * @param {{
+	 *   onScanned: (scope: ScanScope, result: ScanResult, findings: ScanFindings) => void,
+	 *   onExportReport: () => void,
+	 *   confirm: (title: string, paragraphs: string[], buttons: string[]) => Promise<number>,
+	 *   onOpenSettings: () => void,
+	 * }} callbacks
+	 */
+	constructor(service, highlights, callbacks) {
+		this._service = service;
+		this._highlights = highlights;
+		this._onScanned = callbacks.onScanned;
+		this._confirm = callbacks.confirm;
+		this._onOpenSettings = callbacks.onOpenSettings;
+		const tr = window.Asc.plugin.tr;
+
+		/** @type {ScanScope} what the scan button scans: the selection once it is long enough */
+		this._scope = "document";
+		this._scanButton = new Button("scan", { variant: "primary", text: tr("Scan document") });
+		this._scanButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._scan(this._scope);
+		});
+		this._selectionHint = /** @type {HTMLElement} */ (document.getElementById("scan-selection-hint"));
+
+		/** @type {Message | null} */
+		this._message = null;
+		/** whether the message shown is the one about a missing API key */
+		this._showsNoKey = false;
+		/** whether scans are kept on Originality.ai, as the settings last said */
+		this._storeScan = true;
+		this._loader = new Loader("scan-loader", tr("Scanning… A plagiarism check can take up to a minute."));
+		this._loader.hide();
+		this._result = new ScanResultView(/** @type {HTMLElement} */ (document.getElementById("scan-result")), {
+			onSelect: (finding) => this._select(finding),
+		});
+
+		this._highlightBar = /** @type {HTMLElement} */ (document.getElementById("scan-highlights"));
+		this._highlightStatus = /** @type {HTMLElement} */ (document.getElementById("highlights-status"));
+		this._clearButton = new Button("clear-highlights", { variant: "secondary", text: tr("Clear marks") });
+		this._clearButton.subscribe((event) => {
+			if (event.type === "button:click")
+				this._clearHighlights();
+		});
+
+		// nothing to report until a scan is done; the caller says when
+		const exportButton = new Button("export-report-scan", { variant: "secondary", text: tr("Export report"), disabled: true });
+		this._exportButton = exportButton;
+		exportButton.subscribe((event) => {
+			if (event.type === "button:click")
+				callbacks.onExportReport();
+		});
+
+		this._isScanning = false;
+	}
+
+	/**
+	 * @param {boolean} enabled - whether the report has anything to show
+	 */
+	setExportEnabled(enabled) {
+		if (enabled)
+			this._exportButton.enable();
+		else
+			this._exportButton.disable();
+	}
+
+	/**
+	 * @param {"error" | "warning" | "info" | "success"} type
+	 * @param {string} title
+	 * @param {string} text - translated; a part in [brackets] becomes a link to the settings
+	 * @private
+	 */
+	_showMessage(type, title, text) {
+		// a message shown where one already is takes its place
+		this._message = new Message("scan-message", {
+			type                : type,
+			title               : title,
+			text                : this._linkSettings(text),
+			closeButton         : true,
+			closeOnClickOutside : false,
+		}).show();
+		this._showsNoKey = false;
+	}
+
+	/**
+	 * @param {string} text
+	 * @returns {string | DocumentFragment} the text, with its part in [brackets], if any, made a
+	 *   link that opens the settings
+	 * @private
+	 */
+	_linkSettings(text) {
+		const match = /^(.*?)\[(.+?)\](.*)$/s.exec(text);
+		if (!match)
+			return text;
+		const link = document.createElement("a");
+		link.href = "#";
+		link.textContent = match[2];
+		link.addEventListener("click", (event) => {
+			event.preventDefault();
+			this._onOpenSettings();
+		});
+		const fragment = document.createDocumentFragment();
+		fragment.append(match[1], link, match[3]);
+		return fragment;
+	}
+
+	/** @private */
+	_hideMessage() {
+		if (this._message)
+			this._message.close();
+		this._message = null;
+		this._showsNoKey = false;
+	}
+
+	/**
+	 * @param {number} words - selected in the document; 0 when nothing is
+	 */
+	setSelectedWords(words) {
+		const tr = window.Asc.plugin.tr;
+		this._scope = words >= ScanService.minWords ? "selection" : "document";
+		this._scanButton.setText(tr(this._scope === "selection" ? "Scan selection" : "Scan document"));
+		// the hint is for a selection too short to scan on its own
+		this._selectionHint.classList.toggle("hidden", words === 0 || this._scope === "selection");
+	}
+
+	/**
+	 * Scans the selected text, whatever the scan button would scan.
+	 */
+	scanSelection() {
+		this._scan("selection");
+	}
+
+	/**
+	 * A mark was clicked in the document: show its finding.
+	 * @param {string} findingId
+	 */
+	revealFinding(findingId) {
+		this._result.markActive(findingId);
+	}
+
+	/**
+	 * Without an API key there is nothing to scan with; say so up front.
+	 * @param {PluginSettings} settings
+	 */
+	onSettingsChanged(settings) {
+		this._storeScan = settings.storeScan;
+		if (this._isScanning)
+			return;
+
+		// only the message about the key goes with the key: a scan's error stays when other settings change
+		if (settings.apiKey) {
+			if (this._showsNoKey)
+				this._hideMessage();
+		} else if (!this._showsNoKey) {
+			this._showNoKey();
+		}
+	}
+
+	/**
+	 * The dictionary came after the page was drawn: draws again what was put together from parts,
+	 * which the page's own translation leaves as it was.
+	 */
+	retranslate() {
+		if (this._showsNoKey)
+			this._showNoKey();
+	}
+
+	/** @private */
+	_showNoKey() {
+		const tr = window.Asc.plugin.tr;
+		this._showMessage("info", tr("No API key"), tr("Add your Originality.ai API key in [Settings]."));
+		this._showsNoKey = true;
+	}
+
+	/**
+	 * @param {ScanScope} scope
+	 * @private
+	 */
+	async _scan(scope) {
+		if (this._isScanning)
+			return;
+
+		this._setScanning(true);
+		try {
+			const text = await this._service.read(scope);
+			// the last result stays until the scan is sure to go ahead
+			if (text.words > ScanService.maxWords && !(await this._confirmCut(text.words)))
+				return;
+
+			this._hideMessage();
+			this._result.clear();
+			await this._clearHighlights();
+			this._loader.show();
+			const result = await this._service.scan(text);
+			const findings = ScanFindings.fromResult(result);
+			this._result.show(result, findings);
+			this._onScanned(scope, result, findings);
+			await this._showHighlights(findings);
+		} catch (e) {
+			this._showError(e);
+		} finally {
+			this._setScanning(false);
+		}
+	}
+
+	/**
+	 * @param {ScanFindings} findings
+	 * @private
+	 */
+	async _showHighlights(findings) {
+		const tr = window.Asc.plugin.tr;
+		const markable = findings.ai.filter((f) => f.flagged).length + findings.plagiarism.length;
+		if (!markable || !(await this._highlights.isSupported()))
+			return;
+
+		const marked = await this._highlights.show(findings);
+		this._highlightStatus.textContent = marked
+			? tr("Marked in the document") + ": " + marked + " / " + markable
+			: tr("The passages were not found in the document; it may have changed since the scan.");
+		this._highlightBar.classList.remove("hidden");
+	}
+
+	/** @private */
+	async _clearHighlights() {
+		this._highlightBar.classList.add("hidden");
+		await this._highlights.clear();
+	}
+
+	/**
+	 * @param {ScanFinding} finding
+	 * @private
+	 */
+	async _select(finding) {
+		const tr = window.Asc.plugin.tr;
+		if (!(await this._highlights.select(finding)))
+			this._showMessage("info", tr("Not found"), tr("This passage is not in the document any more."));
+		else
+			this._hideMessage();
+	}
+
+	/**
+	 * @param {number} words - in the text to scan
+	 * @returns {Promise<boolean>} whether the user agrees to scan only its beginning
+	 * @private
+	 */
+	async _confirmCut(words) {
+		const tr = window.Asc.plugin.tr;
+		const max = ScanService.maxWords.toLocaleString();
+		const answer = await this._confirm(tr("The text is too long"), [
+			tr("The text has %1 words. One scan covers up to %2, so only the first %2 words will be scanned.")
+				.replace("%1", words.toLocaleString()).replace(/%2/g, max),
+			tr("To scan the rest, select it and scan it separately."),
+		], [tr("Continue"), tr("Cancel")]);
+		return answer === 0;
+	}
+
+	/**
+	 * @param {unknown} error
+	 * @private
+	 */
+	_showError(error) {
+		const tr = window.Asc.plugin.tr;
+		if (error instanceof ScanInputError) {
+			this._showMessage("warning", tr("Cannot scan yet"), tr(error.message));
+		} else if (error instanceof OriginalityApiError && error.mayHaveRun) {
+			this._showMessage("warning", tr("Originality.ai took too long to answer"), [
+				tr("The scan may still have finished and used credits."),
+				this._storeScan ? tr("If it did, you will find it in your Originality.ai account.") : "",
+				tr("Try again with a shorter selection."),
+			].filter(Boolean).join(" "));
+		} else if (error instanceof OriginalityApiError) {
+			// the API's own wording is English and specific ("Invalid API Key", "insufficient credits")
+			this._showMessage("error", tr("Originality.ai could not scan the text"),
+				error.status ? error.message : tr(error.message));
+		} else {
+			this._showMessage("error", tr("Something went wrong"), error instanceof Error ? error.message : String(error));
+		}
+	}
+
+	/**
+	 * @param {boolean} isScanning
+	 * @private
+	 */
+	_setScanning(isScanning) {
+		this._isScanning = isScanning;
+		// the loader shows once the text is on its way, see _scan
+		if (isScanning) {
+			this._scanButton.disable();
+		} else {
+			this._scanButton.enable();
+			this._loader.hide();
+		}
+	}
+}

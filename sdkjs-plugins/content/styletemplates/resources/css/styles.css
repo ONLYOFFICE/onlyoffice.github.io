@@ -1,0 +1,23 @@
+#st-root { padding: 10px 12px; font-size: 11px; box-sizing: border-box; }
+#st-root * { box-sizing: border-box; }
+.st-section { margin-bottom: 16px; }
+.st-section h3 { font-size: 12px; font-weight: 700; margin: 0 0 8px; }
+.st-label { display: block; margin-bottom: 4px; }
+.st-input { width: 100%; margin-bottom: 8px; }
+.st-check { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; cursor: pointer; }
+.st-btn { width: 100%; margin-bottom: 4px; }
+.st-hint { margin: 0 0 8px; opacity: .75; }
+.st-hidden { display: none; }
+.st-list { display: flex; flex-direction: column; gap: 8px; }
+.st-empty { opacity: .7; font-style: italic; }
+.st-card { border: 1px solid rgba(128,128,128,.35); border-radius: 4px; padding: 8px; }
+.st-card-head { display: flex; justify-content: space-between; gap: 6px; align-items: baseline; }
+.st-card-name { font-weight: 700; word-break: break-word; }
+.st-card-meta { opacity: .7; white-space: nowrap; }
+.st-actions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.st-actions button { flex: 1 1 auto; min-width: 60px; }
+.st-actions select { flex: 1 1 100%; }
+.st-styles { margin: 6px 0 0; padding-left: 16px; max-height: 140px; overflow: auto; }
+.st-status { min-height: 16px; padding: 6px 0; font-weight: 600; }
+.st-status.err { color: #d9534f; }
+.st-status.ok { color: #3c9a49; }

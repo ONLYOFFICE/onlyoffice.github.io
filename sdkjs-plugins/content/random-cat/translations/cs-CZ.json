@@ -1,0 +1,14 @@
+{
+	"Another cat": "Jiná kočka",
+	"Insert": "Vložit",
+	"Image size": "Velikost obrázku",
+	"Small": "Malý",
+	"Medium": "Střední",
+	"Large": "Velký",
+	"Loading...": "Načítání...",
+	"Failed to load a cat picture. Check your internet connection and try again.": "Obrázek kočky se nepodařilo načíst. Zkontrolujte připojení k internetu a zkuste to znovu.",
+	"The picture has been inserted.": "Obrázek byl vložen.",
+	"Failed to insert the picture.": "Obrázek se nepodařilo vložit.",
+	"Photos provided by": "Fotografie poskytuje",
+	"Random cat picture": "Náhodný obrázek kočky"
+}
