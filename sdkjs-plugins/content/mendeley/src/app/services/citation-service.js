@@ -36,16 +36,16 @@
 /// <reference path="../../../vendor/citeproc/citeproc_commonjs.js" />
 
 /**
- * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
- * @typedef {import('../csl/locales').LocalesManager} LocalesManager
- * @typedef {import('../csl/abbreviations').AbbreviationsManager} AbbreviationsManager
- * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
+ * @typedef {import('@shared/csl/styles').CslStylesManager} CslStylesManager
+ * @typedef {import('@shared/csl/locales').LocalesManager} LocalesManager
+ * @typedef {import('@shared/csl/abbreviations').AbbreviationsManager} AbbreviationsManager
+ * @typedef {import('@shared/csl/citation/citation-item').CitationItem} CitationItem
  */
 
 import { CitationDocService } from "./citation-doc-service";
-import { translate } from "./translate-service";
-import { CSLCitation, CSLCitationStorage } from "../csl/citation";
-import { AdditionalWindow } from "../pages/additional-window";
+import { translate } from "@shared/services/translate-service";
+import { CSLCitation, CSLCitationStorage } from "@shared/csl/citation";
+import { AdditionalWindow } from "@shared/pages/additional-window";
 
 class CitationService {
     #additionalWindow;
@@ -73,7 +73,7 @@ class CitationService {
             this._citPrefixNew,
             this._bibPrefixNew,
         );
-        this.#additionalWindow = new AdditionalWindow();
+        this.#additionalWindow = new AdditionalWindow("Mendeley");
         this.#skipUrlForPaperArticles = false; // true only for bibliography
         this.#abbreviationsManager = abbreviationsManager;
         this.#abbreviationsManager.load();
@@ -131,6 +131,16 @@ class CitationService {
                 }
                 return res;
             });
+    }
+
+    /**
+     * Adds a citation after the stored ones. The citations are numbered
+     * by their order, as the notes of a note style would be.
+     * @param {CSLCitation} cslCitation
+     */
+    #addToStorage(cslCitation) {
+        cslCitation.setNoteIndex(this._storage.getLastNoteIndex() + 1);
+        this._storage.addCslCitation(cslCitation);
     }
 
     /** @returns {string} */
@@ -311,7 +321,7 @@ class CitationService {
                     } else {
                         cslCitation.fillFromObject(citationObject);
                     }
-                    self._storage.addCslCitation(cslCitation);
+                    self.#addToStorage(cslCitation);
 
                     return { control: { ...control }, cslCitation: cslCitation };
                 });
@@ -620,7 +630,7 @@ class CitationService {
             cslCitation.fillFromObject(item);
         }
 
-        this._storage.addCslCitation(cslCitation);
+        this.#addToStorage(cslCitation);
         return this.#formatInsertLink(cslCitation);
 
     }
@@ -949,7 +959,7 @@ class CitationService {
             cslCitation.fillFromObject(citationObject);
             cslCitation.setManualOverride(field.Content);
 
-            self._storage.addCslCitation(cslCitation);
+            self.#addToStorage(cslCitation);
             
             return { field: { ...field }, cslCitation: cslCitation };
         });

@@ -2,7 +2,7 @@
 // style of a document is checked this way before it is taken (see
 // test/services/citation-service.test.js).
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { CslStylesManager } from "../../src/app/csl/styles/styles-manager.js";
+import { CslStylesManager } from "./styles-manager.js";
 
 afterEach(() => {
     vi.unstubAllGlobals();

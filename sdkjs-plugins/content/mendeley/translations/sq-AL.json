@@ -97,5 +97,11 @@
     "Section": "Seksion",
     "Timestamp": "Vulë kohore",
     "Verse": "Varg",
-    "Volume": "Vëllim"
+    "Volume": "Vëllim",
+    "Error": "Gabim",
+    "Information": "Informacion",
+    "Operation completed successfully": "Veprimi përfundoi me sukses",
+    "Please be cautious": "Ju lutemi bëni kujdes",
+    "Success": "Sukses",
+    "Warning": "Kujdes"
 }

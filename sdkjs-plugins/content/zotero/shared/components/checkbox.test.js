@@ -1,7 +1,7 @@
 // The keys of a list of results (Space, Ctrl+A) work from the checkbox the
 // user clicked; 1.2.x left the focus on the page after a click.
 import { expect, it } from "vitest";
-import { Checkbox } from "../../src/app/shared/components/checkbox.js";
+import { Checkbox } from "./checkbox.js";
 
 it("keeps the focus in the list after a click", () => {
     const list = document.createElement("div");

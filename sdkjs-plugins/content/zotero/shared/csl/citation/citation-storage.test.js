@@ -1,7 +1,7 @@
 // citeproc reads the note of the citations around one from the storage:
 // that must be the note number, not the place of the citation.
 import { expect, it } from "vitest";
-import { CSLCitation, CSLCitationStorage } from "../../src/app/csl/citation/index.js";
+import { CSLCitation, CSLCitationStorage } from "./index.js";
 
 it("gives the citations around one with their note numbers", () => {
     CSLCitation.resetUsedIDs();

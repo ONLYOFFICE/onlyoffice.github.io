@@ -1,7 +1,7 @@
 // sr-RS left the CSL repository, and the plugin, for sr-Cyrl-RS. A language
 // chosen before, or kept in a document from Word, must still find a locale.
 import { afterEach, expect, it, vi } from "vitest";
-import { LocalesManager } from "../../src/app/csl/locales/locales-manager.js";
+import { LocalesManager } from "./locales-manager.js";
 
 afterEach(() => {
     vi.unstubAllGlobals();

@@ -31,9 +31,13 @@
                 delete item.series_number
             }
 
-            if (item.series || item.source) {
-                item["container-title"] = item.series || item.source;
-                item["collection-title"] = item.series || item.source;
+            // The journal or book is the container, the series is the
+            // collection: given both the same title, styles print it twice.
+            if (item.source) {
+                item["container-title"] = item.source;
+            }
+            if (item.series) {
+                item["collection-title"] = item.series;
                 delete item.series;
             }
 

@@ -97,5 +97,11 @@
     "Section": "Odeljak",
     "Timestamp": "Vremenska oznaka",
     "Verse": "Stih",
-    "Volume": "Tom"
+    "Volume": "Tom",
+    "Error": "Greška",
+    "Information": "Informacija",
+    "Operation completed successfully": "Radnja je uspešno završena",
+    "Please be cautious": "Budite oprezni",
+    "Success": "Uspeh",
+    "Warning": "Upozorenje"
 }

@@ -97,5 +97,11 @@
     "Section": "Sectie",
     "Timestamp": "Tijdstempel",
     "Verse": "Vers",
-    "Volume": "Deel"
+    "Volume": "Deel",
+    "Error": "Fout",
+    "Information": "Informatie",
+    "Operation completed successfully": "Bewerking voltooid",
+    "Please be cautious": "Wees voorzichtig",
+    "Success": "Gelukt",
+    "Warning": "Waarschuwing"
 }

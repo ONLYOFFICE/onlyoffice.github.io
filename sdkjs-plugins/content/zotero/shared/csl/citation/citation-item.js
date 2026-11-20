@@ -36,6 +36,15 @@
 import { CitationItemData } from "./citation-item-data";
 
 /**
+ * Builds the URIs of an item that has no portable URI of its own; the
+ * reference service's plugin for Word may need them to find the item. Set by
+ * the plugin with CitationItem.setFallbackUris; without it such an item is
+ * written with no URIs.
+ * @type {null | ((id: string|number, itemData: {getCustomProperty(key: string): any}) => Array<string>)}
+ */
+let fallbackUris = null;
+
+/**
  * @param {string|number} id
  */
 function CitationItem(id) {
@@ -53,6 +62,14 @@ function CitationItem(id) {
     this._authorOnly = undefined;
     this._uris = new Array();
 }
+
+/**
+ * @param {(id: string|number, itemData: {getCustomProperty(key: string): any}) => Array<string>} build
+ *  the URIs of an item that has none of its own
+ */
+CitationItem.setFallbackUris = function (build) {
+    fallbackUris = build;
+};
 
 /**
  * @param {any} itemObject
@@ -302,20 +319,8 @@ CitationItem.prototype.toJSON = function (skipUrlForPaperArticles) {
     });
     if (filteredUris.length) {
         result.uris = filteredUris;
-    } else {
-        // Construct URI from library context if available - required for Word Zotero compatibility
-        var userID = this._itemData && this._itemData.getCustomProperty
-            ? this._itemData.getCustomProperty("userID") : null;
-        var groupID = this._itemData && this._itemData.getCustomProperty
-            ? this._itemData.getCustomProperty("groupID") : null;
-        var key = typeof this.id === "string" ? this.id : "";
-        if (key && userID) {
-            result.uris = ["http://zotero.org/users/" + userID + "/items/" + key];
-        } else if (key && groupID) {
-            result.uris = ["http://zotero.org/groups/" + groupID + "/items/" + key];
-        } else {
-            result.uris = [];
-        }
+    } else if (fallbackUris) {
+        result.uris = fallbackUris(this.id, this._itemData);
     }
 
     return result;

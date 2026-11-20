@@ -2,7 +2,7 @@
 // json copy merged over it. The json copy must not spoil what the CSL copy
 // says - each case here was a regression of 1.2.x against 1.1.0.
 import { describe, expect, it } from "vitest";
-import { CitationItemData } from "../../src/app/csl/citation/citation-item-data.js";
+import { CitationItemData } from "./citation-item-data.js";
 
 /** @param {...Object} copies - CSL, then json data, as the plugin reads them */
 function read(...copies) {

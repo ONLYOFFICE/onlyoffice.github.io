@@ -32,9 +32,9 @@
 
 // @ts-check
 
-/// <reference path="../../types-global.js" />
+/// <reference path="../../../../shared/types-global.js" />
 
-import { Button, TreeSelectBox, InputField } from "../components";
+import { Button, TreeSelectBox, InputField } from "@shared/components";
 import { translate } from "../../services";
 
 const MY_LIBRARY = "my_library";

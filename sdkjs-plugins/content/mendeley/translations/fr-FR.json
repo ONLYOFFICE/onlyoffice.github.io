@@ -97,5 +97,11 @@
     "Section": "Section",
     "Timestamp": "Horodatage",
     "Verse": "Verset",
-    "Volume": "Volume"
+    "Volume": "Volume",
+    "Error": "Erreur",
+    "Information": "Information",
+    "Operation completed successfully": "Opération terminée avec succès",
+    "Please be cautious": "Veuillez faire attention",
+    "Success": "Succès",
+    "Warning": "Attention"
 }

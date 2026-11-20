@@ -34,11 +34,11 @@
 
 /// <reference types="@onlyoffice/doceditor-plugin-types" />
 /// <reference types="@onlyoffice/doceditor-plugin-types/word" />
-/// <reference path="../types-global.js" />
-/// <reference path="../csl/citation/types.js" />
-/// <reference path="../csl/styles/types.js" />
+/// <reference path="../../../shared/types-global.js" />
+/// <reference path="../../../shared/csl/citation/types.js" />
+/// <reference path="../../../shared/csl/styles/types.js" />
 
-import { CslHtmlParser } from "./csl-html-parser";
+import { CslHtmlParser } from "@shared/services/csl-html-parser";
 import { CslDocFormatter } from "./csl-doc-formatter";
 import { findNoteNumbers } from "../csl/citation/note-numbers";
 

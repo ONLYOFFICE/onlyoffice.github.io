@@ -34,7 +34,7 @@
 
 /// <reference path="./types.js" />
 
-import { translate } from "../../services/translate-service";
+import { translate } from "../services/translate-service";
 
 /**
  * @constructor

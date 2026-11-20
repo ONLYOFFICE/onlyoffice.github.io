@@ -1,7 +1,7 @@
 // A field written by another program, read and written again by the
 // plugin: whatever it says about its sources must come through unchanged.
 import { describe, expect, it } from "vitest";
-import { CSLCitation } from "../../src/app/csl/citation/index.js";
+import { CSLCitation } from "@shared/csl/citation/index.js";
 import { mendeleyCitation, zoteroWordCitation } from "../fixtures/fields.js";
 
 /** @param {any} source */

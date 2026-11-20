@@ -33,10 +33,10 @@
 // @ts-check
 
 /**
- * @typedef {import('../router').Router} Router
+ * @typedef {import('@shared/router').Router} Router
  */
 
-import { InputField, Button, Message } from "../shared/components";
+import { InputField, Button, Message } from "@shared/components";
 import { translate } from "../services";
 import { AuthCodeFlow } from "../sdk";
 

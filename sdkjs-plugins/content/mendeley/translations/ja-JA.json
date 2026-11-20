@@ -97,5 +97,11 @@
     "Section": "節",
     "Timestamp": "タイムスタンプ",
     "Verse": "節",
-    "Volume": "巻"
+    "Volume": "巻",
+    "Error": "エラー",
+    "Information": "情報",
+    "Operation completed successfully": "操作が正常に完了しました",
+    "Please be cautious": "ご注意ください",
+    "Success": "成功",
+    "Warning": "警告"
 }

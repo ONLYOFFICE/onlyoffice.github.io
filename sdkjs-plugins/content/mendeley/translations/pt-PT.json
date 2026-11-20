@@ -97,5 +97,11 @@
     "Section": "Secção",
     "Timestamp": "Marca temporal",
     "Verse": "Versículo",
-    "Volume": "Volume"
+    "Volume": "Volume",
+    "Error": "Erro",
+    "Information": "Informação",
+    "Operation completed successfully": "Operação concluída com sucesso",
+    "Please be cautious": "Tenha cuidado",
+    "Success": "Sucesso",
+    "Warning": "Aviso"
 }

@@ -32,12 +32,12 @@
 
 // @ts-check
 
-/// <reference path="../types-global.js" />
+/// <reference path="../../../shared/types-global.js" />
 /// <reference path="./types.js" />
 
 import { zoteroEnvironment } from "./zotero-environment";
 import { RateLimitedFetcher } from "./zotero-api-fetcher";
-import { ZOTERO_TYPE_TO_CSL } from "../csl/zotero-type-map";
+import { ZOTERO_TYPE_TO_CSL } from "@shared/csl/zotero-type-map";
 
 const ZoteroSdk = function () {
     this._apiKey = null;

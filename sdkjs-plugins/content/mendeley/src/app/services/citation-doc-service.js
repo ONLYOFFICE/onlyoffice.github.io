@@ -34,11 +34,11 @@
 
 /// <reference types="@onlyoffice/doceditor-plugin-types" />
 /// <reference types="@onlyoffice/doceditor-plugin-types/word" />
-/// <reference path="../types-global.js" />
-/// <reference path="../csl/citation/types.js" />
-/// <reference path="../csl/styles/types.js" />
+/// <reference path="../../../../zotero/shared/types-global.js" />
+/// <reference path="../../../../zotero/shared/csl/citation/types.js" />
+/// <reference path="../../../../zotero/shared/csl/styles/types.js" />
 
-import { CslHtmlParser } from "./csl-html-parser";
+import { CslHtmlParser } from "@shared/services/csl-html-parser";
 
 class CitationDocService {
     #citPrefix;

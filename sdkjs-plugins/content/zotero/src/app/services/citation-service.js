@@ -36,10 +36,10 @@
 /// <reference path="../../../vendor/citeproc/citeproc_commonjs.js" />
 
 /**
- * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
+ * @typedef {import('@shared/csl/styles').CslStylesManager} CslStylesManager
  * @typedef {import('../zotero/zotero').ZoteroSdk} ZoteroSdk
- * @typedef {import('../csl/locales').LocalesManager} LocalesManager
- * @typedef {import('../csl/abbreviations').AbbreviationsManager} AbbreviationsManager
+ * @typedef {import('@shared/csl/locales').LocalesManager} LocalesManager
+ * @typedef {import('@shared/csl/abbreviations').AbbreviationsManager} AbbreviationsManager
  * @typedef {(progress: {phase: "fetch"|"apply", completed: number, total: number}) => void} RefreshProgressCallback
  */
 
@@ -51,15 +51,16 @@
  */
 
 import { CitationDocService } from "./citation-doc-service";
-import { CslHtmlParser } from "./csl-html-parser";
-import { translate } from "./translate-service";
-import { CSLCitation, CSLCitationStorage } from "../csl/citation";
-import { CitationItem } from "../csl/citation/citation-item";
+import { CslHtmlParser } from "@shared/services/csl-html-parser";
+import { translate } from "@shared/services/translate-service";
+import { CSLCitation, CSLCitationStorage } from "@shared/csl/citation";
+import { CitationItem } from "@shared/csl/citation/citation-item";
 import { BibliographyEdits, customEntryToHtml } from "../csl/bibliography";
 import { updateDocumentPrefs } from "../csl/document-prefs";
 import { numberAsInNotes } from "../csl/citation/note-numbers";
-import { AdditionalWindow } from "../pages/additional-window";
+import { AdditionalWindow } from "@shared/pages/additional-window";
 import { collectItemKeys } from "../shared/item-keys";
+import { zoteroItemUris } from "../zotero/zotero-item-uris";
 
 class CitationService {
     /** @type {AdditionalWindow} */
@@ -123,6 +124,7 @@ class CitationService {
         this._bibPrefixNew = "ZOTERO_BIBL";
         this._bibSuffixNew = "CSL_BIBLIOGRAPHY";
         this._bibPrefix = "ZOTERO_BIBLIOGRAPHY";
+        CitationItem.setFallbackUris(zoteroItemUris);
         this._sdk = sdk;
         this._localesManager = localesManager;
         this._cslStylesManager = cslStylesManager;
@@ -135,7 +137,7 @@ class CitationService {
             this._bibPrefixNew,
             this._bibSuffixNew,
         );
-        this.#additionalWindow = new AdditionalWindow();
+        this.#additionalWindow = new AdditionalWindow("Zotero");
         this.#skipUrlForPaperArticles = false; // true only for bibliography
         this.#abbreviationsManager = abbreviationsManager;
         this.#abbreviationsManager.load();
@@ -1944,7 +1946,7 @@ class CitationService {
      * the links that carry field codes become fields, the document
      * preferences are taken up and what Zotero added is removed. The
      * citations keep the text they had; a refresh brings it up to date.
-     * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @param {import('@shared/csl/styles').CslStylesManager} styleManager
      * @returns {Promise<{imported: number, failed: number, hasPreferences: boolean}>}
      */
     async importTransferDocument(styleManager) {
@@ -2024,7 +2026,7 @@ class CitationService {
      * ZOTERO_PREF in sync with every citation change made here. This
      * preserves the citation style when opening a DOCX created by the
      * Word Zotero plugin, or a previous session of this plugin.
-     * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @param {import('@shared/csl/styles').CslStylesManager} styleManager
      * @returns {Promise<void>}
      */
     async loadStyleFromDocument(styleManager) {
@@ -2049,7 +2051,7 @@ class CitationService {
      * reach offline - is not taken: the style in use stays, and the user is
      * told.
      * @param {string} prefXml - as Zotero writes it in ZOTERO_PREF
-     * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @param {import('@shared/csl/styles').CslStylesManager} styleManager
      * @returns {Promise<void>}
      */
     async #applyDocumentPreferences(prefXml, styleManager) {
@@ -2099,7 +2101,7 @@ class CitationService {
      * can read the chosen citation style when the file is opened there.
      * The XML is chunked into 255-char segments across multiple properties
      * to respect the OOXML custom property value length limit.
-     * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @param {import('@shared/csl/styles').CslStylesManager} styleManager
      * @param {string} locale
      * @returns {Promise<void>}
      */
@@ -2148,7 +2150,7 @@ class CitationService {
      * can be formatted where the style repository is out of reach. A style
      * the repository updated replaces the stored one on the next save, once
      * the citations have been formatted with it.
-     * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @param {import('@shared/csl/styles').CslStylesManager} styleManager
      * @returns {Promise<void>}
      */
     async #saveEmbeddedStyle(styleManager) {

@@ -97,5 +97,11 @@
     "Section": "Oddíl",
     "Timestamp": "Časová značka",
     "Verse": "Verš",
-    "Volume": "Svazek"
+    "Volume": "Svazek",
+    "Error": "Chyba",
+    "Information": "Informace",
+    "Operation completed successfully": "Operace byla úspěšně dokončena",
+    "Please be cautious": "Buďte prosím opatrní",
+    "Success": "Úspěch",
+    "Warning": "Varování"
 }

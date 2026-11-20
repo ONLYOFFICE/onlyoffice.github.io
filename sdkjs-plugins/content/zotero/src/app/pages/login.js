@@ -33,11 +33,11 @@
 // @ts-check
 
 /**
- * @typedef {import('../router').Router} Router
+ * @typedef {import('@shared/router').Router} Router
  * @typedef {import('../zotero').ZoteroSdk} ZoteroSdk
  */
 
-import { InputField, Button, Message } from "../shared/components";
+import { InputField, Button, Message } from "@shared/components";
 import { translate } from "../services";
 import { ZoteroApiChecker } from "../zotero";
 

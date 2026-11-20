@@ -33,7 +33,7 @@
 // @ts-check
 
 /**
- * @typedef {import('../router').Router} Router
+ * @typedef {import('@shared/router').Router} Router
  * @typedef {import('../services/citation-service').CitationService} CitationService
  */
 
@@ -44,14 +44,14 @@ import {
     Checkbox,
     Message,
     Loader,
-} from "../shared/components";
+} from "@shared/components";
 import { translate } from "../services";
-import { CslStylesManager } from "../csl/styles";
-import { CslStylesParser } from "../csl/styles/style-parser";
-import { CslHtmlParser } from "../services/csl-html-parser";
-import { LocalesManager } from "../csl/locales";
-import { AbbreviationsManager } from "../csl/abbreviations";
-import { CitationItemData } from "../csl/citation/citation-item-data";
+import { CslStylesManager } from "@shared/csl/styles";
+import { CslStylesParser } from "@shared/csl/styles/style-parser";
+import { CslHtmlParser } from "@shared/services/csl-html-parser";
+import { LocalesManager } from "@shared/csl/locales";
+import { AbbreviationsManager } from "@shared/csl/abbreviations";
+import { CitationItemData } from "@shared/csl/citation/citation-item-data";
 import { AutoUpdatePreferences } from "../auto-update-preferences";
 
 const PREVIEW_ITEMS = [

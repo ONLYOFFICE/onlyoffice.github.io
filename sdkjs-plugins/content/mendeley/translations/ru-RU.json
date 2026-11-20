@@ -104,5 +104,11 @@
     "Section": "Раздел",
     "Timestamp": "Временная отметка",
     "Verse": "Стих",
-    "Volume": "Том"
+    "Volume": "Том",
+    "Error": "Ошибка",
+    "Information": "Информация",
+    "Operation completed successfully": "Операция успешно завершена",
+    "Please be cautious": "Будьте внимательны",
+    "Success": "Успех",
+    "Warning": "Предупреждение"
 }

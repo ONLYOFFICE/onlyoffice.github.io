@@ -31,22 +31,22 @@
  */
 // @ts-check
 
-/// <reference path="./types-global.js" />
+/// <reference path="../../shared/types-global.js" />
 /// <reference path="./zotero/types.js" />
 
 /** @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme */
 
-import { Theme } from "./theme";
-import { Router } from "./router";
+import { Theme } from "@shared/theme";
+import { Router } from "@shared/router";
 import { ZoteroSdk } from "./zotero";
 import { SettingsPage } from "./pages/settings";
 import { LoginPage } from "./pages/login";
 import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
-import { Button, Loader } from "./shared/components";
+import { Button, Loader } from "@shared/components";
 import { AutoUpdatePreferences } from "./auto-update-preferences";
 
-import "../components.css";
+import "@shared/components.css";
 import "../styles.css";
 
 (function () {

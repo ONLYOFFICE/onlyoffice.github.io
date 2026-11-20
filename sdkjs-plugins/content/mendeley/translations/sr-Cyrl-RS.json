@@ -97,5 +97,11 @@
     "Section": "Одељак",
     "Timestamp": "Временска ознака",
     "Verse": "Стих",
-    "Volume": "Том"
+    "Volume": "Том",
+    "Error": "Грешка",
+    "Information": "Информација",
+    "Operation completed successfully": "Радња је успешно завршена",
+    "Please be cautious": "Будите опрезни",
+    "Success": "Успех",
+    "Warning": "Упозорење"
 }

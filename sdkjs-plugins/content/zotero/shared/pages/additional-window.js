@@ -14,8 +14,12 @@ class AdditionalWindow {
     #defaultButtonFn;
     #defaultThemeChangedFn;
     #defaultTranslateFn;
+    /** The window title: the name of the plugin. */
+    #name;
 
-    constructor() {
+    /** @param {string} name */
+    constructor(name) {
+        this.#name = name;
         this.#window = null;
         this.#defaultButtonFn = window.Asc.plugin.button;
         this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
@@ -33,7 +37,7 @@ class AdditionalWindow {
         this.#window = new window.Asc.PluginWindow();
         /** @type {VariationConfig} */
         const variation = {
-            name: "Zotero",
+            name: this.#name,
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
@@ -85,7 +89,7 @@ class AdditionalWindow {
         this.#window = new window.Asc.PluginWindow();
         /** @type {VariationConfig} */
         const variation = {
-            name: "Zotero",
+            name: this.#name,
             url: "edit-window.html",
             description: window.Asc.plugin.tr("Edit citation"),
             isVisual: true,
@@ -145,7 +149,7 @@ class AdditionalWindow {
         this.#window = new window.Asc.PluginWindow();
         /** @type {VariationConfig} */
         const variation = {
-            name: "Zotero",
+            name: this.#name,
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,

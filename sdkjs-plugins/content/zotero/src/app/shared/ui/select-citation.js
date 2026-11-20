@@ -32,12 +32,12 @@
 
 // @ts-check
 
-/// <reference path="../../types-global.js" />
+/// <reference path="../../../../shared/types-global.js" />
 /// <reference path="../../zotero/types.js" />
 
 import { translate } from "../../services";
-import { Checkbox, InputField, SelectBox } from "../components";
-import LOCATOR_VALUES from "../constants/locator-values";
+import { Checkbox, InputField, SelectBox } from "@shared/components";
+import LOCATOR_VALUES from "@shared/constants/locator-values";
 import { collectItemKeys } from "../item-keys";
 
 /**

@@ -33,7 +33,7 @@
 // @ts-check
 
 /**
- * @typedef {import('../router').Router} Router
+ * @typedef {import('@shared/router').Router} Router
  */
 
 import {
@@ -43,13 +43,13 @@ import {
     Checkbox,
     Message,
     Loader,
-} from "../shared/components";
+} from "@shared/components";
 import { translate } from "../services";
-import { CslStylesManager } from "../csl/styles";
-import { CslHtmlParser } from "../services/csl-html-parser";
-import { LocalesManager } from "../csl/locales";
-import { AbbreviationsManager } from "../csl/abbreviations";
-import { CitationItemData } from "../csl/citation/citation-item-data";
+import { CslStylesManager } from "@shared/csl/styles";
+import { CslHtmlParser } from "@shared/services/csl-html-parser";
+import { LocalesManager } from "@shared/csl/locales";
+import { AbbreviationsManager } from "@shared/csl/abbreviations";
+import { CitationItemData } from "@shared/csl/citation/citation-item-data";
 
 const PREVIEW_ITEMS = [
     {
@@ -225,7 +225,8 @@ function SettingsPage(router, displayNoneClass) {
         ["ru-RU", "Russian"],
         ["sk-SK", "Slovak"],
         ["sl-SI", "Slovenian"],
-        ["sr-RS", "Serbian"],
+        ["sr-Cyrl-RS", "Serbian (Cyrillic)"],
+        ["sr-Latn-RS", "Serbian (Latin)"],
         ["sv-SE", "Swedish"],
         ["th-TH", "Thai"],
         ["tr-TR", "Turkish"],

@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/// <reference path="../types-global.js" />
+/// <reference path="../../../shared/types-global.js" />
 /// <reference path="./types.js" />
 
 import { zoteroEnvironment } from "./zotero-environment";

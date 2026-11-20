@@ -97,5 +97,11 @@
     "Section": "Abschnitt",
     "Timestamp": "Zeitstempel",
     "Verse": "Vers",
-    "Volume": "Band"
+    "Volume": "Band",
+    "Error": "Fehler",
+    "Information": "Information",
+    "Operation completed successfully": "Vorgang erfolgreich abgeschlossen",
+    "Please be cautious": "Bitte seien Sie vorsichtig",
+    "Success": "Erfolg",
+    "Warning": "Warnung"
 }

@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/// <reference path="../types-global.js" />
+/// <reference path="../../../shared/types-global.js" />
 /** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiRange} ApiRange */
 
 class CslDocFormatter {

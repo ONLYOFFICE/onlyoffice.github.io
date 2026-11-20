@@ -32,16 +32,16 @@
 
 // @ts-check
 
-/// <reference path="../app/types-global.js" />
+/// <reference path="../../../zotero/shared/types-global.js" />
 
 /** @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme */
 
 
-import { InputField, Checkbox, SelectBox } from "./shared/components";
-import LOCATOR_VALUES from "./shared/constants/locator-values";
-import { Theme } from "./theme";
+import { InputField, Checkbox, SelectBox } from "@shared/components";
+import LOCATOR_VALUES from "@shared/constants/locator-values";
+import { Theme } from "@shared/theme";
 
-import "../components.css";
+import "@shared/components.css";
 import "../edit-window.css";
 
 /**
