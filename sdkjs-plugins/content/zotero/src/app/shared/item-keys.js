@@ -89,4 +89,29 @@ function collectItemKeys(item) {
     return keys;
 }
 
-export { normalizeItemKey, collectItemKeys };
+/**
+ * Keys of every item already cited somewhere in the document, used to give
+ * references the document already relies on priority in the search results.
+ * Reads the stored data only: the citation service's storage is formatting
+ * state which only the insert/refresh flows may rebuild.
+ * @param {{readCitationData(): Promise<Array<Object>>}} document
+ * @returns {Promise<Set<string>>}
+ */
+async function usedItemKeys(document) {
+    /** @type {Set<string>} */
+    const keys = new Set();
+    const citations = await document.readCitationData();
+    citations.forEach(function (/** @type {any} */ citation) {
+        if (!Array.isArray(citation.citationItems)) {
+            return;
+        }
+        citation.citationItems.forEach(function (/** @type {any} */ citationItem) {
+            collectItemKeys(citationItem).forEach(function (key) {
+                keys.add(key);
+            });
+        });
+    });
+    return keys;
+}
+
+export { normalizeItemKey, collectItemKeys, usedItemKeys };

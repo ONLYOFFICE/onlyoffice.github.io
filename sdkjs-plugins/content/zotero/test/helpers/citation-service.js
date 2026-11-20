@@ -4,7 +4,11 @@
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { CitationService } from "../../src/app/services/citation-service.js";
+import { CitationService } from "@shared/services/citation-service.js";
+import { FieldCitationDocument } from "../../src/app/document/field-citation-document.js";
+import { ZoteroLibrary } from "../../src/app/zotero/zotero-library.js";
+import { ZoteroBibliographyEditor } from "../../src/app/zotero/zotero-bibliography-editor.js";
+import { ZoteroDocumentPreferences } from "../../src/app/zotero/zotero-document-preferences.js";
 
 // Not new URL(): happy-dom's URL is no file URL to node.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..") + "/";
@@ -126,14 +130,8 @@ export function makeService(options) {
         createCiteprocHook: () => () => {},
     };
 
-    const service = new CitationService(
-        /** @type {any} */ (localesManager),
-        /** @type {any} */ (stylesManager),
-        /** @type {any} */ (sdk),
-        /** @type {any} */ (abbreviationsManager),
-    );
     const copy = (/** @type {any} */ value) => JSON.parse(JSON.stringify(value));
-    service.citationDocService = /** @type {any} */ ({
+    const fields = /** @type {any} */ ({
         getAddinZoteroFields: async () => copy(doc.fields),
         getNoteNumbers: async (/** @type {Array<any>} */ fields) =>
             doc.noteNumbers ? doc.noteNumbers.slice() : fields.map(() => 0),
@@ -151,5 +149,15 @@ export function makeService(options) {
         loadStyleFromDocument: async () => options.documentPrefs || "",
         loadEmbeddedStyle: async () => null,
     });
-    return { service, doc };
+    const service = new CitationService({
+        name: "Zotero",
+        document: new FieldCitationDocument(fields),
+        localesManager: /** @type {any} */ (localesManager),
+        cslStylesManager: /** @type {any} */ (stylesManager),
+        abbreviationsManager: /** @type {any} */ (abbreviationsManager),
+        library: new ZoteroLibrary(/** @type {any} */ (sdk), /** @type {any} */ (stylesManager)),
+        bibliographyEditor: new ZoteroBibliographyEditor(/** @type {any} */ (sdk)),
+    });
+    const preferences = new ZoteroDocumentPreferences(fields, /** @type {any} */ (localesManager));
+    return { service, doc, preferences, stylesManager };
 }

@@ -42,6 +42,7 @@ import { CitationDocService } from "../services/citation-doc-service";
 /** @typedef {import("@shared/document/citation-document").CitationChange} CitationChange */
 /** @typedef {import("@shared/document/citation-document").BibliographyChange} BibliographyChange */
 /** @typedef {import("@shared/document/citation-document").NoteStyle} NoteStyle */
+/** @typedef {import("@shared/csl/citation").CSLCitation} CSLCitation */
 
 // The tags of Mendeley Cite for Word.
 const CITATION_PREFIX = "MENDELEY_CITATION";
@@ -192,6 +193,26 @@ class ContentControlCitationDocument extends CitationDocument {
         // The editor tells nothing of how it went.
         await this.#controls.saveAsText();
         return true;
+    }
+
+    /**
+     * Mendeley Cite keeps the text as the citeproc text of manualOverride.
+     * @param {CSLCitation} cslCitation
+     * @param {string} text
+     * @param {string | null} previousText
+     */
+    recordText(cslCitation, text, previousText) {
+        cslCitation.setManualOverride(text);
+    }
+
+    /**
+     * Mendeley Cite keeps both texts, the edited one marked as overriding.
+     * @param {CSLCitation} cslCitation
+     * @param {string} formattedText
+     * @param {string} editedText
+     */
+    recordManualEdit(cslCitation, formattedText, editedText) {
+        cslCitation.setManualOverride(formattedText, editedText);
     }
 
     /**

@@ -32,6 +32,8 @@
 
 // @ts-check
 
+/** @typedef {import("../csl/citation").CSLCitation} CSLCitation */
+
 /**
  * The kind of note a note style puts its citations in.
  * @typedef {"footnotes" | "endnotes"} NoteStyle
@@ -185,6 +187,29 @@ class CitationDocument {
      */
     saveAsText() {
         return Promise.reject(notImplemented("saveAsText"));
+    }
+
+    /**
+     * Records in a citation the text it was formatted to, as the plugin for
+     * Word records it in the citation's data.
+     * @param {CSLCitation} cslCitation
+     * @param {string} text
+     * @param {string | null} previousText - the text recorded before, null
+     *  when it does not count
+     */
+    recordText(cslCitation, text, previousText) {
+        throw notImplemented("recordText");
+    }
+
+    /**
+     * Records in a citation that the user edited its text and wants it kept,
+     * as the plugin for Word records it in the citation's data.
+     * @param {CSLCitation} cslCitation
+     * @param {string} formattedText - the text it would be formatted to
+     * @param {string} editedText - the text in the document
+     */
+    recordManualEdit(cslCitation, formattedText, editedText) {
+        throw notImplemented("recordManualEdit");
     }
 }
 

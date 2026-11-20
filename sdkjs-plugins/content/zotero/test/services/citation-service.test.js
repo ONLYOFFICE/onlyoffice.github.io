@@ -228,7 +228,7 @@ describe("the style of a document from Word", () => {
 
     it("takes a style it can have", async () => {
         localStorage.setItem("zoteroStyleId", "apa");
-        const { service } = makeService({
+        const { preferences, stylesManager } = makeService({
             styleId: "apa",
             format: "author-date",
             fields: [],
@@ -236,15 +236,15 @@ describe("the style of a document from Word", () => {
             documentPrefs: prefs("chicago-author-date"),
         });
 
-        await service.loadStyleFromDocument(/** @type {any} */ (service._cslStylesManager));
+        const result = await preferences.load(/** @type {any} */ (stylesManager));
 
         expect(localStorage.getItem("zoteroStyleId")).toBe("chicago-author-date");
-        expect(window.__shownWindows).toHaveLength(0);
+        expect(result.unavailableStyle).toBe(false);
     });
 
-    it("keeps the user's style, and says so, for one it cannot have", async () => {
+    it("keeps the user's style, and tells it, for one it cannot have", async () => {
         localStorage.setItem("zoteroStyleId", "apa");
-        const { service } = makeService({
+        const { preferences, stylesManager } = makeService({
             styleId: "apa",
             format: "author-date",
             fields: [],
@@ -252,9 +252,11 @@ describe("the style of a document from Word", () => {
             documentPrefs: prefs("apa-modified"),
         });
 
-        await service.loadStyleFromDocument(/** @type {any} */ (service._cslStylesManager));
+        const result = await preferences.load(/** @type {any} */ (stylesManager));
 
         expect(localStorage.getItem("zoteroStyleId")).toBe("apa");
-        expect(window.__shownWindows).toHaveLength(1);
+        // The caller shows the warning.
+        expect(result.unavailableStyle).toBe(true);
+        expect(window.__shownWindows).toHaveLength(0);
     });
 });

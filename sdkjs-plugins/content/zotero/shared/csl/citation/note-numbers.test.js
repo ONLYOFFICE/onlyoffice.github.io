@@ -2,7 +2,7 @@
 // instead, so a note with two citations or none shifted "supra n." and
 // "Ibid." for the citations after it.
 import { describe, expect, it } from "vitest";
-import { findNoteNumbers, numberAsInNotes } from "../../src/app/csl/citation/note-numbers.js";
+import { findNoteNumbers, numberAsInNotes } from "./note-numbers.js";
 
 describe("findNoteNumbers", () => {
     it("finds each field's note, as read from a real editor", () => {

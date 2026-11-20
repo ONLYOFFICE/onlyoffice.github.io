@@ -35,8 +35,12 @@
 /// <reference path="../../../shared/types-global.js" />
 
 import { CitationDocument } from "@shared/document/citation-document";
+import { translate } from "@shared/services/translate-service";
+import { CitationItem } from "@shared/csl/citation/citation-item";
 import { CitationDocService } from "../services/citation-doc-service";
+import { zoteroItemUris } from "../zotero/zotero-item-uris";
 
+/** @typedef {import("@shared/csl/citation").CSLCitation} CSLCitation */
 /** @typedef {import("@shared/document/citation-document").DocCitation} DocCitation */
 /** @typedef {import("@shared/document/citation-document").DocBibliography} DocBibliography */
 /** @typedef {import("@shared/document/citation-document").CitationChange} CitationChange */
@@ -69,6 +73,8 @@ class FieldCitationDocument extends CitationDocument {
     /** @param {CitationDocService} [fields] - the editor's fields */
     constructor(fields) {
         super();
+        // The Zotero plugin for Word finds an item by its zotero.org URI.
+        CitationItem.setFallbackUris(zoteroItemUris);
         this.#fields =
             fields ||
             new CitationDocService(
@@ -202,6 +208,69 @@ class FieldCitationDocument extends CitationDocument {
     }
 
     /**
+     * Zotero keeps the text as plainCitation, and the formatted text Word
+     * caches as formattedCitation: only a changed text outdates the cache;
+     * dropping it otherwise would rewrite every field of a Word document.
+     * @param {CSLCitation} cslCitation
+     * @param {string} text
+     * @param {string | null} previousText
+     */
+    recordText(cslCitation, text, previousText) {
+        cslCitation.setPlainCitation(text);
+        if (text !== previousText) {
+            cslCitation.removeFormattedCitation();
+        }
+    }
+
+    /**
+     * Zotero marks a citation the user edited as one not to update.
+     * @param {CSLCitation} cslCitation
+     * @param {string} formattedText
+     * @param {string} editedText
+     */
+    recordManualEdit(cslCitation, formattedText, editedText) {
+        cslCitation.setDoNotUpdate();
+    }
+
+    /**
+     * The field for a citation or a bibliography whose data is known but
+     * whose field is gone. Its text is the one the citation had, until a
+     * refresh writes it anew.
+     * @param {Object} data - the data of the field code
+     * @param {boolean} isBibliography
+     * @returns {AddinFieldData}
+     */
+    fieldFor(data, isBibliography) {
+        const properties = /** @type {{properties?: {plainCitation?: string}}} */ (data).properties;
+        const content = isBibliography
+            ? translate("Bibliography")
+            : (properties && properties.plainCitation) || translate("Citation");
+        const json = JSON.stringify(data);
+        return {
+            FieldId: "",
+            Value: isBibliography
+                ? BIBLIOGRAPHY_PREFIX + " " + json + " " + BIBLIOGRAPHY_SUFFIX
+                : CITATION_PREFIX + " " + CITATION_SUFFIX + " " + json,
+            Content: content,
+        };
+    }
+
+    /**
+     * The stored data of the citations, without telling where they stand.
+     * @returns {Promise<Array<Object>>}
+     */
+    async readCitationData() {
+        const all = await this.#fields.getAddinZoteroFields();
+        /** @type {Array<Object>} */
+        const data = [];
+        all.filter(isCitationField).forEach((field) => {
+            const parsed = parseCode(field.Value);
+            if (parsed) data.push(parsed);
+        });
+        return data;
+    }
+
+    /**
      * @param {AddinFieldData} field
      * @param {number | null} noteIndex
      * @returns {DocCitation}
@@ -304,4 +373,4 @@ function parseCode(code) {
     }
 }
 
-export { FieldCitationDocument };
+export { FieldCitationDocument, parseCode as parseFieldCode };

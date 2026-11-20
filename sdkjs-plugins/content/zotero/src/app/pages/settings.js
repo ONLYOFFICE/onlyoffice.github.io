@@ -34,7 +34,7 @@
 
 /**
  * @typedef {import('@shared/router').Router} Router
- * @typedef {import('../services/citation-service').CitationService} CitationService
+ * @typedef {import('@shared/services/citation-service').CitationService} CitationService
  */
 
 import {

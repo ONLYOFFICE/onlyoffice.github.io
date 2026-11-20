@@ -41,7 +41,14 @@ import { Router } from "@shared/router";
 import { ZoteroSdk } from "./zotero";
 import { SettingsPage } from "./pages/settings";
 import { LoginPage } from "./pages/login";
-import { translate, CitationService, CursorService } from "./services";
+import { translate, CursorService } from "./services";
+import { CitationService } from "@shared/services/citation-service";
+import { FieldCitationDocument } from "./document/field-citation-document";
+import { ZoteroLibrary } from "./zotero/zotero-library";
+import { ZoteroBibliographyEditor } from "./zotero/zotero-bibliography-editor";
+import { ZoteroDocumentPreferences } from "./zotero/zotero-document-preferences";
+import { ZoteroFieldRecovery } from "./zotero/zotero-field-recovery";
+import { usedItemKeys } from "./shared/item-keys";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "@shared/components";
 import { AutoUpdatePreferences } from "./auto-update-preferences";
@@ -62,6 +69,12 @@ import "../styles.css";
 
     /** @type {CitationService} */
     let citationService;
+    /** @type {FieldCitationDocument} */
+    let citationDocument;
+    /** @type {ZoteroDocumentPreferences} */
+    let documentPreferences;
+    /** @type {ZoteroFieldRecovery} */
+    let fieldRecovery;
 
     /** @type {LastSearch} */
     const lastSearch = {
@@ -167,12 +180,21 @@ import "../styles.css";
         sdk = new ZoteroSdk();
         const loginPage = new LoginPage(router, sdk);
         settings = new SettingsPage(router, displayNoneClass);
-        citationService = new CitationService(
+        citationDocument = new FieldCitationDocument();
+        citationService = new CitationService({
+            name: "Zotero",
+            document: citationDocument,
+            localesManager: settings.getLocalesManager(),
+            cslStylesManager: settings.getStyleManager(),
+            abbreviationsManager: settings.getAbbreviationsManager(),
+            library: new ZoteroLibrary(sdk, settings.getStyleManager()),
+            bibliographyEditor: new ZoteroBibliographyEditor(sdk),
+        });
+        documentPreferences = new ZoteroDocumentPreferences(
+            citationDocument.fields,
             settings.getLocalesManager(),
-            settings.getStyleManager(),
-            sdk,
-            settings.getAbbreviationsManager()
         );
+        fieldRecovery = new ZoteroFieldRecovery(citationDocument, documentPreferences);
         settings.setCitationService(citationService);
         let isInit = false;
 
@@ -201,7 +223,7 @@ import "../styles.css";
                     });
                 }
 
-                let initSettingsPromise = citationService.loadStyleFromDocument(settings.getStyleManager())
+                let initSettingsPromise = loadDocumentPreferences()
                     .catch((e) => console.error("Failed to read document prefs:", e))
                     .then(() => settings.init())
                     .catch((e) => {
@@ -230,6 +252,30 @@ import "../styles.css";
         
     };
 
+    /**
+     * Takes up the style, language and note type of the document, as Zotero
+     * in Word left them, and says so when the document's style cannot be had.
+     * @returns {Promise<void>}
+     */
+    async function loadDocumentPreferences() {
+        const result = await documentPreferences.load(settings.getStyleManager());
+        if (result.unavailableStyle) {
+            citationService.showWarningMessage(
+                "The citation style of this document is not available. Your current style is used instead.",
+            );
+        }
+    }
+
+    /**
+     * Writes the style, language and note type in use into the document, for
+     * Zotero in Word.
+     * @returns {Promise<void>}
+     */
+    function saveDocumentPreferences() {
+        const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+        return documentPreferences.save(settings.getStyleManager(), locale);
+    }
+
     function invalidateUsedItems() {
         usedItems.promise = null;
         usedItems.fetchedAt = 0;
@@ -256,8 +302,7 @@ import "../styles.css";
                 // would only queue up behind it.
                 resolve(usedItems.keys);
             }, usedItems.timeout);
-            citationService
-                .getUsedItemKeys()
+            usedItemKeys(citationDocument)
                 .then(function (keys) {
                     clearTimeout(timer);
                     usedItems.keys = keys;
@@ -456,7 +501,7 @@ import "../styles.css";
 
             // Zotero's "Refresh" brings back the fields of a document it
             // converted for another word processor, and so does ours.
-            if (await citationService.isTransferDocument()) {
+            if (await fieldRecovery.isTransferDocument()) {
                 await importTransferDocument();
             }
 
@@ -520,8 +565,7 @@ import "../styles.css";
                 .finally(async function () {
                     // Within the action, so that one undo takes it back
                     // together with the citations.
-                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
-                    await citationService.saveStyleToDocument(styleManager, locale);
+                    await saveDocumentPreferences();
                     await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
                     Loader.hide();
                     Loader.setText(translate("Loading..."));
@@ -548,7 +592,7 @@ import "../styles.css";
             citationService
                 .insertBibliography()
                 .then(function (result) {
-                    addedFieldId = result.fieldId;
+                    addedFieldId = result.id;
                     isNewBibliography = result.isNew;
                 })
                 .catch(function (error) {
@@ -562,16 +606,15 @@ import "../styles.css";
                 })
                 .finally(async function () {
                     if (addedFieldId) {
-                        await citationService.moveCursorOutsideField(addedFieldId);
+                        await citationService.moveCursorOutside(addedFieldId);
                         // Writing goes on below a new bibliography; an
                         // updated one is left as it stood.
                         const editorVersion = window.Asc.scope.editorVersion;
                         if (isNewBibliography && editorVersion && editorVersion >= 10000000) {
-                            await citationService.addParagraphAfterCursor();
+                            await citationDocument.fields.addParagraphAfterCursor();
                         }
                     }
-                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
-                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
+                    await saveDocumentPreferences();
                     await onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
                 });
         });
@@ -592,24 +635,24 @@ import "../styles.css";
             const items = selectCitation.getSelectedItems();
             let bHasNotes = false;
 
-            /** @type {AddinFieldData | null} */
-            let currentField = await citationService.getCurrentField();
-            if (currentField && citationService.isBibliographyField(currentField)) {
+            let current = await citationService.getCurrent();
+            if (current && current.kind === "bibliography") {
                 // Nothing is inserted, so the chosen sources stay selected.
                 citationService.showWarningMessage("Citations cannot be inserted into the bibliography. Place the cursor outside it.");
                 await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
                 return;
             }
-            if (currentField) {
-                // Taken before the sources are added to the field.
-                const idsInDocument = citationService.getCitationItemIds(currentField);
-                return citationService.insertSelectedCitationsToCurrentField(items, currentField)
-                    .then((field) => {
+            if (current && current.kind === "citation") {
+                const citation = current;
+                // Taken before the sources are added to the citation.
+                const idsInDocument = citationService.getCitationItemIds(citation.data);
+                return citationService.insertSelectedCitationsToCurrent(items, citation)
+                    .then((data) => {
                         selectCitation.removeItems(Object.keys(items));
-                        return showEditCitationWindow(field, idsInDocument);
+                        return showEditCitationWindow(citation, data, idsInDocument);
                     })
                     .then((bSuccess) => {
-                        if (bSuccess && currentField) {
+                        if (bSuccess) {
                             citationService.showSuccessMessage("Citation has been updated successfully");
                         }
                     })
@@ -625,10 +668,10 @@ import "../styles.css";
                     bHasNotes = inserted.hasNotes;
                     insertedCitationID = inserted.citationID;
                     selectCitation.removeItems(Object.keys(items));
-                    return citationService.getCurrentField();
+                    return citationService.getCurrent();
                 })
-                .then(function (field) {
-                    currentField = field;
+                .then(function (inserted) {
+                    current = inserted;
                     const updateOptions = {
                         skipCitations:
                             !AutoUpdatePreferences.shouldUpdateCitations(),
@@ -654,13 +697,12 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(async () => {
-                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
-                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
+                    await saveDocumentPreferences();
                     await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
                     if (bHasNotes) {
-                        await citationService.moveCursorRight();
-                    } else if (currentField) {
-                        await citationService.moveCursorOutsideField(currentField.FieldId);
+                        await citationDocument.fields.moveCursorRight();
+                    } else if (current) {
+                        await citationService.moveCursorOutside(current.id);
                     }
                 });
         });
@@ -688,7 +730,7 @@ import "../styles.css";
             // together with the update that gives them their text.
             await onStartAction(true, repairingText);
             try {
-                const result = await citationService.repairBrokenCitations();
+                const result = await fieldRecovery.repairBrokenCitations();
                 if (result.repaired > 0) {
                     // A repaired field has the text it had, a bibliography
                     // none: they are formatted as on a refresh, from the
@@ -773,8 +815,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(async function () {
-                    const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
-                    await citationService.saveStyleToDocument(settings.getStyleManager(), locale);
+                    await saveDocumentPreferences();
                     await onEndAction(
                         false,
                         "Zotero (" + translate("Updating citations") + ")",
@@ -893,9 +934,14 @@ import "../styles.css";
         // The document changes too much for the selection to be kept.
         await onStartAction(false, importingText);
         try {
-            const result = await citationService.importTransferDocument(
+            const result = await fieldRecovery.importTransferDocument(
                 settings.getStyleManager()
             );
+            if (result.unavailableStyle) {
+                citationService.showWarningMessage(
+                    "The citation style of this document is not available. Your current style is used instead.",
+                );
+            }
             if (result.failed) {
                 console.error(
                     result.failed + " transferred citation(s) could not be imported"
@@ -1217,16 +1263,9 @@ import "../styles.css";
         buttonMain.text = "Edit citation";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
-            /** @type {AddinFieldData | null} */
-            const field = await new Promise((resolve) => {
-                window.Asc.plugin.executeMethod(
-                    "GetCurrentAddinField",
-                    undefined,
-                    resolve,
-                );
-            });
+            const current = await citationService.getCurrent();
             await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
-            await showEditCitationWindow(field);
+            await showEditCitationWindow(current);
             await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
         });
         Asc.Buttons.registerContextMenu();
@@ -1234,21 +1273,21 @@ import "../styles.css";
     }
 
     /**
-     * @param {AddinFieldData | null} field
+     * @param {import("@shared/document/citation-document").DocCitation | import("@shared/document/citation-document").DocBibliography | null} current
+     *  - the citation at the cursor
+     * @param {Object | null} [data] - its data with sources just added, if
+     *  other than the stored data
      * @param {Array<string>} [idsInDocument]
      * @returns {Promise<boolean>}
      */
-    async function showEditCitationWindow(field, idsInDocument) {
-        if (
-            !field ||
-            !field.Value ||
-            field.Value.toLowerCase().indexOf("zotero_item") === -1
-        ) {
+    async function showEditCitationWindow(current, data, idsInDocument) {
+        // A citation of an old version of the plugin is not edited.
+        if (!current || current.kind !== "citation" || current.legacy) {
             citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
             return false;
         }
-        const idsBeforeEdit = idsInDocument || citationService.getCitationItemIds(field);
-        const updatedField = await citationService.showEditCitationWindow(field);
+        const idsBeforeEdit = idsInDocument || citationService.getCitationItemIds(current.data);
+        const updatedField = await citationService.showEditCitationWindow(data || current.data);
         if (!updatedField) {
             return false;
         }
@@ -1292,9 +1331,7 @@ import "../styles.css";
                 );
             })
             .then(() => {
-                if (field) {
-                    citationService.moveCursorOutsideField(field.FieldId);
-                }
+                citationService.moveCursorOutside(current.id);
                 return true;
             })
             .catch(function (error) {

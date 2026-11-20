@@ -40,7 +40,7 @@
 
 import { CslHtmlParser } from "@shared/services/csl-html-parser";
 import { CslDocFormatter } from "./csl-doc-formatter";
-import { findNoteNumbers } from "../csl/citation/note-numbers";
+import { findNoteNumbers } from "@shared/csl/citation/note-numbers";
 
 /** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiParagraph} ApiParagraph */
 /** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiHyperlink} ApiHyperlink */
