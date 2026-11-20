@@ -10,9 +10,5 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "type": "commonjs",
-    "dependencies": {
-        "fs-extra": "^11.4.1",
-        "glob": "^14.0.6"
-    }
+    "type": "commonjs"
 }
