@@ -48,6 +48,7 @@
 	{ "name": "chineseautoformattool", "discussion": "" },
 	{ "name": "nlpsolver", "discussion": "" },
 	{ "name": "salesforce", "discussion": "" },
+	{ "name": "originality", "discussion": "746" },
 	{ "name": "curly", "discussion": "690" },
 	{ "name": "onlymath", "discussion": "" },
 	{ "name": "pdf-bookmarks", "discussion": "" },
@@ -56,6 +57,8 @@
     { "name": "quicktranslator", "discussion": ""},
     { "name": "marinamoji", "discussion": ""},
 	{ "name": "scroll-manager", "discussion": "" },
+	{ "name": "styletemplates", "discussion": "" },
 	{ "name": "vn-document-format", "discussion": "" },
+	{ "name": "random-cat", "discussion": "" },
 	{ "name": "serbian-text-converter", "discussion": "" }
 ]

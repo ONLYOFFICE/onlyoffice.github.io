@@ -1,0 +1,14 @@
+{
+	"Another cat": "Другой кот",
+	"Insert": "Вставить",
+	"Image size": "Размер изображения",
+	"Small": "Маленький",
+	"Medium": "Средний",
+	"Large": "Большой",
+	"Loading...": "Загрузка...",
+	"Failed to load a cat picture. Check your internet connection and try again.": "Не удалось загрузить фотографию кота. Проверьте подключение к интернету и повторите попытку.",
+	"The picture has been inserted.": "Изображение вставлено.",
+	"Failed to insert the picture.": "Не удалось вставить изображение.",
+	"Photos provided by": "Фотографии предоставлены",
+	"Random cat picture": "Случайная фотография кота"
+}
