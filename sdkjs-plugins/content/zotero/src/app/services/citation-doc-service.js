@@ -294,18 +294,22 @@ class CitationDocService {
                         const found = [];
                         for (let i = 0; i < paragraphs.length; i++) {
                             const text = paragraphs[i].GetText().trim();
-                            if (!/^ADDIN\s*(ZOTERO_ITEM|ZOTERO_BIBL)/i.test(text)) continue;
-                            if (text.indexOf("{") === -1) continue;
-                            if (text.lastIndexOf("}") !== text.length - 1) continue;
+                            // A citation's code ends with its JSON, a
+                            // bibliography's with CSL_BIBLIOGRAPHY.
+                            const isCitation =
+                                /^ADDIN\s*ZOTERO_ITEM\b[\s\S]*\{[\s\S]*\}$/i.test(text);
+                            const isBibliography =
+                                /^ADDIN\s*ZOTERO_BIBL\b[\s\S]*\{[\s\S]*\}\s*CSL_BIBLIOGRAPHY$/i.test(text);
+                            if (!isCitation && !isBibliography) continue;
                             found.push({ location: location, index: i, rawValue: text });
                         }
                         return found;
                     }
 
-                    const doc = Api.GetDocument();
-                    return scan(doc.GetAllParagraphs(), "body")
-                        .concat(scan(doc.GetFootnotesFirstParagraphs(), "footnote"))
-                        .concat(scan(doc.GetEndNotesFirstParagraphs(), "endnote"));
+                    // The paragraphs of the notes, headers and footers are
+                    // among them: scanning the notes as well found each
+                    // field there twice.
+                    return scan(Api.GetDocument().GetAllParagraphs(), "body");
                 },
                 isClose,
                 isCalc,

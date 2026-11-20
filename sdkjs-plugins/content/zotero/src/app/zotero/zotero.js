@@ -44,7 +44,6 @@ const ZoteroSdk = function () {
     this._userId = 0;
     /** @type {Array<UserGroupInfo>}} */
     this._userGroups = [];
-    this._userGroupsLoaded = false;
     this._isOnlineAvailable = true;
 
     this._fetcher = new RateLimitedFetcher({
@@ -840,7 +839,9 @@ ZoteroSdk.prototype.getUserGroups = function () {
     var self = this;
 
     return new Promise(function (resolve, reject) {
-        if (self._userGroupsLoaded) {
+        // An empty list is asked for again: a group the user joins
+        // since then is searched at once.
+        if (self._userGroups.length > 0) {
             resolve(self._userGroups);
             return;
         }
@@ -876,7 +877,6 @@ ZoteroSdk.prototype.getUserGroups = function () {
                         name: group.data.name,
                     };
                 });
-                self._userGroupsLoaded = true;
                 resolve(self._userGroups);
             })
             .catch(reject);
@@ -1083,7 +1083,6 @@ ZoteroSdk.prototype.clearSettings = function () {
     localStorage.removeItem(this.STORAGE_KEYS.USER_ID);
     localStorage.removeItem(this.STORAGE_KEYS.API_KEY);
     this._userGroups = [];
-    this._userGroupsLoaded = false;
     this._userId = 0;
     this._apiKey = null;
 };

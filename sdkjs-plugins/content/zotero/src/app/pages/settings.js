@@ -197,6 +197,13 @@ function SettingsPage(router, displayNoneClass) {
      * @returns {void}
      */
     this._onChangeState = function (newSettings, oldSettings) {};
+    /**
+     * Repairs the citations that lost their fields, in the document.
+     * @returns {Promise<{repaired: number, failed: number}>}
+     */
+    this._onRepairRequested = function () {
+        return Promise.resolve({ repaired: 0, failed: 0 });
+    };
     this._styleMessage = new Message("styleMessage", { type: "error" });
     this._langMessage = new Message("langMessage", { type: "error" });
     /** @type {Array<[string, string]>} */
@@ -398,6 +405,15 @@ SettingsPage.prototype.loadSavedSettings = function () {
  */
 SettingsPage.prototype.onChangeState = function (callbackFn) {
     this._onChangeState = callbackFn;
+};
+
+/**
+ * What the Repair button does to the document: the page only asks for it
+ * and tells how it went.
+ * @param {function(): Promise<{repaired: number, failed: number}>} callbackFn
+ */
+SettingsPage.prototype.onRepairRequested = function (callbackFn) {
+    this._onRepairRequested = callbackFn;
 };
 
 /**
@@ -709,8 +725,7 @@ SettingsPage.prototype._repairBrokenCitations = function () {
     }
     const button = this._repairBrokenFieldsBtn;
     button.disable();
-    citationService
-        .repairBrokenCitations()
+    this._onRepairRequested()
         .then(function (repairResult) {
             if (repairResult.repaired > 0) {
                 let message =

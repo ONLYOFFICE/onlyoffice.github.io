@@ -682,6 +682,32 @@ import "../styles.css";
             });
         });
 
+        settings.onRepairRequested(async function () {
+            const repairingText = "Zotero (" + translate("Updating citations") + ")";
+            // One action, so that one undo takes back the repaired fields
+            // together with the update that gives them their text.
+            await onStartAction(true, repairingText);
+            try {
+                const result = await citationService.repairBrokenCitations();
+                if (result.repaired > 0) {
+                    // A repaired field has the text it had, a bibliography
+                    // none: they are formatted as on a refresh, from the
+                    // data the document holds.
+                    const styleManager = settings.getStyleManager();
+                    if (styleManager.getLastUsedFormat() === "note") {
+                        await citationService.updateCslItemsInNotes(
+                            styleManager.getLastUsedNotesStyle(),
+                        );
+                    } else {
+                        await citationService.updateCslItems(false);
+                    }
+                }
+                return result;
+            } finally {
+                await onEndAction(false, repairingText);
+            }
+        });
+
         settings.onChangeState(async function (newState, oldState) {
             const bAffectsRendering =
                 newState.language !== oldState.language ||
