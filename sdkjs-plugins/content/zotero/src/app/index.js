@@ -601,10 +601,12 @@ import "../styles.css";
                 return;
             }
             if (currentField) {
+                // Taken before the sources are added to the field.
+                const idsInDocument = citationService.getCitationItemIds(currentField);
                 return citationService.insertSelectedCitationsToCurrentField(items, currentField)
                     .then((field) => {
                         selectCitation.removeItems(Object.keys(items));
-                        return showEditCitationWindow(field);
+                        return showEditCitationWindow(field, idsInDocument);
                     })
                     .then((bSuccess) => {
                         if (bSuccess && currentField) {
@@ -1207,9 +1209,10 @@ import "../styles.css";
 
     /**
      * @param {AddinFieldData | null} field
+     * @param {Array<string>} [idsInDocument]
      * @returns {Promise<boolean>}
      */
-    async function showEditCitationWindow(field) {
+    async function showEditCitationWindow(field, idsInDocument) {
         if (
             !field ||
             !field.Value ||
@@ -1218,7 +1221,7 @@ import "../styles.css";
             citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
             return false;
         }
-        const idsBeforeEdit = citationService.getCitationItemIds(field);
+        const idsBeforeEdit = idsInDocument || citationService.getCitationItemIds(field);
         const updatedField = await citationService.showEditCitationWindow(field);
         if (!updatedField) {
             return false;
