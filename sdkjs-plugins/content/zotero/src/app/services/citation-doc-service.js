@@ -344,7 +344,7 @@ class CitationDocService {
 
     /**
      * The links of a transfer document that carry Zotero's data, in the
-     * body, the footnotes and the endnotes.
+     * body, the notes, the headers and the footers.
      * @returns {Promise<Array<TransferLink>>}
      */
     findTransferLinks() {
@@ -387,10 +387,7 @@ class CitationDocService {
                         return found;
                     }
 
-                    const doc = Api.GetDocument();
-                    return scan(doc.GetAllParagraphs(), "body")
-                        .concat(scan(doc.GetFootnotesFirstParagraphs(), "footnote"))
-                        .concat(scan(doc.GetEndNotesFirstParagraphs(), "endnote"));
+                    return scan(Api.GetDocument().GetAllParagraphs(), "body");
                 },
                 false,
                 false,
