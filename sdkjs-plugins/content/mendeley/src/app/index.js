@@ -35,7 +35,7 @@
 /// <reference path="./sdk/types.js" />
 /// <reference path="../../vendor/mendeley-sdk/standalone.min.js" />
 
-/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme */
 
 import { Theme } from "./theme";
 import { Router } from "./router";

@@ -32,7 +32,8 @@
 
 // @ts-check
 
-/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" />
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
+/// <reference types="@onlyoffice/doceditor-plugin-types/word" />
 /// <reference path="../types-global.js" />
 /// <reference path="../csl/citation/types.js" />
 /// <reference path="../csl/styles/types.js" />

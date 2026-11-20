@@ -34,7 +34,7 @@
 
 /// <reference path="../app/types-global.js" />
 
-/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme */
 
 
 import { InputField, Checkbox, SelectBox } from "./shared/components";
