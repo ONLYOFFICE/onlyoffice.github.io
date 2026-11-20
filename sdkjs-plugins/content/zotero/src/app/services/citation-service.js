@@ -1100,23 +1100,27 @@ class CitationService {
         /** @type {AddinFieldData[]} */
         const updatedFields = [];
 
+        // citeproc formats every citation of the document in one pass, each
+        // knowing the ones before it; done for each citation in turn, the
+        // work grew with the square of their number.
+        /** @type {Map<string, string>} */
+        const formattedById = new Map();
+        this._formatter
+            .rebuildProcessorState(this._storage.getAllCitationsInJson())
+            // Each as [citationID, noteIndex, text].
+            .forEach(function (/** @type {Array<any>} */ result) {
+                formattedById.set(String(result[0]), String(result[2]));
+            });
+
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
             let bHasChanges = !!bChangePosition;
             const { field, cslCitation } = fieldsWithCitations[i];
 
-            const citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
-            const citationsPost = this._storage.getCitationsPost(cslCitation.citationID);;
-
-            const citations = this._storage.getAllCitationsInJson();
-            this._formatter.rebuildProcessorState(citations);
-            
-            const formattedCitationObj = this._formatter.processCitationCluster(
-                cslCitation.toJSON(),
-                citationsPre,
-                citationsPost
-            );
-
-            let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
+            const formatted = formattedById.get(cslCitation.citationID);
+            if (formatted === undefined) {
+                continue;
+            }
+            let htmlCitation = this.#unEscapeHtml(formatted);
             tempElement.innerHTML = CslHtmlParser.purifyHtml(htmlCitation);
             let oldContentInCit = cslCitation.getPlainCitation();
             const oldContentInDoc = field["Content"];
