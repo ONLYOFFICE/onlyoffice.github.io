@@ -70,6 +70,8 @@ function LoginPage(router, sdk) {
     if (!this._logoutLink) {
         throw new Error("logoutLink not found");
     }
+    this._onlineZoteroElements =
+        document.querySelectorAll(".for-zotero-online");
 
     /**
      * @param {AvailableApis} e
@@ -86,7 +88,6 @@ LoginPage.prototype.init = function () {
     const self = this;
     this._addEventListeners();
     let hasFirstAnswer = false;
-    let onlineZoteroElements = document.querySelectorAll(".for-zotero-online");
 
     const apisChecker = ZoteroApiChecker.runApisChecker(self._sdk);
 
@@ -101,15 +102,7 @@ LoginPage.prototype.init = function () {
             self._show();
         }
 
-        if (apis.online) {
-            onlineZoteroElements.forEach(function (element) {
-                element.classList.remove("hidden");
-            });
-        } else {
-            onlineZoteroElements.forEach(function (element) {
-                element.classList.add("hidden");
-            });
-        }
+        self._applyApisToUi(apis);
         if (apis.online && apis.hasKey) {
             self._sdk.setIsOnlineAvailable(true);
             self._hide(true);
@@ -117,7 +110,7 @@ LoginPage.prototype.init = function () {
             return;
         } else if (apis.desktop && apis.hasPermission) {
             self._sdk.setIsOnlineAvailable(false);
-            self._hide();
+            self._hide(true);
             self._hideAllMessages();
             self._onAuthorized(apis);
             return;
@@ -151,6 +144,17 @@ LoginPage.prototype.init = function () {
     return triggers;
 };
 
+/** @param {AvailableApis} apis */
+LoginPage.prototype._applyApisToUi = function (apis) {
+    this._onlineZoteroElements.forEach(function (element) {
+        if (apis.online) {
+            element.classList.remove("hidden");
+        } else {
+            element.classList.add("hidden");
+        }
+    });
+};
+
 LoginPage.prototype._addEventListeners = function () {
     const self = this;
     this._apiKeyLoginField.subscribe(function (event) {
@@ -180,7 +184,7 @@ LoginPage.prototype._addEventListeners = function () {
             .then(function (/** @type {AvailableApis} */ apis) {
                 if (apis.desktop && apis.hasPermission) {
                     self._sdk.setIsOnlineAvailable(false);
-                    self._hide();
+                    self._hide(true);
                     self._hideAllMessages();
                 } else if (apis.desktop && !apis.hasPermission) {
                     const errorMessage =
@@ -216,12 +220,23 @@ LoginPage.prototype._tryToApplyKey = function () {
         self._sdk
             .setApiKey(apiKey)
             .then(function () {
+                self._sdk.setIsOnlineAvailable(true);
                 ZoteroApiChecker.successfullyLoggedInUsingApiKey();
                 self._hide(true);
             })
             .catch(function (err) {
                 console.error(err);
-                self._apiKeyMessage.show(translate("Invalid API key"));
+                return ZoteroApiChecker.checkStatus(self._sdk).then(function (
+                    /** @type {AvailableApis} */ apis
+                ) {
+                    self._apiKeyMessage.show(
+                        translate(
+                            apis.online
+                                ? "Invalid API key"
+                                : "Connection to Zotero failed"
+                        )
+                    );
+                });
             })
             .finally(function () {
                 self._hideLoader();

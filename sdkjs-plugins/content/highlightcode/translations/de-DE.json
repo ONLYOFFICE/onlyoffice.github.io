@@ -11,5 +11,9 @@
 	"Font settings": "Schrifteinstellungen",
 	"Format": "Formatierung",
 	"Available only for the following languages": "Nur für folgende Sprachen verfügbar",
-	"This plugin is not supported by IE": "Dieses Plugin wird vom IE nicht unterstützt"
+	"This plugin is not supported by IE": "Dieses Plugin wird vom IE nicht unterstützt",
+	"Monospace": "Nichtproportional",
+	"Other": "Andere",
+	"Preview may use a substitute font": "Vorschau verwendet möglicherweise eine Ersatzschrift",
+	"The browser may not have this font, so the preview may look different. The document will use the selected font.": "Der Browser hat diese Schrift möglicherweise nicht, daher kann die Vorschau anders aussehen. Im Dokument wird die ausgewählte Schrift verwendet."
 }

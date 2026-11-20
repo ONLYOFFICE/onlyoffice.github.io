@@ -16,3 +16,12 @@
 /**
  * @typedef {"footnotes" | "endnotes"} NoteStyle
  */
+
+/**
+ * A copy of a style kept outside the style repository - in the document or in
+ * localStorage - so that it stays usable offline.
+ * @typedef {Object} StyleCopy
+ * @property {string} styleId - The id the style is selected by.
+ * @property {string} updated - The style's own `<info><updated>` timestamp.
+ * @property {string} content - The CSL, already resolved to its parent for a dependent style.
+ */

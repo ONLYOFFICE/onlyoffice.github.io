@@ -1,0 +1,550 @@
+/* ---- colours ----
+   No colours of our own: they all come from the editor theme (theme-variables.js). Until it is
+   applied the page is not drawn at all, so a dark editor never flashes a white panel; the editor
+   sends its theme with the init message, and the page shows at init even if none came. */
+body:not(.page-ready) {
+	visibility: hidden;
+}
+
+/* until the dictionary comes the page is laid out but its words are out of sight, so that they do
+   not change language before the eyes (page-translator.js); the icons drawn in the text colour
+   (the settings and back arrows) keep it */
+body.texts-pending *,
+body.texts-pending ::placeholder {
+	color: transparent !important;
+}
+
+body.texts-pending svg {
+	color: var(--text-normal) !important;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+body.panel {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	box-sizing: border-box;
+	background: var(--background-normal);
+	color: var(--text-normal);
+	font-size: 11px;
+}
+
+/* ---- sections ---- */
+/* the panel shows one page at a time: the scan, the writing record or the settings */
+.page {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	min-height: 0;
+}
+
+/* the writing record and the settings: the way back, then the page's name */
+.page__header {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 12px;
+	border-bottom: 1px solid var(--border-divider);
+	/* the whole header goes back, not only its arrow */
+	cursor: pointer;
+	user-select: none;
+}
+
+.page__title {
+	font-weight: 700;
+}
+
+.sections {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.section {
+	padding: 12px;
+}
+
+.section[hidden] {
+	display: none;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.hint {
+	margin: 0 0 12px;
+	color: var(--text-secondary);
+	line-height: 1.5;
+}
+
+a {
+	color: var(--border-control-focus);
+}
+
+/* ---- scan ---- */
+.actions {
+	display: flex;
+	gap: 8px;
+	margin: 12px 0;
+}
+
+/* the scan button with the settings button beside it, as in Zotero, and the hint about the
+   selection under them */
+.scan-action {
+	margin-bottom: 12px;
+}
+
+.scan-action__buttons {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.scan-action__buttons .custom-button-container:first-child {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.scan-action .scan-action__error {
+	color: var(--text-error, #f56c6c);
+}
+
+.actions .custom-button-container {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+#scan-loader {
+	margin-bottom: 12px;
+}
+
+.result-card {
+	margin-bottom: 12px;
+	padding: 10px;
+	border: 1px solid var(--border-divider);
+	border-radius: 2px;
+}
+
+.result-card__title {
+	margin: 0 0 8px;
+	font-size: inherit;
+	font-weight: 700;
+}
+
+.verdict {
+	margin-bottom: 8px;
+	font-weight: 700;
+}
+
+.verdict--ai {
+	color: #d9534f;
+}
+
+.verdict--original {
+	color: #3a9d3a;
+}
+
+.verdict--mixed {
+	color: #d68a1a;
+}
+
+.score {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 4px;
+}
+
+.score__label {
+	display: flex;
+	align-items: baseline;
+	gap: 4px;
+}
+
+.score__value {
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.score__label--original .score__value {
+	color: #3a9d3a;
+}
+
+.score__label--ai .score__value {
+	color: #d9534f;
+}
+
+.score__name {
+	color: var(--text-secondary);
+}
+
+.score__bar {
+	height: 6px;
+	margin-bottom: 8px;
+	border-radius: 3px;
+	overflow: hidden;
+	background: #d9534f;
+}
+
+.score__fill {
+	height: 100%;
+	background: #3a9d3a;
+}
+
+.result-note {
+	margin: 4px 0 0;
+	color: var(--text-secondary);
+	line-height: 1.4;
+}
+
+.result-note--error {
+	color: #d9534f;
+}
+
+.result-row {
+	display: flex;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 2px 0;
+}
+
+.result-row__label {
+	color: var(--text-secondary);
+}
+
+.source-list,
+.fact-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.source-list__item,
+.fact-list__item {
+	display: flex;
+	gap: 8px;
+	padding: 4px 0;
+	border-top: 1px solid var(--border-divider);
+}
+
+.source-list__link {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.source-list__count {
+	flex: 0 0 auto;
+	color: var(--text-secondary);
+}
+
+.fact-list__truth {
+	flex: 0 0 auto;
+	min-width: 34px;
+	font-weight: 700;
+}
+
+.fact-list__body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.fact-list__text {
+	line-height: 1.4;
+}
+
+.fact-list__source {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.result-footer {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.result-card__subtitle {
+	margin: 10px 0 4px;
+	font-size: inherit;
+	font-weight: 700;
+	color: var(--text-secondary);
+}
+
+.finding-list {
+	margin: 6px 0 0;
+	padding: 0;
+	list-style: none;
+	max-height: 220px;
+	overflow-y: auto;
+}
+
+.finding-list__item {
+	display: flex;
+	gap: 8px;
+	padding: 4px 6px;
+	border-radius: 2px;
+	cursor: pointer;
+	outline: none;
+}
+
+.finding-list__item:hover,
+.finding-list__item:focus-visible {
+	background-color: var(--highlight-button-hover);
+}
+
+.finding-list__item--active,
+.finding-list__item--active:hover {
+	background-color: var(--highlight-button-pressed);
+}
+
+.finding-list__badge {
+	flex: 0 0 30px;
+	font-weight: 700;
+}
+
+.finding-list__text {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	line-height: 1.4;
+}
+
+.highlights {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.highlights__status {
+	color: var(--text-secondary);
+	line-height: 1.4;
+}
+
+.highlights .custom-button-container {
+	flex: 0 0 auto;
+}
+
+/* ---- writing ---- */
+.recording {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-bottom: 8px;
+}
+
+.recording__dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #d9534f;
+	animation: oai-recording 1.6s ease-in-out infinite;
+}
+
+.recording--off .recording__dot {
+	background: var(--text-tertiary);
+	animation: none;
+}
+
+/* the button to the writing record shows the dot only while the writing is recorded */
+#open-writing:not(.open-writing--recording) .recording__dot {
+	display: none;
+}
+
+.recording__note {
+	margin-bottom: 12px;
+}
+
+@keyframes oai-recording {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.3; }
+}
+
+.typing-score {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	margin-bottom: 4px;
+}
+
+.typing-score__value {
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.typing-score__value--natural {
+	color: #3a9d3a;
+}
+
+.typing-score__value--mixed {
+	color: #d98b1f;
+}
+
+.typing-score__value--robotic {
+	color: #d9534f;
+}
+
+.typing-score__verdict {
+	font-weight: 700;
+}
+
+.reason-list {
+	margin: 6px 0 0;
+	padding-left: 16px;
+	color: var(--text-secondary);
+	line-height: 1.4;
+}
+
+.origin-bar {
+	display: flex;
+	height: 6px;
+	margin-bottom: 8px;
+	border-radius: 3px;
+	overflow: hidden;
+	background: var(--border-divider);
+}
+
+.origin-bar__part--typed,
+.result-row--typed .result-row__label::before {
+	background: #3a9d3a;
+}
+
+.origin-bar__part--pasted,
+.result-row--pasted .result-row__label::before {
+	background: #d9534f;
+}
+
+.origin-bar__part--moved,
+.result-row--moved .result-row__label::before {
+	background: #5b8def;
+}
+
+.origin-bar__part--restored,
+.result-row--restored .result-row__label::before {
+	background: #9a9a9a;
+}
+
+.origin-bar__part--other,
+.result-row--other .result-row__label::before {
+	background: #d98b1f;
+}
+
+.origin-bar__part--unrecorded,
+.result-row--unrecorded .result-row__label::before {
+	background: #8e5bd6;
+}
+
+.result-row--typed .result-row__label::before,
+.result-row--unrecorded .result-row__label::before,
+.result-row--pasted .result-row__label::before,
+.result-row--moved .result-row__label::before,
+.result-row--restored .result-row__label::before,
+.result-row--other .result-row__label::before {
+	content: "";
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	margin-right: 6px;
+	border-radius: 2px;
+}
+
+.paste-item {
+	flex-direction: column;
+	gap: 2px;
+}
+
+.paste-item__meta {
+	color: var(--text-secondary);
+}
+
+.paste-item__flag {
+	color: #8e5bd6;
+}
+
+.result-subtitle {
+	margin: 10px 0 4px;
+	font-weight: 700;
+}
+
+/* ---- settings ---- */
+.field {
+	margin-bottom: 14px;
+}
+
+/* a hint that reports a problem, e.g. a key Originality.ai did not accept */
+.field__hint.field__hint--error {
+	color: var(--text-error, #f56c6c);
+}
+
+.field--row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.field__label {
+	display: block;
+	margin-bottom: 4px;
+	font-weight: 700;
+}
+
+.field__hint {
+	margin: 4px 0 0;
+	color: var(--text-secondary);
+	line-height: 1.4;
+}
+
+.field__value {
+	color: var(--text-secondary);
+}
+
+.field__options {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.textarea {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 3px 7px;
+	border: 1px solid var(--border-regular-control);
+	border-radius: 1px;
+	background-color: var(--background-normal);
+	color: var(--text-normal);
+	font: inherit;
+	resize: vertical;
+}
+
+.textarea:focus {
+	outline: none;
+	border-color: var(--border-control-focus);
+}
+
+/* the newer themes use a larger font and rounder controls */
+body.theme-white,
+body.theme-night {
+	font-size: 12px;
+}
+
+.theme-white .textarea,
+.theme-night .textarea,
+.theme-white .result-card,
+.theme-night .result-card {
+	border-radius: 4px;
+}

@@ -3,6 +3,9 @@
         ".dev/*",
         "node_modules/*",
         "src/*",
+        "test/*",
+        "vitest.config.mjs",
+        "vendor/citeproc/citeproc_commonjs.js",
         "*.es5.js.map",
         "*.es5.js",
         ".browserslistrc",
@@ -11,6 +14,7 @@
         "package.json",
         "README.md",
         "package-lock.json",
-        "rollup.config.mjs"
+        "vite.config.mjs",
+        "postcss.config.mjs"
     ]
 }

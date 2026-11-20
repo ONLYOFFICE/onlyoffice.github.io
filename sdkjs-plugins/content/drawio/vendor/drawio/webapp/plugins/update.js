@@ -1,4 +1,8 @@
 /**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
+/**
  * Update plugin. Use updateUrl and updateInterval (optional, default is 60000ms)
  * in the meta data of the diagram to configure the plugin. (Alternatively, the
  * update-url and update-interval URL parameters may be used instead.)
@@ -25,7 +29,7 @@
  * or tooltip of the cell.
  * 
  * Example: <object label="Hello, %var1%!" var1="World" tooltip=
- * 		"Click <a href=\"https://www.draw.io\">here</a>" placeholders="1">
+ * 		"Click <a href=\"https://app.diagrams.net\">here</a>" placeholders="1">
  * 
  * - An optional replace-value attribute that contains 1 can be specified to
  * replace the value of the cell. Default is to add the attributes of the XML
@@ -86,20 +90,6 @@ Draw.loadPlugin(function(editorUi)
 				editorUi.createFile(editorUi.defaultFilename, null, null, null, null, null, null, true);
 			}
 		}
-		
-		function createOverlay(desc)
-		{
-			var overlay = new mxCellOverlay(desc.image || graph.warningImage,
-				desc.tooltip, desc.align, desc.valign, desc.offset);
-
-			// Installs a handler for clicks on the overlay
-			overlay.addListener(mxEvent.CLICK, function(sender, evt)
-			{
-				editorUi.alert(desc.tooltip);
-			});
-			
-			return overlay;
-		};
 		
 		function parseResponse(xml)
 		{
@@ -200,6 +190,9 @@ Draw.loadPlugin(function(editorUi)
 			return result;
 		};
 		
+		// Original styles of the cells in the demo roundtrip
+		var prevStyles = new mxDictionary();
+		
 		function createDemoResponse()
 		{
 			var doc = mxUtils.createXmlDocument();
@@ -242,10 +235,12 @@ Draw.loadPlugin(function(editorUi)
 						cell.value.getAttribute('update') == '1')
 					{
 						// Restores original style in demo roundtrip
-						if (cell.prevStyle == null)
+						if (prevStyles.get(cell) == null)
 						{
-							cell.prevStyle = cell.style;
+							prevStyles.put(cell, cell.style);
 						}
+						
+						var prevStyle = prevStyles.get(cell);
 						
 						if (Math.random() > 0.5)
 						{
@@ -253,9 +248,9 @@ Draw.loadPlugin(function(editorUi)
 							update.setAttribute('id', cell.id);
 							update.setAttribute('value', '<object tooltip="%load%% Done" load="' +
 								Math.round(Math.random() * 100) + '" placeholders="1">');
-							update.setAttribute('style', cell.prevStyle + ';fillColor=red;gradientColor=white;');
+							update.setAttribute('style', prevStyle + ';fillColor=red;gradientColor=white;');
 							update.setAttribute('icon', JSON.stringify({tooltip: 'Alert', align: 'right',
-								valign: 'top', image: {src: 'https://www.draw.io/mxgraph/images/warning.gif', width: 26, height: 26}}));
+								valign: 'top', image: {src: 'https://app.diagrams.net/mxgraph/images/warning.gif', width: 26, height: 26}}));
 //							update.setAttribute('geometry', JSON.stringify({dx: (Math.random() * 100) - 50,
 //								y: cell.geometry.y + (Math.random() * 100) - 50, dh: (Math.random() * 100) - 50}));
 							status.appendChild(update);
@@ -274,9 +269,9 @@ Draw.loadPlugin(function(editorUi)
 						{
 							var update = doc.createElement('update');
 							update.setAttribute('id', cell.id);
-							update.setAttribute('style', cell.prevStyle + ';fillColor=#d4e1f5;gradientColor=white;');
+							update.setAttribute('style', prevStyle + ';fillColor=#d4e1f5;gradientColor=white;');
 							update.setAttribute('value',
-								'<object tooltip="Click <a href=\"https://www.draw.io\">here</a>">');
+								'<object tooltip="Click <a href=\"https://app.diagrams.net\">here</a>">');
 							update.setAttribute('icon', '');
 							status.appendChild(update);
 						}						

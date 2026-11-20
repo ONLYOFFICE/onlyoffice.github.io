@@ -1,0 +1,226 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2026
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
+// @ts-check
+
+/// <reference path="./settings/settings-store.js" />
+/// <reference path="./service/originality-client.js" />
+/// <reference path="./editor/document-reader.js" />
+/// <reference path="./editor/paragraph-texts.js" />
+/// <reference path="./editor/annotation-renderer.js" />
+/// <reference path="./editor/annotation-clicks.js" />
+/// <reference path="./editor/text-selector.js" />
+/// <reference path="./editor/selection-menu.js" />
+/// <reference path="./editor/selection-watcher.js" />
+/// <reference path="./editor/keystroke-source.js" />
+/// <reference path="./editor/document-structure.js" />
+/// <reference path="./editor/custom-xml-parts.js" />
+/// <reference path="./editor/review-reader.js" />
+/// <reference path="./storage/history-store.js" />
+/// <reference path="./app/scan-service.js" />
+/// <reference path="./app/highlight-service.js" />
+/// <reference path="./app/snapshot-reader.js" />
+/// <reference path="./app/recording-service.js" />
+/// <reference path="./app/writing-history-service.js" />
+/// <reference path="./app/replay-window.js" />
+/// <reference path="./app/confirm-window.js" />
+/// <reference path="./app/review-watcher.js" />
+/// <reference path="./app/report-service.js" />
+/// <reference path="./ui/page-translator.js" />
+/// <reference path="./ui/theme-variables.js" />
+/// <reference path="./ui/panel-pages.js" />
+/// <reference path="./ui/settings-view.js" />
+/// <reference path="./ui/scan-view.js" />
+/// <reference path="./ui/writing-view.js" />
+
+/**
+ * Entry point of the plugin: builds the parts and wires the editor's plugin callbacks to them.
+ * It holds no logic of its own.
+ */
+(function(window) {
+
+	// the scripts load at the end of <body>, so the markup is there already
+	const translator = new PageTranslator(document.body);
+
+	const settingsStore = new SettingsStore();
+	const client = new OriginalityClient();
+	const reader = new DocumentReader();
+	const scanService = new ScanService(reader, client, settingsStore);
+	const selection = new SelectionWatcher(reader);
+
+	const paragraphTexts = new ParagraphTexts();
+	const selector = new TextSelector();
+	const highlights = new HighlightService(paragraphTexts, reader, new AnnotationRenderer(), selector);
+
+	const keystrokes = new KeystrokeSource();
+	const structure = new DocumentStructure();
+	const recording = new RecordingService(new SnapshotReader(reader), keystrokes, structure, paragraphTexts);
+	const history = new WritingHistoryService(new HistoryStore(new CustomXmlParts()), recording);
+	const replayWindow = new ReplayWindow();
+	const confirmWindow = new ConfirmWindow();
+	const confirm = (/** @type {string} */ title, /** @type {string[]} */ paragraphs, /** @type {string[]} */ buttons) =>
+		confirmWindow.ask(title, paragraphs, buttons);
+	const reviews = new ReviewWatcher(new ReviewReader());
+	const reports = new ReportService();
+
+	/** @type {ScanView | null} */
+	let scanView = null;
+	/** draws again what the views put together from translated parts; set once they are built */
+	let retranslateViews = () => {};
+	/** @type {PanelPages | null} */
+	let pages = null;
+
+	function buildViews() {
+		const panelPages = new PanelPages();
+		pages = panelPages;
+		const view = new ScanView(scanService, highlights, {
+			onScanned      : (scope, result, findings) => {
+				reports.rememberScan(scope, result, findings);
+				view.setExportEnabled(reports.hasContent);
+			},
+			onExportReport : () => reports.export(),
+			confirm        : confirm,
+			onOpenSettings : () => panelPages.showSettings(),
+		});
+		scanView = view;
+		selection.onChange((text) => view.setSelectedWords(ScanService.countWords(text)));
+		new SettingsView(settingsStore, {
+			checkBalance : (apiKey) => client.getBalance(apiKey),
+			onChange     : (settings) => view.onSettingsChanged(settings),
+		});
+		view.onSettingsChanged(settingsStore.load());
+
+		const writing = new WritingView(settingsStore.load().recordWriting, {
+			onSelectText      : (text) => selector.select(text),
+			onOpenReplay      : (writerId) => replayWindow.show(history.sessions, writerId),
+			onRecordingChange : (on) => {
+				settingsStore.update({ recordWriting: on });
+				history.setRecording(on);
+			},
+			onDeleteRecord    : (everyone) => history.remove(everyone),
+			confirm           : confirm,
+		});
+		const showHistory = () => {
+			panelPages.showRecording(history.isRecording);
+			writing.update({
+				sessions       : history.sessions,
+				recordingSince : recording.session ? recording.session.startedAt : null,
+				savedAt        : history.savedAt,
+				canSave        : history.canSave,
+				isRecording    : history.isRecording,
+				reviewRecords  : reviews.records,
+			});
+		};
+		// tracked changes come and go with the text, so the review is read again as the text changes
+		history.onChange(() => {
+			showHistory();
+			reviews.refreshSoon();
+		});
+		reviews.onChange(showHistory);
+		showHistory();
+
+		retranslateViews = () => {
+			view.retranslate();
+			showHistory();
+		};
+	}
+
+	window.Asc.plugin.init = function() {
+		// the panel is drawn in English at once, not after the dictionary, which may be slow to come
+		if (!scanView)
+			buildViews();
+		// the dictionary of any language but English is still loading
+		translator.hideUntilTranslated(2000);
+		// the theme, if the editor has one, came with this same message, just before
+		ThemeVariables.reveal();
+		const info = window.Asc.plugin.info;
+		keystrokes.attach();
+		structure.attach();
+		paragraphTexts.attach();
+		history.start({ id: info.userId || "", name: info.userName || "" }, !info.isViewMode, settingsStore.load().recordWriting);
+		reviews.refresh();
+
+		selection.attach();
+		new SelectionMenu().attach(window.Asc.plugin.tr("Check for AI and plagiarism"), () => {
+			if (scanView && pages) {
+				pages.showMain();
+				scanView.scanSelection();
+			}
+		});
+
+		new AnnotationClicks().attach((name, paragraphId, rangeIds) => {
+			const findingId = highlights.findingAt(name, paragraphId, rangeIds);
+			if (findingId && scanView && pages) {
+				pages.showMain();
+				scanView.revealFinding(findingId);
+			}
+		});
+	};
+
+	/**
+	 * The dictionary is in: before init for English, after it for any other language, once its file
+	 * has loaded.
+	 */
+	window.Asc.plugin.onTranslate = function() {
+		if (!scanView)
+			buildViews();
+		translator.translate();
+		retranslateViews();
+	};
+
+	/**
+	 * A button or a close cross. With a window id it is a window's — the replay's or a
+	 * confirmation's — which the plugin closes itself. Without, it is the panel's cross: the history
+	 * is written, then the panel closed. Not every host gets here — sdkjs `plugin_base.js` closes the
+	 * panel itself on its cross — so the regular write after a quiet spell is what keeps the history.
+	 * @param {number} id
+	 * @param {string} [windowId]
+	 */
+	window.Asc.plugin.button = function(id, windowId) {
+		if (windowId && windowId === replayWindow.id) {
+			replayWindow.onButton(windowId);
+		} else if (windowId && windowId === confirmWindow.id) {
+			confirmWindow.onButton(id, windowId);
+		} else if (id === -1) {
+			// close once the history is written: closing first would drop the write
+			history.flush().finally(() => this.executeCommand("close", ""));
+		}
+	};
+
+	window.Asc.plugin.onThemeChanged = function(theme) {
+		window.Asc.plugin.onThemeChangedBase(theme);
+		ThemeVariables.apply(theme);
+		replayWindow.onThemeChanged(theme);
+		confirmWindow.onThemeChanged(theme);
+	};
+
+})(window);

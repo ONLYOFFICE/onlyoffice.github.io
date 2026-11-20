@@ -1,0 +1,11 @@
+{
+  "Render": "Rendu",
+  "Unrender": "Annuler le rendu",
+  "Plain text": "Texte brut",
+  "Format": "Mise en forme",
+  "Copy": "Copier",
+  "Make room for character": "Make room for character",
+  "Unicode source": "Source Unicode",
+  "Processes paragraphs that contain Kanbun marks.": "Traite les paragraphes qui contiennent des marques kanbun.",
+  "Selection if highlighted, else whole document.": "La sélection s’il y en a une, sinon tout le document."
+}

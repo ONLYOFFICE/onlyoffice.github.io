@@ -33,7 +33,7 @@
 // @ts-check
 
 /**
- * @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme
+ * @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme
  */
 
 const Theme = {
@@ -507,12 +507,20 @@ const Theme = {
             styles +=
                 ".input-field-clear,\n" +
                 ".message-container:hover .message-close,\n" +
+                ".message-container:hover .form-grip,\n" +
                 ".custom-button-secondary-icon:disabled,\n" +
                 ".custom-button-secondary-icon.custom-button-disabled,\n" +
                 ".custom-button-secondary:disabled,\n" +
                 ".custom-button-secondary.custom-button-disabled,\n" +
                 ".input-field-element::placeholder,\n" +
                 ".selectbox-search-input::placeholder { color: " +
+                theme["text-tertiary"] +
+                "; }\n";
+            // A rule of its own: :focus-within is unknown to IE11, which
+            // would drop every selector listed next to it.
+            styles +=
+                ".message-container:focus-within .message-close,\n" +
+                ".message-container:focus-within .form-grip { color: " +
                 theme["text-tertiary"] +
                 "; }\n";
         }

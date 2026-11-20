@@ -86,14 +86,94 @@
 		return defaults;
 	};
 
+	const ALLOWED_ATTRS = {
+		a: ['href'], blockquote: [], br: [], code: [], del: [], em: [],
+		h1: ['id'], h2: ['id'], h3: ['id'], h4: ['id'], h5: ['id'], h6: ['id'],
+		hr: [], img: ['src', 'alt'], li: [], ol: ['start'], p: [], pre: [], span: [],
+		strong: [], sub: [], sup: [], table: [], thead: [], tbody: [], tr: [],
+		th: ['align'], td: ['align'], ul: []
+	};
+	const DROPPED_TAGS = ['script', 'style', 'template', 'noscript', 'iframe', 'object', 'embed', 'svg', 'math'];
+	const ALLOWED_STYLES = ['color', 'background-color', 'text-align', 'font-weight', 'font-style', 'text-decoration'];
+
+	function sanitizeHtml(sHtml) {
+		// DOMParser builds an inert document: no scripts run and no resources load
+		let oDoc = new DOMParser().parseFromString(sHtml, 'text/html');
+		cleanNode(oDoc.body);
+		let oFragment = document.createDocumentFragment();
+		oFragment.append(...oDoc.body.childNodes);
+		return oFragment;
+	};
+
+	function cleanNode(oNode) {
+		for (const oChild of Array.from(oNode.childNodes)) {
+			if (oChild.nodeType === Node.TEXT_NODE)
+				continue;
+			if (oChild.nodeType !== Node.ELEMENT_NODE) {
+				oChild.remove();
+				continue;
+			}
+			let sTag = oChild.localName;
+			if (DROPPED_TAGS.includes(sTag)) {
+				oChild.remove();
+				continue;
+			}
+			cleanNode(oChild);
+			if (!ALLOWED_ATTRS.hasOwnProperty(sTag)) {
+				oChild.replaceWith(...oChild.childNodes);
+				continue;
+			}
+			for (const oAttr of Array.from(oChild.attributes)) {
+				if (oAttr.name === 'style') {
+					let sStyle = filterStyle(oChild.style);
+					if (sStyle)
+						oChild.setAttribute('style', sStyle);
+					else
+						oChild.removeAttribute('style');
+					continue;
+				}
+				let isAllowed = ALLOWED_ATTRS[sTag].includes(oAttr.name);
+				if (isAllowed && (oAttr.name === 'href' || oAttr.name === 'src'))
+					isAllowed = isSafeUrl(oAttr.value, oAttr.name === 'src');
+				if (!isAllowed)
+					oChild.removeAttribute(oAttr.name);
+			}
+		}
+	};
+
+	function filterStyle(oStyle) {
+		// values come back normalized by the CSS parser, so they cannot break out of their declaration
+		let arrRules = [];
+		for (const sProp of ALLOWED_STYLES) {
+			let sValue = oStyle.getPropertyValue(sProp);
+			if (sValue && !/url\(|image-set\(/i.test(sValue))
+				arrRules.push(sProp + ': ' + sValue);
+		}
+		return arrRules.join('; ');
+	};
+
+	function isSafeUrl(sUrl, isImage) {
+		let sValue = sUrl.trim();
+		if (!isImage && sValue.startsWith('#'))
+			return true;
+		if (isImage && /^data:image\/(png|jpe?g|gif|bmp|webp);base64,/i.test(sValue))
+			return true;
+		try {
+			let sProtocol = new URL(sValue, window.location.href).protocol;
+			return sProtocol === 'http:' || sProtocol === 'https:' || (!isImage && sProtocol === 'mailto:');
+		} catch (e) {
+			return false;
+		}
+	};
+
 	window.Asc.plugin.attachEvent("onDoc2MdData", function(message) {
 		let result = message.data;
-		if (message.type = 'markdown') {
+		if (message.type === 'markdown') {
 			const options = mergeOptions({});
 			const lexed = marked.lexer(message.data, options);
 			result = marked.parser(lexed, options);
 		}
-		document.getElementById('preview').innerHTML = result;
+		document.getElementById('preview').replaceChildren(sanitizeHtml(result));
 		Ps && Ps.update();
 		destroyLoader();
 	});

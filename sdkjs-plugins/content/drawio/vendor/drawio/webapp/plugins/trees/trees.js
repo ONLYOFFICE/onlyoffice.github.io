@@ -1,4 +1,8 @@
 /**
+ * Copyright (c) 2020-2025, JGraph Holdings Ltd
+ * Copyright (c) 2020-2025, draw.io AG
+ */
+/**
  * Mindmaps plugin.
  * 
  * Todo:
@@ -164,12 +168,19 @@ Draw.loadPlugin(function(ui)
 	graph.foldCells = function(collapse, recurse, cells, checkFoldable, evt)
 	{
 		//console.log('cells', cells, collapse);
+		// Uses the foldable selection cells as the default (eg. Ctrl+Home/End)
+		if (cells == null)
+		{
+			cells = this.getFoldableCells(this.getSelectionCells(), collapse);
+		}
+
 		this.stopEditing();
 		
 		this.model.beginUpdate();
 		try
 		{
-			var newCells = cells.splice();
+			// Tree cells are folded here, all other cells by the base fold
+			var otherCells = [];
 			var tmp = [];
 			
 			for (var i = 0; i < cells.length; i++)
@@ -194,6 +205,10 @@ Draw.loadPlugin(function(ui)
 					
 					graph.model.setCollapsed(cells[i], collapse);
 				}
+				else
+				{
+					otherCells.push(cells[i]);
+				}
 			}
 
 			for (var i = 0; i < tmp.length; i++)
@@ -201,8 +216,7 @@ Draw.loadPlugin(function(ui)
 				graph.model.setVisible(tmp[i], !collapse);
 			}
 			
-			cells = newCells;
-			graphFoldCells.apply(this, arguments);
+			graphFoldCells.call(this, collapse, recurse, otherCells, checkFoldable, evt);
 		}
 		finally
 		{
@@ -1029,72 +1043,11 @@ Draw.loadPlugin(function(ui)
 		return cells;
 	};
 	
-//	var ignoreMove = false;
-//	
-//	graph.addListener(mxEvent.MOVE_CELLS, function(sender, evt)
-//	{
-//		if (!ignoreMove)
-//		{
-//			var cells = evt.getProperty('cells');
-//			var dx = evt.getProperty('dx');
-//			var dy = evt.getProperty('dy');
-//			ignoreMove = true;
-//			
-//			for (var i = 0; i < cells.length; i++)
-//			{
-//				var state = graph.view.getState(cells[i]);
-//				
-//				if (state != null && state.style['mindmapRoot'] == '1')
-//				{
-//					// TODO: Move subtree by same dx/dy
-//					//layout.execute(model.getParent(state.cell), state.cell);
-//					
-//					// Gets the subtree from cell downwards
-//					var tmp = [];
-//					graph.traverse(cells[i], true, function(vertex)
-//					{
-//						tmp.push(vertex);
-//						
-//						return true;
-//					});
-//					
-//					mxUtils.remove(cells[i], tmp);
-//					graph.moveCells(tmp, dx, dy);
-//				}
-//			}
-//
-//			ignoreMove = false;
-//		}
-//	});
-	
 	// Defines a new class for all icons
 	function mxIconSet(state)
 	{
 		this.images = [];
 		var graph = state.view.graph;
-		
-		// Icon1
-//		var img = mxUtils.createImage('images/handle-connect.png');
-//		img.setAttribute('title', 'Duplicate');
-//		img.style.position = 'absolute';
-//		img.style.cursor = 'pointer';
-//		img.style.width = '26px';
-//		img.style.height = '26px';
-//		img.style.left = (state.x - 13) + 'px';
-//		img.style.top = (state.getCenterY() - 13) + 'px';
-//		
-//		mxEvent.addGestureListeners(img,
-//			mxUtils.bind(this, function(evt)
-//			{
-//				var s = graph.gridSize;
-//				graph.setSelectionCells(graph.moveCells([state.cell], s, s, true));
-//				mxEvent.consume(evt);
-//				this.destroy();
-//			})
-//		);
-//		
-//		state.view.graph.container.appendChild(img);
-//		this.images.push(img);
 		
 		// Delete
 		var img = mxUtils.createImage('plugins/trees/handle-move.gif');

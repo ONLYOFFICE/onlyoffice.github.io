@@ -17,3 +17,7 @@
 ## 1.0.3
 
 * Update jquery version.
+
+## 1.0.4
+
+* Sanitize the preview to prevent script execution from document content.

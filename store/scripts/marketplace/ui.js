@@ -517,6 +517,11 @@ const UI = {
                 '<line x1="12" y1="22.08" x2="12" y2="12"></line>' +
                 '</svg></span>';
         }
+        const platform = Utils.getPluginPlatform(config);
+        if (platform) {
+            intro += '<span class="platform-icon" title="' + Utils.getPlatformNote(platform) + '">' +
+                Utils.getPlatformIconHtml(platform, 18) + '</span>';
+        }
         intro += '<div class="rating">' +
                     this._makeRatingElements(config.rating, Utils.getTranslated('Not rated')) +
                 '</div>' +

@@ -1,0 +1,148 @@
+{
+	"name": "Naqsha",
+	"nameLocale": {
+		"ar": "نقشة",
+		"de": "Naqsha",
+		"es": "Naqsha",
+		"fr": "Naqsha",
+		"it": "Naqsha",
+		"pt-BR": "Naqsha",
+		"ru": "Naqsha",
+		"zh-ZH": "Naqsha",
+		"ja": "Naqsha",
+		"cs": "Naqsha"
+	},
+	"offered": "Nixpx LLC",
+	"guid": "asc.{DA395EC3-313E-48F3-BE8D-A4217BE92C27}",
+	"version": "1.0.0",
+	"variations": [
+		{
+			"description": "Draw flowcharts, P&IDs, single-line diagrams and architecture diagrams with Naqsha, and keep them editable inside your documents.",
+			"descriptionLocale": {
+				"ar": "ارسم المخططات الانسيابية ومخططات الأنابيب والأجهزة (P&ID) والمخططات الكهربائية أحادية الخط ومخططات البنية بنقشة، واحتفظ بها قابلة للتعديل داخل مستنداتك.",
+				"de": "Zeichnen Sie Flussdiagramme, R&I-Fließbilder, Einliniendiagramme und Architekturdiagramme mit Naqsha und bearbeiten Sie sie jederzeit direkt in Ihren Dokumenten.",
+				"es": "Dibuje diagramas de flujo, P&ID, esquemas unifilares y diagramas de arquitectura con Naqsha, y manténgalos editables dentro de sus documentos.",
+				"fr": "Dessinez des organigrammes, des schémas P&ID, des schémas unifilaires et des diagrammes d'architecture avec Naqsha, et gardez-les modifiables dans vos documents.",
+				"it": "Disegna diagrammi di flusso, P&ID, schemi unifilari e diagrammi di architettura con Naqsha e mantienili modificabili nei tuoi documenti.",
+				"pt-BR": "Desenhe fluxogramas, P&IDs, diagramas unifilares e diagramas de arquitetura com o Naqsha e mantenha-os editáveis dentro dos seus documentos.",
+				"ru": "Рисуйте блок-схемы, P&ID, однолинейные схемы и архитектурные диаграммы в Naqsha и редактируйте их прямо в документах.",
+				"zh-ZH": "使用 Naqsha 绘制流程图、P&ID、单线图和架构图，并在文档中随时编辑。",
+				"ja": "Naqsha でフローチャート、P&ID、単線結線図、アーキテクチャ図を描き、文書の中でいつでも編集できます。",
+				"cs": "Kreslete vývojové diagramy, P&ID, jednopólová schémata a diagramy architektury v Naqsha a upravujte je přímo ve svých dokumentech."
+			},
+			"url": "index.html",
+			"icons": [
+				"resources/light/icon.png",
+				"resources/light/icon@2x.png"
+			],
+			"icons2": [
+				{
+					"style": "light",
+					"100%": {
+						"normal": "resources/light/icon.png"
+					},
+					"125%": {
+						"normal": "resources/light/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/light/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/light/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/light/icon@2x.png"
+					}
+				},
+				{
+					"style": "dark",
+					"100%": {
+						"normal": "resources/dark/icon.png"
+					},
+					"125%": {
+						"normal": "resources/dark/icon@1.25x.png"
+					},
+					"150%": {
+						"normal": "resources/dark/icon@1.5x.png"
+					},
+					"175%": {
+						"normal": "resources/dark/icon@1.75x.png"
+					},
+					"200%": {
+						"normal": "resources/dark/icon@2x.png"
+					}
+				}
+			],
+			"isViewer": true,
+			"isDisplayedInViewer": false,
+			"EditorsSupport": [
+				"word",
+				"cell",
+				"slide"
+			],
+			"isVisual": true,
+			"isModal": true,
+			"isInsideMode": false,
+			"initDataType": "ole",
+			"isUpdateOleOnResize": false,
+			"buttons": [
+				{
+					"text": "Insert",
+					"primary": true,
+					"textLocale": {
+						"ar": "إدراج",
+						"de": "Einfügen",
+						"es": "Insertar",
+						"fr": "Insérer",
+						"it": "Inserisci",
+						"pt-BR": "Inserir",
+						"ru": "Вставить",
+						"zh-ZH": "插入",
+						"ja": "挿入",
+						"cs": "Vložit"
+					},
+					"isViewer": false
+				},
+				{
+					"text": "Cancel",
+					"primary": false,
+					"textLocale": {
+						"ar": "إلغاء",
+						"de": "Abbrechen",
+						"es": "Cancelar",
+						"fr": "Annuler",
+						"it": "Annulla",
+						"pt-BR": "Cancelar",
+						"ru": "Отмена",
+						"zh-ZH": "取消",
+						"ja": "キャンセル",
+						"cs": "Zrušit"
+					}
+				}
+			],
+			"size": [
+				1280,
+				860
+			],
+			"store": {
+				"background": {
+					"light": "#F6F5FB",
+					"dark": "#0F0F1A"
+				},
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
+				},
+				"categories": [
+					"specAbilities",
+					"work"
+				],
+				"screenshots": [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png"
+				]
+			}
+		}
+	]
+}

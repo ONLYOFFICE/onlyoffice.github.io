@@ -3,6 +3,20 @@
 All notable changes to the OnlyMath plugin are documented here.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.1.2
+
+- **Works with ONLYOFFICE 10.0.** Version 10.0 changed how math fields appear to plugins, so
+  OnlyMath no longer recognised a math field inside a sentence. OnlyMath 1.1.1 could then treat
+  the whole line as the equation. This version requires ONLYOFFICE 10.0 or newer.
+- Calculate (Alt+C) and Solve (Alt+L) work again on a math field inside a sentence, also for
+  fractions: put the cursor anywhere in the field (or select it) and press the shortcut. Only
+  the field is replaced; the text around it is left alone.
+- If a line holds several equations, OnlyMath only acts on the one the cursor is in. When
+  two equations read exactly the same it cannot tell them apart and says so.
+- The right-click menu entries (Calculate, Solve, OnlyMath Settings) appear again when you
+  right-click a math field.
+- Typing `*` and `'` in a math field gives `·` and `′` again.
+
 ## 1.1.1
 
 - Security hardening, following a review of 1.1.0:

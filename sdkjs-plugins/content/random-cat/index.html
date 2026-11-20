@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+ Random Cat plugin for ONLYOFFICE editors.
+ Licensed under the MIT License. See the LICENSE file for details.
+-->
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Random Cat</title>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<link rel="stylesheet" href="resources/css/plugin_style.css">
+	<script type="text/javascript" src="scripts/randomcat.js"></script>
+</head>
+<body>
+	<div id="main" class="main">
+		<div id="preview" class="preview state-loading">
+			<img id="cat-image" class="cat-image" alt="Random cat picture" data-i18n-alt="Random cat picture" draggable="false">
+			<div id="loader" class="preview-overlay loader">
+				<div class="spinner" aria-hidden="true"></div>
+				<span data-i18n="Loading...">Loading...</span>
+			</div>
+			<div id="error" class="preview-overlay error" role="alert">
+				<span id="error-text"></span>
+			</div>
+		</div>
+
+		<div class="row">
+			<label class="row-label" for="size-select" data-i18n="Image size">Image size</label>
+			<select id="size-select" class="form-control size-select">
+				<option value="200" data-i18n="Small">Small</option>
+				<option value="300" data-i18n="Medium" selected>Medium</option>
+				<option value="450" data-i18n="Large">Large</option>
+			</select>
+		</div>
+
+		<div class="buttons">
+			<button id="btn-next" type="button" class="btn-text-default" data-i18n="Another cat">Another cat</button>
+			<button id="btn-insert" type="button" class="btn-text-default submit primary" data-i18n="Insert" disabled>Insert</button>
+		</div>
+
+		<div id="status" class="status" role="status" aria-live="polite"></div>
+
+		<div class="footer">
+			<span data-i18n="Photos provided by">Photos provided by</span>
+			<a class="link" href="https://thecatapi.com" target="_blank" rel="noopener noreferrer">The Cat API</a>
+		</div>
+	</div>
+</body>
+</html>

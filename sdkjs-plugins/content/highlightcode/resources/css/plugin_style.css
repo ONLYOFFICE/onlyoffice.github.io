@@ -1,5 +1,6 @@
 .hljs {
 	background: white;
+	padding: 0.5em;
 }
 html, body {
 	min-height: 100% !important;

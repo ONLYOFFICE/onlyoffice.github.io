@@ -32,6 +32,8 @@
 
 // @ts-check
 
+import { ZOTERO_TYPE_TO_CSL } from "../zotero-type-map";
+
 /**
  * @param {string|number} id
  */
@@ -460,8 +462,19 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     if (Object.hasOwnProperty.call(itemDataObject, "URL")) {
         this._URL = itemDataObject.URL;
     }
-    if (Object.hasOwnProperty.call(itemDataObject, "versionNumber")) {
-        this._version = itemDataObject.versionNumber;
+    // "version" is the version of the work in CSL, but the sync version of
+    // the record in Zotero's json data (the one with itemType), which gives
+    // the work's own as versionNumber. The sync version, a number, got into
+    // the fields of documents before; a CSL version is text.
+    if (Object.hasOwnProperty.call(itemDataObject, "itemType")) {
+        if (
+            Object.hasOwnProperty.call(itemDataObject, "versionNumber") &&
+            !this._version
+        ) {
+            this._version = itemDataObject.versionNumber;
+        }
+    } else if (typeof itemDataObject.version === "string") {
+        this._version = itemDataObject.version;
     }
     if (Object.hasOwnProperty.call(itemDataObject, "volume")) {
         this._volume = itemDataObject.volume;
@@ -488,29 +501,81 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
 
     if (Object.hasOwnProperty.call(itemDataObject, "creators")) {
         const self = this;
-        itemDataObject.creators.forEach(function (
-            /** @type {{firstName: string, lastName: string}}} */ creator
+        /** @type {Object<string, string>} Zotero creatorType → internal field name */
+        const creatorTypeMap = {
+            "author": "_author",
+            "editor": "_editor",
+            "translator": "_translator",
+            "contributor": "_contributor",
+            "composer": "_composer",
+            "director": "_director",
+            "producer": "_producer",
+            "performer": "_performer",
+            "recipient": "_recipient",
+            "narrator": "_narrator",
+            "illustrator": "_illustrator",
+            "interviewer": "_author",
+            "interviewee": "_contributor",
+            "seriesEditor": "_collectionEditor",
+            "bookAuthor": "_containerAuthor",
+            "reviewedAuthor": "_reviewedAuthor",
+            "scriptwriter": "_scriptwriter",
+            "guest": "_guest",
+            "host": "_host",
+            "organizer": "_organizer",
+            "curator": "_curator",
+            "compiler": "_compiler",
+            "chair": "_chair",
+            "editorialDirector": "_editorialDirector",
+            "executiveProducer": "_executiveProducer",
+            "originalCreator": "_originalAuthor",
+            "seriesCreator": "_seriesCreator",
+            "castMember": "_performer",
+            "podcaster": "_host",
+        };
+        // Zotero's CSL copy of the item already sorts its creators into
+        // CSL roles by Zotero's own rules: the main creator of the type is
+        // the author, and particles such as "van" are split off. The json
+        // copy merged over it is read only when no creator is known, or
+        // the same person would turn up again in another role, or twice.
+        const hasNames = Object.keys(creatorTypeMap).some(function (type) {
+            const list = /** @type {any} */ (self)[creatorTypeMap[type]];
+            return Array.isArray(list) && list.length > 0;
+        });
+        if (!hasNames) itemDataObject.creators.forEach(function (
+            /** @type {{firstName: string, lastName: string, name?: string, creatorType?: string}} */ creator
         ) {
-            let author = {};
+            let name = {};
             if (creator.firstName) {
-                author.given = creator.firstName;
+                name.given = creator.firstName;
             }
             if (creator.lastName) {
-                author.family = creator.lastName;
+                name.family = creator.lastName;
             }
-            let bHasAuthor = self._author.some(function (a) {
-                if (a.family !== author.family && (a.family || author.family)) {
+            if (creator.name) {
+                name.literal = creator.name;
+            }
+            var fieldName = creatorTypeMap[creator.creatorType || "author"] || "_author";
+            var targetList = self[fieldName];
+            if (!Array.isArray(targetList)) {
+                targetList = self._author;
+            }
+            let bHas = targetList.some(function (a) {
+                if (a.family !== name.family && (a.family || name.family)) {
                     return false;
                 }
-                if (a.given !== author.given && (a.given || author.given)) {
+                if (a.given !== name.given && (a.given || name.given)) {
+                    return false;
+                }
+                if (a.literal !== name.literal && (a.literal || name.literal)) {
                     return false;
                 }
                 return true;
             });
-            if (bHasAuthor) {
+            if (bHas) {
                 return;
             }
-            self._author.push(author);
+            targetList.push(name);
         },
         this);
     }
@@ -536,6 +601,51 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     }
     if (Object.hasOwnProperty.call(itemDataObject, "bookTitle")) {
         this._containerTitle = itemDataObject.bookTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "publicationTitle")) {
+        this._containerTitle = itemDataObject.publicationTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "proceedingsTitle")) {
+        this._containerTitle = itemDataObject.proceedingsTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "encyclopediaTitle")) {
+        this._containerTitle = itemDataObject.encyclopediaTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "dictionaryTitle")) {
+        this._containerTitle = itemDataObject.dictionaryTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "pages")) {
+        this._page = itemDataObject.pages;
+    }
+    if (
+        Object.hasOwnProperty.call(itemDataObject, "date") &&
+        !Object.hasOwnProperty.call(itemDataObject, "issued") &&
+        Object.keys(this._issued).length === 0
+    ) {
+        var dateStr = itemDataObject.date;
+        var dateMatch = typeof dateStr === "string"
+            ? /^(-?\d{1,4})(?:[-/](\d{1,2}))?(?:[-/](\d{1,2}))?$/.exec(dateStr.trim())
+            : null;
+        if (dateMatch) {
+            var parts = [Number(dateMatch[1])];
+            if (dateMatch[2]) parts.push(Number(dateMatch[2]));
+            if (dateMatch[3]) parts.push(Number(dateMatch[3]));
+            this._issued = { "date-parts": [parts] };
+        }
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "url") && !Object.hasOwnProperty.call(itemDataObject, "URL")) {
+        this._URL = itemDataObject.url;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "numPages")) {
+        this._numberOfPages = itemDataObject.numPages;
+    }
+    // As with the creators: the type from Zotero's CSL copy stands.
+    if (
+        Object.hasOwnProperty.call(itemDataObject, "itemType") &&
+        !Object.hasOwnProperty.call(itemDataObject, "type") &&
+        !this._type
+    ) {
+        this._type = ZOTERO_TYPE_TO_CSL[itemDataObject.itemType] || itemDataObject.itemType;
     }
     if (Object.hasOwnProperty.call(itemDataObject, "extra")) {
         this._note = itemDataObject.extra;

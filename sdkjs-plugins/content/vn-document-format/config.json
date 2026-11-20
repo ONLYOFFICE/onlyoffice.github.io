@@ -1,0 +1,63 @@
+{
+	"name": "Vietnamese document format check",
+	"nameLocale": {
+		"vi": "Kiểm tra thể thức văn bản"
+	},
+	"offered": "Desktiny contributors",
+	"guid": "asc.{580D2E58-BC78-4BB7-B447-95164F3C902B}",
+	"version": "0.1.0",
+
+	"variations": [
+		{
+			"description": "Check a document against the layout rules for Vietnamese administrative documents (Decree 30/2020/ND-CP, Appendix I): A4 paper, margins, Times New Roman, font sizes and the national title and motto.",
+			"descriptionLocale": {
+				"vi": "Kiểm tra thể thức văn bản hành chính theo Nghị định 30/2020/NĐ-CP, Phụ lục I: khổ A4, lề trang, phông Times New Roman, cỡ chữ, Quốc hiệu và Tiêu ngữ."
+			},
+			"url": "index.html",
+
+			"icons": [ "resources/light/icon.png", "resources/light/icon@2x.png" ],
+			"icons2": [
+				{
+					"style": "light",
+					"100%": { "normal": "resources/light/icon.png" },
+					"125%": { "normal": "resources/light/icon@1.25x.png" },
+					"150%": { "normal": "resources/light/icon@1.5x.png" },
+					"175%": { "normal": "resources/light/icon@1.75x.png" },
+					"200%": { "normal": "resources/light/icon@2x.png" }
+				},
+				{
+					"style": "dark",
+					"100%": { "normal": "resources/dark/icon.png" },
+					"125%": { "normal": "resources/dark/icon@1.25x.png" },
+					"150%": { "normal": "resources/dark/icon@1.5x.png" },
+					"175%": { "normal": "resources/dark/icon@1.75x.png" },
+					"200%": { "normal": "resources/dark/icon@2x.png" }
+				}
+			],
+			"isViewer": true,
+			"EditorsSupport": ["word"],
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+			"initDataType": "none",
+			"initData": "",
+			"buttons": [],
+
+			"store": {
+				"background": {
+					"light": "#b3262e",
+					"dark": "#b3262e"
+				},
+				"screenshots": [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png"
+				],
+				"icons": {
+					"light": "resources/store/icons",
+					"dark": "resources/store/icons"
+				},
+				"categories": ["work"]
+			}
+		}
+	]
+}

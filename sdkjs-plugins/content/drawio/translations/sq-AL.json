@@ -1,5 +1,8 @@
 {
 	"Loading" : "Po ngarkohet",
 	"Click on diagram to edit." : "Klikoni në diagram për ta redaktuar.",
-	"This plugin is not supported by IE": "Kjo shtojcë nuk mbështetet nga IE"
+	"This plugin is not supported by IE": "Kjo shtojcë nuk mbështetet nga IE",
+	"Insert as:": "Fut si:",
+	"Viewing mode. Changes will not be saved to the document.": "Modaliteti i shikimit. Ndryshimet nuk do të ruhen në dokument.",
+	"The document is opened in viewing mode. Changes to the diagram will not be saved to the document.": "Dokumenti është hapur në modalitetin e shikimit. Ndryshimet në diagram nuk do të ruhen në dokument."
 }

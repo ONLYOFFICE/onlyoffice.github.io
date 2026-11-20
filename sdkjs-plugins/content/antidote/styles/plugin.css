@@ -1,0 +1,203 @@
+/* Couleurs des boutons selon le thème de l'éditeur; la classe mode-sombre est
+   basculée par onThemeChanged (scripts/plugin.ts). */
+:root {
+  --fond-bouton: rgb(240, 244, 245);
+  --fond-bouton-survol: #cccccc;
+  --texte-bouton: black;
+}
+
+body.mode-sombre {
+  --fond-bouton: rgb(45, 45, 45);
+  --fond-bouton-survol: rgb(53, 53, 55);
+  --texte-bouton: rgb(212, 216, 217);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    "Helvetica Neue",
+    "Segoe UI",
+    Roboto,
+    "Noto Sans",
+    Arimo,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    sans-serif;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+#plugin-container {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.plugin-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.plugin-header .logo {
+  width: auto;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.plugin-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.plugin-content {
+
+  padding: 20px;
+  border-radius: 6px;
+  flex: 1;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.info-text {
+  font-size: 12px;
+  color: #888;
+  margin-top: -8px;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.btn-antidote {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 15px;
+  /*font-weight: 600;*/
+  color: var(--texte-bouton);
+  background: var(--fond-bouton);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  margin-bottom: 12px;
+}
+
+.btn-antidote.btn-assistant {
+  background: linear-gradient(
+    135deg,
+    rgb(193, 62, 249) 0%,
+    rgb(101, 146, 250) 100%
+  );
+}
+
+/*.btn-antidote.btn-dictionnaires {
+}*/
+
+/*.btn-antidote.btn-guides {
+}*/
+
+.btn-antidote:hover {
+  background: var(--fond-bouton-survol);
+
+  /*transform: translateY(-2px);*/
+}
+
+.btn-antidote.btn-assistant:hover {
+  background: linear-gradient(
+    135deg,
+    rgb(198, 73, 252) 0%,
+    rgb(113, 154, 248) 100%
+  );
+  box-shadow: 0 6px 16px rgba(171, 199, 85, 0.4);
+}
+
+/*.btn-antidote.btn-dictionnaires:hover {
+  background: linear-gradient(135deg, #7d943d 0%, #5a6b2d 100%);
+  box-shadow: 0 6px 16px rgba(171, 199, 85, 0.4);
+}
+
+.btn-antidote.btn-guides:hover {
+  background: linear-gradient(135deg, #e67e00 0%, #cc6e00 100%);
+  box-shadow: 0 6px 16px rgba(255, 149, 0, 0.4);
+}*/
+
+.btn-antidote:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+}
+
+.btn-antidote:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-antidote img {
+  width: 20px;
+  height: 20px;
+}
+
+.status-message {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: center;
+  display: none;
+}
+
+.status-message.show {
+  display: block;
+}
+
+.status-message.success {
+  /*background-color: #d4edda;*/
+  color: #155724;
+  /*border: 1px solid #c3e6cb;*/
+}
+
+.status-message.error {
+  /*background-color: #f8d7da;*/
+  color: red;
+  /*border: 1px solid #f5c6cb;*/
+}
+
+.status-message.info {
+  /*background-color: #d1ecf1;*/
+  color: #0c5460;
+  /*border: 1px solid #bee5eb;*/
+}
+
+.status-message.warning {
+  /*background-color: #fff3cd;*/
+  color: #856404;
+  /*border: 1px solid #ffeaa7;*/
+}
+
+.version {
+  color: rgb(212, 216, 217);
+  position: fixed;
+  bottom: 5px;
+}

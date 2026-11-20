@@ -303,11 +303,29 @@ class CSLCitation {
     }
 
     /**
+     * The number of the note the citation is in, 0 for one in the text.
+     * @returns {number}
+     */
+    getNoteIndex() {
+        return Number(this._properties.noteIndex) || 0;
+    }
+
+    /**
      * @param {string} plainCitation
      * @returns
      */
     setPlainCitation(plainCitation) {
         this.#setProperties({ plainCitation: plainCitation });
+        return this;
+    }
+
+    /**
+     * Drops the formatted text the Zotero plugin for Word keeps as its own
+     * cache of the citation.
+     * @returns {CSLCitation}
+     */
+    removeFormattedCitation() {
+        delete this._properties.formattedCitation;
         return this;
     }
 

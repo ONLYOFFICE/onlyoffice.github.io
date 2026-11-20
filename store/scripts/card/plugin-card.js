@@ -249,7 +249,8 @@ const PluginCard = {
             PluginCardUI.divMinVersion.classList.add("hidden");
         }
 
-        const editorBadgesHtml = this._buildEditorBadgesHtml(this.config.variations && this.config.variations[0]);
+        const editorBadgesHtml = this._buildEditorBadgesHtml(this.config.variations && this.config.variations[0])
+            + this._buildPlatformBadgeHtml(this.config);
         if (editorBadgesHtml) {
             PluginCardUI.divEditorBadges.innerHTML = editorBadgesHtml;
             PluginCardUI.divEditorBadges.classList.remove("hidden");
@@ -398,6 +399,9 @@ const PluginCard = {
 			.onSuccess(function(/** @type {string} */response) {
                 /** @type {Array<string>} */
                 let langs = JSON.parse(response);
+                if (!Array.isArray(langs)) {
+                    langs = [];
+                }
                 langs.forEach(function(full) {
                     let short = full.split('-')[0];
                     for (let i = 0; i < self.LANGUAGES.length; i++) {
@@ -659,6 +663,19 @@ const PluginCard = {
             return '';
         }
         return '<span class="pc-editor-badges-label i18n">' + Utils.getTranslated('Works with') + '</span>' + icons;
+    },
+    /**
+     * The platform a plugin is limited to, shown next to the editors it works with.
+     * @param {PluginInfo} config
+     * @returns {string} empty when the plugin works everywhere
+     */
+    _buildPlatformBadgeHtml: function(config) {
+        const platform = Utils.getPluginPlatform(config);
+        if (!platform) {
+            return '';
+        }
+        const name = Utils.getTranslated(platform === 'web' ? 'Web' : 'Desktop');
+        return '<span class="platform-badge" title="' + Utils.getPlatformNote(platform) + '">' + Utils.getPlatformIconHtml(platform, 12) + name + '</span>';
     },
 
     /**

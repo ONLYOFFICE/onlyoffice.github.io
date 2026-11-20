@@ -98,6 +98,30 @@ DiagramEditor.prototype.xml = null;
 DiagramEditor.prototype.format = 'xml';
 
 /**
+ * Format the edited element is stored in. Exporting in another format
+ * changes the element even if the diagram itself is unchanged.
+ */
+DiagramEditor.prototype.startFormat = 'xml';
+
+/**
+ * Sets the format the edited element is stored in, e.g. for a new diagram
+ * whose empty placeholder image says nothing about the wanted format.
+ */
+DiagramEditor.prototype.setElementFormat = function(format)
+{
+	this.format = format;
+	this.startFormat = format;
+};
+
+/**
+ * Returns true if the element has to be exported in another format.
+ */
+DiagramEditor.prototype.isFormatChanged = function()
+{
+	return this.format != this.startFormat;
+};
+
+/**
  * Specifies if libraries should be enabled.
  */
 DiagramEditor.prototype.libraries = true;
@@ -170,6 +194,7 @@ DiagramEditor.prototype.startEditing = function(data, format, title)
 	{
 		window.addEventListener('message', this.handleMessageEvent);
 		this.format = (format != null) ? format : this.format;
+		this.startFormat = this.format;
 		this.title = (title != null) ? title : this.title;
 		this.data = data;
 
@@ -241,6 +266,7 @@ DiagramEditor.prototype.stopEditing = function()
 		document.body.removeChild(this.frame);
 		this.setActive(false);
 		this.frame = null;
+		this.stopped();
 		var t = this;
 		var el = this.startElement;
 		setTimeout(function() {
@@ -259,7 +285,7 @@ DiagramEditor.prototype.postMessage = function(msg)
 	if (this.frame != null)
 	{
 		// if we put id of the current page instead of the first page id, final image will be from curent page
-		if (this.curPage !== 0) {
+		if (this.curPage !== 0 && msg.xml != null) {
 			var first = {start : 0, id: ""};
 			var needed = {start : 0, id: ""};
 			var newXml = "";
@@ -298,6 +324,40 @@ DiagramEditor.prototype.getData = function()
 };
 
 /**
+ * Returns the diagram data for the load message. draw.io decodes a base64 SVG
+ * data URL with atob only, which breaks non-Latin text outside the compressed
+ * diagram (page names), so the SVG is passed as decoded text.
+ */
+DiagramEditor.prototype.getLoadData = function()
+{
+	var data = this.getData();
+	var prefix = 'data:image/svg+xml;base64,';
+
+	if (data != null && data.substring(0, prefix.length) == prefix)
+	{
+		try
+		{
+			var binary = atob(data.substring(prefix.length));
+			var bytes = new Uint8Array(binary.length);
+
+			for (var i = 0; i < binary.length; i++)
+			{
+				bytes[i] = binary.charCodeAt(i);
+			}
+
+			// not decodeURIComponent(escape()): the plugin page overrides the global escape
+			return 'data:image/svg+xml;utf8,' + new TextDecoder('utf-8', {fatal: true}).decode(bytes);
+		}
+		catch (e)
+		{
+			// not UTF-8: leave the data to draw.io as it is
+		}
+	}
+
+	return data;
+};
+
+/**
  * Returns the title for the editor.
  */
 DiagramEditor.prototype.getTitle = function()
@@ -320,7 +380,7 @@ DiagramEditor.prototype.getFrameStyle = function()
  */
 DiagramEditor.prototype.getFrameUrl = function()
 {
-	var url = this.drawDomain + '?proto=json&spin=0&gapi=0&embed=1&dev=1';
+	var url = this.drawDomain + '?proto=json&spin=0&gapi=0&embed=1';
 
 	if (this.ui != null)
 	{
@@ -387,7 +447,12 @@ DiagramEditor.prototype.handleMessage = function(msg)
 			break;
 
 		case "export":
-			this.setElementData(this.startElement, msg.data);
+			this.setElementData(this.startElement, this.normalizeExportData(msg.data));
+			if (this.isFormatChanged()) {
+				// the element is now stored in the new format
+				this.startFormat = this.format;
+				this.isChanged = true;
+			}
 			this.stopEditing();
 			this.xml = null;
 			if (this.isClosePlugin || !this.isChanged) {
@@ -418,9 +483,9 @@ DiagramEditor.prototype.handleMessage = function(msg)
 			// this.postMessage({action: 'prompt', title: 'page number', okKey: 'ok', defaultValue: '1' });
 			this.startElement.classList.remove("hidden");
 			if (this.format != 'xml') {
-				if (this.xml != null) {
-					this.postMessage({action: 'export', format: this.format,
-					xml: this.xml, spinKey: 'export'});
+				// without xml the editor exports its current diagram
+				if (this.xml != null || this.isFormatChanged()) {
+					this.exportDiagram();
 				} else {
 					this.stopEditing(msg);
 					if (!this.isChanged)
@@ -433,6 +498,104 @@ DiagramEditor.prototype.handleMessage = function(msg)
 				this.stopEditing(msg);
 			}
 			break;
+	}
+};
+
+/**
+ * Posts export message to editor.
+ */
+DiagramEditor.prototype.exportDiagram = function()
+{
+	// theme light: otherwise the SVG gets light-dark() colors and the diagram
+	// changes its colors with the theme of whoever views the document
+	this.postMessage({action: 'export', format: this.format, xml: this.xml,
+		spinKey: 'export', theme: 'light'});
+};
+
+/**
+ * draw.io's SVG export gives every colored element two styles: a plain
+ * fill/stroke attribute and a style="fill: light-dark(a, b)" override. The
+ * override is what browsers paint (style beats an attribute), so Word/Excel/
+ * PowerPoint's own SVG-to-shape converter (not a browser, no CSS cascade)
+ * parses that style text, does not recognize light-dark(), and ends up with
+ * no fill or stroke at all: the converted shape is there but invisible. We
+ * already export with theme: 'light' (exportDiagram), so it is always safe to
+ * resolve light-dark(a, b) to its first (light) argument.
+ */
+DiagramEditor.prototype.resolveLightDark = function(text)
+{
+	var out = '';
+	var i = 0;
+
+	while (true) {
+		var start = text.indexOf('light-dark(', i);
+		if (start === -1) {
+			out += text.substring(i);
+			break;
+		}
+		out += text.substring(i, start);
+
+		var argsStart = start + 'light-dark('.length;
+		var depth = 1;
+		var j = argsStart;
+		while (j < text.length && depth > 0) {
+			var ch = text.charAt(j);
+			if (ch === '(') depth++;
+			else if (ch === ')') depth--;
+			j++;
+		}
+		var args = text.substring(argsStart, j - 1);
+
+		// split "light, dark" on the first comma outside any rgb(...)/hsl(...)
+		var parenDepth = 0, splitAt = -1;
+		for (var k = 0; k < args.length; k++) {
+			var c = args.charAt(k);
+			if (c === '(') parenDepth++;
+			else if (c === ')') parenDepth--;
+			else if (c === ',' && parenDepth === 0) { splitAt = k; break; }
+		}
+		out += (splitAt === -1 ? args : args.substring(0, splitAt)).trim();
+		i = j;
+	}
+
+	return out;
+};
+
+/**
+ * Removes light-dark() from an exported SVG data: URI (see resolveLightDark).
+ * Leaves anything else (PNG, an SVG without light-dark()) untouched.
+ */
+DiagramEditor.prototype.normalizeExportData = function(data)
+{
+	// light-dark( only ever shows up after the base64 is decoded, not in data itself
+	var prefix = 'data:image/svg+xml;base64,';
+	if (typeof data !== 'string' || data.substring(0, prefix.length) != prefix)
+	{
+		return data;
+	}
+
+	try {
+		var binary = atob(data.substring(prefix.length));
+		var bytes = new Uint8Array(binary.length);
+		for (var i = 0; i < binary.length; i++) {
+			bytes[i] = binary.charCodeAt(i);
+		}
+		var svg = new TextDecoder('utf-8', {fatal: true}).decode(bytes);
+		if (svg.indexOf('light-dark(') === -1) {
+			return data;
+		}
+
+		svg = this.resolveLightDark(svg);
+
+		var encoded = new TextEncoder().encode(svg);
+		var out = '';
+		for (var k = 0; k < encoded.length; k++) {
+			out += String.fromCharCode(encoded[k]);
+		}
+		return prefix + btoa(out);
+	} catch (e) {
+		// not UTF-8, or atob/btoa failed on this data: leave it as draw.io sent it
+		return data;
 	}
 };
 
@@ -450,8 +613,9 @@ DiagramEditor.prototype.configureEditor = function()
 DiagramEditor.prototype.initializeEditor = function()
 {
 	//https://desk.draw.io/support/solutions/articles/16000042544-how-does-embed-mode-work-
-	this.postMessage({action: 'load', autosave: 1, noSaveBtn: '1', noExitBtn: '1',
-		modified: 'unsavedChanges', xml: this.getData(),
+	// without saveAndExit newer draw.io versions send the save event without exit
+	this.postMessage({action: 'load', autosave: 1, noSaveBtn: '1', noExitBtn: '1', saveAndExit: '1',
+		modified: 'unsavedChanges', xml: this.getLoadData(),
 		title: this.getTitle()});
 	this.setWaiting(false);
 	this.setActive(true);
@@ -490,6 +654,14 @@ DiagramEditor.prototype.initialized = function()
 };
 
 /**
+ * Invoked after the editor frame has been removed.
+ */
+DiagramEditor.prototype.stopped = function()
+{
+	// hook for subclassers
+};
+
+/**
  * Static method to export the diagram when the plugin is closing.
  */
 DiagramEditor.prototype.closePlugin = function(bUnsaved)
@@ -499,8 +671,8 @@ DiagramEditor.prototype.closePlugin = function(bUnsaved)
 	}
 
 	this.isClosePlugin = true;
-	if (this.isChanged)
-		this.postMessage({action: 'export', format: this.format, xml: this.xml, spinKey: 'export'});
+	if (this.isChanged || this.isFormatChanged())
+		this.exportDiagram();
 	else
 		this.pluginCallback(false);
 

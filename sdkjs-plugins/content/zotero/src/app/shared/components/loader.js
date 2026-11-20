@@ -34,6 +34,10 @@
 
 class Loader {
     static #mainLoaderContainer = document.getElementById("loader");
+    static #mainLoaderCircle = document.querySelector("#loader .loader-image circle");
+    static #mainLoaderTitle = document.querySelector("#loader .loader-title");
+    /** Circumference of the loader ring, in the units of its r=7.25 viewBox. */
+    static #circumference = 2 * Math.PI * 7.25;
     #container;
 
     /**
@@ -90,6 +94,38 @@ class Loader {
 
     static hide() {
         this.#mainLoaderContainer?.classList.add("hidden");
+    }
+
+    /** @param {string} text */
+    static setText(text) {
+        if (this.#mainLoaderTitle instanceof HTMLElement) {
+            this.#mainLoaderTitle.innerText = text;
+        }
+    }
+
+    /**
+     * Turns the spinning ring into a progress ring, or back into a spinner
+     * when called with null.
+     * @param {number|null} fraction - from 0 to 1
+     */
+    static setProgress(fraction) {
+        const container = this.#mainLoaderContainer;
+        const circle = this.#mainLoaderCircle;
+        if (!container || !(circle instanceof SVGElement)) {
+            return;
+        }
+        if (fraction === null) {
+            container.classList.remove("loader-determinate");
+            circle.style.strokeDasharray = "";
+            circle.style.strokeDashoffset = "";
+            return;
+        }
+        const clamped = Math.max(0, Math.min(1, fraction));
+        container.classList.add("loader-determinate");
+        circle.style.strokeDasharray = String(this.#circumference);
+        circle.style.strokeDashoffset = String(
+            this.#circumference * (1 - clamped)
+        );
     }
 }
 

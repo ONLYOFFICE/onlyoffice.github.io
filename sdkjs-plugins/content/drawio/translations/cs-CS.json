@@ -1,5 +1,8 @@
 {
 	"Loading" : "Načítání",
 	"Click on diagram to edit." : "Klikněte na diagram pro úpravu.",
-	"This plugin is not supported by IE": "Tento plugin není podporován IE"
+	"This plugin is not supported by IE": "Tento plugin není podporován IE",
+	"Insert as:": "Vložit jako:",
+	"Viewing mode. Changes will not be saved to the document.": "Režim zobrazení. Změny nebudou uloženy do dokumentu.",
+	"The document is opened in viewing mode. Changes to the diagram will not be saved to the document.": "Dokument je otevřen v režimu zobrazení. Změny diagramu nebudou uloženy do dokumentu."
 }

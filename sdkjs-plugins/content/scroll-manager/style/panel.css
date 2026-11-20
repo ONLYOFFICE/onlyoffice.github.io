@@ -1,0 +1,336 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   1. ONLYOFFICE LIGHT THEME
+   ========================================================= */
+:root {
+    --bg-color: transparent; 
+    --text-color: #333333;
+    --text-muted: #666666;
+    --border-color: #dcdcdc;
+
+    /* Informer: saved position */
+    --info-active-bg: #e8f0fe;
+    --info-active-border: #b0cdfc;
+    --info-active-hover: #d9e6fe;
+    --info-active-primary: #1a73e8;
+
+    /* Informer: no position (disabled) */
+    --info-empty-bg: #f0f0f0;
+    --info-empty-border: #dcdcdc;
+    --info-empty-text: #888888;
+
+    /* "Save" button */
+    --btn-primary-bg: #2563eb;
+    --btn-primary-hover: #1d4ed8;
+    --btn-primary-text: #ffffff;
+
+    /* Red accent for outline buttons */
+    --btn-danger-bg: #dc2626;
+    --btn-danger-text: #ffffff;
+
+    /* Disabled buttons */
+    --btn-disabled-bg: #e5e7eb;
+    --btn-disabled-border: #d1d5db;
+    --btn-disabled-text: #9ca3af;
+
+    /* Control elements */
+    --checkbox-accent: #2563eb;
+    --badge-bg: #e5e7eb;
+    --code-bg: #e8f0fe;
+    --code-text: #1a73e8;
+}
+
+/* =========================================================
+   2. ONLYOFFICE DARK THEME
+   ========================================================= */
+[data-theme="dark"],
+html[data-theme="dark"],
+body[data-theme="dark"] {
+    --bg-color: #222222; 
+    --text-color: #d1d5db;
+    --text-muted: #9ca3af;
+    --border-color: #333333;
+
+    /* Informer: saved position */
+    --info-active-bg: #191919;
+    --info-active-border: #333333;
+    --info-active-hover: #111111;
+    --info-active-primary: #60a5fa;
+
+    /* Informer: no position (disabled) */
+    --info-empty-bg: #282828;
+    --info-empty-border: #383838;
+    --info-empty-text: #71717a;
+
+    /* "Save" button */
+    --btn-primary-bg: #3b82f6;
+    --btn-primary-hover: #2563eb;
+    --btn-primary-text: #ffffff;
+
+    /* Red accent for outline buttons */
+    --btn-danger-bg: #ef4444;
+    --btn-danger-text: #ffffff;
+
+    /* Disabled buttons */
+    --btn-disabled-bg: transparent;
+    --btn-disabled-border: #3a3a3a;
+    --btn-disabled-text: #52525b;
+
+    /* Control elements */
+    --checkbox-accent: #3b82f6;
+    --badge-bg: #2d2d2d;
+    --code-bg: #191919;
+    --code-text: #60a5fa;
+}
+
+/* =========================================================
+   3. ONLYOFFICE BASE STYLES
+   ========================================================= */
+html, body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    padding: 16px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* =========================================================
+   4. INFORMATION BLOCK
+   ========================================================= */
+.info-card {
+    border-radius: 8px;
+    padding: 12px 14px;
+    height: 88px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: all 0.15s ease;
+    user-select: none;
+    overflow: hidden;
+}
+
+/* State 1: Position SAVED */
+.info-card:not(.disabled) {
+    background: var(--info-active-bg);
+    border: 1px solid var(--info-active-border);
+    cursor: pointer;
+}
+
+.info-card:not(.disabled):hover {
+    background: var(--info-active-hover);
+}
+
+.info-card:not(.disabled):active {
+    transform: scale(0.98);
+}
+
+.info-card:not(.disabled) .info-card-content,
+.info-card:not(.disabled) .info-text {
+    color: var(--info-active-primary);
+}
+
+.info-card:not(.disabled) .action-icon {
+    color: var(--info-active-primary);
+    opacity: 0.6;
+}
+
+.info-card:not(.disabled):hover .action-icon {
+    opacity: 1;
+}
+
+/* State 2: Position NOT SAVED */
+.info-card.disabled {
+    background: var(--info-empty-bg);
+    border: 1px solid var(--info-empty-border);
+    cursor: default;
+}
+
+.info-card.disabled .info-card-content,
+.info-card.disabled .info-text {
+    color: var(--info-empty-text);
+}
+
+.info-card.disabled .info-text .val {
+    color: var(--text-muted);
+}
+
+.info-card.disabled .action-icon {
+    display: none;
+}
+
+.info-card-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    height: 100%;
+}
+
+.info-card .action-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    transition: opacity 0.15s ease;
+}
+
+.info-text {
+    font-size: 13px;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+}
+
+.info-text .val {
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+/* =========================================================
+   5. Buttons
+   ========================================================= */
+.actions-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+}
+
+/* Blue button (Save current position) */
+.btn-primary {
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--btn-primary-hover);
+}
+
+/* Red outline button (Сlear position / Clear all) */
+.btn-danger-outline {
+    background: transparent;
+    border: 1px solid var(--btn-danger-bg);
+    color: var(--btn-danger-bg);
+}
+
+.btn-danger-outline:hover:not(:disabled),
+.btn-danger-outline:active:not(:disabled) {
+    background: var(--btn-danger-bg);
+    color: var(--btn-danger-text);
+    border-color: var(--btn-danger-bg);
+}
+
+/* General reset for inactive (disabled) buttons */
+.btn:disabled {
+    background: var(--btn-disabled-bg) !important;
+    border: 1px solid var(--btn-disabled-border) !important;
+    color: var(--btn-disabled-text) !important;
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* =========================================================
+   6. SETTINGS (CHECKBOXES)
+   ========================================================= */
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 14px;
+}
+
+.section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1.5px solid var(--text-muted);
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+
+.checkbox-label input[type="checkbox"]:checked {
+    background-color: var(--checkbox-accent);
+    border-color: var(--checkbox-accent);
+}
+
+.checkbox-label input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 4px;
+    height: 8px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
