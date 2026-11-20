@@ -56,12 +56,16 @@ export function citationField(fieldId, citationID, items, text) {
     };
 }
 
-/** @param {string} fieldId */
-export function bibliographyField(fieldId) {
+/**
+ * @param {string} fieldId
+ * @param {Object} [edits] - what Zotero's bibliography editor keeps in the
+ *  field code: uncited, omitted, custom
+ */
+export function bibliographyField(fieldId, edits) {
     return {
         FieldId: fieldId,
         Content: "Bibliography",
-        Value: "ZOTERO_BIBL {} CSL_BIBLIOGRAPHY",
+        Value: "ZOTERO_BIBL " + JSON.stringify(edits || {}) + " CSL_BIBLIOGRAPHY",
     };
 }
 
@@ -78,6 +82,8 @@ export function citationOf(field) {
  * @param {Array<number>} [options.noteNumbers] - of the citation fields
  * @param {(styleId: string) => Promise<any>} [options.getStyle]
  * @param {string} [options.documentPrefs] - ZOTERO_PREF of the document
+ * @param {Object<string, Object>} [options.zoteroItems] - the CSL data of
+ *  the items Zotero has, by item key
  */
 export function makeService(options) {
     const doc = {
@@ -109,6 +115,10 @@ export function makeService(options) {
         MAX_KEYS_PER_REQUEST: 50,
         getItemByKey: async () => null,
         searchUserItemsEverything: async () => ({ items: [] }),
+        getItemsByKeys: async (/** @type {Array<string>} */ keys) =>
+            keys
+                .filter((key) => options.zoteroItems && options.zoteroItems[key])
+                .map((key) => ({ key: key, data: options.zoteroItems[key] })),
     };
     const abbreviationsManager = {
         load: () => {},

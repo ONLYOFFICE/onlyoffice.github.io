@@ -1,6 +1,6 @@
 // CitationService with real citeproc and styles, the document replaced.
 // Each case was a regression of 1.2.x against 1.1.0.
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
     bibliographyField,
     citationField,
@@ -8,6 +8,7 @@ import {
     item,
     makeService,
 } from "../helpers/citation-service.js";
+import { zoteroWordCitation } from "../fixtures/fields.js";
 
 const alpha = item("ALPHA", { author: [{ family: "Alpha", given: "A." }], title: "First Book" });
 const beta = item("BETA", { author: [{ family: "Beta", given: "B." }], title: "Second Book" });
@@ -35,6 +36,34 @@ describe("bibliography", () => {
         const bibliography = doc.written.find((field) => field.FieldId === "9");
         expect(bibliography.Content).toContain("Alpha");
         expect(bibliography.Content).toContain("Beta");
+    });
+
+    it("keeps the edits made with Zotero's bibliography editor in Word", async () => {
+        const uri = (/** @type {string} */ key) => "http://zotero.org/users/1/items/" + key;
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [
+                citationField("1", "c1", [alpha]),
+                citationField("2", "c2", [beta]),
+                bibliographyField("9", {
+                    uncited: [[uri("DELTA")]],
+                    omitted: [[uri("BETA")]],
+                    custom: [[[uri("ALPHA")], "{\\rtf Alpha, A. {\\i Rewritten by hand}.}"]],
+                }),
+            ],
+            zoteroItems: {
+                DELTA: { id: "1/DELTA", type: "book", title: "Listed Without Citation", author: [{ family: "Delta", given: "D." }], issued: { "date-parts": [[2019]] } },
+            },
+        });
+
+        await service.insertBibliography();
+
+        const bibliography = doc.written.find((field) => field.FieldId === "9").Content;
+        expect(bibliography).toContain("<i>Rewritten by hand</i>");
+        expect(bibliography).not.toContain("First Book");
+        expect(bibliography).not.toContain("Beta");
+        expect(bibliography).toContain("Delta");
     });
 });
 
@@ -108,6 +137,29 @@ describe("inserting with the other citations not updated", () => {
 });
 
 describe("field data", () => {
+    it("rewrites a field of Zotero for Word without losing what it says", async () => {
+        const word = zoteroWordCitation;
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [{
+                FieldId: "1",
+                Content: word.properties.plainCitation,
+                Value: "ZOTERO_ITEM CSL_CITATION " + JSON.stringify(word),
+            }],
+        });
+
+        await service.updateCslItems(false);
+
+        const written = citationOf(doc.written[0]);
+        expect(doc.written[0].Content).toContain("see Smith");
+        expect(doc.written[0].Content).toContain("p. 15");
+        expect(doc.written[0].Content).not.toContain("Doe");
+        expect(written.citationItems.map((/** @type {any} */ i) => [i.locator, i.label, i.prefix, i.suffix, i["suppress-author"], i.uris])).toEqual(
+            word.citationItems.map((i) => [i.locator, i.label, i.prefix, i.suffix, i["suppress-author"], i.uris]),
+        );
+    });
+
     it("keeps the version and the abstract a style does not print", async () => {
         const program = item("PROG", {
             type: "software",
@@ -127,6 +179,25 @@ describe("field data", () => {
         const itemData = citationOf(doc.written[0]).citationItems[0].itemData;
         expect(itemData.version).toBe("3.1");
         expect(itemData.abstract).toBe("A toolkit.");
+    });
+});
+
+describe("speed", () => {
+    it("formats all citations of a refresh in one pass of citeproc", async () => {
+        // Rebuilt for each citation in turn, the work grew with the square
+        // of their number: minutes for a few hundred notes.
+        const fields = [];
+        for (let i = 0; i < 30; i++) {
+            fields.push(citationField(String(i + 1), "c" + i, [i % 2 ? alpha : beta]));
+        }
+        const { service, doc } = makeService({ styleId: "ieee", format: "numeric", fields });
+        const rebuild = vi.spyOn(CSL.Engine.prototype, "rebuildProcessorState");
+
+        await service.updateCslItems(true);
+
+        expect(doc.written).toHaveLength(30);
+        expect(rebuild).toHaveBeenCalledTimes(1);
+        rebuild.mockRestore();
     });
 });
 
