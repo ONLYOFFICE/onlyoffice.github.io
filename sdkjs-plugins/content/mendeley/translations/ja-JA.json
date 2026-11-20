@@ -103,5 +103,6 @@
     "Operation completed successfully": "操作が正常に完了しました",
     "Please be cautious": "ご注意ください",
     "Success": "成功",
-    "Warning": "警告"
+    "Warning": "警告",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "文献の中には引用を挿入できません。カーソルを文献の外に置いてください。"
 }

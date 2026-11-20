@@ -7,6 +7,7 @@
 // The stand-in keeps the text it is given as the text of the element, so the
 // citations here are plain text.
 import { describe, expect, it } from "vitest";
+import { CSLCitation } from "../csl/citation/index.js";
 
 const SMITH = {
     citationID: "c1",
@@ -132,6 +133,20 @@ export function describeCitationDocument(name, makeDocument) {
             await expect(
                 Promise.resolve().then(() => doc.updateCitations([{ citation: stranger, data: SMITH, html: "x" }])),
             ).rejects.toThrow();
+        });
+
+        it("records the text a citation was formatted to, and a manual edit", () => {
+            const doc = makeDocument();
+            const citation = new CSLCitation("c1");
+            citation.fillFromObject(SMITH);
+
+            doc.recordText(citation, "Smith, Book.", "(Smith, 2020)");
+            // What a later update compares the document's text with.
+            expect(citation.getPlainCitation()).toBe("Smith, Book.");
+            expect(citation.getDoNotUpdate()).toBe(false);
+
+            doc.recordManualEdit(citation, "Smith, Book.", "Smith, my edit.");
+            expect(citation.getDoNotUpdate()).toBe(true);
         });
 
         it("turns its citations into text", async () => {

@@ -168,7 +168,8 @@ class CitationService {
         // for the last, in a note after the last one, and updated where it
         // is once inserted.
         const isNoteStyle = "note" === this.#cslStylesManager.getLastUsedFormat();
-        cslCitation.setNoteIndex(isNoteStyle ? this.#storage.getLastNoteIndex() + 1 : 0);
+        const bNumbered = isNoteStyle || this.#document.numbersCitationsByOrder;
+        cslCitation.setNoteIndex(bNumbered ? this.#storage.getLastNoteIndex() + 1 : 0);
         this.#storage.addCslCitation(cslCitation);
 
         this.#formatter.addItemsOf(cslCitation);
@@ -269,7 +270,8 @@ class CitationService {
      * A citation just inserted is given as insertedCitationID: it was
      * formatted as the last one of the document, its place there unknown,
      * so it is updated even when the other citations are skipped.
-     * @param {boolean|undefined} bOverwriteManualEdits
+     * @param {boolean} [bOverwriteManualEdits] - without it, a numeric style
+     *  overwrites manual edits and another style leaves the citations be
      * @param {PrepareOptions & {skipCitations?: boolean, skipBibliography?: boolean, insertedCitationID?: string}} [options]
      * @returns {Promise<Array<string>>}
      */

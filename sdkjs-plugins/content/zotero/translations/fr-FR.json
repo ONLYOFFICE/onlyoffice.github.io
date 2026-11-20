@@ -115,6 +115,6 @@
     "Warning": "Attention",
     "Information": "Information",
     "Operation completed successfully": "Opération terminée avec succès",
-    "Please be cautious": "Veuillez faire attention"
-
+    "Please be cautious": "Veuillez faire attention",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Une citation dans ce document est corrompue et ne peut pas être traitée. Veuillez la supprimer ou la remplacer."
 }

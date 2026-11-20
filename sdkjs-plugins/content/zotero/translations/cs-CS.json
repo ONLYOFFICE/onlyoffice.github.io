@@ -115,6 +115,6 @@
     "Warning": "Varování",
     "Information": "Informace",
     "Operation completed successfully": "Operace byla úspěšně dokončena",
-    "Please be cautious": "Buďte prosím opatrní"
-
+    "Please be cautious": "Buďte prosím opatrní",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Citace v tomto dokumentu je poškozená a nelze ji zpracovat. Odstraňte ji nebo ji nahraďte."
 }

@@ -115,6 +115,6 @@
     "Warning": "Предупреждение",
     "Information": "Информация",
     "Operation completed successfully": "Операция успешно завершена",
-    "Please be cautious": "Будьте внимательны"
-
+    "Please be cautious": "Будьте внимательны",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Цитата в этом документе повреждена и не может быть обработана. Пожалуйста, удалите или замените её."
 }

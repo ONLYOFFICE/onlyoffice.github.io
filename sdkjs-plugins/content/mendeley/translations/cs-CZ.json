@@ -103,5 +103,6 @@
     "Operation completed successfully": "Operace byla úspěšně dokončena",
     "Please be cautious": "Buďte prosím opatrní",
     "Success": "Úspěch",
-    "Warning": "Varování"
+    "Warning": "Varování",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citace nelze vložit do bibliografie. Umístěte kurzor mimo ni."
 }

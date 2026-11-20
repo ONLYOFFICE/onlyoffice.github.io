@@ -115,6 +115,6 @@
     "Warning": "Waarschuwing",
     "Information": "Informatie",
     "Operation completed successfully": "Bewerking voltooid",
-    "Please be cautious": "Wees voorzichtig"
-
+    "Please be cautious": "Wees voorzichtig",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Een citaat in dit document is beschadigd en kan niet worden verwerkt. Verwijder of vervang het."
 }

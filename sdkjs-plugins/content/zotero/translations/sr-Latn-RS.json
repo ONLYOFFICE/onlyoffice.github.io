@@ -116,5 +116,6 @@
     "Information": "Informacija",
     "Operation completed successfully": "Radnja je uspešno završena",
     "Please be cautious": "Budite oprezni"
-
+,
+"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Citat u ovom dokumentu je oštećen i ne može biti obrađen. Uklonite ga ili zamenite."
 }

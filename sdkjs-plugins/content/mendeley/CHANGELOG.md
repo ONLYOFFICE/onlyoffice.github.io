@@ -39,4 +39,13 @@
 * Add MEDLINE journal title abbreviation option.
 * Add option to include URLs of paper articles.
 * Add bibliography preview to the settings page.
-* Add support for Desktop Editors: sign in with an authorization code and renew the session automatically.
+
+## 1.2.1
+
+* Work in Desktop Editors: sign in to Mendeley in the browser with the Application ID and secret of your application and paste the authorization code once; the session then renews itself.
+* Fix the journal name being printed twice in citations and the bibliography: the journal and the series of a source now go to separate fields.
+* Fix page numbers of journal articles missing from citations and the bibliography.
+* Fix the plugin not opening in browsers and Desktop Editors without modern JavaScript support.
+* Offer Serbian in Cyrillic and in Latin script instead of one Serbian entry.
+* Fix switching a note style between footnotes and endnotes leaving the citations where they were.
+* Fix the plugin asking whether to keep manual edits of citations nobody edited after a style change.

@@ -42,7 +42,11 @@ import { Router } from "@shared/router";
 import { Sdk } from "./sdk";
 import { SettingsPage } from "./pages/settings";
 import { LoginPage } from "./pages/login";
-import { translate, CitationService, CursorService } from "./services";
+import { translate, CursorService } from "./services";
+import { CitationService } from "@shared/services/citation-service";
+import { AdditionalWindow } from "@shared/pages/additional-window";
+import { ContentControlCitationDocument } from "./document/content-control-citation-document";
+import { MendeleyDesktopFields } from "./document/mendeley-desktop-fields";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "@shared/components";
 
@@ -79,6 +83,8 @@ import "../styles.css";
 
     /** @type {CitationService} */
     let citationService;
+    /** @type {ContentControlCitationDocument} */
+    let citationDocument;
 
     /** @type {LastSearch} */
     const lastSearch = {
@@ -157,11 +163,14 @@ import "../styles.css";
             authFlow: loginPage.getAuthFlow()
         });
         settings = new SettingsPage(router, displayNoneClass);
-        citationService = new CitationService(
-            settings.getLocalesManager(),
-            settings.getStyleManager(),
-            settings.getAbbreviationsManager()
-        );
+        citationDocument = new ContentControlCitationDocument();
+        citationService = new CitationService({
+            name: "Mendeley",
+            document: citationDocument,
+            localesManager: settings.getLocalesManager(),
+            cslStylesManager: settings.getStyleManager(),
+            abbreviationsManager: settings.getAbbreviationsManager(),
+        });
         let isInit = false;
 
         addEventListeners();
@@ -189,7 +198,7 @@ import "../styles.css";
                 Promise.all([
                     loadGroupsPromise,
                     initSettingsPromise,
-                    citationService.checkOldVersion(),
+                    upgradeMendeleyDesktopFields(),
                     showCitationsAtTheStartFromMyLibrary()
                 ]).then(function ([g, s, isUpdateOldVersion, c]) {
                     if (isUpdateOldVersion) {
@@ -438,16 +447,31 @@ import "../styles.css";
             const items = selectCitation.getSelectedItems();
             let internalId = "";
 
-            /** @type {string | "INCORRECT_CONTROL" | null} */
-            let currentControlTag = await citationService.getCurrentContentControlTag();
-            if (currentControlTag) {
-                return citationService.insertSelectedCitationsToCurrentControl(items, currentControlTag)
-                    .then((controlTag) => {
+            const current = await citationService.getCurrent();
+            if (current && current.kind === "bibliography") {
+                // Nothing is inserted, so the chosen sources stay selected.
+                citationService.showWarningMessage("Citations cannot be inserted into the bibliography. Place the cursor outside it.");
+                await onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
+                return;
+            }
+            // Another content control, not Mendeley's, takes no citation.
+            const bInOtherControl =
+                !current && !!(await citationDocument.controls.getCurrentContentControlPr());
+            if (current || bInOtherControl) {
+                const citation = current && current.kind === "citation" ? current : null;
+                return Promise.resolve()
+                    .then(() => {
+                        if (!citation) {
+                            throw new Error("Invalid control tag");
+                        }
+                        return citationService.insertSelectedCitationsToCurrent(items, citation);
+                    })
+                    .then((data) => {
                         selectCitation.removeItems(Object.keys(items));
-                        return showEditCitationWindow(controlTag);
+                        return showEditCitationWindow(citation, data);
                     })
                     .then((bSuccess) => {
-                        if (bSuccess && currentControlTag) {
+                        if (bSuccess) {
                             citationService.showSuccessMessage("Citation has been updated successfully");
                         }
                     }).catch(function (error) {
@@ -465,18 +489,20 @@ import "../styles.css";
             }
 
             return citationService.insertSelectedCitations(items)
-                .then(function (result) {
-                    internalId = result.internalId;
+                .then(async function (result) {
+                    internalId = result.id || "";
                     selectCitation.removeItems(Object.keys(items));
-                    if (result.notesStyle) {
-                        return citationService.updateCslItemsInNotes(result.notesStyle);
+                    if (result.hasNotes) {
+                        await citationService.updateCslItemsInNotes(
+                            settings.getStyleManager().getLastUsedNotesStyle(),
+                        );
                     } else {
-                        return citationService.updateCslItems();
+                        await citationService.updateCslItems();
                     }
                 })
                 .then(async () => {
                     if (internalId) {
-                        await citationService.moveCursorOutsideControl(internalId);
+                        await citationService.moveCursorOutside(internalId);
                     }
                 })
                 .catch(function (error) {
@@ -929,16 +955,49 @@ import "../styles.css";
 		
 	}
 
+    /**
+     * Offers to rewrite the citations of the old Mendeley Desktop plugin as
+     * Mendeley Cite's; the plugin closes if the user declines.
+     * @returns {Promise<boolean>} whether the document was updated
+     */
+    async function upgradeMendeleyDesktopFields() {
+        const oldFields = new MendeleyDesktopFields(citationDocument.controls);
+        const fields = await oldFields.find();
+        if (!fields.length) {
+            return false;
+        }
+
+        const dialog = new AdditionalWindow("Mendeley");
+        const isUserAgree = await dialog.show(
+            "Update this document",
+            "<p class='i18n'>" + translate("Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.") + "</p>" +
+            "<p class='i18n'>" + translate("Rest assured nothing has happened to your document or your citations.") + "</p>" +
+            "<p class='i18n'>" + translate("Press continue to be guided through the update process.") + "</p>",
+        );
+
+        if (isUserAgree) {
+            await oldFields.upgrade(fields);
+            dialog.showInfoWindow(
+                "Update complete",
+                translate("Your document has been updated to use Mendeley Cite.") + " " +
+                translate("Please select the citation style and language for future citation formatting."),
+                "success"
+            );
+        } else {
+            Asc.plugin.executeCommand("close", "");
+        }
+        return isUserAgree;
+    }
+
     function addContextMenuButtons() {
         let buttonMain = new Asc.ButtonContextMenu();
         buttonMain.text = "Edit citation";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
-            /** @type {string | null} */
-            const currentControlTag = await citationService.getCurrentContentControlTag();
+            const current = await citationService.getCurrent();
 
             await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
-            await showEditCitationWindow(currentControlTag);
+            await showEditCitationWindow(current);
             onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
         });
         Asc.Buttons.registerContextMenu();
@@ -946,18 +1005,18 @@ import "../styles.css";
     }
 
     /**
-     * @param {string | null} controlTag
+     * @param {import("@shared/document/citation-document").DocCitation | import("@shared/document/citation-document").DocBibliography | null} current
+     *  - the citation at the cursor
+     * @param {Object | null} [data] - its data with sources just added, if
+     *  other than the stored data
      * @returns {Promise<boolean>}
      */
-    async function showEditCitationWindow(controlTag) {
-        if (
-            !controlTag ||
-            controlTag.indexOf("MENDELEY_CITATION") === -1
-        ) {
+    async function showEditCitationWindow(current, data) {
+        if (!current || current.kind !== "citation") {
             citationService.showWarningMessage("No Mendeley citation found at the cursor. Please click directly on a citation to edit it.");
             return false;
         }
-        const updatedObject = await citationService.showEditCitationWindow(controlTag);
+        const updatedObject = await citationService.showEditCitationWindow(data || current.data);
         if (!updatedObject) {
             return false;
         }

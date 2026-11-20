@@ -103,5 +103,6 @@
     "Operation completed successfully": "Operação concluída com sucesso",
     "Please be cautious": "Tenha cuidado",
     "Success": "Sucesso",
-    "Warning": "Aviso"
+    "Warning": "Aviso",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Não é possível inserir citações na bibliografia. Posicione o cursor fora dela."
 }

@@ -110,5 +110,6 @@
     "Operation completed successfully": "Операция успешно завершена",
     "Please be cautious": "Будьте внимательны",
     "Success": "Успех",
-    "Warning": "Предупреждение"
+    "Warning": "Предупреждение",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитаты нельзя вставить в библиографию. Поставьте курсор за её пределами."
 }

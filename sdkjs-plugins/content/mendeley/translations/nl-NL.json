@@ -103,5 +103,6 @@
     "Operation completed successfully": "Bewerking voltooid",
     "Please be cautious": "Wees voorzichtig",
     "Success": "Gelukt",
-    "Warning": "Waarschuwing"
+    "Warning": "Waarschuwing",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citaten kunnen niet in de bibliografie worden ingevoegd. Plaats de cursor erbuiten."
 }

@@ -90,6 +90,17 @@
  */
 class CitationDocument {
     /**
+     * Whether the citations are numbered by their order, as notes would be,
+     * whatever the style: so the plugin for Word numbers them when the
+     * document cannot tell their notes. Otherwise a citation in the text has
+     * no note number.
+     * @returns {boolean}
+     */
+    get numbersCitationsByOrder() {
+        return false;
+    }
+
+    /**
      * The citations of the document, in document order, and its bibliography.
      * @param {NoteStyle | null} [notesStyle] - where the citations of a note
      *  style sit: their text is then read from those notes
@@ -161,7 +172,11 @@ class CitationDocument {
     }
 
     /**
-     * Moves citations between footnotes and endnotes, writing them as it goes.
+     * Writes citations of a note style into new notes of the given kind,
+     * replacing the notes they stand in: so they move between footnotes and
+     * endnotes, or, given the kind they are in, are rewritten where they
+     * stand. Where the citation is kept, in the note or at its reference, is
+     * the document's own matter.
      * @param {Array<CitationChange>} changes
      * @param {NoteStyle} notesStyle - the kind of note they go to
      * @returns {Promise<void>}

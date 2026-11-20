@@ -103,5 +103,6 @@
     "Operation completed successfully": "Radnja je uspešno završena",
     "Please be cautious": "Budite oprezni",
     "Success": "Uspeh",
-    "Warning": "Upozorenje"
+    "Warning": "Upozorenje",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citati ne mogu da se ubace u bibliografiju. Postavite kursor izvan nje."
 }

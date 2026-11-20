@@ -103,5 +103,6 @@
     "Operation completed successfully": "Veprimi përfundoi me sukses",
     "Please be cautious": "Ju lutemi bëni kujdes",
     "Success": "Sukses",
-    "Warning": "Kujdes"
+    "Warning": "Kujdes",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citimet nuk mund të shtohen në bibliografi. Vendoseni kursorin jashtë saj."
 }

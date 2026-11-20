@@ -115,6 +115,6 @@
     "Warning": "警告",
     "Information": "情報",
     "Operation completed successfully": "操作が正常に完了しました",
-    "Please be cautious": "ご注意ください"
-
+    "Please be cautious": "ご注意ください",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "このドキュメント内の引用が破損しており、処理できません。削除または置き換えてください。"
 }

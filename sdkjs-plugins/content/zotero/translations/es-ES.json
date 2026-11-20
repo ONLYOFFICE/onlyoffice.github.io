@@ -115,6 +115,6 @@
     "Warning": "Advertencia",
     "Information": "Información",
     "Operation completed successfully": "Operación completada correctamente",
-    "Please be cautious": "Proceda con precaución"
-
+    "Please be cautious": "Proceda con precaución",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Una cita en este documento está dañada y no se puede procesar. Elimínela o reemplácela."
 }

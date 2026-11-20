@@ -70,6 +70,11 @@ class ContentControlCitationDocument extends CitationDocument {
             controls || new CitationDocService(CITATION_PREFIX, BIBLIOGRAPHY_PREFIX);
     }
 
+    /** The tags tell no notes; the citations are numbered by their order. */
+    get numbersCitationsByOrder() {
+        return true;
+    }
+
     /**
      * The service the controls are read and written with, for what only
      * Mendeley does: upgrading the fields of its old versions.
@@ -196,13 +201,16 @@ class ContentControlCitationDocument extends CitationDocument {
     }
 
     /**
-     * Mendeley Cite keeps the text as the citeproc text of manualOverride.
+     * Mendeley Cite keeps the text as the citeproc text of manualOverride;
+     * plainCitation, which the plugin writes as well, is read first and must
+     * not keep the text of an earlier style.
      * @param {CSLCitation} cslCitation
      * @param {string} text
      * @param {string | null} previousText
      */
     recordText(cslCitation, text, previousText) {
         cslCitation.setManualOverride(text);
+        cslCitation.setPlainCitation(text);
     }
 
     /**
@@ -338,4 +346,4 @@ function decodeTag(tag) {
     }
 }
 
-export { ContentControlCitationDocument };
+export { ContentControlCitationDocument, encodeTag as encodeCitationTag };

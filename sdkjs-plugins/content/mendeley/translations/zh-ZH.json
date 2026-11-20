@@ -103,5 +103,6 @@
     "Operation completed successfully": "操作已成功完成",
     "Please be cautious": "请谨慎操作",
     "Success": "成功",
-    "Warning": "警告"
+    "Warning": "警告",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "无法在参考文献列表中插入引文。请将光标置于参考文献列表之外。"
 }

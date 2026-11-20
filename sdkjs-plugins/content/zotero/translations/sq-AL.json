@@ -116,5 +116,6 @@
     "Information": "Informacion",
     "Operation completed successfully": "Veprimi përfundoi me sukses",
     "Please be cautious": "Ju lutemi bëni kujdes"
-
+,
+"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Një citim në këtë dokument është i dëmtuar dhe nuk mund të përpunohet. Ju lutem hiqeni ose zëvendësojeni."
 }

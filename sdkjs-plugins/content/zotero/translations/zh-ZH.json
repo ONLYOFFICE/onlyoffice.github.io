@@ -116,5 +116,6 @@
     "Information": "信息",
     "Operation completed successfully": "操作已成功完成",
     "Please be cautious": "请谨慎操作"
-
+,
+"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "文档中的引用已损坏，无法处理。请删除或替换它。"
 }
