@@ -4,4 +4,5 @@ export { Button } from "./button.js";
 export { Radio } from "./radio.js";
 export { Checkbox } from "./checkbox.js";
 export { SelectBox } from "./selectbox.js";
+export { TreeSelectBox } from "./tree-select-box.js";
 export { Loader } from "./loader.js";

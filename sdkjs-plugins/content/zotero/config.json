@@ -13,7 +13,7 @@
 	},
 	"offered": "Ascensio System SIA",
 	"guid": "asc.{BFC5D5C6-89DE-4168-9565-ABD8D1E48711}",
-	"version": "1.1.0",
+	"version": "1.2.1",
 	"minVersion": "9.3.0",
 
 	"variations" : [
@@ -95,7 +95,15 @@
 					"light" : "resources/store/icons",
 					"dark"  : "resources/store/icons"
 				},
-				"categories": ["specAbilities"]
+				"categories": ["specAbilities"],
+				"keywords": {
+					"en": ["citation", "cite", "bibliography", "references", "sources", "reference manager"],
+					"ru": ["цитирование", "цитаты", "библиография", "список литературы", "ссылки на источники", "источники"],
+					"de": ["Zitation", "Zitat", "Literaturverzeichnis", "Bibliografie", "Quellen", "Quellenangabe"],
+					"fr": ["citation", "bibliographie", "références", "sources"],
+					"es": ["cita", "citas", "bibliografía", "referencias", "fuentes"],
+					"pt-BR": ["citação", "bibliografia", "referências", "fontes"]
+				}
 			}
 		}
 	]

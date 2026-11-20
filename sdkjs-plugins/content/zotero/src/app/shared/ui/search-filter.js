@@ -34,10 +34,28 @@
 
 /// <reference path="../../types-global.js" />
 
-import { Button, SelectBox, InputField } from "../components";
+import { Button, TreeSelectBox, InputField } from "../components";
 import { translate } from "../../services";
 
-function SearchFilterComponents() {
+const MY_LIBRARY = "my_library";
+const GROUP_LIBRARIES = "group_libraries";
+/**
+ * The checked nodes of the library filter: "my_library", "group_libraries",
+ * group ids and "<library>:<collection key>", where the library is
+ * "my_library" or a group id.
+ */
+const STORAGE_KEY = "selectedGroups";
+
+/**
+ * The search field and the filter of where to search: the libraries and
+ * their collections, as a tree. A checked node is searched whole, an
+ * indeterminate one only in its checked descendants.
+ * @param {function(string|null): Promise<Array<ZoteroCollection>>} loadCollections
+ *  - the collections of a group library, or of the user library for null
+ */
+function SearchFilterComponents(loadCollections) {
+    const self = this;
+    this._loadCollections = loadCollections;
     this._searchField = new InputField("searchField", {
         type: "text",
         autofocus: true,
@@ -47,12 +65,22 @@ function SearchFilterComponents() {
         variant: "secondary-icon",
         size: "small",
     });
-    this._librarySelectList = new SelectBox("librarySelectList", {
+    this._librarySelectList = new TreeSelectBox("librarySelectList", {
         // TODO: add translation
         placeholder: translate("No items selected"),
-        multiple: true,
         description: translate("Search in:"),
+        loadingText: translate("Loading..."),
+        loadChildren: function (id) {
+            return self._loadLibraryCollections(id);
+        },
     });
+    /**
+     * Settles once the saved selection is restored, which may wait for the
+     * collections of some libraries.
+     * @type {Promise<void>}
+     */
+    this._ready = Promise.resolve();
+    this._restoreGeneration = 0;
     /** @type {Function[]} */
     this._subscribers = [];
 
@@ -63,9 +91,16 @@ SearchFilterComponents.prototype._addEventListeners = function () {
     const self = this;
     this._searchField.subscribe(function (e) {
         if (e.type === "inputfield:blur" || e.type === "inputfield:submit") {
-            const selectedGroups = self._getSelectedGroups();
-            self._subscribers.forEach(function (cb) {
-                cb(e.detail.value, selectedGroups);
+            const text = e.detail.value;
+            self.getScope().then(function (scope) {
+                if (scope.length === 0) {
+                    setTimeout(function () {
+                        self._librarySelectList.openDropdown();
+                    }, 500);
+                }
+                self._subscribers.forEach(function (cb) {
+                    cb(text, scope);
+                });
             });
         }
     });
@@ -79,106 +114,65 @@ SearchFilterComponents.prototype._addEventListeners = function () {
             }
         }
     });
+    this._librarySelectList.subscribe(function (event) {
+        if (event.type === "treeselect:change") {
+            self._saveSelection();
+        }
+    });
+};
+
+SearchFilterComponents.prototype.clearGroups = function () {
+    this._restoreGeneration++;
+    this._librarySelectList.setNodes([]);
 };
 
 /**
+ * Shows the user library and the given groups, each with its collections
+ * loaded when opened, and checks what was checked last time.
  * @param {Array<UserGroupInfo>} groups
  */
 SearchFilterComponents.prototype.addGroups = function (groups) {
-    const self = this;
-    const savedGroups = localStorage.getItem("selectedGroups");
-    /** @type {Array<string>} */
-    let selectedItems = savedGroups
-        ? JSON.parse(savedGroups).map(function (
-              /** @type {string|number}*/ id
-          ) {
-              return id.toString();
-          })
-        : ["my_library", "group_libraries"];
-    let hasSelected = false;
-    groups.forEach(function (group) {
-        group.id = String(group.id);
-    });
-
-    const customGroups = [
-        { id: "my_library", name: translate("My Library") },
+    /** @type {Array<CheckTreeNodeSpec>} */
+    const specs = [
         {
-            id: "group_libraries",
-            name: translate("Group Libraries"),
+            id: MY_LIBRARY,
+            text: translate("My Library"),
+            lazy: true,
+            data: { groupId: null },
         },
     ];
-    !hasSelected &&
-        customGroups.forEach(function (group) {
-            if (selectedItems.indexOf(group.id) !== -1) {
-                hasSelected = true;
-            }
+    if (groups.length) {
+        specs.push({
+            id: GROUP_LIBRARIES,
+            text: translate("Group Libraries"),
+            children: groups.map(function (group) {
+                return {
+                    id: String(group.id),
+                    text: group.name,
+                    lazy: true,
+                    data: { groupId: String(group.id) },
+                };
+            }),
         });
-    !hasSelected &&
-        groups.forEach(function (group) {
-            if (selectedItems.indexOf(group.id.toString()) !== -1) {
-                hasSelected = true;
-            }
-        });
-    if (!hasSelected) {
-        // if local storage data is invalid, select both My Library and Group Libraries
-        selectedItems = ["my_library", "group_libraries"];
     }
-
-    /**
-     * @param {string|number} id
-     * @param {string} name
-     * @param {boolean} selected
-     */
-    const addGroupToSelectBox = function (id, name, selected) {
-        if (typeof id === "number") {
-            id = id.toString();
-        }
-        if (self._librarySelectList instanceof SelectBox)
-            self._librarySelectList.addItem(id, name, selected);
-    };
-
-    for (var i = 0; i < customGroups.length; i++) {
-        const id = customGroups[i].id;
-        const name = customGroups[i].name;
-        addGroupToSelectBox(id, name, selectedItems.indexOf(id) !== -1);
-    }
-
-    if (groups.length === 0) {
-        return;
-    }
-    this._librarySelectList.addSeparator();
-    let selected = selectedItems.indexOf("group_libraries") !== -1;
-    for (var i = 0; i < groups.length; i++) {
-        const id = groups[i].id;
-        const name = groups[i].name;
-        addGroupToSelectBox(
-            id,
-            name,
-            selected || selectedItems.indexOf(id.toString()) !== -1
-        );
-    }
-    this._selectedGroupsWatcher(customGroups, groups);
+    this._librarySelectList.setNodes(specs);
+    this._restoreSelection();
 };
 
 /**
- * @return {Array<string|"my_library"|"group_libraries">}
+ * Where to search, by library: the user library first, then the groups in
+ * the order of the filter.
+ * @returns {Promise<Array<LibraryScope>>}
  */
-SearchFilterComponents.prototype._getSelectedGroups = function () {
+SearchFilterComponents.prototype.getScope = function () {
     const self = this;
-    const ids = this._librarySelectList.getSelectedValues();
-    if (Array.isArray(ids) === false || ids.length === 0) {
-        setTimeout(function () {
-            self._librarySelectList.openDropdown();
-        }, 500);
-    }
-    if (ids === null || typeof ids === "string") {
-        return [];
-    }
-    return ids;
+    return this._ready.then(function () {
+        return self._buildScope();
+    });
 };
 
 /**
- * @param {function(string, Array<string|"my_library"|"group_libraries">): void} callback
+ * @param {function(string, Array<LibraryScope>): void} callback
  * @returns {Object}
  */
 SearchFilterComponents.prototype.subscribe = function (callback) {
@@ -194,84 +188,180 @@ SearchFilterComponents.prototype.subscribe = function (callback) {
     };
 };
 
-/**
- * @param {Array<{id: string, name: string}>} customGroups
- * @param {Array<UserGroupInfo>} groups
- * @returns
- */
-SearchFilterComponents.prototype._selectedGroupsWatcher = function (
-    customGroups,
-    groups
-) {
-    const self = this;
-    if (this._librarySelectList instanceof SelectBox === false) {
-        return;
+/** @returns {Array<LibraryScope>} */
+SearchFilterComponents.prototype._buildScope = function () {
+    const list = this._librarySelectList;
+    /** @type {Array<CheckTreeNode>} */
+    const libraries = [];
+    const myLibrary = list.getNode(MY_LIBRARY);
+    if (myLibrary) {
+        libraries.push(myLibrary);
     }
-    this._librarySelectList.subscribe(function (event) {
-        if (event.type !== "selectbox:change") {
+    const groups = list.getNode(GROUP_LIBRARIES);
+    if (groups && groups.children) {
+        Array.prototype.push.apply(libraries, groups.children);
+    }
+
+    /** @type {Array<LibraryScope>} */
+    const scope = [];
+    libraries.forEach(function (library) {
+        const state = list.getState(library.id);
+        const groupId = library.data.groupId;
+        if (state === "checked") {
+            scope.push({ groupId: groupId, collections: null });
             return;
         }
-        /** @type {Array<string|number>} */
-        let aGroupsToSave = [];
-        const values = event.detail.values;
-        const current = event.detail.current;
-        const bEnabled = event.detail.enabled;
-        const customIds = customGroups.map(function (group) {
-            return group.id;
-        });
+        if (state !== "indeterminate") {
+            return;
+        }
+        // The checked collections, the subcollections of a checked one
+        // being checked too; an indeterminate collection is searched only
+        // in them, not in the items right in it.
         /** @type {Array<string>} */
-        let ids = groups.map(function (group) {
-            return group.id.toString();
-        });
-
-        let bWasCustom = customIds.indexOf(String(current)) !== -1;
-
-        if (bWasCustom) {
-            if (current === "group_libraries") {
-                if (bEnabled) {
-                    aGroupsToSave.push("group_libraries");
-                    self._librarySelectList.selectItems(ids, true);
-                } else {
-                    self._librarySelectList.unselectItems(ids, true);
+        const keys = [];
+        /** @param {Array<CheckTreeNode>} nodes */
+        const collect = function (nodes) {
+            nodes.forEach(function (node) {
+                if (
+                    list.getState(node.id) === "checked" &&
+                    node.data.numItems !== 0
+                ) {
+                    keys.push(node.data.key);
                 }
-                if (values.indexOf("my_library") !== -1) {
-                    aGroupsToSave.push("my_library");
+                if (node.children) {
+                    collect(node.children);
                 }
-            } else {
-                if (values.indexOf("group_libraries") !== -1) {
-                    aGroupsToSave.push("group_libraries");
-                    if (bEnabled) {
-                        aGroupsToSave.push(current);
-                    }
-                } else {
-                    aGroupsToSave = values.slice();
-                }
-            }
-        } else if (!bWasCustom) {
-            let bAllGroupsSelected = ids.every(function (id) {
-                return values.indexOf(id) !== -1;
             });
-            if (bAllGroupsSelected) {
-                self._librarySelectList.selectItems("group_libraries", true);
-                aGroupsToSave.push("group_libraries");
-                if (values.indexOf("my_library") !== -1) {
-                    aGroupsToSave.push("my_library");
-                }
-            } else {
-                self._librarySelectList.unselectItems("group_libraries", true);
-                aGroupsToSave = values.filter(function (value) {
-                    return value !== "group_libraries";
-                });
+        };
+        collect(library.children || []);
+        if (keys.length) {
+            scope.push({ groupId: groupId, collections: keys });
+        }
+    });
+    return scope;
+};
+
+/**
+ * Checks what was saved. A collection can be checked only once the
+ * collections of its library are known, so those libraries load first.
+ */
+SearchFilterComponents.prototype._restoreSelection = function () {
+    const self = this;
+    const list = this._librarySelectList;
+    const generation = ++this._restoreGeneration;
+    const ids = this._getSavedIds();
+    list.setCheckedIds(ids);
+
+    /** @type {Array<string>} */
+    const libraries = [];
+    ids.forEach(function (id) {
+        const separator = id.indexOf(":");
+        if (separator === -1) {
+            return;
+        }
+        const library = id.substring(0, separator);
+        if (libraries.indexOf(library) === -1 && list.getNode(library)) {
+            libraries.push(library);
+        }
+    });
+    this._ready = Promise.all(
+        libraries.map(function (library) {
+            return list.load(library).catch(function (error) {
+                console.error(
+                    "Failed to load the collections of " + library + ":",
+                    error
+                );
+            });
+        })
+    ).then(function () {
+        // The groups were shown anew meanwhile.
+        if (generation !== self._restoreGeneration) {
+            return;
+        }
+        list.setCheckedIds(ids);
+        if (list.getCheckedIds().length === 0) {
+            // Nothing saved is there any more.
+            list.setCheckedIds([MY_LIBRARY, GROUP_LIBRARIES]);
+        }
+    });
+};
+
+/** @returns {Array<string>} */
+SearchFilterComponents.prototype._getSavedIds = function () {
+    /** @type {any} */
+    let saved = null;
+    try {
+        saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    } catch (e) {
+        saved = null;
+    }
+    if (!Array.isArray(saved) || saved.length === 0) {
+        return [MY_LIBRARY, GROUP_LIBRARIES];
+    }
+    return saved.map(function (/** @type {string|number} */ id) {
+        return String(id);
+    });
+};
+
+SearchFilterComponents.prototype._saveSelection = function () {
+    const ids = this._librarySelectList.getCheckedIds();
+    if (ids.length === 0) {
+        localStorage.removeItem(STORAGE_KEY);
+    } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    }
+};
+
+/**
+ * The collections of a library as tree nodes, sorted by name in each
+ * branch as Zotero shows them.
+ * @param {string} libraryId - the node id of the library
+ * @returns {Promise<Array<CheckTreeNodeSpec>>}
+ */
+SearchFilterComponents.prototype._loadLibraryCollections = function (
+    libraryId
+) {
+    const node = this._librarySelectList.getNode(libraryId);
+    const groupId = node && node.data ? node.data.groupId : null;
+    return this._loadCollections(groupId).then(function (collections) {
+        /** @type {Map<string, CheckTreeNodeSpec & {children: Array<CheckTreeNodeSpec>}>} */
+        const byKey = new Map();
+        collections.forEach(function (collection) {
+            byKey.set(collection.key, {
+                id: libraryId + ":" + collection.key,
+                text: collection.name,
+                children: [],
+                data: {
+                    key: collection.key,
+                    numItems: collection.numItems,
+                },
+            });
+        });
+        /** @type {Array<CheckTreeNodeSpec>} */
+        const roots = [];
+        collections.forEach(function (collection) {
+            const spec = byKey.get(collection.key);
+            const parent = collection.parentCollection
+                ? byKey.get(collection.parentCollection)
+                : null;
+            if (spec) {
+                (parent ? parent.children : roots).push(spec);
             }
-        }
-        if (aGroupsToSave.length === 0) {
-            localStorage.removeItem("selectedGroups");
-        } else {
-            localStorage.setItem(
-                "selectedGroups",
-                JSON.stringify(aGroupsToSave)
-            );
-        }
+        });
+        /** @param {Array<CheckTreeNodeSpec>} specs */
+        const sort = function (specs) {
+            specs.sort(function (a, b) {
+                return a.text.localeCompare(b.text, undefined, {
+                    numeric: true,
+                    sensitivity: "base",
+                });
+            });
+            specs.forEach(function (spec) {
+                if (spec.children) sort(spec.children);
+            });
+        };
+        sort(roots);
+        return roots;
     });
 };
 

@@ -125,17 +125,27 @@ class CSLCitationStorage {
         return this;
     }
     /**
+     * Citations are added in document order, their note numbers set.
      * @param {CSLCitation} cslCitation
      * @returns {CSLCitationStorage}
      */
     addCslCitation(cslCitation) {
         this.#citations.push(cslCitation);
-        cslCitation.setNoteIndex(this.#citations.length);
 
         cslCitation.getCitationItems().forEach((item) => {
             this.#setItem(item.id, item);
         });
         return this;
+    }
+    /**
+     * The highest note number of the citations, 0 if none is in a note.
+     * @returns {number}
+     */
+    getLastNoteIndex() {
+        return this.#citations.reduce(
+            (last, citation) => Math.max(last, citation.getNoteIndex()),
+            0,
+        );
     }
     getAllCitationsInJson() {
         return this.#citations.map(citation => citation.toJSON());
@@ -163,11 +173,11 @@ class CSLCitationStorage {
     getCitationsPre(id) {
         /** @type {Array<[string, number]>} */
         const citationsPre = [];
-        this.#citations.find((citation, index) => {
+        this.#citations.find((citation) => {
             if (citation.citationID === id) {
                 return true;
             }
-            citationsPre.push([citation.citationID, index + 1]);
+            citationsPre.push([citation.citationID, citation.getNoteIndex()]);
             return false;
         });
         return citationsPre;
@@ -182,7 +192,7 @@ class CSLCitationStorage {
         const citationIndex = this.getCitationIndex(id);
         for (let i = citationIndex + 1; i < this.#citations.length; i++) {
             const citation = this.#citations[i];
-            citationsPost.push([citation.citationID, i + 1]);
+            citationsPost.push([citation.citationID, citation.getNoteIndex()]);
         }
 
         return citationsPost;

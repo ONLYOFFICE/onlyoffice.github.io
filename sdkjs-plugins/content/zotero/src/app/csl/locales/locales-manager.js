@@ -32,6 +32,24 @@
 
 // @ts-check
 
+/**
+ * Locales the CSL repository dropped, by the one that took their place: a
+ * language chosen before, or kept in a document, still finds its locale.
+ * @type {Object<string, string>}
+ */
+const REPLACED_LOCALES = {
+    // The Cyrillic Serbian of 2012.
+    "sr-RS": "sr-Cyrl-RS",
+};
+
+/**
+ * @param {string} langTag
+ * @returns {string} the locale to use for the language
+ */
+function currentLocaleOf(langTag) {
+    return REPLACED_LOCALES[langTag] || langTag;
+}
+
 function LocalesManager() {
     this._isOnlineAvailable = false;
     this._isDesktopAvailable = false;
@@ -56,12 +74,19 @@ function LocalesManager() {
  */
 LocalesManager.prototype.loadLocale = function (langTag) {
     const self = this;
-    this._selectedLanguage = langTag;
+    langTag = currentLocaleOf(langTag);
     if (this._cache[langTag]) {
         return Promise.resolve(this._cache[langTag]);
     }
     var url = this._getLocalesUrl() + "locales-" + langTag + ".xml";
     return fetch(url)
+        .then(function (response) {
+            // An error page is not a locale.
+            if (!response.ok) {
+                throw new Error("HTTP " + response.status + " for " + url);
+            }
+            return response;
+        })
         .catch(function (err) {
             console.error("Failed to load locale:", err);
             // Try to load from local path as fallback
@@ -80,10 +105,11 @@ LocalesManager.prototype.loadLocale = function (langTag) {
  * @returns {string}
  */
 LocalesManager.prototype.getLastUsedLanguage = function () {
-    this._selectedLanguage =
+    this._selectedLanguage = currentLocaleOf(
         this._selectedLanguage ||
-        localStorage.getItem(this._lastLanguageKey) ||
-        "en-US";
+            localStorage.getItem(this._lastLanguageKey) ||
+            "en-US",
+    );
     return this._selectedLanguage;
 };
 
@@ -93,6 +119,7 @@ LocalesManager.prototype.getLastUsedLanguage = function () {
  */
 LocalesManager.prototype.getLocale = function (localeId) {
     if (localeId) {
+        localeId = currentLocaleOf(localeId);
         if (this._cache[localeId]) {
             return this._cache[localeId];
         }
@@ -108,6 +135,7 @@ LocalesManager.prototype.getLocale = function (localeId) {
  * @param {string} language
  */
 LocalesManager.prototype.saveLastUsedLanguage = function (language) {
+    language = currentLocaleOf(language);
     this._selectedLanguage = language;
     localStorage.setItem(this._lastLanguageKey, language);
 };

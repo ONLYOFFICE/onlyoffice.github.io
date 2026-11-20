@@ -139,3 +139,44 @@
  * @property {boolean} [autoClose]
  * @property {boolean} [closeOnClickOutside]
  */
+
+/** ********************** */
+
+/**
+ * @typedef {"checked"|"unchecked"|"indeterminate"} CheckState
+ */
+
+/**
+ * @typedef {Object} CheckTreeNodeSpec
+ * @property {string} id
+ * @property {string} text
+ * @property {Array<CheckTreeNodeSpec>} [children]
+ * @property {boolean} [lazy] - the children are loaded when needed
+ * @property {any} [data] - kept with the node for its owner
+ */
+
+/**
+ * @typedef {Object} CheckTreeNode
+ * @property {string} id
+ * @property {string} text
+ * @property {any} data
+ * @property {CheckTreeNode|null} parent
+ * @property {Array<CheckTreeNode>|null} children - null until loaded
+ * @property {boolean} checked - the node's own mark; one with children
+ *  takes its state from them
+ */
+
+/**
+ * @typedef {Object} TreeSelectBoxOptionsType
+ * @property {string} [placeholder]
+ * @property {string} [description]
+ * @property {string} [loadingText]
+ * @property {function(string): Promise<Array<CheckTreeNodeSpec>>} [loadChildren]
+ *  - the children of a lazy node
+ */
+
+/**
+ * @typedef {Object} TreeSelectBoxEventType
+ * @property {"treeselect:change"} type
+ * @property {{ids: Array<string>, current: string, enabled: boolean}} detail
+ */
