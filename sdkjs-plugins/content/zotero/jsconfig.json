@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "es2022",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "paths": {
+            "@shared/*": ["./shared/*"]
+        }
+    },
+    "include": ["src/**/*", "shared/**/*", "test/**/*"]
+}

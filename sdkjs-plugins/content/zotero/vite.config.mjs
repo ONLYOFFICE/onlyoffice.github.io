@@ -174,6 +174,10 @@ export default defineConfig({
             },
         },
     ],
+    resolve: {
+        // Code shared with the Mendeley plugin, see shared/README.md.
+        alias: { "@shared": resolve(__dirname, "shared") },
+    },
     build: {
         outDir: "dist",
         emptyOutDir: false,

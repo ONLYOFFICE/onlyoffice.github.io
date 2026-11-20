@@ -12,7 +12,9 @@
         "watch": "cross-env ENTRY=main vite build --watch",
         "watch-edit": "cross-env ENTRY=edit-window vite build --watch",
         "dev": "cross-env ENTRY=main vite build --watch",
-        "es-check": "npx es-check es5 dist/bundle.es5.js"
+        "es-check": "npx es-check es5 dist/bundle.es5.js",
+        "test": "vitest run",
+        "test:watch": "vitest"
     },
     "devDependencies": {
         "@babel/core": "^7.29.6",
@@ -22,9 +24,11 @@
         "autoprefixer": "^10.5.4",
         "cross-env": "^10.1.0",
         "cssnano": "^7.1.2",
+        "happy-dom": "^21.0.4",
         "postcss-import": "^16.1.1",
         "postcss-nested": "^8.0.1",
-        "vite": "^8.2.1"
+        "vite": "^8.2.1",
+        "vitest": "^5.1.1"
     },
     "dependencies": {
         "core-js": "^3.50.0"
