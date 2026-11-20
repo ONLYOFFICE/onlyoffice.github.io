@@ -451,7 +451,7 @@
 				Dialogs.sendCommand(windowID, 'onClickBtn');
 			else
 				Dialogs.close(windowID);
-		} else if (PluginCard.window && PluginCard.window.id == windowID) {
+		} else if (windowID) {
 			PluginCard.hide();
 		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
