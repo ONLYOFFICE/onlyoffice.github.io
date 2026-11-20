@@ -263,7 +263,6 @@ function SettingsPage(router, displayNoneClass) {
         ["sl-SI", "Slovenian"],
         ["sr-Cyrl-RS", "Serbian (Cyrillic)"],
         ["sr-Latn-RS", "Serbian (Latin)"],
-        ["sr-RS", "Serbian"],
         ["sv-SE", "Swedish"],
         ["th-TH", "Thai"],
         ["tl-PH", "Tagalog"],
