@@ -78,14 +78,17 @@
                 <input id="redirectConfig" readonly type="text"  />
                 <button id="redirectUrlCopy" class="i18n" style="margin-top: 12px; width: 100%;">Copy Link and Open Form</button>
                 <p class="i18n">In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.</p>
-                <div class="mrtop label">
-                    <span class="i18n">Application ID</span>
-                    <input id="appIdField" autocomplete="off" class="i18n" type="text" placeholder="Application ID" />
-                </div>
-                <div id="appSecretWrapper" class="mrtop label hidden">
-                    <span class="i18n">Secret</span>
-                    <input id="appSecretField" autocomplete="off" class="i18n" type="password" placeholder="Secret" />
-                </div>
+                <!-- A form, as a password field asks for. It is never sent: Enter would reload the plugin. -->
+                <form id="appCredentialsForm" autocomplete="off" onsubmit="return false;">
+                    <div class="mrtop label">
+                        <span class="i18n">Application ID</span>
+                        <input id="appIdField" autocomplete="off" class="i18n" type="text" placeholder="Application ID" />
+                    </div>
+                    <div id="appSecretWrapper" class="mrtop label hidden">
+                        <span class="i18n">Secret</span>
+                        <input id="appSecretField" autocomplete="off" class="i18n" type="password" placeholder="Secret" />
+                    </div>
+                </form>
                 <button id="loginBtn" class="i18n" style="margin-top: 12px; width: 100%;">Login</button>
                 <div id="authCodeWrapper" class="hidden">
                     <p class="i18n">Sign in to Mendeley in the opened browser, then copy the authorization code and paste it below.</p>
