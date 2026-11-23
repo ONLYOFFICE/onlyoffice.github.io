@@ -35,7 +35,7 @@
     "Refresh": "更新",
     "Unlink citations": "引用のリンクを解除",
     "Please insert some citation into the document.": "ドキュメントに引用を挿入してください。",
-    "Omit author": "著者を省略",
+    "Omit Author": "著者を省略",
 	"Failed to apply this style": "このスタイルを適用できませんでした",
     "The current bibliographic style does not describe the bibliography": "現在の参考文献スタイルは参考文献を記述していません",
     "Failed to insert citation": "引用の挿入に失敗しました",
@@ -104,5 +104,8 @@
     "Please be cautious": "ご注意ください",
     "Success": "成功",
     "Warning": "警告",
-    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "文献の中には引用を挿入できません。カーソルを文献の外に置いてください。"
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "文献の中には引用を挿入できません。カーソルを文献の外に置いてください。",
+    "Locator": "位置指定",
+    "selected": "選択済み",
+    "Keep sources sorted": "出典を自動的に並べ替える"
 }

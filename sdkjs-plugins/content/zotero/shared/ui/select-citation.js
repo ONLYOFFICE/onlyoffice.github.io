@@ -32,16 +32,17 @@
 
 // @ts-check
 
-/// <reference path="../../../../../zotero/shared/types-global.js" />
-/// <reference path="../../sdk/types.js" />
+/// <reference path="../types-global.js" />
 
-import { translate } from "../../services";
-import { Checkbox, InputField, SelectBox } from "@shared/components";
-import LOCATOR_VALUES from "@shared/constants/locator-values";
+import { translate } from "../services/translate-service";
+import { Checkbox, InputField, SelectBox } from "../components";
+import LOCATOR_VALUES from "../constants/locator-values";
+import { collectItemKeys } from "../item-keys";
 
 /**
  * @typedef {Object} Scroller
- * @property {Function} onscroll
+ * @property {function(boolean=): void} onscroll - pass true when the user
+ *  scrolled; other calls only redraw the thumb
  */
 
 /**
@@ -61,6 +62,16 @@ function SelectCitationsComponent(
     this._html = {};
     /** @type {Object<string|number, Checkbox>} */
     this._checks = {};
+    /**
+     * Keys of the items already cited in the document. Matching search results
+     * are shown above everything else, in `_priorityHolder`.
+     * @type {Set<string>}
+     */
+    this._usedItemKeys = new Set();
+    /** @type {HTMLElement|null} */
+    this._priorityHolder = null;
+    /** @type {Array<{key: string, element: HTMLElement}>} */
+    this._priorityEntries = [];
 
     this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
 
@@ -104,13 +115,20 @@ function SelectCitationsComponent(
 SelectCitationsComponent.prototype._init = function () {
     const self = this;
     if (this._cancelSelectBtn) {
-        this._cancelSelectBtn.onclick = function (e) {
+        let onclickFn = function() {
             var ids = [];
             for (var id in self._items) {
                 ids.push(id);
             }
             for (var i = 0; i < ids.length; i++) {
                 self._removeSelected(ids[i]);
+            }
+        };
+        this._cancelSelectBtn.onclick = onclickFn;
+        this._cancelSelectBtn.onkeydown = function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onclickFn();
             }
         };
     }
@@ -134,6 +152,8 @@ SelectCitationsComponent.prototype.clearLibrary = function () {
         holder.removeChild(holder.lastChild);
     }
     if (holder) holder.scrollTop = 0;
+    this._priorityHolder = null;
+    this._priorityEntries = [];
     this._docsScroller.onscroll();
 };
 
@@ -159,22 +179,118 @@ SelectCitationsComponent.prototype.displaySearchItems = function (res, err, last
     return new Promise((resolve, reject) => {
         if (res && res.items && res.items.length > 0) {
             const page = document.createElement("div");
-            if (holder) page.classList.add("page" + holder.children.length);
+            /** @type {Array<SearchResultItem>} */
+            const usedItems = [];
             for (let index = 0; index < res.items.length; index++) {
                 let item = res.items[index];
                 if (!item.title) {
                     continue;
                 }
-                page.appendChild(self._buildDocElement(item));
+                if (self._isUsedInDocument(item)) {
+                    usedItems.push(item);
+                } else {
+                    page.appendChild(self._buildDocElement(item));
+                }
                 numOfShown++;
             }
-            if (holder) holder.appendChild(page);
+            if (holder && page.children.length) {
+                page.classList.add("page" + holder.children.length);
+                holder.appendChild(page);
+            }
+            self._addPriorityItems(usedItems);
         } else if (err) {
             reject(err);
         }
 
         this._docsScroller.onscroll();
         resolve(numOfShown);
+    });
+};
+
+/**
+ * Tells the list which items the document already cites, so that they can be
+ * floated to the top of the search results.
+ * @param {Set<string>} keys
+ */
+SelectCitationsComponent.prototype.setUsedItemKeys = function (keys) {
+    this._usedItemKeys = keys instanceof Set ? keys : new Set();
+};
+
+/**
+ * @param {SearchResultItem} item
+ * @returns {boolean}
+ */
+SelectCitationsComponent.prototype._isUsedInDocument = function (item) {
+    if (!this._usedItemKeys || this._usedItemKeys.size === 0) {
+        return false;
+    }
+    const keys = collectItemKeys(item);
+    for (var i = 0; i < keys.length; i++) {
+        if (this._usedItemKeys.has(keys[i])) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
+ * Sort key for the items shown at the top of the list: the first author,
+ * falling back to the title when the item has no usable author name.
+ * @param {SearchResultItem} item
+ * @returns {string}
+ */
+SelectCitationsComponent.prototype._getAlphabeticalKey = function (item) {
+    let key = "";
+    if (item.author && item.author.length > 0) {
+        const author = /** @type {any} */ (item.author[0]);
+        key = [author.family, author.given]
+            .filter(function (part) {
+                return !!part;
+            })
+            .join(" ")
+            .trim();
+        if (!key && author.literal) {
+            key = String(author.literal).trim();
+        }
+    }
+    if (!key) {
+        key = (item.title || "").trim();
+    }
+    return key.toLowerCase();
+};
+
+/**
+ * Renders the items the document already cites in their own block, kept as the
+ * first child of the list. Libraries answer in an arbitrary order and further
+ * pages keep arriving from the infinite scroll, so the block is re-sorted on
+ * every addition instead of relying on insertion order.
+ * @param {Array<SearchResultItem>} items
+ */
+SelectCitationsComponent.prototype._addPriorityItems = function (items) {
+    const self = this;
+    const holder = this._docsHolder;
+    if (!items.length || !holder) {
+        return;
+    }
+    if (!this._priorityHolder) {
+        this._priorityHolder = document.createElement("div");
+        this._priorityHolder.classList.add("docs-priority");
+    }
+    const priorityHolder = this._priorityHolder;
+    if (priorityHolder.parentNode !== holder) {
+        holder.insertBefore(priorityHolder, holder.firstChild);
+    }
+    items.forEach(function (item) {
+        self._priorityEntries.push({
+            key: self._getAlphabeticalKey(item),
+            element: self._buildDocElement(item),
+        });
+    });
+    this._priorityEntries.sort(function (a, b) {
+        return a.key.localeCompare(b.key);
+    });
+    this._priorityEntries.forEach(function (entry) {
+        priorityHolder.appendChild(entry.element);
     });
 };
 
@@ -242,6 +358,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     }
     const arrow = document.createElement("div");
     arrow.classList.add("selectbox-arrow");
+    arrow.setAttribute("tabindex", "0");
     arrow.innerHTML = "<b></b>";
 
     var title = document.createElement("div");
@@ -302,6 +419,12 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     }
 
     arrow.onclick = toggleItem;
+    arrow.onkeydown = function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleItem();
+        }
+    };
     checkInput.subscribe(function (event) {
         if (event.type !== "checkbox:change") {
             return;
@@ -321,7 +444,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
  * @returns {DocumentFragment}
  */
 SelectCitationsComponent.prototype._buildCitationParams = function (item) {
-    const locatorLabel = localStorage.getItem("selectedLocator") || "page";
+    const locatorLabel = item.label || localStorage.getItem("selectedLocator") || "page";
     item.label = locatorLabel;
 
     const params = document.createDocumentFragment();
@@ -348,15 +471,18 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
 
     const prefixInput = new InputField(prefix, {
         type: "text",
-        placeholder: "Prefix",
+        placeholder: translate("Prefix"),
+        value: item.prefix || "",
     });
     const suffixInput = new InputField(suffix, {
         type: "text",
-        placeholder: "Suffix",
+        placeholder: translate("Suffix"),
+        value: item.suffix || "",
     });
     const locatorSelectbox = new SelectBox(locatorSelect, {
-        placeholder: "Locator",
+        placeholder: translate("Locator"),
         usePortal: true,
+        translate: translate
     });
     LOCATOR_VALUES.forEach(function (info) {
         const selected = info[0] === locatorLabel;
@@ -367,10 +493,12 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     });
     const locatorInput = new InputField(locator, {
         type: "text",
-        placeholder: locatorPlaceholder,
+        placeholder: translate(locatorPlaceholder),
+        value: item.locator || "",
     });
     const omitAuthorInput = new Checkbox(omitAuthor, {
-        label: translate("Omit author"),
+        label: translate("Omit Author"),
+        checked: !!item["suppress-author"],
     });
 
     prefixInput.subscribe(function (event) {
@@ -422,6 +550,7 @@ SelectCitationsComponent.prototype._buildSelectedElement = function (item) {
     const self = this;
     var root = document.createElement("div");
     root.classList.add("selDoc");
+    root.setAttribute("data-id", String(item.id));
 
     const span = document.createElement("span");
     if (item.author && item.author.length > 0) {
@@ -478,9 +607,16 @@ SelectCitationsComponent.prototype._addSelected = function (item, checkbox) {
 /**
  * @param {HTMLElement} holder - The element that contains the document list.
  * @param {HTMLElement} [thumb]
+ * @param {boolean} [byUser] - whether the user scrolled the list
  */
-SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb) {
+SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb, byUser) {
     const self = this;
+    // Only the user's scrolling asks for the next page. Redraws after a page
+    // arrives would otherwise keep fetching until the list overflows, and
+    // every page is a request against the Zotero API rate limit.
+    if (!byUser) {
+        return;
+    }
     if (this._fShouldLoadMore(holder)) {
         if (this._loadTimeout) {
             clearTimeout(this._loadTimeout);
@@ -500,6 +636,23 @@ SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb) {
         }, 500);
     }
 };
+
+/**
+ * The vertical distance of a wheel event in pixels. A touchpad reports many
+ * small pixel deltas; only line and page deltas need scaling.
+ * @param {WheelEvent} e
+ * @param {HTMLElement} holder
+ * @returns {number}
+ */
+function wheelDeltaInPixels(e, holder) {
+    if (e.deltaMode === 1) {
+        return e.deltaY * 20; // lines
+    }
+    if (e.deltaMode === 2) {
+        return e.deltaY * holder.clientHeight; // pages
+    }
+    return e.deltaY;
+}
 
 /**
  * @param {HTMLElement} holder
@@ -523,9 +676,8 @@ SelectCitationsComponent.prototype._initScrollBox = function (
     );
 
     holder.onwheel = function (e) {
-        holder.scrollTop +=
-            e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
-        scroller.onscroll();
+        holder.scrollTop += wheelDeltaInPixels(e, holder);
+        scroller.onscroll(true);
     };
 
     thumb.onmousedown = function (e) {
@@ -533,19 +685,27 @@ SelectCitationsComponent.prototype._initScrollBox = function (
         var y = e.clientY;
         var initialPos = holder.scrollTop;
 
-        window.onmouseup = function (e) {
+        var stopDragging = function () {
             thumb.classList.remove("scrolling");
             window.onmouseup = null;
             window.onmousemove = null;
         };
+        window.onmouseup = stopDragging;
         window.onmousemove = function (e) {
+            // The button was released outside the plugin frame, where the
+            // mouseup never reaches us: without this, merely moving the
+            // pointer would keep dragging the list.
+            if (e.buttons === 0) {
+                stopDragging();
+                return;
+            }
             var delta = e.clientY - y;
 
             var percMoved = delta / holder.clientHeight;
             var deltaScroll = holder.scrollHeight * percMoved;
             holder.scrollTop = initialPos + deltaScroll;
 
-            scroller.onscroll();
+            scroller.onscroll(true);
         };
     };
 
@@ -560,8 +720,8 @@ SelectCitationsComponent.prototype._initScrollBox = function (
  * @param {HTMLElement} holder
  * @param {HTMLElement} thumb
  * @param {number} minThumbHeight
- * @param {function} [func] - an optional function to be called with the holder and thumb as arguments.
- * @returns {function} - a function that checks the scroll state and updates the thumb accordingly.
+ * @param {function} [func] - an optional function to be called with the holder, the thumb and whether the user scrolled.
+ * @returns {function(boolean=): void} - a function that checks the scroll state and updates the thumb accordingly.
  * */
 SelectCitationsComponent.prototype._checkScroll = function (
     holder,
@@ -570,7 +730,7 @@ SelectCitationsComponent.prototype._checkScroll = function (
     func
 ) {
     const displayNoneClass = this._displayNoneClass;
-    return function () {
+    return function (byUser) {
         if (holder.scrollHeight <= holder.clientHeight) {
             thumb.classList.add(displayNoneClass);
         } else {
@@ -588,7 +748,7 @@ SelectCitationsComponent.prototype._checkScroll = function (
             thumb.style.marginTop = margin + "px";
         }
 
-        if (func) func(holder, thumb);
+        if (func) func(holder, thumb, byUser === true);
     };
 };
 

@@ -50,3 +50,8 @@
 * Fix the plugin asking whether to keep manual edits of citations nobody edited after a style change.
 * Update the built-in citation styles and locales.
 * Fix a built-in citation style failing to load when zotero.org cannot be reached: the copy shipped with the plugin is used.
+* Fix scrolling the found sources: a touchpad scrolls them smoothly, the list stops following the pointer when the button is released outside the plugin, and further pages are requested only when you scroll.
+* Open a found source and clear the selection with the keyboard.
+* Translate the prefix, suffix and locator fields and the "Omit Author" option of a found source.
+* Reorder the sources of a citation by dragging them in the citation editing window, and add "Keep sources sorted" to keep the order set by hand.
+* Fix the other citations and the bibliography not being updated after sources were added to a citation, removed from it or reordered.

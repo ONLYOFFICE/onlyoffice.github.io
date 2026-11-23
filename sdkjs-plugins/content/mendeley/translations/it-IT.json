@@ -35,7 +35,7 @@
     "Refresh": "Aggiorna",
     "Unlink citations": "Rimuovi citazioni collegate",
     "Please insert some citation into the document.": "Per favore inserisci una citazione nel documento.",
-    "Omit author": "Escludi autore",
+    "Omit Author": "Escludi autore",
 	"Failed to apply this style": "Impossibile applicare questo stile",
     "The current bibliographic style does not describe the bibliography": "Lo stile bibliografico corrente non descrive la bibliografia",
     "Failed to insert citation": "Impossibile inserire la citazione",
@@ -104,5 +104,8 @@
     "Please be cautious": "Procedere con cautela",
     "Success": "Successo",
     "Warning": "Attenzione",
-    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Non è possibile inserire citazioni nella bibliografia. Posiziona il cursore al di fuori di essa."
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Non è possibile inserire citazioni nella bibliografia. Posiziona il cursore al di fuori di essa.",
+    "Locator": "Localizzatore",
+    "selected": "selezionati",
+    "Keep sources sorted": "Mantieni le fonti ordinate"
 }

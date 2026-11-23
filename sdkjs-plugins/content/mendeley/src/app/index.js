@@ -47,7 +47,8 @@ import { CitationService } from "@shared/services/citation-service";
 import { AdditionalWindow } from "@shared/pages/additional-window";
 import { ContentControlCitationDocument } from "./document/content-control-citation-document";
 import { MendeleyDesktopFields } from "./document/mendeley-desktop-fields";
-import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
+import { SelectCitationsComponent } from "@shared/ui/select-citation";
+import { SearchFilterComponents } from "./shared/ui";
 import { Button, Loader } from "@shared/components";
 
 import "@shared/components.css";
@@ -459,6 +460,8 @@ import "../styles.css";
                 !current && !!(await citationDocument.controls.getCurrentContentControlPr());
             if (current || bInOtherControl) {
                 const citation = current && current.kind === "citation" ? current : null;
+                // Taken before the sources are added to the citation.
+                const idsInDocument = citationService.getCitationItemIds(citation ? citation.data : null);
                 return Promise.resolve()
                     .then(() => {
                         if (!citation) {
@@ -468,7 +471,7 @@ import "../styles.css";
                     })
                     .then((data) => {
                         selectCitation.removeItems(Object.keys(items));
-                        return showEditCitationWindow(citation, data);
+                        return showEditCitationWindow(citation, data, idsInDocument);
                     })
                     .then((bSuccess) => {
                         if (bSuccess) {
@@ -1009,17 +1012,25 @@ import "../styles.css";
      *  - the citation at the cursor
      * @param {Object | null} [data] - its data with sources just added, if
      *  other than the stored data
+     * @param {Array<string>} [idsInDocument] - the ids of its sources in the
+     *  document, if other than in its data
      * @returns {Promise<boolean>}
      */
-    async function showEditCitationWindow(current, data) {
+    async function showEditCitationWindow(current, data, idsInDocument) {
         if (!current || current.kind !== "citation") {
             citationService.showWarningMessage("No Mendeley citation found at the cursor. Please click directly on a citation to edit it.");
             return false;
         }
+        const idsBeforeEdit = idsInDocument || citationService.getCitationItemIds(current.data);
         const updatedObject = await citationService.showEditCitationWindow(data || current.data);
         if (!updatedObject) {
             return false;
         }
+        // Sources added, removed or reordered change the other citations
+        // too, such as "ibid." or numbers, and the bibliography.
+        const bItemsChanged =
+            idsBeforeEdit.join("\u0000") !==
+            citationService.getCitationItemIds(updatedObject).join("\u0000");
 
         let updateFn = citationService.updateItem.bind(
             citationService,
@@ -1027,16 +1038,31 @@ import "../styles.css";
         );
 
         const styleManager = settings.getStyleManager();
-        if (styleManager.getLastUsedFormat() === "note") {
+        const bIsNotesFormat = styleManager.getLastUsedFormat() === "note";
+        const notesStyle = styleManager.getLastUsedNotesStyle();
+        if (bIsNotesFormat) {
             // this way, because "SelectAddinField" does not work with notes
             updateFn = citationService.updateItem.bind(
                 citationService,
                 updatedObject,
-                styleManager.getLastUsedNotesStyle()
+                notesStyle
             );
         }
 
         return updateFn()
+            .then(async () => {
+                if (!bItemsChanged) {
+                    return;
+                }
+                // The text of a citation in a note is in the note, not in
+                // its control: notes are rewritten on their own.
+                if (bIsNotesFormat) {
+                    await citationService.updateCslItemsInNotes(notesStyle);
+                } else {
+                    await citationService.updateCslItems();
+                }
+            })
+            .then(() => true)
             .catch(function (error) {
                 console.error(error);
                 let message = translate("Failed to insert citation");

@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/// <reference path="../zotero/types.js" />
+/// <reference path="./types-global.js" />
 
 /**
  * A Zotero item is referred to by several different strings depending on where

@@ -173,6 +173,49 @@ var AscSimpleRequest = window.AscSimpleRequest;
  */
 
 /**
+ * @typedef {Object} SearchResult
+ * @property {Array<SearchResultItem>} items
+ * @property {number|string} [id] - the library or group searched
+ * @property {function(): Promise<SearchResult>} [next]
+ */
+
+/**
+ * @typedef {Object} SearchResultItem
+ * @property {string} [abstract]
+ * @property {string} [archive]
+ * @property {string} [archive_location]
+ * @property {Array<{family: string, given: string}>} [author]
+ * @property {string} [event-place]
+ * @property {number|string} [groupID]
+ * @property {string} [call-number]
+ * @property {string} [collection-number]
+ * @property {string} [collection-title]
+ * @property {string} [container-title]
+ * @property {string} [edition]
+ * @property {string} id
+ * @property {string} [ISBN]
+ * @property {{'date-parts': number[][]}} [issued]
+ * @property {string} [language]
+ * @property {string} [note]
+ * @property {string} [number-of-pages]
+ * @property {string} [number-of-volumes]
+ * @property {number} [page]
+ * @property {string} [publisher]
+ * @property {string} [publisher-place]
+ * @property {string} [shortTitle]
+ * @property {string} title
+ * @property {string} type
+ * @property {Array<string>} [uris]
+ * @property {string} [URL]
+ * @property {number|string} [userID]
+ * @property {string} [volume]
+ * @property {string} [prefix]
+ * @property {string} [suffix]
+ * @property {string} [label]
+ * @property {string} [locator]
+ * @property {boolean} [suppress-author]
+ */
+/**
  * @typedef {Object} LastSearch
  * @property {string} text
  * @property {SearchResult | null} obj

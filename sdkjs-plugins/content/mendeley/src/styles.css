@@ -286,6 +286,9 @@ div::-moz-selection {
             top: 10px;
             right: 9px;
         }
+        &:focus-visible {
+            outline: none;
+        }
     }
     & .selectbox-arrow::after {
         content: "";
@@ -320,7 +323,7 @@ div::-moz-selection {
         margin-top: 6px;
     }
 }
-.page0 > .doc:first-child {
+#docsHolder > div:first-child > .doc:first-child {
     margin-top: 0;
 }
 

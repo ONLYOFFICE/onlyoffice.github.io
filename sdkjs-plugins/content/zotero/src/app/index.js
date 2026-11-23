@@ -48,8 +48,9 @@ import { ZoteroLibrary } from "./zotero/zotero-library";
 import { ZoteroBibliographyEditor } from "./zotero/zotero-bibliography-editor";
 import { ZoteroDocumentPreferences } from "./zotero/zotero-document-preferences";
 import { ZoteroFieldRecovery } from "./zotero/zotero-field-recovery";
-import { usedItemKeys } from "./shared/item-keys";
-import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
+import { usedItemKeys } from "@shared/item-keys";
+import { SelectCitationsComponent } from "@shared/ui/select-citation";
+import { SearchFilterComponents } from "./shared/ui";
 import { Button, Loader } from "@shared/components";
 import { AutoUpdatePreferences } from "./auto-update-preferences";
 

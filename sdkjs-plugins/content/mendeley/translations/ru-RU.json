@@ -42,7 +42,7 @@
     "Refresh": "Обновить",
     "Unlink citations": "Открепить цитаты",
     "Please insert some citation into the document.": "Пожалуйста, вставьте цитату в документ.",
-    "Omit author": "Не выводить автора",
+    "Omit Author": "Не выводить автора",
 	"Failed to apply this style": "Не удалось применить этот стиль",
     "The current bibliographic style does not describe the bibliography": "Текущий стиль не описывает библиографию",
     "Failed to insert citation": "Не удалось вставить цитату",
@@ -111,5 +111,8 @@
     "Please be cautious": "Будьте внимательны",
     "Success": "Успех",
     "Warning": "Предупреждение",
-    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитаты нельзя вставить в библиографию. Поставьте курсор за её пределами."
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитаты нельзя вставить в библиографию. Поставьте курсор за её пределами.",
+    "Locator": "Локатор",
+    "selected": "выбрано",
+    "Keep sources sorted": "Сортировать источники автоматически"
 }

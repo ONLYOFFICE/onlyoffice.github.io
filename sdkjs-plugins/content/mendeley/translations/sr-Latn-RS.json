@@ -35,7 +35,7 @@
     "Refresh": "Osveži",
     "Unlink citations": "Otkucaj reference",
     "Please insert some citation into the document.": "Unesi neku reference u dokument.",
-    "Omit author": "Izostavi autora",
+    "Omit Author": "Izostavi autora",
 	"Failed to apply this style": "Neuspelo postavljanje ovog stila",
     "The current bibliographic style does not describe the bibliography": "Trenutni bibliografski stil ne opisuje bibliografiju",
     "Failed to insert citation": "Neuspelo unosenje reference",
@@ -104,5 +104,8 @@
     "Please be cautious": "Budite oprezni",
     "Success": "Uspeh",
     "Warning": "Upozorenje",
-    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citati ne mogu da se ubace u bibliografiju. Postavite kursor izvan nje."
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citati ne mogu da se ubace u bibliografiju. Postavite kursor izvan nje.",
+    "Locator": "Lokator",
+    "selected": "izabrano",
+    "Keep sources sorted": "Automatski sortiraj izvore"
 }

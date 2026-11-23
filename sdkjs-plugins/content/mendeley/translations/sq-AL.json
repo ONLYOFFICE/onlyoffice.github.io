@@ -35,7 +35,7 @@
     "Refresh": "Rifresko",
     "Unlink citations": "Hiqni citimet",
     "Please insert some citation into the document.": "Ju lutem shtoni ndonjë citim në dokument",
-    "Omit author": "Hiqni autorin",
+    "Omit Author": "Hiqni autorin",
 	"Failed to apply this style": "Nuk arriti të zbatojë këtë stil",
     "The current bibliographic style does not describe the bibliography": "Stili aktual bibliografik nuk përshkruan bibliografinë",
     "Failed to insert citation": "Nuk arriti të shtojë citimin",
@@ -104,5 +104,8 @@
     "Please be cautious": "Ju lutemi bëni kujdes",
     "Success": "Sukses",
     "Warning": "Kujdes",
-    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citimet nuk mund të shtohen në bibliografi. Vendoseni kursorin jashtë saj."
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citimet nuk mund të shtohen në bibliografi. Vendoseni kursorin jashtë saj.",
+    "Locator": "Lokalizuesi",
+    "selected": "të zgjedhura",
+    "Keep sources sorted": "Rendit burimet automatikisht"
 }

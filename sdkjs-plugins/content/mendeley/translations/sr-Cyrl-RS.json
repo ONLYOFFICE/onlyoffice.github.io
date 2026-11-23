@@ -35,7 +35,7 @@
     "Refresh": "Освежи",
     "Unlink citations": "Откажи цитате",
     "Please insert some citation into the document.": "Молимо убаците неки цитат у документ.",
-    "Omit author": "Изостави автора",
+    "Omit Author": "Изостави автора",
 	"Failed to apply this style": "Неуспешно применљивање овог стила",
     "The current bibliographic style does not describe the bibliography": "Текући библиографски стил не описује библиографију",
     "Failed to insert citation": "Неуспешно убацivanje цитата",
@@ -104,5 +104,8 @@
     "Please be cautious": "Будите опрезни",
     "Success": "Успех",
     "Warning": "Упозорење",
-    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитати не могу да се убаце у библиографију. Поставите курсор изван ње."
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитати не могу да се убаце у библиографију. Поставите курсор изван ње.",
+    "Locator": "Локатор",
+    "selected": "изабрано",
+    "Keep sources sorted": "Аутоматски сортирај изворе"
 }

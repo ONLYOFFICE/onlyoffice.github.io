@@ -35,7 +35,7 @@
     "Refresh": "刷新",
     "Unlink citations": "取消引用",
     "Please insert some citation into the document.": "请插入一些引用到文档中。",
-    "Omit author": "省略作者",
+    "Omit Author": "省略作者",
 	"Failed to apply this style": "无法套用此样式",
     "The current bibliographic style does not describe the bibliography": "当前的参考文献样式未描述参考文献",
     "Failed to insert citation": "插入引用失败",
@@ -104,5 +104,8 @@
     "Please be cautious": "请谨慎操作",
     "Success": "成功",
     "Warning": "警告",
-    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "无法在参考文献列表中插入引文。请将光标置于参考文献列表之外。"
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "无法在参考文献列表中插入引文。请将光标置于参考文献列表之外。",
+    "Locator": "定位器",
+    "selected": "已选择",
+    "Keep sources sorted": "保持文献自动排序"
 }

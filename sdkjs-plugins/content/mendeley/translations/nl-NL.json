@@ -35,7 +35,7 @@
     "Refresh": "Vernieuwen",
     "Unlink citations": "Citaten ontkoppelen",
     "Please insert some citation into the document.": "Voeg alstublieft een citatie in het document in.",
-    "Omit author": "Auteur weglaten",
+    "Omit Author": "Auteur weglaten",
 	"Failed to apply this style": "Kan deze stijl niet toepassen",
     "The current bibliographic style does not describe the bibliography": "De huidige bibliografische stijl beschrijft de bibliografie niet",
     "Failed to insert citation": "Kan citatie niet invoegen",
@@ -104,5 +104,8 @@
     "Please be cautious": "Wees voorzichtig",
     "Success": "Gelukt",
     "Warning": "Waarschuwing",
-    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citaten kunnen niet in de bibliografie worden ingevoegd. Plaats de cursor erbuiten."
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citaten kunnen niet in de bibliografie worden ingevoegd. Plaats de cursor erbuiten.",
+    "Locator": "Locator",
+    "selected": "geselecteerd",
+    "Keep sources sorted": "Bronnen automatisch sorteren"
 }
