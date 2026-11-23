@@ -518,11 +518,11 @@ import "./edit-window.css";
                     citationItem.suffix = suffix;
                     bHasChanges = true;
                 }
-                if ((citationItem.label || label) && citationItem.label !== label) {
-                    if (label) {
-                        citationItem.label = label;
-                        bHasChanges = true;
-                    }
+                // Without a label the locator is a page, as the window shows
+                // it: "Page" left as it was is no change.
+                if (label && label !== (citationItem.label || "page")) {
+                    citationItem.label = label;
+                    bHasChanges = true;
                 }
                 if ((citationItem.locator || locator) && citationItem.locator !== locator) {
                     citationItem.locator = locator;

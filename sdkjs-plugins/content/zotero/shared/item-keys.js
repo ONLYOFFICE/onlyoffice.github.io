@@ -114,4 +114,80 @@ async function usedItemKeys(document) {
     return keys;
 }
 
-export { normalizeItemKey, collectItemKeys, usedItemKeys };
+/**
+ * The keys of the items the document cites, for putting them first in the
+ * search results. Reading them walks every citation of the document, too
+ * slow to redo on every keystroke: they are read again only after a while,
+ * or once told the document changed. An answer that is late is not waited
+ * for, the keys read before stand in: the order of the results is a hint,
+ * showing them is not.
+ */
+class CitedItemKeys {
+    /** @type {{readCitationData(): Promise<Array<Object>>}} */
+    #document;
+    #ttl;
+    #timeout;
+    /** @type {Set<string>} */
+    #keys = new Set();
+    /** @type {Promise<Set<string>> | null} */
+    #reading = null;
+    #readAt = 0;
+
+    /**
+     * @param {{readCitationData(): Promise<Array<Object>>}} document
+     * @param {{ttl?: number, timeout?: number}} [options] - how long, in
+     *  milliseconds, the keys read stand, and how long a reading is waited for
+     */
+    constructor(document, options) {
+        this.#document = document;
+        this.#ttl = (options && options.ttl) || 5000;
+        this.#timeout = (options && options.timeout) || 1000;
+    }
+
+    /**
+     * The keys read last, without reading the document.
+     * @returns {Set<string>}
+     */
+    get known() {
+        return this.#keys;
+    }
+
+    /**
+     * The keys of the document, read again if those read last are stale.
+     * @returns {Promise<Set<string>>}
+     */
+    read() {
+        const now = Date.now();
+        if (this.#reading && now - this.#readAt < this.#ttl) {
+            return this.#reading;
+        }
+        this.#readAt = now;
+        const reading = new Promise((resolve) => {
+            // The late answer stays the reading: it serves the next search,
+            // and a new reading would only queue up behind it.
+            const timer = setTimeout(() => resolve(this.#keys), this.#timeout);
+            usedItemKeys(this.#document)
+                .then((keys) => {
+                    clearTimeout(timer);
+                    this.#keys = keys;
+                    resolve(keys);
+                })
+                .catch((e) => {
+                    clearTimeout(timer);
+                    console.error(e);
+                    if (this.#reading === reading) this.invalidate();
+                    resolve(this.#keys);
+                });
+        });
+        this.#reading = reading;
+        return reading;
+    }
+
+    /** Has the keys read again next time: the document has changed. */
+    invalidate() {
+        this.#reading = null;
+        this.#readAt = 0;
+    }
+}
+
+export { normalizeItemKey, collectItemKeys, usedItemKeys, CitedItemKeys };

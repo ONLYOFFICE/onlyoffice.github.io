@@ -47,6 +47,15 @@ export function describeCitationDocument(name, makeDocument) {
             expect(citations.every((c) => c.legacy === false)).toBe(true);
         });
 
+        it("reads the data of its citations without their text", async () => {
+            const doc = makeDocument();
+            await doc.insertCitation("(Smith, 2020)", SMITH, null);
+            await doc.insertCitation("(Brown, 2018)", BROWN, null);
+            await doc.insertBibliography("Smith, J. (2020).", null);
+
+            expect(await doc.readCitationData()).toEqual([SMITH, BROWN]);
+        });
+
         it("tells a citation inserted into a note", async () => {
             const doc = makeDocument();
 

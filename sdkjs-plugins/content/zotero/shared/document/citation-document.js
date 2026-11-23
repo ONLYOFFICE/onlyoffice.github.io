@@ -111,6 +111,23 @@ class CitationDocument {
     }
 
     /**
+     * The data stored with the citations of the document, in document order,
+     * leaving out what cannot be read. A document that can read the data
+     * without the text of the citations does it faster.
+     * @returns {Promise<Array<Object>>}
+     */
+    readCitationData() {
+        return this.readCitations().then(function (read) {
+            /** @type {Array<Object>} */
+            const data = [];
+            read.citations.forEach(function (citation) {
+                if (citation.data) data.push(citation.data);
+            });
+            return data;
+        });
+    }
+
+    /**
      * The citation or the bibliography at the cursor.
      * @returns {Promise<DocCitation | DocBibliography | null>}
      */

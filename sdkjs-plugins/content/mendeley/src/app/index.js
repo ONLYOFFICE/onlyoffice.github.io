@@ -48,6 +48,7 @@ import { AdditionalWindow } from "@shared/pages/additional-window";
 import { ContentControlCitationDocument } from "./document/content-control-citation-document";
 import { MendeleyDesktopFields } from "./document/mendeley-desktop-fields";
 import { SelectCitationsComponent } from "@shared/ui/select-citation";
+import { CitedItemKeys } from "@shared/item-keys";
 import { SearchFilterComponents } from "./shared/ui";
 import { Button, Loader } from "@shared/components";
 
@@ -96,6 +97,17 @@ import "../styles.css";
         groupOrder: [],
     };
     let bInProgress = false;
+    /**
+     * Counts the searches: results that come for an earlier one, after the
+     * list was cleared for a newer one, are not shown.
+     */
+    let searchGeneration = 0;
+    /**
+     * Items already cited in the document, so that the search results can put
+     * them on top of the list.
+     * @type {CitedItemKeys}
+     */
+    let citedItems;
 
     /** @type {SearchFilterComponents} */
     let searchFilter;
@@ -165,6 +177,7 @@ import "../styles.css";
         });
         settings = new SettingsPage(router, displayNoneClass);
         citationDocument = new ContentControlCitationDocument();
+        citedItems = new CitedItemKeys(citationDocument);
         citationService = new CitationService({
             name: "Mendeley",
             document: citationDocument,
@@ -280,6 +293,7 @@ import "../styles.css";
          */
         function searchFor(text, selectedGroups, groupsHash) {
             selectCitation.clearLibrary();
+            searchGeneration++;
             /** @type {Array<Promise<number>>} */
             const promises = [];
             return new Promise(resolve => {
@@ -724,6 +738,7 @@ import "../styles.css";
      */
     async function onEndAction(scrollToTarget, preloaderMessage) {
         bInProgress = false;
+        citedItems.invalidate();
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
@@ -844,16 +859,17 @@ import "../styles.css";
      * @returns {Promise<number>}
      */
     function loadLibrary(promise, isGroup) {
+        const generation = searchGeneration;
         return promise
             .then(function (res) {
-                return displaySearchItems(res, null, isGroup);
+                return displaySearchItems(res, null, isGroup, generation);
             })
             .catch(function (err) {
                 console.error(err);
                 if (err.message) {
                     showError(translate(err.message));
                 }
-                return displaySearchItems(null, err, isGroup);
+                return displaySearchItems(null, err, isGroup, generation);
             })
             .then(function (numOfShown) {
                 return numOfShown;
@@ -864,9 +880,14 @@ import "../styles.css";
      * @param {SearchResult | null} res
      * @param {Error | null} err
      * @param {boolean} isGroup
+     * @param {number} generation - the search it is the result of
      * @returns {Promise<number>}
      */
-    function displaySearchItems(res, err, isGroup) {
+    function displaySearchItems(res, err, isGroup, generation) {
+        // The list was cleared for a newer search while this one was loading.
+        if (generation !== searchGeneration) {
+            return Promise.resolve(0);
+        }
         let first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
@@ -909,7 +930,25 @@ import "../styles.css";
             }
         }
 
-        return selectCitation.displaySearchItems(res, err, lastSearch);
+        return getUsedItemKeys().then(function (usedItemKeys) {
+            // The document is read meanwhile: check again.
+            if (generation !== searchGeneration) {
+                return 0;
+            }
+            selectCitation.setUsedItemKeys(usedItemKeys);
+            return selectCitation.displaySearchItems(res, err, lastSearch);
+        });
+    }
+
+    /** @returns {Promise<Set<string>>} */
+    function getUsedItemKeys() {
+        if (bInProgress) {
+            // A document action owns the editor: reading the controls would
+            // have to wait for it, and the search results must not wait for a
+            // sort hint. Read them once the action is over.
+            return Promise.resolve(citedItems.known);
+        }
+        return citedItems.read();
     }
 
     /**

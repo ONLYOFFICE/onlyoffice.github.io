@@ -55,3 +55,5 @@
 * Translate the prefix, suffix and locator fields and the "Omit Author" option of a found source.
 * Reorder the sources of a citation by dragging them in the citation editing window, and add "Keep sources sorted" to keep the order set by hand.
 * Fix the other citations and the bibliography not being updated after sources were added to a citation, removed from it or reordered.
+* Show the sources the document already cites first in the search results.
+* Fix results of an earlier search appearing in the list after a new search was started.
