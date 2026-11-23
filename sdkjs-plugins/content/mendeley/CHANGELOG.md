@@ -40,7 +40,7 @@
 * Add option to include URLs of paper articles.
 * Add bibliography preview to the settings page.
 
-## 1.2.1
+## 2.0.0
 
 * Fix the journal name being printed twice in citations and the bibliography: the journal and the series of a source now go to separate fields.
 * Fix page numbers of journal articles missing from citations and the bibliography.
