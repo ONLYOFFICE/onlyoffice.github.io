@@ -6,6 +6,9 @@
  * Sends requests to the Zotero web API one at a time. The API limits how
  * fast a client may ask, and a search across several libraries would
  * otherwise fire one request per library at once.
+ * A request that can be cancelled is a search's; one that cannot is for an
+ * action the user waits on, such as inserting a citation, and is sent
+ * before the searches waiting.
  */
 class RateLimitedFetcher {
     #maxRetries;
@@ -16,10 +19,12 @@ class RateLimitedFetcher {
     /** Shortest time between the starts of two requests, ms. */
     #minInterval;
     /**
-     * Settles when the last queued request has finished.
-     * @type {Promise<void>}
+     * The requests waiting for their turn, those of actions first.
+     * @type {Array<{urgent: boolean, start: () => void}>}
      */
-    #queue;
+    #waiting;
+    /** A request is being sent. */
+    #busy;
     #lastRequestTime;
     /** Time before which the server asked not to be called (Backoff). */
     #backoffUntil;
@@ -36,13 +41,15 @@ class RateLimitedFetcher {
         this.#minInterval =
             options.minInterval !== undefined ? options.minInterval : 300;
 
-        this.#queue = Promise.resolve();
+        this.#waiting = [];
+        this.#busy = false;
         this.#lastRequestTime = 0;
         this.#backoffUntil = 0;
     }
 
     /**
-     * Sends the request once every request queued before it has finished.
+     * Sends the request once every request queued before it has finished,
+     * or every action's request for one without a signal.
      * An answer the server asks to repeat later (429, 5xx) is retried after
      * the delay it names, still holding the queue; any other answer is
      * returned as it is, for the caller to judge. Network errors are not
@@ -55,15 +62,46 @@ class RateLimitedFetcher {
      * @returns {Promise<FetchResponse>}
      */
     fetchWithRetry(url, headers, signal) {
-        const request = this.#queue.then(() =>
-            this.#send(url, headers, signal)
-        );
-        // The next request waits for this one, whatever its outcome.
-        this.#queue = request.then(
-            () => {},
-            () => {}
-        );
-        return request;
+        return new Promise((resolve, reject) => {
+            const urgent = !signal;
+            const request = {
+                urgent: urgent,
+                start: () => {
+                    // The next request waits for this one, whatever its
+                    // outcome.
+                    const done = () => {
+                        this.#busy = false;
+                        this.#startNext();
+                    };
+                    this.#send(url, headers, signal)
+                        .then(resolve, reject)
+                        .then(done, done);
+                },
+            };
+            if (urgent) {
+                // After the actions already waiting, before any search.
+                let index = 0;
+                while (index < this.#waiting.length && this.#waiting[index].urgent) {
+                    index++;
+                }
+                this.#waiting.splice(index, 0, request);
+            } else {
+                this.#waiting.push(request);
+            }
+            this.#startNext();
+        });
+    }
+
+    #startNext() {
+        if (this.#busy) {
+            return;
+        }
+        const request = this.#waiting.shift();
+        if (!request) {
+            return;
+        }
+        this.#busy = true;
+        request.start();
     }
 
     resetCounter() {
