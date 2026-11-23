@@ -108,8 +108,9 @@ const PREVIEW_ITEMS = [
  * the notes, with a preview of the style.
  * @param {Router} router
  * @param {string} displayNoneClass
- * @param {{styleKey: string, sections?: Array<SettingsSection>}} options -
- *  where the style chosen is kept, and the settings the plugin adds
+ * @param {{styleKey: string, styleCopyKey: string, sections?: Array<SettingsSection>}} options -
+ *  where the style chosen and its offline copy are kept, and the settings
+ *  the plugin adds
  */
 function SettingsPage(router, displayNoneClass, options) {
     this._router = router;
@@ -182,7 +183,7 @@ function SettingsPage(router, displayNoneClass, options) {
         throw new Error("previewWrapper not found");
     }
 
-    this._cslStylesManager = new CslStylesManager(options.styleKey);
+    this._cslStylesManager = new CslStylesManager(options.styleKey, options.styleCopyKey);
     this._localesManager = new LocalesManager();
     this._abbreviationsManager = new AbbreviationsManager();
 

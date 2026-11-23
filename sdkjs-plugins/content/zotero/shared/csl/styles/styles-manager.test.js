@@ -11,7 +11,7 @@ afterEach(() => {
 describe("getStyle", () => {
     it("rejects a style the repository does not have", async () => {
         vi.stubGlobal("fetch", async () => new Response("<html>Not Found</html>", { status: 404 }));
-        const manager = new CslStylesManager("zoteroStyleId");
+        const manager = new CslStylesManager("zoteroStyleId", "zoteroLastStyleCopy");
         manager.setRestApiAvailable(true);
 
         await expect(manager.getStyle("apa-modified", false)).rejects.toBeTruthy();
@@ -26,7 +26,7 @@ describe("getStyle", () => {
             if (url.indexOf("https://") === 0) throw new TypeError("Failed to fetch");
             return new Response(csl, { status: 200 });
         });
-        const manager = new CslStylesManager("zoteroStyleId");
+        const manager = new CslStylesManager("zoteroStyleId", "zoteroLastStyleCopy");
         manager.setRestApiAvailable(true);
 
         const style = await manager.getStyle("apa", false);
@@ -42,7 +42,7 @@ describe("getStyle", () => {
             urls.push(url);
             throw new TypeError("Failed to fetch");
         });
-        const manager = new CslStylesManager("zoteroStyleId");
+        const manager = new CslStylesManager("zoteroStyleId", "zoteroLastStyleCopy");
         manager.setRestApiAvailable(true);
 
         await expect(manager.getStyle("apa-modified", false)).rejects.toBeTruthy();
@@ -50,7 +50,7 @@ describe("getStyle", () => {
     });
 
     it("rejects a style that is out of reach offline", async () => {
-        const manager = new CslStylesManager("zoteroStyleId");
+        const manager = new CslStylesManager("zoteroStyleId", "zoteroLastStyleCopy");
         manager.setRestApiAvailable(false);
 
         await expect(manager.getStyle("apa-modified", false)).rejects.toBeTruthy();

@@ -99,3 +99,26 @@ describe("the citation editing window", () => {
         expect(saved.citationItems[0]).not.toHaveProperty("label");
     });
 });
+
+describe("dragging a source", () => {
+    it("stops once the button was released outside the window", async () => {
+        await open({
+            citationID: "c1",
+            citationItems: [
+                { id: "A1", itemData: { title: "Alpha", type: "book" } },
+                { id: "B2", itemData: { title: "Beta", type: "book" } },
+            ],
+            properties: { noteIndex: 0 },
+        });
+        const header = /** @type {HTMLElement} */ (document.querySelector(".form-header"));
+        const form = /** @type {HTMLElement} */ (header.parentElement);
+
+        header.dispatchEvent(new MouseEvent("mousedown", { button: 0, buttons: 1, clientY: 0, bubbles: true }));
+        // The pointer comes back with the button already released.
+        document.dispatchEvent(new MouseEvent("mousemove", { buttons: 0, clientY: 500 }));
+        document.dispatchEvent(new MouseEvent("mousemove", { buttons: 1, clientY: 1000 }));
+
+        expect(form.classList.contains("dragging")).toBe(false);
+        expect(save()).toBeNull();
+    });
+});

@@ -230,12 +230,15 @@ class CitationService {
      * @returns {Promise<{id: string, isNew: boolean}>}
      */
     async insertBibliography() {
-        const { entries, bibliography } = await this.#readDocument();
+        const { entries, bibliography, bUnreadable } = await this.#readDocument();
         const bNoCitations = entries.length === 0;
 
         await this.#prepareStorage();
 
         if (bibliography) {
+            if (bUnreadable) {
+                return { id: bibliography.id, isNew: false };
+            }
             const ids = await this.#document.updateCitations(
                 [],
                 this.#bibliographyChange(bNoCitations, bibliography),
@@ -276,7 +279,7 @@ class CitationService {
      * @returns {Promise<Array<string>>}
      */
     async updateCslItems(bOverwriteManualEdits, options) {
-        const { entries, bibliography } = await this.#readDocument();
+        const { entries, bibliography, bUnreadable } = await this.#readDocument();
         const bNoCitations = entries.length === 0;
 
         await this.#prepareStorage(options);
@@ -306,7 +309,7 @@ class CitationService {
 
         /** @type {BibliographyChange | null} */
         let bibliographyChange = null;
-        if (!bSkipBibliography && bibliography) {
+        if (!bSkipBibliography && bibliography && !bUnreadable) {
             bibliographyChange = this.#bibliographyChange(bNoCitations, bibliography);
         }
 
@@ -324,7 +327,7 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async updateCslItemsInNotes(notesStyle, options) {
-        const { entries, bibliography } = await this.#readDocument(notesStyle);
+        const { entries, bibliography, bUnreadable } = await this.#readDocument(notesStyle);
         const bNoCitations = entries.length === 0;
         this.#numberAsInNotes(entries);
 
@@ -334,7 +337,7 @@ class CitationService {
         if (changes.length) {
             await this.#document.convertNotesStyle(changes, notesStyle);
         }
-        if (bibliography) {
+        if (bibliography && !bUnreadable) {
             await this.#document.updateCitations([], this.#bibliographyChange(bNoCitations, bibliography));
         }
     }
@@ -374,7 +377,7 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async switchingBetweenNotesAndText(notesStyle, oldNotesStyle) {
-        const { entries, bibliography } = await this.#readDocument(oldNotesStyle || undefined);
+        const { entries, bibliography, bUnreadable } = await this.#readDocument(oldNotesStyle || undefined);
         const bNoCitations = entries.length === 0;
         if (notesStyle) {
             this.#numberAsInNotes(entries);
@@ -390,7 +393,7 @@ class CitationService {
                 await this.#document.convertNotesToText(changes);
             }
         }
-        if (bibliography) {
+        if (bibliography && !bUnreadable) {
             await this.#document.updateCitations([], this.#bibliographyChange(bNoCitations, bibliography));
         }
     }
@@ -455,7 +458,9 @@ class CitationService {
      * @param {CitationData} [updatedData] - a citation's new data, to take for its
      *  stored one
      * @param {string} [updatedCitationId] - the citation it is for
-     * @returns {Promise<{entries: Array<StoredCitation>, bibliography: DocBibliography | null}>}
+     * @returns {Promise<{entries: Array<StoredCitation>, bibliography: DocBibliography | null, bUnreadable: boolean}>}
+     *  bUnreadable: the document has citations, none of which can be read;
+     *  its bibliography is then left as it is, not emptied
      */
     async #readDocument(notesStyle, updatedData, updatedCitationId) {
         this.#storage.clear();
@@ -491,7 +496,11 @@ class CitationService {
                 "A citation in this document is corrupted and cannot be processed. Please remove or replace it.",
             );
         }
-        return { entries: entries, bibliography: bibliography };
+        return {
+            entries: entries,
+            bibliography: bibliography,
+            bUnreadable: bCorrupted && entries.length === 0,
+        };
     }
 
     /**

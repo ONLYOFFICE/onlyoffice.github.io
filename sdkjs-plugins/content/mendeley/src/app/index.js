@@ -177,6 +177,7 @@ import "../styles.css";
         });
         settings = new SettingsPage(router, displayNoneClass, {
             styleKey: "mendStyleId",
+            styleCopyKey: "mendLastStyleCopy",
         });
         // Mendeley works online only.
         settings.setRestApiAvailable(true);
@@ -260,8 +261,13 @@ import "../styles.css";
                 delete res.next;
                 return res;
             })
+        const generation = searchGeneration;
         return loadLibrary(promise, false)
             .then((res) => {
+                // A search started meanwhile owns the list and its header.
+                if (generation !== searchGeneration) {
+                    return;
+                }
                 if (res > 0) {
                     updateHeaderText("started"); 
                 } else {
@@ -344,7 +350,10 @@ import "../styles.css";
             )
                 return;
 
-            searchFor(text, selectedGroups, groupsHash)
+            const search = searchFor(text, selectedGroups, groupsHash);
+            // searchFor has started a new search by now.
+            const generation = searchGeneration;
+            search
                 .catch(() => {
                     return [];
                 })
@@ -364,6 +373,10 @@ import "../styles.css";
                 .then(function (
                         /** @type {Array<PromiseSettledResult<number>>} */ numOfShownByLib,
                     ) {
+                        // A newer search owns the list by now.
+                        if (generation !== searchGeneration) {
+                            return;
+                        }
                         let numOfShown = 0;
                         numOfShownByLib.forEach(function (promise) {
                             if (promise.status === "fulfilled") {
@@ -470,6 +483,12 @@ import "../styles.css";
             if (current && current.kind === "bibliography") {
                 // Nothing is inserted, so the chosen sources stay selected.
                 citationService.showWarningMessage("Citations cannot be inserted into the bibliography. Place the cursor outside it.");
+                await onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
+                return;
+            }
+            if (current && current.kind === "citation" && !current.data) {
+                // Nothing is added, so the chosen sources stay selected.
+                citationService.showWarningMessage("A citation in this document is corrupted and cannot be processed. Please remove or replace it.");
                 await onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
                 return;
             }
@@ -1062,6 +1081,10 @@ import "../styles.css";
     async function showEditCitationWindow(current, data, idsInDocument) {
         if (!current || current.kind !== "citation") {
             citationService.showWarningMessage("No Mendeley citation found at the cursor. Please click directly on a citation to edit it.");
+            return false;
+        }
+        if (!current.data) {
+            citationService.showWarningMessage("A citation in this document is corrupted and cannot be processed. Please remove or replace it.");
             return false;
         }
         const idsBeforeEdit = idsInDocument || citationService.getCitationItemIds(current.data);

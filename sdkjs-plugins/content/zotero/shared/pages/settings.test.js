@@ -63,7 +63,7 @@ describe.each(["zotero", "mendeley"])("SettingsPage in the %s layout", (plugin) 
         const SettingsPage = await loadPage(plugin);
         const section = fakeSection();
         const router = fakeRouter();
-        const page = new SettingsPage(router, "display-none", { styleKey: "testStyleId", sections: [section] });
+        const page = new SettingsPage(router, "display-none", { styleKey: "testStyleId", styleCopyKey: "testStyleCopy", sections: [section] });
 
         page.show();
 
@@ -76,7 +76,7 @@ describe.each(["zotero", "mendeley"])("SettingsPage in the %s layout", (plugin) 
         const SettingsPage = await loadPage(plugin);
         const section = fakeSection();
         const router = fakeRouter();
-        const page = new SettingsPage(router, "display-none", { styleKey: "testStyleId", sections: [section] });
+        const page = new SettingsPage(router, "display-none", { styleKey: "testStyleId", styleCopyKey: "testStyleCopy", sections: [section] });
         page._addEventListeners();
         page._languageSelect.addItems([["en-US", "English (US)"]], "en-US");
         page.show();
@@ -92,7 +92,7 @@ describe.each(["zotero", "mendeley"])("SettingsPage in the %s layout", (plugin) 
     it("keeps the style it is given a key for", async () => {
         const SettingsPage = await loadPage(plugin);
         localStorage.setItem("testStyleId", "apa");
-        const page = new SettingsPage(fakeRouter(), "display-none", { styleKey: "testStyleId" });
+        const page = new SettingsPage(fakeRouter(), "display-none", { styleKey: "testStyleId", styleCopyKey: "testStyleCopy" });
 
         expect(page.getLastUsedStyleId()).toBe("apa");
     });

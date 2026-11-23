@@ -163,7 +163,7 @@ class CitedItemKeys {
         }
         this.#readAt = now;
         const reading = new Promise((resolve) => {
-            // The late answer stays the reading: it serves the next search,
+            // A late answer is not read again: it serves the next search,
             // and a new reading would only queue up behind it.
             const timer = setTimeout(() => resolve(this.#keys), this.#timeout);
             usedItemKeys(this.#document)
@@ -171,6 +171,11 @@ class CitedItemKeys {
                     clearTimeout(timer);
                     this.#keys = keys;
                     resolve(keys);
+                    // This reading may have given the old keys on timeout:
+                    // the next search takes these instead.
+                    if (this.#reading === reading) {
+                        this.#reading = Promise.resolve(keys);
+                    }
                 })
                 .catch((e) => {
                     clearTimeout(timer);

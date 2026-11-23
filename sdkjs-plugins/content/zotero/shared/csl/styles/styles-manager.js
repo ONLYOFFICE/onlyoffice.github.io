@@ -38,9 +38,11 @@ import { CslStylesStorage } from "./storage";
 import { CslStylesParser } from "./style-parser";
 
 /**
- * @param {string} lastStyleKey
+ * @param {string} lastStyleKey - where the style chosen is kept
+ * @param {string} lastStyleCopyKey - where a copy of it is kept for offline
+ *  use; each plugin has its own, as they share the storage
  */
-function CslStylesManager(lastStyleKey) {
+function CslStylesManager(lastStyleKey, lastStyleCopyKey) {
     this._isOnlineAvailable = false;
     this._isDesktopAvailable = false;
 
@@ -57,7 +59,7 @@ function CslStylesManager(lastStyleKey) {
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
     this._lastIncludeUrlForPaperArticlesKey = "zoteroIncludeUrlForPaperArticles";
     this._lastAbbreviateJournalTitlesKey = "zoteroAbbreviateJournalTitles";
-    this._lastStyleCopyKey = "zoteroLastStyleCopy";
+    this._lastStyleCopyKey = lastStyleCopyKey;
 
     this._defaultStyles = [
         "american-anthropological-association",

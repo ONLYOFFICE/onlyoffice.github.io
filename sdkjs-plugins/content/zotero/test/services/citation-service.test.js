@@ -67,6 +67,35 @@ describe("bibliography", () => {
     });
 });
 
+describe("a document whose citations cannot be read", () => {
+    it("keeps its bibliography rather than emptying it", async () => {
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [
+                { FieldId: "1", Content: "(Alpha, 2020)", Value: "ZOTERO_ITEM CSL_CITATION {broken" },
+                bibliographyField("9"),
+            ],
+        });
+
+        await service.updateCslItems(false);
+
+        expect(doc.written.find((field) => field.FieldId === "9")).toBeUndefined();
+    });
+
+    it("empties the bibliography of a document with no citations", async () => {
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [bibliographyField("9")],
+        });
+
+        await service.updateCslItems(false);
+
+        expect(doc.written.find((field) => field.FieldId === "9")).toBeDefined();
+    });
+});
+
 describe("note styles", () => {
     it("refers back to the note a source was first cited in", async () => {
         // Note 1 holds Beta and Gamma, note 2 Alpha, note 3 Beta, note 4

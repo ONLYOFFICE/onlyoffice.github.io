@@ -330,6 +330,11 @@ import "./edit-window.css";
             if (!drag) {
                 return;
             }
+            // Released outside the window, where its mouseup is not heard
+            if (event.buttons === 0) {
+                this.onDragEnd();
+                return;
+            }
             let delta = event.clientY - drag.startY;
             const index = this.forms.indexOf(drag.entry);
 

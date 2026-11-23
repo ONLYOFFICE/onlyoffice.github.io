@@ -68,7 +68,7 @@ describe("CitedItemKeys", () => {
         vi.useFakeTimers();
         const doc = documentCiting([["B2"]]);
         const cited = new CitedItemKeys(doc, { timeout: 1000 });
-        /** @type {function(): void} */
+        /** @type {() => void} */
         let answer = () => {};
         doc.delay = new Promise((resolve) => (answer = resolve));
 
@@ -78,5 +78,23 @@ describe("CitedItemKeys", () => {
         expect(Array.from(await reading)).toEqual([]);
         answer();
         await vi.waitFor(() => expect(Array.from(cited.known)).toEqual(["B2"]));
+    });
+
+    it("gives the late answer to the next search", async () => {
+        vi.useFakeTimers();
+        const doc = documentCiting([["B2"]]);
+        const cited = new CitedItemKeys(doc, { timeout: 1000, ttl: 5000 });
+        /** @type {() => void} */
+        let answer = () => {};
+        doc.delay = new Promise((resolve) => (answer = resolve));
+
+        const reading = cited.read();
+        vi.advanceTimersByTime(1001);
+        await reading;
+        answer();
+        await vi.waitFor(() => expect(Array.from(cited.known)).toEqual(["B2"]));
+
+        expect(Array.from(await cited.read())).toEqual(["B2"]);
+        expect(doc.readings).toBe(1);
     });
 });

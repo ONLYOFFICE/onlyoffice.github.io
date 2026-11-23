@@ -174,6 +174,7 @@ import "../styles.css";
         const loginPage = new LoginPage(router, sdk);
         settings = new SettingsPage(router, displayNoneClass, {
             styleKey: "zoteroStyleId",
+            styleCopyKey: "zoteroLastStyleCopy",
             sections: [new AutoUpdateSettings()],
         });
         citationDocument = new FieldCitationDocument();
@@ -604,6 +605,12 @@ import "../styles.css";
             if (current && current.kind === "bibliography") {
                 // Nothing is inserted, so the chosen sources stay selected.
                 citationService.showWarningMessage("Citations cannot be inserted into the bibliography. Place the cursor outside it.");
+                await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                return;
+            }
+            if (current && current.kind === "citation" && !current.data) {
+                // Nothing is added, so the chosen sources stay selected.
+                citationService.showWarningMessage("A citation in this document is corrupted and cannot be processed. Please remove or replace it.");
                 await onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
                 return;
             }
@@ -1249,6 +1256,10 @@ import "../styles.css";
         // A citation of an old version of the plugin is not edited.
         if (!current || current.kind !== "citation" || current.legacy) {
             citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
+            return false;
+        }
+        if (!current.data) {
+            citationService.showWarningMessage("A citation in this document is corrupted and cannot be processed. Please remove or replace it.");
             return false;
         }
         const idsBeforeEdit = idsInDocument || citationService.getCitationItemIds(current.data);
