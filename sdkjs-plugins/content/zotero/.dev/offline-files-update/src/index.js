@@ -9,6 +9,9 @@ const LOCALES_DEST_FOLDER = "../../resources/csl/locales";
 const STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json";
 const STYLES_JSON_FOLDER = "../../resources/csl/";
 const STYLES_DEST_FOLDER = "../../resources/csl/styles";
+const CSL_FOLDER = "../../resources/csl";
+// The plugins that read the same files through the shared CSL managers.
+const OTHER_PLUGINS_CSL_FOLDERS = ["../../../mendeley/resources/csl"];
 
 const DEFAULT_STYLES = [
     "american-anthropological-association",
@@ -115,6 +118,17 @@ async function downloadStyle(url, styleName) {
     }
 }
 
+async function copyToOtherPlugins() {
+    for (const folder of OTHER_PLUGINS_CSL_FOLDERS) {
+        try {
+            await fs.cp(CSL_FOLDER, folder, { recursive: true });
+        } catch (error) {
+            console.error("❌ Failed to copy the files to", folder);
+            throw error;
+        }
+    }
+}
+
 async function updateLocalFiles() {
     try {
         const jsonData = await downloadStylesJson();
@@ -126,6 +140,9 @@ async function updateLocalFiles() {
         const numOfFiles = await copyLocales();
         console.log(`Copied: ${numOfFiles} locales`);
         await fs.rm("./" + REPO_DEST_FOLDER, { recursive: true, force: true });
+
+        await copyToOtherPlugins();
+        console.log(`Copied the files to ${OTHER_PLUGINS_CSL_FOLDERS.length} other plugin(s)`);
     } catch (error) {
         console.error("❌ Error:", error.message);
     }

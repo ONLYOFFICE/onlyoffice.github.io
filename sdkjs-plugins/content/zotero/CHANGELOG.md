@@ -111,3 +111,4 @@
 * Keep the abstract of a source in its citation whatever the style, as before. A style that prints abstracts asks Zotero for a missing one once a session instead of on every action.
 * Keep Zotero's document preferences set in Word, such as storing citations as bookmarks or delaying citation updates. After the style is changed here, Zotero in Word sets the paragraph style of the bibliography for the new style again.
 * Speed up refreshing citations and changing the style in long documents: all citations are formatted in one pass, so a document with hundreds of citations no longer takes minutes.
+* Fix a built-in citation style failing to load when zotero.org cannot be reached: the copy shipped with the plugin is used.

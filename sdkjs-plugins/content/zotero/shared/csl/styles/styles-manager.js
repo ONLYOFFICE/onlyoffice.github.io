@@ -204,6 +204,25 @@ CslStylesManager.prototype.getStyle = function (
                 return copy.content;
             }
             const fromRepository = url !== self._STYLES_LOCAL + styleName + ".csl";
+            /**
+             * What stands in for a style the repository did not give: the
+             * copy kept with the document or on this computer, else the file
+             * shipped with the plugin.
+             * @param {*} failure - thrown when there is neither
+             * @returns {string | Promise<string>}
+             */
+            const fallback = function (failure) {
+                const copy = fromRepository
+                    ? self._getStyleCopy(styleName)
+                    : null;
+                if (copy) {
+                    return copy.content;
+                }
+                if (fromRepository && self._bundledStyles.indexOf(styleName) !== -1) {
+                    return self._fetchBundledStyle(styleName);
+                }
+                throw failure;
+            };
             return fetch(url).then(
                 function (resp) {
                     // A style the repository does not have, such as one the
@@ -212,24 +231,10 @@ CslStylesManager.prototype.getStyle = function (
                     if (resp.ok) {
                         return resp.text();
                     }
-                    const copy = fromRepository
-                        ? self._getStyleCopy(styleName)
-                        : null;
-                    if (copy) {
-                        return copy.content;
-                    }
                     // The error page is no style.
-                    throw "The style " + styleName + " was not found.";
+                    return fallback("The style " + styleName + " was not found.");
                 },
-                function (error) {
-                    const copy = fromRepository
-                        ? self._getStyleCopy(styleName)
-                        : null;
-                    if (copy) {
-                        return copy.content;
-                    }
-                    throw error;
-                }
+                fallback
             );
         })
         .then(function (content) {
@@ -275,6 +280,20 @@ CslStylesManager.prototype.getStyle = function (
 
             return result;
         });
+};
+
+/**
+ * A style shipped with the plugin, read from its files.
+ * @param {string} styleName
+ * @returns {Promise<string>}
+ */
+CslStylesManager.prototype._fetchBundledStyle = function (styleName) {
+    return fetch(this._STYLES_LOCAL + styleName + ".csl").then(function (resp) {
+        if (!resp.ok) {
+            throw "The style " + styleName + " was not found.";
+        }
+        return resp.text();
+    });
 };
 
 /**
