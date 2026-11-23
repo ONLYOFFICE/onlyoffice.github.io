@@ -1,0 +1,38 @@
+{
+  "name": "TilType",
+  "offered": "Andrey Komarov",
+  "help": "https://github.com/andqaz/tiltype#readme",
+  "guid": "asc.{E9067D1A-F74B-4F0F-9B6A-2EEB4779F433}",
+  "version": "1.4.0",
+  "minVersion": "10.0.0",
+  "variations": [
+    {
+      "description": "Offline word completion for Kazakh, Russian and English. Detect spell-check languages in mixed text and fix punctuation from the context menu.",
+      "descriptionLocale": {
+        "ru": "Автодополнение на казахском, русском и английском без интернета. Определяет язык проверки в смешанном тексте и предлагает пунктуационные правки в контекстном меню.",
+        "kk": "Қазақша, орысша және ағылшынша сөздерді интернетсіз автотолтыру. Аралас мәтіндегі емле тексеру тілін анықтайды және мәнмәтіндік мәзірде тыныс белгілерін түзетуді ұсынады."
+      },
+      "url": "index.html",
+      "icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
+      "isViewer": false,
+      "EditorsSupport": [
+        "word"
+      ],
+      "type": "background",
+      "initDataType": "none",
+      "store": {
+        "background": {
+          "light": "#EAF7F1",
+          "dark": "#1D2B30"
+        },
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": [
+          "work"
+        ]
+      }
+    }
+  ]
+}
