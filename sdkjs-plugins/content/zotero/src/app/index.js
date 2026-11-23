@@ -39,7 +39,9 @@
 import { Theme } from "@shared/theme";
 import { Router } from "@shared/router";
 import { ZoteroSdk } from "./zotero";
-import { SettingsPage } from "./pages/settings";
+import { SettingsPage } from "@shared/pages/settings";
+import { AutoUpdateSettings } from "./pages/auto-update-settings";
+import { RepairBrokenCitationsButton } from "./pages/repair-broken-citations";
 import { LoginPage } from "./pages/login";
 import { translate, CursorService } from "./services";
 import { CitationService } from "@shared/services/citation-service";
@@ -170,7 +172,10 @@ import "../styles.css";
         router = new Router();
         sdk = new ZoteroSdk();
         const loginPage = new LoginPage(router, sdk);
-        settings = new SettingsPage(router, displayNoneClass);
+        settings = new SettingsPage(router, displayNoneClass, {
+            styleKey: "zoteroStyleId",
+            sections: [new AutoUpdateSettings()],
+        });
         citationDocument = new FieldCitationDocument();
         citedItems = new CitedItemKeys(citationDocument);
         citationService = new CitationService({
@@ -187,7 +192,6 @@ import "../styles.css";
             settings.getLocalesManager(),
         );
         fieldRecovery = new ZoteroFieldRecovery(citationDocument, documentPreferences);
-        settings.setCitationService(citationService);
         let isInit = false;
 
         addEventListeners();
@@ -685,7 +689,7 @@ import "../styles.css";
             });
         });
 
-        settings.onRepairRequested(async function () {
+        new RepairBrokenCitationsButton(citationService, async function () {
             const repairingText = "Zotero (" + translate("Updating citations") + ")";
             // One action, so that one undo takes back the repaired fields
             // together with the update that gives them their text.

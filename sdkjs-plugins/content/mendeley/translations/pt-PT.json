@@ -107,5 +107,11 @@
     "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Não é possível inserir citações na bibliografia. Coloque o cursor fora dela.",
     "Locator": "Localizador",
     "selected": "selecionados",
-    "Keep sources sorted": "Manter as fontes ordenadas"
+    "Keep sources sorted": "Manter as fontes ordenadas",
+    "Add custom style...": "Adicionar estilo personalizado...",
+    "Bibliography preview": "Pré-visualização da bibliografia",
+    "Failed to load language": "Falha ao carregar o idioma",
+    "Invalid CSL style file": "Ficheiro de estilo CSL inválido",
+    "More Styles...": "Mais estilos...",
+    "Select language": "Selecionar idioma"
 }

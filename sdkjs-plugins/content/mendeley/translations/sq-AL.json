@@ -107,5 +107,11 @@
     "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citimet nuk mund të shtohen në bibliografi. Vendoseni kursorin jashtë saj.",
     "Locator": "Lokalizuesi",
     "selected": "të zgjedhura",
-    "Keep sources sorted": "Rendit burimet automatikisht"
+    "Keep sources sorted": "Rendit burimet automatikisht",
+    "Add custom style...": "Shto stil të personalizuar...",
+    "Bibliography preview": "Pamja paraprake e bibliografisë",
+    "Failed to load language": "Ngarkimi i gjuhës dështoi",
+    "Invalid CSL style file": "Skedar i pavlefshëm i stilit CSL",
+    "More Styles...": "Më shumë stile...",
+    "Select language": "Zgjidh gjuhën"
 }

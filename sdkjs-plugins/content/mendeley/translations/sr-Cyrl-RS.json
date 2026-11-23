@@ -107,5 +107,11 @@
     "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитати не могу да се убаце у библиографију. Поставите курсор изван ње.",
     "Locator": "Локатор",
     "selected": "изабрано",
-    "Keep sources sorted": "Аутоматски сортирај изворе"
+    "Keep sources sorted": "Аутоматски сортирај изворе",
+    "Add custom style...": "Додај прилагођени стил...",
+    "Bibliography preview": "Преглед библиографије",
+    "Failed to load language": "Учитавање језика није успело",
+    "Invalid CSL style file": "Неисправна CSL датотека стила",
+    "More Styles...": "Још стилова...",
+    "Select language": "Изаберите језик"
 }

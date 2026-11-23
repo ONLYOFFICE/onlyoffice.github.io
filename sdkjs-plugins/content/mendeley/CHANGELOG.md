@@ -57,3 +57,4 @@
 * Fix the other citations and the bibliography not being updated after sources were added to a citation, removed from it or reordered.
 * Show the sources the document already cites first in the search results.
 * Fix results of an earlier search appearing in the list after a new search was started.
+* Settings: the preview follows the language chosen before it is saved, the plugin opens without waiting for the list of styles, and more citation languages are offered, such as Armenian, Galician, Hindi and Malay.

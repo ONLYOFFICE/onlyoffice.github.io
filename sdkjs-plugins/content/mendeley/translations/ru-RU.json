@@ -114,5 +114,11 @@
     "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитаты нельзя вставить в библиографию. Поставьте курсор за её пределами.",
     "Locator": "Локатор",
     "selected": "выбрано",
-    "Keep sources sorted": "Сортировать источники автоматически"
+    "Keep sources sorted": "Сортировать источники автоматически",
+    "Add custom style...": "Добавить свой стиль...",
+    "Bibliography preview": "Предварительный просмотр библиографии",
+    "Failed to load language": "Не удалось загрузить язык",
+    "Invalid CSL style file": "Недопустимый файл стиля CSL",
+    "More Styles...": "Другие стили...",
+    "Select language": "Выберите язык"
 }

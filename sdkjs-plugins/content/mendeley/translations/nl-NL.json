@@ -107,5 +107,11 @@
     "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citaten kunnen niet in de bibliografie worden ingevoegd. Plaats de cursor erbuiten.",
     "Locator": "Locator",
     "selected": "geselecteerd",
-    "Keep sources sorted": "Bronnen automatisch sorteren"
+    "Keep sources sorted": "Bronnen automatisch sorteren",
+    "Add custom style...": "Aangepaste stijl toevoegen...",
+    "Bibliography preview": "Voorbeeld van bibliografie",
+    "Failed to load language": "Kan de taal niet laden",
+    "Invalid CSL style file": "Ongeldig CSL-stijlbestand",
+    "More Styles...": "Meer stijlen...",
+    "Select language": "Selecteer taal"
 }

@@ -40,7 +40,7 @@
 import { Theme } from "@shared/theme";
 import { Router } from "@shared/router";
 import { Sdk } from "./sdk";
-import { SettingsPage } from "./pages/settings";
+import { SettingsPage } from "@shared/pages/settings";
 import { LoginPage } from "./pages/login";
 import { translate, CursorService } from "./services";
 import { CitationService } from "@shared/services/citation-service";
@@ -175,7 +175,11 @@ import "../styles.css";
         sdk = new Sdk({
             authFlow: loginPage.getAuthFlow()
         });
-        settings = new SettingsPage(router, displayNoneClass);
+        settings = new SettingsPage(router, displayNoneClass, {
+            styleKey: "mendStyleId",
+        });
+        // Mendeley works online only.
+        settings.setRestApiAvailable(true);
         citationDocument = new ContentControlCitationDocument();
         citedItems = new CitedItemKeys(citationDocument);
         citationService = new CitationService({

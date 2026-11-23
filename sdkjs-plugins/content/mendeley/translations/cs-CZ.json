@@ -107,5 +107,11 @@
     "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citace nelze vložit do bibliografie. Umístěte kurzor mimo ni.",
     "Locator": "Lokátor",
     "selected": "vybráno",
-    "Keep sources sorted": "Řadit zdroje automaticky"
+    "Keep sources sorted": "Řadit zdroje automaticky",
+    "Add custom style...": "Přidat vlastní styl...",
+    "Bibliography preview": "Náhled bibliografie",
+    "Failed to load language": "Nepodařilo se načíst jazyk",
+    "Invalid CSL style file": "Neplatný soubor stylu CSL",
+    "More Styles...": "Další styly...",
+    "Select language": "Vyberte jazyk"
 }

@@ -33,8 +33,7 @@
 // @ts-check
 
 /**
- * @typedef {import('@shared/router').Router} Router
- * @typedef {import('@shared/services/citation-service').CitationService} CitationService
+ * @typedef {import('../router').Router} Router
  */
 
 import {
@@ -44,15 +43,14 @@ import {
     Checkbox,
     Message,
     Loader,
-} from "@shared/components";
-import { translate } from "../services";
-import { CslStylesManager } from "@shared/csl/styles";
-import { CslStylesParser } from "@shared/csl/styles/style-parser";
-import { CslHtmlParser } from "@shared/services/csl-html-parser";
-import { LocalesManager } from "@shared/csl/locales";
-import { AbbreviationsManager } from "@shared/csl/abbreviations";
-import { CitationItemData } from "@shared/csl/citation/citation-item-data";
-import { AutoUpdatePreferences } from "../auto-update-preferences";
+} from "../components";
+import { translate } from "../services/translate-service";
+import { CslStylesManager } from "../csl/styles";
+import { CslStylesParser } from "../csl/styles/style-parser";
+import { CslHtmlParser } from "../services/csl-html-parser";
+import { LocalesManager } from "../csl/locales";
+import { AbbreviationsManager } from "../csl/abbreviations";
+import { CitationItemData } from "../csl/citation/citation-item-data";
 
 const PREVIEW_ITEMS = [
     {
@@ -92,17 +90,32 @@ const PREVIEW_ITEMS = [
  * @property {StyleFormat} styleFormat
  * @property {boolean} includeUrlForPaperArticles
  * @property {boolean} abbreviateJournalTitles
- * @property {boolean} autoUpdateCitations
- * @property {boolean} autoUpdateBibliography
  */
 
 /**
+ * Settings a plugin adds to the page, saved and cancelled with the others.
+ * @typedef {Object} SettingsSection
+ * @property {() => void} show - shows the values saved
+ * @property {() => boolean} isChanged - whether a value shown is not
+ *  the one saved
+ * @property {() => void} save - saves the values shown
+ * @property {(callback: () => void) => void} subscribe - tells of a value
+ *  changed on the page
+ */
+
+/**
+ * The settings of the citations: the style and its options, the language,
+ * the notes, with a preview of the style.
  * @param {Router} router
  * @param {string} displayNoneClass
+ * @param {{styleKey: string, sections?: Array<SettingsSection>}} options -
+ *  where the style chosen is kept, and the settings the plugin adds
  */
-function SettingsPage(router, displayNoneClass) {
+function SettingsPage(router, displayNoneClass, options) {
     this._router = router;
     this._displayNoneClass = displayNoneClass;
+    /** @type {Array<SettingsSection>} */
+    this._sections = options.sections || [];
 
     this._saveBtn = new Button("saveSettingsBtn", {
         variant: "primary",
@@ -110,12 +123,6 @@ function SettingsPage(router, displayNoneClass) {
     this._cancelBtn = new Button("cancelBtn", {
         variant: "secondary",
     });
-
-    this._repairBrokenFieldsBtn = new Button("repairBrokenFieldsBtn", {
-        variant: "secondary",
-    });
-    /** @type {CitationService|null} */
-    this._citationService = null;
 
     this._styleSelect = new SelectBox("styleSelectList", {
         placeholder: "Enter style name",
@@ -161,16 +168,6 @@ function SettingsPage(router, displayNoneClass) {
         }
     );
 
-    this._autoUpdateCitationsCheckbox = new Checkbox("autoUpdateCitations", {
-        label: "Update other citations when inserting a new one",
-    });
-    this._autoUpdateBibliographyCheckbox = new Checkbox(
-        "autoUpdateBibliography",
-        {
-            label: "Update the bibliography when inserting a citation",
-        }
-    );
-
     this._cslFileInput = document.getElementById("cslFileInput");
     if (!this._cslFileInput) {
         throw new Error("cslFileInput not found");
@@ -185,7 +182,7 @@ function SettingsPage(router, displayNoneClass) {
         throw new Error("previewWrapper not found");
     }
 
-    this._cslStylesManager = new CslStylesManager("zoteroStyleId");
+    this._cslStylesManager = new CslStylesManager(options.styleKey);
     this._localesManager = new LocalesManager();
     this._abbreviationsManager = new AbbreviationsManager();
 
@@ -197,13 +194,6 @@ function SettingsPage(router, displayNoneClass) {
      * @returns {void}
      */
     this._onChangeState = function (newSettings, oldSettings) {};
-    /**
-     * Repairs the citations that lost their fields, in the document.
-     * @returns {Promise<{repaired: number, failed: number}>}
-     */
-    this._onRepairRequested = function () {
-        return Promise.resolve({ repaired: 0, failed: 0 });
-    };
     this._styleMessage = new Message("styleMessage", { type: "error" });
     this._langMessage = new Message("langMessage", { type: "error" });
     /** @type {Array<[string, string]>} */
@@ -293,18 +283,8 @@ function SettingsPage(router, displayNoneClass) {
         styleFormat: "numeric",
         includeUrlForPaperArticles: false,
         abbreviateJournalTitles: false,
-        autoUpdateCitations: true,
-        autoUpdateBibliography: true,
     };
 }
-
-/**
- * @param {CitationService} citationService - repairs the citations that
- *  lost their fields
- */
-SettingsPage.prototype.setCitationService = function (citationService) {
-    this._citationService = citationService;
-};
 
 /**
  * @returns {LocalesManager}
@@ -349,7 +329,7 @@ SettingsPage.prototype.init = function () {
     var lastStyle = this._cslStylesManager.getLastUsedStyleId() || "ieee";
     const savedLang = this._localesManager.getLastUsedLanguage();
     this._addEventListeners();
-    // A document made in Zotero may bring a language the list does not
+    // A document made elsewhere may bring a language the list does not
     // name. It is offered by its code, or nothing would be selected.
     const languages = this._LANGUAGES.slice();
     if (!languages.some((language) => language[0] === savedLang)) {
@@ -404,15 +384,6 @@ SettingsPage.prototype.loadSavedSettings = function () {
  */
 SettingsPage.prototype.onChangeState = function (callbackFn) {
     this._onChangeState = callbackFn;
-};
-
-/**
- * What the Repair button does to the document: the page only asks for it
- * and tells how it went.
- * @param {function(): Promise<{repaired: number, failed: number}>} callbackFn
- */
-SettingsPage.prototype.onRepairRequested = function (callbackFn) {
-    this._onRepairRequested = callbackFn;
 };
 
 /**
@@ -506,28 +477,12 @@ SettingsPage.prototype._addEventListeners = function () {
             promises.push(Promise.resolve());
         }
 
-        const autoUpdateCitationsChecked =
-            self._autoUpdateCitationsCheckbox.getState().checked;
-        if (
-            self._stateSettings.autoUpdateCitations !== autoUpdateCitationsChecked
-        ) {
-            AutoUpdatePreferences.setShouldUpdateCitations(
-                autoUpdateCitationsChecked
-            );
-            promises.push(Promise.resolve());
-        }
-
-        const autoUpdateBibliographyChecked =
-            self._autoUpdateBibliographyCheckbox.getState().checked;
-        if (
-            self._stateSettings.autoUpdateBibliography !==
-            autoUpdateBibliographyChecked
-        ) {
-            AutoUpdatePreferences.setShouldUpdateBibliography(
-                autoUpdateBibliographyChecked
-            );
-            promises.push(Promise.resolve());
-        }
+        self._sections.forEach(function (/** @type {SettingsSection} */ section) {
+            if (section.isChanged()) {
+                section.save();
+                promises.push(Promise.resolve());
+            }
+        });
 
         if (promises.length) {
             self._showLoader();
@@ -543,8 +498,6 @@ SettingsPage.prototype._addEventListeners = function () {
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
                         includeUrlForPaperArticles: includeUrlChecked,
                         abbreviateJournalTitles: abbreviateJournalTitlesChecked,
-                        autoUpdateCitations: autoUpdateCitationsChecked,
-                        autoUpdateBibliography: autoUpdateBibliographyChecked,
                     };
 
                     self._onChangeState(newState, oldState);
@@ -682,11 +635,10 @@ SettingsPage.prototype._addEventListeners = function () {
     this._endNotes.subscribe(function (event) {
         self._somethingWasChanged();
     });
-    this._autoUpdateCitationsCheckbox.subscribe(function (event) {
-        self._somethingWasChanged();
-    });
-    this._autoUpdateBibliographyCheckbox.subscribe(function (event) {
-        self._somethingWasChanged();
+    this._sections.forEach(function (/** @type {SettingsSection} */ section) {
+        section.subscribe(function () {
+            self._somethingWasChanged();
+        });
     });
     this._includeUrlCheckbox.subscribe(function (event) {
         self._somethingWasChanged();
@@ -706,53 +658,6 @@ SettingsPage.prototype._addEventListeners = function () {
             );
         }
     });
-    this._repairBrokenFieldsBtn.subscribe(function (event) {
-        if (event.type !== "button:click") {
-            return;
-        }
-        self._repairBrokenCitations();
-    });
-};
-
-/**
- * Restores the citations that lost their fields and tells how it went.
- */
-SettingsPage.prototype._repairBrokenCitations = function () {
-    const citationService = this._citationService;
-    if (!citationService) {
-        return;
-    }
-    const button = this._repairBrokenFieldsBtn;
-    button.disable();
-    this._onRepairRequested()
-        .then(function (repairResult) {
-            if (repairResult.repaired > 0) {
-                let message =
-                    translate("Repaired") + " " + repairResult.repaired + " " +
-                    translate("citation(s) that had lost their formatting.");
-                if (repairResult.failed > 0) {
-                    message += " " + repairResult.failed + " " + translate("could not be repaired.");
-                }
-                citationService.showSuccessMessage(message);
-            } else if (repairResult.failed > 0) {
-                citationService.showWarningMessage(
-                    repairResult.failed + " " + translate("citation(s) could not be repaired.")
-                );
-            } else {
-                citationService.showSuccessMessage(
-                    translate("No broken citations were found.")
-                );
-            }
-        })
-        .catch(function (error) {
-            console.error(error);
-            citationService.showWarningMessage(
-                translate("Failed to repair broken citations")
-            );
-        })
-        .finally(function () {
-            button.enable();
-        });
 };
 
 SettingsPage.prototype._hideAllMessages = function () {
@@ -774,9 +679,6 @@ SettingsPage.prototype.show = function () {
             this._cslStylesManager.getIncludeUrlForPaperArticles(),
         abbreviateJournalTitles:
             this._cslStylesManager.getAbbreviateJournalTitles(),
-        autoUpdateCitations: AutoUpdatePreferences.shouldUpdateCitations(),
-        autoUpdateBibliography:
-            AutoUpdatePreferences.shouldUpdateBibliography(),
     };
     this._saveBtn.disable();
     this._router.openSettings();
@@ -795,16 +697,9 @@ SettingsPage.prototype.show = function () {
     } else {
         this._abbreviateJournalTitlesCheckbox.uncheck(true);
     }
-    if (this._stateSettings.autoUpdateCitations) {
-        this._autoUpdateCitationsCheckbox.check(true);
-    } else {
-        this._autoUpdateCitationsCheckbox.uncheck(true);
-    }
-    if (this._stateSettings.autoUpdateBibliography) {
-        this._autoUpdateBibliographyCheckbox.check(true);
-    } else {
-        this._autoUpdateBibliographyCheckbox.uncheck(true);
-    }
+    this._sections.forEach(function (/** @type {SettingsSection} */ section) {
+        section.show();
+    });
     if (this._currentStyleContent) {
         const language =
             this._stateSettings.language ||

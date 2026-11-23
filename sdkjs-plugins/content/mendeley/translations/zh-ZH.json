@@ -107,5 +107,11 @@
     "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "无法在参考文献列表中插入引文。请将光标置于参考文献列表之外。",
     "Locator": "定位器",
     "selected": "已选择",
-    "Keep sources sorted": "保持文献自动排序"
+    "Keep sources sorted": "保持文献自动排序",
+    "Add custom style...": "添加自定义样式...",
+    "Bibliography preview": "参考文献预览",
+    "Failed to load language": "加载语言失败",
+    "Invalid CSL style file": "无效的 CSL 样式文件",
+    "More Styles...": "更多样式...",
+    "Select language": "选择语言"
 }

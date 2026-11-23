@@ -107,5 +107,11 @@
     "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "文献の中には引用を挿入できません。カーソルを文献の外に置いてください。",
     "Locator": "位置指定",
     "selected": "選択済み",
-    "Keep sources sorted": "出典を自動的に並べ替える"
+    "Keep sources sorted": "出典を自動的に並べ替える",
+    "Add custom style...": "カスタムスタイルを追加...",
+    "Bibliography preview": "参考文献のプレビュー",
+    "Failed to load language": "言語の読み込みに失敗しました",
+    "Invalid CSL style file": "無効なCSLスタイルファイル",
+    "More Styles...": "その他のスタイル...",
+    "Select language": "言語を選択"
 }
