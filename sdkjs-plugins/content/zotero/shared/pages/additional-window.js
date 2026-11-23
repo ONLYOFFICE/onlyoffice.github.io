@@ -73,7 +73,9 @@ class AdditionalWindow {
         });
     }    
     /**
-     * @param {any} content
+     * @param {CitationData} content
+     * @returns {Promise<{saved: boolean, data: CitationData | null}>} whether it was saved,
+     *  with the edited data, null when nothing was edited
      */
     showEditWindow(content) {
         if (this.#window) {
@@ -123,11 +125,7 @@ class AdditionalWindow {
                     this.#window.attachEvent("onSaveFields", resolve);
                     this.#window.command('onClickSave');
                 });
-                if (buttonId === 0) {
-                    resolve(element);
-                } else {
-                    resolve(null);
-                }
+                resolve({ saved: buttonId === 0, data: buttonId === 0 ? element : null });
 
                 this.#hide();
             };

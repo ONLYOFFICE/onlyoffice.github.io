@@ -94,18 +94,18 @@ function collectItemKeys(item) {
  * references the document already relies on priority in the search results.
  * Reads the stored data only: the citation service's storage is formatting
  * state which only the insert/refresh flows may rebuild.
- * @param {{readCitationData(): Promise<Array<Object>>}} document
+ * @param {{readCitationData(): Promise<Array<CitationData>>}} document
  * @returns {Promise<Set<string>>}
  */
 async function usedItemKeys(document) {
     /** @type {Set<string>} */
     const keys = new Set();
     const citations = await document.readCitationData();
-    citations.forEach(function (/** @type {any} */ citation) {
+    citations.forEach(function (citation) {
         if (!Array.isArray(citation.citationItems)) {
             return;
         }
-        citation.citationItems.forEach(function (/** @type {any} */ citationItem) {
+        citation.citationItems.forEach(function (citationItem) {
             collectItemKeys(citationItem).forEach(function (key) {
                 keys.add(key);
             });
@@ -123,7 +123,7 @@ async function usedItemKeys(document) {
  * showing them is not.
  */
 class CitedItemKeys {
-    /** @type {{readCitationData(): Promise<Array<Object>>}} */
+    /** @type {{readCitationData(): Promise<Array<CitationData>>}} */
     #document;
     #ttl;
     #timeout;
@@ -134,7 +134,7 @@ class CitedItemKeys {
     #readAt = 0;
 
     /**
-     * @param {{readCitationData(): Promise<Array<Object>>}} document
+     * @param {{readCitationData(): Promise<Array<CitationData>>}} document
      * @param {{ttl?: number, timeout?: number}} [options] - how long, in
      *  milliseconds, the keys read stand, and how long a reading is waited for
      */

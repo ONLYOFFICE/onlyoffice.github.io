@@ -223,3 +223,37 @@ var AscSimpleRequest = window.AscSimpleRequest;
  * @property {Array<string|number>} groupOrder - the searched groups in the order of the library filter
  * @property {string} groupsHash
  */
+
+/**
+ * A citation as the document stores it, in CSL citation JSON.
+ * @typedef {Object} CitationData
+ * @property {string} citationID
+ * @property {string} [schema]
+ * @property {CitationDataProperties} [properties]
+ * @property {Array<CitationDataItem>} [citationItems]
+ * @property {Object<string, string|boolean>} [manualOverride] - Mendeley's
+ */
+
+/**
+ * @typedef {Object} CitationDataProperties
+ * @property {number} [noteIndex]
+ * @property {boolean} [unsorted] - the sources stay in the order given
+ * @property {string} [formattedCitation]
+ * @property {string} [plainCitation]
+ * @property {boolean} [dontUpdate]
+ */
+
+/**
+ * A source of a citation, as the document stores it.
+ * @typedef {Object} CitationDataItem
+ * @property {string|number} id
+ * @property {{id?: string|number, type?: string, title?: string}} [itemData] - the
+ *  item in CSL JSON
+ * @property {Array<string>} [uris]
+ * @property {string} [prefix]
+ * @property {string} [suffix]
+ * @property {string} [locator]
+ * @property {string} [label]
+ * @property {boolean} [suppress-author]
+ * @property {boolean} [author-only]
+ */

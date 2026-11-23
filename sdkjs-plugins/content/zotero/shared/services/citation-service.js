@@ -192,11 +192,11 @@ class CitationService {
      * formatted where it stands; nothing is written yet.
      * @param {Object<string, SearchResultItem>} items
      * @param {DocCitation} current
-     * @returns {Promise<Object | null>} the citation's data, as it was when
+     * @returns {Promise<CitationData | null>} the citation's data, as it was when
      *  it has no id; null when it cannot be read
      */
     async insertSelectedCitationsToCurrent(items, current) {
-        const citationObject = /** @type {any} */ (current.data);
+        const citationObject = current.data;
         if (!citationObject || !citationObject.citationID) {
             return citationObject;
         }
@@ -414,25 +414,28 @@ class CitationService {
     }
 
     /**
-     * @param {Object | null} data - a citation's data
+     * @param {CitationData | null} data - a citation's data
      * @returns {Array<string>} the ids of its items
      */
     getCitationItemIds(data) {
-        const items = (data && /** @type {any} */ (data).citationItems) || [];
+        const items = (data && data.citationItems) || [];
         return items.map(function (/** @type {{id: string|number}} */ item) {
             return String(item.id);
         });
     }
 
     /**
-     * @param {Object | null} data - a citation's data
-     * @returns {Promise<Object & {citationID: string} | null>} the edited
-     *  data, null when the user cancelled
+     * @param {CitationData | null} data - a citation's data
+     * @param {boolean} [bUnsaved] - the data is not the document's, such as
+     *  with sources just added: saved without edits, it is still saved
+     * @returns {Promise<CitationData | null>} the data to
+     *  write, null when cancelled or saved without a change
      */
-    async showEditCitationWindow(data) {
+    async showEditCitationWindow(data, bUnsaved) {
         if (!data) return null;
-        const updated = await this.#additionalWindow.showEditWindow(data);
-        return updated || null;
+        const result = await this.#additionalWindow.showEditWindow(data);
+        if (!result.saved) return null;
+        return result.data || (bUnsaved ? data : null);
     }
 
     /** @param {string} message */
@@ -449,7 +452,7 @@ class CitationService {
      * Reads the document's citations into the storage, in document order.
      * @param {NoteStyle} [notesStyle] - where the citations sit, for their
      *  text in notes
-     * @param {Object} [updatedData] - a citation's new data, to take for its
+     * @param {CitationData} [updatedData] - a citation's new data, to take for its
      *  stored one
      * @param {string} [updatedCitationId] - the citation it is for
      * @returns {Promise<{entries: Array<StoredCitation>, bibliography: DocBibliography | null}>}
@@ -464,7 +467,7 @@ class CitationService {
         const entries = [];
         let bCorrupted = false;
         citations.forEach((citation, index) => {
-            const data = /** @type {any} */ (citation.data);
+            const data = citation.data;
             if (!data) {
                 bCorrupted = true;
                 return;

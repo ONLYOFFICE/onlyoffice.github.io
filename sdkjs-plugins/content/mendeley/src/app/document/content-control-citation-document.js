@@ -317,7 +317,7 @@ function encodeTag(data) {
 /**
  * The citation in a tag, null when it cannot be read.
  * @param {string} tag
- * @returns {Object | null}
+ * @returns {CitationData | null}
  */
 function decodeTag(tag) {
     // After the version: MENDELEY_CITATION_v3_<base64>.

@@ -44,7 +44,7 @@
  * @typedef {Object} DocCitation
  * @property {"citation"} kind
  * @property {string} id - the editor's id of the element that holds it
- * @property {Object | null} data - the CSL citation stored with it, null
+ * @property {CitationData | null} data - the CSL citation stored with it, null
  *  when it cannot be read
  * @property {string} text - its text in the document
  * @property {number | null} noteIndex - the number of the note it is in, 0
@@ -67,7 +67,7 @@
  * What to write into a citation of the document.
  * @typedef {Object} CitationChange
  * @property {DocCitation} citation
- * @property {Object} data - the CSL citation to store
+ * @property {CitationData} data - the CSL citation to store
  * @property {string | null} html - the new text; null keeps the text that is
  *  in the document, as for one the user edited
  */
@@ -114,11 +114,11 @@ class CitationDocument {
      * The data stored with the citations of the document, in document order,
      * leaving out what cannot be read. A document that can read the data
      * without the text of the citations does it faster.
-     * @returns {Promise<Array<Object>>}
+     * @returns {Promise<Array<CitationData>>}
      */
     readCitationData() {
         return this.readCitations().then(function (read) {
-            /** @type {Array<Object>} */
+            /** @type {Array<CitationData>} */
             const data = [];
             read.citations.forEach(function (citation) {
                 if (citation.data) data.push(citation.data);

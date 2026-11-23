@@ -1240,7 +1240,7 @@ import "../styles.css";
     /**
      * @param {import("@shared/document/citation-document").DocCitation | import("@shared/document/citation-document").DocBibliography | null} current
      *  - the citation at the cursor
-     * @param {Object | null} [data] - its data with sources just added, if
+     * @param {CitationData | null} [data] - its data with sources just added, if
      *  other than the stored data
      * @param {Array<string>} [idsInDocument]
      * @returns {Promise<boolean>}
@@ -1252,7 +1252,7 @@ import "../styles.css";
             return false;
         }
         const idsBeforeEdit = idsInDocument || citationService.getCitationItemIds(current.data);
-        const updatedField = await citationService.showEditCitationWindow(data || current.data);
+        const updatedField = await citationService.showEditCitationWindow(data || current.data, !!data);
         if (!updatedField) {
             return false;
         }

@@ -257,14 +257,14 @@ class FieldCitationDocument extends CitationDocument {
 
     /**
      * The stored data of the citations, without telling where they stand.
-     * @returns {Promise<Array<Object>>}
+     * @returns {Promise<Array<CitationData>>}
      */
     async readCitationData() {
         const all = await this.#fields.getAddinZoteroFields();
-        /** @type {Array<Object>} */
+        /** @type {Array<CitationData>} */
         const data = [];
         all.filter(isCitationField).forEach((field) => {
-            const parsed = parseCode(field.Value);
+            const parsed = parseCitation(field.Value);
             if (parsed) data.push(parsed);
         });
         return data;
@@ -280,7 +280,7 @@ class FieldCitationDocument extends CitationDocument {
         const citation = {
             kind: "citation",
             id: field.FieldId,
-            data: parseCode(field.Value),
+            data: parseCitation(field.Value),
             text: field.Content || "",
             noteIndex: typeof noteIndex === "number" ? noteIndex : null,
             legacy: field.Value.indexOf(LEGACY_CITATION_PREFIX) !== -1,
@@ -354,6 +354,15 @@ function isBibliographyField(field) {
         (field.Value.indexOf(BIBLIOGRAPHY_PREFIX) !== -1 ||
             field.Value.indexOf(LEGACY_BIBLIOGRAPHY_PREFIX) !== -1)
     );
+}
+
+/**
+ * The citation a field code stores, null when it cannot be read.
+ * @param {string} code
+ * @returns {CitationData | null}
+ */
+function parseCitation(code) {
+    return /** @type {CitationData | null} */ (parseCode(code));
 }
 
 /**

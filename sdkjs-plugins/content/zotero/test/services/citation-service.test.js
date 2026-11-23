@@ -260,3 +260,59 @@ describe("the style of a document from Word", () => {
         expect(window.__shownWindows).toHaveLength(0);
     });
 });
+
+describe("the citation edit window", () => {
+    /**
+     * A window that answers "Save" with `reply`: the edited data, or null
+     * for none edited.
+     * @param {any} reply
+     */
+    function windowReplying(reply) {
+        window.Asc.PluginWindow = function () {
+            /** @type {Object<string, Function>} */
+            const events = {};
+            this.show = () => {};
+            this.close = () => {};
+            this.attachEvent = (/** @type {string} */ name, /** @type {Function} */ fn) => (events[name] = fn);
+            this.command = () => events.onSaveFields(reply);
+        };
+    }
+
+    /** @param {number} buttonId */
+    async function press(buttonId) {
+        await vi.waitFor(() => expect(window.Asc.plugin.button).toBeTypeOf("function"));
+        window.Asc.plugin.button(buttonId);
+    }
+
+    const added = { citationID: "c1", citationItems: [{ id: "ALPHA" }, { id: "BETA" }] };
+
+    it("saves sources just added when nothing else is edited", async () => {
+        windowReplying(null);
+        const { service } = makeService({ styleId: "apa", format: "author-date", fields: [] });
+
+        const shown = service.showEditCitationWindow(added, true);
+        await press(0);
+
+        expect(await shown).toBe(added);
+    });
+
+    it("saves nothing for a citation saved as it was", async () => {
+        windowReplying(null);
+        const { service } = makeService({ styleId: "apa", format: "author-date", fields: [] });
+
+        const shown = service.showEditCitationWindow(added);
+        await press(0);
+
+        expect(await shown).toBe(null);
+    });
+
+    it("adds no source when cancelled", async () => {
+        windowReplying(null);
+        const { service } = makeService({ styleId: "apa", format: "author-date", fields: [] });
+
+        const shown = service.showEditCitationWindow(added, true);
+        await press(1);
+
+        expect(await shown).toBe(null);
+    });
+});

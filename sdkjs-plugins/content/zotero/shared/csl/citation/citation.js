@@ -402,8 +402,10 @@ class CSLCitation {
         return errors.length === 0 ? true : errors;
     }
 
+    /** @returns {CitationData} */
     toJSON() {
-        var result = /** @type {any} */ ({
+        /** @type {CitationData} */
+        var result = ({
             citationID: this.citationID,
             schema: this._schema,
         });

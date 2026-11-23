@@ -74,13 +74,14 @@ class MendeleyDesktopFields {
         const infoForUpgrade = fields
             .filter((field) => !bibField || bibField.FieldId !== field.FieldId)
             .map((field, index) => {
+                /** @type {CitationData} */
                 const citationObject = JSON.parse(
                     field.Value.slice(field.Value.indexOf("{"), field.Value.lastIndexOf("}") + 1),
                 );
                 if (citationObject && citationObject.citationItems) {
                     // Mendeley Cite knows an item by its uuid, which the old
                     // plugin kept only in the item's URIs.
-                    citationObject.citationItems.forEach(function (/** @type {any} */ item) {
+                    citationObject.citationItems.forEach(function (item) {
                         if (item.uris && item.uris.length) {
                             let id = item.id;
                             item.uris.some(/** @param {string} uri */ (uri) => {
@@ -96,7 +97,7 @@ class MendeleyDesktopFields {
                                 return true;
                             });
                             item.id = id;
-                            item.itemData.id = id;
+                            if (item.itemData) item.itemData.id = id;
                         }
                     });
                 }
