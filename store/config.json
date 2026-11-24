@@ -60,5 +60,6 @@
 	{ "name": "styletemplates", "discussion": "" },
 	{ "name": "vn-document-format", "discussion": "" },
 	{ "name": "random-cat", "discussion": "" },
-	{ "name": "serbian-text-converter", "discussion": "" }
+	{ "name": "serbian-text-converter", "discussion": "" },
+	{ "name": "auto-latex-equations", "discussion": "" }
 ]

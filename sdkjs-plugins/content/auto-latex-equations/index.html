@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Auto-LaTeX Equations</title>
+  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+  <script type="text/javascript" src="scripts/pluginCode.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; font-family: Arial, sans-serif; font-size: 12px; }
+    body { padding: 12px; }
+    h3 { margin: 0 0 8px; font-size: 14px; }
+    p.hint { opacity: .7; margin: 0 0 12px; line-height: 1.4; }
+    code { background: rgba(128,128,128,.2); padding: 1px 4px; border-radius: 3px; }
+    button { width: 100%; padding: 8px; font-size: 13px; cursor: pointer; border: 0; border-radius: 3px;
+             background: #2b579a; color: #fff; margin-bottom: 12px; }
+    button:disabled { opacity: .5; cursor: default; }
+    label { display: flex; align-items: flex-start; gap: 6px; cursor: pointer; margin-bottom: 12px; line-height: 1.4; }
+    #status { min-height: 18px; padding: 6px 8px; border-radius: 3px; background: rgba(128,128,128,.15); }
+    #status.ok { background: rgba(60,160,60,.25); }
+    #status.err { background: rgba(200,60,60,.25); }
+  </style>
+</head>
+<body>
+  <h3 id="title">Auto-LaTeX Equations</h3>
+  <p class="hint" id="hint"></p>
+
+  <button id="convertAll">Convert all equations</button>
+
+  <label>
+    <input type="checkbox" id="auto">
+    <span id="autoLabel">Automatic conversion on paste (panel open)</span>
+  </label>
+
+  <div id="status">Ready.</div>
+</body>
+</html>
