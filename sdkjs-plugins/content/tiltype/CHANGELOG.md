@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1
+
+- Added the Marketplace language manifest, user guide and screenshots.
+- Documented third-party dependencies and the LGPL distribution of Hunspell.
+- Updated the settings window to use plugin-local events.
+
 ## 1.4.0
 
 - Introduced the TilType name and light, dark and Marketplace icons.

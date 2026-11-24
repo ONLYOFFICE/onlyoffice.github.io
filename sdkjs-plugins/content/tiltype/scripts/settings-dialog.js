@@ -16,7 +16,7 @@
   const errorMessage = /** @type {HTMLElement} */ (document.getElementById("error"));
 
   plugin.init = () => {
-    plugin.attachEditorEvent("preferencesData", (/** @type {{ options: CorrectionSettings, language: DictionaryLanguage }} */ data) => {
+    plugin.attachEvent("preferencesData", (/** @type {{ options: CorrectionSettings, language: DictionaryLanguage }} */ data) => {
       const labels = settingsLabels[data.language];
       document.documentElement.lang = data.language;
       for (const element of document.querySelectorAll("[data-text]")) {
@@ -31,7 +31,7 @@
       language.value = data.options.language;
       form.hidden = false;
     });
-    plugin.attachEditorEvent("preferencesError", () => { errorMessage.hidden = false; });
+    plugin.attachEvent("preferencesError", () => { errorMessage.hidden = false; });
     plugin.sendToPlugin("preferencesReady", {});
   };
 

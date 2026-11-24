@@ -32,7 +32,7 @@ The WebAssembly engine is distributed via
 [hunspell-asm 4.0.2](https://github.com/kwonoj/hunspell-asm/tree/v4.0.2).
 The [Hunspell source code](https://github.com/hunspell/hunspell) and the
 [WebAssembly build sources](https://github.com/kwonoj/docker-hunspell-wasm)
-are available upstream. Hunspell is distributed here under MPL 1.1
-(`vendor/HUNSPELL-MPL-1.1.txt`). The JS bindings and
+are available upstream. Hunspell is distributed under GNU LGPL v3, using its LGPL 2.1-or-later option.
+See `licenses/Hunspell.license` and `3rd-Party.txt`. The JS bindings and
 [emscripten-wasm-loader 3.0.3](https://www.npmjs.com/package/emscripten-wasm-loader/v/3.0.3)
-use MIT. Nano ID's license is in `vendor/`.
+use MIT. Nano ID's license is in `licenses/NanoID.license`.
