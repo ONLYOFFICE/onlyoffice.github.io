@@ -1,0 +1,55 @@
+This plugin uses the following third-party components.
+
+1. Hunspell 1.6.2, the spelling engine compiled to WebAssembly.
+   Source: https://github.com/hunspell/hunspell/tree/v1.6.2
+   Build: https://github.com/kwonoj/docker-hunspell-wasm/tree/fc6a952-200131
+   License: GNU LGPL v3 (under Hunspell's LGPL 2.1-or-later option).
+   License File: licenses/Hunspell.license
+
+2. hunspell-asm 4.0.2, JavaScript bindings and published WebAssembly build.
+   Source: https://github.com/kwonoj/hunspell-asm/tree/v4.0.2
+   License: MIT for the bindings.
+   License File: licenses/hunspell-asm.license
+
+3. emscripten-wasm-loader 3.0.3, WebAssembly module loader.
+   Source: https://www.npmjs.com/package/emscripten-wasm-loader/v/3.0.3
+   License: MIT, as declared by the package author.
+   License File: licenses/emscripten-wasm-loader.license
+
+4. Nano ID 2.1.11, ID generation used by the bindings and loader.
+   Source: https://github.com/ai/nanoid/tree/2.1.11
+   License: MIT.
+   License File: licenses/NanoID.license
+
+5. Emscripten-generated runtime code in vendor/hunspell.js.
+   Source: https://github.com/emscripten-core/emscripten
+   License: MIT or University of Illinois/NCSA Open Source License.
+   License File: licenses/Emscripten.license
+
+6. Word frequency lists. TilType's English and Russian lists adapt Leipzig
+   Corpora Collection data and Hermit Dave's FrequencyWords (OpenSubtitles2018).
+   The Kazakh list adapts Leipzig Corpora Collection data.
+   License: CC BY-SA 4.0 (English/Russian) and CC BY 4.0 (Kazakh).
+   License Files: licenses/FrequencyWords.license, licenses/LeipzigCorpora.license
+   Source archives, attribution and changes: DICTIONARY-NOTICE.md
+
+7. English, Kazakh and Russian spelling dictionaries from ONLYOFFICE Desktop
+   Editors, distributed under the separate terms in each dictionary directory.
+   Source: https://github.com/ONLYOFFICE/dictionaries
+   License Files: see the notices in dictionaries/hunspell/.
+
+The published bundle also contains getroot 1.0.0, a browser/Node global
+resolver used by emscripten-wasm-loader.
+Source: https://www.npmjs.com/package/getroot/v/1.0.0
+License: MIT.
+License File: licenses/getroot.license
+
+Rebuilding the spelling engine bundle:
+The source and build instructions for the engine are linked above. TilType's
+JavaScript entry point and exact npm dependency versions are in its source
+repository. Run npm ci and npm run build:spellcheck to regenerate
+vendor/hunspell.js. To use a modified Hunspell build, replace the browser module
+under node_modules/hunspell-asm/dist/cjs/lib/browser/hunspell.js before bundling,
+then replace vendor/hunspell.js in the extracted plugin and repackage it.
+
+TilType source and build instructions: https://github.com/andqaz/tiltype

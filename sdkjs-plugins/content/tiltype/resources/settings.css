@@ -1,0 +1,32 @@
+/* Раскладка окна настроек поверх базовых стилей ONLYOFFICE. */
+body {
+  margin: 0;
+  padding: 16px 20px;
+  font: 13px/1.45 "Segoe UI", Arial, sans-serif;
+}
+
+[hidden] { display: none !important; }
+
+label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+input[type="checkbox"] { margin: 3px 0 0; }
+.language { display: grid; gap: 4px; }
+.language select { width: 100%; }
+p { margin: 0 0 10px; }
+#error { color: #cf482e; }
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.actions button { min-width: 90px; min-height: 28px; }
+.actions .primary { background: #325ab5; color: white; }
+.actions .primary:hover { background: #254990; color: white; }
