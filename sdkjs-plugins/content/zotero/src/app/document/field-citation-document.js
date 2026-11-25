@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/// <reference path="../../../shared/types-global.js" />
+/// <reference path="../../shared/types-global.js" />
 
 import { CitationDocument } from "@shared/document/citation-document";
 import { translate } from "@shared/services/translate-service";

@@ -4,8 +4,8 @@
         "module": "esnext",
         "moduleResolution": "bundler",
         "paths": {
-            "@shared/*": ["../zotero/shared/*"]
+            "@shared/*": ["../zotero/src/shared/*"]
         }
     },
-    "include": ["src/**/*", "test/**/*", "../zotero/shared/**/*"]
+    "include": ["src/**/*", "test/**/*", "../zotero/src/shared/**/*"]
 }

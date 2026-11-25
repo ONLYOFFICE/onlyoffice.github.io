@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/// <reference path="../../../../zotero/shared/types-global.js" />
+/// <reference path="../../../../zotero/src/shared/types-global.js" />
 
 import { CitationDocument } from "@shared/document/citation-document";
 import { CitationDocService } from "../services/citation-doc-service";

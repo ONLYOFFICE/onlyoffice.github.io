@@ -5,7 +5,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 
-const CONTENT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+const CONTENT = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..");
 
 /**
  * Lays the plugin out and loads the page then: the loader finds its

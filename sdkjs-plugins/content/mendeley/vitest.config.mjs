@@ -7,17 +7,17 @@ const __dirname = import.meta.dirname;
 // build: the tests run the sources as they are.
 export default defineConfig({
     resolve: {
-        alias: { "@shared": resolve(__dirname, "../zotero/shared") },
+        alias: { "@shared": resolve(__dirname, "../zotero/src/shared") },
     },
     server: {
         // Vite serves files outside the plugin folder only from listed paths.
-        fs: { allow: [__dirname, resolve(__dirname, "../zotero/shared")] },
+        fs: { allow: [__dirname, resolve(__dirname, "../zotero/src/shared")] },
     },
     test: {
         // The parent folder, so that the tests of the code shared with the
         // Zotero plugin run here too.
         dir: resolve(__dirname, ".."),
-        include: ["mendeley/test/**/*.test.js", "zotero/shared/**/*.test.js"],
+        include: ["mendeley/test/**/*.test.js", "zotero/src/shared/**/*.test.js"],
         environment: "happy-dom",
         setupFiles: ["test/setup.js"],
         passWithNoTests: true,

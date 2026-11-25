@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { SelectCitationsComponent } from "./select-citation.js";
 
-const CONTENT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+const CONTENT = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..");
 
 /** @param {string} plugin */
 function loadLayout(plugin) {

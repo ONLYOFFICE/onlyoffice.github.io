@@ -175,8 +175,8 @@ export default defineConfig({
         },
     ],
     resolve: {
-        // Code shared with the Zotero plugin, see ../zotero/shared/README.md.
-        alias: { "@shared": resolve(__dirname, "../zotero/shared") },
+        // Code shared with the Zotero plugin, see ../zotero/src/shared/README.md.
+        alias: { "@shared": resolve(__dirname, "../zotero/src/shared") },
         // Babel adds core-js imports to the shared files too; without this
         // they would resolve from the Zotero plugin's node_modules.
         dedupe: ["core-js"],

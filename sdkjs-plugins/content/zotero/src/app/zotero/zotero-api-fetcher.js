@@ -1,6 +1,6 @@
 // @ts-check
 
-/// <reference path="../../../shared/types-global.js" />
+/// <reference path="../../shared/types-global.js" />
 
 /**
  * Sends requests to the Zotero web API one at a time. The API limits how

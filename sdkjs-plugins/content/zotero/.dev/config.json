@@ -3,7 +3,6 @@
         ".dev/*",
         "node_modules/*",
         "src/*",
-        "shared/*",
         "test/*",
         "vitest.config.mjs",
         "jsconfig.json",

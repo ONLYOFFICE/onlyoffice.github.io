@@ -4,8 +4,8 @@ Source code used by both plugins. Each plugin imports it as `@shared/...`
 and builds it into its own `dist/`, so the plugins stay separate: their own
 `config.json`, GUID, version, translations and package.
 
-The folder is not part of the Zotero plugin package: `.dev/config.json`
-excludes `shared/*`.
+It lives in `src/` with the rest of the source code, so it is not part of
+the Zotero plugin package either.
 
 The code here must not depend on how a plugin stores citations in the
 document (Zotero uses addin fields, Mendeley uses content controls) or on

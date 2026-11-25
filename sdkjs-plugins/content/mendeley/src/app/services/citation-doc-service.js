@@ -34,9 +34,9 @@
 
 /// <reference types="@onlyoffice/doceditor-plugin-types" />
 /// <reference types="@onlyoffice/doceditor-plugin-types/word" />
-/// <reference path="../../../../zotero/shared/types-global.js" />
-/// <reference path="../../../../zotero/shared/csl/citation/types.js" />
-/// <reference path="../../../../zotero/shared/csl/styles/types.js" />
+/// <reference path="../../../../zotero/src/shared/types-global.js" />
+/// <reference path="../../../../zotero/src/shared/csl/citation/types.js" />
+/// <reference path="../../../../zotero/src/shared/csl/styles/types.js" />
 
 import { CslHtmlParser } from "@shared/services/csl-html-parser";
 

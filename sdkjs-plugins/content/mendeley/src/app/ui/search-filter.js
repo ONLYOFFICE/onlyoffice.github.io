@@ -32,10 +32,10 @@
 
 // @ts-check
 
-/// <reference path="../../../../../zotero/shared/types-global.js" />
+/// <reference path="../../../../zotero/src/shared/types-global.js" />
 
 import { Button, SelectBox, InputField } from "@shared/components";
-import { translate } from "../../services";
+import { translate } from "../services";
 
 function SearchFilterComponents() {
     this._searchField = new InputField("searchField", {

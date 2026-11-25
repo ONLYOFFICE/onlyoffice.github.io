@@ -31,7 +31,7 @@
  */
 // @ts-check
 
-/// <reference path="../../../zotero/shared/types-global.js" />
+/// <reference path="../../../zotero/src/shared/types-global.js" />
 /// <reference path="./sdk/types.js" />
 /// <reference path="../../vendor/mendeley-sdk/standalone.min.js" />
 
@@ -49,7 +49,7 @@ import { ContentControlCitationDocument } from "./document/content-control-citat
 import { MendeleyDesktopFields } from "./document/mendeley-desktop-fields";
 import { SelectCitationsComponent } from "@shared/ui/select-citation";
 import { CitedItemKeys } from "@shared/item-keys";
-import { SearchFilterComponents } from "./shared/ui";
+import { SearchFilterComponents } from "./ui";
 import { Button, Loader } from "@shared/components";
 
 import "@shared/components.css";

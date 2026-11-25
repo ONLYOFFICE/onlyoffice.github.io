@@ -31,7 +31,7 @@
  */
 // @ts-check
 
-/// <reference path="../../shared/types-global.js" />
+/// <reference path="../shared/types-global.js" />
 /// <reference path="./zotero/types.js" />
 
 /** @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme */
@@ -52,7 +52,7 @@ import { ZoteroDocumentPreferences } from "./zotero/zotero-document-preferences"
 import { ZoteroFieldRecovery } from "./zotero/zotero-field-recovery";
 import { CitedItemKeys } from "@shared/item-keys";
 import { SelectCitationsComponent } from "@shared/ui/select-citation";
-import { SearchFilterComponents } from "./shared/ui";
+import { SearchFilterComponents } from "./ui";
 import { Button, Loader } from "@shared/components";
 import { AutoUpdatePreferences } from "./auto-update-preferences";
 
