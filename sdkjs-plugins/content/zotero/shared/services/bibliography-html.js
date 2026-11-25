@@ -32,7 +32,7 @@
 
 // @ts-check
 
-import { unEscapeHtml } from "./citation-formatter";
+import { replaceNonBreakingSpaces } from "./citation-formatter";
 
 /**
  * The bibliography citeproc made, as HTML for the document: one paragraph an
@@ -45,7 +45,7 @@ function bibliographyHtml(bibObject, editorVersion) {
     /** @type {Array<string>} */
     const bibItems = [];
     for (let i = 0; i < bibObject[1].length; i++) {
-        let bibText = unEscapeHtml(bibObject[1][i])
+        let bibText = replaceNonBreakingSpaces(bibObject[1][i])
             .replaceAll("\n", "")
             .replaceAll("\r", "")
             .replace(/\s+/g, " ")

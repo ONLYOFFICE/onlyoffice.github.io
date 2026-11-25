@@ -163,7 +163,26 @@ class CslHtmlParser {
         // Current position in the original HTML string
         let i = 0;
 
+        /**
+         * Adds text, moving the position the formatting is counted from.
+         * @param {string} text
+         */
+        const append = (text) => {
+            result.text += text;
+            textPosition += text.length;
+        };
+
         while (i < htmlString.length) {
+            if (htmlString[i] === "&") {
+                // A character reference is the character it stands for:
+                // citeproc writes a "<" of the text as "&#60;".
+                const reference = CslHtmlParser.#readCharacterReference(htmlString, i);
+                if (reference) {
+                    append(reference.character);
+                    i += reference.length;
+                    continue;
+                }
+            }
             // Check for opening tag
             if (htmlString[i] === "<" && i + 1 < htmlString.length) {
                 // Check if it's a closing tag
@@ -173,7 +192,7 @@ class CslHtmlParser {
                 const tagEnd = htmlString.indexOf(">", i);
                 if (tagEnd === -1) {
                     // No closing '>', treat as regular text
-                    result.text += htmlString[i];
+                    append(htmlString[i]);
                     i++;
                     continue;
                 }
@@ -185,7 +204,7 @@ class CslHtmlParser {
                 const tagParts = tag.split(" ");
                 if (tagParts.length === 0) {
                     // No tag name, treat as regular text
-                    result.text += htmlString[i];
+                    append(htmlString[i]);
                     i++;
                     continue;
                 }
@@ -193,7 +212,7 @@ class CslHtmlParser {
                 const loverCaseTagName = tagParts[0].toLowerCase();
                 if (loverCaseTagName === "br") {
                     // <br> is a special case - add a newline
-                    result.text += "\n";
+                    append("\n");
                     i = tagEnd + 1;
                     continue;
                 }
@@ -239,8 +258,7 @@ class CslHtmlParser {
                 i = tagEnd + 1;
             } else {
                 // Regular character - add to plain text
-                result.text += htmlString[i];
-                textPosition++;
+                append(htmlString[i]);
                 i++;
             }
         }
@@ -254,6 +272,48 @@ class CslHtmlParser {
         });
 
         return result;
+    }
+
+    /**
+     * Named references HTML text from citeproc and Zotero can hold.
+     * @type {Object<string, string>}
+     */
+    static #NAMED_REFERENCES = {
+        amp: "&",
+        lt: "<",
+        gt: ">",
+        quot: "\"",
+        apos: "'",
+        nbsp: " ",
+    };
+
+    /**
+     * The character reference at a position of HTML, such as "&#60;",
+     * "&#x3C;" or "&lt;".
+     * @param {string} html
+     * @param {number} index - where the "&" is
+     * @returns {{character: string, length: number} | null} null if no
+     *  reference starts there, or one of an unknown name
+     */
+    static #readCharacterReference(html, index) {
+        const match = /^&(?:#(\d{1,7})|#x([0-9a-f]{1,6})|([a-z]+));/i.exec(
+            html.substring(index, index + 12),
+        );
+        if (!match) return null;
+        let character;
+        if (match[3] !== undefined) {
+            character = CslHtmlParser.#NAMED_REFERENCES[match[3].toLowerCase()];
+        } else {
+            const code = match[1] !== undefined
+                ? parseInt(match[1], 10)
+                : parseInt(match[2], 16);
+            if (code > 0 && code <= 0x10ffff) {
+                character = String.fromCodePoint(code);
+            }
+        }
+        return character === undefined
+            ? null
+            : { character: character, length: match[0].length };
     }
 }
 

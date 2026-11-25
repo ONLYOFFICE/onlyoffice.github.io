@@ -15,6 +15,30 @@ const beta = item("BETA", { author: [{ family: "Beta", given: "B." }], title: "S
 const gamma = item("GAMMA", { author: [{ family: "Gamma", given: "C." }], title: "Third Book" });
 
 describe("bibliography", () => {
+    it("keeps a URL a style puts in angle brackets", async () => {
+        // As ISO-690 (numeric, Slovenčina) does: "Dostupné na internete: <URL>."
+        const page = item("PAGE", {
+            type: "webpage",
+            author: [{ family: "Wruck", given: "W." }],
+            title: "Data management strategies",
+            URL: "https://academic.oup.com/bib/article-lookup/doi/10.1093/bib/bbs064",
+        });
+        const { service, doc } = makeService({
+            styleId: "url-in-angle-brackets",
+            format: "numeric",
+            fields: [citationField("1", "c1", [page]), bibliographyField("9")],
+        });
+
+        await service.insertBibliography();
+
+        const html = doc.written.find((field) => field.FieldId === "9").Content;
+        const element = document.createElement("div");
+        element.innerHTML = html;
+        expect(element.textContent).toContain(
+            "Available at: <https://academic.oup.com/bib/article-lookup/doi/10.1093/bib/bbs064>.",
+        );
+    });
+
     it("lists a citation that came into the document since the last action", async () => {
         const { service, doc } = makeService({
             styleId: "apa",

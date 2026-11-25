@@ -238,7 +238,7 @@ class CitationFormatter {
             citationsPost,
         );
 
-        const htmlCitation = unEscapeHtml(formattedCitationObj[1][0][1]);
+        const htmlCitation = replaceNonBreakingSpaces(formattedCitationObj[1][0][1]);
         const tempElement = document.createElement("div");
         document.createDocumentFragment().appendChild(tempElement);
         tempElement.innerHTML = CslHtmlParser.purifyHtml(htmlCitation);
@@ -259,7 +259,7 @@ class CitationFormatter {
             .rebuildProcessorState(this.#storage.getAllCitationsInJson())
             // Each as [citationID, noteIndex, text].
             .forEach(function (/** @type {Array<any>} */ result) {
-                formattedById.set(String(result[0]), unEscapeHtml(String(result[2])));
+                formattedById.set(String(result[0]), replaceNonBreakingSpaces(String(result[2])));
             });
         return formattedById;
     }
@@ -328,15 +328,15 @@ class CitationFormatter {
 }
 
 /**
+ * The HTML citeproc made, its non-breaking spaces as plain ones. Character
+ * references stay: "&#60;" is text, and a "<" in their place would be read
+ * as the start of a tag - a URL a style puts in angle brackets vanished so.
+ * Whatever reads the HTML as text decodes them.
  * @param {string} htmlString
  * @returns {string}
  */
-function unEscapeHtml(htmlString) {
-    return htmlString
-        .replace(/ /g, " ")
-        .replace(/&#60;/g, "<")
-        .replace(/&#62;/g, ">")
-        .replace(/&#38;/g, "&");
+function replaceNonBreakingSpaces(htmlString) {
+    return htmlString.replace(/\u00A0/g, " ");
 }
 
-export { CitationFormatter, unEscapeHtml };
+export { CitationFormatter, replaceNonBreakingSpaces };
