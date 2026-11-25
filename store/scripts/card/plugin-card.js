@@ -347,7 +347,11 @@ const PluginCard = {
             PluginCardUI.btnInstall.classList.add("hidden");
         } else {
             PluginCardUI.btnRemove.classList.add("hidden");
-            PluginCardUI.btnInstall.classList.remove("hidden");
+            if (data.bOffline) {
+                PluginCardUI.btnInstall.classList.add("hidden");
+            } else {
+                PluginCardUI.btnInstall.classList.remove("hidden");
+            }
         }
 
         if (data.bActionDisabled) {

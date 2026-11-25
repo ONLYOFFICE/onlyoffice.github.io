@@ -29,6 +29,7 @@
  * @property {number} editorVersion
  * @property {boolean} bHasUpdate
  * @property {boolean} bActionDisabled
+ * @property {boolean} [bOffline] - no connection: there is nothing to install from
  * @property {boolean} removed
  * @property {boolean} canRemoved
  * @property {boolean} independentMode
