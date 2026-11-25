@@ -54,7 +54,6 @@
       var count = 0;
       var failed = [];
 
-
       var re = /\$\$([\s\S]+?)\$\$|(?<!\$)\$(?![\s$])([^$\n]*?[^$\s\\])\$(?![\d$])/g;
 
       var n = doc.GetElementsCount();
@@ -76,14 +75,18 @@
         }
 
         for (var f = 0; f < found.length; f++) {
+
           var guard = 0;
           while (guard++ < 50) {
             var ranges = el.Search(found[f].raw, true);
             if (!ranges || !ranges.length) break;
-            ranges[ranges.length - 1].Select();
+            var before = ranges.length;
+            ranges[before - 1].Select();
             if (!doc.AddMathEquation(found[f].latex, "latex")) { failed.push(found[f].raw); break; }
             count++;
-            if (el.GetText().indexOf(found[f].raw) !== -1) { failed.push(found[f].raw); break; }
+
+            var after = el.Search(found[f].raw, true);
+            if (after && after.length >= before) { failed.push(found[f].raw); break; }
           }
         }
       }
@@ -123,7 +126,7 @@
     $("convertAll").onclick = function () { skip = {}; convert(true); };
     $("auto").onchange = function () {
       setStatus(this.checked ? "Automatic conversion enabled." : "Automatic conversion disabled.");
-      if (this.checked) convert(false);
+      if (this.checked) convert(false);   // convertit aussi ce qui est déjà collé
     };
 
     if (typeof window.Asc.plugin.attachEditorEvent === "function") {

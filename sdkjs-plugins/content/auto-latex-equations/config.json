@@ -7,7 +7,8 @@
     "pt-BR": "Equações Auto-LaTeX"
   },
   "guid": "asc.{AFBAD265-5EAE-49BA-B562-D9A753D55A39}",
-  "version": "1.0.3",
+  "version": "1.0.4",
+  "minVersion": "8.2.0",
   "offered": "yidir kahlouche",
   "baseUrl": "",
   "variations": [

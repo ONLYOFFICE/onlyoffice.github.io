@@ -1,4 +1,4 @@
-## 1.0.3
+## 1.0.4
 * Initial release.
 * Convert `$...$` and `$$...$$` LaTeX into math equations (button in the side panel).
 * Automatic conversion on paste.
