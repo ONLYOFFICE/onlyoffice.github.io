@@ -1,0 +1,14 @@
+{
+  "Auto-LaTeX Equations": "Auto-LaTeX-Gleichungen",
+  "Detects <code>$...$</code> and <code>$$...$$</code> in the text and turns them into equations.": "Erkennt <code>$...$</code> und <code>$$...$$</code> im Text und wandelt sie in Gleichungen um.",
+  "Convert all equations": "Alle Gleichungen umwandeln",
+  "Automatic conversion on paste (panel open)": "Automatische Umwandlung beim Einfügen (Panel geöffnet)",
+  "Ready.": "Bereit.",
+  "Automatic conversion enabled.": "Automatische Umwandlung aktiviert.",
+  "Automatic conversion disabled.": "Automatische Umwandlung deaktiviert.",
+  "No response from the editor.": "Keine Antwort vom Editor.",
+  "AddMathEquation is not available: ONLYOFFICE 8.2 or later is required.": "AddMathEquation ist nicht verfügbar: ONLYOFFICE 8.2 oder neuer erforderlich.",
+  "equation(s) converted.": "Gleichung(en) umgewandelt.",
+  "ignored.": "ignoriert.",
+  "No $...$ or $$...$$ equation found.": "Keine Gleichung $...$ oder $$...$$ gefunden."
+}
