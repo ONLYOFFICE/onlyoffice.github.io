@@ -1,4 +1,5 @@
 {
+	"$schema": "https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/refs/heads/master/schemas/config.schema.json",
 	"name": "Icons",
 	"nameLocale": {
 		"ru": "Иконки",
@@ -17,7 +18,7 @@
 	},
 	"offered": "Ascensio System SIA",
 	"guid": "asc.{1B6B4FBC-BFFA-4B01-A901-94996D88D1DC}",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minVersion": "8.2.0",
 
 	"variations": [

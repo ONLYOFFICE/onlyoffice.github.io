@@ -30,6 +30,16 @@
  *
  */
 
+function _arrayLikeToArray(r, a) {
+    (null == a || a > r.length) && (a = r.length);
+    for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+    return n;
+}
+
+function _arrayWithHoles(r) {
+    if (Array.isArray(r)) return r;
+}
+
 function _assertClassBrand(e, t, n) {
     if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
     throw new TypeError("Private element is not present on this object");
@@ -89,6 +99,30 @@ function _defineProperty(e, r, t) {
     }) : e[r] = t, e;
 }
 
+function _iterableToArrayLimit(r, l) {
+    var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+    if (null != t) {
+        var e, n, i, u, a = [], f = true, o = false;
+        try {
+            if (i = (t = t.call(r)).next, 0 === l) ; else for (;!(f = (e = i.call(t)).done) && (a.push(e.value), 
+            a.length !== l); f = !0) ;
+        } catch (r) {
+            o = true, n = r;
+        } finally {
+            try {
+                if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return;
+            } finally {
+                if (o) throw n;
+            }
+        }
+        return a;
+    }
+}
+
+function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
 function ownKeys(e, r) {
     var t = Object.keys(e);
     if (Object.getOwnPropertySymbols) {
@@ -112,20 +146,32 @@ function _objectSpread2(e) {
     return e;
 }
 
-function _toPrimitive(t, r) {
+function _slicedToArray(r, e) {
+    return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
+}
+
+function _toPrimitive(t, e) {
     if ("object" != typeof t || !t) return t;
-    var e = t[Symbol.toPrimitive];
-    if (void 0 !== e) {
-        var i = e.call(t, r);
+    var r;
+    if ("undefined" != typeof Symbol && void 0 !== (r = t[Symbol.toPrimitive])) {
+        var i = r.call(t, e);
         if ("object" != typeof i) return i;
         throw new TypeError("@@toPrimitive must return a primitive value.");
     }
-    return ("string" === r ? String : Number)(t);
+    return ("string" === e ? String : Number)(t);
 }
 
 function _toPropertyKey(t) {
     var i = _toPrimitive(t, "string");
     return "symbol" == typeof i ? i : i + "";
+}
+
+function _unsupportedIterableToArray(r, a) {
+    if (r) {
+        if ("string" == typeof r) return _arrayLikeToArray(r, a);
+        var t = {}.toString.call(r).slice(8, -1);
+        return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
+    }
 }
 
 var Commands = {
@@ -245,7 +291,7 @@ function _convertEllipticalArcToCubics(startX, startY, endX, endY, rx, ry, rotat
             y: endY
         } ];
     }
-    var {cx: cx, cy: cy, theta1: theta1, theta2: theta2} = center;
+    var cx = center.cx, cy = center.cy, theta1 = center.theta1, theta2 = center.theta2;
     var deltaTheta = Math.abs(theta2 - theta1);
     var segments = Math.max(1, Math.min(4, Math.ceil(deltaTheta / (Math.PI / 2))));
     var thetaStep = (theta2 - theta1) / segments;
@@ -771,7 +817,7 @@ function _extractPolylines(svgDoc) {
     var elements = [];
     svgDoc.querySelectorAll("polyline").forEach(polyline => {
         var points = polyline.getAttribute("points").split(" ").map(point => {
-            var [x, y] = point.split(",");
+            var _point$split = point.split(","), _point$split2 = _slicedToArray(_point$split, 2), x = _point$split2[0], y = _point$split2[1];
             return {
                 x: parseFloat(x),
                 y: parseFloat(y)
@@ -792,7 +838,7 @@ function _extractPolygons(svgDoc) {
     var elements = [];
     svgDoc.querySelectorAll("polygon").forEach(polygon => {
         var points = polygon.getAttribute("points").split(" ").map(point => {
-            var [x, y] = point.split(",");
+            var _point$split3 = point.split(","), _point$split4 = _slicedToArray(_point$split3, 2), x = _point$split4[0], y = _point$split4[1];
             return {
                 x: parseFloat(x),
                 y: parseFloat(y)
@@ -2671,7 +2717,7 @@ var FA_CATEGORIES = [ {
     id: "accessibility",
     label: "Accessibility",
     folders: [ "brands", "regular", "solid" ],
-    icons: [ [ "accessible-icon" ], [ "address-card", "circle-question", "closed-captioning", "eye" ], [ "audio-description", "braille", "circle-info", "ear-deaf", "ear-listen", "eye-low-vision", "fingerprint", "hands", "hands-asl-interpreting", "handshake-angle", "person-cane", "person-walking-with-cane", "phone-volume", "question", "tty", "universal-access", "wheelchair", "wheelchair-move" ] ]
+    icons: [ [ "accessible-icon" ], [ "address-card", "circle-question", "closed-captioning", "eye" ], [ "audio-description", "braille", "circle-info", "closed-captioning-slash", "ear-deaf", "ear-listen", "eye-low-vision", "fingerprint", "hands", "hands-asl-interpreting", "handshake-angle", "person-cane", "person-walking-with-cane", "phone-volume", "question", "tty", "universal-access", "wheelchair", "wheelchair-move" ] ]
 }, {
     id: "alert",
     label: "Alert",
@@ -2696,7 +2742,7 @@ var FA_CATEGORIES = [ {
     id: "astronomy",
     label: "Astronomy",
     folders: [ "solid", "regular" ],
-    icons: [ [ "binoculars", "globe", "meteor", "satellite", "satellite-dish", "shuttle-space", "user-astronaut" ], [ "moon" ] ]
+    icons: [ [ "aquarius", "aries", "binoculars", "cancer", "capricorn", "gemini", "globe", "leo", "libra", "meteor", "pisces", "sagittarius", "satellite", "satellite-dish", "scorpio", "shuttle-space", "taurus", "user-astronaut", "virgo" ], [ "moon" ] ]
 }, {
     id: "automotive",
     label: "Automotive",
@@ -2876,7 +2922,7 @@ var FA_CATEGORIES = [ {
     id: "media-playback",
     label: "Media Playback",
     folders: [ "solid", "regular" ],
-    icons: [ [ "arrow-rotate-left", "arrow-rotate-right", "arrows-rotate", "backward", "backward-fast", "backward-step", "compress", "down-left-and-up-right-to-center", "eject", "expand", "forward", "forward-fast", "forward-step", "maximize", "minimize", "music", "pause", "phone-volume", "play", "plus-minus", "repeat", "rotate", "rotate-left", "rotate-right", "rss", "shuffle", "sliders", "stop", "up-right-and-down-left-from-center", "volume-high", "volume-low", "volume-off", "volume-xmark" ], [ "circle-pause", "circle-play", "circle-stop", "hand" ] ]
+    icons: [ [ "arrow-rotate-left", "arrow-rotate-right", "arrows-rotate", "backward", "backward-fast", "backward-step", "compress", "down-left-and-up-right-to-center", "eject", "expand", "forward", "forward-fast", "forward-step", "maximize", "minimize", "music", "pause", "phone-volume", "picture-in-picture", "play", "plus-minus", "repeat", "rotate", "rotate-left", "rotate-right", "rss", "shuffle", "sliders", "stop", "up-right-and-down-left-from-center", "volume", "volume-high", "volume-low", "volume-off", "volume-xmark" ], [ "circle-pause", "circle-play", "circle-stop", "hand" ] ]
 }, {
     id: "medical-health",
     label: "Medical + Health",
@@ -2896,7 +2942,7 @@ var FA_CATEGORIES = [ {
     id: "music-audio",
     label: "Music + Audio",
     folders: [ "solid", "regular", "brands" ],
-    icons: [ [ "compact-disc", "drum", "drum-steelpan", "guitar", "microphone", "microphone-lines", "microphone-lines-slash", "microphone-slash", "music", "radio", "record-vinyl", "sliders", "volume-high", "volume-low", "volume-off", "volume-xmark", "wave-square" ], [ "file-audio", "headphones" ], [ "napster", "soundcloud", "spotify" ] ]
+    icons: [ [ "compact-disc", "drum", "drum-steelpan", "guitar", "microphone", "microphone-lines", "microphone-lines-slash", "microphone-slash", "music", "radio", "record-vinyl", "sliders", "volume", "volume-high", "volume-low", "volume-off", "volume-xmark", "wave-square" ], [ "file-audio", "headphones" ], [ "napster", "soundcloud", "spotify" ] ]
 }, {
     id: "nature",
     label: "Nature",
@@ -2911,7 +2957,7 @@ var FA_CATEGORIES = [ {
     id: "photos-images",
     label: "Photos + Images",
     folders: [ "solid", "regular", "brands" ],
-    icons: [ [ "bolt", "bolt-lightning", "camera-retro", "camera-rotate", "chalkboard", "circle-half-stroke", "droplet", "eye-dropper", "film", "image-portrait", "minimize", "panorama", "photo-film", "sliders" ], [ "camera", "clone", "eye", "eye-slash", "file-image", "id-badge", "id-card", "image", "images" ], [ "unsplash" ] ]
+    icons: [ [ "bolt", "bolt-lightning", "camera-retro", "camera-rotate", "chalkboard", "circle-half-stroke", "droplet", "eye-dropper", "film", "image-portrait", "minimize", "panorama", "photo-film", "picture-in-picture", "sliders" ], [ "camera", "clone", "eye", "eye-slash", "file-image", "id-badge", "id-card", "image", "images" ], [ "unsplash" ] ]
 }, {
     id: "political",
     label: "Political",
@@ -2921,12 +2967,12 @@ var FA_CATEGORIES = [ {
     id: "punctuation-symbols",
     label: "Punctuation + Symbols",
     folders: [ "solid", "regular" ],
-    icons: [ [ "asterisk", "at", "check", "check-double", "circle-exclamation", "equals", "exclamation", "greater-than", "hashtag", "less-than", "minus", "percent", "plus", "question", "quote-left", "quote-right", "section", "single-quote-left", "single-quote-right" ], [ "circle-question" ] ]
+    icons: [ [ "aquarius", "aries", "asterisk", "at", "cancer", "capricorn", "check", "check-double", "circle-exclamation", "equals", "exclamation", "gemini", "greater-than", "hashtag", "leo", "less-than", "libra", "minus", "percent", "pisces", "plus", "question", "quote-left", "quote-right", "sagittarius", "scorpio", "section", "single-quote-left", "single-quote-right", "taurus", "virgo" ], [ "circle-question" ] ]
 }, {
     id: "religion",
     label: "Religion",
     folders: [ "solid" ],
-    icons: [ [ "ankh", "atom", "bahai", "book-bible", "book-journal-whills", "book-quran", "book-tanakh", "church", "cross", "dharmachakra", "dove", "gopuram", "hamsa", "hands-praying", "hanukiah", "jedi", "kaaba", "khanda", "menorah", "mosque", "om", "peace", "person-praying", "place-of-worship", "scroll-torah", "spaghetti-monster-flying", "star-and-crescent", "star-of-david", "synagogue", "torii-gate", "vihara", "yin-yang" ] ]
+    icons: [ [ "ankh", "aquarius", "aries", "atom", "bahai", "book-bible", "book-journal-whills", "book-quran", "book-tanakh", "cancer", "capricorn", "church", "cross", "dharmachakra", "dove", "gemini", "gopuram", "hamsa", "hands-praying", "hanukiah", "jedi", "kaaba", "khanda", "leo", "libra", "menorah", "mosque", "om", "peace", "person-praying", "pisces", "place-of-worship", "sagittarius", "scorpio", "scroll-torah", "spaghetti-monster-flying", "star-and-crescent", "star-of-david", "synagogue", "taurus", "torii-gate", "vihara", "virgo", "yin-yang" ] ]
 }, {
     id: "science",
     label: "Science",
