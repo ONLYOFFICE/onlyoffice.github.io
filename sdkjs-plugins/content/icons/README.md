@@ -17,7 +17,7 @@ npm run build:all
 ### Update Font Awesome Icons (windows)
 
 ```bash
-cd .dev/svg-path-generator && npm i && npm run start && cd ../..
+cd .dev/svg-path-generator && npm run start && cd ../..
 ```
 
 ### Browser Support

@@ -223,7 +223,7 @@
                 return function(o, p, l) {
                     if (f > 1) throw TypeError("Generator is already running");
                     for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y; ) {
-                        i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u);
+                        i || (c ? (c > 1 && (G.n = c < 3 ? -1 : u), d(c, u)) : G.v = u);
                         try {
                             if (f = 2, i) {
                                 if (c || (o = "next"), t = i[o]) {
@@ -298,15 +298,15 @@
     function _slicedToArray(r, e) {
         return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
     }
-    function _toPrimitive(t, r) {
+    function _toPrimitive(t, e) {
         if ("object" != typeof t || !t) return t;
-        var e = t[Symbol.toPrimitive];
-        if (void 0 !== e) {
-            var i = e.call(t, r);
+        var r;
+        if ("undefined" != typeof Symbol && void 0 !== (r = t[Symbol.toPrimitive])) {
+            var i = r.call(t, e);
             if ("object" != typeof i) return i;
             throw new TypeError("@@toPrimitive must return a primitive value.");
         }
-        return String(t);
+        return ("string" === e ? String : Number)(t);
     }
     function _toPropertyKey(t) {
         var i = _toPrimitive(t, "string");
@@ -482,10 +482,10 @@
         var SHARED = "__core-js_shared__";
         var store = sharedStore.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
         (store.versions || (store.versions = [])).push({
-            version: "3.45.1",
+            version: "3.51.0",
             mode: IS_PURE ? "pure" : "global",
-            copyright: "© 2014-2025 Denis Pushkarev (zloirock.ru)",
-            license: "https://github.com/zloirock/core-js/blob/v3.45.1/LICENSE",
+            copyright: "© 2013–2025 Denis Pushkarev (zloirock.ru), 2025–2026 CoreJS Company (core-js.io). All rights reserved.",
+            license: "https://github.com/zloirock/core-js/blob/v3.51.0/LICENSE",
             source: "https://github.com/zloirock/core-js"
         });
         return sharedStore.exports;
@@ -496,8 +496,9 @@
         if (hasRequiredShared) return shared;
         hasRequiredShared = 1;
         var store = requireSharedStore();
+        var create = Object.create || Object;
         shared = function(key, value) {
-            return store[key] || (store[key] = value || {});
+            return store[key] || (store[key] = value || create(null));
         };
         return shared;
     }
@@ -1202,7 +1203,7 @@
     function requireIterators() {
         if (hasRequiredIterators) return iterators;
         hasRequiredIterators = 1;
-        iterators = {};
+        iterators = Object.create ? Object.create(null) : {};
         return iterators;
     }
     var weakMapBasicDetection;
@@ -2139,18 +2140,30 @@
         };
         return arraySpeciesCreate;
     }
+    var createProperty;
+    var hasRequiredCreateProperty;
+    function requireCreateProperty() {
+        if (hasRequiredCreateProperty) return createProperty;
+        hasRequiredCreateProperty = 1;
+        var DESCRIPTORS = requireDescriptors();
+        var definePropertyModule = requireObjectDefineProperty();
+        var createPropertyDescriptor = requireCreatePropertyDescriptor();
+        createProperty = function(object, key, value) {
+            if (DESCRIPTORS) definePropertyModule.f(object, key, createPropertyDescriptor(0, value)); else object[key] = value;
+        };
+        return createProperty;
+    }
     var arrayIteration;
     var hasRequiredArrayIteration;
     function requireArrayIteration() {
         if (hasRequiredArrayIteration) return arrayIteration;
         hasRequiredArrayIteration = 1;
         var bind = requireFunctionBindContext();
-        var uncurryThis = requireFunctionUncurryThis();
         var IndexedObject = requireIndexedObject();
         var toObject = requireToObject();
         var lengthOfArrayLike = requireLengthOfArrayLike();
         var arraySpeciesCreate = requireArraySpeciesCreate();
-        var push = uncurryThis([].push);
+        var createProperty = requireCreateProperty();
         var createMethod = function(TYPE) {
             var IS_MAP = TYPE === 1;
             var IS_FILTER = TYPE === 2;
@@ -2159,20 +2172,20 @@
             var IS_FIND_INDEX = TYPE === 6;
             var IS_FILTER_REJECT = TYPE === 7;
             var NO_HOLES = TYPE === 5 || IS_FIND_INDEX;
-            return function($this, callbackfn, that, specificCreate) {
+            return function($this, callbackfn, that) {
                 var O = toObject($this);
                 var self = IndexedObject(O);
                 var length = lengthOfArrayLike(self);
                 var boundFunction = bind(callbackfn, that);
                 var index = 0;
-                var create = specificCreate || arraySpeciesCreate;
-                var target = IS_MAP ? create($this, length) : IS_FILTER || IS_FILTER_REJECT ? create($this, 0) : undefined;
+                var resIndex = 0;
+                var target = IS_MAP ? arraySpeciesCreate($this, length) : IS_FILTER || IS_FILTER_REJECT ? arraySpeciesCreate($this, 0) : undefined;
                 var value, result;
                 for (;length > index; index++) if (NO_HOLES || index in self) {
                     value = self[index];
                     result = boundFunction(value, index, O);
                     if (TYPE) {
-                        if (IS_MAP) target[index] = result; else if (result) switch (TYPE) {
+                        if (IS_MAP) createProperty(target, index, result); else if (result) switch (TYPE) {
                           case 3:
                             return true;
 
@@ -2183,13 +2196,13 @@
                             return index;
 
                           case 2:
-                            push(target, value);
+                            createProperty(target, resIndex++, value);
                         } else switch (TYPE) {
                           case 4:
                             return false;
 
                           case 7:
-                            push(target, value);
+                            createProperty(target, resIndex++, value);
                         }
                     }
                 }
@@ -2313,7 +2326,9 @@
         var classof = requireClassofRaw();
         var ARRAY_BUFFER_NON_EXTENSIBLE = requireArrayBufferNonExtensible();
         var $isExtensible = Object.isExtensible;
-        var FAILS_ON_PRIMITIVES = fails(function() {});
+        var FAILS_ON_PRIMITIVES = fails(function() {
+            $isExtensible(1);
+        });
         objectIsExtensible = FAILS_ON_PRIMITIVES || ARRAY_BUFFER_NON_EXTENSIBLE ? function isExtensible(it) {
             if (!isObject(it)) return false;
             if (ARRAY_BUFFER_NON_EXTENSIBLE && classof(it) === "ArrayBuffer") return false;
@@ -2429,39 +2444,39 @@
         };
         return isArrayIteratorMethod;
     }
-    var getIteratorMethod;
-    var hasRequiredGetIteratorMethod;
-    function requireGetIteratorMethod() {
-        if (hasRequiredGetIteratorMethod) return getIteratorMethod;
-        hasRequiredGetIteratorMethod = 1;
-        var classof = requireClassof();
-        var getMethod = requireGetMethod();
+    var getIteratorMethodInternal;
+    var hasRequiredGetIteratorMethodInternal;
+    function requireGetIteratorMethodInternal() {
+        if (hasRequiredGetIteratorMethodInternal) return getIteratorMethodInternal;
+        hasRequiredGetIteratorMethodInternal = 1;
+        var classof = requireClassofRaw();
         var isNullOrUndefined = requireIsNullOrUndefined();
-        var Iterators = requireIterators();
+        var getMethod = requireGetMethod();
         var wellKnownSymbol = requireWellKnownSymbol();
         var ITERATOR = wellKnownSymbol("iterator");
-        getIteratorMethod = function(it) {
-            if (!isNullOrUndefined(it)) return getMethod(it, ITERATOR) || getMethod(it, "@@iterator") || Iterators[classof(it)];
+        var ArrayPrototype = Array.prototype;
+        getIteratorMethodInternal = function(it) {
+            if (!isNullOrUndefined(it)) return getMethod(it, ITERATOR) || getMethod(it, "@@iterator") || (classof(it) === "Arguments" ? ArrayPrototype[ITERATOR] : undefined);
         };
-        return getIteratorMethod;
+        return getIteratorMethodInternal;
     }
-    var getIterator;
-    var hasRequiredGetIterator;
-    function requireGetIterator() {
-        if (hasRequiredGetIterator) return getIterator;
-        hasRequiredGetIterator = 1;
+    var getIteratorInternal;
+    var hasRequiredGetIteratorInternal;
+    function requireGetIteratorInternal() {
+        if (hasRequiredGetIteratorInternal) return getIteratorInternal;
+        hasRequiredGetIteratorInternal = 1;
         var call = requireFunctionCall();
-        var aCallable = requireACallable();
+        var isCallable = requireIsCallable();
         var anObject = requireAnObject();
         var tryToString = requireTryToString();
-        var getIteratorMethod = requireGetIteratorMethod();
+        var getIteratorMethod = requireGetIteratorMethodInternal();
         var $TypeError = TypeError;
-        getIterator = function(argument, usingIterator) {
+        getIteratorInternal = function(argument, usingIterator) {
             var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
-            if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
+            if (isCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
             throw new $TypeError(tryToString(argument) + " is not iterable");
         };
-        return getIterator;
+        return getIteratorInternal;
     }
     var iteratorClose;
     var hasRequiredIteratorClose;
@@ -2504,8 +2519,8 @@
         var isArrayIteratorMethod = requireIsArrayIteratorMethod();
         var lengthOfArrayLike = requireLengthOfArrayLike();
         var isPrototypeOf = requireObjectIsPrototypeOf();
-        var getIterator = requireGetIterator();
-        var getIteratorMethod = requireGetIteratorMethod();
+        var getIterator = requireGetIteratorInternal();
+        var getIteratorMethod = requireGetIteratorMethodInternal();
         var iteratorClose = requireIteratorClose();
         var $TypeError = TypeError;
         var Result = function(stopped, result) {
@@ -2522,7 +2537,9 @@
             var fn = bind(unboundFunction, that);
             var iterator, iterFn, index, length, result, next, step;
             var stop = function(condition) {
-                if (iterator) iteratorClose(iterator, "normal");
+                var $iterator = iterator;
+                iterator = undefined;
+                if ($iterator) iteratorClose($iterator, "normal");
                 return new Result(true, condition);
             };
             var callFn = function(value) {
@@ -2550,10 +2567,11 @@
             }
             next = IS_RECORD ? iterable.next : iterator.next;
             while (!(step = call(next, iterator)).done) {
+                var value = step.value;
                 try {
-                    result = callFn(step.value);
+                    result = callFn(value);
                 } catch (error) {
-                    iteratorClose(iterator, "throw", error);
+                    if (iterator) iteratorClose(iterator, "throw", error); else throw error;
                 }
                 if (typeof result == "object" && result && isPrototypeOf(ResultPrototype, result)) return result;
             }
@@ -3112,7 +3130,7 @@
         if (hasRequiredEnvironmentIsIos) return environmentIsIos;
         hasRequiredEnvironmentIsIos = 1;
         var userAgent = requireEnvironmentUserAgent();
-        environmentIsIos = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
+        environmentIsIos = /ipad|iphone|ipod/i.test(userAgent) && /applewebkit/i.test(userAgent);
         return environmentIsIos;
     }
     var task;
@@ -4307,7 +4325,7 @@
         var toObject = requireToObject();
         var toAbsoluteIndex = requireToAbsoluteIndex();
         var lengthOfArrayLike = requireLengthOfArrayLike();
-        arrayFill = function fill(value) {
+        arrayFill = [].fill || function fill(value) {
             var O = toObject(this);
             var length = lengthOfArrayLike(O);
             var argumentsLength = arguments.length;
@@ -4494,23 +4512,39 @@
         var $TypeError = TypeError;
         var MAX_SAFE_INTEGER = 9007199254740991;
         doesNotExceedSafeInteger = function(it) {
-            if (it > MAX_SAFE_INTEGER) throw $TypeError("Maximum allowed index exceeded");
+            if (it > MAX_SAFE_INTEGER) throw new $TypeError("Maximum allowed index exceeded");
             return it;
         };
         return doesNotExceedSafeInteger;
     }
-    var createProperty;
-    var hasRequiredCreateProperty;
-    function requireCreateProperty() {
-        if (hasRequiredCreateProperty) return createProperty;
-        hasRequiredCreateProperty = 1;
+    var arraySetLength;
+    var hasRequiredArraySetLength;
+    function requireArraySetLength() {
+        if (hasRequiredArraySetLength) return arraySetLength;
+        hasRequiredArraySetLength = 1;
         var DESCRIPTORS = requireDescriptors();
-        var definePropertyModule = requireObjectDefineProperty();
-        var createPropertyDescriptor = requireCreatePropertyDescriptor();
-        createProperty = function(object, key, value) {
-            if (DESCRIPTORS) definePropertyModule.f(object, key, createPropertyDescriptor(0, value)); else object[key] = value;
+        var isArray = requireIsArray();
+        var $TypeError = TypeError;
+        var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+        var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS && !function() {
+            if (this !== undefined) return true;
+            try {
+                Object.defineProperty([], "length", {
+                    writable: false
+                }).length = 1;
+            } catch (error) {
+                return error instanceof TypeError;
+            }
+        }();
+        arraySetLength = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function(O, length) {
+            if (isArray(O) && !getOwnPropertyDescriptor(O, "length").writable) {
+                throw new $TypeError("Cannot set read only .length");
+            }
+            return O.length = length;
+        } : function(O, length) {
+            return O.length = length;
         };
-        return createProperty;
+        return arraySetLength;
     }
     var hasRequiredEs_array_concat;
     function requireEs_array_concat() {
@@ -4524,6 +4558,7 @@
         var lengthOfArrayLike = requireLengthOfArrayLike();
         var doesNotExceedSafeInteger = requireDoesNotExceedSafeInteger();
         var createProperty = requireCreateProperty();
+        var setArrayLength = requireArraySetLength();
         var arraySpeciesCreate = requireArraySpeciesCreate();
         var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
         var wellKnownSymbol = requireWellKnownSymbol();
@@ -4562,7 +4597,7 @@
                         createProperty(A, n++, E);
                     }
                 }
-                A.length = n;
+                setArrayLength(A, n);
                 return A;
             }
         });
@@ -4796,17 +4831,25 @@
         var UNSUPPORTED_Y = stickyHelpers.BROKEN_CARET;
         var NPCG_INCLUDED = /()??/.exec("")[1] !== undefined;
         var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED || UNSUPPORTED_Y || UNSUPPORTED_DOT_ALL || UNSUPPORTED_NCG;
+        var setGroups = function(re, groups) {
+            var object = re.groups = create(null);
+            for (var i = 0; i < groups.length; i++) {
+                var group = groups[i];
+                object[group[0]] = re[group[1]];
+            }
+        };
         if (PATCH) {
             patchedExec = function exec(string) {
                 var re = this;
                 var state = getInternalState(re);
                 var str = toString(string);
                 var raw = state.raw;
-                var result, reCopy, lastIndex, match, i, object, group;
+                var result, reCopy, lastIndex;
                 if (raw) {
                     raw.lastIndex = re.lastIndex;
                     result = call(patchedExec, raw, str);
                     re.lastIndex = raw.lastIndex;
+                    if (result && state.groups) setGroups(result, state.groups);
                     return result;
                 }
                 var groups = state.groups;
@@ -4821,8 +4864,9 @@
                         flags += "g";
                     }
                     strCopy = stringSlice(str, re.lastIndex);
-                    if (re.lastIndex > 0 && (!re.multiline || re.multiline && charAt(str, re.lastIndex - 1) !== "\n")) {
-                        source = "(?: " + source + ")";
+                    var prevChar = re.lastIndex > 0 && charAt(str, re.lastIndex - 1);
+                    if (re.lastIndex > 0 && (!re.multiline || re.multiline && prevChar !== "\n" && prevChar !== "\r" && prevChar !== "\u2028" && prevChar !== "\u2029")) {
+                        source = "(?: (?:" + source + "))";
                         strCopy = " " + strCopy;
                         charsAdded++;
                     }
@@ -4832,10 +4876,10 @@
                     reCopy = new RegExp("^" + source + "$(?!\\s)", flags);
                 }
                 if (UPDATES_LAST_INDEX_WRONG) lastIndex = re.lastIndex;
-                match = call(nativeExec, sticky ? reCopy : re, strCopy);
+                var match = call(nativeExec, sticky ? reCopy : re, strCopy);
                 if (sticky) {
                     if (match) {
-                        match.input = stringSlice(match.input, charsAdded);
+                        match.input = str;
                         match[0] = stringSlice(match[0], charsAdded);
                         match.index = re.lastIndex;
                         re.lastIndex += match[0].length;
@@ -4845,18 +4889,12 @@
                 }
                 if (NPCG_INCLUDED && match && match.length > 1) {
                     call(nativeReplace, match[0], reCopy, function() {
-                        for (i = 1; i < arguments.length - 2; i++) {
+                        for (var i = 1; i < arguments.length - 2; i++) {
                             if (arguments[i] === undefined) match[i] = undefined;
                         }
                     });
                 }
-                if (match && groups) {
-                    match.groups = object = create(null);
-                    for (i = 0; i < groups.length; i++) {
-                        group = groups[i];
-                        object[group[0]] = match[group[1]];
-                    }
-                }
+                if (match && groups) setGroups(match, groups);
                 return match;
             };
         }
@@ -4907,12 +4945,14 @@
                 var execCalled = false;
                 var re = /a/;
                 if (KEY === "split") {
-                    re = {};
-                    re.constructor = {};
-                    re.constructor[SPECIES] = function() {
+                    var constructor = {};
+                    constructor[SPECIES] = function() {
                         return re;
                     };
-                    re.flags = "";
+                    re = {
+                        constructor: constructor,
+                        flags: ""
+                    };
                     re[SYMBOL] = /./[SYMBOL];
                 }
                 re.exec = function() {
@@ -4956,7 +4996,7 @@
         hasRequiredAdvanceStringIndex = 1;
         var charAt = requireStringMultibyte().charAt;
         advanceStringIndex = function(S, index, unicode) {
-            return index + (unicode ? charAt(S, index).length : 1);
+            return index + (unicode ? charAt(S, index).length || 1 : 1);
         };
         return advanceStringIndex;
     }
@@ -5161,17 +5201,17 @@
             }, function(string, replaceValue) {
                 var rx = anObject(this);
                 var S = toString(string);
-                if (typeof replaceValue == "string" && stringIndexOf(replaceValue, UNSAFE_SUBSTITUTE) === -1 && stringIndexOf(replaceValue, "$<") === -1) {
-                    var res = maybeCallNative(nativeReplace, rx, S, replaceValue);
-                    if (res.done) return res.value;
-                }
                 var functionalReplace = isCallable(replaceValue);
                 if (!functionalReplace) replaceValue = toString(replaceValue);
                 var flags = toString(getRegExpFlags(rx));
-                var global = stringIndexOf(flags, "g") !== -1;
+                if (typeof replaceValue == "string" && !~stringIndexOf(replaceValue, UNSAFE_SUBSTITUTE) && !~stringIndexOf(replaceValue, "$<") && !~stringIndexOf(flags, "y")) {
+                    var res = maybeCallNative(nativeReplace, rx, S, replaceValue);
+                    if (res.done) return res.value;
+                }
+                var global = !!~stringIndexOf(flags, "g");
                 var fullUnicode;
                 if (global) {
-                    fullUnicode = stringIndexOf(flags, "u") !== -1;
+                    fullUnicode = !!~stringIndexOf(flags, "u") || !!~stringIndexOf(flags, "v");
                     rx.lastIndex = 0;
                 }
                 var results = [];
@@ -5228,6 +5268,7 @@
         var toLength = requireToLength();
         var toString = requireToString();
         var getMethod = requireGetMethod();
+        var getRegExpFlags = requireRegexpGetFlags();
         var regExpExec = requireRegexpExecAbstract();
         var stickyHelpers = requireRegexpStickyHelpers();
         var fails = requireFails();
@@ -5236,6 +5277,7 @@
         var min = Math.min;
         var push = uncurryThis([].push);
         var stringSlice = uncurryThis("".slice);
+        var stringIndexOf = uncurryThis("".indexOf);
         var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = !fails(function() {
             var re = /(?:)/;
             var originalExec = re.exec;
@@ -5262,8 +5304,11 @@
                     if (res.done) return res.value;
                 }
                 var C = speciesConstructor(rx, RegExp);
-                var unicodeMatching = rx.unicode;
-                var flags = (rx.ignoreCase ? "i" : "") + (rx.multiline ? "m" : "") + (rx.unicode ? "u" : "") + (UNSUPPORTED_Y ? "g" : "y");
+                var flags = toString(getRegExpFlags(rx));
+                var unicodeMatching = !!~stringIndexOf(flags, "u") || !!~stringIndexOf(flags, "v");
+                if (UNSUPPORTED_Y) {
+                    if (!~stringIndexOf(flags, "g")) flags += "g";
+                } else if (!~stringIndexOf(flags, "y")) flags += "y";
                 var splitter = new C(UNSUPPORTED_Y ? "^(?:" + rx.source + ")" : rx, flags);
                 var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
                 if (lim === 0) return [];
@@ -6076,16 +6121,19 @@
         var isConstructor = requireIsConstructor();
         var lengthOfArrayLike = requireLengthOfArrayLike();
         var createProperty = requireCreateProperty();
-        var getIterator = requireGetIterator();
-        var getIteratorMethod = requireGetIteratorMethod();
+        var setArrayLength = requireArraySetLength();
+        var getIterator = requireGetIteratorInternal();
+        var getIteratorMethod = requireGetIteratorMethodInternal();
+        var iteratorClose = requireIteratorClose();
+        var doesNotExceedSafeInteger = requireDoesNotExceedSafeInteger();
         var $Array = Array;
         arrayFrom = function from(arrayLike) {
-            var O = toObject(arrayLike);
             var IS_CONSTRUCTOR = isConstructor(this);
             var argumentsLength = arguments.length;
             var mapfn = argumentsLength > 1 ? arguments[1] : undefined;
             var mapping = mapfn !== undefined;
             if (mapping) mapfn = bind(mapfn, argumentsLength > 2 ? arguments[2] : undefined);
+            var O = toObject(arrayLike);
             var iteratorMethod = getIteratorMethod(O);
             var index = 0;
             var length, result, step, iterator, next, value;
@@ -6094,8 +6142,17 @@
                 iterator = getIterator(O, iteratorMethod);
                 next = iterator.next;
                 for (;!(step = call(next, iterator)).done; index++) {
+                    try {
+                        doesNotExceedSafeInteger(index);
+                    } catch (error) {
+                        iteratorClose(iterator, "throw", error);
+                    }
                     value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [ step.value, index ], true) : step.value;
-                    createProperty(result, index, value);
+                    try {
+                        createProperty(result, index, value);
+                    } catch (error) {
+                        iteratorClose(iterator, "throw", error);
+                    }
                 }
             } else {
                 length = lengthOfArrayLike(O);
@@ -6105,7 +6162,7 @@
                     createProperty(result, index, value);
                 }
             }
-            result.length = index;
+            setArrayLength(result, index);
             return result;
         };
         return arrayFrom;
@@ -6201,7 +6258,7 @@
             var result = "";
             var brackets = false;
             var chr;
-            for (;index <= length; index++) {
+            for (;index < length; index++) {
                 chr = charAt(string, index);
                 if (chr === "\\") {
                     result += chr + charAt(string, ++index);
@@ -6231,10 +6288,14 @@
             var groupid = 0;
             var groupname = "";
             var chr;
-            for (;index <= length; index++) {
+            for (;index < length; index++) {
                 chr = charAt(string, index);
                 if (chr === "\\") {
                     chr += charAt(string, ++index);
+                    if (!ncg && charAt(chr, 1) === "\\") {
+                        result += "\\x5c";
+                        continue;
+                    }
                 } else if (chr === "]") {
                     brackets = false;
                 } else if (!brackets) switch (true) {
@@ -6244,14 +6305,13 @@
 
                   case chr === "(":
                     result += chr;
-                    if (stringSlice(string, index + 1, index + 3) === "?:") {
-                        continue;
-                    }
                     if (exec(IS_NCG, stringSlice(string, index + 1))) {
                         index += 2;
                         ncg = true;
+                        groupid++;
+                    } else if (charAt(string, index + 1) !== "?") {
+                        groupid++;
                     }
-                    groupid++;
                     continue;
 
                   case chr === ">" && ncg:
@@ -6265,6 +6325,13 @@
                     continue;
                 }
                 if (ncg) groupname += chr; else result += chr;
+            }
+            for (var ni = 0; ni < named.length; ni++) {
+                var backref = "\\k<" + named[ni][0] + ">";
+                var numRef = "\\" + named[ni][1];
+                while (stringIndexOf(result, backref) > -1) {
+                    result = replace(result, backref, numRef);
+                }
             }
             return [ result, named ];
         };
@@ -7054,7 +7121,9 @@
             return [ function search(regexp) {
                 var O = requireObjectCoercible(this);
                 var searcher = isObject(regexp) ? getMethod(regexp, SEARCH) : undefined;
-                return searcher ? call(searcher, regexp, O) : new RegExp(regexp)[SEARCH](toString(O));
+                if (searcher) return call(searcher, regexp, O);
+                var S = toString(O);
+                return new RegExp(regexp)[SEARCH](S);
             }, function(string) {
                 var rx = anObject(this);
                 var S = toString(string);
@@ -7750,10 +7819,13 @@
         var BROKEN_ON_SPARSE = fails(function() {
             return !Array(1).includes();
         });
+        var BROKEN_ON_SPARSE_WITH_FROM_INDEX = fails(function() {
+            return [ , 1 ].includes(undefined, 1);
+        });
         $({
             target: "Array",
             proto: true,
-            forced: BROKEN_ON_SPARSE
+            forced: BROKEN_ON_SPARSE || BROKEN_ON_SPARSE_WITH_FROM_INDEX
         }, {
             includes: function includes(el) {
                 return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
@@ -7776,6 +7848,7 @@
         var lengthOfArrayLike = requireLengthOfArrayLike();
         var toIndexedObject = requireToIndexedObject();
         var createProperty = requireCreateProperty();
+        var setArrayLength = requireArraySetLength();
         var wellKnownSymbol = requireWellKnownSymbol();
         var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
         var nativeSlice = requireArraySlice();
@@ -7808,7 +7881,7 @@
                 }
                 result = new (Constructor === undefined ? $Array : Constructor)(max(fin - k, 0));
                 for (n = 0; k < fin; k++, n++) if (k in O) createProperty(result, n, O[k]);
-                result.length = n;
+                setArrayLength(result, n);
                 return result;
             }
         });
@@ -8404,7 +8477,7 @@
         id: "accessibility",
         label: "Accessibility",
         folders: [ "brands", "regular", "solid" ],
-        icons: [ [ "accessible-icon" ], [ "address-card", "circle-question", "closed-captioning", "eye" ], [ "audio-description", "braille", "circle-info", "ear-deaf", "ear-listen", "eye-low-vision", "fingerprint", "hands", "hands-asl-interpreting", "handshake-angle", "person-cane", "person-walking-with-cane", "phone-volume", "question", "tty", "universal-access", "wheelchair", "wheelchair-move" ] ]
+        icons: [ [ "accessible-icon" ], [ "address-card", "circle-question", "closed-captioning", "eye" ], [ "audio-description", "braille", "circle-info", "closed-captioning-slash", "ear-deaf", "ear-listen", "eye-low-vision", "fingerprint", "hands", "hands-asl-interpreting", "handshake-angle", "person-cane", "person-walking-with-cane", "phone-volume", "question", "tty", "universal-access", "wheelchair", "wheelchair-move" ] ]
     }, {
         id: "alert",
         label: "Alert",
@@ -8429,7 +8502,7 @@
         id: "astronomy",
         label: "Astronomy",
         folders: [ "solid", "regular" ],
-        icons: [ [ "binoculars", "globe", "meteor", "satellite", "satellite-dish", "shuttle-space", "user-astronaut" ], [ "moon" ] ]
+        icons: [ [ "aquarius", "aries", "binoculars", "cancer", "capricorn", "gemini", "globe", "leo", "libra", "meteor", "pisces", "sagittarius", "satellite", "satellite-dish", "scorpio", "shuttle-space", "taurus", "user-astronaut", "virgo" ], [ "moon" ] ]
     }, {
         id: "automotive",
         label: "Automotive",
@@ -8609,7 +8682,7 @@
         id: "media-playback",
         label: "Media Playback",
         folders: [ "solid", "regular" ],
-        icons: [ [ "arrow-rotate-left", "arrow-rotate-right", "arrows-rotate", "backward", "backward-fast", "backward-step", "compress", "down-left-and-up-right-to-center", "eject", "expand", "forward", "forward-fast", "forward-step", "maximize", "minimize", "music", "pause", "phone-volume", "play", "plus-minus", "repeat", "rotate", "rotate-left", "rotate-right", "rss", "shuffle", "sliders", "stop", "up-right-and-down-left-from-center", "volume-high", "volume-low", "volume-off", "volume-xmark" ], [ "circle-pause", "circle-play", "circle-stop", "hand" ] ]
+        icons: [ [ "arrow-rotate-left", "arrow-rotate-right", "arrows-rotate", "backward", "backward-fast", "backward-step", "compress", "down-left-and-up-right-to-center", "eject", "expand", "forward", "forward-fast", "forward-step", "maximize", "minimize", "music", "pause", "phone-volume", "picture-in-picture", "play", "plus-minus", "repeat", "rotate", "rotate-left", "rotate-right", "rss", "shuffle", "sliders", "stop", "up-right-and-down-left-from-center", "volume", "volume-high", "volume-low", "volume-off", "volume-xmark" ], [ "circle-pause", "circle-play", "circle-stop", "hand" ] ]
     }, {
         id: "medical-health",
         label: "Medical + Health",
@@ -8629,7 +8702,7 @@
         id: "music-audio",
         label: "Music + Audio",
         folders: [ "solid", "regular", "brands" ],
-        icons: [ [ "compact-disc", "drum", "drum-steelpan", "guitar", "microphone", "microphone-lines", "microphone-lines-slash", "microphone-slash", "music", "radio", "record-vinyl", "sliders", "volume-high", "volume-low", "volume-off", "volume-xmark", "wave-square" ], [ "file-audio", "headphones" ], [ "napster", "soundcloud", "spotify" ] ]
+        icons: [ [ "compact-disc", "drum", "drum-steelpan", "guitar", "microphone", "microphone-lines", "microphone-lines-slash", "microphone-slash", "music", "radio", "record-vinyl", "sliders", "volume", "volume-high", "volume-low", "volume-off", "volume-xmark", "wave-square" ], [ "file-audio", "headphones" ], [ "napster", "soundcloud", "spotify" ] ]
     }, {
         id: "nature",
         label: "Nature",
@@ -8644,7 +8717,7 @@
         id: "photos-images",
         label: "Photos + Images",
         folders: [ "solid", "regular", "brands" ],
-        icons: [ [ "bolt", "bolt-lightning", "camera-retro", "camera-rotate", "chalkboard", "circle-half-stroke", "droplet", "eye-dropper", "film", "image-portrait", "minimize", "panorama", "photo-film", "sliders" ], [ "camera", "clone", "eye", "eye-slash", "file-image", "id-badge", "id-card", "image", "images" ], [ "unsplash" ] ]
+        icons: [ [ "bolt", "bolt-lightning", "camera-retro", "camera-rotate", "chalkboard", "circle-half-stroke", "droplet", "eye-dropper", "film", "image-portrait", "minimize", "panorama", "photo-film", "picture-in-picture", "sliders" ], [ "camera", "clone", "eye", "eye-slash", "file-image", "id-badge", "id-card", "image", "images" ], [ "unsplash" ] ]
     }, {
         id: "political",
         label: "Political",
@@ -8654,12 +8727,12 @@
         id: "punctuation-symbols",
         label: "Punctuation + Symbols",
         folders: [ "solid", "regular" ],
-        icons: [ [ "asterisk", "at", "check", "check-double", "circle-exclamation", "equals", "exclamation", "greater-than", "hashtag", "less-than", "minus", "percent", "plus", "question", "quote-left", "quote-right", "section", "single-quote-left", "single-quote-right" ], [ "circle-question" ] ]
+        icons: [ [ "aquarius", "aries", "asterisk", "at", "cancer", "capricorn", "check", "check-double", "circle-exclamation", "equals", "exclamation", "gemini", "greater-than", "hashtag", "leo", "less-than", "libra", "minus", "percent", "pisces", "plus", "question", "quote-left", "quote-right", "sagittarius", "scorpio", "section", "single-quote-left", "single-quote-right", "taurus", "virgo" ], [ "circle-question" ] ]
     }, {
         id: "religion",
         label: "Religion",
         folders: [ "solid" ],
-        icons: [ [ "ankh", "atom", "bahai", "book-bible", "book-journal-whills", "book-quran", "book-tanakh", "church", "cross", "dharmachakra", "dove", "gopuram", "hamsa", "hands-praying", "hanukiah", "jedi", "kaaba", "khanda", "menorah", "mosque", "om", "peace", "person-praying", "place-of-worship", "scroll-torah", "spaghetti-monster-flying", "star-and-crescent", "star-of-david", "synagogue", "torii-gate", "vihara", "yin-yang" ] ]
+        icons: [ [ "ankh", "aquarius", "aries", "atom", "bahai", "book-bible", "book-journal-whills", "book-quran", "book-tanakh", "cancer", "capricorn", "church", "cross", "dharmachakra", "dove", "gemini", "gopuram", "hamsa", "hands-praying", "hanukiah", "jedi", "kaaba", "khanda", "leo", "libra", "menorah", "mosque", "om", "peace", "person-praying", "pisces", "place-of-worship", "sagittarius", "scorpio", "scroll-torah", "spaghetti-monster-flying", "star-and-crescent", "star-of-david", "synagogue", "taurus", "torii-gate", "vihara", "virgo", "yin-yang" ] ]
     }, {
         id: "science",
         label: "Science",
