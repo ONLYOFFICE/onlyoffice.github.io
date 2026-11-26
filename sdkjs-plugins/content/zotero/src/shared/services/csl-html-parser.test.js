@@ -38,3 +38,25 @@ describe("parseHtmlFormatting", () => {
         expect(CslHtmlParser.parseHtmlFormatting("1 < 2").text).toBe("1 < 2");
     });
 });
+
+describe("purifyHtml", () => {
+    it("keeps of an inline style only the formatting citeproc writes", () => {
+        // A bibliography entry rewritten in Google Docs is pasted as it is.
+        const html = CslHtmlParser.purifyHtml(
+            '<span style="font-size:72pt;color:red">BIG</span> '
+                + '<span style="font-variant: small-caps; font-family: Comic Sans MS">Caps</span>',
+        );
+        expect(html).toBe('<span>BIG</span> <span style="font-variant:small-caps;">Caps</span>');
+    });
+
+    it("leaves citeproc's own styles as they are", () => {
+        const html = '<span style="font-variant:small-caps;">A</span>'
+            + '<span style="text-decoration:underline;">B</span>'
+            + '<span style="white-space:nowrap">&thinsp;</span>';
+        expect(CslHtmlParser.purifyHtml(html)).toBe(html.replace("nowrap\"", "nowrap;\"").replace("&thinsp;", " "));
+    });
+
+    it("drops a style that hides something in a value", () => {
+        expect(CslHtmlParser.purifyHtml('<div style="font-weight:expression(alert(1))">x</div>')).toBe("<div>x</div>");
+    });
+});

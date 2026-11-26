@@ -9,6 +9,7 @@ import {
     makeService,
 } from "../helpers/citation-service.js";
 import { zoteroWordCitation } from "../fixtures/fields.js";
+import { CslHtmlParser } from "@shared/services/csl-html-parser.js";
 
 const alpha = item("ALPHA", { author: [{ family: "Alpha", given: "A." }], title: "First Book" });
 const beta = item("BETA", { author: [{ family: "Beta", given: "B." }], title: "Second Book" });
@@ -258,6 +259,30 @@ describe("field data", () => {
         const itemData = citationOf(doc.written[0]).citationItems[0].itemData;
         expect(itemData.version).toBe("3.1");
         expect(itemData.abstract).toBe("A toolkit.");
+    });
+});
+
+describe("a bibliography entry rewritten in Google Docs", () => {
+    it("is pasted with its formatting but no other style", async () => {
+        const uri = (/** @type {string} */ key) => "http://zotero.org/users/1/items/" + key;
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [
+                citationField("1", "c1", [alpha]),
+                bibliographyField("9", {
+                    custom: [[[uri("ALPHA")], 'CUSTOM <span style="font-size:72pt;color:red">BIG</span> <b>bold</b> <img src=x onerror="alert(1)"> end']],
+                }),
+            ],
+        });
+
+        await service.insertBibliography();
+
+        // Cleaned as the document service does before it pastes the HTML.
+        const pasted = CslHtmlParser.purifyHtml(doc.written.find((field) => field.FieldId === "9").Content);
+        expect(pasted).toContain("<b>bold</b>");
+        expect(pasted).toContain("<span>BIG</span>");
+        expect(pasted).not.toMatch(/font-size|color|<img|onerror/);
     });
 });
 

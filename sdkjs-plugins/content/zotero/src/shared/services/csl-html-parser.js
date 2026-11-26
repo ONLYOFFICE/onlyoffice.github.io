@@ -64,7 +64,7 @@ class CslHtmlParser {
      *  - any `on*` event handler (e.g. `onclick`, `onerror`);
      *  - URL-like attributes pointing to `javascript:` / `vbscript:` /
      *    `data:` schemes;
-     *  - inline `style` containing `expression(` or `javascript:`.
+     *  - inline `style` but for the declarations of text formatting.
      * @param {Element} el
      */
     static #stripDangerousAttributes(el) {
@@ -87,17 +87,61 @@ class CslHtmlParser {
                 }
             }
 
-            if (name === "style" && /expression\s*\(|javascript\s*:/i.test(value)) {
-                el.removeAttribute(attr.name);
+            if (name === "style") {
+                const style = CslHtmlParser.#keepTextFormatting(value);
+                if (style) {
+                    el.setAttribute("style", style);
+                } else {
+                    el.removeAttribute(attr.name);
+                }
             }
         }
+    }
+
+    /**
+     * The CSS properties of the formatting citeproc writes; with any other,
+     * such as size, colour or font, the text would be pasted into the
+     * document so. An entry rewritten in Google Docs is HTML of its own.
+     * @type {Set<string>}
+     */
+    static #textFormatting = new Set([
+        "font-style",
+        "font-weight",
+        "font-variant",
+        "font-variant-caps",
+        "text-decoration",
+        "text-decoration-line",
+        "vertical-align",
+        "white-space",
+    ]);
+
+    /**
+     * An inline style with only the declarations of text formatting, each
+     * written as citeproc does: "font-variant:small-caps;".
+     * @param {string} style
+     * @returns {string} "" if none is left
+     */
+    static #keepTextFormatting(style) {
+        return style
+            .split(";")
+            .map((declaration) => {
+                const colon = declaration.indexOf(":");
+                if (colon === -1) return "";
+                const property = declaration.slice(0, colon).trim().toLowerCase();
+                const value = declaration.slice(colon + 1).trim().toLowerCase();
+                return CslHtmlParser.#textFormatting.has(property) && /^[a-z0-9 -]+$/.test(value)
+                    ? property + ":" + value + ";"
+                    : "";
+            })
+            .join("");
     }
 
     /**
      * Strip every tag that is not in {@link CslHtmlParser.#allowedTags},
      * preserving its text content and any allowed descendants.
      * Allowed tags keep their attributes, except those that can lead to XSS
-     * (event handlers, javascript:/vbscript:/data: URLs in href/src-like attrs).
+     * (event handlers, javascript:/vbscript:/data: URLs in href/src-like attrs)
+     * and the inline styles of anything but text formatting.
      * @param {string} html - HTML string to sanitize
      * @returns {string} Sanitized HTML string
      */
