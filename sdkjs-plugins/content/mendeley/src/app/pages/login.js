@@ -231,8 +231,11 @@ class LoginPage {
             if (event.type !== "button:click") {
                 return;
             }
-            navigator.clipboard.writeText(self._redirectConfigField.getValue());
-            window.open("https://dev.mendeley.com/myapps.html", "_blank");
+            // Opened after copying: the new tab takes the focus the
+            // fallback copy needs.
+            self._copyRedirectUrl().then(function () {
+                window.open("https://dev.mendeley.com/myapps.html", "_blank");
+            });
         });
 
         this._loginBtn.subscribe(function (event) {
@@ -259,6 +262,52 @@ class LoginPage {
             self._show();
             return true;
         };
+    }
+
+    /**
+     * Copies with the Clipboard API, and where the editor's frame does not
+     * allow it, selects the field's text and copies it the old way, which
+     * needs no permission.
+     * @returns {Promise<void>}
+     */
+    _copyRedirectUrl() {
+        const self = this;
+        const text = this._redirectConfigField.getValue();
+        return new Promise(function (resolve, reject) {
+            if (!navigator.clipboard || !navigator.clipboard.writeText) {
+                reject(new Error("The Clipboard API is not available."));
+                return;
+            }
+            navigator.clipboard.writeText(text).then(resolve, reject);
+        }).catch(function (error) {
+            console.warn(
+                "Mendeley: could not copy the redirect URL with the Clipboard API, " +
+                    "probably because the editor frame lacks the clipboard-write " +
+                    "permission. Copying it by selecting the field instead.",
+                error,
+            );
+            self._copyBySelection();
+        });
+    }
+
+    _copyBySelection() {
+        const input = /** @type {HTMLInputElement | null} */ (
+            document.getElementById("redirectConfig")
+        );
+        if (!input) return;
+        input.select();
+        let copied = false;
+        try {
+            copied = document.execCommand("copy");
+        } catch (error) {
+            console.error(error);
+        }
+        if (!copied) {
+            console.error(
+                "Mendeley: could not copy the redirect URL. It is selected " +
+                    "in the field, copy it by hand.",
+            );
+        }
     }
 
     _authenticate() {
