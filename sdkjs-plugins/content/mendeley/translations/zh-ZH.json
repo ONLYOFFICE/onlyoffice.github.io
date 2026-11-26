@@ -113,5 +113,9 @@
     "Failed to load language": "加载语言失败",
     "Invalid CSL style file": "无效的 CSL 样式文件",
     "More Styles...": "更多样式...",
-    "Select language": "选择语言"
+    "Select language": "选择语言",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "此引用已被手动编辑。编辑它将放弃这些修改：引用会像其他引用一样重新格式化。是否继续？",
+    "Citations edited by hand": "手动编辑的引用",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "无论样式和其他设置如何，手动编辑的引用都会保留其文本。本文档中的数量：",
+    "Do you want to discard those edits and format these citations with the new settings?": "是否放弃这些修改，并按新设置格式化这些引用？"
 }

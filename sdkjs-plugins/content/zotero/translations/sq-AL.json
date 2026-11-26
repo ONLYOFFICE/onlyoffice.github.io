@@ -117,5 +117,13 @@
     "Operation completed successfully": "Veprimi përfundoi me sukses",
     "Please be cautious": "Ju lutemi bëni kujdes"
 ,
-"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Një citim në këtë dokument është i dëmtuar dhe nuk mund të përpunohet. Ju lutem hiqeni ose zëvendësojeni."
+"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Një citim në këtë dokument është i dëmtuar dhe nuk mund të përpunohet. Ju lutem hiqeni ose zëvendësojeni.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Ky citat është ndryshuar me dorë. Nëse e redaktoni, ato ndryshime humbasin: citati formatohet sërish si të tjerët. Dëshironi të vazhdoni?",
+    "Citations edited by hand": "Citate të ndryshuara me dorë",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Citatet e ndryshuara me dorë e ruajnë tekstin e tyre pavarësisht stilit dhe cilësimeve të tjera. Numri i tyre në këtë dokument:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Dëshironi t'i anuloni ato ndryshime dhe t'i formatoni këto citate me cilësimet e reja?",
+    "Repair broken citations": "Riparoni citatet e dëmtuara",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Nëse citatet janë kopjuar nga një dokument tjetër, mund të kenë humbur formatimin e fushës dhe tani shfaqen si tekst i thjeshtë. Ky funksion kontrollon dokumentin dhe i rikthen ato.",
+    "Update the bibliography when inserting a citation": "Përditëso bibliografinë kur futet një citat",
+    "Update other citations when inserting a new one": "Përditëso citatet e tjera kur futet një i ri"
 }

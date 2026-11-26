@@ -224,6 +224,16 @@ class ContentControlCitationDocument extends CitationDocument {
     }
 
     /**
+     * The override is dropped with the text recorded anew.
+     * @param {CSLCitation} cslCitation
+     * @param {string} text
+     */
+    discardManualEdit(cslCitation, text) {
+        cslCitation.clearDoNotUpdate();
+        this.recordText(cslCitation, text, null);
+    }
+
+    /**
      * @param {ContentControlProperties} control
      * @returns {DocCitation}
      */

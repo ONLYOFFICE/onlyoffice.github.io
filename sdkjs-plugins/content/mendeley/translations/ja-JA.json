@@ -113,5 +113,9 @@
     "Failed to load language": "言語の読み込みに失敗しました",
     "Invalid CSL style file": "無効なCSLスタイルファイル",
     "More Styles...": "その他のスタイル...",
-    "Select language": "言語を選択"
+    "Select language": "言語を選択",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "この引用は手動で編集されています。編集するとその変更は失われ、引用は他の引用と同様に再びフォーマットされます。続行しますか?",
+    "Citations edited by hand": "手動で編集された引用",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "手動で編集された引用は、スタイルやその他の設定に関係なくテキストが保持されます。この文書内の数:",
+    "Do you want to discard those edits and format these citations with the new settings?": "これらの変更を破棄し、新しい設定でこれらの引用をフォーマットしますか?"
 }

@@ -113,5 +113,9 @@
     "Failed to load language": "Učitavanje jezika nije uspelo",
     "Invalid CSL style file": "Neispravna CSL datoteka stila",
     "More Styles...": "Još stilova...",
-    "Select language": "Izaberite jezik"
+    "Select language": "Izaberite jezik",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Ovaj citat je ručno izmenjen. Ako ga izmenite, te izmene će biti izgubljene: citat će ponovo biti formatiran kao ostali. Da li želite da nastavite?",
+    "Citations edited by hand": "Ručno izmenjeni citati",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Ručno izmenjeni citati zadržavaju svoj tekst bez obzira na stil i druga podešavanja. Njihov broj u ovom dokumentu:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Da li želite da odbacite te izmene i formatirate ove citate prema novim podešavanjima?"
 }

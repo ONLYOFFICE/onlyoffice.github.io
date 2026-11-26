@@ -736,6 +736,15 @@ import "../styles.css";
                 return;
             }
 
+            // Zotero leaves the citations edited by hand as they are; asked
+            // here, the new settings reach them too.
+            const manualEdits = await citationService.countManualEdits();
+            const options = {
+                discardManualEdits:
+                    manualEdits > 0 &&
+                    (await citationService.confirmDiscardManualEdits(manualEdits)),
+            };
+
             // The settings page is closed by now, while every citation of
             // the document is formatted anew, which can take a while.
             Loader.setText("Zotero (" + translate("Updating citations") + ")");
@@ -748,6 +757,7 @@ import "../styles.css";
             let updateFn = citationService.updateCslItems.bind(
                 citationService,
                 true,
+                options,
             );
 
             if ([newState.styleFormat, oldState.styleFormat].includes("note")) {
@@ -757,22 +767,30 @@ import "../styles.css";
                             citationService.switchingBetweenNotesAndText.bind(
                                 citationService,
                                 newState.notesStyle,
+                                undefined,
+                                options,
                             );
                     } else {
                         updateFn =
                             citationService.switchingBetweenNotesAndText.bind(
                                 citationService,
+                                undefined,
+                                undefined,
+                                options,
                             );
                     }
                 } else if (newState.notesStyle !== oldState.notesStyle) {
                     updateFn = citationService.convertNotesStyle.bind(
                         citationService,
                         newState.notesStyle,
+                        undefined,
+                        options,
                     );
                 } else {
                     updateFn = citationService.updateCslItems.bind(
                         citationService,
                         true,
+                        options,
                     );
                 }
             }

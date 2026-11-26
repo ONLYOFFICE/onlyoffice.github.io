@@ -113,5 +113,9 @@
     "Failed to load language": "Kan de taal niet laden",
     "Invalid CSL style file": "Ongeldig CSL-stijlbestand",
     "More Styles...": "Meer stijlen...",
-    "Select language": "Selecteer taal"
+    "Select language": "Selecteer taal",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Dit citaat is handmatig bewerkt. Door het te bewerken gaan die wijzigingen verloren: het citaat wordt weer net als de andere opgemaakt. Wilt u doorgaan?",
+    "Citations edited by hand": "Handmatig bewerkte citaten",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Handmatig bewerkte citaten behouden hun tekst, ongeacht de stijl en de andere instellingen. Hun aantal in dit document:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Wilt u die wijzigingen ongedaan maken en deze citaten opmaken met de nieuwe instellingen?"
 }

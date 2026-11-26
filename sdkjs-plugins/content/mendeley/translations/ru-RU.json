@@ -120,5 +120,9 @@
     "Failed to load language": "Не удалось загрузить язык",
     "Invalid CSL style file": "Недопустимый файл стиля CSL",
     "More Styles...": "Другие стили...",
-    "Select language": "Выберите язык"
+    "Select language": "Выберите язык",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Эта цитата была изменена вручную. Если её отредактировать, эти изменения пропадут: цитата снова будет оформляться, как остальные. Продолжить?",
+    "Citations edited by hand": "Цитаты, изменённые вручную",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Цитаты, изменённые вручную, сохраняют свой текст при любом стиле и других настройках. Их число в этом документе:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Отменить эти изменения и оформить эти цитаты по новым настройкам?"
 }

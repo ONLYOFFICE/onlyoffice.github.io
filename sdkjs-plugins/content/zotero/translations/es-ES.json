@@ -116,5 +116,13 @@
     "Information": "Información",
     "Operation completed successfully": "Operación completada correctamente",
     "Please be cautious": "Proceda con precaución",
-    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Una cita en este documento está dañada y no se puede procesar. Elimínela o reemplácela."
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Una cita en este documento está dañada y no se puede procesar. Elimínela o reemplácela.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Esta cita se editó manualmente. Al editarla se pierden esos cambios: la cita se vuelve a formatear como las demás. ¿Desea continuar?",
+    "Citations edited by hand": "Citas editadas manualmente",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Las citas editadas manualmente conservan su texto independientemente del estilo y de los demás ajustes. Su número en este documento:",
+    "Do you want to discard those edits and format these citations with the new settings?": "¿Desea descartar esos cambios y formatear estas citas con los nuevos ajustes?",
+    "Repair broken citations": "Reparar citas dañadas",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Si las citas se copiaron desde otro documento, es posible que hayan perdido su formato de campo y ahora aparezcan como texto sin formato. Esta función revisa el documento y las restaura.",
+    "Update the bibliography when inserting a citation": "Actualizar la bibliografía al insertar una cita",
+    "Update other citations when inserting a new one": "Actualizar las demás citas al insertar una nueva"
 }

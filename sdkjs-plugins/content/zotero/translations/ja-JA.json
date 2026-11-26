@@ -116,5 +116,13 @@
     "Information": "情報",
     "Operation completed successfully": "操作が正常に完了しました",
     "Please be cautious": "ご注意ください",
-    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "このドキュメント内の引用が破損しており、処理できません。削除または置き換えてください。"
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "このドキュメント内の引用が破損しており、処理できません。削除または置き換えてください。",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "この引用は手動で編集されています。編集するとその変更は失われ、引用は他の引用と同様に再びフォーマットされます。続行しますか?",
+    "Citations edited by hand": "手動で編集された引用",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "手動で編集された引用は、スタイルやその他の設定に関係なくテキストが保持されます。この文書内の数:",
+    "Do you want to discard those edits and format these citations with the new settings?": "これらの変更を破棄し、新しい設定でこれらの引用をフォーマットしますか?",
+    "Repair broken citations": "壊れた引用を修復",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "引用を別の文書からコピーした場合、フィールドの書式が失われ、プレーンテキストとして表示されることがあります。文書をチェックして、それらを復元します。",
+    "Update the bibliography when inserting a citation": "引用を挿入するときに文献を更新する",
+    "Update other citations when inserting a new one": "新しい引用を挿入するときに他の引用を更新する"
 }

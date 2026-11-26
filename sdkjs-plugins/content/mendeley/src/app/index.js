@@ -597,12 +597,21 @@ const DESKTOP_SIGN_IN_ENABLED = false;
         });
 
         settings.onChangeState(async function (newState, oldState) {
+            // Citations edited by hand keep their text; asked here, the new
+            // settings reach them too.
+            const manualEdits = await citationService.countManualEdits();
+            const options = {
+                discardManualEdits:
+                    manualEdits > 0 &&
+                    (await citationService.confirmDiscardManualEdits(manualEdits)),
+            };
+
             await onStartAction(
                 true,
                 "Mendeley (" + translate("Updating citations") + ")",
             );
             
-            let updateFn = citationService.updateCslItems.bind(citationService, true);
+            let updateFn = citationService.updateCslItems.bind(citationService, true, options);
 
             if ([newState.styleFormat, oldState.styleFormat].includes("note")) {
                 if (newState.styleFormat !== oldState.styleFormat) {
@@ -610,13 +619,15 @@ const DESKTOP_SIGN_IN_ENABLED = false;
                         updateFn = citationService.switchingBetweenNotesAndText.bind(
                             citationService,
                             newState.notesStyle,
-                            null
+                            null,
+                            options
                         );
                     } else {
                         updateFn = citationService.switchingBetweenNotesAndText.bind(
                             citationService,
                             null,
-                            oldState.notesStyle
+                            oldState.notesStyle,
+                            options
                         );
                     }
                 } else if (newState.notesStyle !== oldState.notesStyle) {
@@ -624,11 +635,13 @@ const DESKTOP_SIGN_IN_ENABLED = false;
                         citationService,
                         newState.notesStyle,
                         oldState.notesStyle,
+                        options,
                     );
                 } else {
                     updateFn = citationService.updateCslItemsInNotes.bind(
                         citationService,
-                        newState.notesStyle
+                        newState.notesStyle,
+                        options
                     );
                 }
             }

@@ -158,6 +158,18 @@ export function describeCitationDocument(name, makeDocument) {
             expect(citation.getDoNotUpdate()).toBe(true);
         });
 
+        it("gives up a manual edit, taking the edited text for the formatted one", () => {
+            const doc = makeDocument();
+            const citation = new CSLCitation("c1");
+            citation.fillFromObject(SMITH);
+            doc.recordManualEdit(citation, "Smith, Book.", "Smith, my edit.");
+
+            doc.discardManualEdit(citation, "Smith, my edit.");
+            expect(citation.getDoNotUpdate()).toBe(false);
+            // So an update overwrites it without asking whether to keep it.
+            expect(citation.getPlainCitation()).toBe("Smith, my edit.");
+        });
+
         it("turns its citations into text", async () => {
             const doc = makeDocument();
             await doc.insertCitation("(Smith, 2020)", SMITH, null);

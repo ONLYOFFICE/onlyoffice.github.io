@@ -113,5 +113,9 @@
     "Failed to load language": "No se ha podido cargar el idioma",
     "Invalid CSL style file": "Archivo de estilo CSL no válido",
     "More Styles...": "Más estilos...",
-    "Select language": "Seleccionar idioma"
+    "Select language": "Seleccionar idioma",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Esta cita se editó manualmente. Al editarla se pierden esos cambios: la cita se vuelve a formatear como las demás. ¿Desea continuar?",
+    "Citations edited by hand": "Citas editadas manualmente",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Las citas editadas manualmente conservan su texto independientemente del estilo y de los demás ajustes. Su número en este documento:",
+    "Do you want to discard those edits and format these citations with the new settings?": "¿Desea descartar esos cambios y formatear estas citas con los nuevos ajustes?"
 }

@@ -15,6 +15,22 @@ const alpha = item("ALPHA", { author: [{ family: "Alpha", given: "A." }], title:
 const beta = item("BETA", { author: [{ family: "Beta", given: "B." }], title: "Second Book" });
 const gamma = item("GAMMA", { author: [{ family: "Gamma", given: "C." }], title: "Third Book" });
 
+/**
+ * A citation the user edited by hand and chose to keep so: Zotero marks it
+ * not to update, its text in the document no longer the formatted one.
+ * @param {string} fieldId
+ * @param {string} citationID
+ * @param {Array<Object>} items
+ */
+function editedByHand(fieldId, citationID, items) {
+    const field = citationField(fieldId, citationID, items, "(Alpha, my edit)");
+    const data = citationOf(field);
+    data.properties.plainCitation = "(Alpha, 2020)";
+    data.properties.dontUpdate = true;
+    field.Value = "ZOTERO_ITEM CSL_CITATION " + JSON.stringify(data);
+    return field;
+}
+
 describe("bibliography", () => {
     it("keeps a URL a style puts in angle brackets", async () => {
         // As ISO-690 (numeric, Slovenčina) does: "Dostupné na internete: <URL>."
@@ -441,5 +457,94 @@ describe("the citation edit window", () => {
         await press(1);
 
         expect(await shown).toBe(null);
+    });
+
+    it("asks before it edits a citation edited by hand, and edits nothing on No", async () => {
+        /** @type {Array<string>} */
+        const opened = [];
+        window.Asc.PluginWindow = function () {
+            this.show = (/** @type {{url: string}} */ variation) => opened.push(variation.url);
+            this.close = () => {};
+            this.attachEvent = () => {};
+            this.command = () => {};
+        };
+        const { service } = makeService({ styleId: "apa", format: "author-date", fields: [] });
+        const data = citationOf(editedByHand("1", "c1", [alpha]));
+
+        const shown = service.showEditCitationWindow(data);
+        await press(1);
+
+        expect(await shown).toBe(null);
+        expect(opened).toEqual(["info-window.html"]);
+    });
+
+    it("writes a citation edited by hand saved as it was, giving up the edit", async () => {
+        windowReplying(null);
+        const { service } = makeService({ styleId: "apa", format: "author-date", fields: [] });
+        const data = citationOf(editedByHand("1", "c1", [alpha]));
+
+        const shown = service.showEditCitationWindow(data);
+        await press(0);
+        // Then "Save" in the edit window, open once the question is answered.
+        await press(0);
+
+        expect(await shown).toBe(data);
+    });
+
+    it("formats a citation edited by hand once it is edited", async () => {
+        // A source added: before, nothing at all was written.
+        const field = editedByHand("1", "c1", [alpha]);
+        const { service, doc } = makeService({ styleId: "apa", format: "author-date", fields: [field] });
+        const edited = citationOf(field);
+        edited.citationItems.push(beta);
+
+        await service.updateItem(edited);
+
+        expect(doc.written).toHaveLength(1);
+        expect(doc.written[0].Content).toContain("Beta");
+        expect(citationOf(doc.written[0]).properties).not.toHaveProperty("dontUpdate");
+    });
+});
+
+describe("citations edited by hand when the settings change", () => {
+    it("are counted", async () => {
+        const { service } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [editedByHand("1", "c1", [alpha]), citationField("2", "c2", [beta])],
+        });
+
+        expect(await service.countManualEdits()).toBe(1);
+    });
+
+    it("keep their text unless their edits are given up", async () => {
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [editedByHand("1", "c1", [alpha])],
+        });
+
+        await service.updateCslItems(true);
+        expect(doc.written).toEqual([]);
+
+        await service.updateCslItems(true, { discardManualEdits: true });
+        expect(doc.written).toHaveLength(1);
+        expect(doc.written[0].Content).toBe("(Alpha, 2020)");
+        expect(citationOf(doc.written[0]).properties).not.toHaveProperty("dontUpdate");
+    });
+
+    it("are formatted in notes without being asked about again", async () => {
+        const { service, doc } = makeService({
+            styleId: "supra-test",
+            format: "note",
+            fields: [editedByHand("1", "c1", [alpha])],
+            noteNumbers: [1],
+        });
+
+        await service.updateCslItemsInNotes("footnotes", { discardManualEdits: true });
+
+        expect(window.__shownWindows).toEqual([]);
+        expect(doc.written).toHaveLength(1);
+        expect(citationOf(doc.written[0]).properties).not.toHaveProperty("dontUpdate");
     });
 });

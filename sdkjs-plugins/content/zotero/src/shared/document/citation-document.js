@@ -243,6 +243,17 @@ class CitationDocument {
     recordManualEdit(cslCitation, formattedText, editedText) {
         throw notImplemented("recordManualEdit");
     }
+
+    /**
+     * Records in a citation that its manual edit is given up: it is updated
+     * as the others again, its text in the document taken for the one it
+     * was formatted to, so that an update overwrites it without asking.
+     * @param {CSLCitation} cslCitation
+     * @param {string} text - its text in the document
+     */
+    discardManualEdit(cslCitation, text) {
+        throw notImplemented("discardManualEdit");
+    }
 }
 
 /** @param {string} method */

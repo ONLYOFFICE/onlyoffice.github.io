@@ -233,6 +233,15 @@ class FieldCitationDocument extends CitationDocument {
     }
 
     /**
+     * @param {CSLCitation} cslCitation
+     * @param {string} text
+     */
+    discardManualEdit(cslCitation, text) {
+        cslCitation.clearDoNotUpdate();
+        this.recordText(cslCitation, text, null);
+    }
+
+    /**
      * The field for a citation or a bibliography whose data is known but
      * whose field is gone. Its text is the one the citation had, until a
      * refresh writes it anew.

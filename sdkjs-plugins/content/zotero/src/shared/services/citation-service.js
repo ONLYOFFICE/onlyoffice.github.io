@@ -45,6 +45,12 @@ import { CslHtmlParser } from "./csl-html-parser";
 import { translate } from "./translate-service";
 
 /**
+ * @typedef {Object} DiscardOptions
+ * @property {boolean} [discardManualEdits] - the citations edited by hand
+ *  are formatted as the others again
+ */
+
+/**
  * @typedef {import("../csl/styles").CslStylesManager} CslStylesManager
  * @typedef {import("../csl/locales").LocalesManager} LocalesManager
  * @typedef {import("../csl/abbreviations").AbbreviationsManager} AbbreviationsManager
@@ -275,11 +281,12 @@ class CitationService {
      * so it is updated even when the other citations are skipped.
      * @param {boolean} [bOverwriteManualEdits] - without it, a numeric style
      *  overwrites manual edits and another style leaves the citations be
-     * @param {PrepareOptions & {skipCitations?: boolean, skipBibliography?: boolean, insertedCitationID?: string}} [options]
+     * @param {PrepareOptions & DiscardOptions & {skipCitations?: boolean, skipBibliography?: boolean, insertedCitationID?: string}} [options]
      * @returns {Promise<Array<string>>}
      */
     async updateCslItems(bOverwriteManualEdits, options) {
         const { entries, bibliography, bUnreadable } = await this.#readDocument();
+        if (options && options.discardManualEdits) this.#discardManualEdits(entries);
         const bNoCitations = entries.length === 0;
 
         await this.#prepareStorage(options);
@@ -323,11 +330,12 @@ class CitationService {
      * Rewrites the citations of a note style where they stand, in notes of
      * the given kind.
      * @param {NoteStyle} notesStyle
-     * @param {PrepareOptions} [options]
+     * @param {PrepareOptions & DiscardOptions} [options]
      * @returns {Promise<void>}
      */
     async updateCslItemsInNotes(notesStyle, options) {
         const { entries, bibliography, bUnreadable } = await this.#readDocument(notesStyle);
+        if (options && options.discardManualEdits) this.#discardManualEdits(entries);
         const bNoCitations = entries.length === 0;
         this.#numberAsInNotes(entries);
 
@@ -356,6 +364,9 @@ class CitationService {
         entries = entries.filter(function (entry) {
             return entry.cslCitation.citationID === updatedData.citationID;
         });
+        // Editing a citation gives up its manual edit, as in Zotero: the
+        // user was told so before the edit window opened.
+        this.#discardManualEdits(entries);
         const changes = await this.#getChanges(entries, true);
 
         if (notesStyle && changes.length) {
@@ -374,10 +385,12 @@ class CitationService {
      * @param {NoteStyle | null} [notesStyle] - the notes they go to; none
      *  for the text
      * @param {NoteStyle | null} [oldNotesStyle] - the notes they are in
+     * @param {DiscardOptions} [options]
      * @returns {Promise<void>}
      */
-    async switchingBetweenNotesAndText(notesStyle, oldNotesStyle) {
+    async switchingBetweenNotesAndText(notesStyle, oldNotesStyle, options) {
         const { entries, bibliography, bUnreadable } = await this.#readDocument(oldNotesStyle || undefined);
+        if (options && options.discardManualEdits) this.#discardManualEdits(entries);
         const bNoCitations = entries.length === 0;
         if (notesStyle) {
             this.#numberAsInNotes(entries);
@@ -402,10 +415,12 @@ class CitationService {
      * Moves the citations between footnotes and endnotes.
      * @param {NoteStyle} notesStyle - the notes they go to
      * @param {NoteStyle} [oldNotesStyle] - the notes they are in
+     * @param {DiscardOptions} [options]
      * @returns {Promise<void>}
      */
-    async convertNotesStyle(notesStyle, oldNotesStyle) {
+    async convertNotesStyle(notesStyle, oldNotesStyle, options) {
         const { entries } = await this.#readDocument(oldNotesStyle);
+        if (options && options.discardManualEdits) this.#discardManualEdits(entries);
         this.#numberAsInNotes(entries);
 
         await this.#prepareStorage();
@@ -414,6 +429,17 @@ class CitationService {
         if (!changes.length) return;
 
         await this.#document.convertNotesStyle(changes, notesStyle);
+    }
+
+    /**
+     * How many citations of the document keep the text they were edited to
+     * by hand: no update of the document reaches them. Only the data of the
+     * citations is read, not their text or notes.
+     * @returns {Promise<number>}
+     */
+    async countManualEdits() {
+        const data = await this.#document.readCitationData();
+        return data.filter((citation) => this.#isEditedByHand(citation)).length;
     }
 
     /**
@@ -436,9 +462,67 @@ class CitationService {
      */
     async showEditCitationWindow(data, bUnsaved) {
         if (!data) return null;
+        const bEditedByHand = this.#isEditedByHand(data);
+        if (bEditedByHand) {
+            const bDiscard = await this.#additionalWindow.show(
+                "Edit citation",
+                "<p>" +
+                    CslHtmlParser.purifyHtml(translate(
+                        "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?",
+                    )) +
+                    "</p>",
+            );
+            if (!bDiscard) return null;
+        }
         const result = await this.#additionalWindow.showEditWindow(data);
         if (!result.saved) return null;
-        return result.data || (bUnsaved ? data : null);
+        // Saved without a change, an edited citation is still written: its
+        // manual edit is given up.
+        return result.data || (bUnsaved || bEditedByHand ? data : null);
+    }
+
+    /**
+     * Asks whether to give up the manual edits of the document's citations,
+     * so that new settings reach them too.
+     * @param {number} count - the citations edited by hand
+     * @returns {Promise<boolean>}
+     */
+    confirmDiscardManualEdits(count) {
+        return this.#additionalWindow.show(
+            "Citations edited by hand",
+            CslHtmlParser.purifyHtml(
+                "<p>" +
+                    translate("Citations edited by hand keep their text when the style or other settings change. Number in this document:") +
+                    " " + count +
+                    "</p><p>" +
+                    translate("Do you want to discard those edits and format these citations with the new settings?") +
+                    "</p>",
+            ),
+        );
+    }
+
+    /**
+     * @param {CitationData} data - a citation's data
+     * @returns {boolean} whether it keeps a text edited by hand
+     */
+    #isEditedByHand(data) {
+        // A copy to ask: one with the document's id would take another.
+        const citation = new CSLCitation("");
+        citation.fillFromObject(data);
+        return citation.getDoNotUpdate();
+    }
+
+    /**
+     * Gives up the manual edits of the citations, so that they are formatted
+     * as the others.
+     * @param {Array<StoredCitation>} entries
+     */
+    #discardManualEdits(entries) {
+        entries.forEach(({ citation, cslCitation }) => {
+            if (cslCitation.getDoNotUpdate()) {
+                this.#document.discardManualEdit(cslCitation, citation.text);
+            }
+        });
     }
 
     /** @param {string} message */

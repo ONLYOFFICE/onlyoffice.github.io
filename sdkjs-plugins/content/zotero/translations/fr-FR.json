@@ -116,5 +116,13 @@
     "Information": "Information",
     "Operation completed successfully": "Opération terminée avec succès",
     "Please be cautious": "Veuillez faire attention",
-    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Une citation dans ce document est corrompue et ne peut pas être traitée. Veuillez la supprimer ou la remplacer."
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Une citation dans ce document est corrompue et ne peut pas être traitée. Veuillez la supprimer ou la remplacer.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Cette citation a été modifiée manuellement. La modifier annule ces modifications : la citation est de nouveau mise en forme comme les autres. Voulez-vous continuer ?",
+    "Citations edited by hand": "Citations modifiées manuellement",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Les citations modifiées manuellement conservent leur texte quels que soient le style et les autres paramètres. Leur nombre dans ce document :",
+    "Do you want to discard those edits and format these citations with the new settings?": "Voulez-vous annuler ces modifications et mettre en forme ces citations avec les nouveaux paramètres ?",
+    "Repair broken citations": "Réparer les citations endommagées",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Si des citations ont été copiées depuis un autre document, elles ont pu perdre leur mise en forme de champ et apparaître désormais comme du texte brut. Cette fonction vérifie le document et les restaure.",
+    "Update the bibliography when inserting a citation": "Mettre à jour la bibliographie lors de l'insertion d'une citation",
+    "Update other citations when inserting a new one": "Mettre à jour les autres citations lors de l'insertion d'une nouvelle"
 }

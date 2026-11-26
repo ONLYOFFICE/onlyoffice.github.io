@@ -294,6 +294,14 @@ class CSLCitation {
     }
 
     /**
+     * @returns {CSLCitation}
+     */
+    clearDoNotUpdate() {
+        delete this._properties.dontUpdate;
+        return this;
+    }
+
+    /**
      * @param {number} noteIndex
      * @returns {CSLCitation}
      */

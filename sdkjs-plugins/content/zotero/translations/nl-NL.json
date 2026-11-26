@@ -116,5 +116,13 @@
     "Information": "Informatie",
     "Operation completed successfully": "Bewerking voltooid",
     "Please be cautious": "Wees voorzichtig",
-    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Een citaat in dit document is beschadigd en kan niet worden verwerkt. Verwijder of vervang het."
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Een citaat in dit document is beschadigd en kan niet worden verwerkt. Verwijder of vervang het.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Dit citaat is handmatig bewerkt. Door het te bewerken gaan die wijzigingen verloren: het citaat wordt weer net als de andere opgemaakt. Wilt u doorgaan?",
+    "Citations edited by hand": "Handmatig bewerkte citaten",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Handmatig bewerkte citaten behouden hun tekst, ongeacht de stijl en de andere instellingen. Hun aantal in dit document:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Wilt u die wijzigingen ongedaan maken en deze citaten opmaken met de nieuwe instellingen?",
+    "Repair broken citations": "Beschadigde citaten herstellen",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Als citaten uit een ander document zijn gekopieerd, kunnen ze hun veldopmaak kwijt zijn en nu als platte tekst worden weergegeven. Hiermee wordt het document gecontroleerd en worden ze hersteld.",
+    "Update the bibliography when inserting a citation": "Bibliografie bijwerken bij het invoegen van een citaat",
+    "Update other citations when inserting a new one": "Andere citaten bijwerken bij het invoegen van een nieuw citaat"
 }

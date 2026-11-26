@@ -117,5 +117,13 @@
     "Operation completed successfully": "操作已成功完成",
     "Please be cautious": "请谨慎操作"
 ,
-"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "文档中的引用已损坏，无法处理。请删除或替换它。"
+"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "文档中的引用已损坏，无法处理。请删除或替换它。",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "此引用已被手动编辑。编辑它将放弃这些修改：引用会像其他引用一样重新格式化。是否继续？",
+    "Citations edited by hand": "手动编辑的引用",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "无论样式和其他设置如何，手动编辑的引用都会保留其文本。本文档中的数量：",
+    "Do you want to discard those edits and format these citations with the new settings?": "是否放弃这些修改，并按新设置格式化这些引用？",
+    "Repair broken citations": "修复损坏的引用",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "如果引用是从其他文档复制过来的，它们可能已失去域格式，现在显示为普通文本。此功能会检查文档并恢复它们。",
+    "Update the bibliography when inserting a citation": "插入引用时更新参考文献列表",
+    "Update other citations when inserting a new one": "插入新引用时更新其他引用"
 }

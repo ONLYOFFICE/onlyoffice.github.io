@@ -116,5 +116,13 @@
     "Information": "Informazione",
     "Operation completed successfully": "Operazione completata con successo",
     "Please be cautious": "Procedere con cautela",
-    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Una citazione in questo documento è danneggiata e non può essere elaborata. Rimuoverla o sostituirla."
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Una citazione in questo documento è danneggiata e non può essere elaborata. Rimuoverla o sostituirla.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Questa citazione è stata modificata manualmente. Modificandola, queste modifiche andranno perse: la citazione verrà formattata di nuovo come le altre. Vuoi continuare?",
+    "Citations edited by hand": "Citazioni modificate manualmente",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Le citazioni modificate manualmente mantengono il loro testo indipendentemente dallo stile e dalle altre impostazioni. Il loro numero in questo documento:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Vuoi annullare queste modifiche e formattare queste citazioni con le nuove impostazioni?",
+    "Repair broken citations": "Ripara citazioni danneggiate",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Se le citazioni sono state copiate da un altro documento, potrebbero aver perso la formattazione dei campi ed essere ora visualizzate come testo semplice. Questa funzione controlla il documento e le ripristina.",
+    "Update the bibliography when inserting a citation": "Aggiorna la bibliografia quando si inserisce una citazione",
+    "Update other citations when inserting a new one": "Aggiorna le altre citazioni quando se ne inserisce una nuova"
 }

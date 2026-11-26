@@ -117,5 +117,13 @@
     "Operation completed successfully": "Radnja je uspešno završena",
     "Please be cautious": "Budite oprezni"
 ,
-"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Citat u ovom dokumentu je oštećen i ne može biti obrađen. Uklonite ga ili zamenite."
+"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Citat u ovom dokumentu je oštećen i ne može biti obrađen. Uklonite ga ili zamenite.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Ovaj citat je ručno izmenjen. Ako ga izmenite, te izmene će biti izgubljene: citat će ponovo biti formatiran kao ostali. Da li želite da nastavite?",
+    "Citations edited by hand": "Ručno izmenjeni citati",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Ručno izmenjeni citati zadržavaju svoj tekst bez obzira na stil i druga podešavanja. Njihov broj u ovom dokumentu:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Da li želite da odbacite te izmene i formatirate ove citate prema novim podešavanjima?",
+    "Repair broken citations": "Popravi oštećene citate",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Ako su citati kopirani iz drugog dokumenta, možda su izgubili formatiranje polja i sada se prikazuju kao običan tekst. Ova funkcija proverava dokument i vraća ih.",
+    "Update the bibliography when inserting a citation": "Ažuriraj bibliografiju pri umetanju citata",
+    "Update other citations when inserting a new one": "Ažuriraj ostale citate pri umetanju novog"
 }

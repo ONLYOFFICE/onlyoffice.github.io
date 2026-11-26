@@ -113,5 +113,9 @@
     "Failed to load language": "Nepodařilo se načíst jazyk",
     "Invalid CSL style file": "Neplatný soubor stylu CSL",
     "More Styles...": "Další styly...",
-    "Select language": "Vyberte jazyk"
+    "Select language": "Vyberte jazyk",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Tato citace byla upravena ručně. Úpravou o tyto změny přijdete: citace bude znovu formátována jako ostatní. Chcete pokračovat?",
+    "Citations edited by hand": "Ručně upravené citace",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Ručně upravené citace si zachovávají svůj text bez ohledu na styl a další nastavení. Jejich počet v tomto dokumentu:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Chcete tyto úpravy zrušit a naformátovat tyto citace podle nových nastavení?"
 }
