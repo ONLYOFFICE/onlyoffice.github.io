@@ -394,6 +394,11 @@ class CitationService {
         const bNoCitations = entries.length === 0;
         if (notesStyle) {
             this.#numberAsInNotes(entries);
+        } else {
+            // Taken out of their notes, the citations are in no note: as
+            // Zotero records a citation in the text. One left in a note
+            // with the user's text is given its number by the next update.
+            entries.forEach(({ cslCitation }) => cslCitation.setNoteIndex(0));
         }
 
         await this.#prepareStorage();

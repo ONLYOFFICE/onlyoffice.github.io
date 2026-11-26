@@ -146,6 +146,9 @@ export function makeService(options) {
         convertNotesStyle: async (/** @type {Array<any>} */ fields) => {
             doc.written.push(...copy(fields));
         },
+        convertNotesToText: async (/** @type {Array<any>} */ fields) => {
+            doc.written.push(...copy(fields));
+        },
         addBibliography: async (/** @type {string} */ html) => {
             doc.written.push({ FieldId: "new-bibliography", Content: html });
             return "new-bibliography";

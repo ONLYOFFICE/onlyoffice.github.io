@@ -188,6 +188,21 @@ describe("note styles", () => {
         expect(citationOf(doc.written.find((field) => field.FieldId === "5")).properties.noteIndex).toBe(4);
     });
 
+    it("records citations taken out of their notes as in no note", async () => {
+        // Switched to an in-text style: the number of the note they were in
+        // stayed in their data.
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [citationField("1", "c1", [alpha]), citationField("2", "c2", [beta])],
+            noteNumbers: [1, 2],
+        });
+
+        await service.switchingBetweenNotesAndText();
+
+        expect(doc.written.map((field) => citationOf(field).properties.noteIndex)).toEqual([0, 0]);
+    });
+
     it("numbers citations in the text as the notes they are moved to", async () => {
         const { service, doc } = makeService({
             styleId: "supra-test",
