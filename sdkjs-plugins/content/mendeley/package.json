@@ -28,8 +28,8 @@
         "happy-dom": "^21.0.4",
         "postcss-import": "^17.0.1",
         "postcss-nested": "^9.0.1",
-        "vite": "^8.3.8",
-        "vitest": "^5.1.1"
+        "vite": "^8.4.0",
+        "vitest": "^5.1.2"
     },
     "dependencies": {
         "core-js": "^3.51.0"
