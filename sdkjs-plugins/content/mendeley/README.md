@@ -64,6 +64,8 @@ You will need to register the application.
 
 4. Insert the Application ID into the appropriate field in the plugin interface and press `Login`.
 
+<!-- Desktop Editors sign-in is not released yet.
+
 ### Desktop Editors
 
 ONLYOFFICE Desktop Editors open the Mendeley sign-in page in the system browser, so the plugin uses an authorization code that you paste manually.
@@ -77,6 +79,7 @@ ONLYOFFICE Desktop Editors open the Mendeley sign-in page in the system browser,
 4. Paste the code into the `Authorization code` field in the plugin and press `Confirm`.
 
 You only need to do this once: the plugin keeps your session and renews it automatically. The Application ID and the secret are stored locally in the editor.
+-->
 
 ## Known issues
 

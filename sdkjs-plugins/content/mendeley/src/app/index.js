@@ -55,6 +55,13 @@ import { Button, Loader } from "@shared/components";
 import "@shared/components.css";
 import "../styles.css";
 
+/**
+ * Signing in from Desktop Editors with an authorization code works but is not
+ * released yet: until then the plugin tells desktop users it is web-only.
+ * The sign-in code stays in LoginPage; turn this on to ship it.
+ */
+const DESKTOP_SIGN_IN_ENABLED = false;
+
 (function () {
     const displayNoneClass = "hidden";
     const isLocal = (function () {
@@ -166,6 +173,20 @@ import "../styles.css";
     }
 
     window.Asc.plugin.init = function () {
+        if (isLocal && !DESKTOP_SIGN_IN_ENABLED) {
+            const message = "This plugin doesn't work into Desktop Editors.";
+            const content = document.getElementById("content");
+            if (!content) {
+                console.error(message);
+                return;
+            }
+            content.innerHTML =
+                "<p id='message' style='text-align:center; font-size:14pt;' class='i18n'>" +
+                message +
+                "</p>";
+            window.Asc.plugin.onTranslate = applyTranslations;
+            return;
+        }
         Loader.show();
         initElements();
 
