@@ -117,5 +117,9 @@
     "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "この引用は手動で編集されています。編集するとその変更は失われ、引用は他の引用と同様に再びフォーマットされます。続行しますか?",
     "Citations edited by hand": "手動で編集された引用",
     "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "手動で編集された引用は、スタイルやその他の設定に関係なくテキストが保持されます。この文書内の数:",
-    "Do you want to discard those edits and format these citations with the new settings?": "これらの変更を破棄し、新しい設定でこれらの引用をフォーマットしますか?"
+    "Do you want to discard those edits and format these citations with the new settings?": "これらの変更を破棄し、新しい設定でこれらの引用をフォーマットしますか?",
+    "An error occurred while updating the document. Try restarting the plugin.": "ドキュメントの更新中にエラーが発生しました。プラグインを再起動してください。",
+    "Some citations could not be read and were left unchanged. To use them with Mendeley Cite, insert them again.": "一部の引用を読み取れなかったため、変更せずに残しました。Mendeley Cite で使うには、もう一度挿入してください。",
+    "Citations left unchanged:": "変更されなかった引用:",
+    "Sign in to Mendeley and wait until your library loads to edit citations.": "引用を編集するには、Mendeley にサインインし、ライブラリの読み込みが終わるまでお待ちください。"
 }

@@ -117,5 +117,9 @@
     "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Tato citace byla upravena ručně. Úpravou o tyto změny přijdete: citace bude znovu formátována jako ostatní. Chcete pokračovat?",
     "Citations edited by hand": "Ručně upravené citace",
     "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Ručně upravené citace si zachovávají svůj text bez ohledu na styl a další nastavení. Jejich počet v tomto dokumentu:",
-    "Do you want to discard those edits and format these citations with the new settings?": "Chcete tyto úpravy zrušit a naformátovat tyto citace podle nových nastavení?"
+    "Do you want to discard those edits and format these citations with the new settings?": "Chcete tyto úpravy zrušit a naformátovat tyto citace podle nových nastavení?",
+    "An error occurred while updating the document. Try restarting the plugin.": "Při aktualizaci dokumentu došlo k chybě. Zkuste plugin restartovat.",
+    "Some citations could not be read and were left unchanged. To use them with Mendeley Cite, insert them again.": "Některé citace nebylo možné přečíst, a zůstaly proto beze změny. Chcete-li je používat s Mendeley Cite, vložte je znovu.",
+    "Citations left unchanged:": "Citace ponechané beze změny:",
+    "Sign in to Mendeley and wait until your library loads to edit citations.": "Chcete-li upravovat citace, přihlaste se do Mendeley a počkejte, až se načte vaše knihovna."
 }

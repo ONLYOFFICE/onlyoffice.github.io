@@ -117,5 +117,9 @@
     "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Esta citação foi editada manualmente. Ao editá-la, essas alterações serão perdidas: a citação será formatada novamente como as outras. Deseja continuar?",
     "Citations edited by hand": "Citações editadas manualmente",
     "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "As citações editadas manualmente mantêm seu texto independentemente do estilo e das outras configurações. O número delas neste documento:",
-    "Do you want to discard those edits and format these citations with the new settings?": "Deseja descartar essas alterações e formatar estas citações com as novas configurações?"
+    "Do you want to discard those edits and format these citations with the new settings?": "Deseja descartar essas alterações e formatar estas citações com as novas configurações?",
+    "An error occurred while updating the document. Try restarting the plugin.": "Ocorreu um erro ao atualizar o documento. Tente reiniciar o plugin.",
+    "Some citations could not be read and were left unchanged. To use them with Mendeley Cite, insert them again.": "Algumas citações não puderam ser lidas e foram mantidas sem alterações. Para usá-las com o Mendeley Cite, insira-as novamente.",
+    "Citations left unchanged:": "Citações mantidas sem alterações:",
+    "Sign in to Mendeley and wait until your library loads to edit citations.": "Para editar citações, entre no Mendeley e aguarde o carregamento da sua biblioteca."
 }

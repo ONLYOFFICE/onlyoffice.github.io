@@ -62,54 +62,87 @@ class MendeleyDesktopFields {
 
     /**
      * Rewrites the fields as content controls of Mendeley Cite, keeping their
-     * text.
+     * text. A field whose citation cannot be read stays as it is.
      * @param {Array<AddinFieldData>} fields - from find()
-     * @returns {Promise<void>}
+     * @returns {Promise<{unreadable: number}>} how many fields stayed so
      */
-    upgrade(fields) {
+    async upgrade(fields) {
         CSLCitation.resetUsedIDs();
 
         const bibField = fields.find((field) => field.Value.indexOf("Mendeley Bibliography") === 0);
 
-        const infoForUpgrade = fields
+        /** @type {Array<{field: AddinFieldData, citationObject: CitationData}>} */
+        const readable = [];
+        let unreadable = 0;
+        fields
             .filter((field) => !bibField || bibField.FieldId !== field.FieldId)
-            .map((field, index) => {
-                /** @type {CitationData} */
-                const citationObject = JSON.parse(
-                    field.Value.slice(field.Value.indexOf("{"), field.Value.lastIndexOf("}") + 1),
-                );
-                if (citationObject && citationObject.citationItems) {
-                    // Mendeley Cite knows an item by its uuid, which the old
-                    // plugin kept only in the item's URIs.
-                    citationObject.citationItems.forEach(function (item) {
-                        if (item.uris && item.uris.length) {
-                            let id = item.id;
-                            item.uris.some(/** @param {string} uri */ (uri) => {
-                                const sign = "?uuid=";
-                                const start = uri.indexOf(sign);
-                                if (start === -1) {
-                                    return false;
-                                }
-                                const end = uri.indexOf("&", start + sign.length);
-                                id = end === -1
-                                    ? uri.slice(start + sign.length)
-                                    : uri.slice(start + sign.length, end);
-                                return true;
-                            });
-                            item.id = id;
-                            if (item.itemData) item.itemData.id = id;
-                        }
-                    });
+            .forEach((field) => {
+                const citationObject = MendeleyDesktopFields.#readCitation(field);
+                if (citationObject) {
+                    readable.push({ field: field, citationObject: citationObject });
+                } else {
+                    unreadable++;
                 }
-                const cslCitation = new CSLCitation();
-                cslCitation.fillFromObject(citationObject);
-                cslCitation.setManualOverride(field.Content);
-                // Numbered as they follow each other, as Mendeley does.
-                cslCitation.setNoteIndex(index + 1);
-                return { field: field, newValue: encodeCitationTag(cslCitation.toJSON()) };
             });
 
-        return this.#controls.upgradeCslItems(infoForUpgrade, bibField);
+        const infoForUpgrade = readable.map(({ field, citationObject }, index) => {
+            const cslCitation = new CSLCitation();
+            cslCitation.fillFromObject(citationObject);
+            cslCitation.setManualOverride(field.Content);
+            // Numbered as they follow each other, as Mendeley does.
+            cslCitation.setNoteIndex(index + 1);
+            return { field: field, newValue: encodeCitationTag(cslCitation.toJSON()) };
+        });
+
+        await this.#controls.upgradeCslItems(infoForUpgrade, bibField);
+        return { unreadable: unreadable };
+    }
+
+    /**
+     * The citation the old plugin kept in a field, with its items named as
+     * Mendeley Cite names them.
+     * @param {AddinFieldData} field
+     * @returns {CitationData | null} null if the field holds no citation
+     *  that can be read
+     */
+    static #readCitation(field) {
+        /** @type {CitationData} */
+        let citationObject;
+        try {
+            citationObject = JSON.parse(
+                field.Value.slice(field.Value.indexOf("{"), field.Value.lastIndexOf("}") + 1),
+            );
+        } catch (e) {
+            console.error("Cannot read a Mendeley Desktop citation:", field.Value, e);
+            return null;
+        }
+        if (!citationObject || typeof citationObject !== "object") {
+            return null;
+        }
+        if (citationObject.citationItems) {
+            // Mendeley Cite knows an item by its uuid, which the old
+            // plugin kept only in the item's URIs.
+            citationObject.citationItems.forEach(function (item) {
+                if (item.uris && item.uris.length) {
+                    let id = item.id;
+                    item.uris.some(/** @param {string} uri */ (uri) => {
+                        const sign = "?uuid=";
+                        const start = uri.indexOf(sign);
+                        if (start === -1) {
+                            return false;
+                        }
+                        const end = uri.indexOf("&", start + sign.length);
+                        id = end === -1
+                            ? uri.slice(start + sign.length)
+                            : uri.slice(start + sign.length, end);
+                        return true;
+                    });
+                    item.id = id;
+                    if (item.itemData) item.itemData.id = id;
+                }
+            });
+        }
+        return citationObject;
     }
 }
 

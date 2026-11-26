@@ -117,5 +117,9 @@
     "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Ovaj citat je ručno izmenjen. Ako ga izmenite, te izmene će biti izgubljene: citat će ponovo biti formatiran kao ostali. Da li želite da nastavite?",
     "Citations edited by hand": "Ručno izmenjeni citati",
     "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Ručno izmenjeni citati zadržavaju svoj tekst bez obzira na stil i druga podešavanja. Njihov broj u ovom dokumentu:",
-    "Do you want to discard those edits and format these citations with the new settings?": "Da li želite da odbacite te izmene i formatirate ove citate prema novim podešavanjima?"
+    "Do you want to discard those edits and format these citations with the new settings?": "Da li želite da odbacite te izmene i formatirate ove citate prema novim podešavanjima?",
+    "An error occurred while updating the document. Try restarting the plugin.": "Došlo je do greške prilikom ažuriranja dokumenta. Pokušajte da ponovo pokrenete plagin.",
+    "Some citations could not be read and were left unchanged. To use them with Mendeley Cite, insert them again.": "Neki citati nisu mogli da se pročitaju i ostavljeni su nepromenjeni. Da biste ih koristili sa Mendeley Cite, umetnite ih ponovo.",
+    "Citations left unchanged:": "Citati ostavljeni nepromenjeni:",
+    "Sign in to Mendeley and wait until your library loads to edit citations.": "Da biste uređivali citate, prijavite se na Mendeley i sačekajte da se vaša biblioteka učita."
 }

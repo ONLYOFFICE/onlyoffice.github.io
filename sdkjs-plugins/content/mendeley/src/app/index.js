@@ -105,6 +105,12 @@ const DESKTOP_SIGN_IN_ENABLED = false;
     };
     let bInProgress = false;
     /**
+     * Signed in, with the settings and the library loaded: until then
+     * there is no style to format an edited citation with.
+     * @type {boolean}
+     */
+    let canEditCitations = false;
+    /**
      * Counts the searches: results that come for an earlier one, after the
      * list was cleared for a newer one, are not shown.
      */
@@ -214,6 +220,9 @@ const DESKTOP_SIGN_IN_ENABLED = false;
         let isInit = false;
 
         addEventListeners();
+        // The editor fills its context menu only when every plugin that
+        // listens to it has answered, so the plugin answers from the start.
+        addContextMenuButtons();
 
         loginPage
             .init()
@@ -243,12 +252,11 @@ const DESKTOP_SIGN_IN_ENABLED = false;
                 ]).then(function ([g, s, isUpdateOldVersion, c]) {
                     if (isUpdateOldVersion) {
                         settings.show();
-                    } else {
-                        addContextMenuButtons();
                     }
                 }).catch(function (error) {
                     console.error(error.message);
                 }).finally(function () {
+                    canEditCitations = true;
                     Loader.hide();
                 });
             });
@@ -1075,13 +1083,21 @@ const DESKTOP_SIGN_IN_ENABLED = false;
         );
 
         if (isUserAgree) {
-            await oldFields.upgrade(fields);
-            dialog.showInfoWindow(
-                "Update complete",
-                translate("Your document has been updated to use Mendeley Cite.") + " " +
-                translate("Please select the citation style and language for future citation formatting."),
-                "success"
-            );
+            let result;
+            try {
+                result = await oldFields.upgrade(fields);
+            } catch (e) {
+                console.error(e);
+                showError(translate("An error occurred while updating the document. Try restarting the plugin."));
+                return false;
+            }
+            let text = translate("Your document has been updated to use Mendeley Cite.") + " " +
+                translate("Please select the citation style and language for future citation formatting.");
+            if (result.unreadable) {
+                text += " " + translate("Some citations could not be read and were left unchanged. To use them with Mendeley Cite, insert them again.") +
+                    " " + translate("Citations left unchanged:") + " " + result.unreadable;
+            }
+            dialog.showInfoWindow("Update complete", text, result.unreadable ? "warning" : "success");
         } else {
             Asc.plugin.executeCommand("close", "");
         }
@@ -1093,6 +1109,10 @@ const DESKTOP_SIGN_IN_ENABLED = false;
         buttonMain.text = "Edit citation";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
+            if (!canEditCitations) {
+                citationService.showWarningMessage("Sign in to Mendeley and wait until your library loads to edit citations.");
+                return;
+            }
             const current = await citationService.getCurrent();
 
             await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
