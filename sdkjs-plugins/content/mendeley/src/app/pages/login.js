@@ -108,10 +108,9 @@ class LoginPage {
         const self = this;
         const redirectUrl = this._isDesktop
             ? DESKTOP_REDIRECT_URL
-            : document.location.protocol +
-              "//" +
-              document.location.host +
-              document.location.pathname.replace("index.html", "oauth.html");
+            : // Relative to the page, so it works whether the address ends in
+              // index.html or, as some hosts redirect it, in the folder.
+              new URL("oauth.html", document.location.href).href;
         this._redirectConfigField.setValue(redirectUrl);
 
         this._addEventListeners();
