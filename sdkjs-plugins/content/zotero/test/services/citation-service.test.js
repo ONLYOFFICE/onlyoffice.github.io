@@ -419,6 +419,79 @@ describe("the style of a document from Word", () => {
     });
 });
 
+describe("the style of a document changed by Undo", () => {
+    /** @param {string} styleId */
+    const prefs = (styleId) =>
+        '<data data-version="3" zotero-version="5.0.96">' +
+        '<style id="http://www.zotero.org/styles/' + styleId + '" locale="en-US" hasBibliography="1" bibliographyStyleHasBeenSet="0"/>' +
+        "<prefs/></data>";
+    const repository = async () => ({ content: "<style/>" });
+
+    it("is taken up when the document's preferences change", async () => {
+        localStorage.setItem("zoteroStyleId", "apa");
+        const options = {
+            styleId: "apa",
+            format: /** @type {"author-date"} */ ("author-date"),
+            fields: [],
+            getStyle: repository,
+            documentPrefs: prefs("apa"),
+        };
+        const { preferences, stylesManager } = makeService(options);
+        await preferences.load(/** @type {any} */ (stylesManager));
+        // The user chose another style here; Undo then put back the
+        // preferences the document had.
+        localStorage.setItem("zoteroStyleId", "ieee");
+
+        expect(await preferences.haveChanged()).toBe(false);
+
+        options.documentPrefs = prefs("chicago-author-date");
+        expect(await preferences.haveChanged()).toBe(true);
+        await preferences.load(/** @type {any} */ (stylesManager));
+        expect(localStorage.getItem("zoteroStyleId")).toBe("chicago-author-date");
+        expect(await preferences.haveChanged()).toBe(false);
+    });
+
+    it("is not taken up again after the plugin wrote it", async () => {
+        localStorage.setItem("zoteroStyleId", "apa");
+        const options = {
+            styleId: "apa",
+            format: /** @type {"author-date"} */ ("author-date"),
+            fields: [],
+            getStyle: repository,
+            documentPrefs: prefs("apa"),
+        };
+        const { preferences, stylesManager } = makeService(options);
+        await preferences.load(/** @type {any} */ (stylesManager));
+
+        localStorage.setItem("zoteroStyleId", "ieee");
+        await preferences.save(/** @type {any} */ (stylesManager), "en-US");
+
+        expect(options.documentPrefs).toContain("/styles/ieee");
+        expect(await preferences.haveChanged()).toBe(false);
+    });
+
+    it("leaves the plugin's style for a document without preferences", async () => {
+        localStorage.setItem("zoteroStyleId", "apa");
+        const options = {
+            styleId: "apa",
+            format: /** @type {"author-date"} */ ("author-date"),
+            fields: [],
+            getStyle: repository,
+            documentPrefs: prefs("ieee"),
+        };
+        const { preferences, stylesManager } = makeService(options);
+        await preferences.load(/** @type {any} */ (stylesManager));
+        localStorage.setItem("zoteroStyleId", "apa");
+
+        // Undo took back the first preferences ever written to it.
+        options.documentPrefs = "";
+        expect(await preferences.haveChanged()).toBe(true);
+        await preferences.load(/** @type {any} */ (stylesManager));
+        expect(localStorage.getItem("zoteroStyleId")).toBe("apa");
+        expect(await preferences.haveChanged()).toBe(false);
+    });
+});
+
 describe("the citation edit window", () => {
     /**
      * A window that answers "Save" with `reply`: the edited data, or null

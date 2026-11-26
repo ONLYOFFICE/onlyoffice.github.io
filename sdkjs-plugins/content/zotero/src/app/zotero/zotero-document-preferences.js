@@ -49,6 +49,12 @@ class ZoteroDocumentPreferences {
     #fields;
     /** @type {LocalesManager} */
     #localesManager;
+    /**
+     * ZOTERO_PREF as it was when this plugin last read or wrote it, "" for
+     * none: what haveChanged() compares the document's with.
+     * @type {string}
+     */
+    #known = "";
 
     /**
      * @param {CitationDocService} fields - the document's fields and properties
@@ -70,18 +76,40 @@ class ZoteroDocumentPreferences {
      *  style could not be had and the user's stays
      */
     async load(styleManager) {
-        await this.#fields
+        await this.#loadEmbeddedStyle(styleManager);
+
+        const prefXml = await this.#fields.loadStyleFromDocument();
+        this.#known = prefXml;
+        if (!prefXml) {
+            return { unavailableStyle: false };
+        }
+        return this.apply(prefXml, styleManager);
+    }
+
+    /**
+     * Whether the document's preferences are no longer those this plugin
+     * last read or wrote: Undo and Redo put back the document's preferences
+     * together with its citations, while the plugin keeps its own.
+     * @returns {Promise<boolean>}
+     */
+    async haveChanged() {
+        const prefXml = await this.#fields.loadStyleFromDocument();
+        return prefXml !== this.#known;
+    }
+
+    /**
+     * The style the document carries, for formatting where the style
+     * repository is out of reach.
+     * @param {CslStylesManager} styleManager
+     * @returns {Promise<void>}
+     */
+    #loadEmbeddedStyle(styleManager) {
+        return this.#fields
             .loadEmbeddedStyle()
             .then((style) => {
                 styleManager.setDocumentStyle(style);
             })
             .catch((e) => console.error("Failed to read the document style:", e));
-
-        const prefXml = await this.#fields.loadStyleFromDocument();
-        if (!prefXml) {
-            return { unavailableStyle: false };
-        }
-        return this.apply(prefXml, styleManager);
     }
 
     /**
@@ -167,6 +195,7 @@ class ZoteroDocumentPreferences {
         if (prefXml !== null) {
             await this.#savePrefXml(prefXml);
         }
+        this.#known = prefXml !== null ? prefXml : savedPrefXml;
         await this.#saveEmbeddedStyle(styleManager);
     }
 

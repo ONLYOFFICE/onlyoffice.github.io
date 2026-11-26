@@ -273,6 +273,25 @@ import "../styles.css";
         return documentPreferences.save(settings.getStyleManager(), locale);
     }
 
+    /**
+     * Loads the document's preferences again if they changed since the
+     * plugin last read or wrote them, as Undo and Redo change them: the
+     * document's style is the one its citations are in. A document without
+     * them keeps the plugin's.
+     * @returns {Promise<void>}
+     */
+    async function followDocumentPreferences() {
+        try {
+            const changed = await documentPreferences.haveChanged();
+            if (changed) {
+                await loadDocumentPreferences();
+                await settings.loadSavedSettings();
+            }
+        } catch (e) {
+            console.error("Failed to read document prefs:", e);
+        }
+    }
+
     /** @returns {Promise<Set<string>>} */
     function getUsedItemKeys() {
         if (bInProgress) {
@@ -456,6 +475,7 @@ import "../styles.css";
             if (event.type !== "button:click") {
                 return;
             }
+            await followDocumentPreferences();
             if (!settings.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
@@ -542,6 +562,7 @@ import "../styles.css";
             if (event.type !== "button:click") {
                 return;
             }
+            await followDocumentPreferences();
             if (!settings.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
@@ -589,6 +610,7 @@ import "../styles.css";
             if (event.type !== "button:click") {
                 return;
             }
+            await followDocumentPreferences();
             if (!settings.getLastUsedStyleId()) {
                 showError(translate("Style is not selected"));
                 return;
@@ -679,10 +701,11 @@ import "../styles.css";
                 });
         });
 
-        openSettingsBtn.subscribe(function (event) {
+        openSettingsBtn.subscribe(async function (event) {
             if (event.type !== "button:click") {
                 return;
             }
+            await followDocumentPreferences();
             settings.show();
         });
 
@@ -1253,6 +1276,7 @@ import "../styles.css";
         buttonMain.text = "Edit citation";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
+            await followDocumentPreferences();
             const current = await citationService.getCurrent();
             await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
             await showEditCitationWindow(current);

@@ -113,6 +113,7 @@ export function makeService(options) {
         isLastUsedStyleContainBibliography: () => true,
         getStyle: options.getStyle || (async (/** @type {string} */ id) => ({ content: readStyle(id) })),
         setDocumentStyle: () => {},
+        getStyleToEmbed: () => null,
         saveLastUsedNotesStyle: () => {},
     };
     const sdk = {
@@ -154,6 +155,11 @@ export function makeService(options) {
             return "new-bibliography";
         },
         loadStyleFromDocument: async () => options.documentPrefs || "",
+        saveStyleToDocument: async (/** @type {Array<string>} */ chunks) => {
+            options.documentPrefs = chunks.join("");
+        },
+        loadEmbeddedStyleVersion: async () => null,
+        removeEmbeddedStyle: async () => {},
         loadEmbeddedStyle: async () => null,
     });
     const service = new CitationService({
