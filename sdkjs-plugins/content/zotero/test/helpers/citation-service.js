@@ -122,7 +122,11 @@ export function makeService(options) {
         getItemsByKeys: async (/** @type {Array<string>} */ keys) =>
             keys
                 .filter((key) => options.zoteroItems && options.zoteroItems[key])
-                .map((key) => ({ key: key, data: options.zoteroItems[key] })),
+                .map((key) => ({
+                    key: key,
+                    data: options.zoteroItems[key],
+                    uri: "http://zotero.org/users/1/items/" + key,
+                })),
     };
     const abbreviationsManager = {
         load: () => {},

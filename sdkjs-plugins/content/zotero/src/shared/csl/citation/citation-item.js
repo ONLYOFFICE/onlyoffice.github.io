@@ -45,6 +45,25 @@ import { CitationItemData } from "./citation-item-data";
 let fallbackUris = null;
 
 /**
+ * The URI Zotero names an item of its API by, as Zotero in Word writes it:
+ * "http://zotero.org/users/<id>/items/<key>". The API's own links are no
+ * such URI: "self" is the address of the API, "alternate" a page on
+ * zotero.org under the user's name.
+ * @param {any} apiItem - an item as the Zotero API gives it in json format
+ * @returns {string|null} null for a library that has no id on zotero.org
+ */
+function zoteroUriOf(apiItem) {
+    const library = apiItem.library;
+    if (!library || !apiItem.key || !(Number(library.id) > 0)) {
+        return null;
+    }
+    const path = { user: "users", group: "groups" }[String(library.type)];
+    return path
+        ? "http://zotero.org/" + path + "/" + library.id + "/items/" + apiItem.key
+        : null;
+}
+
+/**
  * @param {string|number} id
  */
 function CitationItem(id) {
@@ -81,6 +100,10 @@ CitationItem.prototype.fillFromObject = function (itemObject) {
         Object.hasOwnProperty.call(itemObject, "library")
     ) {
         this._itemData.fillFromObject(itemObject.data);
+        const zoteroUri = zoteroUriOf(itemObject);
+        if (zoteroUri) {
+            this.addUri(zoteroUri);
+        }
         if (Object.hasOwnProperty.call(itemObject, "links")) {
             if (Object.hasOwnProperty.call(itemObject.links, "self")) {
                 this.addUri(itemObject.links.self.href);
@@ -360,4 +383,4 @@ CitationItem.prototype.toFlatJSON = function (index, skipUrlForPaperArticles) {
     return oldItem;
 };
 
-export { CitationItem };
+export { CitationItem, zoteroUriOf };

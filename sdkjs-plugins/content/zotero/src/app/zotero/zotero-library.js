@@ -233,6 +233,10 @@ class ZoteroLibrary extends CitationLibrary {
             // A "users/local/<id>" URI comes from a library that was never
             // synced, so the item lives only in the local Zotero.
             const local = uri.match(/zotero\.org\/users\/local\/[^/]+\/items\/([^/?#]+)/i);
+            // The page of an item of the user's own library on zotero.org,
+            // under the user's name: earlier versions of this plugin wrote
+            // it for the items they took from the web API.
+            const page = uri.match(/zotero\.org\/(?!users\/|groups\/)[^/?#]+\/items\/([^/?#]+)/i);
 
             if (remote) {
                 context =
@@ -241,6 +245,8 @@ class ZoteroLibrary extends CitationLibrary {
                         : { id: id, fetchKey: remote[3], groupID: remote[2] };
             } else if (local) {
                 context = { id: id, fetchKey: local[1], userID: "local" };
+            } else if (page) {
+                context = { id: id, fetchKey: page[1] };
             }
 
             if (!context) {
@@ -350,8 +356,9 @@ class ZoteroLibrary extends CitationLibrary {
         /**
          * @param {{id: string, fetchKey: string}} context
          * @param {any} item - as Zotero returned it, undefined if it did not
+         * @param {string} [uri] - the item's Zotero URI
          */
-        const applyItem = (context, item) => {
+        const applyItem = (context, item, uri) => {
             if (!item) {
                 // Deleted in Zotero, stale key: the item keeps its data.
                 console.warn(
@@ -361,7 +368,7 @@ class ZoteroLibrary extends CitationLibrary {
                 return;
             }
             if (fetched) {
-                fetched.set(context.id, { cslItem: item });
+                fetched.set(context.id, uri ? { cslItem: item, uri: uri } : { cslItem: item });
             }
             const storedItem = storage.getItem(context.id);
             if (!storedItem) {
@@ -372,6 +379,9 @@ class ZoteroLibrary extends CitationLibrary {
                 // Zotero disappears here too. The json format is only used
                 // to backfill single fields.
                 storedItem.replaceItemDataFromCsl(item);
+                // Earlier versions named the items of the web API by their
+                // page on zotero.org, which Zotero in Word does not know.
+                if (uri) storedItem.addUri(uri);
             } else {
                 storedItem.fillFromObject(item);
             }
@@ -401,8 +411,11 @@ class ZoteroLibrary extends CitationLibrary {
                             format,
                         )
                         .then((found) => {
-                            const byKey = new Map(found.map((item) => [item.key, item.data]));
-                            batch.forEach((context) => applyItem(context, byKey.get(context.fetchKey)));
+                            const byKey = new Map(found.map((item) => [item.key, item]));
+                            batch.forEach((context) => {
+                                const item = byKey.get(context.fetchKey);
+                                applyItem(context, item && item.data, item && item.uri);
+                            });
                         })
                         .catch((error) => {
                             // A library that cannot be read must not abort

@@ -83,7 +83,8 @@ class BibliographyEdits {
     /**
      * The item a Zotero URI names, as one string: "users/KEY" for the
      * user's own library, synced or local, and "groups/ID/KEY" for a group.
-     * The URIs of one item in different places then give the same string.
+     * The URIs of one item in different places then give the same string,
+     * and so does the page of an item of the user's own library.
      * @param {string} uri
      * @returns {string | null} null for something else than an item URI
      */
@@ -92,7 +93,13 @@ class BibliographyEdits {
             /zotero\.org\/(users|groups)\/(\d+|local\/[^/]+)\/items\/([^/?#]+)/i
         );
         if (!match) {
-            return null;
+            // The page of an item of the user's own library on zotero.org,
+            // under the user's name: earlier versions of this plugin wrote
+            // it for the items they took from the web API.
+            const page = String(uri).match(
+                /zotero\.org\/(?!users\/|groups\/)[^/?#]+\/items\/([^/?#]+)/i
+            );
+            return page ? "users/" + page[1] : null;
         }
         return match[1].toLowerCase() === "groups"
             ? "groups/" + match[2] + "/" + match[3]

@@ -29,6 +29,12 @@ describe("BibliographyEdits", () => {
         expect(BibliographyEdits.itemKey("http://zotero.org/groups/77/items/ABCD")).toBe("groups/77/ABCD");
         expect(BibliographyEdits.itemKey("https://example.com/whatever")).toBeNull();
     });
+
+    it("names an item of the user's own library alike by its page on zotero.org", () => {
+        // Written by earlier versions for the items of the web API.
+        expect(BibliographyEdits.itemKey("https://www.zotero.org/someone/items/ABCD")).toBe("users/ABCD");
+        expect(BibliographyEdits.itemKey("https://www.zotero.org/styles/apa")).toBeNull();
+    });
 });
 
 describe("customEntryToHtml", () => {

@@ -24,3 +24,38 @@ it("keeps the item's own portable URIs", () => {
 
     expect(item.toJSON().uris).toEqual(["http://www.mendeley.com/documents/?uuid=1234"]);
 });
+
+// An item of the Zotero API in json format: its links are the API address
+// and a page under the user's name, neither of them a Zotero URI.
+const apiItem = (/** @type {any} */ library) => ({
+    key: "KEY4",
+    version: 3,
+    library: library,
+    links: {
+        self: { href: "https://api.zotero.org/users/123/items/KEY4" },
+        alternate: { href: "https://www.zotero.org/someone/items/KEY4" },
+    },
+    data: { key: "KEY4", itemType: "book", title: "A Book" },
+});
+
+it("names an item of the Zotero API by its Zotero URI, as Zotero in Word does", () => {
+    const item = new CitationItem("KEY4");
+    item.fillFromObject(apiItem({ type: "user", id: 123 }));
+
+    expect(item.toJSON().uris[0]).toBe("http://zotero.org/users/123/items/KEY4");
+});
+
+it("names an item of a group library by the group's Zotero URI", () => {
+    const item = new CitationItem("KEY4");
+    item.fillFromObject(apiItem({ type: "group", id: 77 }));
+
+    expect(item.toJSON().uris[0]).toBe("http://zotero.org/groups/77/items/KEY4");
+});
+
+it("builds no Zotero URI for a library without an id on zotero.org", () => {
+    CitationItem.setFallbackUris(() => []);
+    const item = new CitationItem("KEY4");
+    item.fillFromObject(apiItem({ type: "user", id: 0 }));
+
+    expect(item.toJSON().uris).toEqual(["https://www.zotero.org/someone/items/KEY4"]);
+});

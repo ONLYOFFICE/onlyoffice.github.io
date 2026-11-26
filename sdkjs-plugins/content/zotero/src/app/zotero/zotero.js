@@ -38,6 +38,7 @@
 import { zoteroEnvironment } from "./zotero-environment";
 import { RateLimitedFetcher } from "./zotero-api-fetcher";
 import { ZOTERO_TYPE_TO_CSL } from "@shared/csl/zotero-type-map";
+import { zoteroUriOf } from "@shared/csl/citation/citation-item";
 
 const ZoteroSdk = function () {
     this._apiKey = null;
@@ -737,7 +738,8 @@ ZoteroSdk.prototype.getItemByKey = function (itemKey, format) {
  * @param {number|string|null} groupId - null for the user library
  * @param {"csljson"|"json"} format - what `data` holds: the CSL item or the
  *  API item
- * @returns {Promise<Array<{key: string, data: any}>>} the items found
+ * @returns {Promise<Array<{key: string, data: any, uri?: string}>>} the items
+ *  found, with the URI Zotero names each by where the answer tells it
  */
 ZoteroSdk.prototype.getItemsByKeys = function (keys, groupId, format) {
     var self = this;
@@ -760,9 +762,17 @@ ZoteroSdk.prototype.getItemsByKeys = function (keys, groupId, format) {
                         if (!Array.isArray(items)) {
                             items = items ? [items] : [];
                         }
-                        return items.length === 1
-                            ? { key: key, data: items[0] }
-                            : null;
+                        if (items.length !== 1) {
+                            return null;
+                        }
+                        // The local API gives a CSL item its Zotero URI as
+                        // its id.
+                        var uri = format === "csljson"
+                            ? self._zoteroUriOfCsl(items[0])
+                            : zoteroUriOf(items[0]);
+                        return uri
+                            ? { key: key, data: items[0], uri: uri }
+                            : { key: key, data: items[0] };
                     },
                     function (error) {
                         console.warn("Failed to read item " + key + ":", error);
@@ -798,15 +808,32 @@ ZoteroSdk.prototype.getItemsByKeys = function (keys, groupId, format) {
                     return item && item.key;
                 })
                 .map(function (/** @type {any} */ item) {
-                    return {
+                    /** @type {{key: string, data: any, uri?: string}} */
+                    var found = {
                         key: item.key,
                         data: format === "csljson"
                             ? self._parseIncludedCsl(item.csljson)
                             : item,
                     };
+                    var uri = zoteroUriOf(item);
+                    if (uri) found.uri = uri;
+                    return found;
                 });
         }
     );
+};
+
+/**
+ * The Zotero URI a CSL item of the local API has as its id.
+ * @param {any} cslItem
+ * @returns {string|null}
+ */
+ZoteroSdk.prototype._zoteroUriOfCsl = function (cslItem) {
+    var id = cslItem && cslItem.id;
+    return typeof id === "string" &&
+        /^https?:\/\/zotero\.org\/(users|groups)\/[^/]+(\/[^/]+)?\/items\/[^/?#]+$/i.test(id)
+        ? id
+        : null;
 };
 
 /**

@@ -89,6 +89,32 @@ describe("bibliography", () => {
         expect(bibliography).not.toContain("Beta");
         expect(bibliography).toContain("Delta");
     });
+    it("keeps those edits for citations an earlier version took from the web API", async () => {
+        // Such a citation names its item only by the item's page on zotero.org.
+        const page = (/** @type {Object} */ source) =>
+            Object.assign({}, source, { uris: ["https://www.zotero.org/someone/items/" + source.id] });
+        const uri = (/** @type {string} */ key) => "http://zotero.org/users/123/items/" + key;
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [
+                citationField("1", "c1", [page(alpha)]),
+                citationField("2", "c2", [page(beta)]),
+                bibliographyField("9", {
+                    uncited: [],
+                    omitted: [[uri("BETA")]],
+                    custom: [[[uri("ALPHA")], "CUSTOM <b>bold</b> end"]],
+                }),
+            ],
+        });
+
+        await service.insertBibliography();
+
+        const bibliography = doc.written.find((field) => field.FieldId === "9").Content;
+        expect(bibliography).toContain("CUSTOM <b>bold</b> end");
+        expect(bibliography).not.toContain("First Book");
+        expect(bibliography).not.toContain("Beta");
+    });
 });
 
 describe("a document whose citations cannot be read", () => {
@@ -232,6 +258,29 @@ describe("field data", () => {
         const itemData = citationOf(doc.written[0]).citationItems[0].itemData;
         expect(itemData.version).toBe("3.1");
         expect(itemData.abstract).toBe("A toolkit.");
+    });
+});
+
+describe("refresh", () => {
+    it("re-reads a source an earlier version took from the web API", async () => {
+        // Such a citation names its item only by the item's page on zotero.org.
+        const old = Object.assign({}, alpha, { uris: ["https://www.zotero.org/someone/items/ALPHA"] });
+        const { service, doc } = makeService({
+            styleId: "apa",
+            format: "author-date",
+            fields: [citationField("1", "c1", [old]), bibliographyField("9")],
+            zoteroItems: {
+                ALPHA: { id: "123/ALPHA", type: "book", title: "Renamed in Zotero", author: [{ family: "Alpha", given: "A." }], issued: { "date-parts": [[2020]] } },
+            },
+        });
+
+        await service.updateCslItems(true, { refreshItems: true });
+
+        const bibliography = doc.written.find((field) => field.FieldId === "9").Content;
+        expect(bibliography).toContain("Renamed in Zotero");
+        // Named now as Zotero in Word knows it.
+        const citation = citationOf(doc.written.find((field) => field.FieldId === "1"));
+        expect(citation.citationItems[0].uris).toContain("http://zotero.org/users/1/items/ALPHA");
     });
 });
 
