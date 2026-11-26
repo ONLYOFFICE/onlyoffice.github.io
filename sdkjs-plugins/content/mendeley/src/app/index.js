@@ -379,6 +379,8 @@ const DESKTOP_SIGN_IN_ENABLED = false;
             )
                 return;
 
+            // The error of the last search is not this one's.
+            showError(false);
             const search = searchFor(text, selectedGroups, groupsHash);
             // searchFor has started a new search by now.
             const generation = searchGeneration;
@@ -931,6 +933,10 @@ const DESKTOP_SIGN_IN_ENABLED = false;
             })
             .catch(function (err) {
                 console.error(err);
+                // A replaced search's failure is nobody's concern any more.
+                if (generation !== searchGeneration) {
+                    return 0;
+                }
                 if (err.message) {
                     showError(translate(err.message));
                 }

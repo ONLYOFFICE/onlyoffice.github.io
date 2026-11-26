@@ -423,6 +423,8 @@ import "../styles.css";
                 return;
 
             const generation = ++searchGeneration;
+            // The error of the last search is not this one's.
+            showError(false);
             if (searchAbort) {
                 searchAbort.abort();
             }
