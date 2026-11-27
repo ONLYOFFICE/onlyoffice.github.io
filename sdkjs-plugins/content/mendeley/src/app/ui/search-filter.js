@@ -178,6 +178,19 @@ SearchFilterComponents.prototype._getSelectedGroups = function () {
 };
 
 /**
+ * Calls back on every change the user makes to the search text, erasing
+ * included, before it is searched for.
+ * @param {function(string): void} callback - given the text
+ */
+SearchFilterComponents.prototype.onTyping = function (callback) {
+    this._searchField.subscribe(function (e) {
+        if (e.type === "inputfield:input") {
+            callback(e.detail.value);
+        }
+    });
+};
+
+/**
  * @param {function(string, Array<string|"all_collections">): void} callback
  * @returns {Object}
  */

@@ -163,6 +163,12 @@ SelectCitationsComponent.prototype.displayNothingFound = function () {
         this._nothingFound.classList.remove(this._displayNoneClass);
 };
 
+/** @returns {boolean} whether the list says that nothing was found */
+SelectCitationsComponent.prototype.isNothingFoundShown = function () {
+    return !!this._nothingFound &&
+        !this._nothingFound.classList.contains(this._displayNoneClass);
+};
+
 /**
  * @param {SearchResult | null} res
  * @param {Error | null} err

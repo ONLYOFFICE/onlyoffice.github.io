@@ -67,4 +67,17 @@ describe.each(["zotero", "mendeley"])("SelectCitationsComponent in the %s layout
         expect(Object.keys(list.getSelectedItems())).toEqual([]);
         expect(counts[counts.length - 1]).toBe(0);
     });
+
+    it("tells whether it says that nothing was found", async () => {
+        loadLayout(plugin);
+        // The class both plugins hide elements with, as the layout starts.
+        const list = new SelectCitationsComponent("hidden", () => {}, () => false);
+        expect(list.isNothingFoundShown()).toBe(false);
+
+        list.displayNothingFound();
+        expect(list.isNothingFoundShown()).toBe(true);
+
+        list.clearLibrary();
+        expect(list.isNothingFoundShown()).toBe(false);
+    });
 });

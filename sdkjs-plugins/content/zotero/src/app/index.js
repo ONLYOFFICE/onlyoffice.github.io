@@ -332,6 +332,27 @@ import "../styles.css";
             });
     }
 
+    /**
+     * Puts the list the plugin opens with in place of a search's.
+     * @returns {Promise<void>}
+     */
+    function showStartList() {
+        // A search still on its way is replaced.
+        ++searchGeneration;
+        if (searchAbort) {
+            searchAbort.abort();
+            searchAbort = null;
+        }
+        showError(false);
+        lastSearch.text = "";
+        lastSearch.obj = null;
+        lastSearch.groups = [];
+        lastSearch.groupOrder = [];
+        lastSearch.groupsHash = "";
+        selectCitation.clearLibrary();
+        return showCitationsAtTheStartFromMyLibrary();
+    }
+
     /** @returns {Promise<UserGroupInfo[]>} */
     function loadGroups() {
         return sdk
@@ -411,12 +432,25 @@ import "../styles.css";
                     return promises;
                 });
         }
+        // The user has moved on from what the error was about.
+        searchFilter.onTyping(function () {
+            showError(false);
+        });
         searchFilter.subscribe(function (text, scope) {
             text = text.trim();
+            if (elements.mainState.classList.contains(displayNoneClass)) {
+                return;
+            }
+            if (!text) {
+                // A search that found nothing gives way to the list the
+                // plugin opens with once its words are erased.
+                if (selectCitation.isNothingFoundShown()) {
+                    showStartList();
+                }
+                return;
+            }
             const groupsHash = JSON.stringify(scope);
             if (
-                elements.mainState.classList.contains(displayNoneClass) ||
-                !text ||
                 (text == lastSearch.text &&
                     groupsHash === lastSearch.groupsHash) ||
                 scope.length === 0

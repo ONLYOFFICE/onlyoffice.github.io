@@ -312,6 +312,23 @@ const DESKTOP_SIGN_IN_ENABLED = false;
             });
     }
 
+    /**
+     * Puts the list the plugin opens with in place of a search's.
+     * @returns {Promise<void>}
+     */
+    function showStartList() {
+        // A search still on its way is replaced.
+        searchGeneration++;
+        showError(false);
+        lastSearch.text = "";
+        lastSearch.obj = null;
+        lastSearch.groups = [];
+        lastSearch.groupOrder = [];
+        lastSearch.groupsHash = "";
+        selectCitation.clearLibrary();
+        return showCitationsAtTheStartFromMyLibrary();
+    }
+
     /** @returns {Promise<UserGroupInfo[]>} */
     function loadGroups() {
         return sdk
@@ -368,12 +385,25 @@ const DESKTOP_SIGN_IN_ENABLED = false;
                 resolve(promises);
             });
         }
+        // The user has moved on from what the error was about.
+        searchFilter.onTyping(function () {
+            showError(false);
+        });
         searchFilter.subscribe(function (text, selectedGroups) {
             text = text.trim();
+            if (elements.mainState.classList.contains(displayNoneClass)) {
+                return;
+            }
+            if (!text) {
+                // A search that found nothing gives way to the list the
+                // plugin opens with once its words are erased.
+                if (selectCitation.isNothingFoundShown()) {
+                    showStartList();
+                }
+                return;
+            }
             const groupsHash = selectedGroups.join(",");
             if (
-                elements.mainState.classList.contains(displayNoneClass) ||
-                !text ||
                 (text == lastSearch.text &&
                     groupsHash === lastSearch.groupsHash) /*||
                 selectedGroups.length === 0*/
