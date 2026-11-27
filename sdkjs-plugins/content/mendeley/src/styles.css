@@ -210,6 +210,17 @@ div::-moz-selection {
     }
 }
 
+/* A style's name often takes two lines: the lists show six of them. */
+#styleSelectList,
+#styleSelectedListOther {
+    .selectbox-dropdown {
+        max-height: 280px;
+    }
+    .selectbox-options {
+        max-height: 237px;
+    }
+}
+
 .notesStyle {
     & > span {
         font-weight: bold;

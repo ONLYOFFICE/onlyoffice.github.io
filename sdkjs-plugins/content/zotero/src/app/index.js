@@ -54,6 +54,7 @@ import { CitedItemKeys } from "@shared/item-keys";
 import { SelectCitationsComponent } from "@shared/ui/select-citation";
 import { SearchFilterComponents } from "./ui";
 import { Button, Loader } from "@shared/components";
+import { EditCitationMenuItem } from "@shared/ui/edit-citation-menu-item";
 import { AutoUpdatePreferences } from "./auto-update-preferences";
 
 import "@shared/components.css";
@@ -1274,18 +1275,21 @@ import "../styles.css";
 	}
 
     function addContextMenuButtons() {
-        let buttonMain = new Asc.ButtonContextMenu();
-        buttonMain.text = "Edit citation";
-        buttonMain.addCheckers("Target", "Selection");
-        buttonMain.attachOnClick(async function () {
-            await followDocumentPreferences();
-            const current = await citationService.getCurrent();
-            await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
-            await showEditCitationWindow(current);
-            await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-        });
-        Asc.Buttons.registerContextMenu();
-
+        new EditCitationMenuItem(
+            async function () {
+                // A document action owns the editor: the menu does not wait for it.
+                if (bInProgress) return false;
+                const current = await citationService.getCurrent();
+                return !!current && current.kind === "citation";
+            },
+            async function () {
+                await followDocumentPreferences();
+                const current = await citationService.getCurrent();
+                await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
+                await showEditCitationWindow(current);
+                await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+            },
+        );
     }
 
     /**

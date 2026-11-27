@@ -51,6 +51,7 @@ import { SelectCitationsComponent } from "@shared/ui/select-citation";
 import { CitedItemKeys } from "@shared/item-keys";
 import { SearchFilterComponents } from "./ui";
 import { Button, Loader } from "@shared/components";
+import { EditCitationMenuItem } from "@shared/ui/edit-citation-menu-item";
 
 import "@shared/components.css";
 import "../styles.css";
@@ -1111,22 +1112,25 @@ const DESKTOP_SIGN_IN_ENABLED = false;
     }
 
     function addContextMenuButtons() {
-        let buttonMain = new Asc.ButtonContextMenu();
-        buttonMain.text = "Edit citation";
-        buttonMain.addCheckers("Target", "Selection");
-        buttonMain.attachOnClick(async function () {
-            if (!canEditCitations) {
-                citationService.showWarningMessage("Sign in to Mendeley and wait until your library loads to edit citations.");
-                return;
-            }
-            const current = await citationService.getCurrent();
+        new EditCitationMenuItem(
+            async function () {
+                // A document action owns the editor: the menu does not wait for it.
+                if (bInProgress) return false;
+                const current = await citationService.getCurrent();
+                return !!current && current.kind === "citation";
+            },
+            async function () {
+                if (!canEditCitations) {
+                    citationService.showWarningMessage("Sign in to Mendeley and wait until your library loads to edit citations.");
+                    return;
+                }
+                const current = await citationService.getCurrent();
 
-            await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
-            await showEditCitationWindow(current);
-            onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
-        });
-        Asc.Buttons.registerContextMenu();
-
+                await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
+                await showEditCitationWindow(current);
+                onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
+            },
+        );
     }
 
     /**
