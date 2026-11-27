@@ -313,7 +313,7 @@ class LoginPage {
     _authenticate() {
         var appid = this._appIdField.getValue();
         if (!appid) {
-            this._loginMessage.show(translate("AppId is empty"));
+            this._loginMessage.show(translate("Application ID is empty"));
             return;
         }
         this._mendAppId = appid;
