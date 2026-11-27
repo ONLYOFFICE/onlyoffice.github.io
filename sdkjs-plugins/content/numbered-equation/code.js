@@ -247,11 +247,27 @@
                 }
 
                 //#endregion
+                //#region: Vertically center all cells (equations can be taller than one line)
+
+                for (let i = 0; i < columns; i++) {
+                    table.GetCell(0, i).SetVerticalAlign("center");
+                }
+
+                //#endregion
+                //#region: Text style of cells: "Body Text" ("Corpo de texto"), if the document has it
+
+                let bodyTextStyle = doc.GetStyle("Body Text");
+                if (bodyTextStyle) {
+                    for (let i = 0; i < columns; i++) {
+                        table.GetCell(0, i).GetContent().GetElement(0).SetStyle(bodyTextStyle);
+                    }
+                }
+
+                //#endregion
                 //#region: Put number placeholder (x) or (n.x) on right cell
 
                 let rightCell = table.GetCell(0, columns - 1);
                 rightCell.SetCellMarginRight(0); // cell right margin width
-                rightCell.SetVerticalAlign("center"); // number vertically centered (equations can be taller than one line)
                 let rightCellelement = rightCell.GetContent().GetElement(0);
                 rightCellelement.SetJc("right"); // right cell justification
                 rightCellelement.AddText("(");
