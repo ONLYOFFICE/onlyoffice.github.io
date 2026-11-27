@@ -187,10 +187,37 @@ div::-moz-selection {
     }
 }
 
+#previewWrapper {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    padding: 8px;
+    max-height: 180px;
+    overflow-y: auto;
+    font-size: 11px;
+    line-height: 1.35;
+
+    .preview-title {
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+}
+
 #styleSelectedListOther {
     position: absolute;
     .selectbox-header {
         opacity: 0;
+    }
+}
+
+/* A style's name often takes two lines: the lists show six of them. */
+#styleSelectList,
+#styleSelectedListOther {
+    .selectbox-dropdown {
+        max-height: 280px;
+    }
+    .selectbox-options {
+        max-height: 237px;
     }
 }
 
@@ -270,6 +297,9 @@ div::-moz-selection {
             top: 10px;
             right: 9px;
         }
+        &:focus-visible {
+            outline: none;
+        }
     }
     & .selectbox-arrow::after {
         content: "";
@@ -304,7 +334,7 @@ div::-moz-selection {
         margin-top: 6px;
     }
 }
-.page0 > .doc:first-child {
+#docsHolder > div:first-child > .doc:first-child {
     margin-top: 0;
 }
 

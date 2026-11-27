@@ -30,6 +30,8 @@
     "Unlink citations": "Hiqni citimet",
     "Please insert some citation into the document.": "Ju lutem shtoni ndonjë citim në dokument",
     "Omit Author": "Hiqni autorin",
+    "Keep sources sorted": "Rendit burimet automatikisht",
+    "The citation style of this document is not available. Your current style is used instead.": "Stili i citimit të këtij dokumenti nuk është i disponueshëm. Në vend të tij përdoret stili juaj aktual.",
     "Connection to Zotero failed": "Kontakti me Zotero ka qashtuar",
     "Connection to Zotero failed. Make sure Zotero is running": "Lidhja me Zotero dështoi. Sigurohuni që Zotero është duke punuar.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Kontakti me Zotero ka qashtuar. Ju lutem aktivizoni lidhjen ekstern ne Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"",
@@ -47,7 +49,7 @@
     "Everywhere": "Gjithashtu",
     "My Library": "Kutia mija",
     "Group Libraries": "Kutia e grupave",
-    "This plugin help you search references by author, title or year in your own library.": "Kjo plugin helponi t'u kerkoni referenca sipas autorit, titullit ose vitit ne kutia juaj.",
+    "This plugin helps you search references by author, title or year in your own library.": "Kjo plugin helponi t'u kerkoni referenca sipas autorit, titullit ose vitit ne kutia juaj.",
     "Click": "Kliko",
     "to replace all active Zotero citations and Bibliography with plain text.": "per t'i zameni te gjitha citatave Zotero dhe bibliografise me tekstin e plote.",
     "After conversion, citations can no longer be updated.": "Pas konverzimit, citatat nuk mund te ndryshohen.",
@@ -79,6 +81,7 @@
     "Saving as text": "Ruaj si tekst",
 	"Remove": "Hiq",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Nuk u gjet citat Zotero në kursor. Ju lutem klikoni direkt në një citat për të redaktuar atë.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citimet nuk mund të shtohen në bibliografi. Vendoseni kursorin jashtë saj.",
     "Prefix": "Parashtesë",
     "Suffix": "Prapashtesë",
     "Book": "Libër",
@@ -113,5 +116,14 @@
     "Information": "Informacion",
     "Operation completed successfully": "Veprimi përfundoi me sukses",
     "Please be cautious": "Ju lutemi bëni kujdes"
-
+,
+"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Një citim në këtë dokument është i dëmtuar dhe nuk mund të përpunohet. Ju lutem hiqeni ose zëvendësojeni.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Ky citat është ndryshuar me dorë. Nëse e redaktoni, ato ndryshime humbasin: citati formatohet sërish si të tjerët. Dëshironi të vazhdoni?",
+    "Citations edited by hand": "Citate të ndryshuara me dorë",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Citatet e ndryshuara me dorë e ruajnë tekstin e tyre pavarësisht stilit dhe cilësimeve të tjera. Numri i tyre në këtë dokument:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Dëshironi t'i anuloni ato ndryshime dhe t'i formatoni këto citate me cilësimet e reja?",
+    "Repair broken citations": "Riparoni citatet e dëmtuara",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Nëse citatet janë kopjuar nga një dokument tjetër, mund të kenë humbur formatimin e fushës dhe tani shfaqen si tekst i thjeshtë. Ky funksion kontrollon dokumentin dhe i rikthen ato.",
+    "Update the bibliography when inserting a citation": "Përditëso bibliografinë kur futet një citat",
+    "Update other citations when inserting a new one": "Përditëso citatet e tjera kur futet një i ri"
 }

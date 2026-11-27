@@ -40,8 +40,7 @@
     <style id="componentsStyles"></style>
     <style id="pluginStyles"></style>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <script src="vendor/citeproc/citeproc_commonjs.js"></script>
+    <script src="vendor/citeproc/citeproc_commonjs.min.js"></script>
     <script>
         if (typeof Promise === 'function' && typeof Promise.any === 'function') {
             document.write(
@@ -49,7 +48,7 @@
             );
         } else {
             document.write(
-                '<script src="dist/bundle.es5.js"><\/script>'
+                '<script defer src="dist/bundle.es5.js"><\/script>'
             );
         }
     </script>
@@ -72,7 +71,7 @@
         <div id="mainCont" class="flexCol">
             <div id="loginState" class="hidden">
                 <p class="i18n">
-                    This plugin help you search references by author, title or year in your own library.
+                    This plugin helps you search references by author, title or year in your own library.
                 </p>
                 <p>
                     <span class="i18n">To use Zotero you should get an API key.</span>
@@ -141,7 +140,7 @@
                     <span id="cancelSelectBtn" class="i18n link" tabindex="0">Cancel selection</span>
                 </div>
                 <div class="flexCol controls-holder">
-                    <div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
+                    <div class="buttonsWrapper flex">
                         <button id="insertLinkBtn" class="i18n" disabled>Insert/Edit Citation</button>
                         <button id="settingsBtn" class="i18n"
                             title="Configure how citations will be formatted in your document.">
@@ -192,6 +191,16 @@
                     <input type="checkbox" id="abbreviateJournalTitles" />
                 </div>
 
+                <div id="autoUpdateWrapper" class="mrtop">
+                    <input type="checkbox" id="autoUpdateCitations" />
+                    <input type="checkbox" id="autoUpdateBibliography" />
+                </div>
+
+                <div id="repairBrokenFieldsWrapper" class="mrtop">
+                    <span class="i18n">If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.</span>
+                    <button id="repairBrokenFieldsBtn" class="i18n" style="width: 100%; margin-top: 8px;">Repair broken citations</button>
+                </div>
+
                 <div id="previewWrapper" class="mrtop hidden"></div>
 
                 <div class="flexCol flexSize"></div>
@@ -209,7 +218,7 @@
                     Open Zotero website
                 </a>
             </span>
-            <span id="logoutLink" class="link i18n">Reconfigure</span>
+            <span id="logoutLink" class="link i18n hidden">Reconfigure</span>
         </div>
 
         <input type="file" id="cslFileInput" accept=".csl,.xml" style="display: none;" />

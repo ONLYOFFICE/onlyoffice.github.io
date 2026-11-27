@@ -1644,7 +1644,7 @@
         "math"
       ]
     },
-    "updated": "2026-05-10 13:53:45",
+    "updated": "2026-10-29 18:20:28",
     "href": "https://www.zotero.org/styles/american-mathematical-society-numeric"
   },
   {
@@ -2564,10 +2564,11 @@
     "categories": {
       "format": "numeric",
       "fields": [
-        "medicine"
+        "medicine",
+        "biology"
       ]
     },
-    "updated": "2020-05-30 13:10:13",
+    "updated": "2026-10-22 10:29:28",
     "href": "https://www.zotero.org/styles/anticancer-research"
   },
   {
@@ -3720,21 +3721,6 @@
     "href": "https://www.zotero.org/styles/austral-entomology"
   },
   {
-    "title": "Australasian Journal of Philosophy",
-    "titleShort": "AJP",
-    "name": "australasian-journal-of-philosophy",
-    "dependent": 0,
-    "categories": {
-      "format": "author-date",
-      "fields": [
-        "philosophy",
-        "humanities"
-      ]
-    },
-    "updated": "2025-09-16 07:11:22",
-    "href": "https://www.zotero.org/styles/australasian-journal-of-philosophy"
-  },
-  {
     "title": "Australian Archaeology",
     "titleShort": "AAA",
     "name": "australian-archaeology",
@@ -3803,7 +3789,7 @@
         "law"
       ]
     },
-    "updated": "2020-07-09 12:10:11",
+    "updated": "2026-11-19 12:10:24",
     "href": "https://www.zotero.org/styles/australian-guide-to-legal-citation"
   },
   {
@@ -5981,7 +5967,7 @@
       "format": "numeric",
       "fields": []
     },
-    "updated": "2026-01-25 22:16:24",
+    "updated": "2026-11-19 09:43:27",
     "href": "https://www.zotero.org/styles/cardiff-university-vancouver"
   },
   {
@@ -5992,7 +5978,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-01-05 14:58:08",
+    "updated": "2026-11-19 08:40:17",
     "href": "https://www.zotero.org/styles/cardiff-university-harvard"
   },
   {
@@ -10275,10 +10261,12 @@
     "categories": {
       "format": "note",
       "fields": [
-        "generic-base"
+        "generic-base",
+        "history",
+        "humanities"
       ]
     },
-    "updated": "2025-07-17 17:02:16",
+    "updated": "2026-11-12 21:01:59",
     "href": "https://www.zotero.org/styles/de-buck"
   },
   {
@@ -10759,6 +10747,20 @@
     },
     "updated": "2025-07-14 15:39:42",
     "href": "https://www.zotero.org/styles/donau-universitat-krems-department-fur-e-governance-in-wirthschaft-und-verwaltung"
+  },
+  {
+    "title": "Dosis - Farmaseuttinen aikakauskirja",
+    "titleShort": "Dosis",
+    "name": "dosis-farmaseuttinen-aikakauskirja",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "medicine"
+      ]
+    },
+    "updated": "2026-10-23 16:28:24",
+    "href": "https://www.zotero.org/styles/dosis-farmaseuttinen-aikakauskirja"
   },
   {
     "title": "Drug Development Research",
@@ -12016,23 +12018,9 @@
     "href": "https://www.zotero.org/styles/errata"
   },
   {
-    "title": "Escola de Comando e Estado-Maior do Exército - ABNT (Português - Brasil)",
-    "titleShort": "ABNT-ECEME/ME 21-253",
-    "name": "associacao-brasileira-de-normas-tecnicas-eceme",
-    "dependent": 0,
-    "categories": {
-      "format": "author-date",
-      "fields": [
-        "generic-base"
-      ]
-    },
-    "updated": "2021-02-15 03:41:57",
-    "href": "https://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas-eceme"
-  },
-  {
     "title": "Escola de Comando e Estado-Maior do Exército - Instituto Meira Mattos - ABNT (Português - Brasil)",
-    "titleShort": "ABNT-ECEME/IMM",
-    "name": "associacao-brasileira-de-normas-tecnicas-instituto-meira-mattos",
+    "titleShort": "ECEME - IMM - ABNT",
+    "name": "escola-de-comando-e-estado-maior-do-exercito-instituto-meira-mattos-abnt",
     "dependent": 0,
     "categories": {
       "format": "author-date",
@@ -12040,8 +12028,8 @@
         "generic-base"
       ]
     },
-    "updated": "2021-02-15 03:41:57",
-    "href": "https://www.zotero.org/styles/associacao-brasileira-de-normas-tecnicas-instituto-meira-mattos"
+    "updated": "2026-11-20 08:06:09",
+    "href": "https://www.zotero.org/styles/escola-de-comando-e-estado-maior-do-exercito-instituto-meira-mattos-abnt"
   },
   {
     "title": "Escuela Nacional de Antropología e Historia (autor-fecha, Español - México)",
@@ -15905,6 +15893,26 @@
     "href": "https://www.zotero.org/styles/iawa-journal"
   },
   {
+    "title": "Ibadica (العربية)",
+    "titleShort": "Ibadica (author-date, Arabic)",
+    "name": "ibadica",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "history",
+        "humanities",
+        "law",
+        "linguistics",
+        "literature",
+        "philosophy",
+        "theology"
+      ]
+    },
+    "updated": "2026-11-18 20:09:53",
+    "href": "https://www.zotero.org/styles/ibadica"
+  },
+  {
     "title": "Ibis",
     "name": "ibis",
     "dependent": 0,
@@ -16064,7 +16072,7 @@
         "medicine"
       ]
     },
-    "updated": "2026-01-25 22:16:24",
+    "updated": "2026-11-06 13:52:00",
     "href": "https://www.zotero.org/styles/imperial-college-london-author-date"
   },
   {
@@ -16077,7 +16085,7 @@
         "medicine"
       ]
     },
-    "updated": "2026-02-26 18:18:37",
+    "updated": "2026-10-08 15:19:51",
     "href": "https://www.zotero.org/styles/imperial-college-london-numerical"
   },
   {
@@ -16572,7 +16580,7 @@
         "engineering"
       ]
     },
-    "updated": "2025-03-10 14:48:32",
+    "updated": "2026-10-16 20:21:39",
     "href": "https://www.zotero.org/styles/institute-for-operations-research-and-the-management-sciences"
   },
   {
@@ -18187,7 +18195,7 @@
         "social_science"
       ]
     },
-    "updated": "2025-07-14 15:39:42",
+    "updated": "2026-10-08 15:29:22",
     "href": "https://www.zotero.org/styles/istanbul-universitesi-sosyal-bilimler-enstitusu"
   },
   {
@@ -18763,6 +18771,7 @@
   },
   {
     "title": "Journal of Antimicrobial Chemotherapy",
+    "titleShort": "JAC-AMR",
     "name": "journal-of-antimicrobial-chemotherapy",
     "dependent": 0,
     "categories": {
@@ -18771,7 +18780,7 @@
         "medicine"
       ]
     },
-    "updated": "2026-01-03 21:21:12",
+    "updated": "2026-10-19 21:36:26",
     "href": "https://www.zotero.org/styles/journal-of-antimicrobial-chemotherapy"
   },
   {
@@ -21194,6 +21203,20 @@
     "href": "https://www.zotero.org/styles/journal-of-raman-spectroscopy"
   },
   {
+    "title": "Journal of Raptor Research",
+    "titleShort": "JRR",
+    "name": "journal-of-raptor-research",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "biology"
+      ]
+    },
+    "updated": "2026-10-28 11:35:07",
+    "href": "https://www.zotero.org/styles/journal-of-raptor-research"
+  },
+  {
     "title": "Journal of Reconstructive Microsurgery",
     "titleShort": "J Reconstr Microsurg",
     "name": "journal-of-reconstructive-microsurgery",
@@ -22357,7 +22380,7 @@
         "law"
       ]
     },
-    "updated": "2021-02-10 05:28:52",
+    "updated": "2026-10-08 09:45:36",
     "href": "https://www.zotero.org/styles/juristische-zitierweise-schweizer"
   },
   {
@@ -23083,7 +23106,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-01-05 14:58:08",
+    "updated": "2026-11-05 16:39:39",
     "href": "https://www.zotero.org/styles/harvard-leeds-beckett-university"
   },
   {
@@ -26833,7 +26856,7 @@
         "law"
       ]
     },
-    "updated": "2026-09-30 09:05:27",
+    "updated": "2026-11-13 09:12:22",
     "href": "https://www.zotero.org/styles/norsk-henvisningsstandard-for-rettsvitenskapelige-tekster-full-firstnote"
   },
   {
@@ -26846,7 +26869,7 @@
         "law"
       ]
     },
-    "updated": "2026-09-30 09:05:27",
+    "updated": "2026-11-07 14:55:46",
     "href": "https://www.zotero.org/styles/norsk-henvisningsstandard-for-rettsvitenskapelige-tekster"
   },
   {
@@ -29094,7 +29117,7 @@
         "theology"
       ]
     },
-    "updated": "2026-06-02 07:21:14",
+    "updated": "2026-10-11 13:36:21",
     "href": "https://www.zotero.org/styles/pontifical-biblical-institute"
   },
   {
@@ -31335,7 +31358,7 @@
         "theology"
       ]
     },
-    "updated": "2026-08-12 12:18:39",
+    "updated": "2026-11-03 23:39:19",
     "href": "https://www.zotero.org/styles/society-of-biblical-literature-fullnote-bibliography"
   },
   {
@@ -31430,7 +31453,7 @@
         "social_science"
       ]
     },
-    "updated": "2026-08-13 13:24:08",
+    "updated": "2026-10-20 15:51:09",
     "href": "https://www.zotero.org/styles/schweizerische-zeitschrift-fur-geschichte"
   },
   {
@@ -33020,7 +33043,7 @@
         "social_science"
       ]
     },
-    "updated": "2023-04-03 02:14:41",
+    "updated": "2026-10-21 12:43:26",
     "href": "https://www.zotero.org/styles/stanovnistvo"
   },
   {
@@ -37563,7 +37586,7 @@
         "medicine"
       ]
     },
-    "updated": "2022-01-23 20:00:05",
+    "updated": "2026-11-02 10:24:31",
     "href": "https://www.zotero.org/styles/universitatsmedizin-gottingen"
   },
   {
@@ -38277,13 +38300,14 @@
   },
   {
     "title": "University of Leeds (author-date/Harvard)",
+    "titleShort": "UoL",
     "name": "harvard-university-of-leeds",
     "dependent": 0,
     "categories": {
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-01-05 14:58:08",
+    "updated": "2026-11-17 15:35:15",
     "href": "https://www.zotero.org/styles/harvard-university-of-leeds"
   },
   {
@@ -40227,7 +40251,7 @@
         "psychology"
       ]
     },
-    "updated": "2025-12-22 16:04:44",
+    "updated": "2026-11-18 16:27:21",
     "href": "https://www.zotero.org/styles/zurcher-hochschule-fur-angewandte-wissenschaften-soziale-arbeit"
   },
   {

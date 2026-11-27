@@ -30,6 +30,8 @@
     "Unlink citations": "引用を外す",
     "Please insert some citation into the document.": "文書にいくつかの引用を挿入してください。",
     "Omit Author": "著者を省略する",
+    "Keep sources sorted": "出典を自動的に並べ替える",
+    "The citation style of this document is not available. Your current style is used instead.": "この文書の引用スタイルは利用できません。代わりに現在のスタイルが使用されます。",
     "Connection to Zotero failed": "Zoteroへの接続に失敗しました",
     "Connection to Zotero failed. Make sure Zotero is running": "Zoteroへの接続に失敗しました。Zoteroが起動していることを確認してください。",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Zoteroへの接続に失敗しました。Zoteroで外部接続を有効にしてください：編集 → 設定 → 詳細設定 → \"Allow other applications on this computer to communicate with Zotero\"をチェック",
@@ -47,7 +49,7 @@
     "Everywhere": "全て",
     "My Library": "私のライブラリ",
     "Group Libraries": "グループライブラリ",
-    "This plugin help you search references by author, title or year in your own library.": "このプラグインは、自分のライブラリ内の著者名、タイトル、年度で文献を検索することができます。",
+    "This plugin helps you search references by author, title or year in your own library.": "このプラグインは、自分のライブラリ内の著者名、タイトル、年度で文献を検索することができます。",
     "Click": "クリック",
     "to replace all active Zotero citations and Bibliography with plain text.": "全ての有効なZotero引用とBibliographyをテキストに置き換えます。",
     "After conversion, citations can no longer be updated.": "変換後、引用は更新できません。",
@@ -79,6 +81,7 @@
     "Saving as text": "テキストとして保存",
 	"Remove": "削除",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "カーソルにZotero引用が見つかりません。引用を編集するには、直接クリックしてください。",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "文献の中には引用を挿入できません。カーソルを文献の外に置いてください。",
     "Prefix": "接頭辞",
     "Suffix": "接尾辞",
     "Book": "書籍",
@@ -112,6 +115,14 @@
     "Warning": "警告",
     "Information": "情報",
     "Operation completed successfully": "操作が正常に完了しました",
-    "Please be cautious": "ご注意ください"
-
+    "Please be cautious": "ご注意ください",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "このドキュメント内の引用が破損しており、処理できません。削除または置き換えてください。",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "この引用は手動で編集されています。編集するとその変更は失われ、引用は他の引用と同様に再びフォーマットされます。続行しますか?",
+    "Citations edited by hand": "手動で編集された引用",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "手動で編集された引用は、スタイルやその他の設定に関係なくテキストが保持されます。この文書内の数:",
+    "Do you want to discard those edits and format these citations with the new settings?": "これらの変更を破棄し、新しい設定でこれらの引用をフォーマットしますか?",
+    "Repair broken citations": "壊れた引用を修復",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "引用を別の文書からコピーした場合、フィールドの書式が失われ、プレーンテキストとして表示されることがあります。文書をチェックして、それらを復元します。",
+    "Update the bibliography when inserting a citation": "引用を挿入するときに文献を更新する",
+    "Update other citations when inserting a new one": "新しい引用を挿入するときに他の引用を更新する"
 }

@@ -30,6 +30,8 @@
     "Unlink citations": "Citaat Verwijderen",
     "Please insert some citation into the document.": "Voeg een citaat toe aan het document.",
     "Omit Author": "Auteur Weglaten",
+    "Keep sources sorted": "Bronnen automatisch sorteren",
+    "The citation style of this document is not available. Your current style is used instead.": "De citatiestijl van dit document is niet beschikbaar. In plaats daarvan wordt uw huidige stijl gebruikt.",
     "Connection to Zotero failed": "Verbinding met Zotero mislukt",
     "Connection to Zotero failed. Make sure Zotero is running": "Verbinding met Zotero mislukt. Controleer of Zotero actief is.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Verbinding met Zotero mislukt. Schakel externe verbindingen in Zotero in: Bewerken → Instellingen → Geavanceerd → Vink \"Allow other applications on this computer to communicate with Zotero\" aan",
@@ -47,7 +49,7 @@
     "Everywhere": "Elke plaats",
     "My Library": "Mijn bibliotheek",
     "Group Libraries": "Groepsbibliotheek",
-    "This plugin help you search references by author, title or year in your own library.": "Deze plugin helpt u om referenties te zoeken op auteur, titel of jaar in uw eigen bibliotheek.",
+    "This plugin helps you search references by author, title or year in your own library.": "Deze plugin helpt u om referenties te zoeken op auteur, titel of jaar in uw eigen bibliotheek.",
     "Click": "Klik",
     "to replace all active Zotero citations and Bibliography with plain text.": "om alle actieve Zotero citaat en bibliografie te vervangen met tekst.",
     "After conversion, citations can no longer be updated.": "Na de conversie kunnen citaaten niet meer worden bijgewerkt.",
@@ -79,6 +81,7 @@
     "Saving as text": "Opslaan als tekst",
 	"Remove": "Verwijderen",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Geen Zotero-citaat gevonden op de cursor. Klik direct op een citaat om het te bewerken.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citaten kunnen niet in de bibliografie worden ingevoegd. Plaats de cursor erbuiten.",
     "Prefix": "Voorvoegsel",
     "Suffix": "Achtervoegsel",
     "Book": "Boek",
@@ -112,6 +115,14 @@
     "Warning": "Waarschuwing",
     "Information": "Informatie",
     "Operation completed successfully": "Bewerking voltooid",
-    "Please be cautious": "Wees voorzichtig"
-
+    "Please be cautious": "Wees voorzichtig",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Een citaat in dit document is beschadigd en kan niet worden verwerkt. Verwijder of vervang het.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Dit citaat is handmatig bewerkt. Door het te bewerken gaan die wijzigingen verloren: het citaat wordt weer net als de andere opgemaakt. Wilt u doorgaan?",
+    "Citations edited by hand": "Handmatig bewerkte citaten",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Handmatig bewerkte citaten behouden hun tekst, ongeacht de stijl en de andere instellingen. Hun aantal in dit document:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Wilt u die wijzigingen ongedaan maken en deze citaten opmaken met de nieuwe instellingen?",
+    "Repair broken citations": "Beschadigde citaten herstellen",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Als citaten uit een ander document zijn gekopieerd, kunnen ze hun veldopmaak kwijt zijn en nu als platte tekst worden weergegeven. Hiermee wordt het document gecontroleerd en worden ze hersteld.",
+    "Update the bibliography when inserting a citation": "Bibliografie bijwerken bij het invoegen van een citaat",
+    "Update other citations when inserting a new one": "Andere citaten bijwerken bij het invoegen van een nieuw citaat"
 }

@@ -1,5 +1,4 @@
-const fs = require("fs-extra");
-const { glob } = require("glob");
+const fs = require("fs/promises");
 const { exec } = require("child_process");
 const path = require("path");
 
@@ -10,6 +9,9 @@ const LOCALES_DEST_FOLDER = "../../resources/csl/locales";
 const STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json";
 const STYLES_JSON_FOLDER = "../../resources/csl/";
 const STYLES_DEST_FOLDER = "../../resources/csl/styles";
+const CSL_FOLDER = "../../resources/csl";
+// The plugins that read the same files through the shared CSL managers.
+const OTHER_PLUGINS_CSL_FOLDERS = ["../../../mendeley/resources/csl"];
 
 const DEFAULT_STYLES = [
     "american-anthropological-association",
@@ -42,16 +44,16 @@ function cloneRepository() {
 
 async function copyLocales() {
     try {
-        const xmlLocalesFiles = await glob(
-            LOCALES_TEMP_FOLDER + "/locales-*.xml"
+        const xmlLocalesFiles = (await fs.readdir(LOCALES_TEMP_FOLDER)).filter(
+            (fileName) => /^locales-.*\.xml$/.test(fileName)
         );
-        await fs.ensureDir(LOCALES_DEST_FOLDER);
+        await fs.mkdir(LOCALES_DEST_FOLDER, { recursive: true });
 
         let numOfFiles = 0;
-        for (const filePath of xmlLocalesFiles) {
-            const fileName = path.basename(filePath);
+        for (const fileName of xmlLocalesFiles) {
+            const filePath = path.join(LOCALES_TEMP_FOLDER, fileName);
             const targetPath = path.join(LOCALES_DEST_FOLDER, fileName);
-            await fs.copy(filePath, targetPath);
+            await fs.copyFile(filePath, targetPath);
             numOfFiles++;
         }
         return numOfFiles;
@@ -63,7 +65,7 @@ async function copyLocales() {
 
 async function downloadStylesJson() {
     try {
-        await fs.ensureDir(STYLES_JSON_FOLDER);
+        await fs.mkdir(STYLES_JSON_FOLDER, { recursive: true });
         const response = await fetch(STYLES_JSON_URL);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -84,7 +86,7 @@ async function downloadStylesJson() {
 }
 
 async function downloadStyleFiles(arrayOfStyles, concurrency = 50) {
-    await fs.ensureDir(STYLES_DEST_FOLDER);
+    await fs.mkdir(STYLES_DEST_FOLDER, { recursive: true });
     if (arrayOfStyles.length < concurrency) concurrency = arrayOfStyles.length;
     return Promise.all(
         [...Array(concurrency)].map(async () => {
@@ -116,6 +118,17 @@ async function downloadStyle(url, styleName) {
     }
 }
 
+async function copyToOtherPlugins() {
+    for (const folder of OTHER_PLUGINS_CSL_FOLDERS) {
+        try {
+            await fs.cp(CSL_FOLDER, folder, { recursive: true });
+        } catch (error) {
+            console.error("❌ Failed to copy the files to", folder);
+            throw error;
+        }
+    }
+}
+
 async function updateLocalFiles() {
     try {
         const jsonData = await downloadStylesJson();
@@ -126,7 +139,10 @@ async function updateLocalFiles() {
         await cloneRepository();
         const numOfFiles = await copyLocales();
         console.log(`Copied: ${numOfFiles} locales`);
-        await fs.remove("./" + REPO_DEST_FOLDER);
+        await fs.rm("./" + REPO_DEST_FOLDER, { recursive: true, force: true });
+
+        await copyToOtherPlugins();
+        console.log(`Copied the files to ${OTHER_PLUGINS_CSL_FOLDERS.length} other plugin(s)`);
     } catch (error) {
         console.error("❌ Error:", error.message);
     }

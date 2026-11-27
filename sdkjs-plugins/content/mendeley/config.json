@@ -1,4 +1,5 @@
 {
+	"$schema": "https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/refs/heads/master/schemas/config.schema.json",
 	"name" : "Mendeley",
 	"nameLocale": {
 		"ru": "Mendeley",
@@ -13,7 +14,8 @@
 	},
 	"offered": "Ascensio System SIA",
 	"guid" : "asc.{BE5CBF95-C0AD-4842-B157-AC40FEDD9441}",
-	"version" : "1.0.4",
+	"version" : "2.0.0",
+	"minVersion": "9.3.0",
 
 	"variations" : [
 		{

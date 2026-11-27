@@ -32,13 +32,18 @@
 
 // @ts-check
 
-/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" /> 
-/// <reference path="../types-global.js" />
-/// <reference path="../csl/citation/types.js" />
-/// <reference path="../csl/styles/types.js" />
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
+/// <reference types="@onlyoffice/doceditor-plugin-types/word" />
+/// <reference path="../../shared/types-global.js" />
+/// <reference path="../../shared/csl/citation/types.js" />
+/// <reference path="../../shared/csl/styles/types.js" />
 
-import { CslHtmlParser } from "./csl-html-parser";
+import { CslHtmlParser } from "@shared/services/csl-html-parser";
 import { CslDocFormatter } from "./csl-doc-formatter";
+import { findNoteNumbers } from "@shared/csl/citation/note-numbers";
+
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiParagraph} ApiParagraph */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/word").Word.ApiHyperlink} ApiHyperlink */
 
 class CitationDocService {
     #citPrefixOld;
@@ -47,6 +52,22 @@ class CitationDocService {
     #citSuffix;
     #bibPrefix;
     #bibSuffix;
+    /**
+     * Namespace of the custom XML part that carries the document's citation
+     * style. The CSL sits in it as text, so it comes back exactly as stored.
+     */
+    #EMBEDDED_STYLE_NAMESPACE = "urn:onlyoffice:zotero:style";
+    /**
+     * The first paragraph of a document Zotero converted for moving it
+     * between word processors; the second one is the older name.
+     */
+    #TRANSFER_MARKERS = ["ZOTERO_TRANSFER_DOCUMENT", "ZOTERO_EXPORTED_DOCUMENT"];
+    /** How the links that carry Zotero's data begin in such a document. */
+    #TRANSFER_LINK_PREFIXES = [
+        "ITEM CSL_CITATION ",
+        "BIBL ",
+        "DOCUMENT_PREFERENCES ",
+    ];
 
     /**
      * @param {string} citPrefix
@@ -79,7 +100,7 @@ class CitationDocService {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: fieldId,
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibliographyCode(value),
                 Content: formattingPositions.text,
             };
 
@@ -89,20 +110,41 @@ class CitationDocService {
                 }).then((addedField) => {
                     fieldId = addedField?.FieldId || "";
                     if (!formattingPositions.formatting.length) return;
+                    if (fieldId) {
+                        return this.#selectField(fieldId).then(() =>
+                            CslDocFormatter.formatAfterUpdate(formattingPositions)
+                        );
+                    }
                     return CslDocFormatter.formatAfterInsert(
                         formattingPositions.formatting,
+                        formattingPositions.text,
                     );
                 }).then(() => fieldId);
         } else {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: "",
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibliographyCode(value),
                 Content: " ",
             };
 
             return await this.#pasteBibliographyWithHtml(field, text);
         }
+    }
+
+    /**
+     * The code of a bibliography field, spaced the way the Zotero plugin for
+     * Word writes it: ZOTERO_BIBL {json} CSL_BIBLIOGRAPHY. A bibliography
+     * without stored settings has no JSON part.
+     * @param {string} value
+     * @returns {string}
+     */
+    #bibliographyCode(value) {
+        return [this.#bibPrefix, value.trim(), this.#bibSuffix]
+            .filter(function (part) {
+                return part !== "";
+            })
+            .join(" ");
     }
 
     /**
@@ -116,19 +158,32 @@ class CitationDocService {
         /** @type {AddinFieldData} */
         const field = {
             FieldId: "",
-            Value: this.#citPrefix + " " + this.#citSuffix + value,
+            Value: this.#citPrefix + " " + this.#citSuffix + " " + value,
             Content: formattingPositions.text,
         };
-        const bHasNotes = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1)
+        // Inserting while the cursor already sits inside a footnote/endnote
+        // must not open a second note nested in the first one.
+        const wantsNote = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1);
+        const bHasNotes = wantsNote && !(await this.#isInNote());
+
         if (bHasNotes) {
             await this.#addNote(notesStyle);
         }
 
         await this.#addAddinField(field);
 
-        if (!formattingPositions.formatting.length) return bHasNotes;
-        await CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-        
+        if (formattingPositions.formatting.length) {
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(
+                    formattingPositions,
+                );
+            } else {
+                await CslDocFormatter.formatAfterInsert(formattingPositions.formatting, formattingPositions.text);
+            }
+        }
+
         if (bHasNotes) {
             await this.#selectFieldReference();
         }
@@ -168,6 +223,348 @@ class CitationDocService {
         });
     }
 
+    /**
+     * The number of the footnote or endnote each field is in, 0 for a field
+     * in the text: citeproc's noteIndex. Told from the fields' text, as
+     * findNoteNumbers says.
+     * @param {Array<AddinFieldData>} fields - in document order
+     * @returns {Promise<Array<number>>}
+     */
+    async getNoteNumbers(fields) {
+        const notes = await this.#getNoteTexts();
+        return findNoteNumbers(
+            fields.map((field) => field.Content || ""),
+            notes,
+        );
+    }
+
+    /**
+     * The text of every footnote and every endnote, in document order.
+     * @returns {Promise<{footnotes: Array<string>, endnotes: Array<string>}>}
+     */
+    #getNoteTexts() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    /** @param {Array<ApiParagraph>} firstParagraphs */
+                    function readNotes(firstParagraphs) {
+                        return firstParagraphs.map(function (first) {
+                            let text = "";
+                            // The paragraphs after the first end with the note.
+                            for (let p = /** @type {ApiParagraph|null} */ (first); p; p = p.GetNext()) {
+                                text += p.GetText() + "\n";
+                            }
+                            return text;
+                        });
+                    }
+                    const doc = Api.GetDocument();
+                    return {
+                        footnotes: readNotes(doc.GetFootnotesFirstParagraphs()),
+                        endnotes: readNotes(doc.GetEndNotesFirstParagraphs()),
+                    };
+                },
+                false,
+                false,
+                (result) => resolve(result || { footnotes: [], endnotes: [] }),
+            );
+        });
+    }
+
+    /**
+     * Scans the document body, footnotes and endnotes for paragraphs whose
+     * ENTIRE text is a complex field's raw instruction text (e.g. "ADDIN
+     * ZOTERO_ITEM CSL_CITATION {json}") exposed as visible content instead
+     * of hidden field code. This happens when a field is copy/pasted into a
+     * different document and the host editor fails to preserve the field
+     * wrapper. Only whole-paragraph matches are reported, so paragraphs
+     * that merely mention Zotero amid other text are left untouched.
+     * @returns {Promise<Array<{location: "body" | "footnote" | "endnote", index: number, rawValue: string}>>}
+     */
+    scanForBrokenFields() {
+        return new Promise((resolve) => {
+            const isCalc = true;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    /**
+                     * @param {Array<ApiParagraph>} paragraphs
+                     * @param {"body" | "footnote" | "endnote"} location
+                     */
+                    function scan(paragraphs, location) {
+                        const found = [];
+                        for (let i = 0; i < paragraphs.length; i++) {
+                            const text = paragraphs[i].GetText().trim();
+                            // A citation's code ends with its JSON, a
+                            // bibliography's with CSL_BIBLIOGRAPHY.
+                            const isCitation =
+                                /^ADDIN\s*ZOTERO_ITEM\b[\s\S]*\{[\s\S]*\}$/i.test(text);
+                            const isBibliography =
+                                /^ADDIN\s*ZOTERO_BIBL\b[\s\S]*\{[\s\S]*\}\s*CSL_BIBLIOGRAPHY$/i.test(text);
+                            if (!isCitation && !isBibliography) continue;
+                            found.push({ location: location, index: i, rawValue: text });
+                        }
+                        return found;
+                    }
+
+                    // The paragraphs of the notes, headers and footers are
+                    // among them: scanning the notes as well found each
+                    // field there twice.
+                    return scan(Api.GetDocument().GetAllParagraphs(), "body");
+                },
+                isClose,
+                isCalc,
+                (result) => resolve(result || []),
+            );
+        });
+    }
+
+    /**
+     * Whether Zotero converted the document for moving it between word
+     * processors: its first paragraph is the transfer marker then.
+     * @returns {Promise<boolean>}
+     */
+    isTransferDocument() {
+        return new Promise((resolve) => {
+            Asc.scope.transferMarkers = this.#TRANSFER_MARKERS;
+            Asc.plugin.callCommand(
+                () => {
+                    const first = Api.GetDocument().GetElement(0);
+                    if (!first || first.GetClassType() !== "paragraph") {
+                        return false;
+                    }
+                    const text = /** @type {ApiParagraph} */ (first).GetText();
+                    return Asc.scope.transferMarkers.indexOf(text.trim()) !== -1;
+                },
+                false,
+                false,
+                (result) => resolve(result === true),
+            );
+        });
+    }
+
+    /**
+     * The links of a transfer document that carry Zotero's data, in the
+     * body, the notes, the headers and the footers.
+     * @returns {Promise<Array<TransferLink>>}
+     */
+    findTransferLinks() {
+        return new Promise((resolve) => {
+            Asc.scope.transferLinkPrefixes = this.#TRANSFER_LINK_PREFIXES;
+            Asc.plugin.callCommand(
+                () => {
+                    /** @type {Array<string>} */
+                    const prefixes = Asc.scope.transferLinkPrefixes;
+                    /**
+                     * @param {Array<ApiParagraph>} paragraphs
+                     * @param {"body" | "footnote" | "endnote"} location
+                     */
+                    function scan(paragraphs, location) {
+                        const found = [];
+                        for (let i = 0; i < paragraphs.length; i++) {
+                            const paragraph = paragraphs[i];
+                            const count = paragraph.GetElementsCount();
+                            for (let j = 0; j < count; j++) {
+                                const element = paragraph.GetElement(j);
+                                if (!element || element.GetClassType() !== "hyperlink") {
+                                    continue;
+                                }
+                                const text = /** @type {ApiHyperlink} */ (element)
+                                    .GetDisplayedText()
+                                    .trim();
+                                const isZotero = prefixes.some(function (prefix) {
+                                    return text.indexOf(prefix) === 0;
+                                });
+                                if (isZotero) {
+                                    found.push({
+                                        location: location,
+                                        paragraph: i,
+                                        element: j,
+                                        text: text,
+                                    });
+                                }
+                            }
+                        }
+                        return found;
+                    }
+
+                    return scan(Api.GetDocument().GetAllParagraphs(), "body");
+                },
+                false,
+                false,
+                (result) => resolve(result || []),
+            );
+        });
+    }
+
+    /**
+     * Puts a field in the place of a link found by findTransferLinks.
+     * @param {TransferLink} link
+     * @param {AddinFieldData} field
+     * @returns {Promise<AddinFieldData | null>} null if the link is gone
+     */
+    async replaceTransferLink(link, field) {
+        const removed = await this.#removeTransferLink(link);
+        if (!removed) return null;
+        await this.#addAddinField(field);
+        return this.getCurrentField();
+    }
+
+    /**
+     * Deletes the paragraph of a link found by findTransferLinks, such as
+     * the one Zotero writes the document preferences in.
+     * @param {TransferLink} link
+     * @returns {Promise<boolean>} false if the link is gone
+     */
+    removeTransferLinkParagraph(link) {
+        return new Promise((resolve) => {
+            Asc.scope.transferLink = link;
+            Asc.plugin.callCommand(
+                () => {
+                    /** @type {TransferLink} */
+                    const link = Asc.scope.transferLink;
+                    const doc = Api.GetDocument();
+                    let paragraphs;
+                    if ("footnote" === link.location) {
+                        paragraphs = doc.GetFootnotesFirstParagraphs();
+                    } else if ("endnote" === link.location) {
+                        paragraphs = doc.GetEndNotesFirstParagraphs();
+                    } else {
+                        paragraphs = doc.GetAllParagraphs();
+                    }
+                    const paragraph = paragraphs[link.paragraph];
+                    if (!paragraph) return false;
+                    const element = paragraph.GetElement(link.element);
+                    if (
+                        !element ||
+                        element.GetClassType() !== "hyperlink" ||
+                        /** @type {ApiHyperlink} */ (element).GetDisplayedText().trim() !== link.text
+                    ) {
+                        return false;
+                    }
+                    return paragraph.Delete();
+                },
+                false,
+                true,
+                (result) => resolve(result === true),
+            );
+        });
+    }
+
+    /**
+     * Deletes what Zotero puts at the start of a transfer document: the
+     * marker, the instructions and the empty paragraphs around them.
+     * @returns {Promise<void>}
+     */
+    removeTransferHeader() {
+        return new Promise((resolve) => {
+            Asc.scope.transferMarkers = this.#TRANSFER_MARKERS;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    /**
+                     * @param {number} index
+                     * @returns {ApiParagraph | null}
+                     */
+                    function getParagraph(index) {
+                        const element = doc.GetElement(index);
+                        return element && element.GetClassType() === "paragraph"
+                            ? /** @type {ApiParagraph} */ (element)
+                            : null;
+                    }
+                    /** @param {ApiParagraph | null} paragraph */
+                    function isEmpty(paragraph) {
+                        return !!paragraph && paragraph.GetText().trim() === "";
+                    }
+
+                    const marker = getParagraph(0);
+                    if (
+                        !marker ||
+                        Asc.scope.transferMarkers.indexOf(marker.GetText().trim()) === -1
+                    ) {
+                        return;
+                    }
+                    /** @type {Array<ApiParagraph | null>} */
+                    let header = [marker];
+                    const instructions = getParagraph(2);
+                    // Zotero writes four paragraphs: the marker, an empty
+                    // one, the instructions and another empty one. If they
+                    // were changed, only the marker is surely Zotero's.
+                    if (isEmpty(getParagraph(1)) && instructions && isEmpty(getParagraph(3))) {
+                        header = [marker, getParagraph(1), instructions, getParagraph(3)];
+                    }
+                    for (let i = header.length - 1; i >= 0; i--) {
+                        const paragraph = header[i];
+                        if (paragraph) paragraph.Delete();
+                    }
+                },
+                false,
+                true,
+                () => resolve(),
+            );
+        });
+    }
+
+    /**
+     * Takes a link found by findTransferLinks out of its paragraph and puts
+     * the cursor in its place.
+     * @param {TransferLink} link
+     * @returns {Promise<boolean>} false if the link is gone
+     */
+    #removeTransferLink(link) {
+        return new Promise((resolve) => {
+            Asc.scope.transferLink = link;
+            Asc.plugin.callCommand(
+                () => {
+                    /** @type {TransferLink} */
+                    const link = Asc.scope.transferLink;
+                    const doc = Api.GetDocument();
+                    let paragraphs;
+                    if ("footnote" === link.location) {
+                        paragraphs = doc.GetFootnotesFirstParagraphs();
+                    } else if ("endnote" === link.location) {
+                        paragraphs = doc.GetEndNotesFirstParagraphs();
+                    } else {
+                        paragraphs = doc.GetAllParagraphs();
+                    }
+                    const paragraph = paragraphs[link.paragraph];
+                    if (!paragraph) return false;
+                    const element = paragraph.GetElement(link.element);
+                    if (
+                        !element ||
+                        element.GetClassType() !== "hyperlink" ||
+                        /** @type {ApiHyperlink} */ (element).GetDisplayedText().trim() !== link.text
+                    ) {
+                        return false;
+                    }
+                    if (!paragraph.RemoveElement(link.element)) return false;
+                    // An empty run keeps the place of the link, so that the
+                    // field goes there and not into the text around it.
+                    const run = Api.CreateRun();
+                    if (!paragraph.AddElement(run, link.element)) return false;
+                    return run.MoveCursorToPos(0);
+                },
+                false,
+                true,
+                (result) => resolve(result === true),
+            );
+        });
+    }
+
+    /**
+     * Replaces a broken (plain-text) field's paragraph content with a real
+     * field carrying the given data.
+     * @param {{location: "body" | "footnote" | "endnote", index: number}} match
+     * @param {AddinFieldData} field
+     * @returns {Promise<AddinFieldData | null>}
+     */
+    async repairBrokenField(match, field) {
+        const selected = await this.#selectBrokenFieldParagraph(match.location, match.index);
+        if (!selected) return null;
+        await this.#removeSelectedContent();
+        await this.#addAddinField(field);
+        return this.getCurrentField();
+    }
+
     /** @returns {Promise<boolean>} */
     saveAsText() {
         return this.getAddinZoteroFields().then(function (arrFields) {
@@ -204,13 +601,17 @@ class CitationDocService {
         const bibFields = fields.filter(field => field.Value.indexOf(this.#bibPrefix) === 0);
 
         if (bibFields.length && editorVersion && editorVersion >= 9004000) {
-            fields = fields.filter(field => field.Value.indexOf(this.#bibPrefix) !== 0);
             const field = bibFields[0];
-            await this.#selectField(field.FieldId);
-            const text = field.Content || '';
-            field.Content = " ";
-            await this.#removeSelectedContent();
-            await this.#pasteBibliographyWithHtml(field, text);
+            // The bibliography is written anew where the old one was. If
+            // that one is gone, it is updated in place like the other
+            // fields, so that no second one appears at the cursor.
+            const removed = await this.#removeAddinField(field.FieldId);
+            if (removed) {
+                fields = fields.filter(field => field.Value.indexOf(this.#bibPrefix) !== 0);
+                const text = field.Content || '';
+                field.Content = " ";
+                await this.#pasteBibliographyWithHtml(field, text);
+            }
         }
 
         const formats = this.#makeFormattingPositions(fields);
@@ -222,12 +623,14 @@ class CitationDocService {
             );
         });
 
-        if (!formats.size) return fieldIds;
-        for (const [fieldId, formattingPositions] of formats) {
-            const selectFieldResult = await this.#selectField(fieldId);
+        for (const field of fields) {
+            if (!field.Content || !field.FieldId) continue;
+            const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
+            await CslDocFormatter.clearFormatting();
+            const formattingPositions = formats.get(field.FieldId);
+            if (!formattingPositions) continue;
             await CslDocFormatter.formatAfterUpdate(
-                fieldId,
                 formattingPositions,
             );
         }
@@ -239,8 +642,11 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async convertNotesToText(fields) {
+        /** @type {Array<AddinFieldData>} */
+        const keptInNotes = [];
+        const currentTexts = await this.#getCurrentFieldTexts();
         const formats = this.#makeFormattingPositions(fields);
-    
+
         for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
             if (!field.FieldId) {
@@ -250,15 +656,36 @@ class CitationDocService {
 
             const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
-            const isReferenceSelected = await this.#selectFieldReference();
-            if (!isReferenceSelected) continue;
+            if (await this.#getNoteStyle()) {
+                // Taking the citation out of its note deletes the note with
+                // all it holds; one with more than this citation is kept,
+                // and the citation updated in it.
+                const isAlone = await this.#isAloneInNote(
+                    currentTexts.get(field.FieldId) || "",
+                );
+                if (!isAlone) {
+                    keptInNotes.push(field);
+                    continue;
+                }
+                const isReferenceSelected = await this.#selectFieldReference();
+                if (!isReferenceSelected) continue;
+            }
+            // The note reference, or the field itself, is selected: it is
+            // replaced by the field in the text.
             await this.#removeSuperscript();
             await this.#removeSelectedContent();
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
+        await this.#updateFieldsInPlace(keptInNotes, formats);
     }
 
     /**
@@ -280,7 +707,13 @@ class CitationDocService {
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
     }
 
@@ -292,6 +725,7 @@ class CitationDocService {
     async convertNotesStyle(fields, notesStyle) {
         /** @type {Array<AddinFieldData>} */
         const editedFields = [];
+        const currentTexts = await this.#getCurrentFieldTexts();
         const formats = this.#makeFormattingPositions(fields);
 
         for (let i = 0; i < fields.length; i++) {
@@ -306,24 +740,90 @@ class CitationDocService {
 
             const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
-            const isReferenceSelected = await this.#selectFieldReference();
-            if (!isReferenceSelected) continue;
+
+            const noteStyle = await this.#getNoteStyle();
+            if (noteStyle === notesStyle) {
+                // Already in a note of the chosen kind - update in place
+                editedFields.push(field);
+                continue;
+            }
+            if (noteStyle) {
+                // A note of the other kind is made anew, which drops all it
+                // holds; one with more than this citation is left as it is.
+                const isAlone = await this.#isAloneInNote(
+                    currentTexts.get(field.FieldId) || "",
+                );
+                if (!isAlone) {
+                    editedFields.push(field);
+                    continue;
+                }
+                const isReferenceSelected = await this.#selectFieldReference();
+                if (!isReferenceSelected) continue;
+            }
+            // The note reference, or the field itself in the text, is
+            // selected: it goes, and a new note takes its place. A note
+            // added over a selection would only follow it.
             await this.#removeSuperscript();
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
-        if (editedFields.length) {
-            await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod(
-                    "UpdateAddinFields",
-                    [editedFields],
-                    resolve,
-                );
-            });
+        await this.#updateFieldsInPlace(editedFields, formats);
+    }
+
+    /**
+     * What the fields of the document read now, by field id, to tell a
+     * note that holds nothing but its citation.
+     * @returns {Promise<Map<string, string>>}
+     */
+    async #getCurrentFieldTexts() {
+        /** @type {Map<string, string>} */
+        const texts = new Map();
+        (await this.#getAllAddinFields()).forEach(function (field) {
+            if (field.FieldId) texts.set(field.FieldId, field.Content || "");
+        });
+        return texts;
+    }
+
+    /**
+     * Gives fields their new text where they are, formatted as the style
+     * says: the formatting of the old text is cleared first, as the new
+     * text takes it on otherwise.
+     * @param {Array<AddinFieldData>} fields - with plain text, as
+     *  #makeFormattingPositions leaves them
+     * @param {Map<string, {text: string, formatting: Array<FormattingPositions>}>} formats
+     * @returns {Promise<void>}
+     */
+    async #updateFieldsInPlace(fields, formats) {
+        if (!fields.length) return;
+        for (const field of fields) {
+            if (!field.Content) continue;
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            await CslDocFormatter.clearFormatting();
+        }
+        await new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod(
+                "UpdateAddinFields",
+                [fields],
+                resolve,
+            );
+        });
+        for (const field of fields) {
+            const formatting = formats.get(field.FieldId);
+            if (!formatting) continue;
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            await CslDocFormatter.formatAfterUpdate(formatting);
         }
     }
 
@@ -335,7 +835,27 @@ class CitationDocService {
     async moveCursorToField(fieldId, isBegin) {
         return new Promise((resolve) => {
             isBegin = isBegin ?? true;
-            window.Asc.plugin.executeMethod("MoveCursorToField", [fieldId, isBegin], resolve);
+            window.Asc.plugin.executeMethod("MoveCursorToField", [fieldId, isBegin], () => resolve());
+        });
+    }
+
+    /**
+     * @returns {Promise<void>}
+     */
+    addParagraphAfterCursor() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const paragraph = doc.GetCurrentParagraph();
+                    if (!paragraph) return;
+                    if (!paragraph.InsertParagraph("", "after", true)) return;
+                    doc.MoveCursorRight(1);
+                },
+                false,
+                false,
+                () => resolve(),
+            );
         });
     }
 
@@ -347,7 +867,7 @@ class CitationDocService {
     async moveCursorOutsideField(fieldId, isBeforeField) {
         return new Promise((resolve) => {
             isBeforeField = isBeforeField ?? false;
-            window.Asc.plugin.executeMethod("MoveCursorOutsideField", [fieldId, isBeforeField], resolve);
+            window.Asc.plugin.executeMethod("MoveCursorOutsideField", [fieldId, isBeforeField], () => resolve());
         });
     }
 
@@ -372,7 +892,7 @@ class CitationDocService {
 
     /**
      * @param {AddinFieldData} field
-     * @returns {Promise<void>}
+     * @returns {Promise<AddinFieldData | null>}
      */
     #addAddinField(field) {
         return new Promise(function (resolve) {
@@ -476,7 +996,92 @@ class CitationDocService {
      */
     #pasteHtml(html) {
         return new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("PasteHtml", [html], resolve);
+            window.Asc.plugin.executeMethod(
+                "PasteHtml",
+                [html, { MergeLast: true }],
+                function () {
+                    resolve();
+                },
+            );
+        });
+    }
+
+    /** @returns {Promise<boolean>} */
+    #isInNote() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const note = doc.GetCurrentFootEndnote();
+                    return !!note;
+                },
+                false,
+                true,
+                (result) => resolve(!!result),
+            );
+        });
+    }
+
+    /**
+     * The kind of note the cursor is in.
+     * @returns {Promise<NoteStyle | null>} null outside notes
+     */
+    #getNoteStyle() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const note = Api.GetDocument().GetCurrentFootEndnote();
+                    if (!note) return null;
+                    if (note.IsEndnote()) return "endnotes";
+                    if (note.IsFootnote()) return "footnotes";
+                    return null;
+                },
+                false,
+                false,
+                (result) =>
+                    resolve(
+                        result === "footnotes" || result === "endnotes"
+                            ? result
+                            : null,
+                    ),
+            );
+        });
+    }
+
+    /**
+     * Whether the note the cursor is in holds nothing but the given text.
+     * @param {string} text
+     * @returns {Promise<boolean>}
+     */
+    #isAloneInNote(text) {
+        return new Promise((resolve) => {
+            Asc.scope.noteText = text;
+            Asc.plugin.callCommand(
+                () => {
+                    const note = Api.GetDocument().GetCurrentFootEndnote();
+                    if (!note) return false;
+                    return note.GetText().trim() === String(Asc.scope.noteText).trim();
+                },
+                false,
+                false,
+                (result) => resolve(result === true),
+            );
+        });
+    }
+
+    /**
+     * Removes a field the way a paste replaces a selection: the cursor
+     * stays where the field was.
+     * @param {string} fieldId
+     * @returns {Promise<boolean>} false if the editor found no such field
+     */
+    #removeAddinField(fieldId) {
+        return new Promise((resolve) => {
+            window.Asc.plugin.executeMethod(
+                "RemoveAddinField",
+                [fieldId],
+                (result) => resolve(result === true),
+            );
         });
     }
 
@@ -486,7 +1091,7 @@ class CitationDocService {
             window.Asc.plugin.executeMethod(
                 "RemoveSelectedContent",
                 undefined,
-                resolve,
+                () => resolve(),
             );
         });
     }
@@ -496,8 +1101,48 @@ class CitationDocService {
      */
     #selectField(fieldId) {
         return new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
-                resolve(true),
+            window.Asc.plugin.executeMethod(
+                "SelectAddinField",
+                [fieldId],
+                (result) => resolve(result !== false),
+            );
+        });
+    }
+
+    /**
+     * Re-locates a paragraph reported by `scanForBrokenFields` by its stable
+     * index (paragraph object references don't survive across separate
+     * `callCommand` calls, so it has to be looked up again each time) and
+     * selects it, ready for `#removeSelectedContent`.
+     * @param {"body" | "footnote" | "endnote"} location
+     * @param {number} index
+     * @returns {Promise<boolean>}
+     */
+    #selectBrokenFieldParagraph(location, index) {
+        return new Promise((resolve) => {
+            Asc.scope.brokenFieldLocation = location;
+            Asc.scope.brokenFieldIndex = index;
+            const isCalc = true;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    let paragraphs;
+                    if ("footnote" === Asc.scope.brokenFieldLocation) {
+                        paragraphs = doc.GetFootnotesFirstParagraphs();
+                    } else if ("endnote" === Asc.scope.brokenFieldLocation) {
+                        paragraphs = doc.GetEndNotesFirstParagraphs();
+                    } else {
+                        paragraphs = doc.GetAllParagraphs();
+                    }
+                    const paragraph = paragraphs[Asc.scope.brokenFieldIndex];
+                    if (!paragraph) return false;
+                    paragraph.Select();
+                    return true;
+                },
+                isClose,
+                isCalc,
+                (result) => resolve(!!result),
             );
         });
     }
@@ -648,9 +1293,9 @@ class CitationDocService {
                             
                             for (let i = 0; i < paragraph.GetElementsCount(); i++) {
                                  let margin = paragraph.GetElement(i);
-                                 if (!margin || typeof margin.GetText !== 'function') continue;
+                                 if (!margin || !("GetText" in margin) || !("AddText" in margin)) continue;
                                  if (margin.GetText() === numberText) {
-                                    margin.AddTabStop();
+                                    margin.AddText("\t");
                                     margin.SetItalic(false);
                                     break;
                                  }
@@ -674,6 +1319,239 @@ class CitationDocService {
         });
         Asc.scope.bibStyle = null;
         return addedField.FieldId;
+    }
+
+    async loadStyleFromDocument() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const props = doc.GetCustomProperties();
+                    if (!props) return "";
+                    let xml = "";
+                    let i = 1;
+                    const MAX_ZOTERO_PREF_CHUNKS = 1000;
+                    while (i <= MAX_ZOTERO_PREF_CHUNKS) {
+                        const val = props.Get("ZOTERO_PREF_" + i);
+                        if (val === null || val === undefined) break;
+                        xml += String(val);
+                        i++;
+                    }
+                    return xml;
+                },
+                false,
+                true,
+                (result) => resolve(result || ""),
+            );
+        });
+    }
+
+    /**
+     * Which style, in which version, the document stores: what
+     * loadEmbeddedStyle() gives, without the CSL, which can be large.
+     * @returns {Promise<{styleId: string, updated: string} | null>}
+     */
+    loadEmbeddedStyleVersion() {
+        return new Promise((resolve) => {
+            Asc.scope.embeddedStyleNamespace = this.#EMBEDDED_STYLE_NAMESPACE;
+            Asc.plugin.callCommand(
+                function () {
+                    const doc = Api.GetDocument();
+                    const customParts = doc ? doc.GetCustomXmlParts() : null;
+                    if (!customParts) return null;
+                    const parts = customParts
+                        .GetByNamespace(Asc.scope.embeddedStyleNamespace);
+                    if (!parts.length) return null;
+                    const root = new DOMParser().parseFromString(
+                        parts[0].GetXml(),
+                        "application/xml"
+                    ).documentElement;
+                    if (!root || root.namespaceURI !== Asc.scope.embeddedStyleNamespace) {
+                        return null;
+                    }
+                    return {
+                        styleId: root.getAttribute("style-id") || "",
+                        updated: root.getAttribute("updated") || "",
+                    };
+                },
+                false,
+                false,
+                (result) => resolve(result || null)
+            );
+        });
+    }
+
+    /**
+     * The citation style stored in the document by saveEmbeddedStyle().
+     * @returns {Promise<StyleCopy|null>}
+     */
+    async loadEmbeddedStyle() {
+        const xml = await new Promise((resolve) => {
+            Asc.scope.embeddedStyleNamespace = this.#EMBEDDED_STYLE_NAMESPACE;
+            Asc.plugin.callCommand(
+                function () {
+                    const doc = Api.GetDocument();
+                    if (!doc) {
+                        return "";
+                    }
+                    const customParts = doc.GetCustomXmlParts();
+                    if (!customParts) {
+                        return "";
+                    }
+                    const parts = customParts
+                        .GetByNamespace(Asc.scope.embeddedStyleNamespace);
+                    return parts.length ? parts[0].GetXml() : "";
+                },
+                false,
+                false,
+                resolve
+            );
+        });
+        if (!xml) {
+            return null;
+        }
+        const root = new DOMParser().parseFromString(
+            xml,
+            "application/xml"
+        ).documentElement;
+        if (!root || root.namespaceURI !== this.#EMBEDDED_STYLE_NAMESPACE) {
+            return null;
+        }
+        return {
+            styleId: root.getAttribute("style-id") || "",
+            updated: root.getAttribute("updated") || "",
+            content: root.textContent || "",
+        };
+    }
+
+    /**
+     * Stores the citation style in the document, replacing the one there -
+     * unless the document already holds this style in the same or a newer
+     * version, which a co-author may have stored meanwhile.
+     * @param {StyleCopy} style
+     * @returns {Promise<void>}
+     */
+    async saveEmbeddedStyle(style) {
+        /**
+         * @param {string} text
+         * @returns {string}
+         */
+        const escapeXml = (text) => String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+
+        const xml =
+            '<?xml version="1.0" encoding="UTF-8"?>' +
+            '<embeddedStyle xmlns="' + this.#EMBEDDED_STYLE_NAMESPACE + '"' +
+            ' style-id="' + escapeXml(style.styleId) + '"' +
+            ' updated="' + escapeXml(style.updated) + '">' +
+            escapeXml(style.content) +
+            "</embeddedStyle>";
+        return new Promise((resolve) => {
+            Asc.scope.embeddedStyleNamespace = this.#EMBEDDED_STYLE_NAMESPACE;
+            Asc.scope.embeddedStyle = {
+                styleId: style.styleId,
+                updated: style.updated,
+                xml: xml,
+            };
+            Asc.plugin.callCommand(
+                function () {
+                    const style = Asc.scope.embeddedStyle;
+                    const doc = Api.GetDocument();
+                    if (!doc) {
+                        return;
+                    }
+                    const customParts = doc.GetCustomXmlParts();
+                    if (!customParts) {
+                        return;
+                    }
+                    const stored = customParts.GetByNamespace(
+                        Asc.scope.embeddedStyleNamespace
+                    );
+                    for (let i = 0; i < stored.length; i++) {
+                        // The attributes come before the CSL text.
+                        const head = stored[i].GetXml().slice(0, 1000);
+                        const id = /style-id="([^"]*)"/.exec(head);
+                        const updated = /updated="([^"]*)"/.exec(head);
+                        if (!id || id[1] !== style.styleId || !updated) {
+                            continue;
+                        }
+                        const storedTime = Date.parse(updated[1]);
+                        const newTime = Date.parse(style.updated);
+                        if (isNaN(newTime) || storedTime >= newTime) {
+                            return;
+                        }
+                    }
+                    for (let i = 0; i < stored.length; i++) {
+                        stored[i].Delete();
+                    }
+                    customParts.Add(style.xml);
+                },
+                false,
+                false,
+                function () {
+                    resolve();
+                }
+            );
+        });
+    }
+
+    /**
+     * Drops the citation style stored by saveEmbeddedStyle().
+     * @returns {Promise<void>}
+     */
+    async removeEmbeddedStyle() {
+        return new Promise((resolve) => {
+            Asc.scope.embeddedStyleNamespace = this.#EMBEDDED_STYLE_NAMESPACE;
+            Asc.plugin.callCommand(
+                function () {
+                    const doc = Api.GetDocument();
+                    if (!doc) {
+                        return;
+                    }
+                    const customParts = doc.GetCustomXmlParts();
+                    if (!customParts) {
+                        return;
+                    }
+                    const stored = customParts
+                        .GetByNamespace(Asc.scope.embeddedStyleNamespace);
+                    for (let i = 0; i < stored.length; i++) {
+                        stored[i].Delete();
+                    }
+                },
+                false,
+                false,
+                function () {
+                    resolve();
+                }
+            );
+        });
+    }
+
+    /**
+     * @param {Array<string>} chunks
+     * @returns 
+     */
+    async saveStyleToDocument(chunks) {
+        return new Promise(function (resolve) {
+            Asc.scope.prefChunks = chunks;
+            Asc.plugin.callCommand(
+                function () {
+                    var doc = Api.GetDocument();
+                    var props = doc.GetCustomProperties();
+                    var chunks = Asc.scope.prefChunks;
+                    var slotsToClear = Math.max(chunks.length, 10);
+                    for (var i = 0; i < slotsToClear; i++) {
+                        props.Add("ZOTERO_PREF_" + (i + 1), i < chunks.length ? chunks[i] : "");
+                    }
+                },
+                false,
+                false,
+                resolve
+            );
+        });
     }
 }
 

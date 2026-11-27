@@ -31,23 +31,37 @@
  */
 // @ts-check
 
-/// <reference path="./types-global.js" />
+/// <reference path="../../../zotero/src/shared/types-global.js" />
 /// <reference path="./sdk/types.js" />
 /// <reference path="../../vendor/mendeley-sdk/standalone.min.js" />
 
-/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types").AscTheme} AscTheme */
 
-import { Theme } from "./theme";
-import { Router } from "./router";
+import { Theme } from "@shared/theme";
+import { Router } from "@shared/router";
 import { Sdk } from "./sdk";
-import { SettingsPage } from "./pages/settings";
+import { SettingsPage } from "@shared/pages/settings";
 import { LoginPage } from "./pages/login";
-import { translate, CitationService, CursorService } from "./services";
-import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
-import { Button, Loader } from "./shared/components";
+import { translate, CursorService } from "./services";
+import { CitationService } from "@shared/services/citation-service";
+import { AdditionalWindow } from "@shared/pages/additional-window";
+import { ContentControlCitationDocument } from "./document/content-control-citation-document";
+import { MendeleyDesktopFields } from "./document/mendeley-desktop-fields";
+import { SelectCitationsComponent } from "@shared/ui/select-citation";
+import { CitedItemKeys } from "@shared/item-keys";
+import { SearchFilterComponents } from "./ui";
+import { Button, Loader } from "@shared/components";
+import { EditCitationMenuItem } from "@shared/ui/edit-citation-menu-item";
 
-import "../components.css";
+import "@shared/components.css";
 import "../styles.css";
+
+/**
+ * Signing in from Desktop Editors with an authorization code works but is not
+ * released yet: until then the plugin tells desktop users it is web-only.
+ * The sign-in code stays in LoginPage; turn this on to ship it.
+ */
+const DESKTOP_SIGN_IN_ENABLED = false;
 
 (function () {
     const displayNoneClass = "hidden";
@@ -79,6 +93,8 @@ import "../styles.css";
 
     /** @type {CitationService} */
     let citationService;
+    /** @type {ContentControlCitationDocument} */
+    let citationDocument;
 
     /** @type {LastSearch} */
     const lastSearch = {
@@ -86,8 +102,26 @@ import "../styles.css";
         obj: null,
         groups: [],
         groupsHash: "",
+        groupOrder: [],
     };
     let bInProgress = false;
+    /**
+     * Signed in, with the settings and the library loaded: until then
+     * there is no style to format an edited citation with.
+     * @type {boolean}
+     */
+    let canEditCitations = false;
+    /**
+     * Counts the searches: results that come for an earlier one, after the
+     * list was cleared for a newer one, are not shown.
+     */
+    let searchGeneration = 0;
+    /**
+     * Items already cited in the document, so that the search results can put
+     * them on top of the list.
+     * @type {CitedItemKeys}
+     */
+    let citedItems;
 
     /** @type {SearchFilterComponents} */
     let searchFilter;
@@ -146,33 +180,50 @@ import "../styles.css";
     }
 
     window.Asc.plugin.init = function () {
-        if (isLocal) {
+        if (isLocal && !DESKTOP_SIGN_IN_ENABLED) {
             const message = "This plugin doesn't work into Desktop Editors.";
-            const content = document.getElementById('content');
+            const content = document.getElementById("content");
             if (!content) {
                 console.error(message);
-                return false;
+                return;
             }
-			content.innerHTML = "<p id='message' style='text-align:center; font-size:14pt;' class='i18n';>" + message + "<\/p>";
-			return;
-		}
+            content.innerHTML =
+                "<p id='message' style='text-align:center; font-size:14pt;' class='i18n'>" +
+                message +
+                "</p>";
+            window.Asc.plugin.onTranslate = applyTranslations;
+            return;
+        }
         Loader.show();
         initElements();
 
         router = new Router();
-        loginPage = new LoginPage(router);
+        loginPage = new LoginPage(router, isLocal);
 
         sdk = new Sdk({
             authFlow: loginPage.getAuthFlow()
         });
-        settings = new SettingsPage(router, displayNoneClass);
-        citationService = new CitationService(
-            settings.getLocalesManager(),
-            settings.getStyleManager()
-        );
+        settings = new SettingsPage(router, displayNoneClass, {
+            styleKey: "mendStyleId",
+            styleCopyKey: "mendLastStyleCopy",
+        });
+        // Mendeley works online only.
+        settings.setRestApiAvailable(true);
+        citationDocument = new ContentControlCitationDocument();
+        citedItems = new CitedItemKeys(citationDocument);
+        citationService = new CitationService({
+            name: "Mendeley",
+            document: citationDocument,
+            localesManager: settings.getLocalesManager(),
+            cslStylesManager: settings.getStyleManager(),
+            abbreviationsManager: settings.getAbbreviationsManager(),
+        });
         let isInit = false;
 
         addEventListeners();
+        // The editor fills its context menu only when every plugin that
+        // listens to it has answered, so the plugin answers from the start.
+        addContextMenuButtons();
 
         loginPage
             .init()
@@ -197,17 +248,16 @@ import "../styles.css";
                 Promise.all([
                     loadGroupsPromise,
                     initSettingsPromise,
-                    citationService.checkOldVersion(),
+                    upgradeMendeleyDesktopFields(),
                     showCitationsAtTheStartFromMyLibrary()
                 ]).then(function ([g, s, isUpdateOldVersion, c]) {
                     if (isUpdateOldVersion) {
                         settings.show();
-                    } else {
-                        addContextMenuButtons();
                     }
                 }).catch(function (error) {
                     console.error(error.message);
                 }).finally(function () {
+                    canEditCitations = true;
                     Loader.hide();
                 });
             });
@@ -241,8 +291,13 @@ import "../styles.css";
                 delete res.next;
                 return res;
             })
+        const generation = searchGeneration;
         return loadLibrary(promise, false)
             .then((res) => {
+                // A search started meanwhile owns the list and its header.
+                if (generation !== searchGeneration) {
+                    return;
+                }
                 if (res > 0) {
                     updateHeaderText("started"); 
                 } else {
@@ -255,6 +310,23 @@ import "../styles.css";
             .finally(() => {
                 libLoader.hide();
             });
+    }
+
+    /**
+     * Puts the list the plugin opens with in place of a search's.
+     * @returns {Promise<void>}
+     */
+    function showStartList() {
+        // A search still on its way is replaced.
+        searchGeneration++;
+        showError(false);
+        lastSearch.text = "";
+        lastSearch.obj = null;
+        lastSearch.groups = [];
+        lastSearch.groupOrder = [];
+        lastSearch.groupsHash = "";
+        selectCitation.clearLibrary();
+        return showCitationsAtTheStartFromMyLibrary();
     }
 
     /** @returns {Promise<UserGroupInfo[]>} */
@@ -278,6 +350,7 @@ import "../styles.css";
          */
         function searchFor(text, selectedGroups, groupsHash) {
             selectCitation.clearLibrary();
+            searchGeneration++;
             /** @type {Array<Promise<number>>} */
             const promises = [];
             return new Promise(resolve => {
@@ -312,19 +385,37 @@ import "../styles.css";
                 resolve(promises);
             });
         }
+        // The user has moved on from what the error was about.
+        searchFilter.onTyping(function () {
+            showError(false);
+        });
         searchFilter.subscribe(function (text, selectedGroups) {
             text = text.trim();
+            if (elements.mainState.classList.contains(displayNoneClass)) {
+                return;
+            }
+            if (!text) {
+                // A search that found nothing gives way to the list the
+                // plugin opens with once its words are erased.
+                if (selectCitation.isNothingFoundShown()) {
+                    showStartList();
+                }
+                return;
+            }
             const groupsHash = selectedGroups.join(",");
             if (
-                elements.mainState.classList.contains(displayNoneClass) ||
-                !text ||
                 (text == lastSearch.text &&
                     groupsHash === lastSearch.groupsHash) /*||
                 selectedGroups.length === 0*/
             )
                 return;
 
-            searchFor(text, selectedGroups, groupsHash)
+            // The error of the last search is not this one's.
+            showError(false);
+            const search = searchFor(text, selectedGroups, groupsHash);
+            // searchFor has started a new search by now.
+            const generation = searchGeneration;
+            search
                 .catch(() => {
                     return [];
                 })
@@ -344,6 +435,10 @@ import "../styles.css";
                 .then(function (
                         /** @type {Array<PromiseSettledResult<number>>} */ numOfShownByLib,
                     ) {
+                        // A newer search owns the list by now.
+                        if (generation !== searchGeneration) {
+                            return;
+                        }
                         let numOfShown = 0;
                         numOfShownByLib.forEach(function (promise) {
                             if (promise.status === "fulfilled") {
@@ -446,16 +541,39 @@ import "../styles.css";
             const items = selectCitation.getSelectedItems();
             let internalId = "";
 
-            /** @type {string | "INCORRECT_CONTROL" | null} */
-            let currentControlTag = await citationService.getCurrentContentControlTag();
-            if (currentControlTag) {
-                return citationService.insertSelectedCitationsToCurrentControl(items, currentControlTag)
-                    .then((controlTag) => {
+            const current = await citationService.getCurrent();
+            if (current && current.kind === "bibliography") {
+                // Nothing is inserted, so the chosen sources stay selected.
+                citationService.showWarningMessage("Citations cannot be inserted into the bibliography. Place the cursor outside it.");
+                await onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
+                return;
+            }
+            if (current && current.kind === "citation" && !current.data) {
+                // Nothing is added, so the chosen sources stay selected.
+                citationService.showWarningMessage("A citation in this document is corrupted and cannot be processed. Please remove or replace it.");
+                await onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
+                return;
+            }
+            // Another content control, not Mendeley's, takes no citation.
+            const bInOtherControl =
+                !current && !!(await citationDocument.controls.getCurrentContentControlPr());
+            if (current || bInOtherControl) {
+                const citation = current && current.kind === "citation" ? current : null;
+                // Taken before the sources are added to the citation.
+                const idsInDocument = citationService.getCitationItemIds(citation ? citation.data : null);
+                return Promise.resolve()
+                    .then(() => {
+                        if (!citation) {
+                            throw new Error("Invalid control tag");
+                        }
+                        return citationService.insertSelectedCitationsToCurrent(items, citation);
+                    })
+                    .then((data) => {
                         selectCitation.removeItems(Object.keys(items));
-                        return showEditCitationWindow(controlTag);
+                        return showEditCitationWindow(citation, data, idsInDocument);
                     })
                     .then((bSuccess) => {
-                        if (bSuccess && currentControlTag) {
+                        if (bSuccess) {
                             citationService.showSuccessMessage("Citation has been updated successfully");
                         }
                     }).catch(function (error) {
@@ -473,18 +591,20 @@ import "../styles.css";
             }
 
             return citationService.insertSelectedCitations(items)
-                .then(function (result) {
-                    internalId = result.internalId;
+                .then(async function (result) {
+                    internalId = result.id || "";
                     selectCitation.removeItems(Object.keys(items));
-                    if (result.notesStyle) {
-                        return citationService.updateCslItemsInNotes(result.notesStyle);
+                    if (result.hasNotes) {
+                        await citationService.updateCslItemsInNotes(
+                            settings.getStyleManager().getLastUsedNotesStyle(),
+                        );
                     } else {
-                        return citationService.updateCslItems();
+                        await citationService.updateCslItems();
                     }
                 })
                 .then(async () => {
                     if (internalId) {
-                        await citationService.moveCursorOutsideControl(internalId);
+                        await citationService.moveCursorOutside(internalId);
                     }
                 })
                 .catch(function (error) {
@@ -518,12 +638,21 @@ import "../styles.css";
         });
 
         settings.onChangeState(async function (newState, oldState) {
+            // Citations edited by hand keep their text; asked here, the new
+            // settings reach them too.
+            const manualEdits = await citationService.countManualEdits();
+            const options = {
+                discardManualEdits:
+                    manualEdits > 0 &&
+                    (await citationService.confirmDiscardManualEdits(manualEdits)),
+            };
+
             await onStartAction(
                 true,
                 "Mendeley (" + translate("Updating citations") + ")",
             );
             
-            let updateFn = citationService.updateCslItems.bind(citationService, true);
+            let updateFn = citationService.updateCslItems.bind(citationService, true, options);
 
             if ([newState.styleFormat, oldState.styleFormat].includes("note")) {
                 if (newState.styleFormat !== oldState.styleFormat) {
@@ -531,13 +660,15 @@ import "../styles.css";
                         updateFn = citationService.switchingBetweenNotesAndText.bind(
                             citationService,
                             newState.notesStyle,
-                            null
+                            null,
+                            options
                         );
                     } else {
                         updateFn = citationService.switchingBetweenNotesAndText.bind(
                             citationService,
                             null,
-                            oldState.notesStyle
+                            oldState.notesStyle,
+                            options
                         );
                     }
                 } else if (newState.notesStyle !== oldState.notesStyle) {
@@ -545,11 +676,13 @@ import "../styles.css";
                         citationService,
                         newState.notesStyle,
                         oldState.notesStyle,
+                        options,
                     );
                 } else {
                     updateFn = citationService.updateCslItemsInNotes.bind(
                         citationService,
-                        newState.notesStyle
+                        newState.notesStyle,
+                        options
                     );
                 }
             }
@@ -703,6 +836,7 @@ import "../styles.css";
      */
     async function onEndAction(scrollToTarget, preloaderMessage) {
         bInProgress = false;
+        citedItems.invalidate();
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
@@ -823,16 +957,21 @@ import "../styles.css";
      * @returns {Promise<number>}
      */
     function loadLibrary(promise, isGroup) {
+        const generation = searchGeneration;
         return promise
             .then(function (res) {
-                return displaySearchItems(res, null, isGroup);
+                return displaySearchItems(res, null, isGroup, generation);
             })
             .catch(function (err) {
                 console.error(err);
+                // A replaced search's failure is nobody's concern any more.
+                if (generation !== searchGeneration) {
+                    return 0;
+                }
                 if (err.message) {
                     showError(translate(err.message));
                 }
-                return displaySearchItems(null, err, isGroup);
+                return displaySearchItems(null, err, isGroup, generation);
             })
             .then(function (numOfShown) {
                 return numOfShown;
@@ -843,9 +982,14 @@ import "../styles.css";
      * @param {SearchResult | null} res
      * @param {Error | null} err
      * @param {boolean} isGroup
+     * @param {number} generation - the search it is the result of
      * @returns {Promise<number>}
      */
-    function displaySearchItems(res, err, isGroup) {
+    function displaySearchItems(res, err, isGroup, generation) {
+        // The list was cleared for a newer search while this one was loading.
+        if (generation !== searchGeneration) {
+            return Promise.resolve(0);
+        }
         let first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
@@ -888,7 +1032,25 @@ import "../styles.css";
             }
         }
 
-        return selectCitation.displaySearchItems(res, err, lastSearch);
+        return getUsedItemKeys().then(function (usedItemKeys) {
+            // The document is read meanwhile: check again.
+            if (generation !== searchGeneration) {
+                return 0;
+            }
+            selectCitation.setUsedItemKeys(usedItemKeys);
+            return selectCitation.displaySearchItems(res, err, lastSearch);
+        });
+    }
+
+    /** @returns {Promise<Set<string>>} */
+    function getUsedItemKeys() {
+        if (bInProgress) {
+            // A document action owns the editor: reading the controls would
+            // have to wait for it, and the search results must not wait for a
+            // sort hint. Read them once the action is over.
+            return Promise.resolve(citedItems.known);
+        }
+        return citedItems.read();
     }
 
     /**
@@ -937,38 +1099,98 @@ import "../styles.css";
 		
 	}
 
+    /**
+     * Offers to rewrite the citations of the old Mendeley Desktop plugin as
+     * Mendeley Cite's; the plugin closes if the user declines.
+     * @returns {Promise<boolean>} whether the document was updated
+     */
+    async function upgradeMendeleyDesktopFields() {
+        const oldFields = new MendeleyDesktopFields(citationDocument.controls);
+        const fields = await oldFields.find();
+        if (!fields.length) {
+            return false;
+        }
+
+        const dialog = new AdditionalWindow("Mendeley");
+        const isUserAgree = await dialog.show(
+            "Update this document",
+            "<p class='i18n'>" + translate("Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.") + "</p>" +
+            "<p class='i18n'>" + translate("Rest assured nothing has happened to your document or your citations.") + "</p>" +
+            "<p class='i18n'>" + translate("Press continue to be guided through the update process.") + "</p>",
+        );
+
+        if (isUserAgree) {
+            let result;
+            try {
+                result = await oldFields.upgrade(fields);
+            } catch (e) {
+                console.error(e);
+                showError(translate("An error occurred while updating the document. Try restarting the plugin."));
+                return false;
+            }
+            let text = translate("Your document has been updated to use Mendeley Cite.") + " " +
+                translate("Please select the citation style and language for future citation formatting.");
+            if (result.unreadable) {
+                text += " " + translate("Some citations could not be read and were left unchanged. To use them with Mendeley Cite, insert them again.") +
+                    " " + translate("Citations left unchanged:") + " " + result.unreadable;
+            }
+            dialog.showInfoWindow("Update complete", text, result.unreadable ? "warning" : "success");
+        } else {
+            Asc.plugin.executeCommand("close", "");
+        }
+        return isUserAgree;
+    }
+
     function addContextMenuButtons() {
-        let buttonMain = new Asc.ButtonContextMenu();
-        buttonMain.text = "Edit citation";
-        buttonMain.addCheckers("Target", "Selection");
-        buttonMain.attachOnClick(async function () {
-            /** @type {string | null} */
-            const currentControlTag = await citationService.getCurrentContentControlTag();
+        new EditCitationMenuItem(
+            async function () {
+                // A document action owns the editor: the menu does not wait for it.
+                if (bInProgress) return false;
+                const current = await citationService.getCurrent();
+                return !!current && current.kind === "citation";
+            },
+            async function () {
+                if (!canEditCitations) {
+                    citationService.showWarningMessage("Sign in to Mendeley and wait until your library loads to edit citations.");
+                    return;
+                }
+                const current = await citationService.getCurrent();
 
-            await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
-            await showEditCitationWindow(currentControlTag);
-            onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
-        });
-        Asc.Buttons.registerContextMenu();
-
+                await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
+                await showEditCitationWindow(current);
+                onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
+            },
+        );
     }
 
     /**
-     * @param {string | null} controlTag
+     * @param {import("@shared/document/citation-document").DocCitation | import("@shared/document/citation-document").DocBibliography | null} current
+     *  - the citation at the cursor
+     * @param {CitationData | null} [data] - its data with sources just added, if
+     *  other than the stored data
+     * @param {Array<string>} [idsInDocument] - the ids of its sources in the
+     *  document, if other than in its data
      * @returns {Promise<boolean>}
      */
-    async function showEditCitationWindow(controlTag) {
-        if (
-            !controlTag ||
-            controlTag.indexOf("MENDELEY_CITATION") === -1
-        ) {
+    async function showEditCitationWindow(current, data, idsInDocument) {
+        if (!current || current.kind !== "citation") {
             citationService.showWarningMessage("No Mendeley citation found at the cursor. Please click directly on a citation to edit it.");
             return false;
         }
-        const updatedObject = await citationService.showEditCitationWindow(controlTag);
+        if (!current.data) {
+            citationService.showWarningMessage("A citation in this document is corrupted and cannot be processed. Please remove or replace it.");
+            return false;
+        }
+        const idsBeforeEdit = idsInDocument || citationService.getCitationItemIds(current.data);
+        const updatedObject = await citationService.showEditCitationWindow(data || current.data, !!data);
         if (!updatedObject) {
             return false;
         }
+        // Sources added, removed or reordered change the other citations
+        // too, such as "ibid." or numbers, and the bibliography.
+        const bItemsChanged =
+            idsBeforeEdit.join("\u0000") !==
+            citationService.getCitationItemIds(updatedObject).join("\u0000");
 
         let updateFn = citationService.updateItem.bind(
             citationService,
@@ -976,16 +1198,31 @@ import "../styles.css";
         );
 
         const styleManager = settings.getStyleManager();
-        if (styleManager.getLastUsedFormat() === "note") {
+        const bIsNotesFormat = styleManager.getLastUsedFormat() === "note";
+        const notesStyle = styleManager.getLastUsedNotesStyle();
+        if (bIsNotesFormat) {
             // this way, because "SelectAddinField" does not work with notes
             updateFn = citationService.updateItem.bind(
                 citationService,
                 updatedObject,
-                styleManager.getLastUsedNotesStyle()
+                notesStyle
             );
         }
 
         return updateFn()
+            .then(async () => {
+                if (!bItemsChanged) {
+                    return;
+                }
+                // The text of a citation in a note is in the note, not in
+                // its control: notes are rewritten on their own.
+                if (bIsNotesFormat) {
+                    await citationService.updateCslItemsInNotes(notesStyle);
+                } else {
+                    await citationService.updateCslItems();
+                }
+            })
+            .then(() => true)
             .catch(function (error) {
                 console.error(error);
                 let message = translate("Failed to insert citation");

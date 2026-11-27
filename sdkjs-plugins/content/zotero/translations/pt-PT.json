@@ -30,6 +30,8 @@
     "Unlink citations": "Desligar citações",
     "Please insert some citation into the document.": "Por favor, insira alguma citação no documento.",
     "Omit Author": "Omitir Autor",
+    "Keep sources sorted": "Manter as fontes ordenadas",
+    "The citation style of this document is not available. Your current style is used instead.": "O estilo de citação deste documento não está disponível. Será utilizado o seu estilo atual.",
     "Connection to Zotero failed": "A ligação com o Zotero falhou",
     "Connection to Zotero failed. Make sure Zotero is running": "A ligação com o Zotero falhou. Certifique-se de que o Zotero está em execução.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "A ligação com o Zotero falhou. Active as ligações externas no Zotero: Editar → Definições → Avançadas → Marque \"Permitir que outros aplicativos neste computador se comuniquem com o Zotero\"",
@@ -47,7 +49,7 @@
     "Everywhere": "Todos os lugares",
     "My Library": "A minha biblioteca",
     "Group Libraries": "Grupos de bibliotecas",
-    "This plugin help you search references by author, title or year in your own library.": "Este plugin te ajudar a procurar referências por autor, título ou ano na tua biblioteca.",
+    "This plugin helps you search references by author, title or year in your own library.": "Este plugin te ajudar a procurar referências por autor, título ou ano na tua biblioteca.",
     "Click": "Clique",
     "to replace all active Zotero citations and Bibliography with plain text.": "para substituir todas as citações Zotero ativas e Bibliografia com texto simples.",
     "After conversion, citations can no longer be updated.": "Depois da conversão, as citações não podem mais ser atualizadas.",
@@ -79,6 +81,7 @@
     "Saving as text": "Guardar como texto",
 	"Remove": "Remover",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Citação Zotero não encontrada. Por favor, clique diretamente na citação para editá-la.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Não é possível inserir citações na bibliografia. Coloque o cursor fora dela.",
     "Prefix": "Prefixo",
     "Suffix": "Sufixo",
     "Book": "Livro",
@@ -112,6 +115,14 @@
     "Warning": "Aviso",
     "Information": "Informação",
     "Operation completed successfully": "Operação concluída com sucesso",
-    "Please be cautious": "Tenha cuidado"
-
+    "Please be cautious": "Tenha cuidado",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Uma citação neste documento está corrompida e não pode ser processada. Por favor, remova-a ou substitua-a.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Esta citação foi editada manualmente. Ao editá-la, essas alterações perdem-se: a citação volta a ser formatada como as outras. Deseja continuar?",
+    "Citations edited by hand": "Citações editadas manualmente",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "As citações editadas manualmente mantêm o seu texto independentemente do estilo e das outras definições. O seu número neste documento:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Deseja descartar essas alterações e formatar estas citações com as novas definições?",
+    "Repair broken citations": "Reparar citações danificadas",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Se as citações foram copiadas de outro documento, podem ter perdido a formatação de campo e aparecer agora como texto simples. Esta função verifica o documento e restaura-as.",
+    "Update the bibliography when inserting a citation": "Atualizar a bibliografia ao inserir uma citação",
+    "Update other citations when inserting a new one": "Atualizar as outras citações ao inserir uma nova"
 }

@@ -30,6 +30,8 @@
     "Unlink citations": "Открепить цитаты",
     "Please insert some citation into the document.": "Пожалуйста, вставьте цитату в документ.",
     "Omit Author": "Не выводить автора",
+    "Keep sources sorted": "Сортировать источники автоматически",
+    "The citation style of this document is not available. Your current style is used instead.": "Стиль цитирования этого документа недоступен. Вместо него используется ваш текущий стиль.",
     "Connection to Zotero failed": "Не удалось установить соединение с Zotero",
     "Connection to Zotero failed. Make sure Zotero is running": "Не удалось установить соединение с Zotero. Убедитесь, что Zotero запущен",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Не удалось установить соединение с Zotero. Пожалуйста, включите внешние соединения в Zotero. Сделайте это в разделе \"Правка → Настройки → Расширенные\": включите галочку \"Allow other applications on this computer to communicate with Zotero\"",
@@ -47,7 +49,7 @@
     "Everywhere": "Везде",
     "My Library": "Моя библиотека",
     "Group Libraries": "Группы библиотек",
-    "This plugin help you search references by author, title or year in your own library.": "Этот плагин поможет вам находить ссылки по автору, названию или году издания в вашей библиотеке.",
+    "This plugin helps you search references by author, title or year in your own library.": "Этот плагин поможет вам находить ссылки по автору, названию или году издания в вашей библиотеке.",
     "Click": "Кликните",
     "to replace all active Zotero citations and Bibliography with plain text.": "чтобы заменить все активные цитаты и библиографию Zotero обычным текстом.",
     "After conversion, citations can no longer be updated.": "После конвертации цитаты больше не будут обновляться.",
@@ -79,6 +81,7 @@
     "Saving as text": "Сохранение как текст",
 	"Remove": "Удалить",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Цитата Zotero не найдена. Пожалуйста, нажмите напрямую на цитату для редактирования.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Цитаты нельзя вставить в библиографию. Поставьте курсор за её пределами.",
     "Prefix": "Префикс",
     "Suffix": "Суффикс",
     "Book": "Книга",
@@ -112,6 +115,14 @@
     "Warning": "Предупреждение",
     "Information": "Информация",
     "Operation completed successfully": "Операция успешно завершена",
-    "Please be cautious": "Будьте внимательны"
-
+    "Please be cautious": "Будьте внимательны",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Цитата в этом документе повреждена и не может быть обработана. Пожалуйста, удалите или замените её.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Эта цитата была изменена вручную. Если её отредактировать, эти изменения пропадут: цитата снова будет оформляться, как остальные. Продолжить?",
+    "Citations edited by hand": "Цитаты, изменённые вручную",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Цитаты, изменённые вручную, сохраняют свой текст при любом стиле и других настройках. Их число в этом документе:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Отменить эти изменения и оформить эти цитаты по новым настройкам?",
+    "Repair broken citations": "Восстановить повреждённые цитаты",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Если цитаты были скопированы из другого документа, они могли потерять форматирование полей и теперь отображаются как обычный текст. Эта функция проверит документ и восстановит их.",
+    "Update the bibliography when inserting a citation": "Обновлять библиографию при вставке цитаты",
+    "Update other citations when inserting a new one": "Обновлять остальные цитаты при вставке новой"
 }

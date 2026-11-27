@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/// <reference path="../types-global.js" />
+/// <reference path="../../../../zotero/src/shared/types-global.js" />
 /// <reference path="../../../vendor/mendeley-sdk/standalone.min.js" />
 /// <reference path="./types.js" />
 

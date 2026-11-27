@@ -1,0 +1,198 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2026
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
+// @ts-check
+
+/// <reference path="./types-global.js" />
+
+/**
+ * A Zotero item is referred to by several different strings depending on where
+ * it comes from: a bare item key from the web API, a citation key (desktop
+ * mode, e.g. a Better BibTeX key) or a full item URI stored inside a document
+ * field. Everything is reduced to its last path segment so that an id read
+ * from the document can be compared with an id read from a search result.
+ * @param {string|number|null|undefined} value
+ * @returns {string}
+ */
+function normalizeItemKey(value) {
+    if (value === null || value === undefined) {
+        return "";
+    }
+    let key = String(value).trim();
+    const paramsIndex = key.search(/[?#]/);
+    if (paramsIndex !== -1) {
+        key = key.slice(0, paramsIndex);
+    }
+    const slashIndex = key.lastIndexOf("/");
+    if (slashIndex !== -1) {
+        key = key.slice(slashIndex + 1);
+    }
+    return key;
+}
+
+/**
+ * Every key the item can be recognized by: its own id plus the keys of all of
+ * its URIs, because the id under which a citation was stored is not always the
+ * id the same item is found under later.
+ * @param {{id?: string|number, uris?: Array<string>, itemData?: {id?: string|number}}} item
+ * @returns {Array<string>}
+ */
+function collectItemKeys(item) {
+    /** @type {Array<string>} */
+    const keys = [];
+    /** @param {string|number|null|undefined} value */
+    const add = function (value) {
+        const key = normalizeItemKey(value);
+        if (key && keys.indexOf(key) === -1) {
+            keys.push(key);
+        }
+    };
+    if (!item) {
+        return keys;
+    }
+    add(item.id);
+    if (item.itemData) {
+        add(item.itemData.id);
+    }
+    if (Array.isArray(item.uris)) {
+        item.uris.forEach(add);
+    }
+    return keys;
+}
+
+/**
+ * Keys of every item already cited somewhere in the document, used to give
+ * references the document already relies on priority in the search results.
+ * Reads the stored data only: the citation service's storage is formatting
+ * state which only the insert/refresh flows may rebuild.
+ * @param {{readCitationData(): Promise<Array<CitationData>>}} document
+ * @returns {Promise<Set<string>>}
+ */
+async function usedItemKeys(document) {
+    /** @type {Set<string>} */
+    const keys = new Set();
+    const citations = await document.readCitationData();
+    citations.forEach(function (citation) {
+        if (!Array.isArray(citation.citationItems)) {
+            return;
+        }
+        citation.citationItems.forEach(function (citationItem) {
+            collectItemKeys(citationItem).forEach(function (key) {
+                keys.add(key);
+            });
+        });
+    });
+    return keys;
+}
+
+/**
+ * The keys of the items the document cites, for putting them first in the
+ * search results. Reading them walks every citation of the document, too
+ * slow to redo on every keystroke: they are read again only after a while,
+ * or once told the document changed. An answer that is late is not waited
+ * for, the keys read before stand in: the order of the results is a hint,
+ * showing them is not.
+ */
+class CitedItemKeys {
+    /** @type {{readCitationData(): Promise<Array<CitationData>>}} */
+    #document;
+    #ttl;
+    #timeout;
+    /** @type {Set<string>} */
+    #keys = new Set();
+    /** @type {Promise<Set<string>> | null} */
+    #reading = null;
+    #readAt = 0;
+
+    /**
+     * @param {{readCitationData(): Promise<Array<CitationData>>}} document
+     * @param {{ttl?: number, timeout?: number}} [options] - how long, in
+     *  milliseconds, the keys read stand, and how long a reading is waited for
+     */
+    constructor(document, options) {
+        this.#document = document;
+        this.#ttl = (options && options.ttl) || 5000;
+        this.#timeout = (options && options.timeout) || 1000;
+    }
+
+    /**
+     * The keys read last, without reading the document.
+     * @returns {Set<string>}
+     */
+    get known() {
+        return this.#keys;
+    }
+
+    /**
+     * The keys of the document, read again if those read last are stale.
+     * @returns {Promise<Set<string>>}
+     */
+    read() {
+        const now = Date.now();
+        if (this.#reading && now - this.#readAt < this.#ttl) {
+            return this.#reading;
+        }
+        this.#readAt = now;
+        const reading = new Promise((resolve) => {
+            // A late answer is not read again: it serves the next search,
+            // and a new reading would only queue up behind it.
+            const timer = setTimeout(() => resolve(this.#keys), this.#timeout);
+            usedItemKeys(this.#document)
+                .then((keys) => {
+                    clearTimeout(timer);
+                    this.#keys = keys;
+                    resolve(keys);
+                    // This reading may have given the old keys on timeout:
+                    // the next search takes these instead.
+                    if (this.#reading === reading) {
+                        this.#reading = Promise.resolve(keys);
+                    }
+                })
+                .catch((e) => {
+                    clearTimeout(timer);
+                    console.error(e);
+                    if (this.#reading === reading) this.invalidate();
+                    resolve(this.#keys);
+                });
+        });
+        this.#reading = reading;
+        return reading;
+    }
+
+    /** Has the keys read again next time: the document has changed. */
+    invalidate() {
+        this.#reading = null;
+        this.#readAt = 0;
+    }
+}
+
+export { normalizeItemKey, collectItemKeys, usedItemKeys, CitedItemKeys };

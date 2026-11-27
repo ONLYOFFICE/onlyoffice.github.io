@@ -10,10 +10,5 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "type": "commonjs",
-    "dependencies": {
-        "child_process": "^1.0.2",
-        "fs-extra": "^11.3.1",
-        "glob": "^11.1.0"
-    }
+    "type": "commonjs"
 }

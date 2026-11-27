@@ -32,10 +32,13 @@
 
 // @ts-check
 
-/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" />
-/// <reference path="../types-global.js" />
-/// <reference path="../csl/citation/types.js" />
-/// <reference path="../csl/styles/types.js" />
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
+/// <reference types="@onlyoffice/doceditor-plugin-types/word" />
+/// <reference path="../../../../zotero/src/shared/types-global.js" />
+/// <reference path="../../../../zotero/src/shared/csl/citation/types.js" />
+/// <reference path="../../../../zotero/src/shared/csl/styles/types.js" />
+
+import { CslHtmlParser } from "@shared/services/csl-html-parser";
 
 class CitationDocService {
     #citPrefix;
@@ -698,7 +701,7 @@ class CitationDocService {
      * @returns {Promise<string>}
      */
     async #pasteContentControlHtml(html) {
-
+        html = CslHtmlParser.purifyHtml(html);
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
         const paragraphs = doc.querySelectorAll(".csl-entry");

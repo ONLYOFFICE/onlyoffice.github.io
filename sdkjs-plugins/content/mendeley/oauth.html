@@ -33,27 +33,152 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mendeley</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #f7f7f7;
+            --card: #ffffff;
+            --text: #333333;
+            --muted: #6b6b6b;
+            --border: #cfcfcf;
+            --accent: #446995;
+            --accent-text: #ffffff;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #222222;
+                --card: #333333;
+                --text: #e8e8e8;
+                --muted: #a8a8a8;
+                --border: #555555;
+                --accent: #4a7bb7;
+            }
+        }
+        body {
+            margin: 0;
+            padding: 16px;
+            background: var(--bg);
+            color: var(--text);
+            font: 14px/1.5 Arial, Helvetica, sans-serif;
+        }
+        #codeState {
+            max-width: 480px;
+            margin: 48px auto;
+            padding: 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+        p {
+            margin: 0 0 16px;
+            color: var(--muted);
+        }
+        #code {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: var(--bg);
+            color: var(--text);
+            font: 13px/1.4 Consolas, "Courier New", monospace;
+        }
+        #copyBtn {
+            margin-top: 12px;
+            width: 100%;
+            padding: 8px;
+            border: 0;
+            border-radius: 2px;
+            background: var(--accent);
+            color: var(--accent-text);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
-<body spellcheck="false" class="noselect">
+<body spellcheck="false">
+    <div id="codeState" class="hidden">
+        <h1 id="title">Mendeley authorization code</h1>
+        <p id="hint">Copy the code and paste it into the Mendeley plugin in ONLYOFFICE Desktop Editors. You can then close this page.</p>
+        <input id="code" type="text" readonly />
+        <button id="copyBtn" type="button">Copy</button>
+    </div>
     <script>
         (function () {
-            function parseLocation() {
+            function getOpener() {
+                try {
+                    if (window.opener && typeof window.opener.OAuthCallback === "function") {
+                        return window.opener;
+                    }
+                } catch (e) {
+                    // the opener has a different origin
+                }
+                return null;
+            }
+
+            function parseLocation(opener) {
                 try {
                     var matches = document.location.hash.match(new RegExp("access_token=([^&]*)&state=([^&]*)"));
-                    
+
                     if (matches && matches[1] && matches[2]) {
-                        window.opener.OAuthCallback(matches[1], matches[2]);
+                        opener.OAuthCallback(matches[1], matches[2]);
                     } else {
-                        window.opener.OAuthError("No token or state");
+                        opener.OAuthError("No token or state");
                     }
                 } finally {
                     window.close();
                 }
             }
 
-            window.onload = parseLocation;
+            // The page was opened without the plugin window (Desktop Editors open it
+            // in the system browser): show the authorization code for manual input.
+            function showCode() {
+                var params = new URLSearchParams(document.location.search);
+                var code = params.get("code");
+                var codeField = document.getElementById("code");
+                var copyBtn = document.getElementById("copyBtn");
+
+                if (code) {
+                    codeField.value = code;
+                    copyBtn.onclick = function () {
+                        codeField.select();
+                        var copied = navigator.clipboard ?
+                            navigator.clipboard.writeText(code) :
+                            Promise.reject();
+                        copied.catch(function () {
+                            document.execCommand("copy");
+                        }).then(function () {
+                            copyBtn.textContent = "Copied";
+                        });
+                    };
+                } else {
+                    document.getElementById("title").textContent = "Authorization failed";
+                    document.getElementById("hint").textContent =
+                        params.get("error_description") || params.get("error") || "No authorization code.";
+                    codeField.classList.add("hidden");
+                    copyBtn.classList.add("hidden");
+                }
+                document.getElementById("codeState").classList.remove("hidden");
+            }
+
+            window.onload = function () {
+                var opener = getOpener();
+                if (opener) {
+                    parseLocation(opener);
+                } else {
+                    showCode();
+                }
+            };
         })();
     </script>
 </body>
-</html>	
+</html>

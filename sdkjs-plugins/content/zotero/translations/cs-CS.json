@@ -30,6 +30,8 @@
     "Unlink citations": "Odpojit citace",
     "Please insert some citation into the document.": "Vložte prosím do dokumentu nějakou citaci.",
     "Omit Author": "Vynechat Autora",
+    "Keep sources sorted": "Řadit zdroje automaticky",
+    "The citation style of this document is not available. Your current style is used instead.": "Citační styl tohoto dokumentu není dostupný. Místo něj se použije váš aktuální styl.",
     "Connection to Zotero failed": "Pripojenie k Zotero zlyhalo",
     "Connection to Zotero failed. Make sure Zotero is running": "Pripojenie k Zotero zlyhalo. Zjistejte, aby Zotero bezočně spolčuje",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Pripojenie k Zotero zlyhalo. Přidejte externí pripojenie v Zotero. Zjistejte, aby Zotero bezočně spolčuje",
@@ -47,7 +49,7 @@
     "Everywhere": "Vезде",
     "My Library": "Moje knihovna",
     "Group Libraries": "Skupinové knihovny",
-    "This plugin help you search references by author, title or year in your own library.": "Tento plugin pomože výhledat odkazy podle autora, názvu nebo roku v vasí knihovne.",
+    "This plugin helps you search references by author, title or year in your own library.": "Tento plugin pomože výhledat odkazy podle autora, názvu nebo roku v vasí knihovne.",
     "Click": "Kliknуть",
     "to replace all active Zotero citations and Bibliography with plain text.": "pro nahrazení vsech aktivnich Zotero citat a bibliografie textem.",
     "After conversion, citations can no longer be updated.": "Po konverzii citace nelze aktualizovat.",
@@ -79,6 +81,7 @@
     "Saving as text": "Uložit jako text",
     "Remove": "Odstranit",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Nenalezeno žádné Zotero citace na kurzoru. Klikněte prosím přímo na citaci, kterou chcete upravit.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citace nelze vložit do bibliografie. Umístěte kurzor mimo ni.",
     "Prefix": "Předpona",
     "Suffix": "Přípona",
     "Book": "Kniha",
@@ -112,6 +115,14 @@
     "Warning": "Varování",
     "Information": "Informace",
     "Operation completed successfully": "Operace byla úspěšně dokončena",
-    "Please be cautious": "Buďte prosím opatrní"
-
+    "Please be cautious": "Buďte prosím opatrní",
+    "A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Citace v tomto dokumentu je poškozená a nelze ji zpracovat. Odstraňte ji nebo ji nahraďte.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Tato citace byla upravena ručně. Úpravou o tyto změny přijdete: citace bude znovu formátována jako ostatní. Chcete pokračovat?",
+    "Citations edited by hand": "Ručně upravené citace",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Ručně upravené citace si zachovávají svůj text bez ohledu na styl a další nastavení. Jejich počet v tomto dokumentu:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Chcete tyto úpravy zrušit a naformátovat tyto citace podle nových nastavení?",
+    "Repair broken citations": "Opravit poškozené citace",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Pokud byly citace zkopírovány z jiného dokumentu, mohly ztratit formátování polí a nyní se zobrazují jako prostý text. Tato funkce zkontroluje dokument a obnoví je.",
+    "Update the bibliography when inserting a citation": "Aktualizovat bibliografii při vložení citace",
+    "Update other citations when inserting a new one": "Aktualizovat ostatní citace při vložení nové"
 }

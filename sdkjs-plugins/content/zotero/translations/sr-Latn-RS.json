@@ -30,6 +30,8 @@
     "Unlink citations": "Otkazi citat",
     "Please insert some citation into the document.": "Molimo ubacite neki citat u dokument.",
     "Omit Author": "Izostavi autora",
+    "Keep sources sorted": "Automatski sortiraj izvore",
+    "The citation style of this document is not available. Your current style is used instead.": "Stil citiranja ovog dokumenta nije dostupan. Umesto njega se koristi vaš trenutni stil.",
     "Connection to Zotero failed": "Neuspelo povezivanje na Zotero",
     "Connection to Zotero failed. Make sure Zotero is running": "Neuspelo povezivanje na Zotero. Molimo proverite da Zotero radi.",
     "Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"": "Neuspelo povezivanje na Zotero. Molimo omogucite vanjske veze u Zotero: Edit → Settings → Advanced → Check \"Allow other applications on this computer to communicate with Zotero\"",
@@ -47,7 +49,7 @@
     "Everywhere": "Sve",
     "My Library": "Moja biblioteka",
     "Group Libraries": "Grupe biblioteka",
-    "This plugin help you search references by author, title or year in your own library.": "Ovaj plugin vam pomazuje pretraživanje referenca po autoru, naslovu ili godini u vasoj biblioteci.",
+    "This plugin helps you search references by author, title or year in your own library.": "Ovaj plugin vam pomazuje pretraživanje referenca po autoru, naslovu ili godini u vasoj biblioteci.",
     "Click": "Kliknite",
     "to replace all active Zotero citations and Bibliography with plain text.": "za zamenu svih aktivnih Zotero citata i bibliografije tekstom.",
     "After conversion, citations can no longer be updated.": " Nakon konverzije, citat ne može visje biti azuriran.",
@@ -79,6 +81,7 @@
     "Saving as text": "Sačuvaj kao tekst",
 	"Remove": "Ukloni",
     "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Nije pronađen Zotero citat na kursoru. Kliknite direktno na citat da biste ga izmenili.",
+    "Citations cannot be inserted into the bibliography. Place the cursor outside it.": "Citati ne mogu da se ubace u bibliografiju. Postavite kursor izvan nje.",
     "Prefix": "Prefiks",
     "Suffix": "Sufiks",
     "Book": "Knjiga",
@@ -113,5 +116,14 @@
     "Information": "Informacija",
     "Operation completed successfully": "Radnja je uspešno završena",
     "Please be cautious": "Budite oprezni"
-
+,
+"A citation in this document is corrupted and cannot be processed. Please remove or replace it.": "Citat u ovom dokumentu je oštećen i ne može biti obrađen. Uklonite ga ili zamenite.",
+    "This citation was edited by hand. Editing it will discard those edits and format it like the other citations. Do you want to continue?": "Ovaj citat je ručno izmenjen. Ako ga izmenite, te izmene će biti izgubljene: citat će ponovo biti formatiran kao ostali. Da li želite da nastavite?",
+    "Citations edited by hand": "Ručno izmenjeni citati",
+    "Citations edited by hand keep their text when the style or other settings change. Number in this document:": "Ručno izmenjeni citati zadržavaju svoj tekst bez obzira na stil i druga podešavanja. Njihov broj u ovom dokumentu:",
+    "Do you want to discard those edits and format these citations with the new settings?": "Da li želite da odbacite te izmene i formatirate ove citate prema novim podešavanjima?",
+    "Repair broken citations": "Popravi oštećene citate",
+    "If citations were copied in from another document, they may have lost their field formatting and now show up as plain text. This checks the document and restores them.": "Ako su citati kopirani iz drugog dokumenta, možda su izgubili formatiranje polja i sada se prikazuju kao običan tekst. Ova funkcija proverava dokument i vraća ih.",
+    "Update the bibliography when inserting a citation": "Ažuriraj bibliografiju pri umetanju citata",
+    "Update other citations when inserting a new one": "Ažuriraj ostale citate pri umetanju novog"
 }
