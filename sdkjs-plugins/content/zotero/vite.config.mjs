@@ -206,7 +206,7 @@ export default defineConfig({
             ],
         },
     },
-    css: {
-        devSourcemap: true,
+    dev: {
+        sourcemap: { js: true, css: true },
     },
 });
