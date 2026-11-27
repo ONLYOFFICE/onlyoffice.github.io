@@ -757,8 +757,8 @@ class CitationService {
                     " from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.",
             ) +
             "</p>" +
-            "<p>" + translate("Original:") + " " + original + "</p>" +
-            "<p>" + translate("Modified:") + " " + modified + "</p>"
+            "<p>" + translate("Original:") + " " + CslHtmlParser.escapeHtml(original) + "</p>" +
+            "<p>" + translate("Modified:") + " " + CslHtmlParser.escapeHtml(modified) + "</p>"
         );
     }
 }

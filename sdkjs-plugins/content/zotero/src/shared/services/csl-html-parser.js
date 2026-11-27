@@ -185,6 +185,19 @@ class CslHtmlParser {
     }
 
     /**
+     * Escape plain text for insertion into HTML, so a tag inside it is
+     * shown as text.
+     * @param {string} text
+     * @returns {string}
+     */
+    static escapeHtml(text) {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    /**
      * Parse HTML string to extract plain text and formatting information.
      * Only supports: <sub>, <sup>, <sc>, <i>, <u>, <b> tags
      * @param {string} htmlString - HTML string to parse

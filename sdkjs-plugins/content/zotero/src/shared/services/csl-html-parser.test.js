@@ -60,3 +60,13 @@ describe("purifyHtml", () => {
         expect(CslHtmlParser.purifyHtml('<div style="font-weight:expression(alert(1))">x</div>')).toBe("<div>x</div>");
     });
 });
+
+describe("escapeHtml", () => {
+    it("keeps the tags a user typed into a citation as text through purifyHtml", () => {
+        const text = "Xss <img src=x onerror=\"alert(1)\"> <span style=\"position:fixed\">QQ</span> & co";
+        const element = document.createElement("p");
+        element.innerHTML = CslHtmlParser.purifyHtml(CslHtmlParser.escapeHtml(text));
+        expect(element.textContent).toBe(text);
+        expect(element.children.length).toBe(0);
+    });
+});
