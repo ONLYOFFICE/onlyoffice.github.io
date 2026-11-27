@@ -32,7 +32,7 @@
 
 /// <reference path="../../scripts/types.js" />
 /// <reference path="./shared/marketplace-url.js" />
-/// <reference path="../../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
 
 (function(window, undefined) {
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );

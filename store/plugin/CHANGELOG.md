@@ -31,3 +31,7 @@
 ## 1.0.6
 
 * Replaced tab-based navigation with a persistent sidebar for quicker access to plugin categories.
+
+## 1.0.7
+
+* Close the plugin card on a click outside it.

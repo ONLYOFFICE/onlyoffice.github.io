@@ -30,7 +30,7 @@
  *
  */
 
-/// <reference path="../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
+/// <reference types="@onlyoffice/doceditor-plugin-types" />
 /// <reference path="./types.js" />
 /// <reference path="./marketplace/ui.js" />
 /// <reference path="./marketplace/storage.js" />
@@ -105,6 +105,8 @@ const Marketplace = {
 
 	init: function() {
 		const self = this;
+		// The catalog's own address: a marketplace mirror in a closed network never reaches github.io.
+		DataFetcher.setConnectionCheckUrl(configUrl);
 		DataFetcher.subscribeToTheAppearanceOfALostInternetConnection(function(isOnline) {
 			console.log('Internet connection status:', isOnline);
 			if (isOnline) {
@@ -364,7 +366,9 @@ const Marketplace = {
 	},
 
 	_onInternetConnectionRestored: function() {
-		if (MarketplaceStorage.hasAllPlugins()) {
+		if (MarketplaceStorage.hasMarketplacePlugins()) {
+			// The catalog came from the HTTP cache while offline; redraw so Install and Update come back.
+			updateListOfPlugins(true);
 			return;
 		}
 		this.loadMarketplacePluginsAndRating()
@@ -412,7 +416,11 @@ const translationsPromise = Marketplace.loadAndApplyTranslations(Utils.lang, Uti
 /** @type {Promise<PluginInfo[]>} */
 let allPluginsPromise = Marketplace.loadMarketplacePluginsAndRating()
 	.then(function(plugins) {
-		MarketplaceStorage.setMarketplacePlugins(plugins);
+		// Offline the start does not wait for this load, and the catalog may already have come
+		// with the restored connection by the time this one fails.
+		if (plugins.length || !MarketplaceStorage.hasMarketplacePlugins()) {
+			MarketplaceStorage.setMarketplacePlugins(plugins);
+		}
 		return plugins;
 	});
 
@@ -430,12 +438,18 @@ window.onload = function() {
 		setThemeForBrowserTabMode();
 	}
 
+	// What works without a network comes first: offline, the installed plugins show at once
+	// instead of after the catalog requests time out.
 	Promise.all([
 		versionsPromise,
 		translationsPromise,
 		availablePluginsPromise,
-		allPluginsPromise
+		// The catalog may come from the HTTP cache and look fine without a connection.
+		DataFetcher.checkConnection()
 	])
+	.then(function() {
+		return DataFetcher.isOnline ? allPluginsPromise : null;
+	})
 	.then(function(result) {
 			if (DataFetcher.isOnline) {
 				updateListOfPlugins(true);
@@ -519,6 +533,7 @@ window.addEventListener('message', function(event) {
 		case 'Theme':             _onMessageTheme(message);     break;
 		case 'onExternalMouseUp': _onMessageMouseUp();          break;
 		case 'onClickBack':       PluginCardController.goBackToMarketplace();  break;
+		case 'Focus':             window.focus();               break;
 	}
 }, false);
 
@@ -653,10 +668,6 @@ function _onMessageTheme(message) {
 	// todo change header background color and change icons for plugin cards and for plugin window
 }
 function _onMessageMouseUp() {
-	if (pluginVersion > 1000005) {
-		//MarketplacePluginService.closePluginCard();
-		return;
-	}
 	let evt = document.createEvent('MouseEvents');
 	evt.initMouseEvent('mouseup', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 	document.dispatchEvent(evt);
@@ -796,9 +807,9 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 		bHasUpdate: bHasUpdate,
 		bRemoved: bRemoved,
 		bNotAvailable: bNotAvailable,
-		bNeedUpdateButton: bHasUpdate && !bRemoved,
+		bNeedUpdateButton: bHasUpdate && !bRemoved && DataFetcher.isOnline,
 		bNeedRemoveButton: !!(installed && !bRemoved && available && available.canRemoved),
-		bNeedInstallButton: !installed || bRemoved,
+		bNeedInstallButton: (!installed || bRemoved) && DataFetcher.isOnline,
 		independentMode: independentMode
 	};
 }
@@ -944,6 +955,7 @@ function onClickPluginPlate(guid) {
 		editorVersion: editorVersion,
 		bHasUpdate: !!bHasUpdate,
 		bActionDisabled: !!(actionButton && actionButton.hasAttribute('disabled')),
+		bOffline: !DataFetcher.isOnline,
 		OOMarketplaceUrl: OOMarketplaceUrl,
 		OOIO: OOIO,
 		ioUrl: ioUrl,

@@ -37,6 +37,8 @@ const DataFetcher = {
     _urlToCheckConnection: 'https://onlyoffice.github.io/store/translations/langs.json',
     proxyUrl: 'https://plugins-services.onlyoffice.com/proxy',  // url to proxy for getting rating
     isOnline: true,                                             // flag internet connection
+    _requestTimeout: 30000,                                     // ms; an unanswered request counts as a lost connection
+    _connectionCheckTimeout: 5000,                              // ms; the check is one small file
     /** @type {Array<(isOnline: boolean) => void>} */
     _subscribers: [],
     _bMonitoringConnection: false,
@@ -72,10 +74,11 @@ const DataFetcher = {
      * @param {string} url 
      * @param {'GET' | 'POST'} method 
      * @param {*} responseType 
-     * @param {*} body 
-     * @returns 
+     * @param {*} body
+     * @param {number} [timeout] ms, _requestTimeout when omitted
+     * @returns
      */
-    makeRequest: function(url, method, responseType, body) {
+    makeRequest: function(url, method, responseType, body, timeout) {
         const self = this;
         if (!method)
             method = 'GET';
@@ -102,7 +105,8 @@ const DataFetcher = {
                     }
                 };
 
-                xhr.onerror = function (err) {
+                /** @param {unknown} err */
+                const onNetworkFailure = function (err) {
                     reject(err);
                     if (!url.includes('https')) {
                         return
@@ -110,12 +114,16 @@ const DataFetcher = {
                     self.isOnline = false;
                     self._checkInternet();
                 };
+                xhr.onerror = onNetworkFailure;
+                // A network that drops packets never fails a request, it leaves it hanging.
+                xhr.timeout = timeout || self._requestTimeout;
+                xhr.ontimeout = onNetworkFailure;
 
                 xhr.send(body);
             } catch (error) {
                 reject(error);
             }
-            
+
         });
     },
     /**
@@ -180,6 +188,8 @@ const DataFetcher = {
                 numOfRetries++;
                 self.subscribeToTheAppearanceOfALostInternetConnection(makeRequest);
             };
+            xhr.timeout = self._requestTimeout;
+            xhr.ontimeout = xhr.onerror;
 
             xhr.send(body);
         }
@@ -207,7 +217,9 @@ const DataFetcher = {
     
     /** @param {(isOnline: boolean) => void} callback */
     subscribeToTheAppearanceOfALostInternetConnection: function(callback) {
-        this._subscribers.push(callback);
+        if (this._subscribers.indexOf(callback) === -1) {
+            this._subscribers.push(callback);
+        }
         this._checkInternet();
     },
     /** @param {(isOnline: boolean) => void} callback */
@@ -251,7 +263,28 @@ const DataFetcher = {
             });
         });
     },
-    
+
+    /** @param {string} url a file that is reachable whenever plugins can be installed */
+    setConnectionCheckUrl: function(url) {
+        this._urlToCheckConnection = url;
+    },
+
+    /**
+     * Asks the network itself: a plain request can be answered from the HTTP cache and report a
+     * connection that is already gone. A failed request turns isOnline off inside makeRequest.
+     * @returns {Promise<boolean>}
+     */
+    checkConnection: function() {
+        const self = this;
+        return this.makeRequest(this._urlToCheckConnection + '?t=' + Date.now(), 'GET', null, null, this._connectionCheckTimeout)
+            .then(function() {
+                self.isOnline = true;
+            }, function() {})
+            .then(function() {
+                return self.isOnline;
+            });
+    },
+
     _checkInternet: function() {
         const self = this;
         if (this._bMonitoringConnection || this.isOnline) {
@@ -263,14 +296,8 @@ const DataFetcher = {
         this._bMonitoringConnection = true;
         (function checkInternetRecursion() {
             setTimeout(function() {
-                self.makeRequest(self._urlToCheckConnection, 'GET', null, null)
-                    .then(function() {
-                        return true;
-                    }).catch(function() {
-                        return false;
-                    })
+                self.checkConnection()
                     .then(function(bOnline) {
-                        self.isOnline = bOnline;
                         if (bOnline) {
                             self._subscribers.forEach(function(subscriber) {
                                 subscriber(bOnline);

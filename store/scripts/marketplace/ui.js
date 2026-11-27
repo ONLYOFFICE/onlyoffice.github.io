@@ -496,7 +496,7 @@ const UI = {
 
         let intro = '<div class="introduction">' +
             '<div class="image" style="background: ' + bg + '">' +
-                '<img id="img_' + guid + '" class="plugin_icon" data-guid="' + guid + '" src="' + imgSrc.src + '" srcset="' + imgSrc.srcset + '">' +
+                '<img id="img_' + guid + '" class="plugin_icon" data-guid="' + guid + '" loading="lazy" src="' + imgSrc.src + '" srcset="' + imgSrc.srcset + '">' +
             '</div>' +
             '<div class="name">' +
                 '<div class="plugin-name">' + name + '</div>' +

@@ -1,7 +1,7 @@
 
-/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").PluginWindow} PluginWindow */
-/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").VariationConfig} VariationConfig */
-/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").AscTheme} AscTheme */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/plugin").PluginWindow} PluginWindow */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/config").VariationConfig} VariationConfig */
+/** @typedef {import("@onlyoffice/doceditor-plugin-types/plugin").AscPlugin["theme"]} AscTheme */
 
 /**
  * @typedef {Object} Rating
@@ -29,6 +29,7 @@
  * @property {number} editorVersion
  * @property {boolean} bHasUpdate
  * @property {boolean} bActionDisabled
+ * @property {boolean} [bOffline] - no connection: there is nothing to install from
  * @property {boolean} removed
  * @property {boolean} canRemoved
  * @property {boolean} independentMode

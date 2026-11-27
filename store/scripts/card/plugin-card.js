@@ -347,7 +347,11 @@ const PluginCard = {
             PluginCardUI.btnInstall.classList.add("hidden");
         } else {
             PluginCardUI.btnRemove.classList.add("hidden");
-            PluginCardUI.btnInstall.classList.remove("hidden");
+            if (data.bOffline) {
+                PluginCardUI.btnInstall.classList.add("hidden");
+            } else {
+                PluginCardUI.btnInstall.classList.remove("hidden");
+            }
         }
 
         if (data.bActionDisabled) {
@@ -651,7 +655,7 @@ const PluginCard = {
             pdf: { icon: 'pdf', title: Utils.getTranslated('PDF Editor') }
         };
         let icons = '';
-        ['word', 'cell', 'slide', 'pdf'].forEach(function(type) {
+        /** @type {EditorType[]} */ (['word', 'cell', 'slide', 'pdf']).forEach(function(type) {
             if (editorsSupport.indexOf(type) === -1) {
                 return;
             }

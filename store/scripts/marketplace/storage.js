@@ -247,6 +247,13 @@ const MarketplaceStorage = {
     hasAllPlugins: function() {
         return this._allPlugins.length > 0;
     },
+    /**
+     * Whether the catalog has loaded; hasAllPlugins is true with installed plugins alone.
+     * @returns {boolean}
+     */
+    hasMarketplacePlugins: function() {
+        return this._marketplacePlugins.length > 0;
+    },
     /** @returns {boolean} */
     hasAvailablePlugins: function() {
         return this._availablePlugins.length > 0;
