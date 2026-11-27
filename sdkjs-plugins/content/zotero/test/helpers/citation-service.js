@@ -95,6 +95,8 @@ export function makeService(options) {
         noteNumbers: options.noteNumbers,
         /** @type {Array<Object>} what was written to the document */
         written: [],
+        /** @type {Array<string>} the field ids moved as if all were in the text */
+        movedFromText: [],
     };
 
     const localesManager = {
@@ -148,6 +150,10 @@ export function makeService(options) {
             doc.written.push(...copy(fields));
         },
         convertNotesToText: async (/** @type {Array<any>} */ fields) => {
+            doc.written.push(...copy(fields));
+        },
+        convertTextToNotes: async (/** @type {Array<any>} */ fields) => {
+            doc.movedFromText.push(...fields.map((field) => field.FieldId));
             doc.written.push(...copy(fields));
         },
         addBibliography: async (/** @type {string} */ html) => {

@@ -635,4 +635,28 @@ describe("citations edited by hand when the settings change", () => {
         expect(doc.written).toHaveLength(1);
         expect(citationOf(doc.written[0]).properties).not.toHaveProperty("dontUpdate");
     });
+
+    it("move into notes together with the others, from the note a change of style left them in", async () => {
+        // An in-text style kept the edited citation in its footnote; going
+        // to endnotes with its edit given up, it moves with the others.
+        const { service, doc } = makeService({
+            styleId: "supra-test",
+            format: "note",
+            fields: [
+                citationField("1", "c1", [alpha]),
+                editedByHand("2", "c2", [beta]),
+                citationField("3", "c3", [gamma]),
+            ],
+            noteNumbers: [0, 1, 0],
+        });
+
+        await service.switchingBetweenNotesAndText("endnotes", undefined, { discardManualEdits: true });
+
+        // Each is moved from where it stands, not as if all were in the text.
+        expect(doc.movedFromText).toEqual([]);
+        const notes = Object.fromEntries(
+            doc.written.map((field) => [field.FieldId, citationOf(field).properties.noteIndex]),
+        );
+        expect(notes).toEqual({ "1": 1, "2": 2, "3": 3 });
+    });
 });

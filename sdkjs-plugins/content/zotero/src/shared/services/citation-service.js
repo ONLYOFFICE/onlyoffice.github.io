@@ -406,7 +406,10 @@ class CitationService {
         const changes = await this.#getChanges(entries, true);
         if (changes.length) {
             if (notesStyle) {
-                await this.#document.convertTextToNotes(changes, notesStyle);
+                // Not all of them need be in the text: a citation edited by
+                // hand stays in its note through a change of style, and
+                // given up later, it is moved from there.
+                await this.#document.convertNotesStyle(changes, notesStyle);
             } else {
                 await this.#document.convertNotesToText(changes);
             }
